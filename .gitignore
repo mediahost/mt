@@ -1,0 +1,78 @@
+#################
+## Log
+#################
+/log/*
+!/log/
+!/log/.htaccess
+
+#################
+## Temp
+#################
+/temp/*
+!/temp/
+!/temp/.htaccess
+/www/webtemp/*
+!/www/webtemp/
+!/www/webtemp/.htaccess
+
+#################
+## Nette configs
+#################
+*.local.neon
+*.server.neon
+*.server_dev.neon
+*.server_test.neon
+*.server_ver*.neon
+/app/config/settings.local/*
+
+#################
+## Vendor (3rd side libs)
+################
+/vendor/*
+!/vendor/others
+
+#################
+## Tests
+#################
+/tests/test.log
+/tests/tmp/*
+!/tests/tmp/
+
+#################
+## Bin
+#################
+/bin/test.bat
+/bin/testOne.bat
+
+#################
+## NetBeans
+################
+/nbproject/*
+
+#################
+## PhpStorm
+################
+.idea
+
+#################
+## Deployment
+################
+/deployment/*
+!/deployment/deployment.bat
+!/deployment/deployment_dev.bat
+!/deployment/deployment_test.bat
+!/deployment/deployment_ver*.bat
+!/deployment/deployment.example.php
+!/deployment/deployment.config.php
+
+#################
+## Installer
+################
+/www/adminer/database-log.sql
+/bin/testInstaller.bat
+
+#################
+## Foto
+################
+/www/foto/*
+!/www/foto/
