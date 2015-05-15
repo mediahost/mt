@@ -1,0 +1,44 @@
+/* here you can put your own css to customize and override the theme */
+
+.page-container-bg-solid .breadcrumb {
+	background-color: white;
+}
+
+div.tagsinput {
+	border: 1px solid #E5E5E5;
+}
+
+div.tagsinput.active {
+	border-color: #999;
+}
+
+.noUi-tooltip {
+	display: block;
+	position: absolute;
+	border: 1px solid #D9D9D9;
+	font: 400 12px/12px Arial;
+	border-radius: 3px;
+	background: #fff;
+	top: -28px;
+	padding: 5px;
+	left: -9px;
+	text-align: center;
+	width: 50px;
+}
+.noUi-tooltip strong {
+	display: block;
+	padding: 2px;
+}
+.noUi-control.hasTooltips {
+	margin-top: 29px;
+}
+.noUi-control.hasPips {
+	margin-bottom: 49px;
+}
+.noUi-marker-normal {
+	display: none;
+}
+
+.page-spinner-bar > div, .block-spinner-bar > div {
+	background: #2299dd;
+}

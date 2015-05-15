@@ -1,0 +1,4 @@
+nette:
+	latte:
+		macros:
+			- \Zeleznypa\Nette\Latte\Macros\FormMacros::install #Macro {button}

@@ -1,0 +1,139 @@
+{block footer}
+
+<!-- BEGIN PRE-FOOTER -->
+<div class="pre-footer">
+	<div class="container">
+		<div class="row">
+			<!-- BEGIN BOTTOM ABOUT BLOCK -->
+			<div class="col-md-4 col-sm-6 pre-footer-col">
+				<h2>{$pageInfo->projectName}</h2>
+				<p>
+					{$pageInfo->description}
+				</p>
+
+				<div class="photo-stream">
+					<h2>{_'Open hours'}</h2>
+					<table>
+						<tr>
+							<th style="width:150px">Pondelok:</th>
+							<td>9:00 - 17:00</td>
+						</tr>
+						<tr>
+							<th>Utorok:</th>
+							<td>9:00 - 17:00</td>
+						</tr>
+						<tr>
+							<th>Streda:</th>
+							<td>9:00 - 17:00</td>
+						</tr>
+						<tr>
+							<th>Štvrtok:</th>
+							<td>9:00 - 17:00</td>
+						</tr>
+						<tr>
+							<th>Piatok:</th>
+							<td>9:00 - 17:00</td>
+						</tr>
+						<tr>
+							<th>Sobota – Nedeľa:</th>
+							<td>Zatvorené</td>
+						</tr>
+						<tr>
+							<th>Sviatky:</th>
+							<td>Zatvorené</td>
+						</tr>
+					</table>             
+				</div>
+			</div>
+
+			<!-- END BOTTOM ABOUT BLOCK -->
+
+			<!-- BEGIN BOTTOM CONTACTS -->
+			<div class="col-md-4 col-sm-6 pre-footer-col">
+
+				<h2>{_'Our Contacts'}</h2>
+				<address class="margin-bottom-40">
+					<address class="margin-bottom-10">
+						<strong>GRIFIN, s.r.o.</strong><br>
+						Hviezdoslavova 10<br>
+						01001 Žilina<br>
+						IČO: 45654433<br>
+						DIČ: SK2023102268<br>
+					</address>
+					<address class="margin-bottom-10">
+						<strong>Konzultácie ohľadom spracovania objednávok</strong><br>
+						{_'Phone'}: +421 908 84 84 84<br>
+						{_'Email'}: <a href="mailto:obchod@mobilnetelefony.sk">obchod@mobilnetelefony.sk</a><br>
+					</address>
+					<address class="margin-bottom-40">
+						<strong>Reklamácie, servis</strong><br>
+						{_'Phone'}: +421 908 78 00 62<br>
+						{_'Email'}: <a href="mailto:servis@mobilnetelefony.sk">servis@mobilnetelefony.sk</a><br>
+					</address>
+				</address>
+			</div>
+			<!-- END BOTTOM CONTACTS -->
+
+			<!-- BEGIN TWITTER BLOCK --> 
+			<div class="col-md-4 col-sm-6 pre-footer-col">
+				<h2 class="margin-bottom-0">{_'Latest Tweets'}</h2>
+				<a class="twitter-timeline" 
+				   href="https://twitter.com/twitterapi" 
+				   data-tweet-limit="2" data-theme="dark" 
+				   data-link-color="#57C8EB" 
+				   data-widget-id="580719359452139520" 
+				   data-chrome="noheader nofooter noscrollbar noborders transparent">
+					{_'Loading tweets by'} @NetteFramework...
+				</a>
+			</div>
+			<!-- END TWITTER BLOCK -->
+		</div>
+        <hr>
+        <div class="row">
+			<!-- BEGIN SOCIAL ICONS -->
+			<div class="col-md-6 col-sm-6">
+				<ul class="social-icons">
+					<li><a class="facebook" data-original-title="facebook" href="#"></a></li>
+					<li><a class="twitter" data-original-title="twitter" href="#"></a></li>
+					<li><a class="googleplus" data-original-title="googleplus" href="#"></a></li>
+					<li><a class="linkedin" data-original-title="linkedin" href="#"></a></li>
+					<li><a class="youtube" data-original-title="youtube" href="#"></a></li>
+					<li><a class="skype" data-original-title="skype" href="#"></a></li>
+				</ul>
+			</div>
+			<!-- END SOCIAL ICONS -->
+			<!-- BEGIN NEWLETTER -->
+			<div class="col-md-6 col-sm-6">
+				<div class="pre-footer-subscribe-box pull-right">
+					<h2>Newsletter</h2>
+					<form action="#">
+						<div class="input-group">
+							<input type="text" placeholder="youremail@mail.com" class="form-control">
+							<span class="input-group-btn">
+								<button class="btn btn-primary" type="submit">Subscribe</button>
+							</span>
+						</div>
+					</form>
+				</div> 
+			</div>
+			<!-- END NEWLETTER -->
+        </div>
+	</div>
+</div>
+<!-- END PRE-FOOTER -->
+
+<!-- BEGIN FOOTER -->
+<div class="footer">
+	<div class="container">
+		<div class="row">
+			<!-- BEGIN COPYRIGHT -->
+			<div class="col-md-6 col-sm-6 padding-top-10">
+				{!= date('Y')} &copy; {$pageInfo->projectName} {_'by Mediahost'} | 
+				<a href="#">{_'Privacy Policy'}</a> | 
+				<a href="#">{_'Terms of Service'}</a>
+			</div>
+			<!-- END COPYRIGHT -->
+		</div>
+	</div>
+</div>
+<!-- END FOOTER -->

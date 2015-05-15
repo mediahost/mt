@@ -1,0 +1,27 @@
+doctrine:
+	host: localhost
+	user: user # user must have right to create DB
+	password: pasword
+	dbname: dbname
+
+facebook:
+	appId: "app_id"
+	appSecret: "app_secret"
+
+twitter:
+	consumerKey: 'consumer_key'
+	consumerSecretKey: 'secret_key'
+
+installer:
+	lock: TRUE
+	doctrine: FALSE
+#	initUsers: ['user_mail' = ['password', 'name_of_role']]
+	initUsers: ['admin' = ['admin', 'admin'], 'superadmin' = ['superadmin', 'superadmin'], 'signed' = ['signed', 'signed'], 'user' = ['user', 'user']]
+
+nette:
+	mailer:
+		smtp: FALSE
+
+gettextTranslator:
+	files:
+		all: %appDir%/lang/locale

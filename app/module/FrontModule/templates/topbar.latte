@@ -1,0 +1,45 @@
+{block topbar}
+<!-- BEGIN TOP BAR LEFT PART -->
+<div class="col-md-6 col-sm-6 additional-shop-info">
+	<ul class="list-unstyled list-inline">
+		<li><i class="fa fa-envelope-o"></i><span>obchod@mobilnetelefony.sk</span></li>
+		<li><i class="fa fa-phone"></i><span>+421 908 84 84 84</span></li>
+		<!-- BEGIN CURRENCIES -->
+		<li class="shop-currencies">
+			<a href="javascript:void(0);" class="current">€</a>
+			<a href="javascript:void(0);">Kč</a>
+		</li>
+		<!-- END CURRENCIES -->
+		<!-- BEGIN LANGS -->
+		<li class="langs-block">
+			<a href="javascript:void(0);" class="current">{_$allowedLanguages[$lang]}</a>
+			<div class="langs-block-others-wrapper">
+				<div class="langs-block-others">
+					<a n:foreach="$allowedLanguages as $langCode => $langName"
+					   n:if="$langCode !== $lang"
+					   n:href="changeLanguage! $langCode">
+						{_$langName}
+					</a>
+				</div>
+			</div>
+		</li>
+		<!-- END LANGS -->
+	</ul>
+</div>
+<!-- END TOP BAR LEFT PART -->
+<!-- BEGIN TOP BAR MENU -->
+<div class="col-md-6 col-sm-6 additional-nav">
+	<ul n:if="!$user->loggedIn" class="list-unstyled list-inline pull-right">
+		<li><a n:href="Sign:in">{_'Sign In'}</a></li>
+		<li><a n:href="Sign:up">{_'Registration'}</a></li>
+	</ul>
+	<ul n:if="$user->loggedIn" class="list-unstyled list-inline pull-right">
+		<li>{$user->identity}</li>
+		<li n:if="$user->isAllowed('dashboard')"><a n:href=":App:Dashboard:">{_'Admin'}</a></li>
+		<li n:if="$user->isAllowed('myAccount')"><a n:href="MyAccount:">{_'My Account'}</a></li>
+		<li>
+			<a href="{control signOut}"><i class="fa fa-sign-out"></i> {_'Sign out'}</a>
+		</li>
+	</ul>
+</div>
+<!-- END TOP BAR MENU -->       

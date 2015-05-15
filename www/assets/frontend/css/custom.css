@@ -1,0 +1,10 @@
+.content-form-page select.form-control {
+	border-color: #DBDBDB;
+	color: #AAA;
+	font: 14px Arial, sans-serif;
+}
+
+.portlet > .portlet-title > .actions .btn-icon-only {
+  height: 27px;
+  width: 27px;
+}

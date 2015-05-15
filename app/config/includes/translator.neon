@@ -1,0 +1,7 @@
+extensions:
+	gettextTranslator: GettextTranslator\DI\Extension
+
+gettextTranslator:
+	lang: en
+	files:
+		all: %appDir%/lang/locale

@@ -1,0 +1,46 @@
+services:
+	Permission:
+		class: Nette\Security\Permission
+		setup:
+			# Roles
+			- addRole('guest')
+			- addRole('signed', 'guest')
+			- addRole('user', 'signed')
+			- addRole('dealer', 'user')
+			- addRole('admin', 'signed')
+			- addRole('superadmin', 'admin')
+
+			# Resources
+			- addResource('myAccount')
+			- addResource('myOrders')
+
+			- addResource('dashboard')
+			- addResource('settings')
+			- addResource('profile')
+
+			- addResource('orders')
+			- addResource('products')
+			- addResource('categories')
+			- addResource('users')
+			- addResource('discounts')
+
+			- addResource('examples')
+			- addResource('service')
+
+			# Privilegies
+			- deny('guest')
+
+			- allow('signed', 'profile', ['default', 'settings', 'delete'])
+
+			- allow('user', 'myAccount')
+			- allow('user', 'myOrders')
+
+			- allow('admin', 'dashboard')
+			- allow('admin', 'orders')
+			- allow('admin', 'products')
+			- allow('admin', 'categories')
+			- allow('admin', 'users')
+			- allow('admin', 'discounts')
+			- allow('admin', 'settings')
+
+			- allow('superadmin') # Full access for superadmin

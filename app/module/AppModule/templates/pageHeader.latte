@@ -1,0 +1,28 @@
+{define pageTitle}{_'MobilneTelefony'} <small>{_'ver.2'}</small>{/define}
+
+{define pageHeader}
+<!-- BEGIN PAGE HEADER-->
+<h3 class="page-title"
+	n:if="!$designSettings->containerBgSolid">
+	{include pageTitle}
+</h3>
+<div class="page-bar">
+	<!-- BEGIN BREADCRUMB-->
+	<ul class="page-breadcrumb breadcrumb" n:block="breadcrumb">
+		<li>
+			<i class="fa fa-home"></i>
+			<a n:href=":Front:Homepage:">{_'Home'}</a>
+		</li>
+		{block breadcrumbItems}{/block}
+	</ul>
+	<!-- END BREADCRUMB-->
+	<div class="page-toolbar">
+		{block pageToolbar}{/block}
+	</div>
+</div>
+<h3 class="page-title"
+	n:if="$designSettings->containerBgSolid">
+	{include pageTitle}
+</h3>
+<!-- END PAGE HEADER-->
+{/define}

@@ -1,0 +1,51 @@
+{block pageTitle}
+	{_'Service Tools'}
+{/block}
+
+{block breadcrumbItems}
+<li>
+	<a n:href="Service:">{_'Services'}</a>
+</li>
+<li><span>{_'Tools'}</span></li>
+{/block}
+
+{block content}
+
+<div class="row">
+	<div class="col-md-6">
+        <div class="list-group">
+
+            <a n:href="importInitData!" class="list-group-item delete-confirm">
+                <h4 class="list-group-item-heading">
+                    {_'Import Init Data to DB'}
+                    ({_'contains RE-INSTALL DB'})
+                </h4>
+                <p class="list-group-item-text">
+                     {_'Clear all data in DB and imports initial data from test backup.'}
+                     {_'Please create BACKUP before do this DB schema!'}
+                </p>
+            </a>
+
+            <a n:href="install!" class="list-group-item delete-confirm">
+                <h4 class="list-group-item-heading">
+                    {_'Install DB'}
+                </h4>
+                <p class="list-group-item-text">
+                     {_'Run istalation procedure.'}
+                     {_'DB will be maintained.'}
+                </p>
+            </a>
+
+            <a n:href="reinstall!" class="list-group-item delete-confirm">
+                <h4 class="list-group-item-heading">
+                    {_'Reinstall DB'}
+                </h4>
+                <p class="list-group-item-text">
+                     {_'Clear actual DB schema and reinstall DB'}
+                     {_'Please create BACKUP before do this DB schema!'}
+                </p>
+            </a>
+
+        </div>
+	</div>
+</div>

@@ -1,0 +1,23 @@
+{block content}
+<div class="container">
+	<div class="row">
+		&nbsp;<br />
+		&nbsp;<br />
+	</div>
+	<div class="row">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{_'TEST 2'} - {_'Register and site will back to this site'}
+			</div>
+			<div class="panel-body">
+				{if $user->isLoggedIn()}
+					{_'IT WORKS!!! This is secret content only for signed in.'}
+					<a href="{control signOut}">{_'Sign Out'}</a>.
+				{else}
+					{_'This is secret content and you can see it only after signed in.'}
+					<a n:href="Sign:register, backlink => $backlink">{_'Register as Candidate'}</a>.
+				{/if}
+			</div>
+		</div>
+	</div>
+</div>

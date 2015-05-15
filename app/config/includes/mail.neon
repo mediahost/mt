@@ -1,0 +1,4 @@
+services:
+	- {implement: App\Mail\Messages\ICreateRegistrationMessageFactory, inject: yes}
+	- {implement: App\Mail\Messages\IForgottenMessageFactory, inject: yes}
+	- {implement: App\Mail\Messages\IVerificationMessageFactory, inject: yes}

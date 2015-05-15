@@ -1,0 +1,6 @@
+services:
+	- {class: App\Listeners\LoggedListener, tags: [kdyby.subscriber], inject: yes}
+	- {class: App\Listeners\InstallerListener, tags: [kdyby.subscriber], inject: yes}
+	- {class: App\Listeners\SignListener, tags: [kdyby.subscriber], inject: yes}
+	# Entity Listeners
+	- {class: App\Listeners\Model\Entity\ImageListener, inject: yes}
