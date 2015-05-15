@@ -1,0 +1,85 @@
+{block pageTitle}
+	{_'Users'}
+{/block}
+
+{block breadcrumbItems}
+<li>
+	<a n:href="this">{_'Users'}</a>
+</li>
+{/block}
+
+{block content}
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-users"></i>
+					<span class="caption-subject bold uppercase">{_'Users'}</span>
+				</div>
+				<div class="actions">
+					<a n:href="Users:add" class="btn btn-circle green-sharp">
+						<i class="fa fa-plus"></i> {_'Add User'}
+					</a>
+					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body">
+				{control usersGrid}
+{*
+				<table class="datatable table table-striped table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>
+								{_'ID'}
+							</th>
+							<th>
+								{_'Username'}
+							</th>
+							<th>
+								{_'Role'}
+							</th>
+							<th>
+								{_'Edit'}
+							</th>
+							<th>
+								{_'Delete'}
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr n:foreach="$users as $user"
+							class="odd gradeX">
+							<td>
+								{$user->id}
+							</td>
+							<td>
+								{$user->mail}
+								<a n:href="Users:access, $user->id"
+								   n:if="$template->canAccess($identity, $user)"><i class="icon-key"></i></a>
+							</td>
+							<td>
+								{$user->roles|implode:', '}
+							</td>
+							<td>
+								<a n:href="Users:edit, $user->id"
+								   n:if="$template->canEdit($identity, $user)">
+									{_'Edit'}
+								</a>
+							</td>
+							<td>
+								<a n:href="Users:delete, $user->id" 
+								   n:if="$template->canDelete($identity, $user)"
+								   class="delete-confirm">
+									{_'Delete'}
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+*}
+			</div>
+		</div>
+	</div>
+</div>

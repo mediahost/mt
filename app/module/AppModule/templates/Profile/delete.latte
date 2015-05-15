@@ -1,0 +1,13 @@
+{includeblock '@settings.latte'}
+{block content}
+<div class="row profile-account">
+	<div class="col-md-3">
+		{include settingsMenu}
+	</div>
+	<div class="col-md-6">
+		<div class="well">
+			<p>{_'Do you really want to delete all data for your account?'}</p>
+			<a class="btn btn-default" n:href="delete!">{_'Yes, I want'}</a>
+		</div>
+	</div>
+</div>

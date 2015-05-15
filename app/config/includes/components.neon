@@ -1,0 +1,72 @@
+# Components
+# !!!must have "crete:" for components with events!!!
+
+services:
+	# Auth
+	ISignOutControlFactory:
+		implement: App\Components\Auth\ISignOutControlFactory
+		inject: yes
+
+	IConnectManagerControlFactory:
+		create: App\Components\Auth\ConnectManagerControl
+		implement: App\Components\Auth\IConnectManagerControlFactory
+		inject: yes
+
+	IForgottenControlFactory:
+		create: App\Components\Auth\ForgottenControl
+		implement: App\Components\Auth\IForgottenControlFactory
+		inject: yes
+
+	ISetPasswordControlFactory:
+		create: App\Components\Auth\SetPasswordControl
+		implement: App\Components\Auth\ISetPasswordControlFactory
+		inject: yes
+
+	IRecoveryControlFactory:
+		create: App\Components\Auth\RecoveryControl
+		implement: App\Components\Auth\IRecoveryControlFactory
+		inject: yes
+
+	IFacebookControlFactory:
+		create: App\Components\Auth\FacebookControl
+		implement: App\Components\Auth\IFacebookControlFactory
+		inject: yes
+
+	ITwitterControlFactory:
+		create: App\Components\Auth\TwitterControl
+		implement: App\Components\Auth\ITwitterControlFactory
+		inject: yes
+
+	IRequiredControlFactory:
+		create: App\Components\Auth\RequiredControl
+		implement: App\Components\Auth\IRequiredControlFactory
+		inject: yes
+
+	ISignInControlFactory:
+		create: App\Components\Auth\SignInControl
+		implement: App\Components\Auth\ISignInControlFactory
+		inject: yes
+
+	ISignUpControlFactory:
+		create: App\Components\Auth\SignUpControl
+		implement: App\Components\Auth\ISignUpControlFactory
+		inject: yes
+
+	# User
+	IPreferencesControlFactory:
+		implement: App\Components\User\IPreferencesControlFactory
+		inject: yes
+
+	IUserControlFactory:
+		implement: App\Components\User\IUserControlFactory
+		inject: yes
+
+	# Example
+	IFormControlFactory:
+		implement: App\Components\Example\Form\IFormControlFactory
+		inject: yes
+
+	# Grids
+	IUsersGridFactory:
+		implement: App\Components\Grids\User\IUsersGridFactory
+		inject: yes

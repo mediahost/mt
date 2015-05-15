@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="{$lang}" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="{$lang}" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="{$lang}" class="no-js">
+	<!--<![endif]-->
+	{includeblock '../../BaseModule/templates/metronic.defines.latte'}
+
+	<!-- BEGIN HEAD -->
+	<head>
+		<title>{block title|striptags}{_'Source-Code'}{/block}</title>
+
+		<meta charset="utf-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+		<meta name="robots" content="noindex,nofollow">
+		<meta content="" name="description"/>
+		<meta content="" name="author"/>
+
+		{include cssMetronicCore}
+		{include cssMetronicAdminTheme}
+
+		{control cssApp}
+		{control cssPrint}
+
+		<link href="{$basePath}/favicon.ico" rel="shortcut icon">
+
+		{block head}{/block}
+	</head>
+	<!-- END HEAD -->
+
+	<!-- BEGIN BODY -->
+	<body n:class="$designSettings->headerFixed ? page-header-fixed,
+					$designSettings->layoutBoxed ? page-boxed,
+					$designSettings->sidebarClosed ? 'page-sidebar-closed page-sidebar-menu-closed',
+					$designSettings->sidebarFixed ? page-sidebar-fixed,
+					$designSettings->footerFixed ? page-footer-fixed,
+					$designSettings->sidebarReversed ? page-sidebar-reversed,
+					$designSettings->containerBgSolid ? page-container-bg-solid">
+		<script> document.documentElement.className += ' js'</script>
+
+		{include 'header.latte'}
+
+		<!-- BEGIN CONTAINER -->
+		{if $designSettings->layoutBoxed}<div class="container">{/if}
+		<div class="page-container">
+
+			{include 'sidebar.latte'}
+
+			<!-- BEGIN CONTENT -->
+			<div class="page-content-wrapper">
+				<!-- BEGIN PAGE -->
+				<div class="page-content">
+					
+					{include 'styleCustomizer.latte'}
+					
+					{includeblock 'pageHeader.latte'}
+					{include pageHeader}
+
+					<!-- BEGIN FLASH MESSAGES-->
+					<div n:snippet="flashMessages">
+						<div n:foreach="$flashes as $flash"
+							 class="alert alert-{$flash->type} fade in">
+							<button type="button" class="close" data-dismiss="alert"></button>
+							{$flash->message}
+						</div>
+					</div>
+					<!-- END FLASH MESSAGES-->
+
+					<!-- CONTENT BODY-->
+					{include content}
+					<!-- END CONTENT BODY-->
+
+				</div>
+				<!-- END PAGE -->
+			</div>
+			<!-- END CONTENT -->
+
+		</div>
+		{if $designSettings->layoutBoxed && $designSettings->footerFixed}</div>{/if}
+		<!-- END CONTAINER -->
+
+		{if $designSettings->layoutBoxed && $designSettings->footerFixed}<div class="container">{/if}
+		{include 'footer.latte'}
+		{if $designSettings->layoutBoxed && $designSettings->footerFixed}</div>{/if}
+		
+		{if $designSettings->layoutBoxed && !$designSettings->footerFixed}</div>{/if}
+
+		{block scripts}
+		<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+		{include jsMetronicCore}
+		{include jsAdminApp}
+		<!-- END JAVASCRIPTS -->
+		{/block}
+	</body>
+</html>

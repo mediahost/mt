@@ -1,0 +1,41 @@
+{block pageTitle}
+	{_'Settings'}
+{/block}
+
+{block breadcrumbItems}
+<li>
+	<a n:href="Profile:">{_'My Profile'}</a>
+</li>
+<li>
+	<a n:href="this">{_'Settings'}</a>
+</li>
+{/block}
+
+{block settingsMenu}
+<ul class="ver-inline-menu tabbable margin-bottom-10">
+	<li {ifCurrent connectManager}class="active"{/ifCurrent}>
+		<a n:href="connectManager">
+			<i class="icon-feed"></i>
+			{_'Connect manager'}
+		</a>
+		<span class="after" n:ifCurrent="connectManager">
+		</span>
+	</li>
+	<li {ifCurrent setPassword}class="active"{/ifCurrent}>
+		<a n:href="setPassword">
+			<i class="icon-key"></i>
+			{_'Set password'}
+		</a>
+		<span class="after" n:ifCurrent="setPassword">
+		</span>
+	</li>
+	<li {ifCurrent delete}class="active"{/ifCurrent}>
+		<a n:href="delete">
+			<i class="icon-shield"></i>
+			{_'Delete account'}
+		</a>
+		<span class="after" n:ifCurrent="delete">
+		</span>
+	</li>
+</ul>
+{/block}

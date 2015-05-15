@@ -1,0 +1,59 @@
+#
+# SECURITY WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+#
+# If you don't protect this directory from direct web access, anybody will be able to see your passwords.
+# http://nette.org/security-warning
+#
+includes:
+	# Extensions
+	- extensions/authentication.neon
+	- extensions/doctrine.neon
+	- extensions/webloader.neon
+
+	# Includes
+	- includes/components.neon
+	- includes/mail.neon
+	- includes/form.neon
+	- includes/listeners.neon
+	- includes/model.neon
+	- includes/permission.neon
+	- includes/presenters.neon
+	- includes/translator.neon
+
+parameters:
+
+php:
+	date.timezone: Europe/Prague
+	# zlib.output_compression: yes
+
+nette:
+	application:
+		errorPresenter: 'Front:Error'
+		catchExceptions: FALSE
+		mapping:
+			*: App\*Module\Presenters\*Presenter
+
+	session:
+		autoStart: true
+		expiration: 14 days
+		debugger: true
+
+	debugger:
+		email: 'pupe.dupe@gmail.com'
+
+services:
+	- App\RouterFactory
+	router: @App\RouterFactory::createRouter
+
+	urlScript:
+		factory: @httpRequest::getUrl()
+
+	nette.templateFactory: App\Templating\TemplateFactory
+	security.userStorage: Majkl578\NetteAddons\Doctrine2Identity\Http\UserStorage
+
+extensions:
+	onControlCreate: App\Extensions\ListenersGenericRegistration\DI\EventOnControlCreateCreateExtension
+	events: Kdyby\Events\DI\EventsExtension
+	installer: App\Extensions\Installer\DI\InstallerExtension
+	settings: App\Extensions\Settings\DI\SettingsExtension
+	foto: App\Extensions\Foto\DI\FotoExtension

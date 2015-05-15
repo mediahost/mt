@@ -1,0 +1,16 @@
+services:
+	doctrine: Kdyby\Doctrine\DI\OrmExtension
+	annotations: Kdyby\Annotations\DI\AnnotationsExtension
+
+	# Facades
+	- {class: App\Model\Facade\RoleFacade, inject: yes}
+	- {class: App\Model\Facade\UserFacade, inject: yes}
+
+	# Storages
+	- {class: App\Model\Storage\SignUpStorage, inject: yes}
+
+	# Events subscribers
+	treeSubscriber:
+		class: Knp\DoctrineBehaviors\ORM\Tree\TreeSubscriber
+		arguments: [Knp\DoctrineBehaviors\Reflection\ClassAnalyzer(), FALSE, 'Knp\DoctrineBehaviors\Model\Tree\Node']
+		tags: [kdyby.subscriber]

@@ -1,0 +1,15 @@
+{block footer}
+
+<!-- BEGIN FOOTER -->
+<div class="page-footer">
+	<div class="page-footer-inner">
+		{!= date('Y')} &copy; {_'MobilneTelefony by Mediahost'}.
+		| PHP {=PHP_VERSION}
+		{ifset $_SERVER['SERVER_SOFTWARE']}| Server {$_SERVER['SERVER_SOFTWARE']}{/ifset}
+		| Nette Framework {=Nette\Framework::VERSION}
+	</div>
+	<div class="scroll-to-top">
+		<i class="icon-arrow-up"></i>
+	</div>
+</div>
+<!-- END FOOTER -->

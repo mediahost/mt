@@ -1,0 +1,63 @@
+# Gettext keys exported by GettextTranslator and Translation Panel
+# Created: 2014-09-23 23:08:08
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2015-04-23 18:23+0100\n"
+"Project-Id-Version: Sourcecode\n"
+"POT-Creation-Date: 2014-08-24 12:34+0100\n"
+"Last-Translator: Petr Poupě <pupe.dupe@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: en\n"
+"X-Generator: Poedit 1.6.10\n"
+
+msgid "Grido.HintNumber"
+msgstr "You can use <, <=, >, >=, <>. e.g. '>= %d'"
+
+msgid "Grido.SelectSomeRow"
+msgstr "Select some row"
+
+msgid "Grido.Invert"
+msgstr "Invert"
+
+msgid "Grido.Items"
+msgstr "Items %d - %d of %d"
+
+msgid "Grido.First"
+msgstr "First"
+
+msgid "Grido.Previous"
+msgstr "Previous"
+
+msgid "Grido.Next"
+msgstr "Next"
+
+msgid "Grido.Last"
+msgstr "Last"
+
+msgid "Grido.Actions"
+msgstr "Actions"
+
+msgid "Grido.Search"
+msgstr "Search"
+
+msgid "Grido.Reset"
+msgstr "Reset"
+
+msgid "Grido.ItemsPerPage"
+msgstr "Items per page"
+
+msgid "Grido.Selected"
+msgstr "Selected..."
+
+msgid "Grido.EnterPage"
+msgstr "Enter page:"
+
+msgid "Grido.NoResults"
+msgstr "No results."
+
+msgid "Grido.ExportAllItems"
+msgstr "Export all items"

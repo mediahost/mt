@@ -1,0 +1,66 @@
+# Gettext keys exported by GettextTranslator and Translation Panel
+# Created: 2014-08-24 12:54:38
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2015-04-23 18:24+0100\n"
+"Project-Id-Version: Sourcecode\n"
+"POT-Creation-Date: 2014-08-24 12:34+0100\n"
+"Last-Translator: Petr Poupě <pupe.dupe@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Poedit 1.6.10\n"
+"Language: sk_SK\n"
+
+msgid "Registration"
+msgstr "Registrácia"
+
+msgid "Grido.HintNumber"
+msgstr "Môžete použiť <, <=, >, >=, <>. Napr.: '>= %d'"
+
+msgid "Grido.SelectSomeRow"
+msgstr "Vyberte riadok"
+
+msgid "Grido.Invert"
+msgstr "Obrátit výber"
+
+msgid "Grido.Items"
+msgstr "Položky %d - %d z %d"
+
+msgid "Grido.First"
+msgstr "Prvý"
+
+msgid "Grido.Previous"
+msgstr "Predchádzajúci"
+
+msgid "Grido.Next"
+msgstr "Ďalší"
+
+msgid "Grido.Last"
+msgstr "Posledný"
+
+msgid "Grido.Actions"
+msgstr "Akcie"
+
+msgid "Grido.Search"
+msgstr "Vyhľadať"
+
+msgid "Grido.Reset"
+msgstr "Zrušiť"
+
+msgid "Grido.ItemsPerPage"
+msgstr "Položiek na stránku"
+
+msgid "Grido.Selected"
+msgstr "Vybrané..."
+
+msgid "Grido.EnterPage"
+msgstr "Zadajte stranu:"
+
+msgid "Grido.NoResults"
+msgstr "Žiadne výsledky."
+
+msgid "Grido.ExportAllItems"
+msgstr "Exportovať všetky položky"

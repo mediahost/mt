@@ -1,0 +1,24 @@
+{form form, class => 'form-horizontal form-without-legend'}
+	<div class="row" n:if="$form->errors">
+		<div class="col-md-offset-4 col-lg-8 alert alert-danger">
+			<button class="close" data-close="alert"></button>
+			{foreach $form->errors as $error}
+				<span>{$error}</span><br/>
+			{/foreach}
+		</div>
+	</div>
+
+	<div class="form-group">
+		{label newPassword, class=>'control-label visible-ie8 visible-ie9' /}
+		{input newPassword, class=>'form-control placeholder-no-fix'}
+	</div>
+
+	<div class="form-group">
+		{label passwordAgain, class=>'control-label visible-ie8 visible-ie9' /}
+		{input passwordAgain, class=>'form-control placeholder-no-fix'}
+	</div>
+
+	<div class="form-actions">
+		{button recovery, class=>'btn btn-primary'}{caption}{/button}
+	</div>
+{/form}

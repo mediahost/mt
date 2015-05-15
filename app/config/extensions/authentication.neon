@@ -1,0 +1,6 @@
+extensions:
+	facebook: Kdyby\Facebook\DI\FacebookExtension
+	twitter: Netrium\Addons\Twitter\TwitterExtension
+
+facebook:
+	permissions: [email,user_birthday]

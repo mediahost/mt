@@ -1,0 +1,27 @@
+{form form, class => 'lock-form pull-left'}	
+	<div class="alert" n:if="$form->errors">
+		<button class="close" data-close="alert"></button>
+		{foreach $form->errors as $error}
+			<span>{$error}</span><br n:if="!$iterator->last"/>
+		{/foreach}
+	</div>
+	
+	<h4 n:if="$loggedUser">{$loggedUser}</h4>
+	<div class="form-group">
+		{input password, class=>'form-control placeholder-no-fix', autocomplete=>'off'}
+	</div>
+	<div class="form-actions">
+		{button signIn, class=>'btn btn-success uppercase'}{caption}{/button}
+	</div>
+	<div class="form-actions">
+	</div>
+	<div class="socials">
+		<a class="social-icon facebook append-remember" data-original-title="{_'Facebook'}" href="{control facebook}"></a>
+		<a class="social-icon twitter append-remember" data-original-title="{_'Twitter'}" href="{control twitter}"></a>
+		{*
+		<a class="social-icon googleplus append-remember" data-original-title="{_'Google'}" n:href="this"></a>
+		<a class="social-icon linkedin append-remember" data-original-title="{_'Linkedin'}" n:href="this"></a>
+		*}
+		{input remember}
+	</div>
+{/form}

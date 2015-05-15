@@ -1,0 +1,3 @@
+services:
+	# Presenters
+	- App\FrontModule\Presenters\SignPresenter

@@ -1,0 +1,131 @@
+// FUNCTIONS /////
+
+.test(@color: red) {
+    border: 1px @color solid;
+}
+.test2(@color: red) {
+    background-color: @color;
+}
+
+.cleaner() {
+    display: block;
+    clear: both;
+    content: "";
+}
+
+.boxSize(@size: 100px) {
+    width: @size;
+    height: @size;
+}
+
+.rounded(@radius: 3px) {
+    border-radius: @radius;
+    -o-border-radius: @radius;
+    -ms-border-radius: @radius;
+    -moz-border-radius: @radius;
+    -webkit-border-radius: @radius;
+}
+
+.roundedTop(@radius: 3px) {
+    border-top-left-radius: @radius;
+    border-top-right-radius: @radius;
+    -o-border-radius-topleft: @radius;
+    -o-border-radius-topright: @radius;
+    -ms-border-radius-topleft: @radius;
+    -ms-border-radius-topright: @radius;
+    -moz-border-radius-topleft: @radius;
+    -moz-border-radius-topright: @radius;
+    -webkit-border-top-left-radius: @radius;
+    -webkit-border-top-right-radius: @radius;
+}
+
+.roundedLeft(@radius: 3px) {
+    border-top-left-radius: @radius;
+    border-bottom-left-radius: @radius;
+    -o-border-radius-topleft: @radius;
+    -o-border-radius-bottomleft: @radius;
+    -ms-border-radius-topleft: @radius;
+    -ms-border-radius-bottomleft: @radius;
+    -moz-border-radius-topleft: @radius;
+    -moz-border-radius-bottomleft: @radius;
+    -webkit-border-top-left-radius: @radius;
+    -webkit-border-bottom-left-radius: @radius;
+}
+
+.grayscale(@percentage: 100%) {
+    filter: grayscale(@percentage);
+    -webkit-filter: grayscale(@percentage);
+    -moz-filter: grayscale(@percentage);
+    -ms-filter: grayscale(@percentage);
+    -o-filter: grayscale(@percentage);
+}
+
+.grayscaleOn() {
+    .grayscale(100%);
+    filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale"); /* Firefox 3.5+ */
+}
+
+.grayscaleOff() {
+    .grayscale(0%);
+    filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0\'/></filter></svg>#grayscale");
+}
+
+.boxSizing(@sizing: border-box) {
+    box-sizing: @sizing;
+    -o-box-sizing: @sizing;
+    -ms-box-sizing: @sizing;
+    -moz-box-sizing: @sizing;
+    -webkit-box-sizing: @sizing;
+}
+
+.gradientBackground(@color1: #ffffff, @color2: #000000, @percentage1: 0, @percentage2: 1) {
+    background-image: linear-gradient(bottom, @color1 percentage(@percentage1), @color2 percentage(@percentage2));
+    background-image: -o-linear-gradient(bottom, @color1 percentage(@percentage1), @color2 percentage(@percentage2));
+    background-image: -moz-linear-gradient(bottom, @color1 percentage(@percentage1), @color2 percentage(@percentage2));
+    background-image: -webkit-linear-gradient(bottom, @color1 percentage(@percentage1), @color2 percentage(@percentage2));
+    background-image: -ms-linear-gradient(bottom, @color1 percentage(@percentage1), @color2 percentage(@percentage2));
+
+    background-image: -webkit-gradient(
+            linear,
+            left bottom,
+            left top,
+            color-stop(@percentage1, @color1),
+            color-stop(@percentage2, @color2)
+    );
+}
+
+.boxShadow(@horizontal: 1px, @vertical: 1px, @blur: 2px, @color: black) {
+    box-shadow:         0 @horizontal @vertical @blur @color;
+    -o-box-shadow:      0 @horizontal @vertical @blur @color;
+    -ms-box-shadow:     0 @horizontal @vertical @blur @color;
+    -moz-box-shadow:    0 @horizontal @vertical @blur @color;
+    -webkit-box-shadow: 0 @horizontal @vertical @blur @color;
+}
+
+.textShadow(@horizontal: 1px, @vertical: 1px, @blur: 2px, @color: black) {
+    text-shadow: @horizontal @vertical @blur @color;
+    text-shadow: @horizontal @vertical @blur @color;
+    -o-text-shadow: @horizontal @vertical @blur @color;
+    -ms-text-shadow: @horizontal @vertical @blur @color;
+    -moz-text-shadow: @horizontal @vertical @blur @color;
+    -webkit-text-shadow: @horizontal @vertical @blur @color;
+    filter: dropshadow(color=@color, offx=@horizontal, offy=@vertical);
+}
+
+.transition(@time: 0.5s, @property: all, @function: linear) {
+    transition-timing-function: @function;
+    -o-transition-timing-function: @function;
+    -ms-transition-timing-function: @function;
+    -moz-transition-timing-function: @function;
+    -webkit-transition-timing-function: @function;
+    transition-duration: @time;
+    -o-transition-duration: @time;
+    -ms-transition-duration: @time;
+    -moz-transition-duration: @time;
+    -webkit-transition-duration: @time;
+    transition-property: @property;
+    -o-transition-property: @property;
+    -ms-transition-property: @property;
+    -moz-transition-property: @property;
+    -webkit-transition-property: @property;
+}
