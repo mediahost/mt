@@ -9,7 +9,7 @@
 				{$source->name}
 			</td>
 			<td class="buttons">
-				<a n:class="btn, btn-sm, loading-btn, !$source->active ? green"
+				<a n:class="btn, btn-sm, loading-btn, !$source->active ? blue-steel"
 				   data-loading-text="{_'Loading...'}"
 				   n:if="!$source->active || ($source->active && $canDisconnect)"
 				   href="{$source->link}">

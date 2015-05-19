@@ -1,0 +1,25 @@
+{block breadcrumbItems}
+<li><a n:href="MyAccount:">{_'My Account'}</a></li>
+<li class="active">{_'My Orders'}</li>
+{/block}
+
+{block content}
+<div class="container">
+	<div class="row">
+
+		{include 'navigation.latte'}
+
+		<!-- BEGIN CONTENT -->
+		<div class="col-md-9 col-sm-7">
+            <h1>{_'My Orders'}</h1>
+            <div class="content-page">
+				<ul>
+					<li><a n:href="this">{_'order 1'}</a></li>
+					<li><a n:href="this">{_'order 2'}</a></li>
+					<li><a n:href="this">{_'order 3'}</a></li>
+				</ul>
+            </div>
+		</div>
+		<!-- END CONTENT -->
+	</div>
+</div>

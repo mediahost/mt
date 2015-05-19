@@ -90,7 +90,7 @@ class ConnectManagerControl extends BaseControl
 		]);
 
 		$appConnection = clone $initConnection;
-		$appConnection->name = $this->translator->translate('SourceCode');
+		$appConnection->name = $this->translator->translate('E-mail account');
 		$appConnection->active = $this->user->hasSocialConnection(User::SOCIAL_CONNECTION_APP);
 		$appConnection->link = $appConnection->active ?
 				$this->link('deactivate!', User::SOCIAL_CONNECTION_APP) :
