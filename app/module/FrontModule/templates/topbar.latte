@@ -2,8 +2,8 @@
 <!-- BEGIN TOP BAR LEFT PART -->
 <div class="col-md-6 col-sm-6 additional-shop-info">
 	<ul class="list-unstyled list-inline">
-		<li><i class="fa fa-envelope-o"></i><span>obchod@mobilnetelefony.sk</span></li>
-		<li><i class="fa fa-phone"></i><span>+421 908 84 84 84</span></li>
+		<li class="visible-lg-inline-block"><i class="fa fa-envelope-o"></i><span>obchod@mobilnetelefony.sk</span></li>
+		<li class="visible-md-inline-block"><i class="fa fa-phone"></i><span>+421 908 84 84 84</span></li>
 		<!-- BEGIN CURRENCIES -->
 		<li class="shop-currencies">
 			<a href="javascript:void(0);" class="current">€</a>
@@ -34,7 +34,7 @@
 		<li><a n:href="Sign:up">{_'Registration'}</a></li>
 	</ul>
 	<ul n:if="$user->loggedIn" class="list-unstyled list-inline pull-right">
-		<li>{$user->identity}</li>
+		<li class="visible-lg-inline-block">{$user->identity}</li>
 		<li n:if="$user->isAllowed('dashboard')"><a n:href=":App:Dashboard:">{_'Admin'}</a></li>
 		<li n:if="$user->isAllowed('myAccount')"><a n:href="MyAccount:">{_'My Account'}</a></li>
 		<li>
