@@ -53,7 +53,7 @@ class SetPasswordControl extends BaseControl
 
 		$form->addPassword('passwordAgain', 'Re-type Your Password', NULL, 255)
 				->setAttribute('placeholder', 'Re-type Your Password')
-				->addConditionOn($form['newPassword'], Form::FILLED)
+				->setRequired('Please re-enter your password')
 				->addRule(Form::EQUAL, 'Passwords must be equal.', $form['newPassword']);
 
 		$form->addSubmit('save', 'Save');

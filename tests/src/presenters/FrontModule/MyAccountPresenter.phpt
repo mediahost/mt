@@ -14,15 +14,15 @@ $container = require __DIR__ . '/../../bootstrap.php';
  *
  * @testCase
  * @phpVersion 5.4
- * @skip
  */
-class ProfilePresenterTest extends BasePresenter
+class MyAccountPresenterTest extends BasePresenter
 {
 
 	protected function setUp()
 	{
+		$this->initSystem();
 		parent::setUp();
-		$this->openPresenter('App:Profile');
+		$this->openPresenter('Front:MyAccount');
 	}
 
 	protected function tearDown()
@@ -39,6 +39,7 @@ class ProfilePresenterTest extends BasePresenter
 
 	public function testDefault()
 	{
+		$this->loginUser();
 		$response = $this->runPresenterActionGet('default');
 
 		$html = (string) $response->getSource();
@@ -49,5 +50,5 @@ class ProfilePresenterTest extends BasePresenter
 
 }
 
-$test = new ProfilePresenterTest($container);
+$test = new MyAccountPresenterTest($container);
 $test->run();

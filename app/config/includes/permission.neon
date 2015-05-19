@@ -12,7 +12,6 @@ services:
 
 			# Resources
 			- addResource('myAccount')
-			- addResource('myOrders')
 
 			- addResource('dashboard')
 			- addResource('settings')
@@ -33,7 +32,6 @@ services:
 			- allow('signed', 'profile', ['default', 'settings', 'delete'])
 
 			- allow('user', 'myAccount')
-			- allow('user', 'myOrders')
 
 			- allow('admin', 'dashboard')
 			- allow('admin', 'orders')

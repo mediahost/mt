@@ -1,0 +1,38 @@
+{block navigation}
+<!-- BEGIN SIDEBAR -->
+<div class="sidebar col-md-3 col-sm-3">
+
+	<ul class="list-group margin-bottom-25 sidebar-menu">
+		<li n:class="list-group-item, clearfix, $presenter->isLinkCurrent('MyAccount:orders') ? active">
+			<a n:href="MyAccount:orders">
+				<i class="fa fa-angle-right"></i>
+				{_'My Orders'}
+			</a>
+		</li>
+		<li n:class="list-group-item, clearfix, $presenter->isLinkCurrent('MyAccount:personalInfo') ? active">
+			<a n:href="MyAccount:personalInfo">
+				<i class="fa fa-angle-right"></i>
+				{_'Personal Info'}
+			</a>
+		</li>
+		<li n:class="list-group-item, clearfix, $presenter->isLinkCurrent('MyAccount:accounts') ? active">
+			<a n:href="MyAccount:accounts">
+				<i class="fa fa-angle-right"></i>
+				{_'Soacial Connection'}
+			</a>
+		</li>
+		<li n:class="list-group-item, clearfix, $presenter->isLinkCurrent('MyAccount:password') ? active">
+			<a n:href="MyAccount:password">
+				<i class="fa fa-angle-right"></i>
+				{_'Change Password'}
+			</a>
+		</li>
+		<li n:class="list-group-item, clearfix, $presenter->isLinkCurrent('MyAccount:delete') ? active">
+			<a n:href="MyAccount:delete">
+				<i class="fa fa-angle-right"></i>
+				{_'Delete Account'}
+			</a>
+		</li>
+	</ul>
+</div>
+<!-- END SIDEBAR -->
