@@ -61,6 +61,7 @@ class Role extends BaseEntity
 				self::GUEST,
 				self::SIGNED,
 				self::USER,
+				self::DEALER,
 				self::ADMIN,
 				self::SUPERADMIN,
 		];

@@ -28,7 +28,6 @@ trait UserFacadeDelete
 	public function delete(User $user)
 	{
 		if ($this->isDeletable($user)) {
-			$this->clearPermissions($user);
 			$this->em->remove($user);
 			$this->em->flush();
 			return $user;
