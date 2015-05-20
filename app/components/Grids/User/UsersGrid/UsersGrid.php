@@ -3,7 +3,7 @@
 namespace App\Components\Grids\User;
 
 use App\Components\BaseControl;
-use App\Components\Grido\BaseGrid;
+use App\Extensions\Grido\BaseGrid;
 use App\Helpers;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;

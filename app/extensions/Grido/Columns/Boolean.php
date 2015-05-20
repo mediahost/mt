@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Components\Grido\Columns;
+namespace App\Extensions\Grido\Columns;
 
-use Grido\Components\Columns\Text;
+use Grido\Extensions\Columns\Text;
 use Nette\Utils\Html;
 
 /**
