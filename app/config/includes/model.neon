@@ -1,6 +1,7 @@
 services:
 	doctrine: Kdyby\Doctrine\DI\OrmExtension
 	annotations: Kdyby\Annotations\DI\AnnotationsExtension
+	userCalllable: App\Model\Entity\UserCallable
 
 	# Facades
 	- {class: App\Model\Facade\RoleFacade, inject: yes}
@@ -25,6 +26,10 @@ services:
 	softDeletableSubscriber:
 		class: Knp\DoctrineBehaviors\ORM\SoftDeletable\SoftDeletableSubscriber
 		arguments: [Knp\DoctrineBehaviors\Reflection\ClassAnalyzer(), FALSE, 'Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable']
+		tags: [kdyby.subscriber]
+	blameableSubscriber:
+		class: Knp\DoctrineBehaviors\ORM\Blameable\BlameableSubscriber
+		arguments: [Knp\DoctrineBehaviors\Reflection\ClassAnalyzer(), FALSE, 'Knp\DoctrineBehaviors\Model\Blameable\Blameable', @userCalllable, 'App\Model\Entity\User']
 		tags: [kdyby.subscriber]
 	loggableSubscriber:
 		class: Knp\DoctrineBehaviors\ORM\Loggable\LoggableSubscriber
