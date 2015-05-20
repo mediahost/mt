@@ -4,8 +4,6 @@ namespace Test\Examples;
 
 use Kdyby\Doctrine\EntityRepository;
 use Nette\DI\Container;
-use Nette\Utils\DateTime;
-use Test\Examples\Model\Entity\Sluggable;
 use Test\Examples\Model\Entity\Timestampable;
 use Tester\Assert;
 
@@ -13,6 +11,7 @@ $container = require __DIR__ . '/../bootstrap.php';
 
 /**
  * TEST: Timestampable use
+ * https://github.com/KnpLabs/DoctrineBehaviors/blob/master/tests/Knp/DoctrineBehaviors/ORM/TimestampableTest.php
  *
  * @testCase
  * @phpVersion 5.4

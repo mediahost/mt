@@ -12,6 +12,7 @@ $container = require __DIR__ . '/../bootstrap.php';
 
 /**
  * TEST: Translation use
+ * https://github.com/KnpLabs/DoctrineBehaviors/blob/master/tests/Knp/DoctrineBehaviors/ORM/TranslatableTest.php
  *
  * @testCase
  * @phpVersion 5.4
