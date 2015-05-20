@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Components\Grido;
+namespace App\Extensions\Grido;
 
-use App\Components\Grido\Columns\Boolean;
+use App\Extensions\Grido\Columns\Boolean;
 use Grido\Grid;
 
 /**
