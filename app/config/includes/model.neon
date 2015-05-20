@@ -14,3 +14,7 @@ services:
 		class: Knp\DoctrineBehaviors\ORM\Tree\TreeSubscriber
 		arguments: [Knp\DoctrineBehaviors\Reflection\ClassAnalyzer(), FALSE, 'Knp\DoctrineBehaviors\Model\Tree\Node']
 		tags: [kdyby.subscriber]
+	sluggSubscriber:
+		class: Knp\DoctrineBehaviors\ORM\Sluggable\SluggableSubscriber
+		arguments: [Knp\DoctrineBehaviors\Reflection\ClassAnalyzer(), FALSE, 'Knp\DoctrineBehaviors\Model\Sluggable\Sluggable']
+		tags: [kdyby.subscriber]
