@@ -22,3 +22,7 @@ services:
 		class: Knp\DoctrineBehaviors\ORM\Timestampable\TimestampableSubscriber
 		arguments: [Knp\DoctrineBehaviors\Reflection\ClassAnalyzer(), FALSE, 'Knp\DoctrineBehaviors\Model\Timestampable\Timestampable']
 		tags: [kdyby.subscriber]
+	softDeletableSubscriber:
+		class: Knp\DoctrineBehaviors\ORM\SoftDeletable\SoftDeletableSubscriber
+		arguments: [Knp\DoctrineBehaviors\Reflection\ClassAnalyzer(), FALSE, 'Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable']
+		tags: [kdyby.subscriber]
