@@ -53,12 +53,8 @@ services:
 		inject: yes
 
 	# User
-	IPreferencesControlFactory:
-		implement: App\Components\User\IPreferencesControlFactory
-		inject: yes
-
-	IUserControlFactory:
-		implement: App\Components\User\IUserControlFactory
+	IUserBasicControlFactory:
+		implement: App\Components\User\IUserBasicControlFactory
 		inject: yes
 
 	# Example

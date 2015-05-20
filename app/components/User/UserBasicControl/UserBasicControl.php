@@ -16,9 +16,9 @@ use Nette\Forms\IControl;
 use Nette\Utils\ArrayHash;
 
 /**
- * Form with all user's personal settings.
+ * Form with basic user data.
  */
-class UserControl extends BaseControl
+class UserBasicControl extends BaseControl
 {
 
 	/** @var User */
@@ -177,9 +177,9 @@ class UserControlException extends Exception
 
 }
 
-interface IUserControlFactory
+interface IUserBasicControlFactory
 {
 
-	/** @return UserControl */
+	/** @return UserBasicControl */
 	function create();
 }
