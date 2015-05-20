@@ -26,3 +26,7 @@ services:
 		class: Knp\DoctrineBehaviors\ORM\SoftDeletable\SoftDeletableSubscriber
 		arguments: [Knp\DoctrineBehaviors\Reflection\ClassAnalyzer(), FALSE, 'Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable']
 		tags: [kdyby.subscriber]
+	loggableSubscriber:
+		class: Knp\DoctrineBehaviors\ORM\Loggable\LoggableSubscriber
+		arguments: [Knp\DoctrineBehaviors\Reflection\ClassAnalyzer(), FALSE, ['Tracy\Debugger', 'log']]
+		tags: [kdyby.subscriber]
