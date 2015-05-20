@@ -1858,12 +1858,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mediahost/DoctrineBehaviors.git",
-                "reference": "50ce4bc2bd5bacb6a763d90f62c9bbd2a45ee87b"
+                "reference": "ecaf6f38110de8ade5ea00296339e6bec445a7bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mediahost/DoctrineBehaviors/zipball/50ce4bc2bd5bacb6a763d90f62c9bbd2a45ee87b",
-                "reference": "50ce4bc2bd5bacb6a763d90f62c9bbd2a45ee87b",
+                "url": "https://api.github.com/repos/mediahost/DoctrineBehaviors/zipball/ecaf6f38110de8ade5ea00296339e6bec445a7bf",
+                "reference": "ecaf6f38110de8ade5ea00296339e6bec445a7bf",
                 "shasum": ""
             },
             "require": {
@@ -1912,7 +1912,7 @@
             "support": {
                 "source": "https://github.com/mediahost/DoctrineBehaviors/tree/master"
             },
-            "time": "2015-01-14 12:12:27"
+            "time": "2015-05-20 20:04:54"
         },
         {
             "name": "latte/latte",
@@ -4119,12 +4119,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Kdyby/TesterExtras.git",
-                "reference": "7d548b5f74b12f015d34da6ce71d9149724c1690"
+                "reference": "ed612407eb5501d9f843d953e1648e6cfb89f75f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kdyby/TesterExtras/zipball/7d548b5f74b12f015d34da6ce71d9149724c1690",
-                "reference": "7d548b5f74b12f015d34da6ce71d9149724c1690",
+                "url": "https://api.github.com/repos/Kdyby/TesterExtras/zipball/ed612407eb5501d9f843d953e1648e6cfb89f75f",
+                "reference": "ed612407eb5501d9f843d953e1648e6cfb89f75f",
                 "shasum": ""
             },
             "require": {
@@ -4160,7 +4160,7 @@
                 "nette",
                 "tester"
             ],
-            "time": "2015-05-09 20:27:24"
+            "time": "2015-05-14 21:15:01"
         },
         {
             "name": "mockery/mockery",

@@ -2,7 +2,7 @@
 
 namespace App\Extensions\Grido\Columns;
 
-use Grido\Extensions\Columns\Text;
+use Grido\Components\Columns\Text;
 use Nette\Utils\Html;
 
 /**
