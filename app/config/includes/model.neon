@@ -18,3 +18,7 @@ services:
 		class: Knp\DoctrineBehaviors\ORM\Sluggable\SluggableSubscriber
 		arguments: [Knp\DoctrineBehaviors\Reflection\ClassAnalyzer(), FALSE, 'Knp\DoctrineBehaviors\Model\Sluggable\Sluggable']
 		tags: [kdyby.subscriber]
+	timestampSubscriber:
+		class: Knp\DoctrineBehaviors\ORM\Timestampable\TimestampableSubscriber
+		arguments: [Knp\DoctrineBehaviors\Reflection\ClassAnalyzer(), FALSE, 'Knp\DoctrineBehaviors\Model\Timestampable\Timestampable']
+		tags: [kdyby.subscriber]
