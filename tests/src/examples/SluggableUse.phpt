@@ -12,6 +12,7 @@ $container = require __DIR__ . '/../bootstrap.php';
 
 /**
  * TEST: Sluggable use
+ * https://github.com/KnpLabs/DoctrineBehaviors/blob/master/tests/Knp/DoctrineBehaviors/ORM/SluggableTest.php
  *
  * @testCase
  * @phpVersion 5.4
@@ -24,7 +25,6 @@ class SluggableUseTest extends BaseUse
 
 	public function __construct(Container $container)
 	{
-
 		parent::__construct($container);
 		$this->sluggRepo = $this->em->getRepository(Sluggable::getClassName());
 	}
