@@ -31,7 +31,7 @@ abstract class DbTestCase extends BaseTestCase
 
 	protected function setOwnDb()
 	{
-		Bootstrap::setupDoctrineDatabase($this->getContainer(), [], 'sc');
+		Bootstrap::setupDoctrineDatabase($this->getContainer(), [], 'mt');
 	}
 
 	protected function importDbDataFromFile($file)
