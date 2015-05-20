@@ -2,9 +2,6 @@
 
 namespace App\AppModule\Presenters;
 
-/**
- * Dashboard presenter
- */
 class DashboardPresenter extends BasePresenter
 {
 
