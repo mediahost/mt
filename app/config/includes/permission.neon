@@ -7,7 +7,7 @@ services:
 			- addRole('signed', 'guest')
 			- addRole('user', 'signed')
 			- addRole('dealer', 'user')
-			- addRole('admin', 'signed')
+			- addRole('admin', 'dealer')
 			- addRole('superadmin', 'admin')
 
 			# Resources
