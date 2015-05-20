@@ -6,9 +6,6 @@ use App\Components\Example\Form\FormControl;
 use App\Components\Example\Form\IFormControlFactory;
 use App\Forms\Form;
 
-/**
- * Examples presenter
- */
 class ExamplesPresenter extends BasePresenter
 {
 
