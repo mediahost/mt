@@ -14,7 +14,6 @@ use GettextTranslator\Gettext;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\ForbiddenRequestException;
 use Nette\Application\UI\Presenter;
-use Nette\Security\IUserStorage;
 use WebLoader\Nette\CssLoader;
 use WebLoader\Nette\LoaderFactory;
 
@@ -106,13 +105,8 @@ abstract class BasePresenter extends Presenter
 	private function checkSecured($resource, $privilege)
 	{
 		if (!$this->user->loggedIn) {
-			if ($this->user->logoutReason === IUserStorage::INACTIVITY) {
-				$this->flashMessage('You have been signed out, because you have been inactive for long time.');
-				$this->redirect(':Front:LockScreen:', ['backlink' => $this->storeRequest()]);
-			} else {
-				$this->flashMessage('You should be logged in!');
-				$this->redirect(':Front:Sign:in', ['backlink' => $this->storeRequest()]);
-			}
+			$this->flashMessage('You should be logged in!');
+			$this->redirect(':Front:Sign:in', ['backlink' => $this->storeRequest()]);
 		} elseif (!$this->user->isAllowed($resource, $privilege)) {
 			throw new ForbiddenRequestException;
 		}
@@ -209,5 +203,4 @@ abstract class BasePresenter extends Presenter
 	}
 
 	// </editor-fold>
-
 }
