@@ -54,8 +54,9 @@
 						<span class="title">{_'Orders'}</span><span class="selected"></span>
 					</a>
 				</li>
-				<li>
-					<a n:href="this">
+				<li n:if="$user->isAllowed('products', 'default')"
+					n:class="$presenter->isLinkCurrent('Products:*') ? active">
+					<a n:href="Products:">
 						<i class="fa fa-tags"></i>
 						<span class="title">{_'Products'}</span><span class="selected"></span>
 					</a>
