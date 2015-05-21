@@ -5,6 +5,7 @@ namespace Test\Examples\Model\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
+use Nette\Utils\DateTime;
 
 /**
  * @ORM\Entity
@@ -12,6 +13,8 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  * https://github.com/KnpLabs/DoctrineBehaviors/blob/master/tests/fixtures/BehaviorFixtures/ORM/TimestampableEntity.php
  *
  * @property string $name
+ * @property DateTime $createdAt
+ * @property DateTime $updatedAt
  */
 class Timestampable extends BaseEntity
 {
