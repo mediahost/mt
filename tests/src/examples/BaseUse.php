@@ -22,7 +22,7 @@ abstract class BaseUse extends DbTestCase
 	public function __construct(Container $container)
 	{
 		parent::__construct($container);
-		$this->defaultSettings = new DefaultSettingsStorage;
+		$this->defaultSettings = new DefaultSettingsStorage();
 	}
 
 	protected function getLanguageService()
@@ -32,7 +32,7 @@ abstract class BaseUse extends DbTestCase
 				'default' => 'en',
 				'allowed' => ['en' => 'English', 'fr' => 'French', 'cs' => 'Czech'],
 			]);
-			$this->languageService = new LanguageService;
+			$this->languageService = new LanguageService();
 			$this->languageService->defaultStorage = $this->defaultSettings;
 			$this->languageService->em = $this->em;
 		}

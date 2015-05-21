@@ -12,6 +12,9 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  * https://github.com/KnpLabs/DoctrineBehaviors/blob/master/tests/fixtures/BehaviorFixtures/ORM/BlameableEntity.php
  *
  * @property string $name
+ * @property mixed $createdBy
+ * @property mixed $updatedBy
+ * @property mixed $deletedBy
  */
 class Blameable extends BaseEntity
 {
