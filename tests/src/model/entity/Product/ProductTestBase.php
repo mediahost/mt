@@ -5,6 +5,12 @@ namespace Test\Model\Entity;
 use App\Extensions\Settings\Model\Service\LanguageService;
 use App\Extensions\Settings\Model\Storage\DefaultSettingsStorage;
 use App\Model\Entity\Category;
+use App\Model\Entity\CategoryTranslation;
+use App\Model\Entity\Parameter;
+use App\Model\Entity\ParameterType;
+use App\Model\Entity\ParameterTypeTranslation;
+use App\Model\Entity\ParameterValue;
+use App\Model\Entity\ParameterValueTranslation;
 use App\Model\Entity\Price;
 use App\Model\Entity\Producer;
 use App\Model\Entity\Product;
@@ -137,9 +143,15 @@ abstract class ProductTestBase extends DbTestCase
 			$this->em->getClassMetadata(ProductSeo::getClassName()),
 			$this->em->getClassMetadata(Price::getClassName()),
 			$this->em->getClassMetadata(Category::getClassName()),
+			$this->em->getClassMetadata(CategoryTranslation::getClassName()),
 			$this->em->getClassMetadata(Producer::getClassName()),
 			$this->em->getClassMetadata(Tag::getClassName()),
 			$this->em->getClassMetadata(TagTranslation::getClassName()),
+			$this->em->getClassMetadata(Parameter::getClassName()),
+			$this->em->getClassMetadata(ParameterType::getClassName()),
+			$this->em->getClassMetadata(ParameterTypeTranslation::getClassName()),
+			$this->em->getClassMetadata(ParameterValue::getClassName()),
+			$this->em->getClassMetadata(ParameterValueTranslation::getClassName()),
 		];
 	}
 

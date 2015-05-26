@@ -3,6 +3,10 @@
 namespace Test\Model\Entity;
 
 use App\Model\Entity\Category;
+use App\Model\Entity\EntityException;
+use App\Model\Entity\Parameter;
+use App\Model\Entity\ParameterType;
+use App\Model\Entity\ParameterValue;
 use App\Model\Entity\Producer;
 use App\Model\Entity\Product;
 use App\Model\Entity\Tag;
@@ -247,6 +251,66 @@ class ProductTest extends ProductTestBase
 		
 		Assert::count(0, $this->product->tags);
 		Assert::count(2, $this->product->signs);
+	}
+	
+	public function testParameters()
+	{
+		$paramType1 = new ParameterType('param type 1');
+		$paramType2 = new ParameterType('param type 2');
+		$paramType3 = new ParameterType('param type 3');
+		$this->em->persist($paramType1);
+		$this->em->persist($paramType2);
+		$this->em->persist($paramType3);
+		
+		$paramValue1a = new ParameterValue('my value 1a', $paramType1);
+		$paramValue1b = new ParameterValue('my value 1b', $paramType1);
+		$paramValue2a = new ParameterValue('my value 2a', $paramType2);
+		$paramValue2b = new ParameterValue('my value 2b', $paramType2);
+		$paramValue3a = new ParameterValue('my value 3a', $paramType3);
+		$paramValue3b = new ParameterValue('my value 3b', $paramType3);
+		$this->em->persist($paramValue1a);
+		$this->em->persist($paramValue1b);
+		$this->em->persist($paramValue2a);
+		$this->em->persist($paramValue2b);
+		$this->em->persist($paramValue3a);
+		$this->em->persist($paramValue3b);
+		
+		$parameter1 = new Parameter($paramType1, $paramValue1a);
+		$parameter2 = new Parameter($paramType2, $paramValue2a);
+		$parameter3 = new Parameter($paramType3, $paramValue3a);
+		$this->em->persist($parameter1);
+		$this->em->persist($parameter2);
+		$this->em->persist($parameter3);
+		
+		$this->product = new Product();
+		$this->product->setParameters([$parameter1, $parameter2]);
+		$this->saveProduct();
+		
+		Assert::count(2, $this->product->parameters);
+		
+		$this->product->addParameter($parameter3);
+		$this->saveProduct();
+		
+		Assert::count(3, $this->product->parameters);
+		Assert::same('param type 1', (string) $this->product->parameters[0]->type);
+		Assert::same('my value 1a', (string) $this->product->parameters[0]->value);
+		Assert::same('param type 2', (string) $this->product->parameters[1]->type);
+		Assert::same('my value 2a', (string) $this->product->parameters[1]->value);
+		
+		$parameterToChange1 = $this->product->parameters[0];
+		$parameterToChange1->value = $paramValue1b;
+		$this->em->persist($parameterToChange1);
+		$this->em->flush();
+		
+		$this->reloadProduct();
+		
+		Assert::same('param type 1', (string) $this->product->parameters[0]->type);
+		Assert::same('my value 1b', (string) $this->product->parameters[0]->value);
+		
+		$parameterToChange2 = $this->product->parameters[0];
+		Assert::exception(function () use ($parameterToChange2, $paramValue2b) {
+			$parameterToChange2->value = $paramValue2b;
+		}, EntityException::class);
 	}
 
 }
