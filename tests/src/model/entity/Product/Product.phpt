@@ -256,18 +256,27 @@ class ProductTest extends ProductTestBase
 	public function testParameters()
 	{
 		$paramType1 = new ParameterType('param type 1');
+		$paramType1->mergeNewTranslations();
 		$paramType2 = new ParameterType('param type 2');
+		$paramType2->mergeNewTranslations();
 		$paramType3 = new ParameterType('param type 3');
+		$paramType3->mergeNewTranslations();
 		$this->em->persist($paramType1);
 		$this->em->persist($paramType2);
 		$this->em->persist($paramType3);
 		
 		$paramValue1a = new ParameterValue('my value 1a', $paramType1);
+		$paramValue1a->mergeNewTranslations();
 		$paramValue1b = new ParameterValue('my value 1b', $paramType1);
+		$paramValue1b->mergeNewTranslations();
 		$paramValue2a = new ParameterValue('my value 2a', $paramType2);
+		$paramValue2a->mergeNewTranslations();
 		$paramValue2b = new ParameterValue('my value 2b', $paramType2);
+		$paramValue2b->mergeNewTranslations();
 		$paramValue3a = new ParameterValue('my value 3a', $paramType3);
+		$paramValue3a->mergeNewTranslations();
 		$paramValue3b = new ParameterValue('my value 3b', $paramType3);
+		$paramValue3b->mergeNewTranslations();
 		$this->em->persist($paramValue1a);
 		$this->em->persist($paramValue1b);
 		$this->em->persist($paramValue2a);
