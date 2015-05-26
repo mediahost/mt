@@ -33,7 +33,6 @@ class ParameterValue extends BaseTranslatable
 		parent::__construct($currentLocale);
 		if ($value) {
 			$this->value = $value;
-			$this->mergeNewTranslations();
 		}
 		if ($type) {
 			$this->type = $type;
