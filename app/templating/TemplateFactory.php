@@ -20,6 +20,7 @@ class TemplateFactory extends ParentTemplateFactory
 		$template = parent::createTemplate($control);
 		$latte = $template->getLatte();
 		$latte->onCompile[] = $this->addMacros;
+		$latte->addFilter('concat', ['App\Helpers', 'concatArray']);
 		return $template;
 	}
 
@@ -27,7 +28,7 @@ class TemplateFactory extends ParentTemplateFactory
 	{
 		$set = new MacroSet($latte->getCompiler());
 		$set->addMacro('ifCurrentIn', $this->ifCurrentInBegin, 'endif; unset($_c);');
-		$set->addMacro('scache', '?>?<?php echo strtotime(date(\'Y-m-d hh \')); ?>"<?php');
+		$set->addMacro('scache', '?>?<?php echo strtotime(date(\'Y-m-d hh \'));');
 	}
 
 	public function ifCurrentInBegin($node, $writer)
