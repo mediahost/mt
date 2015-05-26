@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityRepository;
 use Test\DbTestCase;
 use Tester\Assert;
 
-$container = require __DIR__ . '/../../bootstrap.php';
+$container = require __DIR__ . '/../../../../bootstrap.php';
 
 /**
  * TEST: Category entity
