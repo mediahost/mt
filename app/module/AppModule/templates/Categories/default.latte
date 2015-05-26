@@ -1,0 +1,22 @@
+{block pageTitle}
+	{_'Categories'}
+{/block}
+
+{block breadcrumbItems}
+<li><span>{_'Categories'}</span></li>
+{/block}
+
+{block content}
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box">
+			<ul class="list-group">
+				<li class="list-group-item"
+					n:foreach="$categories as $category">
+					{$category->path|concat:' / '}{if count($category->path)} / {/if}<b>{$category}</b>
+					| {$category->url} 
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
