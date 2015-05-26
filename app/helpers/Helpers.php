@@ -29,6 +29,17 @@ class Helpers
 	{
 		return self::concatStrings($separator, $first, $second);
 	}
+	
+	/**
+	 * Alias for concatStrings()
+	 * @param array $array
+	 * @param string $separator
+	 * @return string
+	 */
+	public static function concatArray(array $array, $separator = " ")
+	{
+		return self::concatStrings($separator, $array);
+	}
 
 	/**
 	 * Accepts unlimited parameters or two parameters, where second is array
