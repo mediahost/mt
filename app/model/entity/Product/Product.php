@@ -2,6 +2,7 @@
 
 namespace App\Model\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model;
 use Nette\Utils\DateTime;
@@ -25,6 +26,7 @@ use Nette\Utils\DateTime;
  * @property Producer $producer
  * @property Category $mainCategory
  * @property array $categories
+ * @property array $tags
  */
 class Product extends BaseTranslatable
 {
@@ -34,25 +36,70 @@ class Product extends BaseTranslatable
 	use Model\Loggable\Loggable;
 	use Model\Timestampable\Timestampable;
 	use Model\SoftDeletable\SoftDeletable;
-	
+
 	/** @ORM\Column(type="boolean") */
 	protected $active = TRUE;
-	
+
 	/** @ORM\Column(type="string", length=100, nullable=true) */
 	protected $ean;
-	
-    /** @ORM\ManyToOne(targetEntity="Producer", inversedBy="products") */
-    protected $producer;
-	
-    /** @ORM\ManyToOne(targetEntity="Category") */
-    protected $mainCategory;
+
+	/** @ORM\ManyToOne(targetEntity="Producer", inversedBy="products") */
+	protected $producer;
+
+	/** @ORM\ManyToOne(targetEntity="Category") */
+	protected $mainCategory;
 
 	/** @ORM\ManyToMany(targetEntity="Category", inversedBy="products") */
 	protected $categories;
 
+	/** @ORM\ManyToMany(targetEntity="Tag", inversedBy="products") */
+	protected $tags;
+
 	public function __construct($currentLocale = NULL)
 	{
+		$this->categories = new ArrayCollection();
+		$this->tags = new ArrayCollection();
 		parent::__construct($currentLocale);
+	}
+	
+	public function setMainCategory(Category $category)
+	{
+		$this->mainCategory = $category;
+		$this->addCategory($category);
+	}
+
+	public function setCategories(array $categories)
+	{
+		$removeIdles = function ($key, Category $category) use ($categories) {
+			if (!in_array($category, $categories, TRUE)) {
+				$this->removeCategory($category);
+			}
+			return TRUE;
+		};
+		$this->categories->forAll($removeIdles);
+		foreach ($categories as $category) {
+			$this->addCategory($category);
+		}
+		return $this;
+	}
+
+	public function addCategory(Category $category)
+	{
+		if (!$this->categories->contains($this->mainCategory)) {
+			$this->mainCategory = $category;
+		}
+		if (!$this->categories->contains($category)) {
+			$this->categories->add($category);
+		}
+		return $this;
+	}
+
+	public function removeCategory(Category $category)
+	{
+		if ($category === $this->mainCategory) {
+			$this->mainCategory = NULL;
+		}
+		return $this->categories->removeElement($category);
 	}
 
 	public function __toString()

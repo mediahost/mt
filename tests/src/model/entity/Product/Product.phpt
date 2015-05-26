@@ -2,6 +2,8 @@
 
 namespace Test\Model\Entity;
 
+use App\Model\Entity\Category;
+use App\Model\Entity\Producer;
 use App\Model\Entity\Product;
 use Tester\Assert;
 
@@ -106,6 +108,96 @@ class ProductTest extends ProductTestBase
 		Assert::same('jméno', $this->product->name);
 		Assert::same('krátký popisek', $this->product->seo->name);
 		Assert::same('dlouhý popisek', $this->product->seo->description);
+	}
+	
+	public function testProducer()
+	{
+		$producer = new Producer('My Producer');
+		$this->em->persist($producer);
+		
+		$this->product = new Product();
+		$this->product->producer = $producer;
+		
+		$this->saveProduct();
+		
+		Assert::same('My Producer', (string) $this->product->producer);
+	}
+	
+	public function testMainCategories()
+	{
+		$category = new Category('My Category');
+		$this->em->persist($category);
+		
+		$this->product = new Product();
+		$this->product->mainCategory = $category;
+		
+		$this->saveProduct();
+		
+		Assert::same('My Category', (string) $this->product->mainCategory);
+	}
+	
+	public function testAddAndRemoveCategory()
+	{
+		$cat1 = new Category('My Category 1');
+		$cat2 = new Category('My Category 2');
+		$cat3 = new Category('My Category 3');
+		$this->em->persist($cat1);
+		$this->em->persist($cat2);
+		$this->em->persist($cat3);
+		
+		$this->product = new Product();
+		$this->product->addCategory($cat1);
+		$this->product->addCategory($cat2);
+		$this->product->addCategory($cat3);
+		
+		$this->saveProduct();
+		
+		Assert::same('My Category 1', (string) $this->product->mainCategory);
+		Assert::count(3, $this->product->categories);
+		
+		$this->product->removeCategory($cat2);
+		
+		$this->saveProduct();
+		
+		Assert::count(2, $this->product->categories);
+	}
+	
+	public function testAddCategories()
+	{
+		$cat1 = new Category('My Category 1');
+		$cat2 = new Category('My Category 2');
+		$cat3 = new Category('My Category 3');
+		$cat4 = new Category('My Category 4');
+		$cat5 = new Category('My Category 5');
+		$this->em->persist($cat1);
+		$this->em->persist($cat2);
+		$this->em->persist($cat3);
+		$this->em->persist($cat4);
+		$this->em->persist($cat5);
+		
+		$this->product = new Product();
+		$this->product->setCategories([$cat2, $cat1, $cat3]);
+		
+		$this->saveProduct();
+		
+		Assert::same('My Category 2', (string) $this->product->mainCategory);
+		Assert::count(3, $this->product->categories);
+		Assert::same('My Category 1', (string) $this->product->categories[0]);
+		Assert::same('My Category 2', (string) $this->product->categories[1]);
+		Assert::same('My Category 3', (string) $this->product->categories[2]);
+		
+		$this->product->setCategories([$cat4, $cat5]);
+		$this->saveProduct();
+		
+		Assert::same('My Category 4', (string) $this->product->mainCategory);
+		Assert::count(2, $this->product->categories);
+		Assert::same('My Category 4', (string) $this->product->categories[0]);
+		Assert::same('My Category 5', (string) $this->product->categories[1]);
+		
+		$this->product->setCategories([]);
+		
+		Assert::null($this->product->mainCategory);
+		Assert::count(0, $this->product->categories);
 	}
 
 }
