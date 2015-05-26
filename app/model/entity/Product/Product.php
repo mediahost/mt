@@ -53,6 +53,9 @@ class Product extends BaseTranslatable
 	/** @ORM\ManyToMany(targetEntity="Category", inversedBy="products") */
 	protected $categories;
 
+	/** @ORM\OneToMany(targetEntity="Parameter", mappedBy="product") */
+	protected $parameters;
+
 	/** @ORM\ManyToMany(targetEntity="Tag", inversedBy="products") */
 	protected $tags;
 
@@ -101,6 +104,34 @@ class Product extends BaseTranslatable
 			$this->mainCategory = NULL;
 		}
 		return $this->categories->removeElement($category);
+	}
+	
+	public function setParameters(array $parameters)
+	{
+		$removeIdles = function ($key, Parameter $parameter) use ($parameters) {
+			if (!in_array($parameter, $parameters, TRUE)) {
+				$this->removeTag($parameter);
+			}
+			return TRUE;
+		};
+		$this->parameters->forAll($removeIdles);
+		foreach ($parameters as $parameter) {
+			$this->addParameter($parameter);
+		}
+		return $this;
+	}
+
+	public function removeParameter(Parameter $parameter)
+	{
+		return $this->parameters->removeElement($parameter);
+	}
+
+	public function addParameter(Parameter $parameter)
+	{
+		if (!$this->parameters->contains($parameter)) {
+			$this->parameters->add($parameter);
+		}
+		return $this;
 	}
 	
 	public function getTags()
