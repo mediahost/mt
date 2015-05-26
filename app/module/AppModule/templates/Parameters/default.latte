@@ -1,0 +1,21 @@
+{block pageTitle}
+	{_'Parameters'}
+{/block}
+
+{block breadcrumbItems}
+<li><span>{_'Parameters'}</span></li>
+{/block}
+
+{block content}
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box">
+			<ul class="list-group">
+				<li class="list-group-item"
+					n:foreach="$parameters as $parameter">
+					{$parameter} 
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

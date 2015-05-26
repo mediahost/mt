@@ -57,7 +57,7 @@
 				<li n:if="$user->isAllowed('products', 'default')"
 					n:class="$presenter->isLinkCurrent('Products:*') ? active">
 					<a n:href="Products:">
-						<i class="fa fa-tags"></i>
+						<i class="icon-docs"></i>
 						<span class="title">{_'Products'}</span><span class="selected"></span>
 					</a>
 				</li>
@@ -129,20 +129,36 @@
 			<!-- END SUPERADMIN -->
 
 			<!-- BEGIN TOGETHER AREA -->
-			{if $user->isAllowed('profile', 'default')}
-				<li class="heading">
-					<h3 class="uppercase">{_'Settings'}</h3>
-				</li>
+			<li class="heading">
+				<h3 class="uppercase">{_'Settings'}</h3>
+			</li>
 
-				<li n:if="$user->isAllowed('settings', 'default')"
-					n:class="$presenter->isLinkCurrent('Settings:*') ? active">
-					<a n:href="Settings:">
-						<i class="icon-settings"></i> 
-						<span class="title">{_'Settings'}</span>
-						<span class="selected"></span>
-					</a>
-				</li>
-			{/if}
+			<li n:if="$user->isAllowed('parameters', 'default')"
+				n:class="$presenter->isLinkCurrent('Parameters:*') ? active">
+				<a n:href="Parameters:">
+					<i class="icon-list"></i> 
+					<span class="title">{_'Parameters'}</span>
+					<span class="selected"></span>
+				</a>
+			</li>
+
+			<li n:if="$user->isAllowed('tags', 'default')"
+				n:class="$presenter->isLinkCurrent('Tags:*') ? active">
+				<a n:href="Tags:">
+					<i class="icon-tag"></i> 
+					<span class="title">{_'Tags'}</span>
+					<span class="selected"></span>
+				</a>
+			</li>
+
+			<li n:if="$user->isAllowed('settings', 'default')"
+				n:class="$presenter->isLinkCurrent('Settings:*') ? active">
+				<a n:href="Settings:">
+					<i class="icon-settings"></i> 
+					<span class="title">{_'Settings'}</span>
+					<span class="selected"></span>
+				</a>
+			</li>
 			
 			<li class="heading">
 				<h3 class="uppercase"></h3>
