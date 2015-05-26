@@ -5,6 +5,7 @@ namespace Test\Model\Entity;
 use App\Model\Entity\Category;
 use App\Model\Entity\Producer;
 use App\Model\Entity\Product;
+use App\Model\Entity\Tag;
 use Tester\Assert;
 
 $container = require __DIR__ . '/../../../bootstrap.php';
@@ -198,6 +199,54 @@ class ProductTest extends ProductTestBase
 		
 		Assert::null($this->product->mainCategory);
 		Assert::count(0, $this->product->categories);
+	}
+	
+	public function testTagsAndSigns()
+	{
+		$tag1 = new Tag('tag one');
+		$tag2 = new Tag('tag two');
+		$tag3 = new Tag('tag three');
+		$tag4 = new Tag('tag four');
+		$sign1 = new Tag('sign one');
+		$sign1->type = Tag::TYPE_SIGN;
+		$sign2 = new Tag('sign two');
+		$sign2->type = Tag::TYPE_SIGN;
+		
+		$this->em->persist($tag1);
+		$this->em->persist($tag2);
+		$this->em->persist($tag3);
+		$this->em->persist($tag4);
+		$this->em->persist($sign1);
+		$this->em->persist($sign2);
+		
+		$this->product = new Product();
+		$this->product->setTags([$tag1, $tag2]);
+		$this->product->setSigns([$sign1]);
+		$this->saveProduct();
+		
+		Assert::count(2, $this->product->tags);
+		Assert::count(1, $this->product->signs);
+		
+		$this->product->addTag($tag3);
+		$this->product->setSigns([]);
+		$this->saveProduct();
+		
+		Assert::count(3, $this->product->tags);
+		Assert::count(0, $this->product->signs);
+		
+		$this->product->setTags([$tag4]);
+		$this->product->addSign($sign2);
+		$this->saveProduct();
+		
+		Assert::count(1, $this->product->tags);
+		Assert::count(1, $this->product->signs);
+		
+		$this->product->setTags([]);
+		$this->product->setSigns([$sign1, $sign2]);
+		$this->saveProduct();
+		
+		Assert::count(0, $this->product->tags);
+		Assert::count(2, $this->product->signs);
 	}
 
 }

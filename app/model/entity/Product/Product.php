@@ -27,6 +27,7 @@ use Nette\Utils\DateTime;
  * @property Category $mainCategory
  * @property array $categories
  * @property array $tags
+ * @property array $signs
  */
 class Product extends BaseTranslatable
 {
@@ -100,6 +101,70 @@ class Product extends BaseTranslatable
 			$this->mainCategory = NULL;
 		}
 		return $this->categories->removeElement($category);
+	}
+	
+	public function getTags()
+	{
+		$onlyTags = function (Tag $tag) {
+			return $tag->type === Tag::TYPE_TAG;
+		};
+		return $this->tags->filter($onlyTags);
+	}
+	
+	public function getSigns()
+	{
+		$onlyTags = function (Tag $tag) {
+			return $tag->type === Tag::TYPE_SIGN;
+		};
+		return $this->tags->filter($onlyTags);
+	}
+	
+	private function setTagsOrSigns(array $tags, $type = Tag::TYPE_TAG)
+	{
+		$removeIdles = function ($key, Tag $tag) use ($tags, $type) {
+			if ($tag->type === $type && !in_array($tag, $tags, TRUE)) {
+				$this->removeTag($tag);
+			}
+			return TRUE;
+		};
+		$this->tags->forAll($removeIdles);
+		foreach ($tags as $tag) {
+			$this->addTag($tag);
+		}
+		return $this;
+	}
+	
+	public function setTags(array $tags)
+	{
+		return $this->setTagsOrSigns($tags, Tag::TYPE_TAG);
+	}
+	
+	public function setSigns(array $signs)
+	{
+		return $this->setTagsOrSigns($signs, Tag::TYPE_SIGN);
+	}
+
+	public function addTag(Tag $tag)
+	{
+		if (!$this->tags->contains($tag)) {
+			$this->tags->add($tag);
+		}
+		return $this;
+	}
+
+	public function addSign(Tag $sign)
+	{
+		return $this->addTag($sign);
+	}
+
+	public function removeTag(Tag $tag)
+	{
+		return $this->tags->removeElement($tag);
+	}
+
+	public function removeSign(Tag $sign)
+	{
+		return $this->removeTag($sign);
 	}
 
 	public function __toString()
