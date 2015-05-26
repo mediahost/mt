@@ -20,8 +20,12 @@ services:
 			- addResource('orders')
 			- addResource('products')
 			- addResource('categories')
+			- addResource('producers')
 			- addResource('users')
 			- addResource('discounts')
+			- addResource('parameters')
+			- addResource('tags')
+			- addResource('signs')
 
 			- addResource('examples')
 			- addResource('service')
@@ -37,8 +41,12 @@ services:
 			- allow('admin', 'orders')
 			- allow('admin', 'products')
 			- allow('admin', 'categories')
+			- allow('admin', 'producers')
 			- allow('admin', 'users')
 			- allow('admin', 'discounts')
 			- allow('admin', 'settings')
+			- allow('admin', 'parameters')
+			- allow('admin', 'tags')
+			- allow('admin', 'signs')
 
 			- allow('superadmin') # Full access for superadmin
