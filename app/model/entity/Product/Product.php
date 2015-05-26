@@ -20,6 +20,11 @@ use Nette\Utils\DateTime;
  * @property DateTime $createdAt
  * @property DateTime $updatedAt
  * @property DateTime $deletedAt
+ * @property boolean $active
+ * @property string $ean
+ * @property Producer $producer
+ * @property Category $mainCategory
+ * @property array $categories
  */
 class Product extends BaseTranslatable
 {
@@ -35,6 +40,15 @@ class Product extends BaseTranslatable
 	
 	/** @ORM\Column(type="string", length=100, nullable=true) */
 	protected $ean;
+	
+    /** @ORM\ManyToOne(targetEntity="Producer", inversedBy="products") */
+    protected $producer;
+	
+    /** @ORM\ManyToOne(targetEntity="Category") */
+    protected $mainCategory;
+
+	/** @ORM\ManyToMany(targetEntity="Category", inversedBy="products") */
+	protected $categories;
 
 	public function __construct($currentLocale = NULL)
 	{

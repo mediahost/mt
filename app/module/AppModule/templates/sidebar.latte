@@ -61,6 +61,13 @@
 						<span class="title">{_'Products'}</span><span class="selected"></span>
 					</a>
 				</li>
+				<li n:if="$user->isAllowed('categories', 'default')"
+					n:class="$presenter->isLinkCurrent('Categories:*') ? active">
+					<a n:href="Categories:">
+						<i class="icon-notebook"></i>
+						<span class="title">{_'Categories'}</span><span class="selected"></span>
+					</a>
+				</li>
 				<li n:if="$user->isAllowed('users', 'default')"
 					n:class="$presenter->isLinkCurrent('Users:*') ? active">
 					<a n:href="Users:">
