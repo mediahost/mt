@@ -11,6 +11,8 @@ use App\Model\Entity\Product;
 use App\Model\Entity\ProductSeo;
 use App\Model\Entity\ProductTranslation;
 use App\Model\Entity\Stock;
+use App\Model\Entity\Tag;
+use App\Model\Entity\TagTranslation;
 use App\Model\Repository\ProductRepository;
 use App\Model\Repository\StockRepository;
 use Nette\DI\Container;
@@ -136,6 +138,8 @@ abstract class ProductTestBase extends DbTestCase
 			$this->em->getClassMetadata(Price::getClassName()),
 			$this->em->getClassMetadata(Category::getClassName()),
 			$this->em->getClassMetadata(Producer::getClassName()),
+			$this->em->getClassMetadata(Tag::getClassName()),
+			$this->em->getClassMetadata(TagTranslation::getClassName()),
 		];
 	}
 
