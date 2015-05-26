@@ -3,6 +3,7 @@
 namespace Test\Model\Entity;
 
 use App\Model\Entity\Category;
+use App\Model\Entity\CategoryTranslation;
 use Doctrine\ORM\EntityRepository;
 use Test\DbTestCase;
 use Tester\Assert;
@@ -34,7 +35,25 @@ class CategoryTest extends DbTestCase
 		parent::tearDown();
 	}
 
-	public function testSetAndGet()
+	public function testTranslations()
+	{
+		$entity = new Category('The Name', 'en');
+		$entity->translate('cs')->name = 'Jméno';
+		$entity->mergeNewTranslations();
+		
+		$this->em->persist($entity);
+		$this->em->flush();
+		
+		$id = $entity->id;
+		
+		$findedEntity = $this->categoryRepo->find($id);
+		
+		Assert::same('The Name', $findedEntity->name);
+		Assert::same('The Name', $findedEntity->translate('en')->name);
+		Assert::same('Jméno', $findedEntity->translate('cs')->name);
+	}
+
+	public function testParentAndChildren()
 	{
 		$cat1 = new Category('category 1');
 		$cat2 = new Category('category 2');
@@ -117,6 +136,7 @@ class CategoryTest extends DbTestCase
 	{
 		return [
 			$this->em->getClassMetadata(Category::getClassName()),
+			$this->em->getClassMetadata(CategoryTranslation::getClassName()),
 		];
 	}
 
