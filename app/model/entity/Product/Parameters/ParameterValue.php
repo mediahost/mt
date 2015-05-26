@@ -28,11 +28,15 @@ class ParameterValue extends BaseTranslatable
 	/** @ORM\ManyToOne(targetEntity="ParameterType", inversedBy="values") */
 	protected $type;
 	
-	public function __construct($value = NULL, $currentLocale = NULL)
+	public function __construct($value = NULL, ParameterType $type = NULL, $currentLocale = NULL)
 	{
 		parent::__construct($currentLocale);
 		if ($value) {
 			$this->value = $value;
+			$this->mergeNewTranslations();
+		}
+		if ($type) {
+			$this->type = $type;
 		}
 	}
 

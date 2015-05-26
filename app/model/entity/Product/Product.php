@@ -28,6 +28,7 @@ use Nette\Utils\DateTime;
  * @property array $categories
  * @property array $tags
  * @property array $signs
+ * @property array $parameters
  */
 class Product extends BaseTranslatable
 {
@@ -62,6 +63,7 @@ class Product extends BaseTranslatable
 	public function __construct($currentLocale = NULL)
 	{
 		$this->categories = new ArrayCollection();
+		$this->parameters = new ArrayCollection();
 		$this->tags = new ArrayCollection();
 		parent::__construct($currentLocale);
 	}
@@ -121,17 +123,18 @@ class Product extends BaseTranslatable
 		return $this;
 	}
 
-	public function removeParameter(Parameter $parameter)
-	{
-		return $this->parameters->removeElement($parameter);
-	}
-
 	public function addParameter(Parameter $parameter)
 	{
 		if (!$this->parameters->contains($parameter)) {
+			$parameter->product = $this;
 			$this->parameters->add($parameter);
 		}
 		return $this;
+	}
+
+	public function removeParameter(Parameter $parameter)
+	{
+		return $this->parameters->removeElement($parameter);
 	}
 	
 	public function getTags()

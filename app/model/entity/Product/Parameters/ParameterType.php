@@ -34,6 +34,7 @@ class ParameterType extends BaseTranslatable
 		parent::__construct($currentLocale);
 		if ($name) {
 			$this->name = $name;
+			$this->mergeNewTranslations();
 		}
 	}
 
