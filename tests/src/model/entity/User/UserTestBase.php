@@ -3,6 +3,7 @@
 namespace Test\Model\Entity;
 
 use App\Model\Entity\Facebook;
+use App\Model\Entity\Group;
 use App\Model\Entity\PageConfigSettings;
 use App\Model\Entity\PageDesignSettings;
 use App\Model\Entity\Role;
@@ -63,7 +64,7 @@ abstract class UserTestBase extends DbTestCase
 
 	protected function reloadUser()
 	{
-		$this->em->detach($this->user);
+		$this->em->clear();
 		$this->user = $this->userRepo->find($this->user->id);
 		return $this;
 	}
@@ -77,6 +78,7 @@ abstract class UserTestBase extends DbTestCase
 				$this->em->getClassMetadata(PageDesignSettings::getClassName()),
 				$this->em->getClassMetadata(Facebook::getClassName()),
 				$this->em->getClassMetadata(Twitter::getClassName()),
+				$this->em->getClassMetadata(Group::getClassName()),
 		];
 	}
 

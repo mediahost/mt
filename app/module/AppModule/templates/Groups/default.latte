@@ -1,0 +1,21 @@
+{block pageTitle}
+	{_'Groups'}
+{/block}
+
+{block breadcrumbItems}
+<li><span>{_'Groups'}</span></li>
+{/block}
+
+{block content}
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box">
+			<ul class="list-group">
+				<li class="list-group-item"
+					n:foreach="$groups as $group">
+					{$group} 
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
