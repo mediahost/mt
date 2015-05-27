@@ -9,7 +9,7 @@ use Tester\Assert;
 $container = require __DIR__ . '/../../../bootstrap.php';
 
 /**
- * TEST: User entity Socials
+ * TEST: User entity Passwords
  *
  * @testCase
  * @phpVersion 5.4

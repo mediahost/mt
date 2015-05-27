@@ -2,7 +2,6 @@
 
 namespace Test\Model\Entity;
 
-use App\Model\Entity\Candidate;
 use App\Model\Entity\Facebook;
 use App\Model\Entity\Role;
 use App\Model\Entity\Twitter;
@@ -15,7 +14,7 @@ use Tester\Assert;
 $container = require __DIR__ . '/../../../bootstrap.php';
 
 /**
- * TEST: User entity Socials
+ * TEST: User entity Roles
  *
  * @testCase
  * @phpVersion 5.4
