@@ -5,8 +5,8 @@ namespace Test\Model\Entity;
 use App\Model\Entity\PageConfigSettings;
 use App\Model\Entity\PageDesignSettings;
 use App\Model\Entity\Role;
-use Tester\Assert;
 use Kdyby\Doctrine\EmptyValueException;
+use Tester\Assert;
 
 $container = require __DIR__ . '/../../../bootstrap.php';
 
