@@ -37,14 +37,25 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	/** @ORM\OneToOne(targetEntity="PageDesignSettings", fetch="EAGER", cascade={"persist", "remove"}) */
 	protected $pageDesignSettings;
 
+	/** @ORM\ManyToMany(targetEntity="Group", inversedBy="users") */
+	protected $groups;
+
 	public function __construct($mail = NULL)
 	{
 		$this->roles = new ArrayCollection;
+		$this->groups = new ArrayCollection();
 		if ($mail) {
 			$this->mail = $mail;
 		}
 		parent::__construct();
 	}
+	
+    public function addGroup(Group $group)
+    {
+        $group->addUser($this);
+        $this->groups->add($group);
+		return $this;
+    }
 
 	public function __toString()
 	{
