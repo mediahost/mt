@@ -36,7 +36,9 @@ class Group extends BaseEntity
 
     public function addUser(User $user)
     {
-        $this->users->add($user);
+		if (!$this->users->contains($user)) {
+			$this->users->add($user);
+		}
 		return $this;
     }
 

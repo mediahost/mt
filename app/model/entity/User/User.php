@@ -3,6 +3,7 @@
 namespace App\Model\Entity;
 
 use App\Model\Entity\Traits\IUserSocials;
+use App\Model\Entity\Traits\UserGroups;
 use App\Model\Entity\Traits\UserPassword;
 use App\Model\Entity\Traits\UserRoles;
 use App\Model\Entity\Traits\UserSocials;
@@ -25,6 +26,7 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 
 	use Identifier;
 	use UserRoles;
+	use UserGroups;
 	use UserPassword;
 	use UserSocials;
 
@@ -37,9 +39,6 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	/** @ORM\OneToOne(targetEntity="PageDesignSettings", fetch="EAGER", cascade={"persist", "remove"}) */
 	protected $pageDesignSettings;
 
-	/** @ORM\ManyToMany(targetEntity="Group", inversedBy="users") */
-	protected $groups;
-
 	public function __construct($mail = NULL)
 	{
 		$this->roles = new ArrayCollection;
@@ -49,13 +48,6 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 		}
 		parent::__construct();
 	}
-	
-    public function addGroup(Group $group)
-    {
-        $group->addUser($this);
-        $this->groups->add($group);
-		return $this;
-    }
 
 	public function __toString()
 	{

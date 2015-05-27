@@ -71,7 +71,7 @@
 				<li n:if="$user->isAllowed('users', 'default')"
 					n:class="$presenter->isLinkCurrent('Users:*') ? active">
 					<a n:href="Users:">
-						<i class="fa fa-users"></i>
+						<i class="fa fa-user"></i>
 						<span class="title">{_'Users'}</span><span class="selected"></span>
 					</a>
 				</li>
@@ -131,6 +131,15 @@
 			<!-- BEGIN TOGETHER AREA -->
 			<li class="heading">
 				<h3 class="uppercase">{_'Settings'}</h3>
+			</li>
+
+			<li n:if="$user->isAllowed('groups', 'default')"
+				n:class="$presenter->isLinkCurrent('Groups:*') ? active">
+				<a n:href="Groups:">
+					<i class="icon-users"></i> 
+					<span class="title">{_'Groups'}</span>
+					<span class="selected"></span>
+				</a>
 			</li>
 
 			<li n:if="$user->isAllowed('parameters', 'default')"
