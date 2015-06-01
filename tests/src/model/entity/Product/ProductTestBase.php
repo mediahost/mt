@@ -4,25 +4,7 @@ namespace Test\Model\Entity;
 
 use App\Extensions\Settings\Model\Service\LanguageService;
 use App\Extensions\Settings\Model\Storage\DefaultSettingsStorage;
-use App\Model\Entity\Category;
-use App\Model\Entity\CategoryTranslation;
-use App\Model\Entity\Discount;
-use App\Model\Entity\Group;
-use App\Model\Entity\GroupDiscount;
-use App\Model\Entity\Parameter;
-use App\Model\Entity\ParameterType;
-use App\Model\Entity\ParameterTypeTranslation;
-use App\Model\Entity\ParameterValue;
-use App\Model\Entity\ParameterValueTranslation;
-use App\Model\Entity\Price;
-use App\Model\Entity\Producer;
-use App\Model\Entity\Product;
-use App\Model\Entity\ProductSeo;
-use App\Model\Entity\ProductTranslation;
-use App\Model\Entity\Stock;
-use App\Model\Entity\Tag;
-use App\Model\Entity\TagTranslation;
-use App\Model\Entity\Vat;
+use App\Model\Entity;
 use App\Model\Repository\ProductRepository;
 use App\Model\Repository\StockRepository;
 use Nette\DI\Container;
@@ -35,10 +17,10 @@ abstract class ProductTestBase extends DbTestCase
 	const DESC = 'my longer text as description';
 	const PEREX = 'my longer text as perex';
 
-	/** @var Product */
+	/** @var Entity\Product */
 	protected $product;
 
-	/** @var Stock */
+	/** @var Entity\Stock */
 	protected $stock;
 
 	/** @var ProductRepository */
@@ -60,8 +42,8 @@ abstract class ProductTestBase extends DbTestCase
 	{
 		parent::__construct($container);
 
-		$this->productRepo = $this->em->getRepository(Product::getClassName());
-		$this->stockRepo = $this->em->getRepository(Stock::getClassName());
+		$this->productRepo = $this->em->getRepository(Entity\Product::getClassName());
+		$this->stockRepo = $this->em->getRepository(Entity\Stock::getClassName());
 		
 		$this->defaultSettings = new DefaultSettingsStorage();
 
@@ -141,25 +123,27 @@ abstract class ProductTestBase extends DbTestCase
 	protected function getClasses()
 	{
 		return [
-			$this->em->getClassMetadata(Product::getClassName()),
-			$this->em->getClassMetadata(ProductTranslation::getClassName()),
-			$this->em->getClassMetadata(Stock::getClassName()),
-			$this->em->getClassMetadata(ProductSeo::getClassName()),
-			$this->em->getClassMetadata(Price::getClassName()),
-			$this->em->getClassMetadata(Vat::getClassName()),
-			$this->em->getClassMetadata(Discount::getClassName()),
-			$this->em->getClassMetadata(Category::getClassName()),
-			$this->em->getClassMetadata(CategoryTranslation::getClassName()),
-			$this->em->getClassMetadata(Producer::getClassName()),
-			$this->em->getClassMetadata(Tag::getClassName()),
-			$this->em->getClassMetadata(TagTranslation::getClassName()),
-			$this->em->getClassMetadata(Parameter::getClassName()),
-			$this->em->getClassMetadata(ParameterType::getClassName()),
-			$this->em->getClassMetadata(ParameterTypeTranslation::getClassName()),
-			$this->em->getClassMetadata(ParameterValue::getClassName()),
-			$this->em->getClassMetadata(ParameterValueTranslation::getClassName()),
-			$this->em->getClassMetadata(Group::getClassName()),
-			$this->em->getClassMetadata(GroupDiscount::getClassName()),
+			$this->em->getClassMetadata(Entity\Product::getClassName()),
+			$this->em->getClassMetadata(Entity\ProductTranslation::getClassName()),
+			$this->em->getClassMetadata(Entity\Stock::getClassName()),
+			$this->em->getClassMetadata(Entity\ProductSeo::getClassName()),
+			$this->em->getClassMetadata(Entity\Price::getClassName()),
+			$this->em->getClassMetadata(Entity\Vat::getClassName()),
+			$this->em->getClassMetadata(Entity\Discount::getClassName()),
+			$this->em->getClassMetadata(Entity\Category::getClassName()),
+			$this->em->getClassMetadata(Entity\CategoryTranslation::getClassName()),
+			$this->em->getClassMetadata(Entity\Producer::getClassName()),
+			$this->em->getClassMetadata(Entity\Tag::getClassName()),
+			$this->em->getClassMetadata(Entity\TagTranslation::getClassName()),
+			$this->em->getClassMetadata(Entity\Parameter::getClassName()),
+			$this->em->getClassMetadata(Entity\ParameterType::getClassName()),
+			$this->em->getClassMetadata(Entity\ParameterTypeTranslation::getClassName()),
+			$this->em->getClassMetadata(Entity\ParameterValue::getClassName()),
+			$this->em->getClassMetadata(Entity\ParameterValueTranslation::getClassName()),
+			$this->em->getClassMetadata(Entity\Group::getClassName()),
+			$this->em->getClassMetadata(Entity\GroupDiscount::getClassName()),
+			$this->em->getClassMetadata(Entity\Unit::getClassName()),
+			$this->em->getClassMetadata(Entity\UnitTranslation::getClassName()),
 		];
 	}
 
