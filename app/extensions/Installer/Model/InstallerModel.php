@@ -2,6 +2,7 @@
 
 namespace App\Extensions\Installer\Model;
 
+use App\Model\Entity\Unit;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
 use Doctrine\ORM\EntityManager;
@@ -37,6 +38,25 @@ class InstallerModel extends Object
 		foreach ($roles as $roleName) {
 			$this->roleFacade->create($roleName);
 		}
+		return TRUE;
+	}
+
+	/**
+	 * Create all nested roles
+	 * @return boolean
+	 */
+	public function installUnits(array $units)
+	{
+		$unitRepo = $this->em->getRepository(Unit::getClassName());
+		foreach ($units as $unitName) {
+			$finded = $unitRepo->findByName($unitName);
+			if (!$finded) {
+				$unit = new Unit($unitName);
+				$unit->mergeNewTranslations();
+				$this->em->persist($unit);
+			}
+		}
+		$this->em->flush();
 		return TRUE;
 	}
 

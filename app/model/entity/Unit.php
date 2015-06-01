@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Model\Repository\UnitRepository")
  *
  * @property string $name
  */
@@ -39,6 +39,15 @@ class Unit extends BaseTranslatable
 	public function __toString()
 	{
 		return (string) $this->name;
+	}
+
+	public static function getAllNames()
+	{
+		return [
+			self::PAIR,
+			self::PIECES,
+			self::SET,
+		];
 	}
 
 }
