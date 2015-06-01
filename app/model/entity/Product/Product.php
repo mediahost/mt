@@ -2,8 +2,7 @@
 
 namespace App\Model\Entity;
 
-use App\Model\Entity\Traits\ProductCategories;
-use App\Model\Entity\Traits\ProductParameters;
+use App\Model\Entity\Traits;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model;
@@ -34,9 +33,9 @@ class Product extends BaseTranslatable
 	use Model\Loggable\Loggable;
 	use Model\Timestampable\Timestampable;
 	use Model\SoftDeletable\SoftDeletable;
-	use ProductCategories;
-	use ProductParameters;
-	use ProductPrices;
+	use Traits\ProductCategories;
+	use Traits\ProductParameters;
+	use Traits\ProductPrices;
 
 	/** @ORM\Column(type="boolean") */
 	protected $active = TRUE;
@@ -49,6 +48,7 @@ class Product extends BaseTranslatable
 		$this->categories = new ArrayCollection();
 		$this->parameters = new ArrayCollection();
 		$this->tags = new ArrayCollection();
+		$this->groupDiscounts = new ArrayCollection();
 		parent::__construct($currentLocale);
 	}
 

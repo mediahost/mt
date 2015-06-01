@@ -6,6 +6,9 @@ use App\Extensions\Settings\Model\Service\LanguageService;
 use App\Extensions\Settings\Model\Storage\DefaultSettingsStorage;
 use App\Model\Entity\Category;
 use App\Model\Entity\CategoryTranslation;
+use App\Model\Entity\Discount;
+use App\Model\Entity\Group;
+use App\Model\Entity\GroupDiscount;
 use App\Model\Entity\Parameter;
 use App\Model\Entity\ParameterType;
 use App\Model\Entity\ParameterTypeTranslation;
@@ -19,6 +22,7 @@ use App\Model\Entity\ProductTranslation;
 use App\Model\Entity\Stock;
 use App\Model\Entity\Tag;
 use App\Model\Entity\TagTranslation;
+use App\Model\Entity\Vat;
 use App\Model\Repository\ProductRepository;
 use App\Model\Repository\StockRepository;
 use Nette\DI\Container;
@@ -142,6 +146,8 @@ abstract class ProductTestBase extends DbTestCase
 			$this->em->getClassMetadata(Stock::getClassName()),
 			$this->em->getClassMetadata(ProductSeo::getClassName()),
 			$this->em->getClassMetadata(Price::getClassName()),
+			$this->em->getClassMetadata(Vat::getClassName()),
+			$this->em->getClassMetadata(Discount::getClassName()),
 			$this->em->getClassMetadata(Category::getClassName()),
 			$this->em->getClassMetadata(CategoryTranslation::getClassName()),
 			$this->em->getClassMetadata(Producer::getClassName()),
@@ -152,6 +158,8 @@ abstract class ProductTestBase extends DbTestCase
 			$this->em->getClassMetadata(ParameterTypeTranslation::getClassName()),
 			$this->em->getClassMetadata(ParameterValue::getClassName()),
 			$this->em->getClassMetadata(ParameterValueTranslation::getClassName()),
+			$this->em->getClassMetadata(Group::getClassName()),
+			$this->em->getClassMetadata(GroupDiscount::getClassName()),
 		];
 	}
 
