@@ -24,6 +24,7 @@ use Nette\Utils\DateTime;
  * @property DateTime $deletedAt
  * @property boolean $active
  * @property string $ean
+ * @property Unit $unit
  */
 class Product extends BaseTranslatable
 {
@@ -42,6 +43,9 @@ class Product extends BaseTranslatable
 
 	/** @ORM\Column(type="string", length=100, nullable=true) */
 	protected $ean;
+	
+    /** @ORM\ManyToOne(targetEntity="Unit") */
+	protected $unit;
 
 	public function __construct($currentLocale = NULL)
 	{
