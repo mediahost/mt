@@ -12,6 +12,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @property Price $price
  * @property float $priceVat
  * @property ArrayCollection $groupDiscounts
+ * @property float $purchasePrice
+ * @property float $oldPrice
  */
 trait ProductPrices
 {
