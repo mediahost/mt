@@ -4,7 +4,7 @@ namespace App\Extensions;
 
 use App\Extensions\Installer\Model\InstallerModel;
 use App\Helpers;
-use App\Security\CompanyPermission;
+use App\Model\Entity\Unit;
 use Nette\Object;
 use Nette\Security\IAuthorizator;
 
@@ -206,6 +206,7 @@ class Installer extends Object
 		$prefix = 'DB_';
 		$this->installDoctrine($prefix);
 		$this->installRoles($prefix);
+		$this->installUnits($prefix);
 		$this->installUsers($prefix);
 	}
 
@@ -233,6 +234,23 @@ class Installer extends Object
 		$name = $lockPrefix . $this->getLockName(__METHOD__);
 		if ($this->lock($name)) {
 			$this->model->installRoles($this->getRoles());
+			$this->onSuccessInstall($this, $name);
+			$this->messages[$name] = [self::INSTALL_SUCCESS];
+		} else {
+			$this->onLockedInstall($this, $name);
+			$this->messages[$name] = [self::INSTALL_LOCKED];
+		}
+	}
+
+	/**
+	 * Instal units
+	 * @param string $lockPrefix
+	 */
+	private function installUnits($lockPrefix = NULL)
+	{
+		$name = $lockPrefix . $this->getLockName(__METHOD__);
+		if ($this->lock($name)) {
+			$this->model->installUnits(Unit::getAllNames());
 			$this->onSuccessInstall($this, $name);
 			$this->messages[$name] = [self::INSTALL_SUCCESS];
 		} else {

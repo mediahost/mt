@@ -61,9 +61,9 @@ class InstallerTest extends DbTestCase
 				->setInstallDoctrine(FALSE)
 				->setInitUsers([])
 				->install();
-		Assert::count(2, $messages1);
-		Assert::same(['DB_Roles', 'DB_Users'], array_keys($messages1));
-		Assert::same([[0 => TRUE], [0 => TRUE]], array_values($messages1));
+		Assert::count(3, $messages1);
+		Assert::same(['DB_Roles', 'DB_Units', 'DB_Users'], array_keys($messages1));
+		Assert::same([[0 => TRUE], [0 => TRUE], [0 => TRUE]], array_values($messages1));
 	}
 
 	public function testInstallerAll()
@@ -77,8 +77,9 @@ class InstallerTest extends DbTestCase
 				->setInstallDoctrine(TRUE)
 				->setInitUsers([])
 				->install();
-		Assert::count(5, $messages2);
+		Assert::count(6, $messages2);
 		Assert::true($messages2['DB_Roles'][0]);
+		Assert::true($messages2['DB_Units'][0]);
 		Assert::true($messages2['DB_Users'][0]);
 		Assert::true($messages2['Composer'][0]);
 		Assert::true($messages2['Adminer'][0]);
@@ -92,8 +93,9 @@ class InstallerTest extends DbTestCase
 				->setInstallDoctrine(TRUE)
 				->setInitUsers([])
 				->install();
-		Assert::count(5, $messages3);
+		Assert::count(6, $messages3);
 		Assert::false($messages3['DB_Roles'][0]);
+		Assert::false($messages3['DB_Units'][0]);
 		Assert::false($messages3['DB_Users'][0]);
 		Assert::false($messages3['Composer'][0]);
 		Assert::false($messages3['Adminer'][0]);
@@ -112,8 +114,9 @@ class InstallerTest extends DbTestCase
 					'user2' => ['password', 'guest'],
 				])
 				->install();
-		Assert::count(5, $messages4);
+		Assert::count(6, $messages4);
 		Assert::true($messages4['DB_Roles'][0]);
+		Assert::true($messages4['DB_Units'][0]);
 		Assert::true($messages4['DB_Users'][0]);
 		Assert::false($messages4['Composer'][0]);
 		Assert::false($messages4['Adminer'][0]);
