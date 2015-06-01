@@ -25,6 +25,19 @@ use Nette\Utils\DateTime;
  * @property boolean $active
  * @property string $ean
  * @property Unit $unit
+ * @property Producer $producer
+ * @property Category $mainCategory
+ * @property array $categories
+ * @property array $tags
+ * @property array $signs
+ * @property array $parameters
+ * @property Price $price
+ * @property float $priceVat
+ * @property ArrayCollection $groupDiscounts
+ * @property float $purchasePrice
+ * @property float $oldPrice
+ * @property ArrayCollection $similars
+ * @property ArrayCollection $similarsWithMe
  */
 class Product extends BaseTranslatable
 {
@@ -37,6 +50,7 @@ class Product extends BaseTranslatable
 	use Traits\ProductCategories;
 	use Traits\ProductParameters;
 	use Traits\ProductPrices;
+	use Traits\ProductSimilars;
 
 	/** @ORM\Column(type="boolean") */
 	protected $active = TRUE;
@@ -53,6 +67,8 @@ class Product extends BaseTranslatable
 		$this->parameters = new ArrayCollection();
 		$this->tags = new ArrayCollection();
 		$this->groupDiscounts = new ArrayCollection();
+		$this->similars = new ArrayCollection();
+		$this->similarsWithMe = new ArrayCollection();
 		parent::__construct($currentLocale);
 	}
 
