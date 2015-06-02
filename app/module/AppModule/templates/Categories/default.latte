@@ -12,8 +12,9 @@
 		<div class="portlet box">
 			<ul class="list-group">
 				<li class="list-group-item"
-					n:foreach="$categories as $category">
-					{$category->path|concat:' / '}{if count($category->path)} / {/if}<b>{$category}</b>
+					n:foreach="$categories as $category">{? $category->setCurrentLocale($lang)}
+					{$category->path|concat:' / '}
+					{if count($category->path)} / {/if}<b>{$category}</b>
 					| {$category->url} 
 				</li>
 			</ul>
