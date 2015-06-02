@@ -61,9 +61,13 @@ class Product extends BaseTranslatable
 	
     /** @ORM\ManyToOne(targetEntity="Unit") */
 	protected $unit;
+	
+	/** @ORM\OneToMany(targetEntity="Stock", mappedBy="product") */
+	protected $stocks;
 
 	public function __construct($currentLocale = NULL)
 	{
+		$this->stocks = new ArrayCollection();
 		$this->categories = new ArrayCollection();
 		$this->parameters = new ArrayCollection();
 		$this->tags = new ArrayCollection();
