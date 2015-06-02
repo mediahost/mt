@@ -4,12 +4,12 @@ namespace App\FrontModule\Presenters;
 
 use App\BaseModule\Presenters\BasePresenter as BaseBasePresenter;
 use App\Model\Entity\Category;
-use Kdyby\Doctrine\EntityRepository;
+use App\Model\Repository\CategoryRepository;
 
 abstract class BasePresenter extends BaseBasePresenter
 {
 
-	/** @var EntityRepository */
+	/** @var CategoryRepository */
 	protected $categoryRepo;
 
 	/** @var array */

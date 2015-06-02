@@ -8,10 +8,11 @@
 {/define}
 
 {define categoryTreeItem}
+{? $category->setCurrentLocale($lang)}
 {var expandActiveCategories => ($expandOnlyActiveCategories && $activeCategory && $activeCategory->isInPath($category)) || !$expandOnlyActiveCategories}
 {var printSubmenu => ($expandActiveCategories && $category->hasChildren && $deep < $maxCategoryDeep)}
 
-<a n:href="this" n:class="$printSubmenu ? collapsed">
+<a n:href="Category: url => $category->url" n:class="$printSubmenu ? collapsed">
 	<i class="fa fa-angle-right"></i>
 	{$category}
 </a>

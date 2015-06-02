@@ -16,8 +16,10 @@ class CategoriesPresenter extends BasePresenter
 	{
 		$categoryRepo = $this->em->getRepository(Category::getClassName());
 		
-//		$this->createDemoCategories();
-		
+		if (!count($categoryRepo->findAll())) {
+			$this->createDemoCategories();
+		}
+
 		$this->template->categories = $categoryRepo->findAll();
 	}
 	

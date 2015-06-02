@@ -56,6 +56,12 @@ class RouterFactory
 		// </editor-fold>
 		// <editor-fold desc="Front">
 
+		$frontRouter[] = new Route('c/<url [0-9a-z/]+>', [
+			'presenter' => 'Category',
+			'action' => 'default',
+			'url' => NULL,
+		]);
+
 		$frontRouter[] = new Route('<presenter>/<action>[/<id>]', [
 			'presenter' => 'Homepage',
 			'action' => 'default',
