@@ -9,15 +9,6 @@ services:
 
 webloader:
 	css:
-		demo:
-			files:
-				- {files: ["*.less"], from: %wwwDir%/less/demo/includes}
-			filters:
-				- @cssUrlFilter
-				- @cssMinFilter
-			fileFilters:
-				- @lessFilter
-
 		front:
 			files:
 				- {files: ["*.less"], from: %wwwDir%/less/front/includes}
