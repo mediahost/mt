@@ -14,10 +14,10 @@ use Nette\Utils\Strings;
 trait ProductImages
 {
 
-	/** @ORM\OneToOne(targetEntity=Imagee", cascade="all") */
+	/** @ORM\OneToOne(targetEntity="Image", cascade="all") */
 	protected $image;
 
-	/** @ORM\ManyToMany(targetEntity=Imagee") */
+	/** @ORM\ManyToMany(targetEntity="Image") */
 	protected $images;
 
 	public function setImage(FileUpload $file)
