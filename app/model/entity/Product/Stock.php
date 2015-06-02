@@ -2,7 +2,6 @@
 
 namespace App\Model\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
@@ -16,9 +15,24 @@ class Stock extends BaseEntity
 {
 
 	use Identifier;
-
-	/** @ORM\Column(type="string", nullable=false, unique=true) */
-	protected $name;
+	
+    /** @ORM\ManyToOne(targetEntity="Product", inversedBy="stocks") */
+    protected $product;
+	
+    /** @ORM\ManyToOne(targetEntity="Variant") */
+    protected $variant1;
+	
+    /** @ORM\ManyToOne(targetEntity="Variant") */
+    protected $variant2;
+	
+    /** @ORM\ManyToOne(targetEntity="Variant") */
+    protected $variant3;
+	
+	/** @ORM\Column(type="boolean") */
+	protected $active = TRUE;
+	
+	/** @ORM\Column(type="integer") */
+	protected $quantity;
 
 	public function __construct()
 	{
