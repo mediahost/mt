@@ -19,7 +19,8 @@ use Nette\Utils\DateTime;
 class Image extends BaseEntity
 {
 
-	const FOLDER_COMPANY_LOGO = 'companies/logos';
+	const FOLDER_PRODUCTS = 'products/images';
+	const FOLDER_USERS = 'users/images';
 
 	use Identifier;
 
