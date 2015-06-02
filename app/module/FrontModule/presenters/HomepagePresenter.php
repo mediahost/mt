@@ -7,7 +7,7 @@ class HomepagePresenter extends BasePresenter
 
 	public function actionDefault()
 	{
-
+		$this->activeCategory = $this->categoryRepo->find(10);
 	}
 
 	public function renderTest1()

@@ -13,6 +13,7 @@ use Knp\DoctrineBehaviors\Model;
  *
  * @property Producer $parent
  * @property array $children
+ * @property-read bool $hasChildren
  * @property string $name
  * @property array $products
  * @property array $path
@@ -23,6 +24,7 @@ class Producer extends BaseEntity
 {
 	use Identifier;
 	use CategoryUrl;
+	use CategoryBase;
 	use Model\Sluggable\Sluggable;
 
 	/** @ORM\Column(type="string", length=256, nullable=true) */
