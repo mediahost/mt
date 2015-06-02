@@ -15,8 +15,14 @@ class CategoryTranslation extends BaseEntity
 {
 
 	use Model\Translatable\Translation;
+	use Model\Sluggable\Sluggable;
 
 	/** @ORM\Column(type="string", length=256, nullable=true) */
 	protected $name;
+
+	protected function getSluggableFields()
+	{
+		return ['name'];
+	}
 
 }

@@ -22,7 +22,6 @@ class Category extends BaseTranslatable
 
 	use CategoryUrl;
 	use Model\Translatable\Translatable;
-	use Model\Sluggable\Sluggable;
 
 	/** @ORM\ManyToOne(targetEntity="Category", inversedBy="children") */
 	protected $parent;
@@ -47,11 +46,6 @@ class Category extends BaseTranslatable
 		$category->parent = $this;
 		$this->children->add($category);
 		return $this;
-	}
-
-	protected function getSluggableFields()
-	{
-		return ['name'];
 	}
 
 	public function __toString()

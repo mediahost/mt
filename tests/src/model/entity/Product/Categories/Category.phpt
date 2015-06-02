@@ -56,8 +56,11 @@ class CategoryTest extends DbTestCase
 	public function testParentAndChildren()
 	{
 		$cat1 = new Category('category 1');
+		$cat1->mergeNewTranslations();
 		$cat2 = new Category('category 2');
+		$cat1->mergeNewTranslations();
 		$cat3 = new Category('category 3');
+		$cat1->mergeNewTranslations();
 		$this->em->persist($cat1);
 		$this->em->persist($cat2);
 		$this->em->persist($cat3);
@@ -66,6 +69,7 @@ class CategoryTest extends DbTestCase
 		$entity->parent = $cat1;
 		$entity->addChild($cat2);
 		$entity->addChild($cat3);
+		$entity->mergeNewTranslations();
 		
 		$this->em->persist($entity);
 		$this->em->flush();
@@ -92,6 +96,10 @@ class CategoryTest extends DbTestCase
 		$cat2 = new Category('Category 2');
 		$cat3 = new Category('Category 3');
 		$entity = new Category('The Name');
+		$cat1->mergeNewTranslations();
+		$cat2->mergeNewTranslations();
+		$cat3->mergeNewTranslations();
+		$entity->mergeNewTranslations();
 		
 		$cat1->addChild($cat2);
 		$cat2->addChild($cat3);
