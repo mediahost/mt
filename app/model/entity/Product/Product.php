@@ -51,6 +51,7 @@ class Product extends BaseTranslatable
 	use Traits\ProductParameters;
 	use Traits\ProductPrices;
 	use Traits\ProductSimilars;
+	use Traits\ProductImages;
 
 	/** @ORM\Column(type="boolean") */
 	protected $active = TRUE;
@@ -69,6 +70,7 @@ class Product extends BaseTranslatable
 		$this->groupDiscounts = new ArrayCollection();
 		$this->similars = new ArrayCollection();
 		$this->similarsWithMe = new ArrayCollection();
+		$this->images = new ArrayCollection();
 		parent::__construct($currentLocale);
 	}
 
