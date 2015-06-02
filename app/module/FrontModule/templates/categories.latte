@@ -1,0 +1,26 @@
+{define categories}
+<ul class="list-group margin-bottom-25 sidebar-menu">
+	<li n:foreach="$categories as $category"
+		n:class="list-group-item, clearfix, $category->hasChildren ? dropdown, $activeCategory && $activeCategory->isInPath($category) ? active">
+		{include categoryTreeItem, category => $category, deep => 1}
+	</li>
+</ul>
+{/define}
+
+{define categoryTreeItem}
+{var expandActiveCategories => ($expandOnlyActiveCategories && $activeCategory && $activeCategory->isInPath($category)) || !$expandOnlyActiveCategories}
+{var printSubmenu => ($expandActiveCategories && $category->hasChildren && $deep < $maxCategoryDeep)}
+
+<a n:href="this" n:class="$printSubmenu ? collapsed">
+	<i class="fa fa-angle-right"></i>
+	{$category}
+</a>
+{if $printSubmenu}
+	<ul class="dropdown-menu" style="display:block;">
+		<li n:foreach="$category->children as $child"
+			n:class="list-group-item, clearfix, $printSubmenu ? dropdown, $activeCategory && $activeCategory->isInPath($child) ? active">
+			{include categoryTreeItem, category => $child, deep => ++$deep}
+		</li>
+	</ul>
+{/if}
+{/define}

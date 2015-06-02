@@ -11,6 +11,7 @@ use Knp\DoctrineBehaviors\Model;
  *
  * @property Category $parent
  * @property array $children
+ * @property-read bool $hasChildren
  * @property string $name
  * @property array $products
  * @property array $path
@@ -21,6 +22,7 @@ class Category extends BaseTranslatable
 {
 
 	use CategoryUrl;
+	use CategoryBase;
 	use Model\Translatable\Translatable;
 
 	/** @ORM\ManyToOne(targetEntity="Category", inversedBy="children") */
