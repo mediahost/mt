@@ -50,7 +50,7 @@ class InstallerModel extends Object
 		$unitRepo = $this->em->getRepository(Unit::getClassName());
 		foreach ($units as $unitName) {
 			$finded = $unitRepo->findByName($unitName);
-			if (!$finded) {
+			if (!count($finded)) {
 				$unit = new Unit($unitName);
 				$unit->mergeNewTranslations();
 				$this->em->persist($unit);

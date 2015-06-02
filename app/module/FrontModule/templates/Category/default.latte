@@ -1,0 +1,22 @@
+{includeblock '../categories.latte'}
+
+{block content}
+<div class="container">
+	<div class="row">
+		<div class="sidebar col-md-3 col-sm-5">
+			{include categories}
+		</div>
+		<div class="col-md-9 col-sm-7">
+			
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					{_'Category'}
+				</div>
+				<div class="panel-body">
+					{$category}
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--/end row-->
+</div>
