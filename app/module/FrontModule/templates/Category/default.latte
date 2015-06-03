@@ -7,25 +7,45 @@
 
 {block content}
 <div class="container">
+	<!-- BEGIN SIDEBAR & CONTENT -->
 	<div class="row">
+		<!-- BEGIN SIDEBAR -->
 		<div class="sidebar col-md-3 col-sm-5">
 			{include categories}
-			
+
             <div class="sidebar-filter margin-bottom-25">
 				{include filter}
 			</div>
 		</div>
+		<!-- END SIDEBAR -->
+		<!-- BEGIN CONTENT -->
 		<div class="col-md-9 col-sm-7">
-			
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					{_'Category'}
+			{include sorting}
+
+            <!-- BEGIN PRODUCT LIST -->
+			{foreach $products as $product}
+				{var isLastOnRow => !($iterator->counter % $itemsPerRow)}
+				{if $iterator->first}
+					<div class="row product-list">
+					{/if}
+					<!-- PRODUCT ITEM START -->
+					<div class="col-md-4 col-sm-6 col-xs-12">
+						{include product, product => $product}
+					</div>
+					<!-- PRODUCT ITEM END -->
+					{if $iterator->last}
+					</div>
+				{elseif $isLastOnRow}
 				</div>
-				<div class="panel-body">
-					{$category}
-				</div>
-			</div>
+				<div class="row product-list">
+				{/if}
+			{/foreach}
+            <!-- END PRODUCT LIST -->
+            <!-- BEGIN PAGINATOR -->
+			{include paginator}
+            <!-- END PAGINATOR -->
 		</div>
+		<!-- END CONTENT -->
 	</div>
-	<!--/end row-->
+	<!-- END SIDEBAR & CONTENT -->
 </div>

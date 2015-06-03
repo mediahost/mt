@@ -7,6 +7,7 @@ use App\Components\Auth\SignOutControl;
 use App\Extensions\Settings\Model\Service\DesignService;
 use App\Extensions\Settings\Model\Service\LanguageService;
 use App\Extensions\Settings\Model\Service\ModuleService;
+use App\Extensions\Settings\Model\Service\PageConfigService;
 use App\Extensions\Settings\Model\Storage\DefaultSettingsStorage;
 use App\Model\Entity;
 use App\Model\Facade\UserFacade;
@@ -52,6 +53,9 @@ abstract class BasePresenter extends Presenter
 
 	/** @var ModuleService @inject */
 	public $moduleService;
+
+	/** @var PageConfigService @inject */
+	public $pageConfigService;
 
 	/** @var EntityManager @inject */
 	public $em;
