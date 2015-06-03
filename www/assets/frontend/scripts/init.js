@@ -5,6 +5,7 @@ jQuery(document).ready(function () {
 	$.nette.init(); // https://github.com/vojtech-dobes/nette.ajax.js
 	
 	Layout.initTwitter();
+	Layout.initSliderRange();
 
 	// special for pages
 	Login.init();
