@@ -28,7 +28,7 @@ var Layout = function () {
         if (isIE11) {
             jQuery('html').addClass('ie11'); // detect IE11 version
         }
-    }
+    };
 
     // runs callback functions set by App.addResponsiveHandler().
     var runResponsiveHandlers = function () {
@@ -37,7 +37,7 @@ var Layout = function () {
             var each = responsiveHandlers[i];
             each.call();
         }
-    }
+    };
 
     // handle the layout reinitialization on window resize
     var handleResponsiveOnResize = function () {
@@ -66,7 +66,7 @@ var Layout = function () {
                 }, 50); // wait 50ms until window resize finishes.
             });
         }
-    }
+    };
 
     var handleIEFixes = function() {
         //fix html5 placeholder attribute for ie7 & ie8
@@ -93,7 +93,7 @@ var Layout = function () {
                 });
             });
         }
-    }
+    };
 
     // Handles scrollable contents using jQuery SlimScroll plugin.
     var handleScrollers = function () {
@@ -116,7 +116,7 @@ var Layout = function () {
                 disableFadeOut: true
             });
         });
-    }
+    };
 
     var handleSearch = function() {    
         $('.search-btn').click(function () {            
@@ -150,7 +150,7 @@ var Layout = function () {
                 }
             });
         }
-    }
+    };
 
     var handleMenu = function() {
         $(".header .navbar-toggle").click(function () {
@@ -162,7 +162,8 @@ var Layout = function () {
                 .addClass("open");
             }
         });
-    }
+    };
+	
     var handleSubMenuExt = function() {
         $(".header-navigation .dropdown").on("hover", function() {
             if ($(this).children(".header-navigation-content-ext").show()) {
@@ -186,7 +187,7 @@ var Layout = function () {
                 }
             } 
         });
-    }
+    };
 
     function handleDifInits() { 
         $(".header .navbar-toggle span:nth-child(2)").addClass("short-icon-bar");
@@ -255,7 +256,7 @@ var Layout = function () {
             var tabid = location.hash.substr(1);
             $('a[href="#' + tabid + '"]').click();
         }
-    }
+    };
 
     var handleMobiToggler = function () {
         $(".mobi-toggler").on("click", function(event) {
@@ -264,7 +265,7 @@ var Layout = function () {
             $(".header").toggleClass("menuOpened");
             $(".header").find(".header-navigation").toggle(300);
         });
-    }
+    };
 
     var handleTheme = function () {
     
@@ -275,7 +276,7 @@ var Layout = function () {
             $('#style-color').attr("href", "../../assets/frontend/layout/css/themes/" + color + ".css");
             $('.corporate .site-logo img').attr("src", "../../assets/frontend/layout/img/logos/logo-corp-" + color + ".png");
             $('.ecommerce .site-logo img').attr("src", "../../assets/frontend/layout/img/logos/logo-shop-" + color + ".png");
-        }
+        };
 
         $('.icon-color', panel).click(function () {
             $('.color-mode').show();
@@ -293,7 +294,7 @@ var Layout = function () {
             $('.inline li', panel).removeClass("current");
             $(this).addClass("current");
         });
-    }
+    };
 	
     return {
         init: function () {
@@ -490,12 +491,6 @@ var Layout = function () {
 
         scrollTop: function () {
             App.scrollTo();
-        },
-
-        gridOption1: function () {
-            $(function(){
-                $('.grid-v1').mixitup();
-            });    
         }
 
     };

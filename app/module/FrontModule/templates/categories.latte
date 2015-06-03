@@ -25,3 +25,19 @@
 	</ul>
 {/if}
 {/define}
+
+{define filter}
+<h2>{_'Filter'}</h2>
+<h3>{_'Availability'}</h3>
+<div class="checkbox-list">
+	<label><input type="checkbox">{_'Not Available'} (3)</label>
+	<label><input type="checkbox">{_'In Stock'} (26)</label>
+</div>
+
+<h3>{_'Price'}</h3>
+<p>
+	<label for="amount">{_'Range'}:</label>
+	<input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;">
+</p>
+<div id="slider-range"></div> {* TODO: nahradit funkčním prvkem; odsranit demo pohyblivost z JS(Layout init) i CSS (add style for slider) *}
+{/define}
