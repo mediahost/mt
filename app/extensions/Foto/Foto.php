@@ -80,13 +80,13 @@ class Foto extends Object
 
 		$sizeX = 0;
 		$sizeY = 0;
-		if (preg_match("@^(\d+)\-(\d+)$@", $size, $matches)) {
+		if (preg_match('@^(\d+)' . preg_quote(FotoHelpers::getSizeSeparator()) . '(\d+)$@', $size, $matches)) {
 			$sizeX = $matches[1];
 			$sizeY = $matches[2];
 		}
 
 		if ($sizeX > 0 && $sizeY > 0) {
-			$resizedPath = Helpers::getPath($this->rootFolder, "{$sizeX}-{$sizeY}");
+			$resizedPath = Helpers::getPath($this->rootFolder, $sizeX . FotoHelpers::getSizeSeparator() . $sizeY);
 			Helpers::mkDirForce(Helpers::getPath($resizedPath, FotoHelpers::getFolderFromPath($name)));
 			$resized = Helpers::getPath($resizedPath, $name);
 
@@ -134,7 +134,7 @@ class Foto extends Object
 		} else if (is_string($source)) { // filename or string
 			$img = file_exists($source) ? Image::fromFile($source) : Image::fromString($source);
 		} else {
-			throw new FotoException("This source format isn't supported");
+			throw new FotoException('This source format isn\'t supported');
 		}
 
 		$filenameWithExt = FotoHelpers::getExtendedFilename($filename, $format);
@@ -162,7 +162,7 @@ class Foto extends Object
 	public function deleteThumbnails($name)
 	{
 		foreach (scandir($this->rootFolder) as $dir) {
-			if (preg_match("@^\d+\-\d+$@", $dir)) {
+			if (preg_match('@^\d+' . preg_quote(FotoHelpers::getSizeSeparator()) . '\d+$@', $dir)) {
 				$filename = Helpers::getPath($this->originalFolder, $dir, $name);
 				FotoHelpers::deleteFile($filename);
 			}
@@ -222,15 +222,20 @@ class FotoHelpers extends Object
 	{
 		switch ($format) {
 			case Image::JPEG:
-				$ext = "jpg";
+				$ext = 'jpg';
 				break;
 			case Image::PNG:
-				$ext = "png";
+				$ext = 'png';
 				break;
 			default:
-				throw new FotoException("This requested format isn't supported");
+				throw new FotoException('This requested format isn\'t supported');
 		}
 		return $filename . '.' . $ext;
+	}
+	
+	public static function getSizeSeparator()
+	{
+		return '-';
 	}
 
 }
