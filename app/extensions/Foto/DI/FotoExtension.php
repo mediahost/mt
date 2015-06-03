@@ -2,6 +2,7 @@
 
 namespace App\Extensions\Foto\DI;
 
+use App\Model\Entity\Image;
 use Nette\Configurator;
 use Nette\DI\Compiler;
 use Nette\DI\CompilerExtension;
@@ -13,12 +14,13 @@ class FotoExtension extends CompilerExtension
 	public $defaults = [
 		'folder' => '%wwwDir%/foto',
 		'originalFolderName' => 'original',
-		'defaultImage' => 'default.png',
+		'defaultImage' => NULL, // rewriten in loadConfiguration()
 		'defaultFormat' => 'png',
 	];
 
 	public function loadConfiguration()
 	{
+		$this->defaults['defaultImage'] = Image::DEFAULT_IMAGE;
 		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig($this->defaults);
 

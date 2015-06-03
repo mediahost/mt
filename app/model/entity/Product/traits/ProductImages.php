@@ -8,8 +8,8 @@ use Nette\Http\FileUpload;
 use Nette\Utils\Strings;
 
 /**
- * @property ArrayCollection $similars
- * @property ArrayCollection $similarsWithMe
+ * @property Image $image
+ * @property ArrayCollection $images
  */
 trait ProductImages
 {

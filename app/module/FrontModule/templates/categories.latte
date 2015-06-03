@@ -94,9 +94,9 @@
 {dump $product}
 <div class="product-item">
 	<div class="pi-img-wrapper">
-		<img src="{$basePath}/foto/238-238/{$product->image}" class="img-responsive" alt="{$product}">
+		<img src="{$basePath}/foto/{$product->image|size:'238','238'}" class="img-responsive" alt="{$product}">
 		<div>
-			<a href="{$basePath}/foto/{$product->image}" class="btn btn-default fancybox-button">{_'Zoom'}</a>
+			<a href="{$basePath}/foto/{$product->image|size}" class="btn btn-default fancybox-button">{_'Zoom'}</a>
 			<a n:href="this" class="btn btn-default fancybox-fast-view">{_'View'}</a>
 		</div>
 	</div>

@@ -21,6 +21,7 @@ class TemplateFactory extends ParentTemplateFactory
 		$latte = $template->getLatte();
 		$latte->onCompile[] = $this->addMacros;
 		$latte->addFilter('concat', ['App\Helpers', 'concatArray']);
+		$latte->addFilter('size', ['App\Model\Entity\Image', 'returnSizedFilename']);
 		return $template;
 	}
 
