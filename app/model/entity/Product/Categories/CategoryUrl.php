@@ -16,6 +16,7 @@ trait CategoryUrl
 			if ($parent->id === $this->id || array_key_exists($parent->id, $path)) {
 				$containExistingEdge = TRUE;
 			} else {
+				$parent->setCurrentLocale($this->currentLocale);
 				$path[$parent->id] = $parent;
 			}
 			$parent = $parent->parent;
