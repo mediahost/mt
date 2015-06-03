@@ -1,5 +1,10 @@
 {includeblock '../categories.latte'}
 
+{block breadcrumbItems}
+<li n:foreach="$category->path as $parent"><a n:href="Category: url => $parent->url">{$parent}</a></li>
+<li class="active">{$category}</li>
+{/block}
+
 {block content}
 <div class="container">
 	<div class="row">
