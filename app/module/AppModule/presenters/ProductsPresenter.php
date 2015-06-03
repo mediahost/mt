@@ -33,10 +33,10 @@ class ProductsPresenter extends BasePresenter
 	
 	public function handleCreate()
 	{
-		$vatRepo = $this->em->getRepository(Vat::class);
+		$vatRepo = $this->em->getRepository(Vat::getClassName());
 		$vat = $vatRepo->find(1);
 		
-		$groupRepo = $this->em->getRepository(Group::class);
+		$groupRepo = $this->em->getRepository(Group::getClassName());
 		$group1 = $groupRepo->find(1);
 		$group2 = $groupRepo->find(2);
 		$group3 = $groupRepo->find(3);

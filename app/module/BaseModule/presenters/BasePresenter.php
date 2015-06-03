@@ -77,6 +77,14 @@ abstract class BasePresenter extends Presenter
 		$this->template->designColors = $this->designService->colors;
 		$this->template->pageInfo = $this->settingStorage->pageInfo;
 	}
+	
+	protected function isInstallPresenter()
+	{
+		$presenterExceptions = [
+			'Front:Install',
+		];
+		return in_array($this->presenter->name, $presenterExceptions);
+	}
 
 	// <editor-fold desc="flash messages">
 
@@ -132,10 +140,7 @@ abstract class BasePresenter extends Presenter
 
 	private function setLang()
 	{
-		$presenterExceptions = [
-			'Front:Install',
-		];
-		if (in_array($this->presenter->name, $presenterExceptions)) { // defaultLanguage for some presenters
+		if ($this->isInstallPresenter()) { // defaultLanguage for some presenters
 			$this->lang = NULL;
 			return;
 		}

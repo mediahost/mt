@@ -21,6 +21,9 @@ abstract class BasePresenter extends BaseBasePresenter
 	protected function startup()
 	{
 		parent::startup();
+		if ($this->isInstallPresenter()) {
+			return;
+		}
 		$this->categoryRepo = $this->em->getRepository(Category::getClassName());
 		$this->categories = $this->categoryRepo->findBy(['parent' => NULL]);
 	}
