@@ -4,13 +4,18 @@ namespace App\FrontModule\Presenters;
 
 use App\BaseModule\Presenters\BasePresenter as BaseBasePresenter;
 use App\Model\Entity\Category;
+use App\Model\Entity\Product;
 use App\Model\Repository\CategoryRepository;
+use App\Model\Repository\ProductRepository;
 
 abstract class BasePresenter extends BaseBasePresenter
 {
 
 	/** @var CategoryRepository */
 	protected $categoryRepo;
+	
+	/** @var ProductRepository */
+	protected $productRepo;
 
 	/** @var array */
 	protected $categories;
@@ -24,6 +29,7 @@ abstract class BasePresenter extends BaseBasePresenter
 		if ($this->isInstallPresenter()) {
 			return;
 		}
+		$this->productRepo = $this->em->getRepository(Product::getClassName());
 		$this->categoryRepo = $this->em->getRepository(Category::getClassName());
 		$this->categories = $this->categoryRepo->findBy(['parent' => NULL]);
 	}

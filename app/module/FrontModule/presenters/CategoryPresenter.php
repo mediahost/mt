@@ -14,6 +14,8 @@ class CategoryPresenter extends BasePresenter
 		}
 		$this->activeCategory = $category;
 		$this->template->category = $category;
+		$this->template->products = $this->productRepo->findAll();
+		$this->template->itemsPerRow = $this->pageConfigService->getItemsPerRow();
 	}
 
 }
