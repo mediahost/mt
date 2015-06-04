@@ -3,49 +3,53 @@
 {block breadcrumbItems}
 <li n:foreach="$category->path as $parent"><a n:href="Category: url => $parent->url">{$parent}</a></li>
 <li class="active">{$category}</li>
-{/block}
+	{/block}
 
 {block content}
 <div class="container">
 	<!-- BEGIN SIDEBAR & CONTENT -->
 	<div class="row">
+		
 		<!-- BEGIN SIDEBAR -->
 		<div class="sidebar col-md-3 col-sm-5">
 			{include categories}
 
             <div class="sidebar-filter margin-bottom-25">
-				{include filter}
+				<h2>{_'Filter'}</h2>
+				{control products:filter}
 			</div>
 		</div>
 		<!-- END SIDEBAR -->
+		
 		<!-- BEGIN CONTENT -->
 		<div class="col-md-9 col-sm-7">
-			{include sorting}
 
-            <!-- BEGIN PRODUCT LIST -->
-			{foreach $products as $product}
-				{var isLastOnRow => !($iterator->counter % $itemsPerRow)}
-				{if $iterator->first}
-					<div class="row product-list">
-					{/if}
-					<!-- PRODUCT ITEM START -->
-					<div class="col-md-4 col-sm-6 col-xs-12">
-						{include product, product => $product}
-					</div>
-					<!-- PRODUCT ITEM END -->
-					{if $iterator->last}
-					</div>
-				{elseif $isLastOnRow}
+			<div class="row list-view-sorting clearfix">
+				<div class="col-md-2 col-sm-2 list-view">
+					<a href="#"><i class="fa fa-th-large"></i></a>
+					<a href="#"><i class="fa fa-th-list"></i></a>
 				</div>
-				<div class="row product-list">
-				{/if}
-			{/foreach}
-            <!-- END PRODUCT LIST -->
-            <!-- BEGIN PAGINATOR -->
-			{include paginator}
-            <!-- END PAGINATOR -->
+				<div class="col-md-10 col-sm-10">
+					<div class="pull-right">
+						{control products:sorting}
+					</div>
+					<div class="pull-right">
+						{control products:perPage}
+					</div>
+				</div>
+			</div>
+
+			{control products:list}
+
+			<!-- BEGIN PAGINATOR -->
+			<div class="row">
+				{control products:paginator}
+			</div>
+			<!-- END PAGINATOR -->
+			
 		</div>
 		<!-- END CONTENT -->
+		
 	</div>
 	<!-- END SIDEBAR & CONTENT -->
 </div>
