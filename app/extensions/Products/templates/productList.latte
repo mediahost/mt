@@ -18,6 +18,15 @@
 		<div class="row product-list">
 		{/if}
 	{/foreach}
+	{if !count($products)}
+		<div class="note note-info">
+			<h4 class="block">{_'Despite our efforts, we found no product.'}</h4>
+			<p>
+				{_'Try entering a different category, or possibly change product filter.'}
+				{_'We believe, then you will find your product.'}
+			</p>
+		</div>
+	{/if}
 	<!-- END PRODUCT LIST -->
 {/snippet}
 
