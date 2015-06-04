@@ -18,7 +18,10 @@ class ProductSeo extends BaseEntity
 
 	use Identifier;
 	
-    /** @ORM\OneToOne(targetEntity="ProductTranslation", inversedBy="seo") **/
+    /** 
+	 * @ORM\OneToOne(targetEntity="ProductTranslation", inversedBy="seo")
+     * @ORM\JoinColumn(name="product_translation_id")
+	 **/
     protected $product;
 
 	/** @ORM\Column(type="string", length=55, nullable=true) */
