@@ -22,6 +22,9 @@ class CategoryPresenter extends BasePresenter
 		$products->sort = [
 			'name' => ProductList::ORDER_ASC,
 		];
+		$products->filter = [
+			'category' => $category->childrenArray,
+		];
 	}
 
 }
