@@ -52,7 +52,8 @@ abstract class BasePresenter extends BaseBasePresenter
 		$list = new ProductList();
 		$list->setTranslator($this->translator);
 		$list->setItemsPerPage($this->pageConfigService->rowsPerPage, $this->pageConfigService->itemsPerRow);
-
+		$list->setLang($this->lang, $this->languageService->defaultLanguage);
+		
 		$list->qb = $this->productRepo->createQueryBuilder('p');
 
 		return $list;
