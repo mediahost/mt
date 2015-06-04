@@ -442,15 +442,7 @@ class ProductList extends Control
 
 	public function renderList()
 	{
-		$data = $this->getData();
-
-		if ($this->onRender) {
-			$this->onRender($this);
-		}
-
 		$this->template->setFile(__DIR__ . '/templates/productList.latte');
-		$this->template->products = $data;
-		$this->template->itemsPerRow = $this->itemsPerRow;
 		$this->templateRender();
 	}
 
@@ -463,13 +455,6 @@ class ProductList extends Control
 	public function renderPaginator()
 	{
 		$this->template->setFile(__DIR__ . '/templates/paginator.latte');
-		$this->template->paginator = $this->paginator;
-		$this->templateRender();
-	}
-
-	public function renderPerPage()
-	{
-		$this->template->setFile(__DIR__ . '/templates/perPage.latte');
 		$this->templateRender();
 	}
 
@@ -481,6 +466,15 @@ class ProductList extends Control
 
 	private function templateRender()
 	{
+		$data = $this->getData();
+
+		if ($this->onRender) {
+			$this->onRender($this);
+		}
+		
+		$this->template->products = $data;
+		$this->template->paginator = $this->paginator;
+		$this->template->itemsPerRow = $this->itemsPerRow;
 		$this->template->lang = $this->lang;
 		$this->template->render();
 	}

@@ -1,19 +1,21 @@
 {snippet productPaginator}
-	<div n:block="count" class="col-md-4 col-sm-4 items-info">
-		{_'Items %s to %s of %s total', NULL, $paginator->countBegin, $paginator->countEnd, $paginator->itemCount}
-	</div>
-	<div n:block="paginator" class="col-md-8 col-sm-8">
-		<ul class="pagination pull-right">
-			<li><a n:href="page! page => $paginator->page - 1" n:class="btn, $paginator->isFirst() ? disabled">&laquo;</a></li>
-			<li n:foreach="$paginator->getSteps() as $step">
-				{if $step == $control->page}
-					<span>{$step}</span>
-				{else}
-					<a n:href="page! page => $step">{$step}</a>
-				{/if}
-				<a n:if="$iterator->nextValue > $step + 1" class="btn prompt disabled">...</a>
-			</li>
-			<li><a n:href="page! page => $paginator->page + 1" n:class="btn, $paginator->isLast() ? disabled">&raquo;</a></li>
-		</ul>
-	</div>
+	{if count($products)}
+		<div n:block="count" class="col-md-4 col-sm-4 items-info">
+			{_'Items %s to %s of %s total', NULL, $paginator->countBegin, $paginator->countEnd, $paginator->itemCount}
+		</div>
+		<div n:block="paginator" class="col-md-8 col-sm-8">
+			<ul class="pagination pull-right">
+				<li><a n:href="page! page => $paginator->page - 1" n:class="btn, $paginator->isFirst() ? disabled">&laquo;</a></li>
+				<li n:foreach="$paginator->getSteps() as $step">
+					{if $step == $control->page}
+						<span>{$step}</span>
+					{else}
+						<a n:href="page! page => $step">{$step}</a>
+					{/if}
+					<a n:if="$iterator->nextValue > $step + 1" class="btn prompt disabled">...</a>
+				</li>
+				<li><a n:href="page! page => $paginator->page + 1" n:class="btn, $paginator->isLast() ? disabled">&raquo;</a></li>
+			</ul>
+		</div>
+	{/if}
 {/snippet}
