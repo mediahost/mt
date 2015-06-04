@@ -1,0 +1,38 @@
+{snippet productList}
+	<!-- BEGIN PRODUCT LIST -->
+	{foreach $products as $product}
+		{var isLastOnRow => !($iterator->counter % $itemsPerRow)}
+		{if $iterator->first}
+			<div class="row product-list">
+			{/if}
+			<!-- PRODUCT ITEM START -->
+			<div class="col-md-4 col-sm-6 col-xs-12">
+				{include product, product => $product}
+			</div>
+			<!-- PRODUCT ITEM END -->
+			{if $iterator->last}
+			</div>
+		{elseif $isLastOnRow}
+		</div>
+		<div class="row product-list">
+		{/if}
+	{/foreach}
+	<!-- END PRODUCT LIST -->
+{/snippet}
+
+{define product}
+<div class="product-item">
+	<div class="pi-img-wrapper">
+		<img src="{$basePath}/foto/{$product->image|size:'238','238'}" class="img-responsive" alt="{$product}">
+		<div>
+			<a href="{$basePath}/foto/{$product->image|size}" class="btn btn-default fancybox-button">{_'Zoom'}</a>
+			<a n:href="this" class="btn btn-default fancybox-fast-view">{_'View'}</a>
+		</div>
+	</div>
+	<h3>
+		<a n:href="this">{$product}</a>
+	</h3>
+	<div class="pi-price">{$product->price}</div>
+	<a href="#" class="btn btn-default add2cart">{_'Add to cart'}</a>
+</div>
+{/define}

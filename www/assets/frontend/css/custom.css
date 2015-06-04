@@ -8,3 +8,7 @@
   height: 27px;
   width: 27px;
 }
+
+.pagination .btn {
+	font-size: 13px;
+}

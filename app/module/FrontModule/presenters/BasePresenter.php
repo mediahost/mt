@@ -3,10 +3,12 @@
 namespace App\FrontModule\Presenters;
 
 use App\BaseModule\Presenters\BasePresenter as BaseBasePresenter;
+use App\Extensions\Products\ProductList;
 use App\Model\Entity\Category;
 use App\Model\Entity\Product;
 use App\Model\Repository\CategoryRepository;
 use App\Model\Repository\ProductRepository;
+use Grido\DataSources\Doctrine;
 
 abstract class BasePresenter extends BaseBasePresenter
 {
@@ -43,6 +45,18 @@ abstract class BasePresenter extends BaseBasePresenter
 		$categoriesSettings = $this->moduleService->getModuleSettings('categories');
 		$this->template->expandOnlyActiveCategories = $categoriesSettings ? $categoriesSettings->expandOnlyActiveCategories : TRUE;
 		$this->template->maxCategoryDeep = $categoriesSettings ? $categoriesSettings->maxDeep : 3;
+	}
+	
+	public function createComponentProducts()
+	{
+		$list = new ProductList();
+		$list->setTranslator($this->translator);
+		$list->setItemsPerPage($this->pageConfigService->rowsPerPage, $this->pageConfigService->itemsPerRow);
+
+		$qb = $this->productRepo->createQueryBuilder('p');
+		$list->model = new Doctrine($qb);
+
+		return $list;
 	}
 
 }
