@@ -10,9 +10,12 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="portlet box">
-			<div class="portlet-body">
-				<a n:href="create!">Create Product</a>
-			</div>
+			<ul class="list-group">
+				<li class="list-group-item"
+					n:foreach="$products as $product">{? $product->setCurrentLocale($lang)}
+					{$product} | {$product->price}
+				</li>
+			</ul>
 		</div>
 	</div>
 </div>
