@@ -2,6 +2,8 @@
 
 namespace App\FrontModule\Presenters;
 
+use App\Extensions\Products\ProductList;
+
 class CategoryPresenter extends BasePresenter
 {
 
@@ -14,8 +16,12 @@ class CategoryPresenter extends BasePresenter
 		}
 		$this->activeCategory = $category;
 		$this->template->category = $category;
-		$this->template->products = $this->productRepo->findAll();
-		$this->template->itemsPerRow = $this->pageConfigService->getItemsPerRow();
+		
+		/* @var $products ProductList */
+		$products = $this['products'];
+		$products->sort = [
+			'name' => ProductList::ORDER_ASC,
+		];
 	}
 
 }
