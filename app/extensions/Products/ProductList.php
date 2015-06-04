@@ -11,7 +11,6 @@ use Kdyby\Doctrine\QueryBuilder;
 use Nette\Application\UI\Control;
 use Nette\Localization\ITranslator;
 use Nette\Templating\FileTemplate;
-use Tracy\Debugger;
 
 class ProductList extends Control
 {
@@ -60,6 +59,12 @@ class ProductList extends Control
 
 	/** @var ITranslator */
 	protected $translator;
+
+	/** @var string */
+	protected $lang = 'en';
+
+	/** @var string */
+	protected $defaultLang = 'en';
 
 	/**
 	 * Sets a QueryBuilder.
@@ -148,6 +153,18 @@ class ProductList extends Control
 	public function setTranslator(ITranslator $translator)
 	{
 		$this->translator = $translator;
+		return $this;
+	}
+
+	/**
+	 * Sets language.
+	 * @param string $language
+	 * @return ProductList
+	 */
+	public function setLang($language, $defaultLang = 'en')
+	{
+		$this->lang = $language;
+		$this->defaultLang = $defaultLang;
 		return $this;
 	}
 
@@ -244,7 +261,7 @@ class ProductList extends Control
 			}
 
 			$data = $this->fetchData();
-			
+
 			if ($useCache === TRUE) {
 				$this->data = $data;
 			}
@@ -285,21 +302,17 @@ class ProductList extends Control
 	 */
 	public function fetchData()
 	{
-        $data = array();
+		$data = array();
 
-        // DoctrinePaginator is better if the query uses ManyToMany associations
-        $result = $this->qb->getMaxResults() !== NULL || $this->qb->getFirstResult() !== NULL
-            ? new DoctrinePaginator($this->qb->getQuery())
-            : $this->qb->getQuery()->getResult();
+		// DoctrinePaginator is better if the query uses ManyToMany associations
+		$result = $this->qb->getMaxResults() !== NULL || $this->qb->getFirstResult() !== NULL ? new DoctrinePaginator($this->qb->getQuery()) : $this->qb->getQuery()->getResult();
 
-        foreach ($result as $item) {
-            // Return only entity itself
-            $data[] = is_array($item)
-                ? $item[0]
-                : $item;
-        }
+		foreach ($result as $item) {
+			// Return only entity itself
+			$data[] = is_array($item) ? $item[0] : $item;
+		}
 
-        return $data;
+		return $data;
 	}
 
 	/**
@@ -320,6 +333,7 @@ class ProductList extends Control
 
 	protected function applyFiltering()
 	{
+		$this->filterOnlyActive();
 		foreach ($this->filter as $key => $value) {
 			switch ($key) {
 				case 'category':
@@ -327,6 +341,14 @@ class ProductList extends Control
 					break;
 			}
 		}
+	}
+
+	protected function filterOnlyActive()
+	{
+		$this->qb
+				->andWhere('p.active = :active')
+				->setParameter('active', TRUE);
+		return $this;
 	}
 
 	protected function filterByCategory(array $category)
@@ -345,7 +367,18 @@ class ProductList extends Control
 
 	protected function applySorting()
 	{
-		
+		foreach ($this->sort as $key => $value) {
+			switch ($key) {
+				case 'name':
+					$this->qb
+							->innerJoin('p.translations', 't')
+							->andWhere('t.locale = :lang OR t.locale = :defaultLang')
+							->setParameter('lang', $this->lang)
+							->setParameter('defaultLang', $this->defaultLang)
+							->orderBy('t.name', $value);
+					break;
+			}
+		}
 	}
 
 	protected function applyPaging()
@@ -359,7 +392,6 @@ class ProductList extends Control
 		$this->qb
 				->setFirstResult($offset)
 				->setMaxResults($limit);
-		
 	}
 
 	/*	 * ******************************************************************************************* */
@@ -388,6 +420,8 @@ class ProductList extends Control
 		}
 	}
 
+	/*	 * ******************************************************************************************* */
+
 	/**
 	 * @return FileTemplate
 	 * @internal
@@ -401,10 +435,6 @@ class ProductList extends Control
 		return $template;
 	}
 
-	/**
-	 * @internal
-	 * @throws Exception
-	 */
 	public function render()
 	{
 		$this->renderList();
@@ -413,39 +443,45 @@ class ProductList extends Control
 	public function renderList()
 	{
 		$data = $this->getData();
-		
+
 		if ($this->onRender) {
 			$this->onRender($this);
 		}
-		
+
 		$this->template->setFile(__DIR__ . '/templates/productList.latte');
 		$this->template->products = $data;
 		$this->template->itemsPerRow = $this->itemsPerRow;
-		$this->template->render();
+		$this->templateRender();
 	}
 
 	public function renderFilter()
 	{
 		$this->template->setFile(__DIR__ . '/templates/filter.latte');
-		$this->template->render();
+		$this->templateRender();
 	}
 
 	public function renderPaginator()
 	{
 		$this->template->setFile(__DIR__ . '/templates/paginator.latte');
 		$this->template->paginator = $this->paginator;
-		$this->template->render();
+		$this->templateRender();
 	}
 
 	public function renderPerPage()
 	{
 		$this->template->setFile(__DIR__ . '/templates/perPage.latte');
-		$this->template->render();
+		$this->templateRender();
 	}
 
 	public function renderSorting()
 	{
 		$this->template->setFile(__DIR__ . '/templates/sorting.latte');
+		$this->templateRender();
+	}
+
+	private function templateRender()
+	{
+		$this->template->lang = $this->lang;
 		$this->template->render();
 	}
 
