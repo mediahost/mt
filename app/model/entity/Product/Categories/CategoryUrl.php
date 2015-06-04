@@ -7,26 +7,10 @@ use App\Helpers;
 trait CategoryUrl
 {
 
-	public function getPath($reverse = TRUE)
-	{
-		$parent = $this->parent;
-		$path = [];
-		$containExistingEdge = FALSE;
-		while ($parent !== NULL && !$containExistingEdge) {
-			if ($parent->id === $this->id || array_key_exists($parent->id, $path)) {
-				$containExistingEdge = TRUE;
-			} else {
-				$parent->setCurrentLocale($this->currentLocale);
-				$path[$parent->id] = $parent;
-			}
-			$parent = $parent->parent;
-		}
-		if ($reverse) {
-			return array_reverse($path);
-		}
-		return $path;
-	}
-
+	/**
+	 * Return url path with parents and actual category
+	 * @return string
+	 */
 	public function getUrl()
 	{
 		$glue = '/';
