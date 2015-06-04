@@ -26,6 +26,9 @@ trait ProductCategories
 	{
 		$this->mainCategory = $category;
 		$this->addCategory($category);
+		foreach ($category->parents as $parent) {
+			$this->addCategory($parent);
+		}
 	}
 
 	public function setCategories(array $categories)

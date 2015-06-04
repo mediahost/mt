@@ -31,7 +31,7 @@ class Category extends BaseTranslatable
 	/** @ORM\OneToMany(targetEntity="Category", mappedBy="parent") */
 	protected $children;
 	
-	/** @ORM\OneToMany(targetEntity="Product", mappedBy="producer") */
+	/** @ORM\ManyToMany(targetEntity="Product", mappedBy="categories") */
 	protected $products;
 
 	public function __construct($name = NULL, $currentLocale = NULL)

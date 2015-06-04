@@ -15,6 +15,9 @@
 <a n:href="Category: url => $category->url" n:class="$printSubmenu ? collapsed">
 	<i class="fa fa-angle-right"></i>
 	{$category}
+	{if $showProductsCount}
+		({count($category->products)})
+	{/if}
 </a>
 {if $printSubmenu}
 	<ul class="dropdown-menu" style="display:block;">
