@@ -3,12 +3,15 @@
 namespace App\Extensions\Products;
 
 use App\Extensions\Products\Components\Paginator;
-use Grido\DataSources\IDataSource;
-use Grido\DataSources\Model;
+use App\Model\Entity\Category;
+use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
+use Exception;
 use InvalidArgumentException;
+use Kdyby\Doctrine\QueryBuilder;
 use Nette\Application\UI\Control;
 use Nette\Localization\ITranslator;
 use Nette\Templating\FileTemplate;
+use Tracy\Debugger;
 
 class ProductList extends Control
 {
@@ -22,10 +25,10 @@ class ProductList extends Control
 	/** @var int @persistent */
 	public $perPage;
 
-	/** @var array @persistent */
+	/** @var array */
 	public $sort = array();
 
-	/** @var array @persistent */
+	/** @var array */
 	public $filter = array();
 
 	/** @var array event on render */
@@ -43,8 +46,8 @@ class ProductList extends Control
 	/** @var int */
 	protected $rowsPerPage = 3;
 
-	/** @var IDataSource */
-	protected $model;
+	/** @var QueryBuilder */
+	protected $qb;
 
 	/** @var int total count of items */
 	protected $count;
@@ -59,15 +62,13 @@ class ProductList extends Control
 	protected $translator;
 
 	/**
-	 * Sets a model that implements the interface Grido\DataSources\IDataSource or data-source object.
-	 * @param mixed $model
-	 * @param bool $forceWrapper
-	 * @throws InvalidArgumentException
+	 * Sets a QueryBuilder.
+	 * @param QueryBuilder $model
 	 * @return ProductList
 	 */
-	public function setModel($model, $forceWrapper = FALSE)
+	public function setQb(QueryBuilder $model)
 	{
-		$this->model = $model instanceof IDataSource && $forceWrapper === FALSE ? $model : new Model($model);
+		$this->qb = $model;
 
 		return $this;
 	}
@@ -109,7 +110,7 @@ class ProductList extends Control
 	 * Sets sorting.
 	 * @param array $sort
 	 * @return ProductList
-	 * @throws \InvalidArgumentException
+	 * @throws InvalidArgumentException
 	 */
 	public function setSort(array $sort)
 	{
@@ -118,7 +119,7 @@ class ProductList extends Control
 		foreach ($sort as $column => $dir) {
 			$dir = strtr(strtolower($dir), $replace);
 			if (!in_array($dir, $replace)) {
-				throw new \InvalidArgumentException("Dir '$dir' for column '$column' is not allowed.");
+				throw new InvalidArgumentException("Dir '$dir' for column '$column' is not allowed.");
 			}
 
 			$this->sort[$column] = $dir;
@@ -181,7 +182,8 @@ class ProductList extends Control
 	public function getCount()
 	{
 		if ($this->count === NULL) {
-			$this->count = $this->model->getCount();
+			$paginator = new DoctrinePaginator($this->qb->getQuery());
+			$this->count = $paginator->count();
 		}
 
 		return $this->count;
@@ -219,13 +221,13 @@ class ProductList extends Control
 	 * @param bool $applyPaging
 	 * @param bool $useCache
 	 * @param bool $fetch
-	 * @throws \Exception
+	 * @throws Exception
 	 * @return array
 	 */
 	public function getData($applyPaging = TRUE, $useCache = TRUE, $fetch = TRUE)
 	{
-		if ($this->model === NULL) {
-			throw new \Exception('Model cannot be empty, please use method $grid->setModel().');
+		if ($this->qb === NULL) {
+			throw new Exception('Model cannot be empty, please use method $productList->setQb().');
 		}
 
 		$data = $this->data;
@@ -238,11 +240,11 @@ class ProductList extends Control
 			}
 
 			if ($fetch === FALSE) {
-				return $this->model;
+				return $this->qb;
 			}
 
-			$data = $this->model->getData();
-
+			$data = $this->fetchData();
+			
 			if ($useCache === TRUE) {
 				$this->data = $data;
 			}
@@ -269,12 +271,35 @@ class ProductList extends Control
 	}
 
 	/**
-	 * @return IDataSource
+	 * @return QueryBuilder
 	 * @internal
 	 */
-	public function getModel()
+	public function getQb()
 	{
-		return $this->model;
+		return $this->qb;
+	}
+
+	/**
+	 * @return array
+	 * @internal
+	 */
+	public function fetchData()
+	{
+        $data = array();
+
+        // DoctrinePaginator is better if the query uses ManyToMany associations
+        $result = $this->qb->getMaxResults() !== NULL || $this->qb->getFirstResult() !== NULL
+            ? new DoctrinePaginator($this->qb->getQuery())
+            : $this->qb->getQuery()->getResult();
+
+        foreach ($result as $item) {
+            // Return only entity itself
+            $data[] = is_array($item)
+                ? $item[0]
+                : $item;
+        }
+
+        return $data;
 	}
 
 	/**
@@ -293,71 +318,29 @@ class ProductList extends Control
 
 	/*	 * ******************************************************************************************* */
 
-	/**
-	 * @return FileTemplate
-	 * @internal
-	 */
-	public function createTemplate()
-	{
-		$template = parent::createTemplate();
-		$template->setFile(__DIR__ . '/templates/productList.latte');
-		$template->registerHelper('translate', callback($this->getTranslator(), 'translate'));
-
-		return $template;
-	}
-
-	/**
-	 * @internal
-	 * @throws \Exception
-	 */
-	public function render()
-	{
-		$data = $this->getData();
-
-		if ($this->onRender) {
-			$this->onRender($this);
-		}
-
-		$this->template->products = $data;
-		$this->template->paginator = $this->paginator;
-		$this->template->itemsPerRow = $this->itemsPerRow;
-
-		$this->template->render();
-	}
-
-	public function renderList()
-	{
-		$this->template->setFile(__DIR__ . '/templates/productList.latte');
-		$this->render();
-	}
-
-	public function renderFilter()
-	{
-		$this->template->setFile(__DIR__ . '/templates/filter.latte');
-		$this->render();
-	}
-
-	public function renderPaginator()
-	{
-		$this->template->setFile(__DIR__ . '/templates/paginator.latte');
-		$this->render();
-	}
-
-	public function renderPerPage()
-	{
-		$this->template->setFile(__DIR__ . '/templates/perPage.latte');
-		$this->render();
-	}
-
-	public function renderSorting()
-	{
-		$this->template->setFile(__DIR__ . '/templates/sorting.latte');
-		$this->render();
-	}
-
 	protected function applyFiltering()
 	{
-		
+		foreach ($this->filter as $key => $value) {
+			switch ($key) {
+				case 'category':
+					$this->filterByCategory($value);
+					break;
+			}
+		}
+	}
+
+	protected function filterByCategory(array $category)
+	{
+		if (is_array($category)) {
+			$this->qb
+					->andWhere('p.mainCategory IN (:categories)')
+					->setParameter('categories', $category);
+		} else if ($category instanceof Category) {
+			$this->qb
+					->andWhere('p.mainCategory = :category')
+					->setParameter('category', $category);
+		}
+		return $this;
 	}
 
 	protected function applySorting()
@@ -371,7 +354,12 @@ class ProductList extends Control
 				->setItemCount($this->getCount())
 				->setPage($this->page);
 
-		$this->model->limit($paginator->getOffset(), $paginator->getLength());
+		$offset = $paginator->getOffset();
+		$limit = $paginator->getLength();
+		$this->qb
+				->setFirstResult($offset)
+				->setMaxResults($limit);
+		
 	}
 
 	/*	 * ******************************************************************************************* */
@@ -398,6 +386,67 @@ class ProductList extends Control
 		} else {
 			$this->redirect('this');
 		}
+	}
+
+	/**
+	 * @return FileTemplate
+	 * @internal
+	 */
+	public function createTemplate()
+	{
+		$template = parent::createTemplate();
+		$template->setFile(__DIR__ . '/templates/productList.latte');
+		$template->registerHelper('translate', callback($this->getTranslator(), 'translate'));
+
+		return $template;
+	}
+
+	/**
+	 * @internal
+	 * @throws Exception
+	 */
+	public function render()
+	{
+		$this->renderList();
+	}
+
+	public function renderList()
+	{
+		$data = $this->getData();
+		
+		if ($this->onRender) {
+			$this->onRender($this);
+		}
+		
+		$this->template->setFile(__DIR__ . '/templates/productList.latte');
+		$this->template->products = $data;
+		$this->template->itemsPerRow = $this->itemsPerRow;
+		$this->template->render();
+	}
+
+	public function renderFilter()
+	{
+		$this->template->setFile(__DIR__ . '/templates/filter.latte');
+		$this->template->render();
+	}
+
+	public function renderPaginator()
+	{
+		$this->template->setFile(__DIR__ . '/templates/paginator.latte');
+		$this->template->paginator = $this->paginator;
+		$this->template->render();
+	}
+
+	public function renderPerPage()
+	{
+		$this->template->setFile(__DIR__ . '/templates/perPage.latte');
+		$this->template->render();
+	}
+
+	public function renderSorting()
+	{
+		$this->template->setFile(__DIR__ . '/templates/sorting.latte');
+		$this->template->render();
 	}
 
 }

@@ -53,8 +53,7 @@ abstract class BasePresenter extends BaseBasePresenter
 		$list->setTranslator($this->translator);
 		$list->setItemsPerPage($this->pageConfigService->rowsPerPage, $this->pageConfigService->itemsPerRow);
 
-		$qb = $this->productRepo->createQueryBuilder('p');
-		$list->model = new Doctrine($qb);
+		$list->qb = $this->productRepo->createQueryBuilder('p');
 
 		return $list;
 	}

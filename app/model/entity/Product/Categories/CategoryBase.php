@@ -33,5 +33,23 @@ trait CategoryBase
 		}
 		return $isInPath;
 	}
+	
+	/**
+	 * Returns childs and its childs
+	 * @return array
+	 */
+	public function getChildrenArray($withThis = TRUE, $deep = NULL)
+	{
+		$array = [];
+		if ($withThis) {
+			$array[$this->id] = $this;
+		}
+		if (($deep === NULL || $deep > 0) && $this->hasChildren) {
+			foreach ($this->children as $child) {
+				$array += $child->getChildrenArray(TRUE, --$deep);
+			}
+		}
+		return $array;
+	}
 
 }
