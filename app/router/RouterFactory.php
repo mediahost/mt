@@ -29,10 +29,10 @@ class RouterFactory
 		// <editor-fold desc="Foto">
 
 		$fotoRouter[] = new Route('foto/[<size \d+\-\d+>/]<name .+>', [
-            'presenter' => "Foto",
+			'presenter' => "Foto",
 			'action' => 'default',
-            'size' => NULL,
-            'name' => NULL,
+			'size' => NULL,
+			'name' => NULL,
 		]);
 
 		// </editor-fold>
@@ -56,11 +56,18 @@ class RouterFactory
 		// </editor-fold>
 		// <editor-fold desc="Front">
 
-		$frontRouter[] = new Route('c/<url [0-9a-z/]+>', [
-			'presenter' => 'Category',
-			'action' => 'default',
-			'url' => NULL,
-		]);
+		$slugs = '[0-9a-z/-]+';
+		$sluggablePresenters = [ // alias => Presenter
+			'c' => 'Category',
+			'p' => 'Product',
+		];
+		foreach ($sluggablePresenters as $alias => $presenter) {
+			$frontRouter[] = new Route($alias . '/<url ' . $slugs . '>', [
+				'presenter' => $presenter,
+				'action' => 'default',
+				'url' => NULL,
+			]);
+		}
 
 		$frontRouter[] = new Route('<presenter>/<action>[/<id>]', [
 			'presenter' => 'Homepage',

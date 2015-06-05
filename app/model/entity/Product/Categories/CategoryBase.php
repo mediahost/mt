@@ -38,6 +38,18 @@ trait CategoryBase
 	}
 
 	/**
+	 * Returns reversed parents plus this category
+	 * - in order from top to this category
+	 * @return array
+	 */
+	public function getPathWithThis()
+	{
+		$path = $this->getPath();
+		$path[$this->id] = $this;
+		return $path;
+	}
+
+	/**
 	 * Check if $category is in path
 	 * @param Category|Producer $category
 	 * @param bool $includeSelf check with this category
