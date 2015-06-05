@@ -2,6 +2,7 @@
 
 namespace App\Model\Entity;
 
+use App\Helpers;
 use App\Model\Entity\Traits;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -76,6 +77,13 @@ class Product extends BaseTranslatable
 		$this->similarsWithMe = new ArrayCollection();
 		$this->images = new ArrayCollection();
 		parent::__construct($currentLocale);
+	}
+	
+	public function getUrl()
+	{
+		$this->mainCategory->setCurrentLocale($this->getCurrentLocale());
+		$url = Helpers::getPath($this->mainCategory->url, $this->slug);
+		return $url;
 	}
 
 	public function __toString()

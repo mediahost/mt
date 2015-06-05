@@ -1,0 +1,163 @@
+{includeblock '../categories.latte'}
+
+{block breadcrumbItems}
+<li n:foreach="$product->mainCategory->pathWithThis as $category">
+	<a n:href="Category: url => $category->url">{$category}</a>
+</li>
+<li class="active">{$product}</li>
+	{/block}
+
+{block content}
+<div class="container">
+	<!-- BEGIN SIDEBAR & CONTENT -->
+	<div class="row">
+
+		<!-- BEGIN SIDEBAR -->
+		<div class="sidebar col-md-3 col-sm-5">
+			{include categories}
+
+            <div class="sidebar-products clearfix">
+				{include bestsellers}
+			</div>
+		</div>
+		<!-- END SIDEBAR -->
+
+		<!-- BEGIN CONTENT -->
+		<div class="col-md-9 col-sm-7">
+
+            <div class="product-page">
+				<div class="row">
+					<div class="col-md-6 col-sm-6">
+						<div class="product-main-image">
+							<img src="{$basePath}/foto/{$product->image|size:'380','500'}" 
+								 alt="{$product}" class="img-responsive" 
+								 data-BigImgsrc="{$basePath}/foto/{$product->image|size}">
+						</div>
+						<div class="product-other-images" n:if="count($product->images)">
+							<a n:foreach="$product->images as $image"
+							   href="{$basePath}/foto/{$image->image|size}" class="fancybox-button" rel="photos-lib">
+								<img alt="{$product}" src="{$basePath}/foto/{$product->image|size:'60','75'}">
+							</a>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-6">
+						<h1>{$product}</h1>
+						<div class="price-availability-block clearfix">
+							<div class="price">
+								<strong>47,00<span>€</span></strong>
+								<em><span>62,00</span>€</em>
+							</div>
+							<div class="availability">
+								{_'Availability'}: <strong>{_'In Stock'}</strong>
+							</div>
+						</div>
+						<div class="description" n:if="$product->perex">
+							<p>{$product->perex}</p>
+						</div>
+						<div class="product-page-options">
+							<div class="pull-left">
+								<label class="control-label">Size:</label>
+								<select class="form-control input-sm">
+									<option>L</option>
+									<option>M</option>
+									<option>XL</option>
+								</select>
+							</div>
+							<div class="pull-left">
+								<label class="control-label">Color:</label>
+								<select class="form-control input-sm">
+									<option>Red</option>
+									<option>Blue</option>
+									<option>Black</option>
+								</select>
+							</div>
+						</div>
+						<div class="product-page-cart">
+							<div class="product-quantity">
+								<input id="product-quantity" type="text" value="1" readonly class="form-control input-sm">
+							</div>
+							<button class="btn btn-primary" type="submit">{_'Add to cart'}</button>
+						</div>
+						<ul class="social-icons">
+							<li><a class="facebook" data-original-title="facebook" n:href="this"></a></li>
+							<li><a class="twitter" data-original-title="twitter" n:href="this"></a></li>
+							<li><a class="googleplus" data-original-title="googleplus" n:href="this"></a></li>
+							<li><a class="evernote" data-original-title="evernote" n:href="this"></a></li>
+							<li><a class="tumblr" data-original-title="tumblr" n:href="this"></a></li>
+						</ul>
+					</div>
+
+					<div class="product-page-content">
+						<ul id="myTab" class="nav nav-tabs">
+							<li><a href="#Description" data-toggle="tab">{_'Description'}</a></li>
+							<li><a href="#Parameters" data-toggle="tab">{_'Parameters'}</a></li>
+							<li class="active"><a href="#Reviews" data-toggle="tab">{_'Reviews'} (2)</a></li>
+						</ul>
+						<div id="myTabContent" class="tab-content">
+							<div class="tab-pane fade" id="Description">
+								<p>{$product->description}</p>
+							</div>
+							<div class="tab-pane fade" id="Parameters">
+								<table class="datasheet">
+									<tr>
+										<th colspan="2">{_'Additional features'}</th>
+									</tr>
+									<tr>
+										<td class="datasheet-features-type">Value 1</td>
+										<td>21 cm</td>
+									</tr>
+									<tr>
+										<td class="datasheet-features-type">Value 2</td>
+										<td>700 gr.</td>
+									</tr>
+									<tr>
+										<td class="datasheet-features-type">Value 3</td>
+										<td>10 person</td>
+									</tr>
+									<tr>
+										<td class="datasheet-features-type">Value 4</td>
+										<td>14 cm</td>
+									</tr>
+									<tr>
+										<td class="datasheet-features-type">Value 5</td>
+										<td>plastic</td>
+									</tr>
+								</table>
+							</div>
+							<div class="tab-pane fade in active" id="Reviews">
+								<!--<p>There are no reviews for this product.</p>-->
+								<div class="review-item clearfix">
+									<div class="review-item-submitted">
+										<strong>Bob</strong>
+										<em>30/12/2013 - 07:37</em>
+										<div class="rateit" data-rateit-value="5" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+									</div>                                              
+									<div class="review-item-content">
+										<p>Sed velit quam, auctor id semper a, hendrerit eget justo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis vel arcu pulvinar dolor tempus feugiat id in orci. Phasellus sed erat leo. Donec luctus, justo eget ultricies tristique, enim mauris bibendum orci, a sodales lectus purus ut lorem.</p>
+									</div>
+								</div>
+								<div class="review-item clearfix">
+									<div class="review-item-submitted">
+										<strong>Mary</strong>
+										<em>13/12/2013 - 17:49</em>
+										<div class="rateit" data-rateit-value="2.5" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+									</div>                                              
+									<div class="review-item-content">
+										<p>Sed velit quam, auctor id semper a, hendrerit eget justo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis vel arcu pulvinar dolor tempus feugiat id in orci. Phasellus sed erat leo. Donec luctus, justo eget ultricies tristique, enim mauris bibendum orci, a sodales lectus purus ut lorem.</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="sticker sticker-new"></div>
+					<div class="sticker sticker-sale"></div>
+				</div>
+            </div>
+
+		</div>
+		<!-- END CONTENT -->
+
+	</div>
+	<!-- END SIDEBAR & CONTENT -->
+</div>

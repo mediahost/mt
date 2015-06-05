@@ -36,11 +36,11 @@
 		<img src="{$basePath}/foto/{$product->image|size:'238','238'}" class="img-responsive" alt="{$product}">
 		<div>
 			<a href="{$basePath}/foto/{$product->image|size}" class="btn btn-default fancybox-button">{_'Zoom'}</a>
-			<a n:href="this" class="btn btn-default fancybox-fast-view">{_'View'}</a>
+			<a href="{plink Product: 'url' => $product->url}" class="btn btn-default fancybox-fast-view">{_'View'}</a>
 		</div>
 	</div>
 	<h3>
-		<a n:href="this">{$product}</a>
+		<a href="{plink Product: 'url' => $product->url}">{$product}</a>
 	</h3>
 	<div class="pi-price">{$product->price}</div>
 	<a href="#" class="btn btn-default add2cart">{_'Add to cart'}</a>
