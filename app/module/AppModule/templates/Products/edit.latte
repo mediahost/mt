@@ -18,9 +18,10 @@
 		{include seo}
 	</div>
 	<div class="col-md-5">
+		{include images}
 		{include prices}
 		{include quantity}
-		{include category}
+		{include categories}
 	</div>
 </div>
 {/block}
@@ -29,7 +30,7 @@
 <div class="portlet light">
 	<div class="portlet-title">
 		<div class="caption font-green-sharp">
-			<i class="fa fa-edit font-green-sharp"></i>
+			<i class="fa fa-info-circle font-green-sharp"></i>
 			<span class="caption-subject bold uppercase">
 				{_'Basic data'}
 			</span>
@@ -49,7 +50,7 @@
 <div class="portlet light">
 	<div class="portlet-title">
 		<div class="caption font-green-sharp">
-			<i class="fa fa-edit font-green-sharp"></i>
+			<i class="fa fa-euro font-green-sharp"></i>
 			<span class="caption-subject bold uppercase">
 				{_'Prices'}
 			</span>
@@ -69,7 +70,7 @@
 <div class="portlet light">
 	<div class="portlet-title">
 		<div class="caption font-green-sharp">
-			<i class="fa fa-edit font-green-sharp"></i>
+			<i class="fa fa-inbox font-green-sharp"></i>
 			<span class="caption-subject bold uppercase">
 				{_'Quantity'}
 			</span>
@@ -85,11 +86,11 @@
 </div>
 {/define}
 
-{define category}
+{define categories}
 <div class="portlet light">
 	<div class="portlet-title">
 		<div class="caption font-green-sharp">
-			<i class="fa fa-edit font-green-sharp"></i>
+			<i class="icon-notebook font-green-sharp"></i>
 			<span class="caption-subject bold uppercase">
 				{_'Classification'}
 			</span>
@@ -109,7 +110,7 @@
 <div class="portlet light">
 	<div class="portlet-title">
 		<div class="caption font-green-sharp">
-			<i class="fa fa-edit font-green-sharp"></i>
+			<i class="fa fa-globe font-green-sharp"></i>
 			<span class="caption-subject bold uppercase">
 				{_'SEO'}
 			</span>
@@ -121,6 +122,26 @@
 	</div>
 	<div class="portlet-body form">
 		{control stockSeoForm}
+	</div>
+</div>
+{/define}
+
+{define images}
+<div class="portlet light">
+	<div class="portlet-title">
+		<div class="caption font-green-sharp">
+			<i class="fa fa-image font-green-sharp"></i>
+			<span class="caption-subject bold uppercase">
+				{_'Images'}
+			</span>
+		</div>
+		<div class="actions">
+			<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+			</a>
+		</div>
+	</div>
+	<div class="portlet-body form">
+		{control stockImageForm}
 	</div>
 </div>
 {/define}

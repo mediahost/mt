@@ -2,15 +2,13 @@
 
 namespace App\Components\Product;
 
-use App\Forms\Controls\TextInputBased\MetronicTextInputBase;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Stock;
-use App\Model\Entity\Unit;
 use App\Model\Facade\UnitFacade;
 use Nette\Utils\ArrayHash;
 
-class StockQuantityControl extends StockBaseControl
+class StockImageControl extends StockBaseControl
 {
 	// <editor-fold desc="variables">
 
@@ -28,18 +26,11 @@ class StockQuantityControl extends StockBaseControl
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer);
 
-		$unitRepo = $this->em->getRepository(Unit::getClassName());
-		$defaultUnit = $unitRepo->find(1);
-		$defaultUnit->setCurrentLocale($this->lang);
-		$units = $this->unitFacade->getUnitsList($this->lang);
-
-		$form->addTouchSpin('quantity', 'Quantity')
-				->setMax(1000)
-				->setPostfix($defaultUnit)
-				->setSize(MetronicTextInputBase::SIZE_M)
-				->setDefaultValue(0);
-		$form->addSelect2('unit', 'Units', $units)
-						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
+		$form->addUploadImageWithPreview('image', 'Image')
+				->setPreview('/foto/200-150/' . $this->stock->product->image, $this->stock->product->name)
+				->setSize(200, 150)
+				->addCondition(Form::FILLED)
+				->addRule(Form::IMAGE, 'Image must be in valid image format');
 
 		$form->addSubmit('save', 'Save');
 
@@ -57,11 +48,9 @@ class StockQuantityControl extends StockBaseControl
 
 	private function load(ArrayHash $values)
 	{
-		$this->stock->quantity = $values->quantity > 1 ? $values->quantity : 0;
-		
-		$unitRepo = $this->em->getRepository(Unit::getClassName());
-		$unit = $unitRepo->find($values->unit);
-		$this->stock->product->unit = $unit;
+		if ($values->image->isImage()) {
+			$this->stock->product->image = $values->image;
+		}
 
 		return $this;
 	}
@@ -77,17 +66,16 @@ class StockQuantityControl extends StockBaseControl
 	protected function getDefaults()
 	{
 		$values = [
-			'quantity' => $this->stock->quantity,
-			'units' => $this->stock->product->unit->id,
+			'image' => $this->stock->product->image,
 		];
 		return $values;
 	}
 
 }
 
-interface IStockQuantityControlFactory
+interface IStockImageControlFactory
 {
 
-	/** @return StockQuantityControl */
+	/** @return StockImageControl */
 	function create();
 }

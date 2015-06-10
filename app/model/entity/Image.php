@@ -21,6 +21,7 @@ use Nette\Utils\DateTime;
 class Image extends BaseEntity
 {
 
+	const FOLDER_DEFAULT = 'others';
 	const FOLDER_PRODUCTS = 'products/images';
 	const FOLDER_USERS = 'users/images';
 	const DEFAULT_IMAGE = 'default.png';
@@ -38,6 +39,9 @@ class Image extends BaseEntity
 
 	/** string */
 	public $requestedFilename;
+
+	/** string */
+	private $folderToSave = self::FOLDER_DEFAULT;
 
 	public function __construct($file)
 	{
@@ -60,6 +64,26 @@ class Image extends BaseEntity
 		$this->requestedFilename = $requestedFilename;
 		$this->lastChange = new DateTime();
 		return $this;
+	}
+	
+	public function setFolder($folder = self::FOLDER_DEFAULT)
+	{
+		switch ($folder) {
+			case self::FOLDER_PRODUCTS:
+			case self::FOLDER_USERS:
+			case self::FOLDER_DEFAULT:
+				$this->folderToSave = $folder;
+				break;
+			default:
+				$this->folderToSave = self::FOLDER_DEFAULT;
+				break;
+		}
+		return $this;
+	}
+	
+	public function getFolder()
+	{
+		return $this->folderToSave;
 	}
 
 	public function isChanged()

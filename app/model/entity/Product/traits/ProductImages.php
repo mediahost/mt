@@ -22,13 +22,13 @@ trait ProductImages
 
 	public function setImage(FileUpload $file)
 	{
-		if (!$this->logo instanceof Image) {
-			$this->logo = new Image($file);
+		if (!$this->image instanceof Image) {
+			$this->image = new Image($file);
 		} else {
-			$this->logo->setFile($file);
+			$this->image->setFile($file);
 		}
-		$this->logo->requestedFilename = 'product_image_' . Strings::webalize(microtime());
-		$this->logo->setFolder(Image::FOLDER_PRODUCTS);
+		$this->image->requestedFilename = 'product_image_' . Strings::webalize(microtime());
+		$this->image->setFolder(Image::FOLDER_PRODUCTS);
 		return $this;
 	}
 

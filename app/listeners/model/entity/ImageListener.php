@@ -48,10 +48,11 @@ class ImageListener extends Object implements Subscriber
 	private function saveImage(Image $image)
 	{
 		if ($image->changed) {
-			$folder = Image::FOLDER_COMPANY_LOGO;
-			$realFilename = $this->createNewImage($image, $folder);
-			$this->fotoService->delete($image->filename);
-			$image->filename = Helpers::getPath($folder, $realFilename);
+			$realFilename = $this->createNewImage($image, $image->folder);
+			if ($image->filename) {
+				$this->fotoService->delete($image->filename);
+			}
+			$image->filename = Helpers::getPath($image->folder, $realFilename);
 		}
 	}
 
