@@ -6,6 +6,7 @@ use App\Model\Entity\Discount;
 use App\Model\Entity\Group;
 use App\Model\Entity\GroupDiscount;
 use App\Model\Entity\Price;
+use App\Model\Entity\Vat;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -15,15 +16,15 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @property float $purchasePrice
  * @property float $oldPrice
  */
-trait ProductPrices
+trait StockPrices
 {
 
 	/** @ORM\OneToOne(targetEntity="Price", cascade={"persist", "remove"}) */
 	protected $price;
-	
+
 	/** @ORM\Column(type="float", nullable=true) */
 	protected $purchasePrice;
-	
+
 	/** @ORM\Column(type="float", nullable=true) */
 	protected $oldPrice;
 
@@ -39,6 +40,22 @@ trait ProductPrices
 			}
 		}
 		return $this->price;
+	}
+
+	public function setPrice($value, Vat $vat, $withVat = FALSE)
+	{
+		if ($this->price === NULL) {
+			$this->price = new Price($vat);
+		} else {
+			$this->price->vat = $vat;
+		}
+		
+		if ($withVat) {
+			$this->price->withVat = $value;
+		} else {
+			$this->price->withoutVat = $value;
+		}
+		return $this;
 	}
 
 	public function addDiscount(Discount $discount, Group $group)

@@ -13,7 +13,7 @@ use Knp\DoctrineBehaviors\Model;
  * @property string $slug
  * @property string $description
  * @property string $perex
- * @property Seo $seo
+ * @property ProductSeo $seo
  */
 class ProductTranslation extends BaseEntity
 {

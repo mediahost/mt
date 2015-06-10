@@ -23,7 +23,7 @@ class TouchSpin extends MetronicTextInputBase
 	public function __construct($label = NULL)
 	{
 		parent::__construct($label);
-		$this->control->class = 'touchspin';
+		$this->control->class = ['touchspin'];
 		$this->dataAttributes = [
 			'ButtonDownClass' => 'buttondown-class',
 			'ButtonUpClass' => 'buttonup-class',

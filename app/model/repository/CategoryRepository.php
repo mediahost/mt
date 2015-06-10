@@ -24,7 +24,7 @@ class CategoryRepository extends BaseRepository
 		$slug = array_pop($url);
 		$parent = NULL;
 		if (count($url)) {
-			$parent = $this->findOneByUrl($url, $lang);
+			$parent = $this->findOneByUrl($url, $lang); // search only category with right parents
 		}
 
 		$qb = $this->createQueryBuilder('c')

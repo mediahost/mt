@@ -2,15 +2,59 @@
 
 namespace App\AppModule\Presenters;
 
-use App\Model\Entity\Category;
-use App\Model\Entity\Discount;
-use App\Model\Entity\Group;
-use App\Model\Entity\Price;
-use App\Model\Entity\Product;
-use App\Model\Entity\Vat;
+use App\Components\Grids\Product\IStocksGridFactory;
+use App\Components\Grids\Product\StocksGrid;
+use App\Components\Product\IStockAddControlFactory;
+use App\Components\Product\IStockBasicControlFactory;
+use App\Components\Product\IStockCategoryControlFactory;
+use App\Components\Product\IStockPriceControlFactory;
+use App\Components\Product\IStockQuantityControlFactory;
+use App\Components\Product\IStockSeoControlFactory;
+use App\Components\Product\StockAddControl;
+use App\Components\Product\StockBasicControl;
+use App\Components\Product\StockCategoryControl;
+use App\Components\Product\StockPriceControl;
+use App\Components\Product\StockQuantityControl;
+use App\Components\Product\StockSeoControl;
+use App\Model\Entity\Stock;
+use App\TaggedString;
+use Kdyby\Doctrine\EntityRepository;
 
 class ProductsPresenter extends BasePresenter
 {
+
+	/** @var Stock */
+	private $stockEntity;
+
+	/** @var EntityRepository */
+	private $stockRepo;
+
+	/** @var IStockAddControlFactory @inject */
+	public $iStockAddControlFactory;
+
+	/** @var IStockBasicControlFactory @inject */
+	public $iStockBasicControlFactory;
+
+	/** @var IStockPriceControlFactory @inject */
+	public $iStockPriceControlFactory;
+
+	/** @var IStockQuantityControlFactory @inject */
+	public $iStockQuantityControlFactory;
+
+	/** @var IStockCategoryControlFactory @inject */
+	public $iStockCategoryControlFactory;
+
+	/** @var IStockSeoControlFactory @inject */
+	public $iStockSeoControlFactory;
+
+	/** @var IStocksGridFactory @inject */
+	public $iStocksGridFactory;
+
+	protected function startup()
+	{
+		parent::startup();
+		$this->stockRepo = $this->em->getRepository(Stock::getClassName());
+	}
 
 	/**
 	 * @secured
@@ -19,196 +63,118 @@ class ProductsPresenter extends BasePresenter
 	 */
 	public function actionDefault()
 	{
-		$productRepo = $this->em->getRepository(Product::getClassName());
-
-		if (!count($productRepo->findAll())) {
-			$this->createDemoProducts();
-		}
-
-		$this->template->products = $productRepo->findAll();
-	}
-
-	private function createDemoProducts()
-	{
-		$categoryRepo = $this->em->getRepository(Category::getClassName());
-		if (!count($categoryRepo->findAll())) {
-			$this->flashMessage('Init categories before init products.');
-			$this->flashMessage('Right now you can go to products.');
-			$this->redirect('Categories:');
-		}
 		
-		$vatRepo = $this->em->getRepository(Vat::getClassName());
-		$vat = $vatRepo->find(1);
-		if (!$vat) {
-			$vat = new Vat(20);
-			$vatRepo->save($vat);
-		}
-
-		$groupRepo = $this->em->getRepository(Group::getClassName());
-		if (count($groupRepo->findAll()) < 3) {
-			$group1 = new Group('Group 1');
-			$group2 = new Group('Group 2');
-			$group3 = new Group('Group 3');
-			$groupRepo->save($group1);
-			$groupRepo->save($group2);
-			$groupRepo->save($group3);
-		} else {
-			$group1 = $groupRepo->find(1);
-			$group2 = $groupRepo->find(2);
-			$group3 = $groupRepo->find(3);
-		}
-
-		$discount1 = new Discount(5);
-		$discount2 = new Discount(30, Discount::MINUS_VALUE);
-		$discount3 = new Discount(950, Discount::FIXED_PRICE);
-
-		$productRepo = $this->em->getRepository(Product::getClassName());
-
-		$product = new Product();
-		$product->translate('en')->name = 'First Product';
-		$product->translate('en')->seo->name = 'my seo';
-		$product->translate('en')->seo->description = 'my description';
-		$product->translate('cs')->name = 'První produkt';
-		$product->translate('cs')->seo->name = 'my seo';
-		$product->translate('cs')->seo->description = 'my description';
-		$product->mergeNewTranslations();
-		$product->price = new Price($vat, 1000);
-		$product->mainCategory = $categoryRepo->find(8);
-		$product->addDiscount($discount1, $group1);
-		$product->addDiscount($discount2, $group2);
-		$product->addDiscount($discount3, $group3);
-
-		$productRepo->save($product);
-
-		$product = new Product();
-		$product->translate('en')->name = 'Second Product';
-		$product->translate('en')->seo->name = 'my seo';
-		$product->translate('en')->seo->description = 'my description';
-		$product->translate('cs')->name = 'Druhý produkt';
-		$product->translate('cs')->seo->name = 'my seo';
-		$product->translate('cs')->seo->description = 'my description';
-		$product->mergeNewTranslations();
-		$product->price = new Price($vat, 900);
-		$product->mainCategory = $categoryRepo->find(8);
-
-		$productRepo->save($product);
-
-		$product = new Product();
-		$product->translate('en')->name = 'Third Product';
-		$product->translate('en')->seo->name = 'my seo';
-		$product->translate('en')->seo->description = 'my description';
-		$product->translate('cs')->name = 'Třetí produkt';
-		$product->translate('cs')->seo->name = 'my seo';
-		$product->translate('cs')->seo->description = 'my description';
-		$product->mergeNewTranslations();
-		$product->price = new Price($vat, 800);
-		$product->mainCategory = $categoryRepo->find(8);
-
-		$productRepo->save($product);
-
-		$product = new Product();
-		$product->translate('en')->name = 'Fourth Product';
-		$product->translate('en')->seo->name = 'my seo';
-		$product->translate('en')->seo->description = 'my description';
-		$product->translate('cs')->name = 'Čtvrtý produkt';
-		$product->translate('cs')->seo->name = 'my seo';
-		$product->translate('cs')->seo->description = 'my description';
-		$product->mergeNewTranslations();
-		$product->price = new Price($vat, 700);
-		$product->mainCategory = $categoryRepo->find(8);
-
-		$productRepo->save($product);
-
-		$product = new Product();
-		$product->translate('en')->name = 'Fifth Product';
-		$product->translate('en')->seo->name = 'my seo';
-		$product->translate('en')->seo->description = 'my description';
-		$product->translate('cs')->name = 'Pátý produkt';
-		$product->translate('cs')->seo->name = 'my seo';
-		$product->translate('cs')->seo->description = 'my description';
-		$product->mergeNewTranslations();
-		$product->price = new Price($vat, 600);
-		$product->mainCategory = $categoryRepo->find(9);
-
-		$productRepo->save($product);
-
-		$product = new Product();
-		$product->translate('en')->name = 'Sixth Product';
-		$product->translate('en')->seo->name = 'my seo';
-		$product->translate('en')->seo->description = 'my description';
-		$product->translate('cs')->name = 'Šestý produkt';
-		$product->translate('cs')->seo->name = 'my seo';
-		$product->translate('cs')->seo->description = 'my description';
-		$product->mergeNewTranslations();
-		$product->price = new Price($vat, 500);
-		$product->mainCategory = $categoryRepo->find(9);
-
-		$productRepo->save($product);
-
-		$product = new Product();
-		$product->translate('en')->name = 'Seventh Product';
-		$product->translate('en')->seo->name = 'my seo';
-		$product->translate('en')->seo->description = 'my description';
-		$product->translate('cs')->name = 'Sedmý produkt';
-		$product->translate('cs')->seo->name = 'my seo';
-		$product->translate('cs')->seo->description = 'my description';
-		$product->mergeNewTranslations();
-		$product->price = new Price($vat, 400);
-		$product->mainCategory = $categoryRepo->find(9);
-
-		$productRepo->save($product);
-
-		$product = new Product();
-		$product->translate('en')->name = 'Eighth Product';
-		$product->translate('en')->seo->name = 'my seo';
-		$product->translate('en')->seo->description = 'my description';
-		$product->translate('cs')->name = 'Osmý produkt';
-		$product->translate('cs')->seo->name = 'my seo';
-		$product->translate('cs')->seo->description = 'my description';
-		$product->mergeNewTranslations();
-		$product->price = new Price($vat, 300);
-		$product->mainCategory = $categoryRepo->find(9);
-
-		$productRepo->save($product);
-
-		$product = new Product();
-		$product->translate('en')->name = 'Nineth Product';
-		$product->translate('en')->seo->name = 'my seo';
-		$product->translate('en')->seo->description = 'my description';
-		$product->translate('cs')->name = 'Devátý produkt';
-		$product->translate('cs')->seo->name = 'my seo';
-		$product->translate('cs')->seo->description = 'my description';
-		$product->mergeNewTranslations();
-		$product->price = new Price($vat, 200);
-		$product->mainCategory = $categoryRepo->find(9);
-
-		$productRepo->save($product);
-
-		$product = new Product();
-		$product->translate('en')->name = 'Tenth Product';
-		$product->translate('en')->seo->name = 'my seo';
-		$product->translate('en')->seo->description = 'my description';
-		$product->translate('cs')->name = 'Desátý produkt';
-		$product->translate('cs')->seo->name = 'my seo';
-		$product->translate('cs')->seo->description = 'my description';
-		$product->mergeNewTranslations();
-		$product->price = new Price($vat, 100);
-		$product->mainCategory = $categoryRepo->find(9);
-
-		$productRepo->save($product);
-
-		$product = new Product();
-		$product->translate('en')->name = 'Eleventh Product';
-		$product->translate('en')->seo->name = 'my seo';
-		$product->translate('en')->seo->description = 'my description';
-		$product->translate('cs')->name = 'Jedenáctý produkt';
-		$product->translate('cs')->seo->name = 'my seo';
-		$product->translate('cs')->seo->description = 'my description';
-		$product->mergeNewTranslations();
-		$product->price = new Price($vat, 50);
-		$product->mainCategory = $categoryRepo->find(9);
-
-		$productRepo->save($product);
 	}
 
+	/**
+	 * @secured
+	 * @resource('products')
+	 * @privilege('add')
+	 */
+	public function actionAdd()
+	{
+		$this->stockEntity = new Stock();
+		$this['stockAddForm']->setStock($this->stockEntity);
+	}
+
+	/**
+	 * @secured
+	 * @resource('products')
+	 * @privilege('edit')
+	 */
+	public function actionEdit($id)
+	{
+		$this->stockEntity = $this->stockRepo->find($id);
+		if (!$this->stockEntity) {
+			$this->flashMessage('This product wasn\'t found.', 'error');
+			$this->redirect('default');
+		} else {
+			$this['stockBasicForm']->setStock($this->stockEntity);
+			$this['stockPriceForm']->setStock($this->stockEntity);
+			$this['stockQuantityForm']->setStock($this->stockEntity);
+			$this['stockCategoryForm']->setStock($this->stockEntity);
+			$this['stockSeoForm']->setStock($this->stockEntity);
+		}
+	}
+
+	public function renderEdit()
+	{
+		$this->template->stock = $this->stockEntity;
+	}
+
+	// <editor-fold desc="forms">
+
+	/** @return StockAddControl */
+	public function createComponentStockAddForm()
+	{
+		$control = $this->iStockAddControlFactory->create();
+		$control->setLang($this->lang);
+		$control->onAfterSave = $this->afterStockSave;
+		return $control;
+	}
+
+	/** @return StockBasicControl */
+	public function createComponentStockBasicForm()
+	{
+		$control = $this->iStockBasicControlFactory->create();
+		$control->setLang($this->lang);
+		$control->onAfterSave = $this->afterStockSave;
+		return $control;
+	}
+
+	/** @return StockPriceControl */
+	public function createComponentStockPriceForm()
+	{
+		$control = $this->iStockPriceControlFactory->create();
+		$control->setLang($this->lang);
+		$control->onAfterSave = $this->afterStockSave;
+		return $control;
+	}
+
+	/** @return StockQuantityControl */
+	public function createComponentStockQuantityForm()
+	{
+		$control = $this->iStockQuantityControlFactory->create();
+		$control->setLang($this->lang);
+		$control->onAfterSave = $this->afterStockSave;
+		return $control;
+	}
+
+	/** @return StockCategoryControl */
+	public function createComponentStockCategoryForm()
+	{
+		$control = $this->iStockCategoryControlFactory->create();
+		$control->setLang($this->lang);
+		$control->onAfterSave = $this->afterStockSave;
+		return $control;
+	}
+
+	/** @return StockSeoControl */
+	public function createComponentStockSeoForm()
+	{
+		$control = $this->iStockSeoControlFactory->create();
+		$control->setLang($this->lang);
+		$control->onAfterSave = $this->afterStockSave;
+		return $control;
+	}
+
+	public function afterStockSave(Stock $stock)
+	{
+		$message = new TaggedString('Product \'%s\' was successfully saved.', (string) $stock);
+		$this->flashMessage($message, 'success');
+		$this->redirect('edit', $stock->id);
+	}
+
+	// </editor-fold>
+	// <editor-fold desc="grids">
+
+	/** @return StocksGrid */
+	public function createComponentStocksGrid()
+	{
+		$control = $this->iStocksGridFactory->create();
+		$control->setLang($this->lang);
+		return $control;
+	}
+
+	// </editor-fold>
 }

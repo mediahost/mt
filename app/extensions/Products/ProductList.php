@@ -472,7 +472,7 @@ class ProductList extends Control
 			$this->onRender($this);
 		}
 		
-		$this->template->products = $data;
+		$this->template->stocks = $data;
 		$this->template->paginator = $this->paginator;
 		$this->template->itemsPerRow = $this->itemsPerRow;
 		$this->template->lang = $this->lang;

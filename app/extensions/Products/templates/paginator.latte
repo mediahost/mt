@@ -1,5 +1,5 @@
 {snippet productPaginator}
-	{if count($products)}
+	{if count($stocks)}
 		<div n:block="count" class="col-md-4 col-sm-4 items-info">
 			{_'Items %s to %s of %s total', NULL, $paginator->countBegin, $paginator->countEnd, $paginator->itemCount}
 		</div>

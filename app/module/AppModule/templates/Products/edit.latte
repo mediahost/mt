@@ -1,0 +1,126 @@
+{block pageTitle}
+{$stock}
+{/block}
+
+{block breadcrumbItems}
+<li>
+	<a n:href="Products:">{_'Products'}</a>
+</li>
+<li>
+	<span>{$stock}</span>
+</li>
+{/block}
+
+{block content}
+<div class="row">
+	<div class="col-md-7">
+		{include basic}
+		{include seo}
+	</div>
+	<div class="col-md-5">
+		{include prices}
+		{include quantity}
+		{include category}
+	</div>
+</div>
+{/block}
+
+{define basic}
+<div class="portlet light">
+	<div class="portlet-title">
+		<div class="caption font-green-sharp">
+			<i class="fa fa-edit font-green-sharp"></i>
+			<span class="caption-subject bold uppercase">
+				{_'Basic data'}
+			</span>
+		</div>
+		<div class="actions">
+			<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+			</a>
+		</div>
+	</div>
+	<div class="portlet-body form">
+		{control stockBasicForm}
+	</div>
+</div>
+{/define}
+
+{define prices}
+<div class="portlet light">
+	<div class="portlet-title">
+		<div class="caption font-green-sharp">
+			<i class="fa fa-edit font-green-sharp"></i>
+			<span class="caption-subject bold uppercase">
+				{_'Prices'}
+			</span>
+		</div>
+		<div class="actions">
+			<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+			</a>
+		</div>
+	</div>
+	<div class="portlet-body form">
+		{control stockPriceForm}
+	</div>
+</div>
+{/define}
+
+{define quantity}
+<div class="portlet light">
+	<div class="portlet-title">
+		<div class="caption font-green-sharp">
+			<i class="fa fa-edit font-green-sharp"></i>
+			<span class="caption-subject bold uppercase">
+				{_'Quantity'}
+			</span>
+		</div>
+		<div class="actions">
+			<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+			</a>
+		</div>
+	</div>
+	<div class="portlet-body form">
+		{control stockQuantityForm}
+	</div>
+</div>
+{/define}
+
+{define category}
+<div class="portlet light">
+	<div class="portlet-title">
+		<div class="caption font-green-sharp">
+			<i class="fa fa-edit font-green-sharp"></i>
+			<span class="caption-subject bold uppercase">
+				{_'Classification'}
+			</span>
+		</div>
+		<div class="actions">
+			<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+			</a>
+		</div>
+	</div>
+	<div class="portlet-body form">
+		{control stockCategoryForm}
+	</div>
+</div>
+{/define}
+
+{define seo}
+<div class="portlet light">
+	<div class="portlet-title">
+		<div class="caption font-green-sharp">
+			<i class="fa fa-edit font-green-sharp"></i>
+			<span class="caption-subject bold uppercase">
+				{_'SEO'}
+			</span>
+		</div>
+		<div class="actions">
+			<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+			</a>
+		</div>
+	</div>
+	<div class="portlet-body form">
+		{control stockSeoForm}
+	</div>
+</div>
+{/define}

@@ -10,8 +10,8 @@ use App\Model\Entity\User;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
 use App\TaggedString;
-use Kdyby\Doctrine\EntityDao;
 use Kdyby\Doctrine\EntityManager;
+use Kdyby\Doctrine\EntityRepository;
 use Nette\Security\User as IdentityUser;
 
 class UsersPresenter extends BasePresenter
@@ -20,8 +20,8 @@ class UsersPresenter extends BasePresenter
 	/** @var User */
 	private $userEntity;
 
-	/** @var EntityDao */
-	private $userDao;
+	/** @var EntityRepository */
+	private $userRepo;
 
 	// <editor-fold desc="injects">
 
@@ -45,7 +45,7 @@ class UsersPresenter extends BasePresenter
 	protected function startup()
 	{
 		parent::startup();
-		$this->userDao = $this->em->getDao(User::getClassName());
+		$this->userRepo = $this->em->getRepository(User::getClassName());
 	}
 
 	// <editor-fold desc="actions & renderers">
@@ -57,8 +57,6 @@ class UsersPresenter extends BasePresenter
 	 */
 	public function actionDefault()
 	{
-		$this->template->users = $this->userDao->findAll();
-		$this->template->identity = $this->user;
 		$this->template->addFilter('canEdit', $this->canEdit);
 		$this->template->addFilter('canDelete', $this->canDelete);
 		$this->template->addFilter('canAccess', $this->canAccess);
@@ -83,7 +81,7 @@ class UsersPresenter extends BasePresenter
 	 */
 	public function actionEdit($id)
 	{
-		$this->userEntity = $this->userDao->find($id);
+		$this->userEntity = $this->userRepo->find($id);
 		if (!$this->userEntity) {
 			$this->flashMessage('This user wasn\'t found.', 'error');
 			$this->redirect('default');
@@ -118,7 +116,7 @@ class UsersPresenter extends BasePresenter
 	 */
 	public function actionDelete($id)
 	{
-		$user = $this->userDao->find($id);
+		$user = $this->userRepo->find($id);
 		if (!$user) {
 			$this->flashMessage('User wasn\'t found.', 'danger');
 		} else if (!$this->canDelete($this->user, $user)) {
@@ -137,7 +135,7 @@ class UsersPresenter extends BasePresenter
 	 */
 	public function actionAccess($id)
 	{
-		$user = $this->userDao->find($id);
+		$user = $this->userRepo->find($id);
 		if (!$user) {
 			$this->flashMessage('User wasn\'t found.', 'danger');
 		} else if (!$this->canAccess($this->user, $user)) {

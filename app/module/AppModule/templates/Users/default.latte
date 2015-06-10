@@ -27,58 +27,6 @@
 			</div>
 			<div class="portlet-body">
 				{control usersGrid}
-{*
-				<table class="datatable table table-striped table-bordered table-hover">
-					<thead>
-						<tr>
-							<th>
-								{_'ID'}
-							</th>
-							<th>
-								{_'Username'}
-							</th>
-							<th>
-								{_'Role'}
-							</th>
-							<th>
-								{_'Edit'}
-							</th>
-							<th>
-								{_'Delete'}
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr n:foreach="$users as $user"
-							class="odd gradeX">
-							<td>
-								{$user->id}
-							</td>
-							<td>
-								{$user->mail}
-								<a n:href="Users:access, $user->id"
-								   n:if="$template->canAccess($identity, $user)"><i class="icon-key"></i></a>
-							</td>
-							<td>
-								{$user->roles|implode:', '}
-							</td>
-							<td>
-								<a n:href="Users:edit, $user->id"
-								   n:if="$template->canEdit($identity, $user)">
-									{_'Edit'}
-								</a>
-							</td>
-							<td>
-								<a n:href="Users:delete, $user->id" 
-								   n:if="$template->canDelete($identity, $user)"
-								   class="delete-confirm">
-									{_'Delete'}
-								</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-*}
 			</div>
 		</div>
 	</div>

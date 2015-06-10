@@ -13,8 +13,8 @@ use Knp\DoctrineBehaviors\Model;
 class Unit extends BaseTranslatable
 {
 
-	const PAIR = "pair";
 	const PIECES = "pcs";
+	const PAIR = "pair";
 	const SET = "set";
 	const DEFAULT_NAME = self::PIECES;
 
@@ -44,8 +44,8 @@ class Unit extends BaseTranslatable
 	public static function getAllNames()
 	{
 		return [
-			self::PAIR,
 			self::PIECES,
+			self::PAIR,
 			self::SET,
 		];
 	}

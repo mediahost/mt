@@ -16,7 +16,7 @@ use Nette\Utils\DateTime;
  * @property string $slug
  * @property string $description
  * @property string $perex
- * @property ProductSeo $perex
+ * @property ProductSeo $seo
  * @property mixed $createdBy
  * @property mixed $updatedBy
  * @property mixed $deletedBy
@@ -24,7 +24,6 @@ use Nette\Utils\DateTime;
  * @property DateTime $updatedAt
  * @property DateTime $deletedAt
  * @property boolean $active
- * @property string $ean
  * @property Unit $unit
  * @property Producer $producer
  * @property Category $mainCategory
@@ -32,13 +31,10 @@ use Nette\Utils\DateTime;
  * @property array $tags
  * @property array $signs
  * @property array $parameters
- * @property Price $price
- * @property float $priceVat
- * @property ArrayCollection $groupDiscounts
- * @property float $purchasePrice
- * @property float $oldPrice
  * @property ArrayCollection $similars
  * @property ArrayCollection $similarsWithMe
+ * @property ArrayCollection $stocks
+ * @property Stock $stock Default stock item
  */
 class Product extends BaseTranslatable
 {
@@ -50,15 +46,11 @@ class Product extends BaseTranslatable
 	use Model\SoftDeletable\SoftDeletable;
 	use Traits\ProductCategories;
 	use Traits\ProductParameters;
-	use Traits\ProductPrices;
 	use Traits\ProductSimilars;
 	use Traits\ProductImages;
 
 	/** @ORM\Column(type="boolean") */
 	protected $active = TRUE;
-
-	/** @ORM\Column(type="string", length=100, nullable=true) */
-	protected $ean;
 	
     /** @ORM\ManyToOne(targetEntity="Unit") */
 	protected $unit;
@@ -72,11 +64,15 @@ class Product extends BaseTranslatable
 		$this->categories = new ArrayCollection();
 		$this->parameters = new ArrayCollection();
 		$this->tags = new ArrayCollection();
-		$this->groupDiscounts = new ArrayCollection();
 		$this->similars = new ArrayCollection();
 		$this->similarsWithMe = new ArrayCollection();
 		$this->images = new ArrayCollection();
 		parent::__construct($currentLocale);
+	}
+	
+	public function getStock()
+	{
+		return $this->stocks->first();
 	}
 	
 	public function getUrl()
