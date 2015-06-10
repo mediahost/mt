@@ -13,6 +13,8 @@ use App\Model\Entity;
 use App\Model\Facade\UserFacade;
 use App\TaggedString;
 use GettextTranslator\Gettext;
+use h4kuna\Exchange\Exchange;
+use h4kuna\Exchange\ExchangeException;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\ForbiddenRequestException;
 use Nette\Application\UI\Presenter;
@@ -29,12 +31,18 @@ abstract class BasePresenter extends Presenter
 	public $lang = '';
 
 	/** @persistent */
+	public $currency = '';
+
+	/** @persistent */
 	public $backlink = '';
 
 	// <editor-fold desc="injects">
 
 	/** @var LoaderFactory @inject */
 	public $webLoader;
+
+	/** @var Exchange @inject */
+	public $exchange;
 
 	/** @var ISignOutControlFactory @inject */
 	public $iSignOutControlFactory;
@@ -70,6 +78,7 @@ abstract class BasePresenter extends Presenter
 		parent::startup();
 		$this->loadUserSettings();
 		$this->setLang();
+		$this->setCurrency();
 	}
 
 	protected function beforeRender()
@@ -80,6 +89,8 @@ abstract class BasePresenter extends Presenter
 		$this->template->designSettings = $this->designService->settings;
 		$this->template->designColors = $this->designService->colors;
 		$this->template->pageInfo = $this->settingStorage->pageInfo;
+		$this->template->exchange = $this->exchange;
+		$this->template->currency = $this->exchange[$this->currency];
 	}
 	
 	protected function isInstallPresenter()
@@ -166,6 +177,26 @@ abstract class BasePresenter extends Presenter
 	}
 
 	// </editor-fold>
+	// <editor-fold desc="currency">
+
+	private function setCurrency()
+	{
+		if ($this->isInstallPresenter()) {
+			return;
+		}
+		
+//		$this->currency = 'eur'; // TODO: load from user setting
+		
+		$CZKrate = 30; // TODO: load from db
+		
+		// recalculate - CZK is home currency in driver (not default)
+		$originCzkRate = (float) $this->exchange['CZK']->getForeing();
+		$rateRelatedToCZK = $originCzkRate / $CZKrate;
+		
+		$this->exchange->addRate('CZK', $rateRelatedToCZK);
+	}
+
+	// </editor-fold>
 	// <editor-fold desc="handlers">
 
 	public function handleChangeLanguage($newLang)
@@ -175,6 +206,19 @@ abstract class BasePresenter extends Presenter
 			$this->redirect('this', ['lang' => $newLang]);
 		} else {
 			$this->flashMessage('Requested language isn\'t supported.', 'warning');
+			$this->redirect('this');
+		}
+	}
+
+	public function handleChangeCurrency($newCurrency)
+	{
+		try {
+			$currency = $this->exchange[$newCurrency];
+			$newCode = strtolower($currency->getCode());
+			// TODO: save to user settings
+			$this->redirect('this', ['currency' => $newCode]);
+		} catch (ExchangeException $ex) {
+			$this->flashMessage('Requested currency isn\'t supported.', 'warning');
 			$this->redirect('this');
 		}
 	}
