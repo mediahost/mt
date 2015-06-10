@@ -82,6 +82,10 @@ services:
 		implement: App\Components\Product\IStockSeoControlFactory
 		inject: yes
 
+	IStockImageControlFactory:
+		implement: App\Components\Product\IStockImageControlFactory
+		inject: yes
+
 	# Example
 	IFormControlFactory:
 		implement: App\Components\Example\Form\IFormControlFactory

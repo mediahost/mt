@@ -7,12 +7,14 @@ use App\Components\Grids\Product\StocksGrid;
 use App\Components\Product\IStockAddControlFactory;
 use App\Components\Product\IStockBasicControlFactory;
 use App\Components\Product\IStockCategoryControlFactory;
+use App\Components\Product\IStockImageControlFactory;
 use App\Components\Product\IStockPriceControlFactory;
 use App\Components\Product\IStockQuantityControlFactory;
 use App\Components\Product\IStockSeoControlFactory;
 use App\Components\Product\StockAddControl;
 use App\Components\Product\StockBasicControl;
 use App\Components\Product\StockCategoryControl;
+use App\Components\Product\StockImageControl;
 use App\Components\Product\StockPriceControl;
 use App\Components\Product\StockQuantityControl;
 use App\Components\Product\StockSeoControl;
@@ -46,6 +48,9 @@ class ProductsPresenter extends BasePresenter
 
 	/** @var IStockSeoControlFactory @inject */
 	public $iStockSeoControlFactory;
+
+	/** @var IStockImageControlFactory @inject */
+	public $iStockImageControlFactory;
 
 	/** @var IStocksGridFactory @inject */
 	public $iStocksGridFactory;
@@ -94,6 +99,7 @@ class ProductsPresenter extends BasePresenter
 			$this['stockQuantityForm']->setStock($this->stockEntity);
 			$this['stockCategoryForm']->setStock($this->stockEntity);
 			$this['stockSeoForm']->setStock($this->stockEntity);
+			$this['stockImageForm']->setStock($this->stockEntity);
 		}
 	}
 
@@ -153,6 +159,15 @@ class ProductsPresenter extends BasePresenter
 	public function createComponentStockSeoForm()
 	{
 		$control = $this->iStockSeoControlFactory->create();
+		$control->setLang($this->lang);
+		$control->onAfterSave = $this->afterStockSave;
+		return $control;
+	}
+
+	/** @return StockImageControl */
+	public function createComponentStockImageForm()
+	{
+		$control = $this->iStockImageControlFactory->create();
 		$control->setLang($this->lang);
 		$control->onAfterSave = $this->afterStockSave;
 		return $control;

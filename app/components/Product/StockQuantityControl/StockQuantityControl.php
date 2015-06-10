@@ -78,7 +78,7 @@ class StockQuantityControl extends StockBaseControl
 	{
 		$values = [
 			'quantity' => $this->stock->quantity,
-//			'units' => $this->stock->product->unit->id,
+			'units' => $this->stock->product->unit->id,
 		];
 		return $values;
 	}
