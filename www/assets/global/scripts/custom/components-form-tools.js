@@ -459,6 +459,14 @@ var ComponentsFormTools = function () {
 			}
 		});
 
+		$('.mask_currency').inputmask('currency', {
+            rightAlign: 0,
+			prefix: '',
+			suffix: ' €', // TODO: replace by default currency
+            radixPoint: ",",
+            groupSeparator: ' '
+		});
+
 		$('.mask_ipv4').ipAddress();
 		$('.mask_ipv6').ipAddress({
 			v: 6

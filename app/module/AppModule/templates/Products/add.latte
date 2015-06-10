@@ -1,32 +1,34 @@
 {block pageTitle}
-	{_'Users'}
+	{_'Add product'}
 {/block}
 
 {block breadcrumbItems}
 <li>
-	<a n:href="this">{_'Users'}</a>
+	<a n:href="Products:">{_'Products'}</a>
+</li>
+<li>
+	<span>{_'Add'}</span>
 </li>
 {/block}
 
 {block content}
 <div class="row">
-	<div class="col-md-12">
+	<div class="col-md-8">
 		<div class="portlet light">
 			<div class="portlet-title">
-				<div class="caption">
-					<i class="icon-users"></i>
-					<span class="caption-subject bold uppercase">{_'Users'}</span>
+				<div class="caption font-green-sharp">
+					<i class="fa fa-edit font-green-sharp"></i>
+					<span class="caption-subject bold uppercase">
+						{_'Add product'}
+					</span>
 				</div>
 				<div class="actions">
-					<a n:href="Users:add" class="btn btn-circle green-sharp">
-						<i class="fa fa-plus"></i> {_'Add User'}
-					</a>
 					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
 					</a>
 				</div>
 			</div>
-			<div class="portlet-body">
-				{control usersGrid}
+			<div class="portlet-body form">
+				{control stockAddForm}
 			</div>
 		</div>
 	</div>

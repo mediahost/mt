@@ -21,17 +21,17 @@ class ProductRepository extends BaseRepository
 		$slug = array_pop($url);
 		$category = NULL;
 		if (count($url)) {
-//			$category = $this->findOneByUrl($url, $lang);
+//			$category = $this->findOneByUrl($url, $lang); // search only product with right category
 		}
 
 		$qb = $this->createQueryBuilder('p')
 				->join('p.translations', 't')
 				->where('t.slug = :slug')
 				->setParameter('slug', $slug);
-//		if ($category) {
+		if ($category) {
 //			$qb->andWhere('c.parent = :parent')
 //					->setParameter('parent', $category);
-//		}
+		}
 		if ($lang) {
 			$qb->andWhere('t.locale = :lang')
 					->setParameter('lang', $lang);

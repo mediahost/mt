@@ -1,14 +1,14 @@
 {snippet productList}
 	<!-- BEGIN PRODUCT LIST -->
-	{foreach $products as $product}
-		{? $product->setCurrentLocale($lang)}
+	{foreach $stocks as $stock}
+		{? $stock->product->setCurrentLocale($lang)}
 		{var isLastOnRow => !($iterator->counter % $itemsPerRow)}
 		{if $iterator->first}
 			<div class="row product-list">
 			{/if}
 			<!-- PRODUCT ITEM START -->
 			<div class="col-md-4 col-sm-6 col-xs-12">
-				{include product, product => $product}
+				{include product, stock => $stock, product => $stock->product}
 			</div>
 			<!-- PRODUCT ITEM END -->
 			{if $iterator->last}
@@ -18,7 +18,7 @@
 		<div class="row product-list">
 		{/if}
 	{/foreach}
-	{if !count($products)}
+	{if !count($stocks)}
 		<div class="note note-info">
 			<h4 class="block">{_'Despite our efforts, we found no product.'}</h4>
 			<p>
@@ -42,7 +42,7 @@
 	<h3>
 		<a href="{plink Product: 'url' => $product->url}">{$product}</a>
 	</h3>
-	<div class="pi-price">{$product->price}</div>
+	<div class="pi-price">{$stock->price}</div>
 	<a href="#" class="btn btn-default add2cart">{_'Add to cart'}</a>
 </div>
 {/define}

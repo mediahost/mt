@@ -5,7 +5,7 @@
 	<a n:href="Category: url => $category->url">{$category}</a>
 </li>
 <li class="active">{$product}</li>
-	{/block}
+{/block}
 
 {block content}
 <div class="container">
@@ -44,11 +44,20 @@
 						<h1>{$product}</h1>
 						<div class="price-availability-block clearfix">
 							<div class="price">
-								<strong>47,00<span>€</span></strong>
-								<em><span>62,00</span>€</em>
+								<strong>{$stock->price->withoutVat}<span>€</span></strong>
+								<em n:if="$stock->oldPrice">
+									<span>{$stock->oldPrice}</span> €
+								</em>
 							</div>
 							<div class="availability">
-								{_'Availability'}: <strong>{_'In Stock'}</strong>
+								{_'Availability'}: 
+								{if $stock->inStore > 10}
+								<strong>{_'In Stock'}</strong>
+								{elseif $stock->inStore > 0}
+								<strong>{$stock->inStore} {$product->unit}</strong>
+								{else}
+								<strong>{_'Temporarily Sold Out'}</strong>
+								{/if}
 							</div>
 						</div>
 						<div class="description" n:if="$product->perex">

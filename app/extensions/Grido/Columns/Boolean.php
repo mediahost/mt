@@ -13,7 +13,7 @@ class Boolean extends Text
     public function getCellPrototype($row = NULL)
     {
         $cell = parent::getCellPrototype($row = NULL);
-        $cell->class[] = 'center';
+        $cell->class[] = 'text-center';
 
         return $cell;
     }

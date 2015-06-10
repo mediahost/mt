@@ -10,7 +10,7 @@ class Select2 extends SelectBox
 	public function __construct($label = NULL, array $items = NULL)
 	{
 		parent::__construct($label, $items);
-		$this->control->class = 'select2';
+		$this->control->class = ['select2'];
 	}
 
 	/**
@@ -37,4 +37,5 @@ class Select2 extends SelectBox
 		$this->control->$attr = $value;
 		return $this;
 	}
+
 }

@@ -63,7 +63,7 @@ class Vat extends BaseEntity
 
 	public function __toString()
 	{
-		return (string) $this->percent . '%';
+		return (string) ((int) $this->percent . '%');
 	}
 
 }

@@ -57,6 +57,31 @@ services:
 		implement: App\Components\User\IUserBasicControlFactory
 		inject: yes
 
+	# Stock
+	IStockAddControlFactory:
+		implement: App\Components\Product\IStockAddControlFactory
+		inject: yes
+
+	IStockBasicControlFactory:
+		implement: App\Components\Product\IStockBasicControlFactory
+		inject: yes
+
+	IStockPriceControlFactory:
+		implement: App\Components\Product\IStockPriceControlFactory
+		inject: yes
+
+	IStockQuantityControlFactory:
+		implement: App\Components\Product\IStockQuantityControlFactory
+		inject: yes
+
+	IStockCategoryControlFactory:
+		implement: App\Components\Product\IStockCategoryControlFactory
+		inject: yes
+
+	IStockSeoControlFactory:
+		implement: App\Components\Product\IStockSeoControlFactory
+		inject: yes
+
 	# Example
 	IFormControlFactory:
 		implement: App\Components\Example\Form\IFormControlFactory
@@ -65,4 +90,8 @@ services:
 	# Grids
 	IUsersGridFactory:
 		implement: App\Components\Grids\User\IUsersGridFactory
+		inject: yes
+
+	IStocksGridFactory:
+		implement: App\Components\Grids\Product\IStocksGridFactory
 		inject: yes

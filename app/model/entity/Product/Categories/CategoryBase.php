@@ -2,6 +2,8 @@
 
 namespace App\Model\Entity;
 
+use App\Helpers;
+
 trait CategoryBase
 {
 
@@ -101,6 +103,15 @@ trait CategoryBase
 			}
 		}
 		return $array;
+	}
+
+	/**
+	 * Return name with path to root parent
+	 */
+	public function getTreeName($glue = '/')
+	{
+		$path = $this->getPathWithThis();
+		return Helpers::concatStrings($glue, $path);
 	}
 
 }

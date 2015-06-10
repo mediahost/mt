@@ -4,6 +4,7 @@ namespace App\Components;
 
 use App\Extensions\Settings\Model\Service\LanguageService;
 use App\Extensions\Settings\Model\Service\PasswordService;
+use Exception;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI;
 use Nette\Localization\ITranslator;
@@ -33,6 +34,9 @@ abstract class BaseControl extends UI\Control
 	
 	/** @var bool */
 	protected $isSendOnChange = FALSE;
+
+	/** @var string */
+	protected $lang;
 	
 	public function __construct()
 	{
@@ -55,6 +59,15 @@ abstract class BaseControl extends UI\Control
 		return $this;
 	}
 
+	/**
+	 * Set actual language for form
+	 */
+	public function setLang($lang)
+	{
+		$this->lang = $lang;
+		return $this;
+	}
+
 	public function getTemplate()
 	{
 		$template = parent::getTemplate();
@@ -70,5 +83,10 @@ abstract class BaseControl extends UI\Control
 		$template->setFile($dir . '/' . $this->templateFile . '.latte');
 		$template->render();
 	}
+
+}
+
+class BaseControlException extends Exception
+{
 
 }

@@ -3,6 +3,7 @@
 namespace App\Components\User;
 
 use App\Components\BaseControl;
+use App\Components\BaseControlException;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Role;
@@ -10,7 +11,6 @@ use App\Model\Entity\User;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
 use App\TaggedString;
-use Exception;
 use Kdyby\Doctrine\DuplicateEntryException;
 use Nette\Forms\IControl;
 use Nette\Utils\ArrayHash;
@@ -144,7 +144,7 @@ class UserBasicControl extends BaseControl
 	private function checkEntityExistsBeforeRender()
 	{
 		if (!$this->user) {
-			throw new UserControlException('Use setUser(\App\Model\Entity\User) before render');
+			throw new BaseControlException('Use setUser(\App\Model\Entity\User) before render');
 		}
 	}
 
@@ -170,11 +170,6 @@ class UserBasicControl extends BaseControl
 	}
 
 	// </editor-fold>
-}
-
-class UserControlException extends Exception
-{
-
 }
 
 interface IUserBasicControlFactory
