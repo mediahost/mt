@@ -6,8 +6,11 @@
 		<li class="visible-md-inline-block visible-lg-inline-block"><i class="fa fa-phone"></i><span>+421 908 84 84 84</span></li>
 		<!-- BEGIN CURRENCIES -->
 		<li class="shop-currencies">
-			<a href="javascript:void(0);" class="current">€</a>
-			<a href="javascript:void(0);">Kč</a>
+			<a n:foreach="$exchange as $currCode => $curr" 
+			   n:href="changeCurrency! $currCode"
+			   n:class="$currCode == $currency->getCode() ? current">
+				{$curr->getFormat()->getSymbol()}
+			</a>
 		</li>
 		<!-- END CURRENCIES -->
 		<!-- BEGIN LANGS -->

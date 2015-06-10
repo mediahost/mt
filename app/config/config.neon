@@ -9,6 +9,7 @@ includes:
 	- extensions/authentication.neon
 	- extensions/doctrine.neon
 	- extensions/webloader.neon
+	- extensions/currencies.neon
 
 	# Includes
 	- includes/components.neon

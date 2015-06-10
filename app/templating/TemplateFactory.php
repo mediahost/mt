@@ -2,14 +2,29 @@
 
 namespace App\Templating;
 
+use h4kuna\Exchange\Exchange;
 use Latte\Engine;
 use Latte\Macros\MacroSet;
 use Nette\Application\UI\Control;
+use Nette\Bridges\ApplicationLatte\ILatteFactory;
 use Nette\Bridges\ApplicationLatte\Template;
 use Nette\Bridges\ApplicationLatte\TemplateFactory as ParentTemplateFactory;
+use Nette\Caching\IStorage;
+use Nette\Http\IRequest;
+use Nette\Http\IResponse;
+use Nette\Security\User;
 
 class TemplateFactory extends ParentTemplateFactory
 {
+
+	/** @var Exchange */
+	private $exchange;
+
+	public function __construct(Exchange $exchange, ILatteFactory $latteFactory, IRequest $httpRequest = NULL, IResponse $httpResponse = NULL, User $user = NULL, IStorage $cacheStorage = NULL)
+	{
+		$this->exchange = $exchange;
+		parent::__construct($latteFactory, $httpRequest, $httpResponse, $user, $cacheStorage);
+	}
 
 	/**
 	 * @param Control $control
@@ -22,6 +37,7 @@ class TemplateFactory extends ParentTemplateFactory
 		$latte->onCompile[] = $this->addMacros;
 		$latte->addFilter('concat', ['App\Helpers', 'concatArray']);
 		$latte->addFilter('size', ['App\Model\Entity\Image', 'returnSizedFilename']);
+		$latte->addFilter('currency', [$this->exchange, 'format']);
 		return $template;
 	}
 
