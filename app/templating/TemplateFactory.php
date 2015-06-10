@@ -2,6 +2,7 @@
 
 namespace App\Templating;
 
+use App\ExchangeHelper;
 use h4kuna\Exchange\Exchange;
 use Latte\Engine;
 use Latte\Macros\MacroSet;
@@ -17,10 +18,10 @@ use Nette\Security\User;
 class TemplateFactory extends ParentTemplateFactory
 {
 
-	/** @var Exchange */
+	/** @var ExchangeHelper */
 	private $exchange;
 
-	public function __construct(Exchange $exchange, ILatteFactory $latteFactory, IRequest $httpRequest = NULL, IResponse $httpResponse = NULL, User $user = NULL, IStorage $cacheStorage = NULL)
+	public function __construct(ExchangeHelper $exchange, ILatteFactory $latteFactory, IRequest $httpRequest = NULL, IResponse $httpResponse = NULL, User $user = NULL, IStorage $cacheStorage = NULL)
 	{
 		$this->exchange = $exchange;
 		parent::__construct($latteFactory, $httpRequest, $httpResponse, $user, $cacheStorage);
@@ -38,6 +39,9 @@ class TemplateFactory extends ParentTemplateFactory
 		$latte->addFilter('concat', ['App\Helpers', 'concatArray']);
 		$latte->addFilter('size', ['App\Model\Entity\Image', 'returnSizedFilename']);
 		$latte->addFilter('currency', [$this->exchange, 'format']);
+		$latte->addFilter('currencyVat', [$this->exchange, 'formatVat']);
+		$latte->addFilter('change', [$this->exchange, 'change']);
+		$latte->addFilter('changeVat', [$this->exchange, 'changeVat']);
 		return $template;
 	}
 
