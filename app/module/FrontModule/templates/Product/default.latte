@@ -44,7 +44,7 @@
 						<h1>{$product}</h1>
 						<div class="price-availability-block clearfix">
 							<div class="price">
-								<strong>{$stock->price->withoutVat|currency}</strong>
+								<strong>{$stock->price|currencyVat}</strong>
 								<em n:if="$stock->oldPrice">
 									<span>{$stock->oldPrice|currency}</span>
 								</em>

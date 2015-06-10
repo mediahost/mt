@@ -1,3 +1,6 @@
+services:
+	- {class: App\ExchangeHelper, inject: yes}
+
 extensions:
 	exchangeExtension: h4kuna\Exchange\Nette\ExchangeExtension
 
