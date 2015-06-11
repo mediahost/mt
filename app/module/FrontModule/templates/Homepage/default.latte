@@ -3,13 +3,140 @@
 {block breadcrumb}{/block}
 
 {block content}
+{var products => [
+	['name' => 'iphone', 'price' => 555],
+	['name' => 'samsung', 'price' => 444],
+	['name' => 'windows', 'price' => 333],
+	['name' => 'iphone', 'price' => 555],
+	['name' => 'samsung', 'price' => 444],
+	['name' => 'windows', 'price' => 333],
+	['name' => 'iphone', 'price' => 555],
+	['name' => 'samsung', 'price' => 444],
+	['name' => 'windows', 'price' => 333],
+]}
+
 <div class="container">
-	<div class="row">
-		<div class="sidebar col-md-3 col-sm-5">
+	<!-- BEGIN TOP PRODUCTS -->
+	<div class="row margin-bottom-40">
+		<div class="sidebar col-md-3 col-sm-4">
 			{include categories}
 		</div>
-		<div class="col-md-9 col-sm-7">
+		<div class="col-md-9 col-sm-8">
+            <h2>{_'Top products'}</h2>
+            <div class="owl-carousel owl-carousel3">
+				<div n:foreach="$products as $product">
+					{var productName => $product['name']}
+					{var productPrice => $product['price']}
+					<div class="product-item">
+						<div class="pi-img-wrapper">
+							<img src="{$basePath}/images/{$productName}.jpg" class="img-responsive" alt="{$productName}" />
+							<div>
+								<a href="{$basePath}/images/{$productName}.jpg" 
+								   class="btn btn-default fancybox-button">
+									{_'Zoom'}
+								</a>
+								<a n:href="this" class="btn btn-default fancybox-fast-view">{_'View'}</a>
+							</div>
+						</div>
+						<h3>
+							<a n:href="this">{$productName}</a>
+						</h3>
+						<div class="pi-price">{$productPrice|currency}</div>
+						<a n:href="this" class="btn btn-default add2cart">{_'Add to cart'}</a>
+						<div n:if="!($iterator->counter % 3)" class="sticker sticker-new"></div>
+					</div>
+				</div>
+            </div>
 		</div>
 	</div>
-	<!--/end row-->
+	<!-- END TOP PRODUCTS -->
+
+	<div class="row margin-bottom-40">
+		<!-- BEGIN SALES -->
+		<div class="col-md-6 two-items-bottom-items">
+			<h2>{_'Sale'}</h2>
+			<div class="owl-carousel owl-carousel2">
+				<div n:foreach="$products as $product">
+					{var productName => $product['name']}
+					{var productPrice => $product['price']}
+					<div class="product-item">
+						<div class="pi-img-wrapper">
+							<img src="{$basePath}/images/{$productName}.jpg" class="img-responsive" alt="{$productName}" />
+							<div>
+								<a href="{$basePath}/images/{$productName}.jpg" 
+								   class="btn btn-default fancybox-button">
+									{_'Zoom'}
+								</a>
+								<a n:href="this" class="btn btn-default fancybox-fast-view">{_'View'}</a>
+							</div>
+						</div>
+						<h3>
+							<a n:href="this">{$productName}</a>
+						</h3>
+						<div class="pi-price">{$productPrice|currency}</div>
+						<a n:href="this" class="btn btn-default add2cart">{_'Add to cart'}</a>
+						<div class="sticker sticker-sale"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- END SALES -->
+		<!-- BEGIN PROMO -->
+		<div class="col-md-6 shop-index-carousel">
+			<div class="content-slider">
+				<div id="myCarousel" class="carousel slide" data-ride="carousel">
+					<!-- Indicators -->
+					<ol class="carousel-indicators">
+						<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+						<li data-target="#myCarousel" data-slide-to="1"></li>
+						<li data-target="#myCarousel" data-slide-to="2"></li>
+					</ol>
+					<div class="carousel-inner">
+						<div class="item active">
+							<img src="{$basePath}/images/promo/slide1.jpg" class="img-responsive" alt="promo">
+						</div>
+						<div class="item">
+							<img src="{$basePath}/images/promo/slide2.jpg" class="img-responsive" alt="promo">
+						</div>
+						<div class="item">
+							<img src="{$basePath}/images/promo/slide3.jpg" class="img-responsive" alt="promo">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- END PROMO -->
+	</div>
+
+	<!-- BEGIN LAST VISITED -->
+	<div class="row margin-bottom-35">
+		<div class="col-md-12 sale-product">
+            <h2>{_'Last visited'}</h2>
+            <div class="owl-carousel owl-carousel5">
+				<div n:foreach="$products as $product">
+					{var productName => $product['name']}
+					{var productPrice => $product['price']}
+					<div class="product-item">
+						<div class="pi-img-wrapper">
+							<img src="{$basePath}/images/{$productName}.jpg" class="img-responsive" alt="{$productName}" />
+							<div>
+								<a href="{$basePath}/images/{$productName}.jpg" 
+								   class="btn btn-default fancybox-button">
+									{_'Zoom'}
+								</a>
+								<a n:href="this" class="btn btn-default fancybox-fast-view">{_'View'}</a>
+							</div>
+						</div>
+						<h3>
+							<a n:href="this">{$productName}</a>
+						</h3>
+						<div class="pi-price">{$productPrice|currency}</div>
+						<a n:href="this" class="btn btn-default add2cart">{_'Add to cart'}</a>
+						<div n:if="!($iterator->counter % 3)" class="sticker sticker-sale"></div>
+					</div>
+				</div>
+            </div>
+		</div>
+	</div>
+	<!-- END LAST VISITED -->
 </div>
