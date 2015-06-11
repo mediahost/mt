@@ -1,5 +1,7 @@
 {includeblock '../categories.latte'}
 
+{block breadcrumb}{/block}
+
 {block content}
 <div class="container">
 	<div class="row">
@@ -7,41 +9,6 @@
 			{include categories}
 		</div>
 		<div class="col-md-9 col-sm-7">
-			
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					{_'USER'}
-				</div>
-				<div class="panel-body">
-					<ul>
-						<li><a n:href="Sign:in">{_'Sign In'}</a></li>
-						<li><a n:href="Sign:up">{_'Registration'}</a></li>
-					</ul>
-				</div>
-			</div>
-
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					{_'Other Pages'}
-				</div>
-				<div class="panel-body">
-					<ul>
-						<li><a n:href="Sign:lostPassword">{_'Lost Password'}</a></li>
-					</ul>
-				</div>
-			</div>
-
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					{_'Testing pages'}
-				</div>
-				<div class="panel-body">
-					<ul>
-						<li><a n:href="test1">{_'Test Page 1'}</a></li>
-						<li><a n:href="test2">{_'Test Page 2'}</a></li>
-					</ul>
-				</div>
-			</div>
 		</div>
 	</div>
 	<!--/end row-->
