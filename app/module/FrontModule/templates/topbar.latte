@@ -1,9 +1,15 @@
 {block topbar}
 <!-- BEGIN TOP BAR LEFT PART -->
-<div class="col-md-6 col-sm-6 additional-shop-info">
+<div class="col-md-6 col-sm-6 col-xs-6 additional-shop-info">
 	<ul class="list-unstyled list-inline">
-		<li class="visible-lg-inline-block"><i class="fa fa-envelope-o"></i><span>obchod@mobilnetelefony.sk</span></li>
-		<li class="visible-md-inline-block visible-lg-inline-block"><i class="fa fa-phone"></i><span>+421 908 84 84 84</span></li>
+		<li class="visible-lg-inline-block">
+			<i class="fa fa-envelope-o"></i>
+			<span>obchod@mobilnetelefony.sk</span>
+		</li>
+		<li class="visible-md-inline-block visible-lg-inline-block">
+			<i class="fa fa-phone"></i>
+			<span>+421 908 84 84 84</span>
+		</li>
 		<!-- BEGIN CURRENCIES -->
 		<li class="shop-currencies">
 			<a n:foreach="$exchange as $currCode => $curr" 
@@ -31,14 +37,16 @@
 </div>
 <!-- END TOP BAR LEFT PART -->
 <!-- BEGIN TOP BAR MENU -->
-<div class="col-md-6 col-sm-6 additional-nav">
+<div class="col-md-6 col-sm-6 col-xs-6 additional-nav">
 	<ul n:if="!$user->loggedIn" class="list-unstyled list-inline pull-right">
 		<li><a n:href="Sign:in">{_'Sign In'}</a></li>
 		<li><a n:href="Sign:up">{_'Registration'}</a></li>
 	</ul>
 	<ul n:if="$user->loggedIn" class="list-unstyled list-inline pull-right">
 		<li class="visible-lg-inline-block">{$user->identity}</li>
-		<li n:if="$user->isAllowed('dashboard')"><a n:href=":App:Dashboard:">{_'Admin'}</a></li>
+		<li n:if="$user->isAllowed('dashboard')" class="visible-lg-inline-block visible-md-inline-block">
+			<a n:href=":App:Dashboard:">{_'Admin'}</a>
+		</li>
 		<li n:if="$user->isAllowed('myAccount')"><a n:href="MyAccount:">{_'My Account'}</a></li>
 		<li>
 			<a href="{control signOut}"><i class="fa fa-sign-out"></i> {_'Sign out'}</a>
