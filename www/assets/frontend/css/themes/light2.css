@@ -93,12 +93,6 @@ a:hover {
   background: #fff;
   color: #e6400c;
 }
-.header-navigation .search-box:after { 
-	border-bottom: 8px solid #e6400c;
-}
-.header-navigation .search-box {
-	border-top: solid 2px #ea4c1d;
-}
 .title-wrapper h1 span {
 	color: #e6400c;
 }

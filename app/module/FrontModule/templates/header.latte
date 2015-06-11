@@ -15,39 +15,26 @@
 		<a class="site-logo" n:href=":Front:Homepage:">
 			<img src="{$basePath}/images/logo/logo_{$lang}.png" alt="{_'Logo'}" width="200">
 		</a>
-		<a href="javascript:void(0);" class="mobi-toggler">
-			<i class="fa fa-bars"></i>
-		</a>
 		<!-- BEGIN CART -->
 		<div class="top-cart-block">
 			{include 'basket.latte'}
 		</div>
 		<!--END CART -->
 		<!-- BEGIN NAVIGATION -->
-		<div class="header-navigation font-transform-inherit">
-			<ul>
-				{include 'menu.latte'}
-
 				<!-- BEGIN TOP SEARCH -->
-				<li class="menu-search">
-					<span class="sep"></span>
-					<i class="fa fa-search search-btn"></i>
-					<div class="search-box">
-						<form action="#">
-							<div class="input-group">
-								<input type="text" placeholder="{_'Search'}" class="form-control" />
-								<span class="input-group-btn">
-									<button class="btn btn-primary" type="submit">{_'Search'}</button>
-								</span>
-							</div>
-						</form>
-					</div> 
-				</li>
+			<div class="search-box">
+				<form action="#">
+					<div class="input-group">
+						<input type="text" placeholder="{_'Search'}" class="form-control" />
+						<span class="input-group-btn">
+							<button class="btn btn-primary" type="submit">{_'Search'}</button>
+						</span>
+					</div>
+				</form>
+			</div> 
 				<!-- END TOP SEARCH -->
-			</ul>
 		</div>
 		<!-- END NAVIGATION -->
-	</div>
 </div>
 <!-- Header END -->
 {/block}

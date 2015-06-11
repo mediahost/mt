@@ -40,8 +40,8 @@ Header and header elements
 	position: inherit;
 }
 .ecommerce .site-logo {
-	padding-top: 28px;
-	padding-bottom: 27px;
+	padding-top: 15px;
+	padding-bottom: 15px;
 }
 .ecommerce .reduce-header .site-logo {
 	padding-top: 16px;
@@ -132,6 +132,7 @@ Header and header elements
 .header .top-cart-block {
 	float: right;
 	margin-top: 30px;
+	margin-left: 20px;
 	position: relative;
 	font: 400 13px 'Open Sans', Arial, sans-serif;
 }
