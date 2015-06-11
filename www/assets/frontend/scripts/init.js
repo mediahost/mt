@@ -6,6 +6,9 @@ jQuery(document).ready(function () {
 	
 	Layout.initTwitter();
 	Layout.initSliderRange();
+	Layout.initOWL();
+	Layout.initImageZoom();
+	LayersliderInit.initLayerSlider();
 
 	// special for pages
 	Login.init();

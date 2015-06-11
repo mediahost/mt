@@ -29,6 +29,18 @@ abstract class BasePresenter extends BaseBasePresenter
 	/** @var Category */
 	protected $activeCategory;
 
+	/** @var bool */
+	protected $showSlider = FALSE;
+
+	/** @var bool */
+	protected $showSidebanner = FALSE;
+
+	/** @var bool */
+	protected $showBrands = FALSE;
+
+	/** @var bool */
+	protected $showSteps = TRUE;
+
 	protected function startup()
 	{
 		parent::startup();
@@ -46,6 +58,10 @@ abstract class BasePresenter extends BaseBasePresenter
 		parent::beforeRender();
 		$this->template->categories = $this->categories;
 		$this->template->activeCategory = $this->activeCategory;
+		$this->template->showSlider = $this->showSlider;
+		$this->template->showSidebanner = $this->showSidebanner;
+		$this->template->showBrands = $this->showBrands;
+		$this->template->showSteps = $this->showSteps;
 
 		$categoriesSettings = $this->moduleService->getModuleSettings('categories');
 		$this->template->expandOnlyActiveCategories = $categoriesSettings ? $categoriesSettings->expandOnlyActiveCategories : FALSE;

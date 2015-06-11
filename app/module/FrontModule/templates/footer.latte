@@ -1,5 +1,65 @@
 {block footer}
 
+<!-- BEGIN BRANDS -->
+<div class="brands"
+	 n:if="$showBrands">
+	<div class="container">
+		<div class="owl-carousel owl-carousel6-brands">
+			{var brands => [
+				'canon',
+				'esprit',
+				'next',
+				'canon',
+				'puma',
+				'zara',
+				'canon',
+				'esprit',
+				'next',
+				'canon',
+				'puma',
+				'zara',
+			]}
+			<a n:href="this" n:foreach="$brands as $brand">
+				<img src="{$basePath}/images/brands/{$brand}.jpg" alt="{$brand}" title="{$brand}">
+			</a>
+		</div>
+	</div>
+</div>
+<!-- END BRANDS -->
+
+<!-- BEGIN STEPS -->
+<div class="steps-block steps-block-red"
+	 n:if="$showSteps">
+	<div class="container">
+        <div class="row">
+			<div class="col-md-4 steps-block-col">
+				<i class="fa fa-truck"></i>
+				<div>
+					<h2>{_'Free shipping'}</h2>
+					<em>{_'when buying over'} {300|currency}</em>
+				</div>
+				<span>&nbsp;</span>
+			</div>
+			<div class="col-md-4 steps-block-col">
+				<i class="fa fa-gift"></i>
+				<div>
+					<h2>{_'Extra Gifts'}</h2>
+					<em>{_'Free gifts for selected products'}</em>
+				</div>
+				<span>&nbsp;</span>
+			</div>
+			<div class="col-md-4 steps-block-col">
+				<i class="fa fa-phone"></i>
+				<div>
+					<h2>908 84 84 84</h2>
+					<em>{_'Contact us for help'}</em>
+				</div>
+			</div>
+        </div>
+	</div>
+</div>
+<!-- END STEPS -->
+
 <!-- BEGIN PRE-FOOTER -->
 <div class="pre-footer">
 	<div class="container">

@@ -370,14 +370,14 @@ var Layout = function () {
                     [1200, 5],
                     [1400, 5],
                     [1600, 5]
-                ],
+                ]
             });
 
             $(".owl-carousel4").owlCarousel({
                 pagination: false,
                 navigation: true,
                 items: 4,
-                addClassActive: true,
+                addClassActive: true
             });
 
             $(".owl-carousel3").owlCarousel({
@@ -395,7 +395,7 @@ var Layout = function () {
                     [1200, 3],
                     [1400, 3],
                     [1600, 3]
-                ],
+                ]
             });
 
             $(".owl-carousel2").owlCarousel({
