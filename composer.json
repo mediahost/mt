@@ -36,10 +36,6 @@
 		{
 			"type": "vcs",
 			"url": "https://github.com/mediahost/grido.git"
-		},
-		{
-			"type": "vcs",
-			"url": "https://github.com/pupitooo/exchange.git"
 		}
 	],
 	"require": {
