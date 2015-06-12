@@ -9,6 +9,7 @@ services:
 	- {class: App\Model\Facade\VatFacade, inject: yes}
 	- {class: App\Model\Facade\UnitFacade, inject: yes}
 	- {class: App\Model\Facade\CategoryFacade, inject: yes}
+	- {class: App\Model\Facade\StockFacade, inject: yes}
 
 	# Storages
 	- {class: App\Model\Storage\SignUpStorage, inject: yes}

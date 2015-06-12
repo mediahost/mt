@@ -24,27 +24,10 @@
 		<div class="col-md-9 col-sm-8">
             <h2>{_'Top products'}</h2>
             <div class="owl-carousel owl-carousel3">
-				<div n:foreach="$products as $product">
-					{var productName => $product['name']}
-					{var productPrice => $product['price']}
-					<div class="product-item">
-						<div class="pi-img-wrapper">
-							<img src="{$basePath}/images/{$productName}.jpg" class="img-responsive" alt="{$productName}" />
-							<div>
-								<a href="{$basePath}/images/{$productName}.jpg" 
-								   class="btn btn-default fancybox-button">
-									{_'Zoom'}
-								</a>
-								<a n:href="this" class="btn btn-default fancybox-fast-view">{_'View'}</a>
-							</div>
-						</div>
-						<h3>
-							<a n:href="this">{$productName}</a>
-						</h3>
-						<div class="pi-price">{$productPrice|currency}</div>
-						<a n:href="this" class="btn btn-default add2cart">{_'Add to cart'}</a>
-						<div n:if="!($iterator->counter % 3)" class="sticker sticker-new"></div>
-					</div>
+				<div n:foreach="$topStocks as $stock">
+					{var isNew => !($iterator->counter % 3)}
+					{var isSale => !($iterator->counter % 2)}
+					{include product, stock => $stock, product => $stock->product, isNew => $isNew, isSale => $isSale}
 				</div>
             </div>
 		</div>
@@ -56,27 +39,8 @@
 		<div class="col-md-6 two-items-bottom-items">
 			<h2>{_'Sale'}</h2>
 			<div class="owl-carousel owl-carousel2">
-				<div n:foreach="$products as $product">
-					{var productName => $product['name']}
-					{var productPrice => $product['price']}
-					<div class="product-item">
-						<div class="pi-img-wrapper">
-							<img src="{$basePath}/images/{$productName}.jpg" class="img-responsive" alt="{$productName}" />
-							<div>
-								<a href="{$basePath}/images/{$productName}.jpg" 
-								   class="btn btn-default fancybox-button">
-									{_'Zoom'}
-								</a>
-								<a n:href="this" class="btn btn-default fancybox-fast-view">{_'View'}</a>
-							</div>
-						</div>
-						<h3>
-							<a n:href="this">{$productName}</a>
-						</h3>
-						<div class="pi-price">{$productPrice|currency}</div>
-						<a n:href="this" class="btn btn-default add2cart">{_'Add to cart'}</a>
-						<div class="sticker sticker-sale"></div>
-					</div>
+				<div n:foreach="$saleStocks as $stock">
+					{include product, stock => $stock, product => $stock->product, isNew => FALSE, isSale => TRUE}
 				</div>
 			</div>
 		</div>
@@ -108,35 +72,54 @@
 		<!-- END PROMO -->
 	</div>
 
+	<!-- BEGIN NEWS -->
+	<div class="row margin-bottom-35">
+		<div class="col-md-12 sale-product">
+            <h2>{_'New products'}</h2>
+            <div class="owl-carousel owl-carousel5">
+				<div n:foreach="$newStocks as $stock">
+					{include product, stock => $stock, product => $stock->product, isNew => TRUE, isSale => FALSE}
+				</div>
+            </div>
+		</div>
+	</div>
+	<!-- END NEWS -->
+
 	<!-- BEGIN LAST VISITED -->
 	<div class="row margin-bottom-35">
 		<div class="col-md-12 sale-product">
             <h2>{_'Last visited'}</h2>
             <div class="owl-carousel owl-carousel5">
-				<div n:foreach="$products as $product">
-					{var productName => $product['name']}
-					{var productPrice => $product['price']}
-					<div class="product-item">
-						<div class="pi-img-wrapper">
-							<img src="{$basePath}/images/{$productName}.jpg" class="img-responsive" alt="{$productName}" />
-							<div>
-								<a href="{$basePath}/images/{$productName}.jpg" 
-								   class="btn btn-default fancybox-button">
-									{_'Zoom'}
-								</a>
-								<a n:href="this" class="btn btn-default fancybox-fast-view">{_'View'}</a>
-							</div>
-						</div>
-						<h3>
-							<a n:href="this">{$productName}</a>
-						</h3>
-						<div class="pi-price">{$productPrice|currency}</div>
-						<a n:href="this" class="btn btn-default add2cart">{_'Add to cart'}</a>
-						<div n:if="!($iterator->counter % 3)" class="sticker sticker-sale"></div>
-					</div>
+				<div n:foreach="$visitedStocks as $stock">
+					{include product, stock => $stock, product => $stock->product, isNew => FALSE, isSale => FALSE}
 				</div>
             </div>
 		</div>
 	</div>
 	<!-- END LAST VISITED -->
+</div>{/block}
+
+{define product}
+<div class="product-item">
+	<div class="pi-img-wrapper">
+		<img src="{$basePath}/foto/{$product->image|size:'238'}" class="img-responsive" alt="{$product}" />
+		<div>
+			<a href="{$basePath}/foto/{$product->image|size}" 
+			   class="btn btn-default fancybox-button">
+				{_'Zoom'}
+			</a>
+			<a n:href="Product: 'url' => $product->url" 
+			   class="btn btn-default fancybox-fast-view">
+				{_'View'}
+			</a>
+		</div>
+	</div>
+	<h3>
+		<a n:href="Product: 'url' => $product->url">{$product}</a>
+	</h3>
+	<div class="pi-price">{$stock->price|currencyVat}</div>
+	<a n:href="this" class="btn btn-default add2cart">{_'Add to cart'}</a>
+	<div n:if="$isNew" class="sticker sticker-new"></div>
+	<div n:if="$isSale" class="sticker sticker-sale"></div>
 </div>
+{/define}

@@ -10,6 +10,7 @@ use App\Extensions\Settings\Model\Service\ModuleService;
 use App\Extensions\Settings\Model\Service\PageConfigService;
 use App\Extensions\Settings\Model\Storage\DefaultSettingsStorage;
 use App\Model\Entity;
+use App\Model\Facade\StockFacade;
 use App\Model\Facade\UserFacade;
 use App\TaggedString;
 use GettextTranslator\Gettext;
@@ -70,6 +71,9 @@ abstract class BasePresenter extends Presenter
 
 	/** @var UserFacade @inject */
 	public $userFacade;
+
+	/** @var StockFacade @inject */
+	public $stockFacade;
 
 	// </editor-fold>
 

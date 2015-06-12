@@ -83,37 +83,16 @@
 
 {define bestsellers}
 <h2>{_'Bestsellers'}</h2>
-<div class="item">
-	<a n:href="this">
-		<img src="{$basePath}/foto/65-60/default.jpg" alt="some product">
+<div n:foreach="$bestsellerStocks as $stock" class="item">
+	{var product => $stock->product}
+	<a n:href="Product: 'url' => $product->url">
+		<img src="{$basePath}/foto/{$product->image|size:'65'}" alt="{$product}">
 	</a>
 	<h3>
-		<a n:href="this">
-			Some Product
+		<a n:href="Product: 'url' => $product->url">
+			{$product}
 		</a>
 	</h3>
-	<div class="price">31€</div>
-</div>
-<div class="item">
-	<a n:href="this">
-		<img src="{$basePath}/foto/65-60/default.jpg" alt="some product">
-	</a>
-	<h3>
-		<a n:href="this">
-			Some Product
-		</a>
-	</h3>
-	<div class="price">31€</div>
-</div>
-<div class="item">
-	<a n:href="this">
-		<img src="{$basePath}/foto/65-60/default.jpg" alt="some product">
-	</a>
-	<h3>
-		<a n:href="this">
-			Some Product
-		</a>
-	</h3>
-	<div class="price">31€</div>
+	<div class="price">{$stock->price|currencyVat}</div>
 </div>
 {/define}
