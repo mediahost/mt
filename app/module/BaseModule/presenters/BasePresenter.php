@@ -90,7 +90,9 @@ abstract class BasePresenter extends Presenter
 		$this->template->designColors = $this->designService->colors;
 		$this->template->pageInfo = $this->settingStorage->pageInfo;
 		$this->template->exchange = $this->exchange;
-		$this->template->currency = $this->exchange[$this->currency];
+		if ($this->currency) {
+			$this->template->currency = $this->exchange[$this->currency];
+		}
 	}
 
 	protected function isInstallPresenter()
@@ -181,13 +183,14 @@ abstract class BasePresenter extends Presenter
 
 	private function setCurrency()
 	{
+		if ($this->isInstallPresenter()) {
+			$this->currency = NULL;
+			return;
+		}
+		
 		if (!$this->currency) {
 //			$this->currency = 'czk'|NULL; // TODO: load from user setting
 			$this->currency = $this->exchange->getDefault()->getCode();
-		}
-
-		if ($this->isInstallPresenter()) {
-			return;
 		}
 
 		$CZKrate = 30; // TODO: load from db
