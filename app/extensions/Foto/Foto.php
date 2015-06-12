@@ -80,12 +80,16 @@ class Foto extends Object
 
 		$sizeX = 0;
 		$sizeY = 0;
+		$resizeMethod = Image::FIT;
 		if (preg_match('@^(\d+)' . preg_quote(FotoHelpers::getSizeSeparator()) . '(\d+)$@', $size, $matches)) {
 			$sizeX = $matches[1];
 			$sizeY = $matches[2];
+			if ((int) $sizeY === 0) {
+				$resizeMethod = Image::EXACT;
+			}
 		}
 
-		if ($sizeX > 0 && $sizeY > 0) {
+		if ($sizeX > 0) {
 			$resizedPath = Helpers::getPath($this->rootFolder, $sizeX . FotoHelpers::getSizeSeparator() . $sizeY);
 			Helpers::mkDirForce(Helpers::getPath($resizedPath, FotoHelpers::getFolderFromPath($name)));
 			$resized = Helpers::getPath($resizedPath, $name);
@@ -93,10 +97,18 @@ class Foto extends Object
 			if (!file_exists($resized) || filemtime($filename) > filemtime($resized)) {
 				$img = Image::fromFile($filename);
 
-				$sizeX = $sizeX < $img->width ? $sizeX : $img->width;
-				$sizeY = $sizeY < $img->height ? $sizeY : $img->height;
+				switch ($resizeMethod) {
+					case Image::EXACT:
+						$sizeY = $sizeX;
+						break;
+					case Image::FIT:
+					default:
+						$sizeX = $sizeX < $img->width ? $sizeX : $img->width;
+						$sizeY = $sizeY < $img->height ? $sizeY : $img->height;
+						break;
+				}
 
-				$img->resize($sizeX, $sizeY);
+				$img->resize($sizeX, $sizeY, $resizeMethod);
 				$img->save($resized);
 			}
 
@@ -232,7 +244,7 @@ class FotoHelpers extends Object
 		}
 		return $filename . '.' . $ext;
 	}
-	
+
 	public static function getSizeSeparator()
 	{
 		return '-';

@@ -33,7 +33,7 @@
 {define product}
 <div class="product-item">
 	<div class="pi-img-wrapper">
-		<img src="{$basePath}/foto/{$product->image|size:'238','238'}" class="img-responsive" alt="{$product}">
+		<img src="{$basePath}/foto/{$product->image|size:'238'}" class="img-responsive" alt="{$product}">
 		<div>
 			<a href="{$basePath}/foto/{$product->image|size}" class="btn btn-default fancybox-button">{_'Zoom'}</a>
 			<a href="{plink Product: 'url' => $product->url}" class="btn btn-default fancybox-fast-view">{_'View'}</a>
