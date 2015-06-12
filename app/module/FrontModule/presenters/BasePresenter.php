@@ -33,9 +33,6 @@ abstract class BasePresenter extends BaseBasePresenter
 	protected $showSlider = FALSE;
 
 	/** @var bool */
-	protected $showSidebanner = FALSE;
-
-	/** @var bool */
 	protected $showBrands = FALSE;
 
 	/** @var bool */

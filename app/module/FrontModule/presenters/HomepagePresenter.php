@@ -9,7 +9,6 @@ class HomepagePresenter extends BasePresenter
 	{
 //		$this->showSlider = TRUE;
 		$this->showBrands = TRUE;
-//		$this->showSidebanners = TRUE;
 //		$this->showSteps = FALSE;
 	}
 
