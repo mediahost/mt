@@ -92,7 +92,7 @@ abstract class BasePresenter extends Presenter
 		$this->template->exchange = $this->exchange;
 		$this->template->currency = $this->exchange[$this->currency];
 	}
-	
+
 	protected function isInstallPresenter()
 	{
 		$presenterExceptions = [
@@ -181,19 +181,21 @@ abstract class BasePresenter extends Presenter
 
 	private function setCurrency()
 	{
-		if ($this->isInstallPresenter()) {
+		if (!$this->currency) {
+//			$this->currency = 'czk'|NULL; // TODO: load from user setting
 			$this->currency = $this->exchange->getDefault()->getCode();
+		}
+
+		if ($this->isInstallPresenter()) {
 			return;
 		}
-		
-//		$this->currency = 'eur'; // TODO: load from user setting
-		
+
 		$CZKrate = 30; // TODO: load from db
 		
 		// recalculate - CZK is home currency in driver (not default)
 		$originCzkRate = (float) $this->exchange['CZK']->getForeing();
 		$rateRelatedToCZK = $originCzkRate / $CZKrate;
-		
+
 		$this->exchange->addRate('CZK', $rateRelatedToCZK);
 	}
 
