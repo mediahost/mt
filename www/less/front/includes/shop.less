@@ -25,3 +25,117 @@
 		display: none;
 	}
 }
+
+
+
+.categories-menu {
+	position: static;
+	& > ul.list-group {
+		border-left: 5px #64AED9 solid;
+		& > li.list-group-item {
+			padding: 0px;
+			background: #FFF;
+			border: none;
+			& > a {
+				display: block;
+				text-decoration: none;
+				padding: 8px 15px;
+				border-top: 1px rgb(249, 249, 249) solid;
+				border-bottom: 1px rgb(249, 249, 249) solid;
+				&:hover {
+					background: #64AED9;
+					color: white;
+				}
+				&.has-submenu {
+					border-bottom: none;
+				}
+			}
+			&.active {
+				& > a {
+					background: #64AED9;
+					color: white;
+				}
+				.mega-menu-item {
+					h4 {
+						color: rgb(62, 77, 92);
+					}
+				}
+			}
+			&:first-child > a {
+				border-top: 0px;
+			}
+			&:last-child a {
+				border-bottom-width: 0px;
+			}
+			& > ul.submenu {
+				border-bottom: 2px rgb(249, 249, 249) solid;
+				padding-left: 30px;
+				padding-bottom: 10px;
+				text-transform: uppercase;
+			}
+			.mega-menu-item {
+				display: none;
+				position: absolute;
+				left: 258px;
+				top: auto;
+				margin-top: -36px;
+				padding: 0;
+				padding-left: 4px;
+				background: transparent;
+				border: none;  
+				box-shadow: 5px 5px rgba(91, 91, 91, 0.2);
+				letter-spacing: 0;
+				border-radius: 0;
+				z-index: 9999;
+				.header-navigation-content {
+					background: #fff;
+					border-left: 2px #64AED9 solid;
+					padding-top: 10px;
+					ul {
+						li {
+							a {
+								padding: 10px 15px;
+								font-weight: 400;
+								color: #767F88;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	ul.submenu {
+		padding-left: 20px;
+		padding-top: 3px;
+		padding-bottom: 5px;
+		text-transform: none;
+		& > li.list-group-item {
+			padding: 0px;
+			border: none;
+			a {
+				color: rgb(85, 85, 85);
+			}
+			&.active {
+				background-color: white;
+				color: rgb(85, 85, 85);
+				& > i, & > a {
+					color: #64AED9;
+				}
+			}
+		}
+	}
+}
+
+@media (min-width: 1025px) {
+	.categories-menu {
+		& > ul.list-group {
+			& > li.list-group-item {
+				&:hover {
+					& > .mega-menu-item {
+						display: block;
+					}
+				}
+			}
+		}
+	}
+}

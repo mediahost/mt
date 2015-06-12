@@ -724,10 +724,6 @@ Header and header elements
 	color: #3E4D5C;
 	text-transform: uppercase;
 }
-.ecommerce .sidebar .list-group-item {
-    background: #fff;
-    padding: 8px 10px 6px;
-}
 
 /* sidebar filter */
 .sidebar-filter {

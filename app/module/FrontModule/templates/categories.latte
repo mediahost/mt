@@ -1,32 +1,84 @@
 {define categories}
-<ul class="list-group margin-bottom-25 sidebar-menu">
-	<li n:foreach="$categories as $category"
-		n:class="list-group-item, clearfix, $category->hasChildren ? dropdown, $activeCategory && $activeCategory->isInPath($category) ? active">
-		{include categoryTreeItem, category => $category, deep => 1}
-	</li>
-</ul>
+<div class="categories-menu">
+	<ul class="list-group margin-bottom-25">
+		{foreach $categories as $category}
+
+			{var isActive => $activeCategory && $activeCategory->isInPath($category)}
+			{var isAllowedExpandThisCategory => ($expandOnlyActiveCategories && $isActive) || !$expandOnlyActiveCategories}
+			{var isExpandable => $isAllowedExpandThisCategory && $category->hasChildren}
+			{var showSubmenu => $isExpandable}
+			{var showMegamenu => $category->hasChildren}
+
+			<li n:class="list-group-item, $isActive ? active, $showSubmenu ? has-submenu">
+				{include categoryName, category => $category, arrowInLink => TRUE}
+				<div n:if="$showMegamenu" class="mega-menu-item">
+					{include megamenu, category => $category}
+				</div>
+			</li>
+			<li n:if="$showSubmenu"
+				n:class="list-group-item, submenu">
+				<ul n:class="submenu">
+					<li n:foreach="$category->children as $child"
+						{var isActiveChild => $activeCategory && $activeCategory->isInPath($child)}
+						n:class="list-group-item, $isActiveChild ? active">
+						{include submenu, category => $child, deep => 2, isActive => $isActiveChild, arrowInLink => FALSE}
+					</li>
+				</ul>
+			</li>
+
+		{/foreach}
+	</ul>
+</div>
 {/define}
 
-{define categoryTreeItem}
-{? $category->setCurrentLocale($lang)}
-{var expandActiveCategories => ($expandOnlyActiveCategories && $activeCategory && $activeCategory->isInPath($category)) || !$expandOnlyActiveCategories}
-{var printSubmenu => ($expandActiveCategories && $category->hasChildren && $deep < $maxCategoryDeep)}
-
-<a n:href="Category: url => $category->url" n:class="$printSubmenu ? collapsed">
-	<i class="fa fa-angle-right"></i>
+{define categoryName}
+<i n:if="!$arrowInLink" class="fa fa-angle-right"></i>
+<a n:href="Category: url => $category->url">
+	<i n:if="$arrowInLink" class="fa fa-angle-right"></i>
 	{$category}
 	{if $showProductsCount}
 		({count($category->products)})
 	{/if}
 </a>
-{if $printSubmenu}
-	<ul class="dropdown-menu" style="display:block;">
-		<li n:foreach="$category->children as $child"
-			n:class="list-group-item, clearfix, $printSubmenu ? dropdown, $activeCategory && $activeCategory->isInPath($child) ? active">
-			{include categoryTreeItem, category => $child, deep => ++$deep}
-		</li>
-	</ul>
-{/if}
+{/define}
+
+{define submenu}
+{? $category->setCurrentLocale($lang)}
+{var isAllowedExpandThisCategory => ($expandOnlyActiveCategories && $isActive) || !$expandOnlyActiveCategories}
+{var isExpandable => ($isAllowedExpandThisCategory && $category->hasChildren && $deep < $maxCategoryDeep)}
+
+{include categoryName, category => $category}
+<ul n:if="$isExpandable"
+	class="submenu">
+	<li n:foreach="$category->children as $child"
+		{var isActive => $activeCategory && $activeCategory->isInPath($child)}
+		n:class="list-group-item, $isActive ? active">
+		{include submenu, category => $child, deep => ++$deep, isActive => $isActive}
+	</li>
+</ul>
+{/define}
+
+{define megamenu}
+<div class="header-navigation-content">
+	<div class="row">
+		{foreach $category->children as $child}
+			<div class="col-md-4 header-navigation-col">
+				<h4>
+					<a n:href="Category: url => $child->url">{$child}</a>
+				</h4>
+				{include megamenuSub, category => $child}
+			</div>
+		{/foreach}
+	</div>
+</div>
+{/define}
+
+{define megamenuSub}
+<ul>
+	<li n:foreach="$category->children as $child">
+		<a n:href="Category: url => $child->url">{$child}</a>
+	</li>
+</ul>
 {/define}
 
 {define bestsellers}
