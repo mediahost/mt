@@ -182,6 +182,7 @@ abstract class BasePresenter extends Presenter
 	private function setCurrency()
 	{
 		if ($this->isInstallPresenter()) {
+			$this->currency = $this->exchange->getDefault()->getCode();
 			return;
 		}
 		
