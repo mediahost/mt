@@ -2,7 +2,7 @@ services:
 	- {class: App\ExchangeHelper, inject: yes}
 
 extensions:
-	exchangeExtension: h4kuna\Exchange\Nette\ExchangeExtension
+	exchangeExtension: h4kuna\Exchange\Nette\DI\ExchangeExtension
 
 exchangeExtension:
 	driver: h4kuna\Exchange\Driver\Ecb\Day
