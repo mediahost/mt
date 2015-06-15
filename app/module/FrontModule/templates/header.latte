@@ -15,7 +15,9 @@
 		<a class="site-logo" n:href=":Front:Homepage:">
 			<img src="{$basePath}/images/logo/logo_{$lang}.png" alt="{_'Logo'}" width="200">
 		</a>
-		
+		<a href="javascript:void(0);" class="mobi-toggler">
+			<i class="fa fa-search"></i>
+		</a>
 		<!-- BEGIN CART -->
 		<div class="top-cart-block">
 			{include 'basket.latte'}
@@ -34,6 +36,8 @@
 			</form>
 		</div> 
 		<!-- END TOP SEARCH -->
+		
+		{include 'menu.latte'}
 	</div>
 </div>
 <!-- Header END -->

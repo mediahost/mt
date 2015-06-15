@@ -3,17 +3,6 @@
 {block breadcrumb}{/block}
 
 {block content}
-{var products => [
-	['name' => 'iphone', 'price' => 555],
-	['name' => 'samsung', 'price' => 444],
-	['name' => 'windows', 'price' => 333],
-	['name' => 'iphone', 'price' => 555],
-	['name' => 'samsung', 'price' => 444],
-	['name' => 'windows', 'price' => 333],
-	['name' => 'iphone', 'price' => 555],
-	['name' => 'samsung', 'price' => 444],
-	['name' => 'windows', 'price' => 333],
-]}
 
 <div class="container">
 	<!-- BEGIN TOP PRODUCTS -->
@@ -102,7 +91,7 @@
 {define product}
 <div class="product-item">
 	<div class="pi-img-wrapper">
-		<img src="{$basePath}/foto/{$product->image|size:'238'}" class="img-responsive" alt="{$product}" />
+		<img src="{$basePath}/foto/{$product->image|size:'250'}" class="img-responsive" alt="{$product}" />
 		<div>
 			<a href="{$basePath}/foto/{$product->image|size}" 
 			   class="btn btn-default fancybox-button">

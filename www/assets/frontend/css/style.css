@@ -455,7 +455,6 @@ body.page-header-fixed {
   font-size: 23px;
   font-weight: 400;
 
-  margin-right: 67px;
   padding-top: 22px;
   padding-bottom: 22px;
 }
@@ -720,6 +719,8 @@ body.page-header-fixed {
 
 .search-box {
 	margin-top: 28px;
+	margin-left: 270px;
+	margin-right: 267px;
 }
 
 /* reduce navigation */
