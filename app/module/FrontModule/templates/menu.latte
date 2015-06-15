@@ -1,0 +1,139 @@
+{block menu}
+<!-- BEGIN NAVIGATION -->
+<div class="header-navigation">
+	<ul>
+		<li class="dropdown">
+			<a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">Zľavy a akce</a>
+			<!-- BEGIN DROPDOWN MENU -->
+			<ul class="dropdown-menu">
+                <li><a n:href="this">Running Shoes</a></li>
+                <li class="dropdown-submenu">
+					<a n:href="this">Hi Tops <i class="fa fa-angle-right"></i></a>
+					<ul class="dropdown-menu" role="menu">
+						<li><a n:href="this">Second Level Link</a></li>
+						<li><a n:href="this">Second Level Link</a></li>
+						<li class="dropdown-submenu">
+							<a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
+								Second Level Link 
+								<i class="fa fa-angle-right"></i>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a n:href="this">Third Level Link</a></li>
+								<li><a n:href="this">Third Level Link</a></li>
+								<li><a n:href="this">Third Level Link</a></li>
+							</ul>
+						</li>
+					</ul>
+                </li>
+                <li><a n:href="this">Jackets and Coats</a></li>
+			</ul>
+			<!-- END DROPDOWN MENU -->
+		</li>
+		<li class="dropdown dropdown-megamenu">
+			<a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">Příslušenstvo</a>
+			<ul class="dropdown-menu">
+                <li>
+					<div class="header-navigation-content">
+						<div class="row">
+							<div class="col-md-4 header-navigation-col">
+								<h4>Footwear</h4>
+								<ul>
+									<li><a n:href="this">Astro Trainers</a></li>
+									<li><a n:href="this">Basketball Shoes</a></li>
+									<li><a n:href="this">Boots</a></li>
+									<li><a n:href="this">Canvas Shoes</a></li>
+									<li><a n:href="this">Football Boots</a></li>
+									<li><a n:href="this">Golf Shoes</a></li>
+									<li><a n:href="this">Hi Tops</a></li>
+									<li><a n:href="this">Indoor and Court Trainers</a></li>
+								</ul>
+							</div>
+							<div class="col-md-4 header-navigation-col">
+								<h4>Clothing</h4>
+								<ul>
+									<li><a n:href="this">Base Layer</a></li>
+									<li><a n:href="this">Character</a></li>
+									<li><a n:href="this">Chinos</a></li>
+									<li><a n:href="this">Combats</a></li>
+									<li><a n:href="this">Cricket Clothing</a></li>
+									<li><a n:href="this">Fleeces</a></li>
+									<li><a n:href="this">Gilets</a></li>
+									<li><a n:href="this">Golf Tops</a></li>
+								</ul>
+							</div>
+							<div class="col-md-4 header-navigation-col">
+								<h4>Accessories</h4>
+								<ul>
+									<li><a n:href="this">Belts</a></li>
+									<li><a n:href="this">Caps</a></li>
+									<li><a n:href="this">Gloves, Hats and Scarves</a></li>
+								</ul>
+
+								<h4>Clearance</h4>
+								<ul>
+									<li><a n:href="this">Jackets</a></li>
+									<li><a n:href="this">Bottoms</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+                </li>
+			</ul>
+		</li>
+		<li class="dropdown dropdown100 nav-catalogue">
+			<a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">Výkup telefonov</a>
+			<ul class="dropdown-menu">
+                <li>
+					<div class="header-navigation-content">
+						<div class="row">
+							<div class="col-md-3 col-sm-4 col-xs-6" n:foreach="$newStocks as $stock">
+								{var product => $stock->product}
+								<div class="product-item">
+									<div class="pi-img-wrapper">
+										<a n:href="Product: 'url' => $product->url">
+											<img src="{$basePath}/foto/{$product->image|size:'300'}" class="img-responsive" alt="{$product}" />
+										</a>
+									</div>
+									<h3>
+										<a n:href="Product: 'url' => $product->url">
+											{$product}
+										</a>
+									</h3>
+									<div class="pi-price">{$stock->price|currencyVat}</div>
+									<a href="#" class="btn btn-default add2cart">{_'Add to cart'}</a>
+								</div>
+							</div>
+						</div>
+					</div>
+                </li>
+			</ul>
+		</li>
+		<li class="dropdown active">
+			<a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">Servis telefonov</a>
+			<ul class="dropdown-menu">
+                <li><a n:href="this">Home Default</a></li>
+                <li><a n:href="this">Home Header Fixed</a></li>
+                <li><a n:href="this">Home Light Footer</a></li>
+                <li><a n:href="this">Product List</a></li>
+                <li><a n:href="this">Search Result</a></li>
+                <li class="active"><a n:href="this">Product Page</a></li>
+                <li><a n:href="this">Shopping Cart (Null Cart)</a></li>
+                <li><a n:href="this">Shopping Cart</a></li>
+                <li><a n:href="this">Checkout</a></li>
+                <li><a n:href="this">About</a></li>
+                <li><a n:href="this">Contacts</a></li>
+                <li><a n:href="this">My account</a></li>
+                <li><a n:href="this">My Wish List</a></li>
+                <li><a n:href="this">Product Comparison</a></li>
+                <li><a n:href="this">Standart Forms</a></li>
+                <li><a n:href="this">FAQ</a></li>
+                <li><a n:href="this">Privacy Policy</a></li>
+                <li><a n:href="this">Terms &amp; Conditions</a></li>
+			</ul>
+		</li>
+		<li><a n:href="this">Velkoobchod</a></li>
+		<li><a n:href="this">Kontakt</a></li>
+	</ul>
+</div>
+<!-- END NAVIGATION -->
+{/block}

@@ -623,7 +623,7 @@
 /* END max width 600px */
 
 /* BEGIN max width 500px */
-@media (max-width: 500px) {
+@media (max-width: 562px) {
 	.ecommerce .site-logo {
 		padding-bottom: 15px;
 	}
