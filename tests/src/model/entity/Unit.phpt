@@ -73,6 +73,25 @@ class UnitTest extends DbTestCase
 		Assert::same('Ks', $findedEntity->translate('cs')->name);
 	}
 
+	public function testAddTranslation()
+	{
+		$entity = new Unit(Unit::PIECES, 'en');
+		$entity->mergeNewTranslations();
+		
+		$this->em->persist($entity);
+		$this->em->flush();
+		
+		$id = $entity->id;
+		
+		$findedEntity1 = $this->unitRepo->find($id);
+		$findedEntity1->translate('cs', FALSE)->name = 'Ks';
+		$findedEntity1->mergeNewTranslations();
+		
+		Assert::same(Unit::PIECES, $findedEntity1->name);
+		Assert::same(Unit::PIECES, $findedEntity1->translate('en')->name);
+		Assert::same('Ks', $findedEntity1->translate('cs')->name);
+	}
+
 	protected function getClasses()
 	{
 		return [
