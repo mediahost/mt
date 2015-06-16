@@ -14,14 +14,17 @@ trait CategoryBase
 	 */
 	public function getParents()
 	{
+		$isTranslatable = property_exists($this, 'currentLocale');
 		$parent = $this->parent;
 		$path = [];
 		$containExistingEdge = FALSE;
 		while ($parent !== NULL && !$containExistingEdge) {
 			if ($parent->id === $this->id || array_key_exists($parent->id, $path)) {
 				$containExistingEdge = TRUE;
-			} else {
+			} elseif ($isTranslatable) {
 				$parent->setCurrentLocale($this->currentLocale);
+				$path[$parent->id] = $parent;
+			} else {
 				$path[$parent->id] = $parent;
 			}
 			$parent = $parent->parent;
