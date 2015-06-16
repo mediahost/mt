@@ -1,0 +1,33 @@
+{block pageTitle}
+	{_'Units'}
+{/block}
+
+{block breadcrumbItems}
+<li>
+	<a n:href="Settings:">{_'Settings'}</a>
+</li>
+<li><span>{_'Units'}</span></li>
+{/block}
+
+{block content}
+<div class="row">
+	<div class="col-md-8">
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption font-green-sharp">
+					<i class="fa fa-edit font-green-sharp"></i>
+					<span class="caption-subject bold uppercase">
+						{_'Edit units'}
+					</span>
+				</div>
+				<div class="actions">
+					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				{control unitsForm}
+			</div>
+		</div>
+	</div>
+</div>

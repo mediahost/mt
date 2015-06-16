@@ -10,7 +10,6 @@ use App\Model\Entity\User;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
 use App\TaggedString;
-use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\EntityRepository;
 use Nette\Security\User as IdentityUser;
 
@@ -24,9 +23,6 @@ class UsersPresenter extends BasePresenter
 	private $userRepo;
 
 	// <editor-fold desc="injects">
-
-	/** @var EntityManager @inject */
-	public $em;
 
 	/** @var UserFacade @inject */
 	public $userFacade;
@@ -69,7 +65,7 @@ class UsersPresenter extends BasePresenter
 	 */
 	public function actionAdd()
 	{
-		$this->userEntity = new User;
+		$this->userEntity = new User();
 		$this['userForm']->setUser($this->userEntity);
 		$this->setView('edit');
 	}
