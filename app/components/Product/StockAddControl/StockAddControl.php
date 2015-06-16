@@ -123,7 +123,7 @@ class StockAddControl extends StockBaseControl
 		$this->stock->product->mainCategory = $category;
 		
 		$unitRepo = $this->em->getRepository(Unit::getClassName());
-		$unit = $unitRepo->findByName(Unit::DEFAULT_NAME);
+		$unit = $unitRepo->findOneByName(Unit::DEFAULT_NAME);
 		$this->stock->product->unit = $unit;
 
 		$this->stock->product->active = $values->active;

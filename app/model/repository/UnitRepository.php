@@ -2,10 +2,12 @@
 
 namespace App\Model\Repository;
 
+use Doctrine\ORM\NoResultException;
+
 class UnitRepository extends BaseRepository
 {
 
-	public function findByName($name)
+	public function findOneByName($name)
 	{
 		$qb = $this->createQueryBuilder('u')
 				->select('u, t')
@@ -13,7 +15,13 @@ class UnitRepository extends BaseRepository
 				->where('t.name = :name')
 				->setParameter('name', $name);
 
-		return $qb->getQuery()->getResult();
+		try {
+			return $qb->setMaxResults(1)
+							->getQuery()
+							->getSingleResult();
+		} catch (NoResultException $e) {
+			return NULL;
+		}
 	}
 
 }
