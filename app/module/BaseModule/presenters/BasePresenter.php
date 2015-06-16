@@ -195,19 +195,26 @@ abstract class BasePresenter extends Presenter
 			$this->currency = NULL;
 			return;
 		}
-		
+
 		if (!$this->currency) {
 //			$this->currency = 'czk'|NULL; // TODO: load from user setting
 			$this->currency = $this->exchange->getDefault()->getCode();
 		}
 
-		$CZKrate = 30; // TODO: load from db
-		
-		// recalculate - CZK is home currency in driver (not default)
-		$originCzkRate = (float) $this->exchange['CZK']->getForeing();
-		$rateRelatedToCZK = $originCzkRate / $CZKrate;
+		$rateRepo = $this->em->getRepository(Entity\Rate::getClassName());
+		$rates = $rateRepo->findPairs('value');
 
-		$this->exchange->addRate('CZK', $rateRelatedToCZK);
+		$defaultCode = $this->exchange->getDefault()->getCode();
+		foreach ($this->exchange as $code => $currency) {
+			$isDefault = strtolower($code) === strtolower($defaultCode);
+			$isInDb = array_key_exists($code, $rates);
+			if (!$isDefault && $isInDb) {
+				$dbRate = (float) $rates[$code];
+				$originRate = (float) $currency->getForeing();
+				$rateRelated = $originRate / $dbRate;
+				$this->exchange->addRate($code, $rateRelated);
+			}
+		}
 	}
 
 	// </editor-fold>

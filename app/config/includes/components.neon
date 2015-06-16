@@ -96,6 +96,11 @@ services:
 		implement: App\Components\Unit\IUnitsControlFactory
 		inject: yes
 
+	# Rate
+	IRateFormFactory:
+		implement: App\Components\Currency\Form\IRateFactory
+		inject: yes
+
 	# Example
 	IFormControlFactory:
 		implement: App\Components\Example\Form\IFormControlFactory
