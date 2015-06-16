@@ -64,8 +64,7 @@ class UnitTest extends DbTestCase
 		
 		$id = $entity->id;
 		
-		$findedEntities = $this->unitRepo->findByName(Unit::PIECES, 'en');
-		$findedEntity = reset($findedEntities);
+		$findedEntity = $this->unitRepo->findOneByName(Unit::PIECES, 'en');
 		
 		Assert::same($id, $findedEntity->id);
 		Assert::same(Unit::PIECES, $findedEntity->name);
