@@ -9,13 +9,23 @@
 {block content}
 <div class="row">
 	<div class="col-md-12">
-		<div class="portlet box">
-			<ul class="list-group">
-				<li class="list-group-item"
-					n:foreach="$groups as $group">
-					{$group} 
-				</li>
-			</ul>
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-users"></i>
+					<span class="caption-subject bold uppercase">{_'Groups'}</span>
+				</div>
+				<div class="actions">
+					<a n:href="Groups:add" class="btn btn-circle green-sharp">
+						<i class="fa fa-plus"></i> {_'Add Group'}
+					</a>
+					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body">
+				{control groupsGrid}
+			</div>
 		</div>
 	</div>
 </div>

@@ -167,8 +167,24 @@
 					<span class="title">{_'Settings'}</span>
 					<span class="selected"></span>
 				</a>
+				<ul class="sub-menu">
+					<li n:if="$user->isAllowed('settings', 'default')"
+						n:class="$presenter->isLinkCurrent('Settings:default') ? active">
+						<a n:href="Settings:">
+							<i class="fa fa-shopping-cart"></i>
+							{_'E-shop'}
+						</a>
+					</li>
+					<li n:if="$user->isAllowed('settings', 'units')"
+						n:class="$presenter->isLinkCurrent('Settings:units') ? active">
+						<a n:href="Settings:units">
+							<i class="fa fa-flask"></i>
+							{_'Units'}
+						</a>
+					</li>
+				</ul>
 			</li>
-			
+
 			<li class="heading">
 				<h3 class="uppercase"></h3>
 			</li>

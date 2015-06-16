@@ -33,15 +33,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dg/ftp-deployment.git",
-                "reference": "6b303260aee14b951c0b6ee67ac4978d358c21c1"
+                "reference": "c2c2206af003c9aaba074e6a0f2e14319cb66861"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dg/ftp-deployment/zipball/6b303260aee14b951c0b6ee67ac4978d358c21c1",
-                "reference": "6b303260aee14b951c0b6ee67ac4978d358c21c1",
+                "url": "https://api.github.com/repos/dg/ftp-deployment/zipball/c2c2206af003c9aaba074e6a0f2e14319cb66861",
+                "reference": "c2c2206af003c9aaba074e6a0f2e14319cb66861",
                 "shasum": ""
             },
             "require": {
+                "ext-openssl": "*",
                 "php": ">=5.4.0"
             },
             "require-dev": {
@@ -75,7 +76,7 @@
                 "ftp",
                 "ssh"
             ],
-            "time": "2015-05-26 13:27:03"
+            "time": "2015-06-14 14:39:14"
         },
         {
             "name": "doctrine/annotations",
@@ -494,16 +495,16 @@
         },
         {
             "name": "doctrine/instantiator",
-            "version": "1.0.4",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/instantiator.git",
-                "reference": "f976e5de371104877ebc89bd8fecb0019ed9c119"
+                "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/f976e5de371104877ebc89bd8fecb0019ed9c119",
-                "reference": "f976e5de371104877ebc89bd8fecb0019ed9c119",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/8e884e78f9f0eb1329e445619e04456e64d8051d",
+                "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d",
                 "shasum": ""
             },
             "require": {
@@ -514,7 +515,7 @@
                 "ext-pdo": "*",
                 "ext-phar": "*",
                 "phpunit/phpunit": "~4.0",
-                "squizlabs/php_codesniffer": "2.0.*@ALPHA"
+                "squizlabs/php_codesniffer": "~2.0"
             },
             "type": "library",
             "extra": {
@@ -523,8 +524,8 @@
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Doctrine\\Instantiator\\": "src"
+                "psr-4": {
+                    "Doctrine\\Instantiator\\": "src/Doctrine/Instantiator/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -544,7 +545,7 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2014-10-13 12:58:55"
+            "time": "2015-06-14 21:17:01"
         },
         {
             "name": "doctrine/lexer",
@@ -739,12 +740,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/h4kuna/exchange.git",
-                "reference": "b4e03f53cc1814d37f3da9dc8db94a91573c4e57"
+                "reference": "9bab7084610edb2b3fb25d4de0c3b306a0d9437e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/h4kuna/exchange/zipball/b4e03f53cc1814d37f3da9dc8db94a91573c4e57",
-                "reference": "b4e03f53cc1814d37f3da9dc8db94a91573c4e57",
+                "url": "https://api.github.com/repos/h4kuna/exchange/zipball/9bab7084610edb2b3fb25d4de0c3b306a0d9437e",
+                "reference": "9bab7084610edb2b3fb25d4de0c3b306a0d9437e",
                 "shasum": ""
             },
             "require": {
@@ -780,7 +781,7 @@
             ],
             "description": "Exchange between currencies.",
             "homepage": "https://github.com/h4kuna/exchange",
-            "time": "2015-06-12 07:31:24"
+            "time": "2015-06-12 07:41:32"
         },
         {
             "name": "h4kuna/number-format",

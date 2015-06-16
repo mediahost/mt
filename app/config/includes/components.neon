@@ -86,6 +86,16 @@ services:
 		implement: App\Components\Product\IStockImageControlFactory
 		inject: yes
 
+	# Group
+	IGroupControlFactory:
+		implement: App\Components\Group\IGroupControlFactory
+		inject: yes
+
+	# Units
+	IUnitsControlFactory:
+		implement: App\Components\Unit\IUnitsControlFactory
+		inject: yes
+
 	# Example
 	IFormControlFactory:
 		implement: App\Components\Example\Form\IFormControlFactory
@@ -98,4 +108,8 @@ services:
 
 	IStocksGridFactory:
 		implement: App\Components\Grids\Product\IStocksGridFactory
+		inject: yes
+
+	IGroupsGridFactory:
+		implement: App\Components\Grids\Group\IGroupsGridFactory
 		inject: yes
