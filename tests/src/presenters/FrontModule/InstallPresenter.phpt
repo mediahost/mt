@@ -53,6 +53,7 @@ class InstallPresenterTest extends BasePresenter
 
 		$expectedBodyValue = "DB_Doctrine INSTALLED\n "
 				. "DB_Roles INSTALLED\n "
+				. "DB_Units INSTALLED\n "
 				. "DB_Users INSTALLED\n";
 		Assert::same($expectedBodyValue, (string) $dom->find('body')[0]->p);
 	}
