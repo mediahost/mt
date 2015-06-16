@@ -31,7 +31,7 @@ class UnitsControl extends BaseControl
 		$form = new Form;
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer);
-		
+
 		$unitsContainer = $form->addContainer('units');
 		foreach ($this->units as $unit) {
 			$unitName = $unitsContainer->addText($unit->id, $unit->name)
@@ -48,16 +48,31 @@ class UnitsControl extends BaseControl
 
 	public function formSucceeded(Form $form, $values)
 	{
-		$unitRepo = $this->em->getRepository(Unit::getClassName());
 		foreach ($values->units as $id => $name) {
-			if (!empty($name)) {
-				$unit = $unitRepo->find($id);
-				$unit->translate($this->lang)->name = $name;
-				$unit->mergeNewTranslations();
-				$unitRepo->save($unit);
-			}
+			$this->saveUnit($id, $name);
 		}
 		$this->onAfterSave();
+	}
+
+	private function saveUnit($id, $value)
+	{
+		$unitRepo = $this->em->getRepository(Unit::getClassName());
+		$defaultLang = $this->languageService->defaultLanguage;
+		$isLangDefault = $this->lang === $defaultLang;
+		/* @var $unit Unit */
+		$unit = $unitRepo->find($id);
+		if ($isLangDefault && empty($value)) {
+			// skip
+		} else if (empty($value)) { // delete empty translations
+			$translation = $unit->translate($this->lang);
+			if ($translation->getLocale() === $this->lang) {
+				$unit->removeTranslation($unit->translateAdd($this->lang));
+			}
+		} else {
+			$unit->translateAdd($this->lang)->name = $value;
+		}
+		$unit->mergeNewTranslations();
+		$unitRepo->save($unit);
 	}
 
 	/** @return array */

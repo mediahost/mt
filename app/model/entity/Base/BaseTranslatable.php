@@ -27,6 +27,11 @@ abstract class BaseTranslatable extends BaseEntity
 	{
 		return $this->proxyCurrentLocaleTranslation($method, $arguments);
 	}
+	
+	public function translateAdd($lang)
+	{
+		return $this->translate($lang, FALSE);
+	}
 
 	/**
 	 * For all tranlation property redirect $this->property to $this->getProperty()
