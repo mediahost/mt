@@ -17,9 +17,15 @@ $container = require __DIR__ . '/../../bootstrap.php';
 class HomepagePresenterTest extends BasePresenter
 {
 
+	protected function setUp()
+	{
+		$this->initSystem();
+		parent::setUp();
+		$this->openPresenter('Front:Homepage');
+	}
+
 	public function testRenderDefault()
 	{
-		$this->openPresenter('Front:Homepage');
 		$response = $this->runPresenterAction('default');
 
 		$html = (string) $response->getSource();

@@ -8,6 +8,7 @@ use App\Extensions\Settings\Model\Service\DesignService;
 use App\Extensions\Settings\Model\Service\LanguageService;
 use App\Extensions\Settings\Model\Service\ModuleService;
 use App\Extensions\Settings\Model\Service\PageConfigService;
+use App\Extensions\Settings\Model\Service\PageInfoService;
 use App\Extensions\Settings\Model\Storage\DefaultSettingsStorage;
 use App\Model\Entity;
 use App\Model\Facade\StockFacade;
@@ -66,6 +67,9 @@ abstract class BasePresenter extends Presenter
 	/** @var PageConfigService @inject */
 	public $pageConfigService;
 
+	/** @var PageInfoService @inject */
+	public $pageInfoService;
+
 	/** @var EntityManager @inject */
 	public $em;
 
@@ -92,7 +96,7 @@ abstract class BasePresenter extends Presenter
 		$this->template->allowedLanguages = $this->languageService->allowedLanguages;
 		$this->template->designSettings = $this->designService->settings;
 		$this->template->designColors = $this->designService->colors;
-		$this->template->pageInfo = $this->settingStorage->pageInfo;
+		$this->template->pageInfo = $this->pageInfoService;
 		$this->template->exchange = $this->exchange;
 		if ($this->currency) {
 			$this->template->currency = $this->exchange[$this->currency];
