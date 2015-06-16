@@ -2,6 +2,8 @@
 
 namespace App\AppModule\Presenters;
 
+use App\Components\Currency\Form\IRateFactory;
+use App\Components\Currency\Form\Rate;
 use App\Components\Unit\IUnitsControlFactory;
 use App\Components\Unit\UnitsControl;
 use App\Model\Entity\Unit;
@@ -14,6 +16,9 @@ class SettingsPresenter extends BasePresenter
 	private $unitRepo;
 
 	// <editor-fold desc="injects">
+
+	/** @var IRateFactory @inject */
+	public $iRateFormFactory;
 
 	/** @var IUnitsControlFactory @inject */
 	public $iUnitControlFactory;
@@ -47,6 +52,17 @@ class SettingsPresenter extends BasePresenter
 	}
 
 	// <editor-fold desc="forms">
+
+	/** @return Rate */
+	public function createComponentRateForm()
+	{
+		$control = $this->iRateFormFactory->create();
+		$control->onAfterSave = function () {
+			$this->flashMessage('Rates was successfully saved.', 'success');
+			$this->redirect('default');
+		};
+		return $control;
+	}
 
 	/** @return UnitsControl */
 	public function createComponentUnitsForm()
