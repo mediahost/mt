@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Components\Product;
+namespace App\Components\Product\Form;
 
 use App\Forms\Controls\TextInputBased\MetronicTextInputBase;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
+use App\Model\Entity\Category;
 use App\Model\Entity\Stock;
-use App\Model\Entity\Vat;
 use App\Model\Facade\CategoryFacade;
 use Nette\Utils\ArrayHash;
 
-class StockCategoryControl extends StockBaseControl
+class StockCategory extends StockBase
 {
 	// <editor-fold desc="variables">
 
@@ -76,9 +76,9 @@ class StockCategoryControl extends StockBaseControl
 
 }
 
-interface IStockCategoryControlFactory
+interface IStockCategoryFactory
 {
 
-	/** @return StockCategoryControl */
+	/** @return StockCategory */
 	function create();
 }

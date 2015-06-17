@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\Product;
+namespace App\Components\Product\Form;
 
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
@@ -8,7 +8,7 @@ use App\Model\Entity\Stock;
 use App\Model\Facade\UnitFacade;
 use Nette\Utils\ArrayHash;
 
-class StockImageControl extends StockBaseControl
+class StockImage extends StockBase
 {
 	// <editor-fold desc="variables">
 
@@ -73,9 +73,9 @@ class StockImageControl extends StockBaseControl
 
 }
 
-interface IStockImageControlFactory
+interface IStockImageFactory
 {
 
-	/** @return StockImageControl */
+	/** @return StockImage */
 	function create();
 }

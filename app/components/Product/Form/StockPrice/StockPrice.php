@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\Product;
+namespace App\Components\Product\Form;
 
 use App\Forms\Controls\TextInputBased\MetronicTextInputBase;
 use App\Forms\Form;
@@ -10,7 +10,7 @@ use App\Model\Entity\Vat;
 use App\Model\Facade\VatFacade;
 use Nette\Utils\ArrayHash;
 
-class StockPriceControl extends StockBaseControl
+class StockPrice extends StockBase
 {
 	// <editor-fold desc="variables">
 
@@ -93,9 +93,9 @@ class StockPriceControl extends StockBaseControl
 	}
 }
 
-interface IStockPriceControlFactory
+interface IStockPriceFactory
 {
 
-	/** @return StockPriceControl */
+	/** @return StockPrice */
 	function create();
 }

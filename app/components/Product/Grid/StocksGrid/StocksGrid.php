@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\Grids\Product;
+namespace App\Components\Product\Grid;
 
 use App\Components\BaseControl;
 use App\Extensions\Grido\BaseGrid;

@@ -19,13 +19,14 @@ services:
 	- {implement: App\Components\User\Grid\IUsersGridFactory, inject: yes}
 
 	# Stock
-	- {implement: App\Components\Product\IStockAddControlFactory, inject: yes}
-	- {implement: App\Components\Product\IStockBasicControlFactory, inject: yes}
-	- {implement: App\Components\Product\IStockPriceControlFactory, inject: yes}
-	- {implement: App\Components\Product\IStockQuantityControlFactory, inject: yes}
-	- {implement: App\Components\Product\IStockCategoryControlFactory, inject: yes}
-	- {implement: App\Components\Product\IStockSeoControlFactory, inject: yes}
-	- {implement: App\Components\Product\IStockImageControlFactory, inject: yes}
+	- {implement: App\Components\Product\Form\IStockAddFactory, inject: yes}
+	- {implement: App\Components\Product\Form\IStockBasicFactory, inject: yes}
+	- {implement: App\Components\Product\Form\IStockPriceFactory, inject: yes}
+	- {implement: App\Components\Product\Form\IStockQuantityFactory, inject: yes}
+	- {implement: App\Components\Product\Form\IStockCategoryFactory, inject: yes}
+	- {implement: App\Components\Product\Form\IStockSeoFactory, inject: yes}
+	- {implement: App\Components\Product\Form\IStockImageFactory, inject: yes}
+	- {implement: App\Components\Product\Grid\IStocksGridFactory, inject: yes}
 
 	# Group
 	- {implement: App\Components\Group\Form\IGroupEditFactory, inject: yes}
@@ -39,6 +40,3 @@ services:
 
 	# Example
 	- {implement: App\Components\Example\Form\IExampleFormFactory, inject: yes}
-
-	# Grids
-	- {implement: App\Components\Grids\Product\IStocksGridFactory, inject: yes}
