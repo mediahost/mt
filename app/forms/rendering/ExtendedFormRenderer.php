@@ -73,7 +73,7 @@ class ExtendedFormRenderer extends DefaultFormRenderer
 
 	/**
 	 * Renders single visual row of multiple controls.
-	 * @param  IFormControl[]
+	 * @param  IControl[]
 	 * @return string
 	 */
 	public function renderPairMulti(array $controls)

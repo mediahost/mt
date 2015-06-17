@@ -2,8 +2,8 @@
 
 namespace Test\Components\Example;
 
-use App\Components\Example\Form\FormControl;
-use App\Components\Example\Form\IFormControlFactory;
+use App\Components\Example\Form\ExampleForm;
+use App\Components\Example\Form\IExampleFormFactory;
 use Test\Components\BaseControl;
 use Tester\Assert;
 
@@ -18,10 +18,10 @@ $container = require __DIR__ . '/../../bootstrap.php';
 class ExampleFormTest extends BaseControl
 {
 
-	/** @var IFormControlFactory @inject */
+	/** @var IExampleFormFactory @inject */
 	public $factory;
 
-	/** @var FormControl */
+	/** @var ExampleForm */
 	private $component;
 
 	protected function setUp()

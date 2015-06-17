@@ -2,15 +2,15 @@
 
 namespace App\AppModule\Presenters;
 
-use App\Components\Example\Form\FormControl;
-use App\Components\Example\Form\IFormControlFactory;
+use App\Components\Example\Form\ExampleForm;
+use App\Components\Example\Form\IExampleFormFactory;
 use App\Forms\Form;
 
 class ExamplesPresenter extends BasePresenter
 {
 
-	/** @var IFormControlFactory @inject */
-	public $iFormControlFactory;
+	/** @var IExampleFormFactory @inject */
+	public $iExampleFormFactory;
 
 	/**
 	 * @secured
@@ -34,10 +34,10 @@ class ExamplesPresenter extends BasePresenter
 
 	// <editor-fold desc="components">
 
-	/** @return FormControl */
+	/** @return ExampleForm */
 	protected function createComponentForm()
 	{
-		$control = $this->iFormControlFactory->create();
+		$control = $this->iExampleFormFactory->create();
 		$control->onAfterSave = function (Form $form, $values) {
 			$this->template->values = $values;
 		};
