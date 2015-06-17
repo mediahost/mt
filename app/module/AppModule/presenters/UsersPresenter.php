@@ -2,10 +2,10 @@
 
 namespace App\AppModule\Presenters;
 
-use App\Components\Grids\User\IUsersGridFactory;
-use App\Components\Grids\User\UsersGrid;
-use App\Components\User\IUserBasicControlFactory;
-use App\Components\User\UserBasicControl;
+use App\Components\User\Grid\IUsersGridFactory;
+use App\Components\User\Grid\UsersGrid;
+use App\Components\User\Form\IUserBasicFactory;
+use App\Components\User\Form\UserBasic;
 use App\Model\Entity\User;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
@@ -30,8 +30,8 @@ class UsersPresenter extends BasePresenter
 	/** @var RoleFacade @inject */
 	public $roleFacade;
 
-	/** @var IUserBasicControlFactory @inject */
-	public $iUserBasicControlFactory;
+	/** @var IUserBasicFactory @inject */
+	public $iUserBasicFactory;
 
 	/** @var IUsersGridFactory @inject */
 	public $iUsersGridFactory;
@@ -192,10 +192,10 @@ class UsersPresenter extends BasePresenter
 	// </editor-fold>
 	// <editor-fold desc="forms">
 
-	/** @return UserBasicControl */
+	/** @return UserBasic */
 	public function createComponentUserForm()
 	{
-		$control = $this->iUserBasicControlFactory->create();
+		$control = $this->iUserBasicFactory->create();
 		$control->setIdentityRoles($this->user->roles);
 		$control->onAfterSave = function (User $savedUser) {
 			$message = new TaggedString('User \'%s\' was successfully saved.', (string) $savedUser);
