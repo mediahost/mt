@@ -142,6 +142,15 @@
 				</a>
 			</li>
 
+			<li n:if="$user->isAllowed('producers', 'default')"
+				n:class="$presenter->isLinkCurrent('Producers:*') ? active">
+				<a n:href="Producers:">
+					<i class="fa fa-building"></i> 
+					<span class="title">{_'Producers'}</span>
+					<span class="selected"></span>
+				</a>
+			</li>
+
 			<li n:if="$user->isAllowed('parameters', 'default')"
 				n:class="$presenter->isLinkCurrent('Parameters:*') ? active">
 				<a n:href="Parameters:">
