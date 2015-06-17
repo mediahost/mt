@@ -8,10 +8,7 @@ use App\Model\Entity\Twitter;
 use App\Model\Entity\User;
 use Nette\Utils\ArrayHash;
 
-/**
- * ConnectManagerControl
- */
-class ConnectManagerControl extends BaseControl
+class ConnectManager extends BaseControl
 {
 
 	const APP = 'App login';
@@ -38,11 +35,11 @@ class ConnectManagerControl extends BaseControl
 	// </editor-fold>
 	// <editor-fold desc="injects">
 
-	/** @var IFacebookControlFactory @inject */
-	public $iFacebookControlFactory;
+	/** @var IFacebookConnectFactory @inject */
+	public $iFacebookConnectFactory;
 
-	/** @var ITwitterControlFactory @inject */
-	public $iTwitterControlFactory;
+	/** @var ITwitterConnectFactory @inject */
+	public $iTwitterConnectFactory;
 
 	// </editor-fold>
 
@@ -158,10 +155,10 @@ class ConnectManagerControl extends BaseControl
 
 	// <editor-fold desc="controls">
 
-	/** @return FacebookControl */
+	/** @return FacebookConnect */
 	protected function createComponentFacebook()
 	{
-		$control = $this->iFacebookControlFactory->create();
+		$control = $this->iFacebookConnectFactory->create();
 		$control->setConnect();
 		$control->onConnect[] = function (Facebook $fb) {
 			$fbDao = $this->em->getDao(Facebook::getClassName());
@@ -180,10 +177,10 @@ class ConnectManagerControl extends BaseControl
 		return $control;
 	}
 
-	/** @return TwitterControl */
+	/** @return TwitterConnect */
 	protected function createComponentTwitter()
 	{
-		$control = $this->iTwitterControlFactory->create();
+		$control = $this->iTwitterConnectFactory->create();
 		$control->setConnect();
 		$control->onConnect[] = function (Twitter $tw) {
 			$twDao = $this->em->getDao(Twitter::getClassName());
@@ -205,9 +202,9 @@ class ConnectManagerControl extends BaseControl
 	// </editor-fold>
 }
 
-interface IConnectManagerControlFactory
+interface IConnectManagerFactory
 {
 
-	/** @return ConnectManagerControl */
+	/** @return ConnectManager */
 	function create();
 }

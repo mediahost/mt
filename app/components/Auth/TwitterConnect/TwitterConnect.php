@@ -11,7 +11,7 @@ use Netrium\Addons\Twitter\AuthenticationException as TwitterException;
 use Netrium\Addons\Twitter\Authenticator as Twitter;
 use Tracy\Debugger;
 
-class TwitterControl extends BaseControl
+class TwitterConnect extends BaseControl
 {
 
 	/** @var array */
@@ -157,9 +157,9 @@ class TwitterControl extends BaseControl
 	// </editor-fold>
 }
 
-interface ITwitterControlFactory
+interface ITwitterConnectFactory
 {
 
-	/** @return TwitterControl */
+	/** @return TwitterConnect */
 	function create();
 }

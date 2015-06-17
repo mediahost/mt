@@ -11,7 +11,7 @@ use Nette\Security\AuthenticationException;
 use Nette\Security\IAuthenticator;
 use Nette\Utils\ArrayHash;
 
-class SignInControl extends BaseControl
+class SignIn extends BaseControl
 {
 	// <editor-fold desc="events">
 
@@ -21,11 +21,11 @@ class SignInControl extends BaseControl
 	// </editor-fold>
 	// <editor-fold desc="injects">
 
-	/** @var IFacebookControlFactory @inject */
-	public $iFacebookControlFactory;
+	/** @var IFacebookConnectFactory @inject */
+	public $iFacebookConnectFactory;
 
-	/** @var ITwitterControlFactory @inject */
-	public $iTwitterControlFactory;
+	/** @var ITwitterConnectFactory @inject */
+	public $iTwitterConnectFactory;
 
 	/** @var UserFacade @inject */
 	public $userFacade;
@@ -124,24 +124,24 @@ class SignInControl extends BaseControl
 
 	// <editor-fold desc="controls">
 
-	/** @return FacebookControl */
+	/** @return FacebookConnect */
 	protected function createComponentFacebook()
 	{
-		return $this->iFacebookControlFactory->create();
+		return $this->iFacebookConnectFactory->create();
 	}
 
-	/** @return TwitterControl */
+	/** @return TwitterConnect */
 	protected function createComponentTwitter()
 	{
-		return $this->iTwitterControlFactory->create();
+		return $this->iTwitterConnectFactory->create();
 	}
 
 	// </editor-fold>
 }
 
-interface ISignInControlFactory
+interface ISignInFactory
 {
 
-	/** @return SignInControl */
+	/** @return SignIn */
 	function create();
 }

@@ -9,7 +9,7 @@ use App\Model\Entity\User;
 use App\Model\Facade\UserFacade;
 use Nette\Utils\ArrayHash;
 
-class ForgottenControl extends BaseControl
+class Forgotten extends BaseControl
 {
 	
 	/** @var array */
@@ -60,9 +60,9 @@ class ForgottenControl extends BaseControl
 
 }
 
-interface IForgottenControlFactory
+interface IForgottenFactory
 {
 
-	/** @return ForgottenControl */
+	/** @return Forgotten */
 	function create();
 }

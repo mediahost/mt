@@ -10,7 +10,7 @@ use App\Model\Storage\SignUpStorage;
 use Nette\Forms\IControl;
 use Nette\Utils\ArrayHash;
 
-class RequiredControl extends BaseControl
+class Required extends BaseControl
 {
 
 	public $onSuccess = [];
@@ -65,9 +65,9 @@ class RequiredControl extends BaseControl
 
 }
 
-interface IRequiredControlFactory
+interface IRequiredFactory
 {
 
-	/** @return RequiredControl */
+	/** @return Required */
 	function create();
 }

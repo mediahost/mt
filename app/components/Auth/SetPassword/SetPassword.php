@@ -12,7 +12,7 @@ use Exception;
 use Nette\Security;
 use Nette\Utils\ArrayHash;
 
-class SetPasswordControl extends BaseControl
+class SetPassword extends BaseControl
 {
 
 	/** @var array */
@@ -32,10 +32,10 @@ class SetPasswordControl extends BaseControl
 		$form->setTranslator($this->translator);
 
 		if (!$this->presenterUser) {
-			throw new SetPasswordControlException('Must use method setUser(\Nette\Security\User)');
+			throw new SetPasswordException('Must use method setUser(\Nette\Security\User)');
 		}
 		if (!$this->presenterUser->loggedIn) {
-			throw new SetPasswordControlException('Only for logged users');
+			throw new SetPasswordException('Only for logged users');
 		}
 
 		$user = $this->presenterUser->identity;
@@ -90,14 +90,14 @@ class SetPasswordControl extends BaseControl
 
 }
 
-class SetPasswordControlException extends Exception
+class SetPasswordException extends Exception
 {
 	
 }
 
-interface ISetPasswordControlFactory
+interface ISetPasswordFactory
 {
 
-	/** @return SetPasswordControl */
+	/** @return SetPassword */
 	function create();
 }

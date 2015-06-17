@@ -7,7 +7,7 @@ class HomepagePresenter extends BasePresenter
 
 	public function actionDefault()
 	{
-		$this->showSlider = FALSE;
+		$this->showSlider = TRUE;
 		$this->showBrands = TRUE;
 //		$this->showSteps = FALSE;
 	}

@@ -13,7 +13,7 @@ use Kdyby\Facebook\FacebookApiException;
 use Nette\Utils\ArrayHash;
 use Tracy\Debugger;
 
-class FacebookControl extends BaseControl
+class FacebookConnect extends BaseControl
 {
 
 	/** @var array */
@@ -185,9 +185,9 @@ class FacebookControl extends BaseControl
 	// </editor-fold>
 }
 
-interface IFacebookControlFactory
+interface IFacebookConnectFactory
 {
 
-	/** @return FacebookControl */
+	/** @return FacebookConnect */
 	function create();
 }

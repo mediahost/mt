@@ -2,8 +2,8 @@
 
 namespace App\BaseModule\Presenters;
 
-use App\Components\Auth\ISignOutControlFactory;
-use App\Components\Auth\SignOutControl;
+use App\Components\Auth\ISignOutFactory;
+use App\Components\Auth\SignOut;
 use App\Extensions\Settings\Model\Service\DesignService;
 use App\Extensions\Settings\Model\Service\LanguageService;
 use App\Extensions\Settings\Model\Service\ModuleService;
@@ -46,8 +46,8 @@ abstract class BasePresenter extends Presenter
 	/** @var Exchange @inject */
 	public $exchange;
 
-	/** @var ISignOutControlFactory @inject */
-	public $iSignOutControlFactory;
+	/** @var ISignOutFactory @inject */
+	public $iSignOutFactory;
 
 	/** @var Gettext @inject */
 	public $translator;
@@ -198,9 +198,17 @@ abstract class BasePresenter extends Presenter
 
 		if (!$this->currency) {
 //			$this->currency = 'czk'|NULL; // TODO: load from user setting
-			$this->currency = $this->exchange->getDefault()->getCode();
 		}
 
+		if (!array_key_exists($this->currency, $this->exchange)) {
+			$this->currency = strlower($this->exchange->getDefault()->getCode());
+		}
+
+		$this->loadCurrencyRates();
+	}
+
+	private function loadCurrencyRates()
+	{
 		$rateRepo = $this->em->getRepository(Entity\Rate::getClassName());
 		$rates = $rateRepo->findPairs('value');
 
@@ -247,10 +255,10 @@ abstract class BasePresenter extends Presenter
 	// </editor-fold>
 	// <editor-fold desc="components">
 
-	/** @return SignOutControl */
+	/** @return SignOut */
 	public function createComponentSignOut()
 	{
-		return $this->iSignOutControlFactory->create();
+		return $this->iSignOutFactory->create();
 	}
 
 	// </editor-fold>
