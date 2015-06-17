@@ -1,23 +1,30 @@
 {block pageTitle}
-	{_'Categories'}
+{_'Categories'}
 {/block}
 
 {block breadcrumbItems}
 <li><span>{_'Categories'}</span></li>
-{/block}
+		{/block}
 
 {block content}
 <div class="row">
 	<div class="col-md-12">
-		<div class="portlet box">
-			<ul class="list-group">
-				<li class="list-group-item"
-					n:foreach="$categories as $category">{? $category->setCurrentLocale($lang)}
-					{$category->path|concat:' / '}
-					{if count($category->path)} / {/if}<b>{$category}</b>
-					| {$category->url} 
-				</li>
-			</ul>
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption font-green-sharp">
+					<i class="icon-notebook font-green-sharp"></i>
+					<span class="caption-subject">
+						{_'Organize categories'}
+					</span>
+				</div>
+				<div class="actions">
+					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div id="category_tree"></div>
+			</div>
 		</div>
 	</div>
 </div>

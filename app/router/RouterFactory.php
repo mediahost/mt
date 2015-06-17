@@ -38,10 +38,9 @@ class RouterFactory
 		// </editor-fold>
 		// <editor-fold desc="Ajax">
 
-		$ajaxRouter[] = new Route('ajax/<presenter>/<action>[/<id>]', [
+		$ajaxRouter[] = new Route('ajax/<presenter>/<action>', [
 			'presenter' => 'Default',
 			'action' => 'default',
-			'id' => NULL,
 		]);
 
 		// </editor-fold>
