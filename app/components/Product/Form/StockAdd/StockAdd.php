@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\Product;
+namespace App\Components\Product\Form;
 
 use App\Forms\Controls\TextInputBased\MetronicTextInputBase;
 use App\Forms\Form;
@@ -16,7 +16,7 @@ use Nette\Utils\ArrayHash;
 /**
  * Form ONLY for add stock
  */
-class StockAddControl extends StockBaseControl
+class StockAdd extends StockBase
 {
 	// <editor-fold desc="variables">
 
@@ -147,9 +147,9 @@ class StockAddControl extends StockBaseControl
 
 }
 
-interface IStockAddControlFactory
+interface IStockAddFactory
 {
 
-	/** @return StockAddControl */
+	/** @return StockAdd */
 	function create();
 }

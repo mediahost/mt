@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Components\Product;
+namespace App\Components\Product\Form;
 
 use App\Components\BaseControl;
 use App\Components\BaseControlException;
 use App\Model\Entity\Product;
 use App\Model\Entity\Stock;
 
-abstract class StockBaseControl extends BaseControl
+abstract class StockBase extends BaseControl
 {
 
 	/** @var Stock */
