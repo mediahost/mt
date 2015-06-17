@@ -7,6 +7,7 @@ var GlobalCustomInit = function () {
 			ComponentsFormTools.init();
 			ComponentsPickers.init();
 			Maps.init();
+			UITree.init();
 
 			GridoStart.init();
 			if (typeof MultipleFileUpload != 'undefined') {

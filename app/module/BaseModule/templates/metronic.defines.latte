@@ -23,6 +23,7 @@
 <link href="{$basePath}/assets/global/plugins/fancybox/source/jquery.fancybox.min.css" rel="stylesheet" type="text/css"/>
 <link href="{$basePath}/assets/global/plugins/carousel-owl-carousel/owl-carousel/owl.carousel.min.css" rel="stylesheet" type="text/css"/>
 <link href="{$basePath}/assets/global/plugins/slider-layer-slider/css/layerslider.min.css" rel="stylesheet" type="text/css"/>
+<link href="{$basePath}/assets/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet" type="text/css"/>
 <!-- END PAGE LEVEL PLUGIN STYLES -->
 <!-- BEGIN GLOBAL THEME STYLES -->
 <link href="{$basePath}/assets/global/css/components.css" rel="stylesheet" type="text/css"/>
@@ -97,6 +98,7 @@
 <script src="{$basePath}/assets/global/plugins/slider-layer-slider/js/greensock.js" type="text/javascript"></script>
 <script src="{$basePath}/assets/global/plugins/slider-layer-slider/js/layerslider.transitions.js" type="text/javascript"></script>
 <script src="{$basePath}/assets/global/plugins/slider-layer-slider/js/layerslider.kreaturamedia.jquery.js" type="text/javascript"></script>
+<script src="{$basePath}/assets/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script>
 {/define}
 
 {define jsAppPre}
@@ -106,7 +108,8 @@
 <!-- BEGIN CUSTOM SCRIPTS -->
 <script id="jsConf" type="text/json" n:syntax="double">
 	{
-		"basePath" : {{$basePath}}
+		"basePath" : {{$basePath}},
+		"lang" : {{$lang}}
 	}
 </script>
 <script src="{$basePath}/assets/global/scripts/config.js" type="text/javascript"></script>
@@ -133,6 +136,7 @@
 <script src="{$basePath}/assets/global/plugins/grido/js/grido.typeahead.js" type="text/javascript"></script>
 <script src="{$basePath}/assets/global/plugins/grido/js/grido.nette.ajax.js" type="text/javascript"></script>
 <script src="{$basePath}/assets/global/scripts/custom/grido.js" type="text/javascript"></script>
+<script src="{$basePath}/assets/global/scripts/custom/ui-tree.js" type="text/javascript"></script>
 <script src="{$basePath}/assets/global/scripts/custom-init.js" type="text/javascript"></script>
 <!-- end PREAPP -->
 {/define}

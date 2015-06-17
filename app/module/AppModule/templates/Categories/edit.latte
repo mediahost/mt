@@ -1,20 +1,25 @@
 {block pageTitle}
-{_'Categories'}
+	{_'Categories'}
 {/block}
 
 {block breadcrumbItems}
-<li><span>{_'Categories'}</span></li>
-		{/block}
+<li>
+	<a n:href="Categories:">{_'Categories'}</a>
+</li>
+<li>
+	<span>{_'Edit of %s', NULL, $category}</span>
+</li>
+{/block}
 
 {block content}
 <div class="row">
-	<div class="col-md-12">
+	<div class="col-md-8">
 		<div class="portlet light">
 			<div class="portlet-title">
 				<div class="caption font-green-sharp">
-					<i class="icon-notebook font-green-sharp"></i>
-					<span class="caption-subject">
-						{_'Organize categories'}
+					<i class="fa fa-edit font-green-sharp"></i>
+					<span class="caption-subject bold uppercase">
+						{$category}
 					</span>
 				</div>
 				<div class="actions">
@@ -22,8 +27,8 @@
 					</a>
 				</div>
 			</div>
-			<div class="portlet-body">
-				<div id="category_tree"></div>
+			<div class="portlet-body form">
+				{control categoryForm}
 			</div>
 		</div>
 	</div>

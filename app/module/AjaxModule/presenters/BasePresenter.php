@@ -48,9 +48,20 @@ abstract class BasePresenter extends BaseBasePresenter
 		return $this;
 	}
 
+	protected function addRawData($key, $value)
+	{
+		if ($key === NULL) {
+			$this->data[] = $value;
+		} else {
+			$this->data[$key] = $value;
+		}
+		
+		return $this;
+	}
+
 	protected function setError($message)
 	{
-		$this->data['error'] = $message;
+		$this->data['error'] = $this->translator->translate($message);
 		return $this;
 	}
 
