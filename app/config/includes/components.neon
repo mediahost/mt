@@ -13,69 +13,32 @@ services:
 	- {create: App\Components\Auth\Recovery, implement: App\Components\Auth\IRecoveryFactory, inject: yes}
 	- {create: App\Components\Auth\Required, implement: App\Components\Auth\IRequiredFactory, inject: yes}
 	- {create: App\Components\Auth\SetPassword, implement: App\Components\Auth\ISetPasswordFactory, inject: yes}
+
 	# User
-	IUserBasicControlFactory:
-		implement: App\Components\User\IUserBasicControlFactory
-		inject: yes
+	- {implement: App\Components\User\IUserBasicControlFactory, inject: yes}
 
 	# Stock
-	IStockAddControlFactory:
-		implement: App\Components\Product\IStockAddControlFactory
-		inject: yes
-
-	IStockBasicControlFactory:
-		implement: App\Components\Product\IStockBasicControlFactory
-		inject: yes
-
-	IStockPriceControlFactory:
-		implement: App\Components\Product\IStockPriceControlFactory
-		inject: yes
-
-	IStockQuantityControlFactory:
-		implement: App\Components\Product\IStockQuantityControlFactory
-		inject: yes
-
-	IStockCategoryControlFactory:
-		implement: App\Components\Product\IStockCategoryControlFactory
-		inject: yes
-
-	IStockSeoControlFactory:
-		implement: App\Components\Product\IStockSeoControlFactory
-		inject: yes
-
-	IStockImageControlFactory:
-		implement: App\Components\Product\IStockImageControlFactory
-		inject: yes
+	- {implement: App\Components\Product\IStockAddControlFactory, inject: yes}
+	- {implement: App\Components\Product\IStockBasicControlFactory, inject: yes}
+	- {implement: App\Components\Product\IStockPriceControlFactory, inject: yes}
+	- {implement: App\Components\Product\IStockQuantityControlFactory, inject: yes}
+	- {implement: App\Components\Product\IStockCategoryControlFactory, inject: yes}
+	- {implement: App\Components\Product\IStockSeoControlFactory, inject: yes}
+	- {implement: App\Components\Product\IStockImageControlFactory, inject: yes}
 
 	# Group
-	IGroupControlFactory:
-		implement: App\Components\Group\IGroupControlFactory
-		inject: yes
+	- {implement: App\Components\Group\IGroupControlFactory, inject: yes}
 
 	# Units
-	IUnitsControlFactory:
-		implement: App\Components\Unit\IUnitsControlFactory
-		inject: yes
+	- {implement: App\Components\Unit\IUnitsControlFactory, inject: yes}
 
 	# Rate
-	IRateFormFactory:
-		implement: App\Components\Currency\Form\IRateFactory
-		inject: yes
+	- {implement: App\Components\Currency\Form\IRateFactory, inject: yes}
 
 	# Example
-	IFormControlFactory:
-		implement: App\Components\Example\Form\IFormControlFactory
-		inject: yes
+	- {implement: App\Components\Example\Form\IFormControlFactory, inject: yes}
 
 	# Grids
-	IUsersGridFactory:
-		implement: App\Components\Grids\User\IUsersGridFactory
-		inject: yes
-
-	IStocksGridFactory:
-		implement: App\Components\Grids\Product\IStocksGridFactory
-		inject: yes
-
-	IGroupsGridFactory:
-		implement: App\Components\Grids\Group\IGroupsGridFactory
-		inject: yes
+	- {implement: App\Components\Grids\User\IUsersGridFactory, inject: yes}
+	- {implement: App\Components\Grids\Product\IStocksGridFactory, inject: yes}
+	- {implement: App\Components\Grids\Group\IGroupsGridFactory, inject: yes}
