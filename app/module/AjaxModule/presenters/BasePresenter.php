@@ -30,7 +30,20 @@ abstract class BasePresenter extends BaseBasePresenter
 		} else {
 			$this->template->data = Json::encode($this->data);
 		}
-		$this->setView('../data');
+		$this->setView('data');
+	}
+	
+	/**
+	 * Formats view template file names.
+	 * @return array
+	 */
+	public function formatTemplateFiles()
+	{
+		$dir = dirname($this->getReflection()->getFileName());
+		$dir = is_dir("$dir/templates") ? $dir : dirname($dir);
+		return array(
+			"$dir/templates/$this->view.latte",
+		);
 	}
 
 	protected function addData($key, $value, $remove = FALSE)
