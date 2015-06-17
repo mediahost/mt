@@ -53,11 +53,8 @@ class CategoryEdit extends BaseControl
 
 	private function load(ArrayHash $values)
 	{
-		if ($this->category->isNew()) {
-			$defaultLang = $this->languageService->defaultLanguage;
-			$this->category->translateAdd($defaultLang)->name = $values->name;
-		}
-		$this->category->translateAdd($this->lang)->name = $values->name;
+		$lang = $this->category->isNew() ? $this->languageService->defaultLanguage : $this->lang;
+		$this->category->translateAdd($lang)->name = $values->name;
 		$this->category->mergeNewTranslations();
 		return $this;
 	}
