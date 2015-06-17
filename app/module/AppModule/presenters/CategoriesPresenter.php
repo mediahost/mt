@@ -30,6 +30,18 @@ class CategoriesPresenter extends BasePresenter
 	/**
 	 * @secured
 	 * @resource('categories')
+	 * @privilege('add')
+	 */
+	public function actionAdd()
+	{
+		$this->category = new Category();
+		$this['categoryForm']->setCategory($this->category);
+		$this->setView('edit');
+	}
+
+	/**
+	 * @secured
+	 * @resource('categories')
 	 * @privilege('edit')
 	 */
 	public function actionEdit($id)

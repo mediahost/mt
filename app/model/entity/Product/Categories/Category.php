@@ -55,4 +55,9 @@ class Category extends BaseTranslatable
 		return (string) $this->name;
 	}
 
+	public function isNew()
+	{
+		return $this->id === NULL;
+	}
+
 }
