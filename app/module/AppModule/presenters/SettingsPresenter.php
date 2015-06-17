@@ -4,8 +4,8 @@ namespace App\AppModule\Presenters;
 
 use App\Components\Currency\Form\IRateFactory;
 use App\Components\Currency\Form\Rate;
-use App\Components\Unit\IUnitsControlFactory;
-use App\Components\Unit\UnitsControl;
+use App\Components\Unit\Form\IUnitsEditFactory;
+use App\Components\Unit\Form\UnitsEdit;
 use App\Model\Entity\Unit;
 use Kdyby\Doctrine\EntityRepository;
 
@@ -20,7 +20,7 @@ class SettingsPresenter extends BasePresenter
 	/** @var IRateFactory @inject */
 	public $iRateFormFactory;
 
-	/** @var IUnitsControlFactory @inject */
+	/** @var IUnitsEditFactory @inject */
 	public $iUnitControlFactory;
 
 	// </editor-fold>
@@ -64,7 +64,7 @@ class SettingsPresenter extends BasePresenter
 		return $control;
 	}
 
-	/** @return UnitsControl */
+	/** @return UnitsEdit */
 	public function createComponentUnitsForm()
 	{
 		$control = $this->iUnitControlFactory->create();

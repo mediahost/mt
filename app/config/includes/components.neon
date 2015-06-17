@@ -30,7 +30,7 @@ services:
 	- {implement: App\Components\Group\Form\IGroupEditFactory, inject: yes}
 
 	# Units
-	- {implement: App\Components\Unit\IUnitsControlFactory, inject: yes}
+	- {implement: App\Components\Unit\Form\IUnitsEditFactory, inject: yes}
 
 	# Rate
 	- {implement: App\Components\Currency\Form\IRateFactory, inject: yes}
