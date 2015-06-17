@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\Unit;
+namespace App\Components\Unit\Form;
 
 use App\Components\BaseControl;
 use App\Components\BaseControlException;
@@ -8,9 +8,8 @@ use App\Forms\Controls\TextInputBased\MetronicTextInputBase;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Unit;
-use Nette\Utils\ArrayHash;
 
-class UnitsControl extends BaseControl
+class UnitsEdit extends BaseControl
 {
 
 	/** @var array */
@@ -108,9 +107,9 @@ class UnitsControl extends BaseControl
 	// </editor-fold>
 }
 
-interface IUnitsControlFactory
+interface IUnitsEditFactory
 {
 
-	/** @return UnitsControl */
+	/** @return UnitsEdit */
 	function create();
 }
