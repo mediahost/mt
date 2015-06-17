@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\Grids\User;
+namespace App\Components\User\Grid;
 
 use App\Components\BaseControl;
 use App\Extensions\Grido\BaseGrid;
@@ -58,16 +58,16 @@ class UsersGrid extends BaseControl
 				});
 
 		$grid->addActionHref('access', 'Access')
-						->setIcon('fa fa-key')
-						->setDisable(function($item) {
-							return !$this->presenter->canAccess($this->identity, $item);
-						});
+				->setIcon('fa fa-key')
+				->setDisable(function($item) {
+					return !$this->presenter->canAccess($this->identity, $item);
+				});
 
 		$grid->addActionHref('edit', 'Edit')
-						->setIcon('fa fa-edit')
-						->setDisable(function($item) {
-							return !$this->presenter->canEdit($this->identity, $item);
-						});
+				->setIcon('fa fa-edit')
+				->setDisable(function($item) {
+					return !$this->presenter->canEdit($this->identity, $item);
+				});
 
 		$grid->addActionHref('delete', 'Delete')
 						->setIcon('fa fa-trash-o')
@@ -79,7 +79,7 @@ class UsersGrid extends BaseControl
 							return !$this->presenter->canDelete($this->identity, $item);
 						})
 				->elementPrototype->class[] = 'red';
-						
+
 		$grid->setActionWidth("20%");
 
 		$grid->setExport('users');

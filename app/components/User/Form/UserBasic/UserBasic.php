@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\User;
+namespace App\Components\User\Form;
 
 use App\Components\BaseControl;
 use App\Components\BaseControlException;
@@ -18,7 +18,7 @@ use Nette\Utils\ArrayHash;
 /**
  * Form with basic user data.
  */
-class UserBasicControl extends BaseControl
+class UserBasic extends BaseControl
 {
 
 	/** @var User */
@@ -172,9 +172,9 @@ class UserBasicControl extends BaseControl
 	// </editor-fold>
 }
 
-interface IUserBasicControlFactory
+interface IUserBasicFactory
 {
 
-	/** @return UserBasicControl */
+	/** @return UserBasic */
 	function create();
 }

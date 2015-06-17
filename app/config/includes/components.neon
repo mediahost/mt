@@ -15,7 +15,8 @@ services:
 	- {create: App\Components\Auth\SetPassword, implement: App\Components\Auth\ISetPasswordFactory, inject: yes}
 
 	# User
-	- {implement: App\Components\User\IUserBasicControlFactory, inject: yes}
+	- {implement: App\Components\User\Form\IUserBasicFactory, inject: yes}
+	- {implement: App\Components\User\Grid\IUsersGridFactory, inject: yes}
 
 	# Stock
 	- {implement: App\Components\Product\IStockAddControlFactory, inject: yes}
@@ -28,6 +29,7 @@ services:
 
 	# Group
 	- {implement: App\Components\Group\Form\IGroupEditFactory, inject: yes}
+	- {implement: App\Components\Group\Grid\IGroupsGridFactory, inject: yes}
 
 	# Units
 	- {implement: App\Components\Unit\Form\IUnitsEditFactory, inject: yes}
@@ -39,6 +41,4 @@ services:
 	- {implement: App\Components\Example\Form\IExampleFormFactory, inject: yes}
 
 	# Grids
-	- {implement: App\Components\Grids\User\IUsersGridFactory, inject: yes}
 	- {implement: App\Components\Grids\Product\IStocksGridFactory, inject: yes}
-	- {implement: App\Components\Group\Grid\IGroupsGridFactory, inject: yes}
