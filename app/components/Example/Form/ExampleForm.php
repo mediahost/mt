@@ -12,7 +12,7 @@ use App\Forms\Renderers\MetronicHorizontalFormRenderer;
 /**
  * Form with all items for test rendering
  */
-class FormControl extends BaseControl
+class ExampleForm extends BaseControl
 {
 	// <editor-fold desc="events">
 
@@ -108,9 +108,9 @@ class FormControl extends BaseControl
 
 }
 
-interface IFormControlFactory
+interface IExampleFormFactory
 {
 
-	/** @return FormControl */
+	/** @return ExampleForm */
 	function create();
 }

@@ -36,7 +36,7 @@ services:
 	- {implement: App\Components\Currency\Form\IRateFactory, inject: yes}
 
 	# Example
-	- {implement: App\Components\Example\Form\IFormControlFactory, inject: yes}
+	- {implement: App\Components\Example\Form\IExampleFormFactory, inject: yes}
 
 	# Grids
 	- {implement: App\Components\Grids\User\IUsersGridFactory, inject: yes}
