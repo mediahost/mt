@@ -201,7 +201,7 @@ abstract class BasePresenter extends Presenter
 		}
 
 		if (!array_key_exists($this->currency, $this->exchange)) {
-			$this->currency = strlower($this->exchange->getDefault()->getCode());
+			$this->currency = strtolower($this->exchange->getDefault()->getCode());
 		}
 
 		$this->loadCurrencyRates();
