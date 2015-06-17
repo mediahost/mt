@@ -6,8 +6,10 @@ use App\Forms\Controls\TextInputBased\MetronicTextInputBase;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Category;
+use App\Model\Entity\Producer;
 use App\Model\Entity\Stock;
 use App\Model\Facade\CategoryFacade;
+use App\Model\Facade\ProducerFacade;
 use Nette\Utils\ArrayHash;
 
 class StockCategory extends StockBase
@@ -16,6 +18,9 @@ class StockCategory extends StockBase
 
 	/** @var CategoryFacade @inject */
 	public $categoryFacade;
+
+	/** @var ProducerFacade @inject */
+	public $producerFacade;
 
 	// </editor-fold>
 
@@ -29,11 +34,16 @@ class StockCategory extends StockBase
 		$form->setRenderer(new MetronicFormRenderer);
 
 		$categories = $this->categoryFacade->getCategoriesList($this->lang);
+		$producers = $this->producerFacade->getProducersList($this->lang);
 
 		$form->addSelect2('main_category', 'Main category', $categories)
 						->setRequired('Select some category')
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XL;
 		$form->addMultiSelect2('categories', 'Other categories', $categories);
+
+		$form->addSelect2('producer', 'Producer', $producers)
+						->setPrompt('Select some producer')
+						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XL;
 
 		$form->addSubmit('save', 'Save');
 
@@ -55,6 +65,14 @@ class StockCategory extends StockBase
 		$category = $categoryRepo->find($values->main_category);
 		$this->stock->product->mainCategory = $category;
 
+		if ($values->producer) {
+			$producerRepo = $this->em->getRepository(Producer::getClassName());
+			$producer = $producerRepo->find($values->producer);
+			$this->stock->product->producer = $producer;
+		} else {
+			$this->stock->product->producer = NULL;
+		}
+
 		return $this;
 	}
 
@@ -70,6 +88,7 @@ class StockCategory extends StockBase
 	{
 		$values = [
 			'main_category' => $this->stock->product->mainCategory->id,
+			'producer' => $this->stock->product->producer ? $this->stock->product->producer->id : NULL,
 		];
 		return $values;
 	}
