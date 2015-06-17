@@ -1,5 +1,5 @@
 {block pageTitle}
-	{_'Categories'}
+{_'Categories'}
 {/block}
 
 {block breadcrumbItems}
@@ -7,7 +7,13 @@
 	<a n:href="Categories:">{_'Categories'}</a>
 </li>
 <li>
-	<span>{_'Edit of %s', NULL, $category}</span>
+	<span>
+		{if $category->isNew()}
+			{_'Add Main Category'}
+		{else}
+			{_'Edit of %s', NULL, $category}
+		{/if}
+	</span>
 </li>
 {/block}
 
@@ -19,7 +25,11 @@
 				<div class="caption font-green-sharp">
 					<i class="fa fa-edit font-green-sharp"></i>
 					<span class="caption-subject bold uppercase">
-						{$category}
+						{if $category->isNew()}
+							{_'New Main Category'}
+						{else}
+							{$category}
+						{/if}
 					</span>
 				</div>
 				<div class="actions">
