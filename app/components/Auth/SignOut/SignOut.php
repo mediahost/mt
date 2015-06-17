@@ -4,7 +4,7 @@ namespace App\Components\Auth;
 
 use App\Components\BaseControl;
 
-class SignOutControl extends BaseControl
+class SignOut extends BaseControl
 {
 
 	const REDIRECT_AFTER_LOGOUT = ':Front:Homepage:';
@@ -18,9 +18,9 @@ class SignOutControl extends BaseControl
 
 }
 
-interface ISignOutControlFactory
+interface ISignOutFactory
 {
 
-	/** @return SignOutControl */
+	/** @return SignOut */
 	function create();
 }

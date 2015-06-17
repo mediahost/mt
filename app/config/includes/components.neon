@@ -3,55 +3,16 @@
 
 services:
 	# Auth
-	ISignOutControlFactory:
-		implement: App\Components\Auth\ISignOutControlFactory
-		inject: yes
-
-	IConnectManagerControlFactory:
-		create: App\Components\Auth\ConnectManagerControl
-		implement: App\Components\Auth\IConnectManagerControlFactory
-		inject: yes
-
-	IForgottenControlFactory:
-		create: App\Components\Auth\ForgottenControl
-		implement: App\Components\Auth\IForgottenControlFactory
-		inject: yes
-
-	ISetPasswordControlFactory:
-		create: App\Components\Auth\SetPasswordControl
-		implement: App\Components\Auth\ISetPasswordControlFactory
-		inject: yes
-
-	IRecoveryControlFactory:
-		create: App\Components\Auth\RecoveryControl
-		implement: App\Components\Auth\IRecoveryControlFactory
-		inject: yes
-
-	IFacebookControlFactory:
-		create: App\Components\Auth\FacebookControl
-		implement: App\Components\Auth\IFacebookControlFactory
-		inject: yes
-
-	ITwitterControlFactory:
-		create: App\Components\Auth\TwitterControl
-		implement: App\Components\Auth\ITwitterControlFactory
-		inject: yes
-
-	IRequiredControlFactory:
-		create: App\Components\Auth\RequiredControl
-		implement: App\Components\Auth\IRequiredControlFactory
-		inject: yes
-
-	ISignInControlFactory:
-		create: App\Components\Auth\SignInControl
-		implement: App\Components\Auth\ISignInControlFactory
-		inject: yes
-
-	ISignUpControlFactory:
-		create: App\Components\Auth\SignUpControl
-		implement: App\Components\Auth\ISignUpControlFactory
-		inject: yes
-
+	- {create: App\Components\Auth\ConnectManager, implement: App\Components\Auth\IConnectManagerFactory, inject: yes}
+	- {create: App\Components\Auth\FacebookConnect, implement: App\Components\Auth\IFacebookConnectFactory, inject: yes}
+	- {create: App\Components\Auth\TwitterConnect, implement: App\Components\Auth\ITwitterConnectFactory, inject: yes}
+	- {create: App\Components\Auth\SignIn, implement: App\Components\Auth\ISignInFactory, inject: yes}
+	- {create: App\Components\Auth\SignUp, implement: App\Components\Auth\ISignUpFactory, inject: yes}
+	- {implement: App\Components\Auth\ISignOutFactory, inject: yes}
+	- {create: App\Components\Auth\Forgotten, implement: App\Components\Auth\IForgottenFactory, inject: yes}
+	- {create: App\Components\Auth\Recovery, implement: App\Components\Auth\IRecoveryFactory, inject: yes}
+	- {create: App\Components\Auth\Required, implement: App\Components\Auth\IRequiredFactory, inject: yes}
+	- {create: App\Components\Auth\SetPassword, implement: App\Components\Auth\ISetPasswordFactory, inject: yes}
 	# User
 	IUserBasicControlFactory:
 		implement: App\Components\User\IUserBasicControlFactory

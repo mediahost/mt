@@ -13,7 +13,7 @@ use App\TaggedString;
 use Nette\Forms\IControl;
 use Nette\Utils\ArrayHash;
 
-class SignUpControl extends BaseControl
+class SignUp extends BaseControl
 {
 	// <editor-fold desc="events">
 
@@ -23,11 +23,11 @@ class SignUpControl extends BaseControl
 	// </editor-fold>
 	// <editor-fold desc="injects">
 
-	/** @var IFacebookControlFactory @inject */
-	public $iFacebookControlFactory;
+	/** @var IFacebookConnectFactory @inject */
+	public $iFacebookConnectFactory;
 
-	/** @var ITwitterControlFactory @inject */
-	public $iTwitterControlFactory;
+	/** @var ITwitterConnectFactory @inject */
+	public $iTwitterConnectFactory;
 
 	/** @var UserFacade @inject */
 	public $userFacade;
@@ -108,24 +108,24 @@ class SignUpControl extends BaseControl
 
 	// <editor-fold desc="controls">
 
-	/** @return FacebookControl */
+	/** @return FacebookConnect */
 	protected function createComponentFacebook()
 	{
-		return $this->iFacebookControlFactory->create();
+		return $this->iFacebookConnectFactory->create();
 	}
 
-	/** @return TwitterControl */
+	/** @return TwitterConnect */
 	protected function createComponentTwitter()
 	{
-		return $this->iTwitterControlFactory->create();
+		return $this->iTwitterConnectFactory->create();
 	}
 
 	// </editor-fold>
 }
 
-interface ISignUpControlFactory
+interface ISignUpFactory
 {
 
-	/** @return SignUpControl */
+	/** @return SignUp */
 	function create();
 }

@@ -2,10 +2,10 @@
 
 namespace App\FrontModule\Presenters;
 
-use App\Components\Auth\ConnectManagerControl;
-use App\Components\Auth\IConnectManagerControlFactory;
-use App\Components\Auth\ISetPasswordControlFactory;
-use App\Components\Auth\SetPasswordControl;
+use App\Components\Auth\ConnectManager;
+use App\Components\Auth\IConnectManagerFactory;
+use App\Components\Auth\ISetPasswordFactory;
+use App\Components\Auth\SetPassword;
 use App\Model\Entity;
 use App\Model\Facade\CantDeleteUserException;
 use App\Model\Facade\UserFacade;
@@ -17,11 +17,11 @@ class MyAccountPresenter extends BasePresenter
 	/** @var UserFacade @inject */
 	public $userFacade;
 
-	/** @var ISetPasswordControlFactory @inject */
-	public $iSetPasswordControlFactory;
+	/** @var ISetPasswordFactory @inject */
+	public $iSetPasswordFactory;
 
-	/** @var IConnectManagerControlFactory @inject */
-	public $iConnectManagerControlFactory;
+	/** @var IConnectManagerFactory @inject */
+	public $iConnectManagerFactory;
 
 	/**
 	 * @secured
@@ -103,10 +103,10 @@ class MyAccountPresenter extends BasePresenter
 
 	// <editor-fold desc="components">
 
-	/** @return SetPasswordControl */
+	/** @return SetPassword */
 	protected function createComponentSetPassword()
 	{
-		$control = $this->iSetPasswordControlFactory->create();
+		$control = $this->iSetPasswordFactory->create();
 		$control->setUser($this->user);
 		$control->onSuccess[] = function () {
 			$this->flashMessage('Password has been successfuly set!', 'success');
@@ -115,11 +115,11 @@ class MyAccountPresenter extends BasePresenter
 		return $control;
 	}
 
-	/** @return ConnectManagerControl */
+	/** @return ConnectManager */
 	protected function createComponentConnect()
 	{
 		$userDao = $this->em->getDao(Entity\User::getClassName());
-		$control = $this->iConnectManagerControlFactory->create();
+		$control = $this->iConnectManagerFactory->create();
 		$control->setUser($userDao->find($this->user->id));
 		$control->setAppActivateRedirect($this->link('password'));
 		$control->onConnect[] = function ($type) {

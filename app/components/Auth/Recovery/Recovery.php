@@ -10,7 +10,7 @@ use App\Model\Facade\UserFacade;
 use App\TaggedString;
 use Nette\Utils\ArrayHash;
 
-class RecoveryControl extends BaseControl
+class Recovery extends BaseControl
 {
 
 	/** @var array */
@@ -81,9 +81,9 @@ class RecoveryControl extends BaseControl
 
 }
 
-interface IRecoveryControlFactory
+interface IRecoveryFactory
 {
 
-	/** @return RecoveryControl */
+	/** @return Recovery */
 	function create();
 }
