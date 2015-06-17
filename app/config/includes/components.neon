@@ -32,6 +32,10 @@ services:
 	- {implement: App\Components\Group\Form\IGroupEditFactory, inject: yes}
 	- {implement: App\Components\Group\Grid\IGroupsGridFactory, inject: yes}
 
+	# Producers
+	- {implement: App\Components\Producer\Form\IProducerEditFactory, inject: yes}
+	- {implement: App\Components\Producer\Grid\IProducersGridFactory, inject: yes}
+
 	# Units
 	- {implement: App\Components\Unit\Form\IUnitsEditFactory, inject: yes}
 

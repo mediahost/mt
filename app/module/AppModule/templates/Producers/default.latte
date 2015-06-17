@@ -1,0 +1,31 @@
+{block pageTitle}
+	{_'Producers'}
+{/block}
+
+{block breadcrumbItems}
+<li><span>{_'Producers'}</span></li>
+{/block}
+
+{block content}
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-users"></i>
+					<span class="caption-subject bold uppercase">{_'Producers'}</span>
+				</div>
+				<div class="actions">
+					<a n:href="Producers:add" class="btn btn-circle green-sharp">
+						<i class="fa fa-plus"></i> {_'Add Producer'}
+					</a>
+					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body">
+				{control producersGrid}
+			</div>
+		</div>
+	</div>
+</div>

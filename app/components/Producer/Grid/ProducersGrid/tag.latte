@@ -1,0 +1,17 @@
+{if $item->roles}
+    {foreach $item->roles as $role}
+        {if $role == 'signed'}
+            {var $color = 'label-info'}
+        {elseif $role == 'user'}
+            {var $color = 'label-primary'}
+        {elseif $role == 'admin'}
+            {var $color = 'label-warning'}
+        {elseif $role == 'superadmin'}
+            {var $color = 'label-danger'}
+        {else}
+            {var $color = 'label-default'}
+        {/if}
+
+        <span class="label {$color}">{$role}</span>
+    {/foreach}
+{/if}
