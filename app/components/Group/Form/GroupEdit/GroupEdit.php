@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\Group;
+namespace App\Components\Group\Form;
 
 use App\Components\BaseControl;
 use App\Components\BaseControlException;
@@ -9,7 +9,7 @@ use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Group;
 use Nette\Utils\ArrayHash;
 
-class GroupControl extends BaseControl
+class GroupEdit extends BaseControl
 {
 
 	/** @var Group */
@@ -88,9 +88,9 @@ class GroupControl extends BaseControl
 	// </editor-fold>
 }
 
-interface IGroupControlFactory
+interface IGroupEditFactory
 {
 
-	/** @return GroupControl */
+	/** @return GroupEdit */
 	function create();
 }

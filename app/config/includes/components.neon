@@ -27,7 +27,7 @@ services:
 	- {implement: App\Components\Product\IStockImageControlFactory, inject: yes}
 
 	# Group
-	- {implement: App\Components\Group\IGroupControlFactory, inject: yes}
+	- {implement: App\Components\Group\Form\IGroupEditFactory, inject: yes}
 
 	# Units
 	- {implement: App\Components\Unit\IUnitsControlFactory, inject: yes}
@@ -41,4 +41,4 @@ services:
 	# Grids
 	- {implement: App\Components\Grids\User\IUsersGridFactory, inject: yes}
 	- {implement: App\Components\Grids\Product\IStocksGridFactory, inject: yes}
-	- {implement: App\Components\Grids\Group\IGroupsGridFactory, inject: yes}
+	- {implement: App\Components\Group\Grid\IGroupsGridFactory, inject: yes}

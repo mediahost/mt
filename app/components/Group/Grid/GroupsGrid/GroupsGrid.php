@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Components\Grids\Group;
+namespace App\Components\Group\Grid;
 
 use App\Components\BaseControl;
 use App\Extensions\Grido\BaseGrid;
-use App\Helpers;
 use App\Model\Entity\Group;
 use Grido\DataSources\Doctrine;
 use Grido\Grid;
@@ -38,7 +37,7 @@ class GroupsGrid extends BaseControl
 				->setSuggestion();
 
 		$grid->addActionHref('edit', 'Edit')
-						->setIcon('fa fa-edit');
+				->setIcon('fa fa-edit');
 
 		$grid->addActionHref('delete', 'Delete')
 						->setIcon('fa fa-trash-o')
@@ -47,7 +46,7 @@ class GroupsGrid extends BaseControl
 							return sprintf($message, (string) $item);
 						})
 				->elementPrototype->class[] = 'red';
-						
+
 		$grid->setActionWidth("20%");
 
 		return $grid;

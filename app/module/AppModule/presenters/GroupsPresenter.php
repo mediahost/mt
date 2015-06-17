@@ -2,10 +2,10 @@
 
 namespace App\AppModule\Presenters;
 
-use App\Components\Grids\Group\GroupsGrid;
-use App\Components\Grids\Group\IGroupsGridFactory;
-use App\Components\Group\GroupControl;
-use App\Components\Group\IGroupControlFactory;
+use App\Components\Group\Grid\GroupsGrid;
+use App\Components\Group\Grid\IGroupsGridFactory;
+use App\Components\Group\Form\GroupEdit;
+use App\Components\Group\Form\IGroupEditFactory;
 use App\Model\Entity\Group;
 use App\TaggedString;
 use Exception;
@@ -22,8 +22,8 @@ class GroupsPresenter extends BasePresenter
 
 	// <editor-fold desc="injects">
 
-	/** @var IGroupControlFactory @inject */
-	public $iGroupControlFactory;
+	/** @var IGroupEditFactory @inject */
+	public $iGroupEditFactory;
 
 	/** @var IGroupsGridFactory @inject */
 	public $iGroupsGridFactory;
@@ -102,10 +102,10 @@ class GroupsPresenter extends BasePresenter
 
 	// <editor-fold desc="forms">
 
-	/** @return GroupControl */
+	/** @return GroupEdit */
 	public function createComponentGroupForm()
 	{
-		$control = $this->iGroupControlFactory->create();
+		$control = $this->iGroupEditFactory->create();
 		$control->onAfterSave = function (Group $savedGroup) {
 			$message = new TaggedString('Group \'%s\' was successfully saved.', (string) $savedGroup);
 			$this->flashMessage($message, 'success');
