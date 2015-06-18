@@ -39,7 +39,7 @@ class StockCategory extends StockBase
 		$form->addSelect2('main_category', 'Main category', $categories)
 						->setRequired('Select some category')
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XL;
-		$form->addMultiSelect2('categories', 'Other categories', $categories);
+		$form->addMultiSelect2('categories', 'All categories', $categories);
 
 		$form->addSelect2('producer', 'Producer', $producers)
 						->setPrompt('Select some producer')
@@ -62,16 +62,22 @@ class StockCategory extends StockBase
 	private function load(ArrayHash $values)
 	{
 		$categoryRepo = $this->em->getRepository(Category::getClassName());
-		$category = $categoryRepo->find($values->main_category);
-		$this->stock->product->mainCategory = $category;
-
+		$mainCategory = $categoryRepo->find($values->main_category);
+		$this->stock->product->mainCategory = $mainCategory;
+		
+		$otherCategories = [];
+		foreach ($values->categories as $categoryId) {
+			$otherCategories[] = $categoryRepo->find($categoryId);
+		}
+		$this->stock->product->setCategories($otherCategories, $mainCategory);
+		
 		if ($values->producer) {
 			$producerRepo = $this->em->getRepository(Producer::getClassName());
 			$producer = $producerRepo->find($values->producer);
 			$this->stock->product->producer = $producer;
 		} else {
 			$this->stock->product->producer = NULL;
-		}
+		}		
 
 		return $this;
 	}
@@ -90,6 +96,9 @@ class StockCategory extends StockBase
 			'main_category' => $this->stock->product->mainCategory->id,
 			'producer' => $this->stock->product->producer ? $this->stock->product->producer->id : NULL,
 		];
+		foreach ($this->stock->product->categories as $category) {
+			$values['categories'][] = $category->id;
+		}
 		return $values;
 	}
 
