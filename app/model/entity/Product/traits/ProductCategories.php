@@ -26,29 +26,41 @@ trait ProductCategories
 	{
 		$this->mainCategory = $category;
 		$this->addCategory($category);
-		foreach ($category->parents as $parent) {
-			$this->addCategory($parent);
-		}
 	}
 
-	public function setCategories(array $categories)
+	public function setCategories(array $categories, Category $mainCategory = NULL)
 	{
-		$removeIdles = function ($key, Category $category) use ($categories) {
-			if (!in_array($category, $categories, TRUE)) {
+		$dontDeleteCategories = $categories;
+		if ($mainCategory) {
+			$dontDeleteCategories[] = $mainCategory;
+		}
+		$removeIdles = function ($key, Category $category) use ($dontDeleteCategories) {
+			if (!in_array($category, $dontDeleteCategories, TRUE)) {
 				$this->removeCategory($category);
 			}
 			return TRUE;
 		};
 		$this->categories->forAll($removeIdles);
+		
+		if ($mainCategory) {
+			$this->setMainCategory($mainCategory);
+		}
 		foreach ($categories as $category) {
-			$this->addCategory($category);
+			if ($category instanceof Category) {
+				$this->addCategory($category);
+			}
 		}
 		return $this;
 	}
 
+	public function clearCategories()
+	{
+		return $this->categories->clear();
+	}
+
 	public function addCategory(Category $category)
 	{
-		if (!$this->categories->contains($this->mainCategory)) {
+		if (!$this->mainCategory) {
 			$this->mainCategory = $category;
 		}
 		if (!$this->categories->contains($category)) {

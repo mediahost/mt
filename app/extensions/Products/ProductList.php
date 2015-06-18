@@ -351,15 +351,16 @@ class ProductList extends Control
 		return $this;
 	}
 
-	protected function filterByCategory(array $category)
+	protected function filterByCategory($category)
 	{
+		$this->qb->innerJoin('p.categories', 'categories');
 		if (is_array($category)) {
 			$this->qb
-					->andWhere('p.mainCategory IN (:categories)')
+					->andWhere('categories IN (:categories)')
 					->setParameter('categories', $category);
 		} else if ($category instanceof Category) {
 			$this->qb
-					->andWhere('p.mainCategory = :category')
+					->andWhere('categories = :category')
 					->setParameter('category', $category);
 		}
 		return $this;
