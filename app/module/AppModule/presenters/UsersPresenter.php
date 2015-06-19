@@ -79,7 +79,7 @@ class UsersPresenter extends BasePresenter
 	{
 		$this->userEntity = $this->userRepo->find($id);
 		if (!$this->userEntity) {
-			$this->flashMessage('This user wasn\'t found.', 'error');
+			$this->flashMessage('This user wasn\'t found.', 'warning');
 			$this->redirect('default');
 		} else if (!$this->canEdit($this->user, $this->userEntity)) {
 			$this->flashMessage('You can\'t edit this user.', 'danger');

@@ -67,7 +67,7 @@ class ProducersPresenter extends BasePresenter
 	{
 		$this->producerEntity = $this->producerRepo->find($id);
 		if (!$this->producerEntity) {
-			$this->flashMessage('This producer wasn\'t found.', 'error');
+			$this->flashMessage('This producer wasn\'t found.', 'warning');
 			$this->redirect('default');
 		} else {
 			$this['producerForm']->setProducer($this->producerEntity);
