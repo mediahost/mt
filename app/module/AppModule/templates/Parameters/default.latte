@@ -1,21 +1,44 @@
 {block pageTitle}
-	{_'Parameters'}
+{_'Parameters'}
 {/block}
 
 {block breadcrumbItems}
 <li><span>{_'Parameters'}</span></li>
-{/block}
+		{/block}
 
 {block content}
 <div class="row">
 	<div class="col-md-12">
-		<div class="portlet box">
-			<ul class="list-group">
-				<li class="list-group-item"
-					n:foreach="$parameters as $parameter">
-					{$parameter} 
-				</li>
-			</ul>
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-list"></i>
+					<span class="caption-subject bold uppercase">{_'Parameters'}</span>
+				</div>
+				<div class="actions">
+					<div class="btn-group">
+						<a class="btn btn-circle green-sharp" n:href="this" data-toggle="dropdown" aria-expanded="false">
+							<i class="fa fa-plus"></i> {_'Add Parameter'} <i class="fa fa-angle-down"></i>
+						</a>
+						<ul class="dropdown-menu pull-right">
+							<li>
+								<a n:href="add, type => App\Model\Entity\Parameter::STRING">{_'String'}</a>
+							</li>
+							<li>
+								<a n:href="add, type => App\Model\Entity\Parameter::INTEGER">{_'Number'}</a>
+							</li>
+							<li>
+								<a n:href="add, type => App\Model\Entity\Parameter::BOOLEAN">{_'YES or NO'}</a>
+							</li>
+						</ul>
+					</div>
+					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body">
+				{control parametersGrid}
+			</div>
 		</div>
 	</div>
 </div>

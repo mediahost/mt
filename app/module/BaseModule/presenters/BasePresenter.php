@@ -11,6 +11,7 @@ use App\Extensions\Settings\Model\Service\PageConfigService;
 use App\Extensions\Settings\Model\Service\PageInfoService;
 use App\Extensions\Settings\Model\Storage\DefaultSettingsStorage;
 use App\Model\Entity;
+use App\Model\Facade\ParameterFacade;
 use App\Model\Facade\StockFacade;
 use App\Model\Facade\UserFacade;
 use App\TaggedString;
@@ -78,6 +79,9 @@ abstract class BasePresenter extends Presenter
 
 	/** @var StockFacade @inject */
 	public $stockFacade;
+
+	/** @var ParameterFacade @inject */
+	public $parameterFacade;
 
 	// </editor-fold>
 

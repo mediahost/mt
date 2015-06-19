@@ -58,10 +58,9 @@ class StockBasic extends StockBase
 		$this->stock->barcode = $values->barcode;
 		$this->stock->active = $values->active;
 
-		$this->stock->product->setCurrentLocale($this->lang);
-		$this->stock->product->name = $values->name;
-		$this->stock->product->perex = $values->perex;
-		$this->stock->product->description = $values->description;
+		$this->stock->product->translateAdd($this->lang)->name = $values->name;
+		$this->stock->product->translateAdd($this->lang)->perex = $values->perex;
+		$this->stock->product->translateAdd($this->lang)->description = $values->description;
 		$this->stock->product->mergeNewTranslations();
 		$this->stock->product->active = $values->active;
 

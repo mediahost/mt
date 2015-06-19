@@ -45,5 +45,10 @@ services:
 	# Rate
 	- {implement: App\Components\Currency\Form\IRateFactory, inject: yes}
 
+	# Parameters
+	- {implement: App\Components\Parameter\Form\IParameterAddFactory, inject: yes}
+	- {implement: App\Components\Parameter\Form\IParameterEditFactory, inject: yes}
+	- {implement: App\Components\Parameter\Grid\IParametersGridFactory, inject: yes}
+
 	# Example
 	- {implement: App\Components\Example\Form\IExampleFormFactory, inject: yes}

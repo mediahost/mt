@@ -54,11 +54,11 @@ class StockSeo extends StockBase
 		$this->stock->product->setCurrentLocale($this->lang);
 		$expectedSlug = Strings::webalize($this->stock->product->name);
 		if ($values->url && $values->url !== $expectedSlug) {
-			$this->stock->product->slug = $values->url;
+			$this->stock->product->translateAdd($this->lang)->slug = $values->url;
 		}
-		$this->stock->product->seo->name = $values->title;
-		$this->stock->product->perex = $values->perex;
-		$this->stock->product->description = $values->description;
+		$this->stock->product->translateAdd($this->lang)->seo->name = $values->title;
+		$this->stock->product->translateAdd($this->lang)->seo->keywords = $values->keywords;
+		$this->stock->product->translateAdd($this->lang)->seo->description = $values->description;
 		$this->stock->product->mergeNewTranslations();
 
 		return $this;

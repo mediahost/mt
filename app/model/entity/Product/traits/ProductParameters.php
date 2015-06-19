@@ -3,7 +3,9 @@
 namespace App\Model\Entity\Traits;
 
 use App\Model\Entity\Parameter;
-use App\Model\Entity\Tag;
+use App\Model\Entity\Product;
+use Nette\MemberAccessException;
+use Nette\Reflection\ClassType;
 
 /**
  * @property array $tags
@@ -12,104 +14,162 @@ use App\Model\Entity\Tag;
  */
 trait ProductParameters
 {
+	// <editor-fold defaultstate="collapsed" desc="Strings">
 
-	/** @ORM\OneToMany(targetEntity="Parameter", mappedBy="product") */
-	protected $parameters;
+	/** @ORM\Column(type="string", nullable=true) */
+	private $parameterS1;
 
-	/** @ORM\ManyToMany(targetEntity="Tag", inversedBy="products") */
-	protected $tags;
-	
-	public function setParameters(array $parameters)
+	/** @ORM\Column(type="string", nullable=true) */
+	private $parameterS2;
+
+	/** @ORM\Column(type="string", nullable=true) */
+	private $parameterS3;
+
+	/** @ORM\Column(type="string", nullable=true) */
+	private $parameterS4;
+
+	/** @ORM\Column(type="string", nullable=true) */
+	private $parameterS5;
+
+	/** @ORM\Column(type="string", nullable=true) */
+	private $parameterS6;
+
+	/** @ORM\Column(type="string", nullable=true) */
+	private $parameterS7;
+
+	/** @ORM\Column(type="string", nullable=true) */
+	private $parameterS8;
+
+	/** @ORM\Column(type="string", nullable=true) */
+	private $parameterS9;
+
+	/** @ORM\Column(type="string", nullable=true) */
+	private $parameterS10;
+
+	// </editor-fold>
+	// <editor-fold defaultstate="collapsed" desc="Integers">
+
+	/** @ORM\Column(type="integer", nullable=true) */
+	private $parameterN1;
+
+	/** @ORM\Column(type="integer", nullable=true) */
+	private $parameterN2;
+
+	/** @ORM\Column(type="integer", nullable=true) */
+	private $parameterN3;
+
+	/** @ORM\Column(type="integer", nullable=true) */
+	private $parameterN4;
+
+	/** @ORM\Column(type="integer", nullable=true) */
+	private $parameterN5;
+
+	/** @ORM\Column(type="integer", nullable=true) */
+	private $parameterN6;
+
+	/** @ORM\Column(type="integer", nullable=true) */
+	private $parameterN7;
+
+	/** @ORM\Column(type="integer", nullable=true) */
+	private $parameterN8;
+
+	/** @ORM\Column(type="integer", nullable=true) */
+	private $parameterN9;
+
+	/** @ORM\Column(type="integer", nullable=true) */
+	private $parameterN10;
+
+	// </editor-fold>
+	// <editor-fold defaultstate="collapsed" desc="Booleans">
+
+	/** @ORM\Column(type="boolean", nullable=true) */
+	private $parameterB1;
+
+	/** @ORM\Column(type="boolean", nullable=true) */
+	private $parameterB2;
+
+	/** @ORM\Column(type="boolean", nullable=true) */
+	private $parameterB3;
+
+	/** @ORM\Column(type="boolean", nullable=true) */
+	private $parameterB4;
+
+	/** @ORM\Column(type="boolean", nullable=true) */
+	private $parameterB5;
+
+	/** @ORM\Column(type="boolean", nullable=true) */
+	private $parameterB6;
+
+	/** @ORM\Column(type="boolean", nullable=true) */
+	private $parameterB7;
+
+	/** @ORM\Column(type="boolean", nullable=true) */
+	private $parameterB8;
+
+	/** @ORM\Column(type="boolean", nullable=true) */
+	private $parameterB9;
+
+	/** @ORM\Column(type="boolean", nullable=true) */
+	private $parameterB10;
+
+	// </editor-fold>
+
+	public function setParameter($type, $value = NULL)
 	{
-		$removeIdles = function ($key, Parameter $parameter) use ($parameters) {
-			if (!in_array($parameter, $parameters, TRUE)) {
-				$this->removeTag($parameter);
+		$propertyName = 'parameter' . $type;
+		if (property_exists($this, $propertyName)) {
+			if (preg_match('/^' . Parameter::STRING . '/', $type)) {
+				$this->$propertyName = (string) $value;
+			} else if (preg_match('/^' . Parameter::INTEGER . '/', $type)) {
+				$this->$propertyName = (int) $value;
+			} else if (preg_match('/^' . Parameter::BOOLEAN . '/', $type)) {
+				$this->$propertyName = (bool) $value;
 			}
-			return TRUE;
-		};
-		$this->parameters->forAll($removeIdles);
-		foreach ($parameters as $parameter) {
-			$this->addParameter($parameter);
+		}
+	}
+
+	public function getParameter($type)
+	{
+		$propertyName = 'parameter' . $type;
+		if (property_exists($this, $propertyName)) {
+			return $this->$propertyName;
+		} else {
+			$class = get_class($this);
+			return new MemberAccessException("Cannot read an undeclared property $class::\$$propertyName.");
+		}
+	}
+
+	public function clearParameters()
+	{
+		foreach (self::getParameterProperties() as $property) {
+			$this->$property = NULL;
 		}
 		return $this;
 	}
 
-	public function addParameter(Parameter $parameter)
+	public function &__get($name)
 	{
-		if (!$this->parameters->contains($parameter)) {
-			$parameter->product = $this;
-			$this->parameters->add($parameter);
+		$types = Parameter::STRING;
+		$types .= '|' . Parameter::INTEGER;
+		$types .= '|' . Parameter::BOOLEAN;
+		if (preg_match('/^parameter([' . $types . ']\d+)$/', $name, $matches)) {
+			$value = $this->getParameter($matches[1]);
+			return $value;
+		} else {
+			return parent::__get($name);
 		}
-		return $this;
 	}
 
-	public function removeParameter(Parameter $parameter)
+	public static function getParameterProperties()
 	{
-		return $this->parameters->removeElement($parameter);
-	}
-	
-	public function getTags()
-	{
-		$onlyTags = function (Tag $tag) {
-			return $tag->type === Tag::TYPE_TAG;
-		};
-		return $this->tags->filter($onlyTags);
-	}
-	
-	public function getSigns()
-	{
-		$onlyTags = function (Tag $tag) {
-			return $tag->type === Tag::TYPE_SIGN;
-		};
-		return $this->tags->filter($onlyTags);
-	}
-	
-	protected function setTagsOrSigns(array $tags, $type = Tag::TYPE_TAG)
-	{
-		$removeIdles = function ($key, Tag $tag) use ($tags, $type) {
-			if ($tag->type === $type && !in_array($tag, $tags, TRUE)) {
-				$this->removeTag($tag);
+		$properties = [];
+		$reflection = new ClassType(Product::getClassName());
+		foreach ($reflection->properties as $property) {
+			if (preg_match('/^parameter\w\d+$/', $property->name)) {
+				$properties[] = $property;
 			}
-			return TRUE;
-		};
-		$this->tags->forAll($removeIdles);
-		foreach ($tags as $tag) {
-			$this->addTag($tag);
 		}
-		return $this;
-	}
-	
-	public function setTags(array $tags)
-	{
-		return $this->setTagsOrSigns($tags, Tag::TYPE_TAG);
-	}
-	
-	public function setSigns(array $signs)
-	{
-		return $this->setTagsOrSigns($signs, Tag::TYPE_SIGN);
-	}
-
-	public function addTag(Tag $tag)
-	{
-		if (!$this->tags->contains($tag)) {
-			$this->tags->add($tag);
-		}
-		return $this;
-	}
-
-	public function addSign(Tag $sign)
-	{
-		return $this->addTag($sign);
-	}
-
-	public function removeTag(Tag $tag)
-	{
-		return $this->tags->removeElement($tag);
-	}
-
-	public function removeSign(Tag $sign)
-	{
-		return $this->removeTag($sign);
+		return $properties;
 	}
 
 }
