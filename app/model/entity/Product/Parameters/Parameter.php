@@ -9,6 +9,8 @@ use Knp\DoctrineBehaviors\Model;
  * @ORM\Entity(repositoryClass="App\Model\Repository\ParameterRepository")
  *
  * @property string $name
+ * @property string $code
+ * @property string $type
  */
 class Parameter extends BaseTranslatable
 {
@@ -21,36 +23,51 @@ class Parameter extends BaseTranslatable
 	use Model\Translatable\Translatable;
 
 	/** @ORM\Column(type="string", length=5) */
-	protected $type;
+	protected $code;
 
 	/** @var array */
-	private $types = [];
+	private $codes = [];
 
 	public function __construct($type, $name = NULL, $currentLocale = NULL)
 	{
-		$this->setType($type);
+		$this->setCode($type);
 		parent::__construct($currentLocale);
 		if ($name) {
 			$this->name = $name;
 		}
 	}
 
-	public function setType($type)
+	public function setCode($code)
 	{
-		$types = $this->getTypes();
-		if (in_array($type, $types)) {
-			$this->type = $type;
+		$types = $this->getCodes();
+		if (in_array($code, $types)) {
+			$this->code = $code;
 		} else {
-			throw new EntityException('Parameter of type ' . $type . ' isn\'t supported by ' . Product::getClassName() . ' entity.');
+			throw new EntityException('Parameter with code ' . $code . ' isn\'t supported by ' . Product::getClassName() . ' entity.');
 		}
 	}
 
-	public function getTypes()
+	public function getCodes()
 	{
-		if (!count($this->types)) {
-			$this->types = self::getProductTypes();
+		if (!count($this->codes)) {
+			$this->codes = self::getProductCodes();
 		}
-		return $this->types;
+		return $this->codes;
+	}
+
+	public function getType()
+	{
+		if (preg_match('/^(\w)\d+$/', $this->code, $matches)) {
+			switch ($matches[1]) {
+				case self::STRING:
+				case self::INTEGER:
+				case self::BOOLEAN:
+					return $matches[1];
+				default:
+					return NULL;
+			}
+		}
+		return NULL;
 	}
 
 	public function __toString()
@@ -58,15 +75,42 @@ class Parameter extends BaseTranslatable
 		return (string) $this->name;
 	}
 
-	public static function getProductTypes()
+	public static function getProductCodes()
+	{
+		$codes = [];
+		foreach (Product::getParameterProperties() as $property) {
+			$codes[] = $property->code;
+		}
+		return $codes;
+	}
+
+	public static function getProductTypesWithCodes()
 	{
 		$types = [];
 		foreach (Product::getParameterProperties() as $property) {
-			if (preg_match('/^parameter(\w\d+)$/', $property->name, $matches)) {
-				$types[] = $matches[1];
-			}
+			/* @var $property ParameterProperty */
+			$types[$property->type][$property->order] = $property->code;
 		}
 		return $types;
+	}
+
+	public static function getAllowedTypes()
+	{
+		return [
+			self::STRING,
+			self::INTEGER,
+			self::BOOLEAN,
+		];
+	}
+
+	public static function checkCodeHasType($code, $type)
+	{
+		if (!in_array($type, self::getAllowedTypes())) {
+			return FALSE;
+		}
+		$regexpPrefix = '/^';
+		$regexpSuffix = '\d+$/';
+		return preg_match($regexpPrefix . $type . $regexpSuffix, $code);
 	}
 
 }

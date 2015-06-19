@@ -23,35 +23,24 @@ class ParameterFacade extends Object
 	{
 		$this->em = $em;
 		$this->paramRepo = $this->em->getRepository(Parameter::getClassName());
-		$this->allowedParameterTypes = $this->parametersToArray(Parameter::getProductTypes());
+		$this->allowedParameterTypes = Parameter::getProductTypesWithCodes();
 	}
 
-	public function getLastUnusedNumber($type)
+	public function getLastUnusedCode($type)
 	{
 		if (array_key_exists($type, $this->allowedParameterTypes)) {
-			foreach ($this->allowedParameterTypes[$type] as $number) {
-				if ($this->isUnused($type . $number)) {
-					return $number;
+			foreach ($this->allowedParameterTypes[$type] as $number => $code) {
+				if ($this->isUnused($code)) {
+					return $code;
 				}
 			}
 		}
 		return NULL;
 	}
 	
-	private function isUnused($param)
+	private function isUnused($code)
 	{
-		return (bool) ($this->paramRepo->findOneBy(['type' => $param]) === NULL);
-	}
-	
-	private function parametersToArray($parameters)
-	{
-		$array = [];
-		foreach ($parameters as $parameter) {
-			if (preg_match('/^(\w)(\d+)$/', $parameter, $matches)) {
-				$array[$matches[1]][] = $matches[2];
-			}
-		}
-		return $array;
+		return (bool) ($this->paramRepo->findOneBy(['code' => $code]) === NULL);
 	}
 
 }

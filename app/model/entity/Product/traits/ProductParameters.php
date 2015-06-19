@@ -2,16 +2,14 @@
 
 namespace App\Model\Entity\Traits;
 
+use App\Helpers;
+use App\Model\Entity\EntityException;
 use App\Model\Entity\Parameter;
+use App\Model\Entity\ParameterProperty;
 use App\Model\Entity\Product;
 use Nette\MemberAccessException;
 use Nette\Reflection\ClassType;
 
-/**
- * @property array $tags
- * @property array $signs
- * @property array $parameters
- */
 trait ProductParameters
 {
 	// <editor-fold defaultstate="collapsed" desc="Strings">
@@ -114,23 +112,25 @@ trait ProductParameters
 
 	// </editor-fold>
 
-	public function setParameter($type, $value = NULL)
+	public function setParameter($code, $value = NULL)
 	{
-		$propertyName = 'parameter' . $type;
+		$propertyName = 'parameter' . $code;
 		if (property_exists($this, $propertyName)) {
-			if (preg_match('/^' . Parameter::STRING . '/', $type)) {
+			if (Parameter::checkCodeHasType($code, Parameter::STRING)) {
 				$this->$propertyName = (string) $value;
-			} else if (preg_match('/^' . Parameter::INTEGER . '/', $type)) {
+			} else if (Parameter::checkCodeHasType($code, Parameter::INTEGER)) {
 				$this->$propertyName = (int) $value;
-			} else if (preg_match('/^' . Parameter::BOOLEAN . '/', $type)) {
+			} else if (Parameter::checkCodeHasType($code, Parameter::BOOLEAN)) {
 				$this->$propertyName = (bool) $value;
+			} else {
+				throw new EntityException('For this parameter we have no method to process');
 			}
 		}
 	}
 
-	public function getParameter($type)
+	public function getParameter($code)
 	{
-		$propertyName = 'parameter' . $type;
+		$propertyName = 'parameter' . $code;
 		if (property_exists($this, $propertyName)) {
 			return $this->$propertyName;
 		} else {
@@ -139,9 +139,9 @@ trait ProductParameters
 		}
 	}
 
-	public function clearParameters()
+	public function clearParameters($type = NULL)
 	{
-		foreach (self::getParameterProperties() as $property) {
+		foreach (self::getParameterProperties($type = NULL) as $property) {
 			$this->$property = NULL;
 		}
 		return $this;
@@ -149,9 +149,7 @@ trait ProductParameters
 
 	public function &__get($name)
 	{
-		$types = Parameter::STRING;
-		$types .= '|' . Parameter::INTEGER;
-		$types .= '|' . Parameter::BOOLEAN;
+		$types = Helpers::concatArray(Parameter::getAllowedTypes(), '|');
 		if (preg_match('/^parameter([' . $types . ']\d+)$/', $name, $matches)) {
 			$value = $this->getParameter($matches[1]);
 			return $value;
@@ -160,13 +158,17 @@ trait ProductParameters
 		}
 	}
 
-	public static function getParameterProperties()
+	public static function getParameterProperties($type = NULL)
 	{
+		if (!in_array($type, Parameter::getAllowedTypes())) {
+			$type = '\w';
+		}
 		$properties = [];
 		$reflection = new ClassType(Product::getClassName());
 		foreach ($reflection->properties as $property) {
-			if (preg_match('/^parameter\w\d+$/', $property->name)) {
-				$properties[] = $property;
+			if (preg_match('/^parameter' . $type . '\d+$/', $property->name)) {
+				$parameterProperty = new ParameterProperty($property->name, $type);
+				$properties[] = $parameterProperty;
 			}
 		}
 		return $properties;

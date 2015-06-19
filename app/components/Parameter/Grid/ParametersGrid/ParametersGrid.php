@@ -29,13 +29,29 @@ class ParametersGrid extends BaseControl
 		]);
 
 		$grid->setDefaultSort([
+			'code' => 'ASC',
 			'name' => 'ASC',
 		]);
 
-		$grid->addColumnNumber('type', 'ID #')
+		$grid->addColumnNumber('code', 'ID #')
 				->setSortable()
 				->setFilterNumber();
-		$grid->getColumn('type')->headerPrototype->width = '5%';
+		$grid->getColumn('code')->headerPrototype->width = '5%';
+
+		$grid->addColumnNumber('type', 'Type')
+				->setCustomRender(function ($row) {
+					switch ($row->type) {
+						case Parameter::STRING:
+							return $this->translator->translate('String');
+						case Parameter::INTEGER:
+							return $this->translator->translate('Number');
+						case Parameter::BOOLEAN:
+							return $this->translator->translate('YES/NO');
+						default:
+							return $row->type;
+					}
+				});
+		$grid->getColumn('type')->headerPrototype->width = '7%';
 
 		$grid->addColumnText('name', 'Parameter')
 				->setColumn('name')

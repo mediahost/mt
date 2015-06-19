@@ -4,7 +4,7 @@ namespace App\Components\Product\Form;
 
 use App\Forms\Controls\TextInputBased\MetronicTextInputBase;
 use App\Forms\Form;
-use App\Forms\Renderers\MetronicFormRenderer;
+use App\Forms\Renderers\MetronicHorizontalFormRenderer;
 use App\Model\Entity\Category;
 use App\Model\Entity\Stock;
 use App\Model\Entity\Unit;
@@ -35,7 +35,7 @@ class StockAdd extends StockBase
 
 		$form = new Form;
 		$form->setTranslator($this->translator);
-		$form->setRenderer(new MetronicFormRenderer);
+		$form->setRenderer(new MetronicHorizontalFormRenderer());
 
 		$unitRepo = $this->em->getRepository(Unit::getClassName());
 		$defaultUnit = $unitRepo->find(1);
