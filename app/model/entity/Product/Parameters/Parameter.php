@@ -3,55 +3,70 @@
 namespace App\Model\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
-use Kdyby\Doctrine\Entities\BaseEntity;
+use Knp\DoctrineBehaviors\Model;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Model\Repository\ParameterRepository")
  *
- * @property Product $product
- * @property ParameterType $type
- * @property ParameterValue $value
+ * @property string $name
  */
-class Parameter extends BaseEntity
+class Parameter extends BaseTranslatable
 {
 
-	use Identifier;
-	
-	/** @ORM\ManyToOne(targetEntity="Product", inversedBy="parameters") */
-	protected $product;
+	/** Dont change type contstants without change Product parameter names */
+	const STRING = 'S';
+	const INTEGER = 'N';
+	const BOOLEAN = 'B';
 
-	/** @ORM\ManyToOne(targetEntity="ParameterType", inversedBy="parameters") */
+	use Model\Translatable\Translatable;
+
+	/** @ORM\Column(type="string", length=5) */
 	protected $type;
 
-	/** @ORM\ManyToOne(targetEntity="ParameterValue", inversedBy="parameters") */
-	protected $value;
-	
-	public function __construct(ParameterType $type = NULL, ParameterValue $value = NULL)
+	/** @var array */
+	private $types = [];
+
+	public function __construct($type, $name = NULL, $currentLocale = NULL)
 	{
-		parent::__construct();
-		if ($type) {
-			$this->type = $type;
-		}
-		if ($value) {
-			$this->setValue($value);
+		$this->setType($type);
+		parent::__construct($currentLocale);
+		if ($name) {
+			$this->name = $name;
 		}
 	}
-	
-	public function setValue(ParameterValue $value)
+
+	public function setType($type)
 	{
-		if (!$this->type) {
-			throw new EntityException('Set type before set value.');
-		} else if ($value->type->id !== $this->type->id) {
-			throw new EntityException('Value type (' . $value->type . ') must be same as parameter type(' . $this->type . ')');
+		$types = $this->getTypes();
+		if (in_array($type, $types)) {
+			$this->type = $type;
 		} else {
-			$this->value = $value;
+			throw new EntityException('Parameter of type ' . $type . ' isn\'t supported by ' . Product::getClassName() . ' entity.');
 		}
+	}
+
+	public function getTypes()
+	{
+		if (!count($this->types)) {
+			$this->types = self::getProductTypes();
+		}
+		return $this->types;
 	}
 
 	public function __toString()
 	{
-		return $this->type . '-' . $this->value;
+		return (string) $this->name;
+	}
+
+	public static function getProductTypes()
+	{
+		$types = [];
+		foreach (Product::getParameterProperties() as $property) {
+			if (preg_match('/^parameter(\w\d+)$/', $property->name, $matches)) {
+				$types[] = $matches[1];
+			}
+		}
+		return $types;
 	}
 
 }

@@ -33,31 +33,31 @@ class CollectionTest extends DbTestCase
 		parent::tearDown();
 	}
 
-	public function testOne()
-	{
-		$parameterRepo = $this->em->getRepository(ParameterName::getClassName());
-		$parameter1 = $parameterRepo->findOneBy(['name' => 'Color']);
-
-		\Tracy\Debugger::timer();
-
-		$qb = $this->em->createQueryBuilder()
-				->select('p')
-				->from(ParameterCollection::getClassName(), 'p')
-				->join('p.parameters', 'param')
-				->andWhere('param.name = :paramName')
-				->setParameter('paramName', $parameter1)
-				->andWhere('param.string = :value')
-				->setParameter('value', 'green')
-		;
-
-		$result = $qb->getQuery()->getResult();
-
-		$time = \Tracy\Debugger::timer();
-		\Tracy\Debugger::barDump($time);
-
-		\Tracy\Debugger::barDump($result);
-		Assert::same(TRUE, TRUE);
-	}
+//	public function testOne()
+//	{
+//		$parameterRepo = $this->em->getRepository(ParameterName::getClassName());
+//		$parameter1 = $parameterRepo->findOneBy(['name' => 'Color']);
+//
+//		\Tracy\Debugger::timer();
+//
+//		$qb = $this->em->createQueryBuilder()
+//				->select('p')
+//				->from(ParameterCollection::getClassName(), 'p')
+//				->join('p.parameters', 'param')
+//				->andWhere('param.name = :paramName')
+//				->setParameter('paramName', $parameter1)
+//				->andWhere('param.string = :value')
+//				->setParameter('value', 'green')
+//		;
+//
+//		$result = $qb->getQuery()->getResult();
+//
+//		$time = \Tracy\Debugger::timer();
+//		\Tracy\Debugger::barDump($time);
+//
+//		\Tracy\Debugger::barDump($result);
+//		Assert::same(TRUE, TRUE);
+//	}
 
 	public function testMulti()
 	{
@@ -74,8 +74,8 @@ class CollectionTest extends DbTestCase
 		$qb = $this->em->createQueryBuilder()
 				->select('p')
 				->from(ParameterCollection::getClassName(), 'p')
-				->join('p.parameters', 'p1', Join::WITH, 'p1.name = :n1')
-				->join('p.parameters', 'p3', Join::WITH, 'p3.name = :n3')
+				->innerJoin('p.parameters', 'p1', Join::WITH, 'p1.name = :n1')
+				->innerJoin('p.parameters', 'p3', Join::WITH, 'p3.name = :n3')
 				->andWhere('p1.string = :v1')
 				->andWhere('p3.string = :v3')
 //				->andWhere('param.name = :n5 AND param.string = :v5')

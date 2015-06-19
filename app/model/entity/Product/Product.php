@@ -28,9 +28,6 @@ use Nette\Utils\DateTime;
  * @property Producer $producer
  * @property Category $mainCategory
  * @property array $categories
- * @property array $tags
- * @property array $signs
- * @property array $parameters
  * @property ArrayCollection $similars
  * @property ArrayCollection $similarsWithMe
  * @property ArrayCollection $stocks
@@ -62,8 +59,6 @@ class Product extends BaseTranslatable
 	{
 		$this->stocks = new ArrayCollection();
 		$this->categories = new ArrayCollection();
-		$this->parameters = new ArrayCollection();
-		$this->tags = new ArrayCollection();
 		$this->similars = new ArrayCollection();
 		$this->similarsWithMe = new ArrayCollection();
 		$this->images = new ArrayCollection();

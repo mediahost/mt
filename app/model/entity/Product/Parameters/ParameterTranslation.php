@@ -11,7 +11,7 @@ use Knp\DoctrineBehaviors\Model;
  *
  * @property string $name
  */
-class ParameterTypeTranslation extends BaseEntity
+class ParameterTranslation extends BaseEntity
 {
 
 	use Model\Translatable\Translation;

@@ -1,0 +1,35 @@
+{block pageTitle}
+	{_'Parameters'}
+{/block}
+
+{block breadcrumbItems}
+<li>
+	<a n:href="Parameters:">{_'Parameters'}</a>
+</li>
+<li>
+	<span>{_'Edit parameter'}</span>
+</li>
+{/block}
+
+{block content}
+<div class="row">
+	<div class="col-md-8">
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption font-green-sharp">
+					<i class="fa fa-edit font-green-sharp"></i>
+					<span class="caption-subject bold uppercase">
+						{_'Edit parameter'}
+					</span>
+				</div>
+				<div class="actions">
+					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				{control parameterEditForm}
+			</div>
+		</div>
+	</div>
+</div>

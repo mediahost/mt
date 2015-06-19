@@ -11,6 +11,7 @@ services:
 	- {class: App\Model\Facade\CategoryFacade, inject: yes}
 	- {class: App\Model\Facade\ProducerFacade, inject: yes}
 	- {class: App\Model\Facade\StockFacade, inject: yes}
+	- {class: App\Model\Facade\ParameterFacade, inject: yes}
 
 	# Storages
 	- {class: App\Model\Storage\SignUpStorage, inject: yes}

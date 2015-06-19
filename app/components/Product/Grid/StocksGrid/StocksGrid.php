@@ -44,6 +44,9 @@ class StocksGrid extends BaseControl
 		
 		$grid->addColumnText('title', 'Product title')
 				->setColumn('product.name')
+				->setCustomRender(function ($row) {
+					return $row->product->translate($this->lang)->name;
+				})
 				->setSortable()
 				->setFilterText()
 				->setSuggestion();

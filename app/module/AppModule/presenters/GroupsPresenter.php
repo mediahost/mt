@@ -67,7 +67,7 @@ class GroupsPresenter extends BasePresenter
 	{
 		$this->groupEntity = $this->groupRepo->find($id);
 		if (!$this->groupEntity) {
-			$this->flashMessage('This group wasn\'t found.', 'error');
+			$this->flashMessage('This group wasn\'t found.', 'warning');
 			$this->redirect('default');
 		} else {
 			$this['groupForm']->setGroup($this->groupEntity);
@@ -86,13 +86,13 @@ class GroupsPresenter extends BasePresenter
 	 */
 	public function actionDelete($id)
 	{
-		$user = $this->groupRepo->find($id);
-		if (!$user) {
+		$group = $this->groupRepo->find($id);
+		if (!$group) {
 			$this->flashMessage('Group wasn\'t found.', 'danger');
 		} else {
 			try {
-				$this->groupRepo->delete($user);
-				$this->flashMessage('User was deleted.', 'success');
+				$this->groupRepo->delete($group);
+				$this->flashMessage('Group was deleted.', 'success');
 			} catch (Exception $e) {
 				$this->flashMessage('This group can\'t be deleted.', 'danger');
 			}
