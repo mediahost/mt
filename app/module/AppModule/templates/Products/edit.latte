@@ -15,13 +15,14 @@
 <div class="row">
 	<div class="col-md-7">
 		{include basic}
+		{include categories}
 		{include seo}
 	</div>
 	<div class="col-md-5">
-		{include images}
 		{include prices}
 		{include quantity}
-		{include categories}
+		{include images}
+		{include parameters}
 	</div>
 </div>
 {/block}
@@ -142,6 +143,26 @@
 	</div>
 	<div class="portlet-body form">
 		{control stockImageForm}
+	</div>
+</div>
+{/define}
+
+{define parameters}
+<div class="portlet light" n:if="$hasParameters">
+	<div class="portlet-title">
+		<div class="caption font-green-sharp">
+			<i class="fa fa-list font-green-sharp"></i>
+			<span class="caption-subject bold uppercase">
+				{_'Parameters'}
+			</span>
+		</div>
+		<div class="actions">
+			<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+			</a>
+		</div>
+	</div>
+	<div class="portlet-body form">
+		{control stockParameterForm}
 	</div>
 </div>
 {/define}

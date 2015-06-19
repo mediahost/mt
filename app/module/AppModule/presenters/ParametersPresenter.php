@@ -66,13 +66,12 @@ class ParametersPresenter extends BasePresenter
 				$type = Parameter::STRING;
 				break;
 		}
-		$lastUnusedNumber = $this->parameterFacade->getLastUnusedNumber($type);
-		if (!$lastUnusedNumber) {
+		$lastUnusedCode = $this->parameterFacade->getLastUnusedCode($type);
+		if (!$lastUnusedCode) {
 			$this->flashMessage('You have reached the maximum of free parameters for this type.', 'warning');
 			$this->redirect('default');
 		}		
-		$lastUnused = $type . $lastUnusedNumber;
-		$this->parameterEntity = new Parameter($lastUnused);
+		$this->parameterEntity = new Parameter($lastUnusedCode);
 		$this['parameterAddForm']->setParameter($this->parameterEntity);
 	}
 

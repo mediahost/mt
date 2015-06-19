@@ -2,12 +2,11 @@
 
 namespace App\AppModule\Presenters;
 
-use App\Components\Product\Grid\IStocksGridFactory;
-use App\Components\Product\Grid\StocksGrid;
 use App\Components\Product\Form\IStockAddFactory;
 use App\Components\Product\Form\IStockBasicFactory;
 use App\Components\Product\Form\IStockCategoryFactory;
 use App\Components\Product\Form\IStockImageFactory;
+use App\Components\Product\Form\IStockParameterFactory;
 use App\Components\Product\Form\IStockPriceFactory;
 use App\Components\Product\Form\IStockQuantityFactory;
 use App\Components\Product\Form\IStockSeoFactory;
@@ -15,9 +14,12 @@ use App\Components\Product\Form\StockAdd;
 use App\Components\Product\Form\StockBasic;
 use App\Components\Product\Form\StockCategory;
 use App\Components\Product\Form\StockImage;
+use App\Components\Product\Form\StockParameter;
 use App\Components\Product\Form\StockPrice;
 use App\Components\Product\Form\StockQuantity;
 use App\Components\Product\Form\StockSeo;
+use App\Components\Product\Grid\IStocksGridFactory;
+use App\Components\Product\Grid\StocksGrid;
 use App\Model\Entity\Stock;
 use App\TaggedString;
 use Kdyby\Doctrine\EntityRepository;
@@ -51,6 +53,9 @@ class ProductsPresenter extends BasePresenter
 
 	/** @var IStockImageFactory @inject */
 	public $iStockImageFactory;
+
+	/** @var IStockParameterFactory @inject */
+	public $iStockParameterFactory;
 
 	/** @var IStocksGridFactory @inject */
 	public $iStocksGridFactory;
@@ -91,7 +96,7 @@ class ProductsPresenter extends BasePresenter
 	{
 		$this->stockEntity = $this->stockRepo->find($id);
 		if (!$this->stockEntity) {
-			$this->flashMessage('This product wasn\'t found.', 'error');
+			$this->flashMessage('This product wasn\'t found.', 'warning');
 			$this->redirect('default');
 		} else {
 			$this['stockBasicForm']->setStock($this->stockEntity);
@@ -100,12 +105,14 @@ class ProductsPresenter extends BasePresenter
 			$this['stockCategoryForm']->setStock($this->stockEntity);
 			$this['stockSeoForm']->setStock($this->stockEntity);
 			$this['stockImageForm']->setStock($this->stockEntity);
+			$this['stockParameterForm']->setStock($this->stockEntity);
 		}
 	}
 
 	public function renderEdit()
 	{
 		$this->template->stock = $this->stockEntity;
+		$this->template->hasParameters = $this['stockParameterForm']->hasParameters();
 	}
 
 	// <editor-fold desc="forms">
@@ -168,6 +175,15 @@ class ProductsPresenter extends BasePresenter
 	public function createComponentStockImageForm()
 	{
 		$control = $this->iStockImageFactory->create();
+		$control->setLang($this->lang);
+		$control->onAfterSave = $this->afterStockSave;
+		return $control;
+	}
+
+	/** @return StockParameter */
+	public function createComponentStockParameterForm()
+	{
+		$control = $this->iStockParameterFactory->create();
 		$control->setLang($this->lang);
 		$control->onAfterSave = $this->afterStockSave;
 		return $control;

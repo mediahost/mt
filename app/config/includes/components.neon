@@ -26,6 +26,7 @@ services:
 	- {implement: App\Components\Product\Form\IStockCategoryFactory, inject: yes}
 	- {implement: App\Components\Product\Form\IStockSeoFactory, inject: yes}
 	- {implement: App\Components\Product\Form\IStockImageFactory, inject: yes}
+	- {implement: App\Components\Product\Form\IStockParameterFactory, inject: yes}
 	- {implement: App\Components\Product\Grid\IStocksGridFactory, inject: yes}
 
 	# Group

@@ -4,7 +4,7 @@ namespace App\Components\Product\Form;
 
 use App\Forms\Controls\TextInputBased\MetronicTextInputBase;
 use App\Forms\Form;
-use App\Forms\Renderers\MetronicFormRenderer;
+use App\Forms\Renderers\MetronicHorizontalFormRenderer;
 use App\Model\Entity\Category;
 use App\Model\Entity\Producer;
 use App\Model\Entity\Stock;
@@ -31,7 +31,7 @@ class StockCategory extends StockBase
 
 		$form = new Form;
 		$form->setTranslator($this->translator);
-		$form->setRenderer(new MetronicFormRenderer);
+		$form->setRenderer(new MetronicHorizontalFormRenderer());
 
 		$categories = $this->categoryFacade->getCategoriesList($this->lang);
 		$producers = $this->producerFacade->getProducersList($this->lang);

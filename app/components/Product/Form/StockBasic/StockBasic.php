@@ -24,7 +24,7 @@ class StockBasic extends StockBase
 
 		$form = new Form;
 		$form->setTranslator($this->translator);
-		$form->setRenderer(new MetronicFormRenderer);
+		$form->setRenderer(new MetronicFormRenderer());
 		
 		$product = $this->stock->product;
 		$product->setCurrentLocale($this->lang);

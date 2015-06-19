@@ -24,7 +24,7 @@ class StockImage extends StockBase
 
 		$form = new Form;
 		$form->setTranslator($this->translator);
-		$form->setRenderer(new MetronicFormRenderer);
+		$form->setRenderer(new MetronicFormRenderer());
 
 		$form->addUploadImageWithPreview('image', 'Image')
 				->setPreview('/foto/200-150/' . $this->stock->product->image, $this->stock->product->name)
