@@ -2,6 +2,9 @@
 
 namespace App\Model\Repository;
 
+use App\Model\Entity\Product;
+use Doctrine\ORM\NoResultException;
+
 class ProductRepository extends BaseRepository
 {
 
