@@ -6,21 +6,18 @@ use App\Model\Entity\Discount;
 use App\Model\Entity\Group;
 use App\Model\Entity\GroupDiscount;
 use App\Model\Entity\Price;
+use App\Model\Entity\Stock;
 use App\Model\Entity\Vat;
-use Doctrine\Common\Collections\ArrayCollection;
+use Nette\Reflection\ClassType;
 
 /**
  * @property Price $price
  * @property float $priceVat
- * @property ArrayCollection $groupDiscounts
  * @property float $purchasePrice
  * @property float $oldPrice
  */
 trait StockPrices
 {
-
-	/** @ORM\OneToOne(targetEntity="Price", cascade={"persist", "remove"}) */
-	protected $price;
 
 	/** @ORM\Column(type="float", nullable=true) */
 	protected $purchasePrice;
@@ -28,32 +25,117 @@ trait StockPrices
 	/** @ORM\Column(type="float", nullable=true) */
 	protected $oldPrice;
 
+	/** @ORM\ManyToOne(targetEntity="Vat") */
+	protected $vat;
+
+	/** @ORM\Column(type="float", nullable=true) */
+	private $defaultPrice;
+
+	// <editor-fold defaultstate="collapsed" desc="Group Prices">
+
+	/** @ORM\Column(type="float", nullable=true) */
+	private $price1;
+
+	/** @ORM\Column(type="float", nullable=true) */
+	private $price2;
+
+	/** @ORM\Column(type="float", nullable=true) */
+	private $price3;
+
+	/** @ORM\Column(type="float", nullable=true) */
+	private $price4;
+
+	/** @ORM\Column(type="float", nullable=true) */
+	private $price5;
+
+	/** @ORM\Column(type="float", nullable=true) */
+	private $price6;
+
+	/** @ORM\Column(type="float", nullable=true) */
+	private $price7;
+
+	/** @ORM\Column(type="float", nullable=true) */
+	private $price8;
+
+	/** @ORM\Column(type="float", nullable=true) */
+	private $price9;
+
+	/** @ORM\Column(type="float", nullable=true) */
+	private $price10;
+
+	// </editor-fold>
+
 	/** @ORM\OneToMany(targetEntity="GroupDiscount", mappedBy="product", cascade={"persist", "remove"}) */
-	protected $groupDiscounts;
+	private $groupDiscounts;
 
 	public function getPrice(Group $group = NULL)
 	{
-		if ($group) {
-			$discount = $this->getDiscountByGroup($group);
-			if ($discount) {
-				return $discount->getDiscountedPrice($this->price);
-			}
+		$level = $this->getLevelFromGroup($group);
+		$priceProperties = self::getPriceProperties();
+		if ($level && array_key_exists($level, $priceProperties)) {
+			$priceProperty = $priceProperties[$level];
+			$priceValue = $this->$priceProperty;
 		}
-		return $this->price;
+		$priceValue = $this->defaultPrice;
+		return new Price($this->vat, $priceValue);
 	}
 
-	public function setPrice($value, Vat $vat, $withVat = FALSE)
+	public function setPrice($value, Group $group = NULL, $withVat = FALSE)
 	{
-		if ($this->price === NULL) {
-			$this->price = new Price($vat);
-		} else {
-			$this->price->vat = $vat;
-		}
-		
+		$price = new Price($this->vat);
+
 		if ($withVat) {
-			$this->price->withVat = $value;
+			$price->withVat = $value;
 		} else {
-			$this->price->withoutVat = $value;
+			$price->withoutVat = $value;
+		}
+
+		$priceProperties = self::getPriceProperties();
+		$level = $this->getLevelFromGroup($group);
+		if ($level && array_key_exists($level, $priceProperties)) {
+			$priceProperty = $priceProperties[$level];
+			$this->$priceProperty = $price->withoutVat;
+		} else {
+			$this->defaultPrice = $price->withoutVat;
+		}
+		return $this;
+	}
+
+	public function setDefaltPrice($value, $withVat = FALSE)
+	{
+		$this->setPrice($value, NULL, $withVat);
+		$this->recalculateOtherPrices();
+		return $this;
+	}
+
+	protected function getLevelFromGroup(Group $group = NULL)
+	{
+		return $group ? $group->level : NULL;
+	}
+	
+	public static function getPriceProperties()
+	{
+		$properties = [];
+		$reflection = new ClassType(Stock::getClassName());
+		foreach ($reflection->properties as $property) {
+			if (preg_match('/^parameter(\d+)$/', $property->name, $matches)) {
+				$properties[$matches[1]] = $matches[0];
+			}
+		}
+		return $properties;
+	}
+
+	protected function recalculateOtherPrices()
+	{
+		$priceProperties = self::getPriceProperties();
+		$defaultPrice = $this->getPrice();
+		foreach ($priceProperties as $level => $property) {
+			$discount = $this->getDiscountByLevel($level);
+			if ($discount) {
+				$this->$property = $discount->getDiscountedPrice($defaultPrice);
+			} else {
+				$this->$property = $defaultPrice;
+			}
 		}
 		return $this;
 	}
@@ -71,25 +153,31 @@ trait StockPrices
 			$groupDiscount->discount->type = $discount->type;
 			$groupDiscount->discount->value = $discount->value;
 		}
+		$this->recalculateOtherPrices();
+		
+		return $this;
 	}
 
-	public function removeDiscountsByGroup(Group $group)
-	{
-		$removeWithGroup = function ($key, GroupDiscount $groupDiscount) use ($group) {
-			if ($groupDiscount->group->id === $group->id) {
-				$this->groupDiscounts->removeElement($groupDiscount);
-			}
-			return TRUE;
-		};
-		$this->groupDiscounts->forAll($removeWithGroup);
-	}
+//	public function removeDiscountsByGroup(Group $group)
+//	{
+//		$removeWithGroup = function ($key, GroupDiscount $groupDiscount) use ($group) {
+//			if ($groupDiscount->group->id === $group->id) {
+//				$this->groupDiscounts->removeElement($groupDiscount);
+//			}
+//			return TRUE;
+//		};
+//		$this->groupDiscounts->forAll($removeWithGroup);
+//		$this->recalculateOtherPrices();
+//		
+//		return $this;
+//	}
 
 	/** @return GroupDiscount|NULL */
-	protected function getGroupDiscountByGroup(Group $group)
+	protected function getGroupDiscountByLevel($level)
 	{
 		$groupDiscount = NULL;
-		$hasGroup = function (GroupDiscount $groupDiscount) use ($group) {
-			return $groupDiscount->group->id === $group->id;
+		$hasGroup = function (GroupDiscount $groupDiscount) use ($level) {
+			return $groupDiscount->group->level === $level;
 		};
 		$groupDiscounts = $this->groupDiscounts->filter($hasGroup);
 		if ($groupDiscounts->count()) {
@@ -99,10 +187,10 @@ trait StockPrices
 	}
 
 	/** @return Discount|NULL */
-	protected function getDiscountByGroup(Group $group)
+	protected function getDiscountByLevel($level)
 	{
 		$discount = NULL;
-		$groupDiscount = $this->getGroupDiscountByGroup($group);
+		$groupDiscount = $this->getGroupDiscountByLevel($level);
 		if ($groupDiscount) {
 			$discount = $groupDiscount->discount;
 		}

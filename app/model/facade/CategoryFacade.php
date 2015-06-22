@@ -20,10 +20,9 @@ class CategoryFacade extends Object
 	/** @var EntityRepository */
 	private $categoryRepo;
 
-	public function __construct(EntityManager $em, LanguageService $languageService)
+	public function __construct(EntityManager $em)
 	{
 		$this->em = $em;
-		$this->languageService = $languageService;
 		$this->categoryRepo = $this->em->getRepository(Category::getClassName());
 	}
 

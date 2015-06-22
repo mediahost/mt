@@ -67,4 +67,14 @@ class Stock extends BaseEntity
 		return $this->id === NULL;
 	}
 
+	public function &__get($name)
+	{
+		if (preg_match('/^price(\d+)$/', $name, $matches)) {
+			$value = $this->getPrice($matches[1]);
+			return $value;
+		} else {
+			return parent::__get($name);
+		}
+	}
+
 }

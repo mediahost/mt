@@ -53,12 +53,11 @@ class SignEdit extends BaseControl
 
 	private function load(ArrayHash $values)
 	{
-		if ($this->sign->isNew()) {
-			$lang = $this->languageService->defaultLanguage;
-		} else {
-			$lang = $this->lang;
+		$defaultLang = $this->languageService->defaultLanguage;
+		if ($this->sign->isNew() && $defaultLang !== $this->lang) {
+			$this->sign->translateAdd($defaultLang)->name = $values->name;
 		}
-		$this->sign->translateAdd($lang)->name = $values->name;
+		$this->sign->translateAdd($this->lang)->name = $values->name;
 		$this->sign->mergeNewTranslations();
 		return $this;
 	}

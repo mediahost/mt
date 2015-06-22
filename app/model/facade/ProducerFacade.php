@@ -20,10 +20,9 @@ class ProducerFacade extends Object
 	/** @var EntityRepository */
 	private $producerRepo;
 
-	public function __construct(EntityManager $em, LanguageService $languageService)
+	public function __construct(EntityManager $em)
 	{
 		$this->em = $em;
-		$this->languageService = $languageService;
 		$this->producerRepo = $this->em->getRepository(Producer::getClassName());
 	}
 

@@ -204,7 +204,7 @@ abstract class BasePresenter extends Presenter
 //			$this->currency = 'czk'|NULL; // TODO: load from user setting
 		}
 
-		if (!array_key_exists($this->currency, $this->exchange)) {
+		if (!array_key_exists(strtoupper($this->currency), $this->exchange)) {
 			$this->currency = strtolower($this->exchange->getDefault()->getCode());
 		}
 
