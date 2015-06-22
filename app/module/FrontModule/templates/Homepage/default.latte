@@ -14,9 +14,7 @@
             <h2>{_'Top products'}</h2>
             <div class="owl-carousel owl-carousel3">
 				<div n:foreach="$topStocks as $stock">
-					{var isNew => !($iterator->counter % 3)}
-					{var isSale => !($iterator->counter % 2)}
-					{include product, stock => $stock, product => $stock->product, isNew => $isNew, isSale => $isSale}
+					{include product, stock => $stock, product => $stock->product}
 				</div>
             </div>
 		</div>
@@ -26,10 +24,10 @@
 	<div class="row margin-bottom-40">
 		<!-- BEGIN SALES -->
 		<div class="col-md-6 two-items-bottom-items">
-			<h2>{_'Sale'}</h2>
+			<h2>{$saleSign}</h2>
 			<div class="owl-carousel owl-carousel2">
 				<div n:foreach="$saleStocks as $stock">
-					{include product, stock => $stock, product => $stock->product, isNew => FALSE, isSale => TRUE}
+					{include product, stock => $stock, product => $stock->product}
 				</div>
 			</div>
 		</div>
@@ -64,10 +62,10 @@
 	<!-- BEGIN NEWS -->
 	<div class="row margin-bottom-35">
 		<div class="col-md-12 sale-product">
-            <h2>{_'New products'}</h2>
+            <h2>{$newSign}</h2>
             <div class="owl-carousel owl-carousel5">
 				<div n:foreach="$newStocks as $stock">
-					{include product, stock => $stock, product => $stock->product, isNew => TRUE, isSale => FALSE}
+					{include product, stock => $stock, product => $stock->product}
 				</div>
             </div>
 		</div>
@@ -80,7 +78,7 @@
             <h2>{_'Last visited'}</h2>
             <div class="owl-carousel owl-carousel5">
 				<div n:foreach="$visitedStocks as $stock">
-					{include product, stock => $stock, product => $stock->product, isNew => FALSE, isSale => FALSE}
+					{include product, stock => $stock, product => $stock->product}
 				</div>
             </div>
 		</div>
@@ -108,7 +106,7 @@
 	</h3>
 	<div class="pi-price">{$stock->price|currencyVat}</div>
 	<a n:href="this" class="btn btn-default add2cart">{_'Add to cart'}</a>
-	<div n:if="$isNew" class="sticker sticker-new"></div>
-	<div n:if="$isSale" class="sticker sticker-sale"></div>
+	<div n:if="$product->hasSign($newSign)" class="sticker sticker-new"></div>
+	<div n:if="$product->hasSign($saleSign)" class="sticker sticker-sale"></div>
 </div>
 {/define}

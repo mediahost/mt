@@ -10,6 +10,7 @@ use App\Components\Product\Form\IStockParameterFactory;
 use App\Components\Product\Form\IStockPriceFactory;
 use App\Components\Product\Form\IStockQuantityFactory;
 use App\Components\Product\Form\IStockSeoFactory;
+use App\Components\Product\Form\IStockSignFactory;
 use App\Components\Product\Form\StockAdd;
 use App\Components\Product\Form\StockBasic;
 use App\Components\Product\Form\StockCategory;
@@ -18,6 +19,7 @@ use App\Components\Product\Form\StockParameter;
 use App\Components\Product\Form\StockPrice;
 use App\Components\Product\Form\StockQuantity;
 use App\Components\Product\Form\StockSeo;
+use App\Components\Product\Form\StockSign;
 use App\Components\Product\Grid\IStocksGridFactory;
 use App\Components\Product\Grid\StocksGrid;
 use App\Model\Entity\Stock;
@@ -56,6 +58,9 @@ class ProductsPresenter extends BasePresenter
 
 	/** @var IStockParameterFactory @inject */
 	public $iStockParameterFactory;
+
+	/** @var IStockSignFactory @inject */
+	public $iStockSignFactory;
 
 	/** @var IStocksGridFactory @inject */
 	public $iStocksGridFactory;
@@ -99,6 +104,7 @@ class ProductsPresenter extends BasePresenter
 			$this->flashMessage('This product wasn\'t found.', 'warning');
 			$this->redirect('default');
 		} else {
+			$this->stockEntity->product->setCurrentLocale($this->lang);
 			$this['stockBasicForm']->setStock($this->stockEntity);
 			$this['stockPriceForm']->setStock($this->stockEntity);
 			$this['stockQuantityForm']->setStock($this->stockEntity);
@@ -106,13 +112,13 @@ class ProductsPresenter extends BasePresenter
 			$this['stockSeoForm']->setStock($this->stockEntity);
 			$this['stockImageForm']->setStock($this->stockEntity);
 			$this['stockParameterForm']->setStock($this->stockEntity);
+			$this['stockSignForm']->setStock($this->stockEntity);
 		}
 	}
 
 	public function renderEdit()
 	{
 		$this->template->stock = $this->stockEntity;
-		$this->template->hasParameters = $this['stockParameterForm']->hasParameters();
 	}
 
 	// <editor-fold desc="forms">
@@ -184,6 +190,15 @@ class ProductsPresenter extends BasePresenter
 	public function createComponentStockParameterForm()
 	{
 		$control = $this->iStockParameterFactory->create();
+		$control->setLang($this->lang);
+		$control->onAfterSave = $this->afterStockSave;
+		return $control;
+	}
+
+	/** @return StockSign */
+	public function createComponentStockSignForm()
+	{
+		$control = $this->iStockSignFactory->create();
 		$control->setLang($this->lang);
 		$control->onAfterSave = $this->afterStockSave;
 		return $control;

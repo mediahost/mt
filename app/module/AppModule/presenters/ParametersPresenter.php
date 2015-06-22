@@ -118,6 +118,7 @@ class ParametersPresenter extends BasePresenter
 	public function createComponentParameterAddForm()
 	{
 		$control = $this->iParameterAddFactory->create();
+		$control->setLang($this->lang);
 		$control->onAfterSave = $this->afterSave;
 		return $control;
 	}

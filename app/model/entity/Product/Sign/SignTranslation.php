@@ -11,7 +11,7 @@ use Knp\DoctrineBehaviors\Model;
  *
  * @property string $name
  */
-class TagTranslation extends BaseEntity
+class SignTranslation extends BaseEntity
 {
 
 	use Model\Translatable\Translation;

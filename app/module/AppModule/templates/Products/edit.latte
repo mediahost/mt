@@ -23,6 +23,7 @@
 		{include quantity}
 		{include images}
 		{include parameters}
+		{include signs}
 	</div>
 </div>
 {/block}
@@ -148,7 +149,7 @@
 {/define}
 
 {define parameters}
-<div class="portlet light" n:if="$hasParameters">
+<div class="portlet light" n:if="$control['stockParameterForm']->hasParameters()">
 	<div class="portlet-title">
 		<div class="caption font-green-sharp">
 			<i class="fa fa-list font-green-sharp"></i>
@@ -163,6 +164,26 @@
 	</div>
 	<div class="portlet-body form">
 		{control stockParameterForm}
+	</div>
+</div>
+{/define}
+
+{define signs}
+<div class="portlet light" n:if="$control['stockSignForm']->hasSigns()">
+	<div class="portlet-title">
+		<div class="caption font-green-sharp">
+			<i class="fa fa-list font-green-sharp"></i>
+			<span class="caption-subject bold uppercase">
+				{_'Signs'}
+			</span>
+		</div>
+		<div class="actions">
+			<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+			</a>
+		</div>
+	</div>
+	<div class="portlet-body form">
+		{control stockSignForm}
 	</div>
 </div>
 {/define}
