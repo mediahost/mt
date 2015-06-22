@@ -2,7 +2,6 @@
 
 namespace App\Model\Entity\Traits;
 
-use App\Helpers;
 use App\Model\Entity\EntityException;
 use App\Model\Entity\Parameter;
 use App\Model\Entity\ParameterProperty;
@@ -145,17 +144,6 @@ trait ProductParameters
 			$this->$property = NULL;
 		}
 		return $this;
-	}
-
-	public function &__get($name)
-	{
-		$types = Helpers::concatArray(Parameter::getAllowedTypes(), '|');
-		if (preg_match('/^parameter([' . $types . ']\d+)$/', $name, $matches)) {
-			$value = $this->getParameter($matches[1]);
-			return $value;
-		} else {
-			return parent::__get($name);
-		}
 	}
 
 	public static function getParameterProperties($type = NULL)

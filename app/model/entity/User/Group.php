@@ -12,6 +12,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  * @ORM\Table(name="`group`")
  *
  * @property string $name
+ * @property string $level
  * @property ArrayCollection $users
  */
 class Group extends BaseEntity
@@ -19,28 +20,30 @@ class Group extends BaseEntity
 
 	use Identifier;
 
+	/** @ORM\Column(type="string", length=3) */
+	protected $level;
+
 	/** @ORM\Column(type="string", length=50) */
 	protected $name;
 
 	/** @ORM\ManyToMany(targetEntity="User", mappedBy="groups") */
 	protected $users;
 
-	public function __construct($name = NULL)
+	public function __construct($level, $name)
 	{
-		if ($name) {
-			$this->name = $name;
-		}
+		$this->level = $level;
+		$this->name = $name;
 		$this->users = new ArrayCollection();
 		parent::__construct();
 	}
 
-    public function addUser(User $user)
-    {
+	public function addUser(User $user)
+	{
 		if (!$this->users->contains($user)) {
 			$this->users->add($user);
 		}
 		return $this;
-    }
+	}
 
 	public function __toString()
 	{

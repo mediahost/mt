@@ -2,31 +2,31 @@
 
 namespace Test\Model\Entity;
 
-use App\Model\Entity\Tag;
-use App\Model\Entity\TagTranslation;
-use Doctrine\ORM\EntityRepository;
+use App\Model\Entity\Sign;
+use App\Model\Entity\SignTranslation;
+use App\Model\Repository\SignRepository;
 use Test\DbTestCase;
 use Tester\Assert;
 
 $container = require __DIR__ . '/../../../../bootstrap.php';
 
 /**
- * TEST: Tag entity
+ * TEST: Sign entity
  *
  * @testCase
  * @phpVersion 5.4
  */
-class TagTest extends DbTestCase
+class SignTest extends DbTestCase
 {
 	
-	/** @var EntityRepository */
-	private $tagRepo;
+	/** @var SignRepository */
+	private $signRepo;
 
 	public function setUp()
 	{
 		parent::setUp();
 		$this->updateSchema();
-		$this->tagRepo = $this->em->getRepository(Tag::class);
+		$this->signRepo = $this->em->getRepository(Sign::class);
 	}
 
 	public function tearDown()
@@ -37,7 +37,7 @@ class TagTest extends DbTestCase
 
 	public function testTranslations()
 	{
-		$entity = new Tag('The Name', 'en');
+		$entity = new Sign('The Name', 'en');
 		$entity->translate('cs')->name = 'Jméno';
 		$entity->mergeNewTranslations();
 		
@@ -46,7 +46,7 @@ class TagTest extends DbTestCase
 		
 		$id = $entity->id;
 		
-		$findedEntity = $this->tagRepo->find($id);
+		$findedEntity = $this->signRepo->find($id);
 		
 		Assert::same('The Name', $findedEntity->name);
 		Assert::same('The Name', $findedEntity->translate('en')->name);
@@ -56,12 +56,12 @@ class TagTest extends DbTestCase
 	protected function getClasses()
 	{
 		return [
-			$this->em->getClassMetadata(Tag::getClassName()),
-			$this->em->getClassMetadata(TagTranslation::getClassName()),
+			$this->em->getClassMetadata(Sign::getClassName()),
+			$this->em->getClassMetadata(SignTranslation::getClassName()),
 		];
 	}
 
 }
 
-$test = new TagTest($container);
+$test = new SignTest($container);
 $test->run();

@@ -30,7 +30,7 @@ class StockPrice extends StockBase
 		
 		
 		$form->addCheckSwitch('with_vat', 'Prices are with VAT', 'YES', 'NO')
-				->setDefaultValue(TRUE);
+				->setDefaultValue(FALSE);
 		$form->addText('price', 'Price')
 				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
 				->setRequired();
@@ -38,9 +38,11 @@ class StockPrice extends StockBase
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
 
 		$form->addText('purchase', 'Purchase price')
-				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
+				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
+				->setOption('description', 'Vat included');
 		$form->addText('old', 'Old price')
-				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
+				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
+				->setOption('description', 'Vat included');
 
 		$form->addSubmit('save', 'Save');
 
@@ -63,7 +65,8 @@ class StockPrice extends StockBase
 		
 		$vatRepo = $this->em->getRepository(Vat::getClassName());
 		$vat = $vatRepo->find($values->vat);
-		$this->stock->setPrice($values->price, $vat, $values->with_vat);
+		$this->stock->vat = $vat;
+		$this->stock->setDefaltPrice($values->price, $values->with_vat);
 
 		return $this;
 	}
@@ -84,8 +87,8 @@ class StockPrice extends StockBase
 		];
 		if ($this->stock->price) {
 			$values += [
-				'price' => $this->stock->price->withVat,
-				'with_vat' => TRUE,
+				'price' => $this->stock->price->withoutVat,
+				'with_vat' => FALSE,
 				'vat' => $this->stock->price->vat->id,
 			];
 		}

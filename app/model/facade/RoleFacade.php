@@ -20,10 +20,9 @@ class RoleFacade extends Object
 	/** @var EntityDao */
 	private $roleDao;
 
-	public function __construct(EntityManager $em, ModuleService $modules)
+	public function __construct(EntityManager $em)
 	{
 		$this->em = $em;
-		$this->moduleService = $modules;
 		$this->roleDao = $this->em->getDao(Role::getClassName());
 	}
 

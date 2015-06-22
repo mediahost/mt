@@ -22,7 +22,6 @@ class StocksGrid extends BaseControl
 		$qb = $repo->createQueryBuilder('s')
 				->select('s, p')
 				->leftJoin('s.product', 'p')
-				->leftJoin('s.price', 'pr')
 				->leftJoin('p.translations', 't')
 				->where('t.locale = :lang OR t.locale = :defaultLang')
 				->setParameter('lang', $this->lang)
@@ -30,7 +29,6 @@ class StocksGrid extends BaseControl
 		$grid->model = new Doctrine($qb, [
 			'product' => 'p',
 			'product.name' => 't.name',
-			'price.withoutVat' => 'pr.value',
 		]);
 
 		$grid->setDefaultSort([
@@ -52,19 +50,22 @@ class StocksGrid extends BaseControl
 				->setSuggestion();
 		
 		$grid->addColumnNumber('purchasePrice', 'Purchase price')
-				->setNumberFormat(0, ',', ' ')
+				->setCustomRender(function ($row) {
+					return $this->exchange->format($row->purchasePrice);
+				})
 				->setSortable()
 				->setFilterNumber();
 		$grid->getColumn('purchasePrice')->headerPrototype->style = 'width:130px';
 		$grid->getColumn('purchasePrice')->cellPrototype->style = 'text-align: right';
 		
-		$grid->addColumnNumber('price', 'Price')
-				->setNumberFormat(2, ',', ' ')
-				->setColumn('price.withoutVat')
+		$grid->addColumnNumber('defaultPrice', 'Price')
+				->setCustomRender(function ($row) {
+					return $this->exchange->format($row->price->withoutVat);
+				})
 				->setSortable()
 				->setFilterNumber();
-		$grid->getColumn('price')->headerPrototype->style = 'width:110px';
-		$grid->getColumn('price')->cellPrototype->style = 'text-align: right';
+		$grid->getColumn('defaultPrice')->headerPrototype->style = 'width:110px';
+		$grid->getColumn('defaultPrice')->cellPrototype->style = 'text-align: right';
 		
 		$grid->addColumnNumber('quantity', 'Store')
 				->setNumberFormat(0, NULL, ' ')

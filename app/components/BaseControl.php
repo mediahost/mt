@@ -5,6 +5,7 @@ namespace App\Components;
 use App\Extensions\Settings\Model\Service\LanguageService;
 use App\Extensions\Settings\Model\Service\PasswordService;
 use Exception;
+use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI;
 use Nette\Localization\ITranslator;
@@ -25,6 +26,9 @@ abstract class BaseControl extends UI\Control
 
 	/** @var ITranslator @inject */
 	public $translator;
+
+	/** @var Exchange @inject */
+	public $exchange;
 	
 	/** @var string */
 	private $templateFile = self::DEFAULT_TEMPLATE;

@@ -20,10 +20,9 @@ class UnitFacade extends Object
 	/** @var EntityRepository */
 	private $unitRepo;
 
-	public function __construct(EntityManager $em, LanguageService $languageService)
+	public function __construct(EntityManager $em)
 	{
 		$this->em = $em;
-		$this->languageService = $languageService;
 		$this->unitRepo = $this->em->getRepository(Unit::getClassName());
 	}
 

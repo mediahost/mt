@@ -2,13 +2,9 @@
 
 namespace App\Model\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
 
 /**
- * @ORM\Entity
- *
  * @property float $withVat
  * @property float $withoutVat
  * @property Vat $vat
@@ -19,12 +15,10 @@ class Price extends BaseEntity
 	
 	const PRECISION = 2;
 
-	use Identifier;
-
-	/** @ORM\Column(type="float") */
+	/** @var float */
 	private $value;
 	
-    /** @ORM\ManyToOne(targetEntity="Vat") */
+    /** @var Vat */
 	protected $vat;
 	
 	/** @var int */

@@ -84,4 +84,15 @@ class Product extends BaseTranslatable
 		return (string) $this->name;
 	}
 
+	public function &__get($name)
+	{
+		$types = Helpers::concatArray(Parameter::getAllowedTypes(), '|');
+		if (preg_match('/^parameter([' . $types . ']\d+)$/', $name, $matches)) {
+			$value = $this->getParameter($matches[1]);
+			return $value;
+		} else {
+			return parent::__get($name);
+		}
+	}
+
 }
