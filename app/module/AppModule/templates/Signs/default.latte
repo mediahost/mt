@@ -1,0 +1,31 @@
+{block pageTitle}
+{_'Signs'}
+{/block}
+
+{block breadcrumbItems}
+<li><span>{_'Signs'}</span></li>
+		{/block}
+
+{block content}
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-tags"></i>
+					<span class="caption-subject bold uppercase">{_'Signs'}</span>
+				</div>
+				<div class="actions">
+					<a n:href="Signs:add" class="btn btn-circle green-sharp">
+						<i class="fa fa-plus"></i> {_'Add Sign'}
+					</a>
+					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body">
+				{control signsGrid}
+			</div>
+		</div>
+	</div>
+</div>

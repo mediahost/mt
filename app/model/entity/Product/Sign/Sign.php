@@ -6,25 +6,18 @@ use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model;
 
 /**
- * @ORM\Entity(repositoryClass="App\Model\Repository\TagRepository")
+ * @ORM\Entity(repositoryClass="App\Model\Repository\SignRepository")
  *
  * @property string $name
- * @property string $type
  */
-class Tag extends BaseTranslatable
+class Sign extends BaseTranslatable
 {
-	
-	const TYPE_TAG = 'tag';
-	const TYPE_SIGN = 'sign';
 
 	use Model\Translatable\Translatable;
-	
-	/** @ORM\Column(type="string", length=20, nullable=false) */
-	protected $type = self::TYPE_TAG;
-	
-	/** @ORM\OneToMany(targetEntity="Product", mappedBy="tags") */
+
+	/** @ORM\OneToMany(targetEntity="Product", mappedBy="signs") */
 	protected $products;
-	
+
 	public function __construct($name = NULL, $currentLocale = NULL)
 	{
 		parent::__construct($currentLocale);
@@ -36,6 +29,11 @@ class Tag extends BaseTranslatable
 	public function __toString()
 	{
 		return (string) $this->name;
+	}
+	
+	public function isNew()
+	{
+		return $this->id === NULL;
 	}
 
 }

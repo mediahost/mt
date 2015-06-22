@@ -160,11 +160,11 @@
 				</a>
 			</li>
 
-			<li n:if="$user->isAllowed('tags', 'default')"
-				n:class="$presenter->isLinkCurrent('Tags:*') ? active">
-				<a n:href="Tags:">
+			<li n:if="$user->isAllowed('signs', 'default')"
+				n:class="$presenter->isLinkCurrent('Signs:*') ? active">
+				<a n:href="Signs:">
 					<i class="icon-tag"></i> 
-					<span class="title">{_'Tags'}</span>
+					<span class="title">{_'Signs'}</span>
 					<span class="selected"></span>
 				</a>
 			</li>

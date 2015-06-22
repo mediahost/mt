@@ -2,7 +2,7 @@
 
 namespace App\Model\Repository;
 
-class TagRepository extends BaseRepository
+class SignRepository extends BaseRepository
 {
 	
 }

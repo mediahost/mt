@@ -27,6 +27,7 @@ services:
 	- {implement: App\Components\Product\Form\IStockSeoFactory, inject: yes}
 	- {implement: App\Components\Product\Form\IStockImageFactory, inject: yes}
 	- {implement: App\Components\Product\Form\IStockParameterFactory, inject: yes}
+	- {implement: App\Components\Product\Form\IStockSignFactory, inject: yes}
 	- {implement: App\Components\Product\Grid\IStocksGridFactory, inject: yes}
 
 	# Group
@@ -50,6 +51,10 @@ services:
 	- {implement: App\Components\Parameter\Form\IParameterAddFactory, inject: yes}
 	- {implement: App\Components\Parameter\Form\IParameterEditFactory, inject: yes}
 	- {implement: App\Components\Parameter\Grid\IParametersGridFactory, inject: yes}
+
+	# Signs
+	- {implement: App\Components\Sign\Form\ISignEditFactory, inject: yes}
+	- {implement: App\Components\Sign\Grid\ISignsGridFactory, inject: yes}
 
 	# Example
 	- {implement: App\Components\Example\Form\IExampleFormFactory, inject: yes}

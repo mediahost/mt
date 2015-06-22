@@ -43,6 +43,7 @@ class Product extends BaseTranslatable
 	use Model\SoftDeletable\SoftDeletable;
 	use Traits\ProductCategories;
 	use Traits\ProductParameters;
+	use Traits\ProductSigns;
 	use Traits\ProductSimilars;
 	use Traits\ProductImages;
 
@@ -62,6 +63,7 @@ class Product extends BaseTranslatable
 		$this->similars = new ArrayCollection();
 		$this->similarsWithMe = new ArrayCollection();
 		$this->images = new ArrayCollection();
+		$this->signs = new ArrayCollection();
 		parent::__construct($currentLocale);
 	}
 	
