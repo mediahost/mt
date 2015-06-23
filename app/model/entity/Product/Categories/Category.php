@@ -5,6 +5,8 @@ namespace App\Model\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model;
+use Nette\Http\FileUpload;
+use Nette\Utils\Strings;
 
 /**
  * @ORM\Entity(repositoryClass="App\Model\Repository\CategoryRepository")
@@ -34,6 +36,9 @@ class Category extends BaseTranslatable
 	/** @ORM\ManyToMany(targetEntity="Product", mappedBy="categories") */
 	protected $products;
 
+	/** @ORM\OneToOne(targetEntity="Image", cascade="all") */
+	protected $image;
+
 	public function __construct($name = NULL, $currentLocale = NULL)
 	{
 		parent::__construct($currentLocale);
@@ -47,6 +52,18 @@ class Category extends BaseTranslatable
 	{
 		$category->parent = $this;
 		$this->children->add($category);
+		return $this;
+	}
+
+	public function setImage(FileUpload $file)
+	{
+		if (!$this->image instanceof Image) {
+			$this->image = new Image($file);
+		} else {
+			$this->image->setFile($file);
+		}
+		$this->image->requestedFilename = 'category_image_' . Strings::webalize(microtime());
+		$this->image->setFolder(Image::FOLDER_CATEGORIES);
 		return $this;
 	}
 

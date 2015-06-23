@@ -37,6 +37,12 @@ class CategoryEdit extends BaseControl
 				->setRequired('Name is required')
 				->setAttribute('placeholder', $this->category->translate($defaultLanguage)->name);
 
+		$form->addUploadImageWithPreview('image', 'Image')
+				->setPreview('/foto/200-150/' . $this->category->image, $this->category->name)
+				->setSize(200, 150)
+				->addCondition(Form::FILLED)
+				->addRule(Form::IMAGE, 'Image must be in valid image format');
+
 		$form->addSubmit('save', 'Save');
 
 		$form->setDefaults($this->getDefaults());
@@ -56,6 +62,10 @@ class CategoryEdit extends BaseControl
 		$lang = $this->category->isNew() ? $this->languageService->defaultLanguage : $this->lang;
 		$this->category->translateAdd($lang)->name = $values->name;
 		$this->category->mergeNewTranslations();
+		
+		if ($values->image->isImage()) {
+			$this->category->image = $values->image;
+		}
 		return $this;
 	}
 
@@ -71,6 +81,7 @@ class CategoryEdit extends BaseControl
 	{
 		$values = [
 			'name' => $this->category->name,
+			'image' => $this->category->image,
 		];
 		return $values;
 	}
