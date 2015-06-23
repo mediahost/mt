@@ -24,6 +24,7 @@ class Image extends BaseEntity
 	const FOLDER_DEFAULT = 'others';
 	const FOLDER_PRODUCTS = 'products/images';
 	const FOLDER_USERS = 'users/images';
+	const FOLDER_CATEGORIES = 'category/images';
 	const DEFAULT_IMAGE = 'default.png';
 
 	use Identifier;
@@ -71,6 +72,7 @@ class Image extends BaseEntity
 		switch ($folder) {
 			case self::FOLDER_PRODUCTS:
 			case self::FOLDER_USERS:
+			case self::FOLDER_CATEGORIES:
 			case self::FOLDER_DEFAULT:
 				$this->folderToSave = $folder;
 				break;
