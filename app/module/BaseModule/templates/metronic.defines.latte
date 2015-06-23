@@ -109,7 +109,8 @@
 <script id="jsConf" type="text/json" n:syntax="double">
 	{
 		"basePath" : {{$basePath}},
-		"lang" : {{$lang}}
+		"lang" : {{$lang}},
+		"currencySymbol" : {{$currency->getFormat()->getSymbol()}}
 	}
 </script>
 <script src="{$basePath}/assets/global/scripts/config.js" type="text/javascript"></script>

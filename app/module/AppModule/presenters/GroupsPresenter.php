@@ -53,7 +53,12 @@ class GroupsPresenter extends BasePresenter
 	 */
 	public function actionAdd()
 	{
-		$this->groupEntity = new Group();
+		$nextLevel = $this->groupFacade->getLastUnusedLevel();
+		if (!$nextLevel) {
+			$this->flashMessage('You have reached the maximum of user groups.', 'warning');
+			$this->redirect('default');
+		}
+		$this->groupEntity = new Group($this->groupFacade->getLastUnusedLevel());
 		$this['groupForm']->setGroup($this->groupEntity);
 		$this->setView('edit');
 	}

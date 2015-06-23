@@ -26,10 +26,10 @@ class GroupsGrid extends BaseControl
 			'name' => 'ASC',
 		]);
 
-		$grid->addColumnNumber('id', 'ID #')
+		$grid->addColumnNumber('level', 'ID #')
 				->setSortable()
 				->setFilterNumber();
-		$grid->getColumn('id')->headerPrototype->width = '5%';
+		$grid->getColumn('level')->headerPrototype->width = '5%';
 
 		$grid->addColumnText('name', 'Group')
 				->setSortable()

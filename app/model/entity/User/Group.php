@@ -20,7 +20,7 @@ class Group extends BaseEntity
 
 	use Identifier;
 
-	/** @ORM\Column(type="string", length=3) */
+	/** @ORM\Column(type="smallint") */
 	protected $level;
 
 	/** @ORM\Column(type="string", length=50) */
@@ -29,10 +29,12 @@ class Group extends BaseEntity
 	/** @ORM\ManyToMany(targetEntity="User", mappedBy="groups") */
 	protected $users;
 
-	public function __construct($level, $name)
+	public function __construct($level, $name = NULL)
 	{
 		$this->level = $level;
-		$this->name = $name;
+		if ($name) {
+			$this->name = $name;
+		}
 		$this->users = new ArrayCollection();
 		parent::__construct();
 	}

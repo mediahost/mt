@@ -38,12 +38,16 @@ abstract class BasePresenter extends BaseBasePresenter
 	/** @var bool */
 	protected $showSteps = TRUE;
 
+	/** @var int */
+	protected $priceLevel = NULL;
+
 	protected function startup()
 	{
 		parent::startup();
 		if ($this->isInstallPresenter()) {
 			return;
 		}
+		$this->loadPriceLevel();
 		$this->stockRepo = $this->em->getRepository(Stock::getClassName());
 		$this->productRepo = $this->em->getRepository(Product::getClassName());
 		$this->categoryRepo = $this->em->getRepository(Category::getClassName());
@@ -69,6 +73,16 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->template->newStocks = $this->stockFacade->getNews();
 		$this->template->saleStocks = $this->stockFacade->getSales();
 		$this->template->visitedStocks = $this->stockFacade->getLastVisited();
+	}
+	
+	protected function loadPriceLevel()
+	{
+		if ($this->user->loggedIn) {
+			$identity = $this->user->identity;
+			if ($identity->group) {
+				$this->priceLevel = $identity->group->level;
+			}
+		}
 	}
 
 	public function createComponentProducts()
