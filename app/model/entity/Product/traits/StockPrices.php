@@ -165,23 +165,8 @@ trait StockPrices
 
 	public function getDiscountByGroup(Group $group)
 	{
-		$groupDiscount = $this->getGroupDiscountByLevel($group->level);
-		return $groupDiscount->discount;
+		return $this->getDiscountByLevel($group->level);
 	}
-
-//	public function removeDiscountsByGroup(Group $group)
-//	{
-//		$removeWithGroup = function ($key, GroupDiscount $groupDiscount) use ($group) {
-//			if ($groupDiscount->group->id === $group->id) {
-//				$this->groupDiscounts->removeElement($groupDiscount);
-//			}
-//			return TRUE;
-//		};
-//		$this->groupDiscounts->forAll($removeWithGroup);
-//		$this->recalculateOtherPrices();
-//		
-//		return $this;
-//	}
 
 	/** @return GroupDiscount|NULL */
 	protected function getGroupDiscountByLevel($level)
