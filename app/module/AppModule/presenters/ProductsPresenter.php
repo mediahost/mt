@@ -11,6 +11,7 @@ use App\Components\Product\Form\IStockPriceFactory;
 use App\Components\Product\Form\IStockQuantityFactory;
 use App\Components\Product\Form\IStockSeoFactory;
 use App\Components\Product\Form\IStockSignFactory;
+use App\Components\Product\Form\IStockSimilarFactory;
 use App\Components\Product\Form\StockAdd;
 use App\Components\Product\Form\StockBasic;
 use App\Components\Product\Form\StockCategory;
@@ -20,6 +21,7 @@ use App\Components\Product\Form\StockPrice;
 use App\Components\Product\Form\StockQuantity;
 use App\Components\Product\Form\StockSeo;
 use App\Components\Product\Form\StockSign;
+use App\Components\Product\Form\StockSimilar;
 use App\Components\Product\Grid\IStocksGridFactory;
 use App\Components\Product\Grid\StocksGrid;
 use App\Model\Entity\Stock;
@@ -61,6 +63,9 @@ class ProductsPresenter extends BasePresenter
 
 	/** @var IStockSignFactory @inject */
 	public $iStockSignFactory;
+
+	/** @var IStockSimilarFactory @inject */
+	public $iStockSimilarFactory;
 
 	/** @var IStocksGridFactory @inject */
 	public $iStocksGridFactory;
@@ -113,6 +118,7 @@ class ProductsPresenter extends BasePresenter
 			$this['stockImageForm']->setStock($this->stockEntity);
 			$this['stockParameterForm']->setStock($this->stockEntity);
 			$this['stockSignForm']->setStock($this->stockEntity);
+			$this['stockSimilarForm']->setStock($this->stockEntity);
 		}
 	}
 
@@ -199,6 +205,15 @@ class ProductsPresenter extends BasePresenter
 	public function createComponentStockSignForm()
 	{
 		$control = $this->iStockSignFactory->create();
+		$control->setLang($this->lang);
+		$control->onAfterSave = $this->afterStockSave;
+		return $control;
+	}
+
+	/** @return StockSimilar */
+	public function createComponentStockSimilarForm()
+	{
+		$control = $this->iStockSimilarFactory->create();
 		$control->setLang($this->lang);
 		$control->onAfterSave = $this->afterStockSave;
 		return $control;

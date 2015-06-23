@@ -4,6 +4,7 @@ namespace App\Model\Repository;
 
 use App\Model\Entity\Product;
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\Query\Expr\Orx;
 
 class ProductRepository extends BaseRepository
 {
@@ -46,5 +47,35 @@ class ProductRepository extends BaseRepository
 			return NULL;
 		}
 	}
-	
+
+	public function findByName($name, $lang = NULL, array $orderBy = null, $limit = null, $offset = null)
+	{
+		$qb = $this->createQueryBuilder('p')
+				->join('p.translations', 't')
+				->where('t.name LIKE :name')
+				->setParameter('name', '%' . $name . '%');
+		
+		if (is_string($lang)) {
+			$qb->andWhere('t.locale = :lang')
+					->setParameter('lang', $lang);
+		} else if (is_array($lang)) {
+			$orExpr = new Orx();
+			foreach ($lang as $key => $langItem) {
+				$idKey = 'lang' . $key;
+				$orExpr->add('t.locale = :' . $idKey);
+				$qb->setParameter($idKey, $langItem);
+			}
+			$qb->andWhere($orExpr);
+		}
+		
+		if ($orderBy) {
+			$qb->orderBy($orderBy);
+		}
+
+		return $qb->getQuery()
+						->setMaxResults($limit)
+						->setFirstResult($offset)
+						->getResult();
+	}
+
 }
