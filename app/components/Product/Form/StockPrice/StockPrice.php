@@ -54,7 +54,7 @@ class StockPrice extends StockBase
 		foreach ($groups as $group) {
 			$groupPrice = $this->defaultWithVat ? $this->stock->getPrice($group)->withVat : $this->stock->getPrice($group)->withoutVat;
 			$discount = $this->stock->getDiscountByGroup($group);
-			$placeholderPrice = $discount->type === Discount::PERCENTAGE ? $groupPrice : $defaultPrice;
+			$placeholderPrice = $discount && $discount->type === Discount::PERCENTAGE ? $groupPrice : $defaultPrice;
 			
 			$fixed->addText($group->id, $group->name)
 					->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
