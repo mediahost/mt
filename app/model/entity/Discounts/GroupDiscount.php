@@ -9,7 +9,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
 /**
  * @ORM\Entity
  *
- * @property Product $product
+ * @property Stock $stock
  * @property Group $group
  * @property Discount $discount
  */
@@ -18,8 +18,8 @@ class GroupDiscount extends BaseEntity
 
 	use Identifier;
 	
-    /** @ORM\ManyToOne(targetEntity="Product", inversedBy="groupDiscounts") */
-    protected $product;
+    /** @ORM\ManyToOne(targetEntity="Stock", inversedBy="groupDiscounts") */
+    protected $stock;
 
     /** @ORM\ManyToOne(targetEntity="Group") */
 	protected $group;

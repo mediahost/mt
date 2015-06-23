@@ -459,12 +459,19 @@ var ComponentsFormTools = function () {
 			}
 		});
 
-		$('.mask_currency').inputmask('currency', {
+		$('.mask_currency').inputmask('numeric', {
             rightAlign: 0,
 			prefix: '',
-			suffix: ' €', // TODO: replace by default currency
+			suffix: ' ' + currencySymbol,
             radixPoint: ",",
-            groupSeparator: ' '
+            groupSeparator: ' ',
+            autoGroup: !0,
+            digits: 2
+		});
+
+		$('.mask_percentage').inputmask('decimal', {
+            rightAlign: 0,
+			suffix: '%'
 		});
 
 		$('.mask_ipv4').ipAddress();

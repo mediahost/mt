@@ -20,9 +20,10 @@ class UserGroupsTest extends UserTestBase
 	{
 		$groupRepo = $this->em->getRepository(Group::class);
 		
-		$groupA = new Group('Group A');
-		$groupB = new Group('Group B');
-		$groupC = new Group('Group C');
+		$level = '1';
+		$groupA = new Group($level, 'Group A');
+		$groupB = new Group($level, 'Group B');
+		$groupC = new Group($level, 'Group C');
 		$this->em->persist($groupA);
 		$this->em->persist($groupB);
 		$this->em->persist($groupC);

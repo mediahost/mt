@@ -41,5 +41,10 @@ trait UserGroups
 	{
 		return $this->groups->removeElement($group);
 	}
+	
+	public function getGroup()
+	{
+		return $this->groups->count() ? $this->groups->first() : NULL;
+	}
 
 }

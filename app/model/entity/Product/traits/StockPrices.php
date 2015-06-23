@@ -15,6 +15,7 @@ use Nette\Reflection\ClassType;
  * @property float $priceVat
  * @property float $purchasePrice
  * @property float $oldPrice
+ * @property array $groupDiscounts
  */
 trait StockPrices
 {
@@ -65,9 +66,13 @@ trait StockPrices
 
 	// </editor-fold>
 
-	/** @ORM\OneToMany(targetEntity="GroupDiscount", mappedBy="product", cascade={"persist", "remove"}) */
-	private $groupDiscounts;
+	/** @ORM\OneToMany(targetEntity="GroupDiscount", mappedBy="stock", cascade={"persist", "remove"}) */
+	protected $groupDiscounts;
 
+	/**
+	 * @param Group $group
+	 * @return Price
+	 */
 	public function getPrice(Group $group = NULL)
 	{
 		$level = $this->getLevelFromGroup($group);
@@ -112,13 +117,13 @@ trait StockPrices
 	{
 		return $group ? $group->level : NULL;
 	}
-	
+
 	public static function getPriceProperties()
 	{
 		$properties = [];
 		$reflection = new ClassType(Stock::getClassName());
 		foreach ($reflection->properties as $property) {
-			if (preg_match('/^parameter(\d+)$/', $property->name, $matches)) {
+			if (preg_match('/^price(\d+)$/', $property->name, $matches)) {
 				$properties[$matches[1]] = $matches[0];
 			}
 		}
@@ -142,10 +147,10 @@ trait StockPrices
 
 	public function addDiscount(Discount $discount, Group $group)
 	{
-		$groupDiscount = $this->getGroupDiscountByGroup($group);
+		$groupDiscount = $this->getGroupDiscountByLevel($group->level);
 		if (!$groupDiscount) {
 			$groupDiscount = new GroupDiscount();
-			$groupDiscount->product = $this;
+			$groupDiscount->stock = $this;
 			$groupDiscount->group = $group;
 			$groupDiscount->discount = $discount;
 			$this->groupDiscounts->add($groupDiscount);
@@ -154,8 +159,14 @@ trait StockPrices
 			$groupDiscount->discount->value = $discount->value;
 		}
 		$this->recalculateOtherPrices();
-		
+
 		return $this;
+	}
+
+	public function getDiscountByGroup(Group $group)
+	{
+		$groupDiscount = $this->getGroupDiscountByLevel($group->level);
+		return $groupDiscount->discount;
 	}
 
 //	public function removeDiscountsByGroup(Group $group)
@@ -177,7 +188,7 @@ trait StockPrices
 	{
 		$groupDiscount = NULL;
 		$hasGroup = function (GroupDiscount $groupDiscount) use ($level) {
-			return $groupDiscount->group->level === $level;
+			return (int) $groupDiscount->group->level === (int) $level;
 		};
 		$groupDiscounts = $this->groupDiscounts->filter($hasGroup);
 		if ($groupDiscounts->count()) {

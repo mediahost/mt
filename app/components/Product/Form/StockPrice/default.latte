@@ -1,1 +1,44 @@
-{control form}
+{form form, class => 'form-horizontal'}	
+	{? $form->render('begin')}
+
+	<div class="alert" n:if="$form->errors">
+		<button class="close" data-close="alert"></button>
+		{foreach $form->errors as $error}
+			<span>{$error}</span><br n:if="!$iterator->last"/>
+		{/foreach}
+	</div>
+
+	<div class="form-body">
+		{var buttons = []}
+		{foreach $form->getControls() as $control}
+			{continueIf $control->getOption('rendered') || $control instanceof Nette\Forms\Controls\HiddenField}
+			{if $control instanceof Nette\Forms\Controls\Button}
+				{? $buttons[] = $control}
+			{else}
+				{!$form->renderer->renderPair($control)}
+				{if $control->name === 'price'}
+					{include groups, form => $form}
+				{/if}
+			{/if}
+		{/foreach}
+		{if count($buttons)}
+		{!$form->renderer->renderPairMulti($buttons)}
+		{/if}
+	</div>
+
+	{? $form->render('end');}
+{/form}
+
+{define groups}
+{var fixed => App\Model\Entity\Discount::FIXED_PRICE}
+{var percents => App\Model\Entity\Discount::PERCENTAGE}
+{foreach $form['fixed']->getComponents() as $key => $control}
+	<div class="form-group">
+		{$form->renderer->renderLabel($control)}
+		<div class="col-md-9">
+			<div class="inline-block">{input $form[$fixed][$key]}</div>
+			<div class="inline-block">{input $form[$percents][$key]}</div>
+		</div>
+	</div>
+{/foreach}
+{/define}

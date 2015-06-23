@@ -3,7 +3,6 @@
 namespace App\Templating;
 
 use App\ExchangeHelper;
-use h4kuna\Exchange\Exchange;
 use Latte\Engine;
 use Latte\Macros\MacroSet;
 use Nette\Application\UI\Control;
