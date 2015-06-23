@@ -2,7 +2,7 @@ var ComponentsDropdowns = function () {
 
 	var handleSelect2 = function () {
 
-		$("select.select2").each(function () {
+		$('select.select2').each(function () {
 			var params = {};
 			for (var i = 0, attrs = this.attributes, l = attrs.length; i < l; i++) {
 				var attr = attrs.item(i).nodeName;
@@ -21,6 +21,39 @@ var ComponentsDropdowns = function () {
 					}
 					params[paramName] = $(this).attr(attr);
 				}
+			}
+			if ($(this).hasClass('autocompleteProducts')) {
+				params.ajax = {
+					url: basePath + "/ajax/products/find-by-name",
+					dataType: 'jsonp',
+					delay: 250,
+					data: function (params) {
+						return {
+							lang: lang,
+							text: params.term,
+							page: params.page,
+							perPage: 30
+						};
+					},
+					processResults: function (data, params) {
+						params.page = params.page || 1;
+						return {
+							results: data.items,
+							pagination: {
+								more: (params.page * 30) < data.total_count
+							}
+						};
+					},
+					cache: true
+				};
+				params.minimumInputLength = 1;
+				params.escapeMarkup = function (markup) {
+					return markup;
+				};
+				params.templateResult = formatRepo;
+				params.templateSelection = function (repo) {
+					return repo.text;
+				};
 			}
 			$(this).select2(params);
 		});
@@ -41,3 +74,22 @@ var ComponentsDropdowns = function () {
 	};
 
 }();
+
+
+function formatRepo(repo) {
+	if (repo.loading)
+		return repo.text;
+
+	var markup = '<div class="clearfix">' +
+			'<div class="col-sm-1">' +
+			'<img src="' + repo.image_thumbnail_100 + '" style="max-width: 100%" />' +
+			'</div>' +
+			'<div clas="col-sm-10">' +
+			'<div class="clearfix">' +
+			'<div class="col-sm-10">' + repo.text + '</div>' +
+			'</div>';
+
+	markup += '</div></div>';
+
+	return markup;
+}
