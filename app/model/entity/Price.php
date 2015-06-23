@@ -2,7 +2,7 @@
 
 namespace App\Model\Entity;
 
-use Kdyby\Doctrine\Entities\BaseEntity;
+use Nette\Object;
 
 /**
  * @property float $withVat
@@ -10,55 +10,70 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  * @property Vat $vat
  * @property float $vatSum
  */
-class Price extends BaseEntity
+class Price extends Object
 {
-	
+
 	const PRECISION = 2;
 
 	/** @var float */
 	private $value;
-	
-    /** @var Vat */
-	protected $vat;
-	
+
+	/** @var Vat */
+	private $vat;
+
 	/** @var int */
-	protected $precision = self::PRECISION;
-	
+	private $precision = self::PRECISION;
+
 	public function __construct(Vat $vat = NULL, $withoutVat = NULL)
 	{
 		if ($vat) {
-			$this->vat = $vat;
+			$this->setVat($vat);
 		}
 		if ($withoutVat > 0) {
 			$this->setWithoutVat($withoutVat);
 		}
-		parent::__construct();
 	}
-	
+
+	public function setVat(Vat $vat)
+	{
+		$this->vat = $vat;
+		return $this;
+	}
+
+	public function getVat()
+	{
+		return $this->vat;
+	}
+
+	public function getPrecision()
+	{
+		return $this->precision;
+	}
+
 	public function setWithVat($value)
 	{
 		$this->value = round($value / $this->vat->upDecimal, $this->precision);
 		return $this;
 	}
-	
+
 	/** @return float */
 	public function getWithVat()
 	{
 		return (float) round($this->value * $this->vat->upDecimal, $this->precision);
 	}
-	
+
 	public function setWithoutVat($value)
 	{
 		$this->value = (float) round($value, $this->precision);
 		return $this;
 	}
-	
+
 	/** @return float */
 	public function getWithoutVat()
 	{
 		return (float) round($this->value, $this->precision);
 	}
-	
+
 	/** @return float */
 	public function getVatSum()
 	{

@@ -23,7 +23,7 @@
 
 	<div class="row margin-bottom-40">
 		<!-- BEGIN SALES -->
-		<div class="col-md-6 two-items-bottom-items">
+		<div class="col-md-6 two-items-bottom-items" n:ifset="$saleSign">
 			<h2>{$saleSign}</h2>
 			<div class="owl-carousel owl-carousel2">
 				<div n:foreach="$saleStocks as $stock">
@@ -60,7 +60,7 @@
 	</div>
 
 	<!-- BEGIN NEWS -->
-	<div class="row margin-bottom-35">
+	<div class="row margin-bottom-35" n:ifset="$newSign">
 		<div class="col-md-12 sale-product">
             <h2>{$newSign}</h2>
             <div class="owl-carousel owl-carousel5">
