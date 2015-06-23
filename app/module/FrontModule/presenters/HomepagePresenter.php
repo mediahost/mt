@@ -13,19 +13,20 @@ class HomepagePresenter extends BasePresenter
 		$this->showBrands = TRUE;
 //		$this->showSteps = FALSE;
 	}
-	
+
 	public function renderDefault()
 	{
-		$signRepo = $this->em->getRepository(Sign::getClassName());
-		
-		$signSettiings = $this->moduleService->getModuleSettings('signs');
-		$newSign = $signRepo->find($signSettiings->new);
-		$newSign->setCurrentLocale($this->lang);
-		$saleSign = $signRepo->find($signSettiings->sale);
-		$saleSign->setCurrentLocale($this->lang);
-		
-		$this->template->newSign = $newSign;
-		$this->template->saleSign = $saleSign;
+		$signSettings = $this->moduleService->getModuleSettings('signs');
+		if ($signSettings) {
+			$signRepo = $this->em->getRepository(Sign::getClassName());
+			$newSign = $signRepo->find($signSettings->new);
+			$newSign->setCurrentLocale($this->lang);
+			$saleSign = $signRepo->find($signSettings->sale);
+			$saleSign->setCurrentLocale($this->lang);
+
+			$this->template->newSign = $newSign;
+			$this->template->saleSign = $saleSign;
+		}
 	}
 
 }

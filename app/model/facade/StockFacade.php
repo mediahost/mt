@@ -49,6 +49,9 @@ class StockFacade extends Object
 
 	private function getSignedProducts($signId)
 	{
+		if (!$signId) {
+			return [];
+		}
 		$sorting = [
 			0 => 'ASC',
 			1 => 'DESC',
@@ -82,13 +85,15 @@ class StockFacade extends Object
 	public function getSales()
 	{
 		$signSettings = $this->moduleService->getModuleSettings('signs');
-		return $this->getSignedProducts($signSettings->sale);
+		$saleSignId = $signSettings ? $signSettings->sale : NULL;
+		return $this->getSignedProducts($saleSignId);
 	}
 
 	public function getNews()
 	{
 		$signSettings = $this->moduleService->getModuleSettings('signs');
-		return $this->getSignedProducts($signSettings->new);
+		$newSignId = $signSettings ? $signSettings->new : NULL;
+		return $this->getSignedProducts($newSignId);
 	}
 
 	public function getLastVisited()

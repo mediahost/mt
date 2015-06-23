@@ -3,17 +3,8 @@
 namespace Test\Model\Entity;
 
 use App\Model\Entity\Category;
-use App\Model\Entity\Discount;
-use App\Model\Entity\EntityException;
-use App\Model\Entity\Group;
-use App\Model\Entity\Parameter;
-use App\Model\Entity\ParameterType;
-use App\Model\Entity\ParameterValue;
-use App\Model\Entity\Price;
 use App\Model\Entity\Producer;
 use App\Model\Entity\Product;
-use App\Model\Entity\Tag;
-use App\Model\Entity\Vat;
 use Tester\Assert;
 
 $container = require __DIR__ . '/../../../bootstrap.php';
