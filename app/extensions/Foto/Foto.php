@@ -134,29 +134,33 @@ class Foto extends Object
 	 * @param FileUpload|string $source
 	 * @param type $filename filename for save
 	 * @param type $folder set added folder to save image (for ex. products)
-	 * @param int $format
+	 * @param int $defaultFormat when format not loaded from source
 	 * @return string filename
 	 * @throws FotoException
 	 * @throws UnknownImageFileException
 	 */
-	public function create($source, $filename, $folder = NULL, $format = Image::PNG)
+	public function create($source, &$filename, $folder = NULL, $defaultFormat = Image::PNG)
 	{
+		$format = NULL;
 		if ($source instanceof FileUpload) { // uploaded
-			$img = Image::fromString($source->contents);
+			$img = Image::fromString($source->contents, $format);
 		} else if (is_string($source)) { // filename or string
-			$img = file_exists($source) ? Image::fromFile($source) : Image::fromString($source);
+			$img = file_exists($source) ? Image::fromFile($source, $format) : Image::fromString($source, $format);
 		} else {
 			throw new FotoException('This source format isn\'t supported');
 		}
+		if ($format === NULL) {
+			$format = $defaultFormat;
+		}
 
-		$filenameWithExt = FotoHelpers::getExtendedFilename($filename, $format);
+		$filename = FotoHelpers::getExtendedFilename($filename, $format);
 
 		$folderFullPath = Helpers::getPath($this->originalFolder, $folder);
 		FileSystem::createDir($folderFullPath);
 
-		$this->delete(Helpers::getPath($folder, $filenameWithExt));
+		$this->delete(Helpers::getPath($folder, $filename));
 
-		$fullFilename = Helpers::getPath($folderFullPath, $filenameWithExt);
+		$fullFilename = Helpers::getPath($folderFullPath, $filename);
 		$img->save($fullFilename);
 
 		return $fullFilename;
@@ -216,18 +220,17 @@ class FotoHelpers extends Object
 
 	public static function recognizeTypeFromFileExtension($filename)
 	{
-		if (preg_match('~\.(png|jpg|jpeg|gif)$~i', $filename, $matches)) {
-			switch ($filename) {
-				case 'jpeg':
-				case 'jpg':
-					return Image::JPEG;
-				case 'png':
-					return Image::PNG;
-				case 'gif':
-					return Image::GIF;
-			}
+		switch (strtolower(pathinfo($filename, PATHINFO_EXTENSION))) {
+			case 'jpg':
+			case 'jpeg':
+				return Image::JPEG;
+			case 'png':
+				return Image::PNG;
+			case 'gif':
+				return Image::GIF;
+			default:
+				return NULL;
 		}
-		return NULL;
 	}
 
 	public static function getExtendedFilename($filename, $format)
@@ -239,10 +242,18 @@ class FotoHelpers extends Object
 			case Image::PNG:
 				$ext = 'png';
 				break;
+			case Image::GIF:
+				$ext = 'gif';
+				break;
 			default:
 				throw new FotoException('This requested format isn\'t supported');
 		}
 		return $filename . '.' . $ext;
+	}
+
+	public static function getFilenameWithoutExt($filenameWithExt)
+	{
+		return preg_replace('/\.(\w+)$/', '', $filenameWithExt);
 	}
 
 	public static function getSizeSeparator()
