@@ -5,6 +5,7 @@ namespace App\Model\Repository;
 use App\Model\Entity\Product;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Orx;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class ProductRepository extends BaseRepository
 {
@@ -48,13 +49,14 @@ class ProductRepository extends BaseRepository
 		}
 	}
 
-	public function findByName($name, $lang = NULL, array $orderBy = null, $limit = null, $offset = null)
+	public function findByName($name, $lang = NULL, $limit = null, $offset = null, &$totalCount = null)
 	{
 		$qb = $this->createQueryBuilder('p')
 				->join('p.translations', 't')
 				->where('t.name LIKE :name')
-				->setParameter('name', '%' . $name . '%');
-		
+				->setParameter('name', '%' . $name . '%')
+				->orderBy('t.name', 'ASC');
+
 		if (is_string($lang)) {
 			$qb->andWhere('t.locale = :lang')
 					->setParameter('lang', $lang);
@@ -68,11 +70,13 @@ class ProductRepository extends BaseRepository
 			$qb->andWhere($orExpr);
 		}
 		
-		if ($orderBy) {
-			$qb->orderBy($orderBy);
+		if ($limit) {
+			$paginator = new Paginator($qb);
+			$totalCount = $paginator->count();
 		}
 
-		return $qb->getQuery()
+		return $qb
+						->getQuery()
 						->setMaxResults($limit)
 						->setFirstResult($offset)
 						->getResult();
