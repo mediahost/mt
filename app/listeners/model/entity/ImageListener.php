@@ -59,7 +59,7 @@ class ImageListener extends Object implements Subscriber
 	private function removeImage(Image $image)
 	{
 		if ($image->filename) {
-
+			$this->fotoService->delete($image->filename);
 		}
 	}
 

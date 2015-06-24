@@ -9,7 +9,8 @@ use Nette\Utils\Strings;
 
 /**
  * @property Image $image
- * @property ArrayCollection $images
+ * @property-read array $images
+ * @property-write Image $otherImage
  */
 trait ProductImages
 {
@@ -17,7 +18,10 @@ trait ProductImages
 	/** @ORM\OneToOne(targetEntity="Image", cascade="all") */
 	protected $image;
 
-	/** @ORM\ManyToMany(targetEntity="Image") */
+	/** 
+	 * @ORM\ManyToMany(targetEntity="Image", cascade="all")
+	 * @var ArrayCollection
+	 */
 	protected $images;
 
 	public function setImage(FileUpload $file)
@@ -29,6 +33,37 @@ trait ProductImages
 		}
 		$this->image->requestedFilename = 'product_image_' . Strings::webalize(microtime());
 		$this->image->setFolder(Image::FOLDER_PRODUCTS);
+		return $this;
+	}
+
+	public function setOtherImage(FileUpload $file)
+	{
+		$image = new Image($file);
+		$image->requestedFilename = 'product_image_' . Strings::webalize(microtime());
+		$image->setFolder(Image::FOLDER_PRODUCTS);
+		
+		$this->images->add($image);
+		
+		return $this;
+	}
+	
+	public function hasOtherImage(Image $image)
+	{
+		$containImage = function ($key, Image $item) use ($image) {
+			return $item->id === $image->id;
+		};
+		return $this->images->exists($containImage);
+	}
+	
+	public function removeOtherImage($id)
+	{
+		$removeById = function ($key, Image $image) use ($id) {
+			if ((int) $image->id === (int) $id) {
+				$this->images->removeElement($image);
+			}
+			return TRUE;
+		};
+		$this->images->forAll($removeById);
 		return $this;
 	}
 

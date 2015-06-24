@@ -32,7 +32,7 @@ class Image extends BaseEntity
 	/** @ORM\Column(type="string", length=256, nullable=false) */
 	protected $filename;
 
-	/** @ORM\Column(type="date") */
+	/** @ORM\Column(type="datetime") */
 	protected $lastChange;
 
 	/** FileUpload */

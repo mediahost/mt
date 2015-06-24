@@ -26,13 +26,23 @@ class StockImage extends StockBase
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
 
-		$form->addUploadImageWithPreview('image', 'Image')
-				->setPreview('/foto/200-150/' . $this->stock->product->image, $this->stock->product->name)
-				->setSize(200, 150)
+		$imageSizeX = 200;
+		$imageSizeY = 150;
+		
+		$form->addUploadImageWithPreview('image', 'Main Image')
+				->setPreview("/foto/{$imageSizeX}-{$imageSizeY}/" . $this->stock->product->image, $this->stock->product->name)
+				->setSize($imageSizeX, $imageSizeY)
 				->addCondition(Form::FILLED)
 				->addRule(Form::IMAGE, 'Image must be in valid image format');
 
-		$form->addSubmit('save', 'Save');
+		$form->addUploadImageWithPreview('next', 'New other image', TRUE)
+				->setTexting('Select new')
+				->setPreview("/foto/{$imageSizeY}-0/default.png", 'Next image')
+				->setSize($imageSizeX, $imageSizeY)
+				->addCondition(Form::FILLED)
+				->addRule(Form::IMAGE, 'Image must be in valid image format');
+
+		$form->addSubmit('save', 'Upload');
 
 		$form->setDefaults($this->getDefaults());
 		$form->onSuccess[] = $this->formSucceeded;
@@ -50,6 +60,9 @@ class StockImage extends StockBase
 	{
 		if ($values->image->isImage()) {
 			$this->stock->product->image = $values->image;
+		}
+		foreach ($values->next as $image) {
+			$this->stock->product->otherImage = $image;
 		}
 
 		return $this;
@@ -69,6 +82,12 @@ class StockImage extends StockBase
 			'image' => $this->stock->product->image,
 		];
 		return $values;
+	}
+	
+	public function render()
+	{
+		$this->template->images = $this->stock->product->images;
+		parent::render();
 	}
 
 }
