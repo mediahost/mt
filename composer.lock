@@ -3407,12 +3407,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mediahost/grido.git",
-                "reference": "52415a65217953f4eb06a782096c4f2bbf6ad2b9"
+                "reference": "2e2d127993e615799e755d94bc8ebca75fa11965"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mediahost/grido/zipball/52415a65217953f4eb06a782096c4f2bbf6ad2b9",
-                "reference": "52415a65217953f4eb06a782096c4f2bbf6ad2b9",
+                "url": "https://api.github.com/repos/mediahost/grido/zipball/2e2d127993e615799e755d94bc8ebca75fa11965",
+                "reference": "2e2d127993e615799e755d94bc8ebca75fa11965",
                 "shasum": ""
             },
             "require": {
@@ -3466,7 +3466,7 @@
                 "forum": "http://forum.nette.org/cs/13109-grido-datagrid-pro-nette/",
                 "source": "https://github.com/mediahost/grido/tree/master"
             },
-            "time": "2015-04-24 07:36:29"
+            "time": "2015-06-24 14:31:44"
         },
         {
             "name": "rm/header",
