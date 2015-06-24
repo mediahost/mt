@@ -73,15 +73,20 @@ trait StockPrices
 	 * @param Group $group
 	 * @return Price
 	 */
-	public function getPrice(Group $group = NULL)
+	public function getPrice($group = NULL)
 	{
-		$level = $this->getLevelFromGroup($group);
+		if ($group instanceof Group) {
+			$level = $this->getLevelFromGroup($group);
+		} else {
+			$level = $group;
+		}
 		$priceProperties = self::getPriceProperties();
 		if ($level && array_key_exists($level, $priceProperties)) {
 			$priceProperty = $priceProperties[$level];
 			$priceValue = $this->$priceProperty;
+		} else {
+			$priceValue = $this->defaultPrice;
 		}
-		$priceValue = $this->defaultPrice;
 		return new Price($this->vat, $priceValue);
 	}
 
