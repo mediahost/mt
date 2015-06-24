@@ -103,8 +103,8 @@ class Foto extends Object
 						break;
 					case Image::FIT:
 					default:
-						$sizeX = $sizeX < $img->width ? $sizeX : $img->width;
-						$sizeY = $sizeY < $img->height ? $sizeY : $img->height;
+						$sizeX = min($sizeX, $img->width);
+						$sizeY = min($sizeY, $img->height);
 						break;
 				}
 
@@ -179,7 +179,7 @@ class Foto extends Object
 	{
 		foreach (scandir($this->rootFolder) as $dir) {
 			if (preg_match('@^\d+' . preg_quote(FotoHelpers::getSizeSeparator()) . '\d+$@', $dir)) {
-				$filename = Helpers::getPath($this->originalFolder, $dir, $name);
+				$filename = Helpers::getPath($this->rootFolder, $dir, $name);
 				FotoHelpers::deleteFile($filename);
 			}
 		}

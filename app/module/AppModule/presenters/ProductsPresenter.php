@@ -24,6 +24,7 @@ use App\Components\Product\Form\StockSign;
 use App\Components\Product\Form\StockSimilar;
 use App\Components\Product\Grid\IStocksGridFactory;
 use App\Components\Product\Grid\StocksGrid;
+use App\Model\Entity\Image;
 use App\Model\Entity\Stock;
 use App\TaggedString;
 use Kdyby\Doctrine\EntityRepository;
@@ -125,6 +126,24 @@ class ProductsPresenter extends BasePresenter
 	public function renderEdit()
 	{
 		$this->template->stock = $this->stockEntity;
+	}
+
+	/**
+	 * @secured
+	 * @resource('products')
+	 * @privilege('deleteImage')
+	 */
+	public function handleDeleteImage($imageId)
+	{
+		$imageRepo = $this->em->getRepository(Image::getClassName());
+		$image = $imageRepo->find($imageId);
+		if ($image && $this->stockEntity->product->hasOtherImage($image)) {
+			$imageRepo->delete($image);
+			$this->flashMessage('Image was successfully deleted', 'success');
+		} else {
+			$this->flashMessage('This image wasn\'t found for this product.', 'warning');
+		}
+		$this->redirect('this');
 	}
 
 	// <editor-fold desc="forms">

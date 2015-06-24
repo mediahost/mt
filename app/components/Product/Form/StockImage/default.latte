@@ -1,1 +1,53 @@
-{control form}
+{form form}	
+	{? $form->render('begin')}
+
+	<div class="alert" n:if="$form->errors">
+		<button class="close" data-close="alert"></button>
+		{foreach $form->errors as $error}
+			<span>{$error}</span><br n:if="!$iterator->last"/>
+		{/foreach}
+	</div>
+
+	<div class="form-body">
+		{var buttons = []}
+		{foreach $form->getControls() as $control}
+			{continueIf $control->getOption('rendered') || $control instanceof Nette\Forms\Controls\HiddenField}
+			{if $control instanceof Nette\Forms\Controls\Button}
+				{? $buttons[] = $control}
+			{elseif $control->name === 'image'}
+				<div class="row">
+					<div class="col-sm-6 col-md-6">
+						{!$form->renderer->renderPair($form['image'])}
+					</div>
+					<div class="col-sm-6 col-md-6">
+						{!$form->renderer->renderPair($form['next'])}
+					</div>
+				</div>
+			{else}
+				{!$form->renderer->renderPair($control)}
+			{/if}
+		{/foreach}
+		{if count($buttons)}
+			{!$form->renderer->renderPairMulti($buttons)}
+		{/if}
+		{if count($images)}
+			<div class="row" style="padding-left: 10px; padding-right: 10px;">
+				<div class="col-xs-6 col-sm-2 col-md-3" style="padding-left: 5px; padding-right: 5px;" n:foreach="$images as $image">
+					<div class="thumbnail">
+						<div style="height: 100px;">
+							<img src="{$basePath}/foto/150-100/{$image}" alt="{_'other image'}" class="img-responsive" />
+						</div>
+						<div class="caption">
+							<a href="{plink deleteImage! 'imageId' => $image->id}">
+								<i class="fa fa-trash"></i>
+								{_'Delete'}
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		{/if}
+	</div>
+
+	{? $form->render('end');}
+{/form}
