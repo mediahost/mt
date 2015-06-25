@@ -102,6 +102,22 @@
 	}
 }
 
+.sidebar-menu {
+	.list-group-item {
+		&.active {
+			background-color: #64AED9;
+			border-color: #64AED9;
+			a {
+				color: white;
+				&:hover {
+					color: white;
+					text-decoration: none;
+				}
+			}
+		}
+	}
+}
+
 @media (min-width: 1025px) {
 	.categories-menu {
 		& > ul.list-group {
