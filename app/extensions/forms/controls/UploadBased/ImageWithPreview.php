@@ -2,7 +2,6 @@
 
 namespace App\Forms\Controls\UploadBased;
 
-use Nette\Forms\Controls\UploadControl;
 use Nette\Http\FileUpload;
 use Nette\Utils\Html;
 
@@ -10,29 +9,26 @@ use Nette\Utils\Html;
  * Needs plugin - Bootstrap: fileinput.js v3.1.3
  * http://jasny.github.com/bootstrap/javascript/#fileinput
  */
-class UploadImageWithPreview extends UploadControl
+class UploadImageWithPreview extends UploadFile
 {
 
 	/** @var string */
-	private $src;
+	protected $src;
 
 	/** @var string */
-	private $alt = '';
+	protected $alt = '';
 
 	/** @var int */
-	private $width = 200;
+	protected $width = 200;
 
 	/** @var int */
-	private $height = 150;
+	protected $height = 150;
 
-	/** @var string */
-	private $selectText = 'Select image';
-
-	/** @var string */
-	private $changeText = 'Change';
-
-	/** @var string */
-	private $removeText = 'Remove';
+	public function __construct($label = NULL, $multiple = FALSE)
+	{
+		parent::__construct($label, $multiple);
+		$this->selectText = 'Select image';
+	}
 
 	public function setPreview($src, $alt)
 	{
@@ -48,36 +44,28 @@ class UploadImageWithPreview extends UploadControl
 		return $this;
 	}
 
-	public function setTexting($select = NULL, $change = NULL, $remove = NULL)
+	public function isFilled()
 	{
-		if ($select) {
-			$this->selectText = $select;
-		}
-		if ($change) {
-			$this->changeText = $change;
-		}
-		if ($remove) {
-			$this->removeText = $remove;
-		}
-		return $this;
+		$isImage = $this->value instanceof FileUpload ? $this->value->isImage() : (bool) $this->value;
+		return parent::isFilled() && $isImage;
 	}
 
 	/** Generates control's HTML element. */
 	public function getControl($caption = NULL)
 	{
-		$control = Html::el('div', [
-					'class' => 'fileinput fileinput-new',
-					'data-provides' => 'fileinput',
-		]);
+		$control = $this->getControlDiv();
+		$input = $this->getInput($caption);
+
 		if ($this->src) {
 			$control->add($this->getExisted());
 		}
-		return $control
-						->add($this->getPreview())
-						->add($this->getButtons($caption));
+		$control->add($this->getPreview())
+				->add($this->getButtons($input, 'div'));
+
+		return $control;
 	}
 
-	private function getExisted()
+	protected function getExisted()
 	{
 		return Html::el('div', ['class' => 'fileinput-new thumbnail'])
 						->add(Html::el('img', [
@@ -86,40 +74,12 @@ class UploadImageWithPreview extends UploadControl
 		]));
 	}
 
-	private function getPreview()
+	protected function getPreview()
 	{
 		return Html::el('div', [
 					'class' => 'fileinput-preview fileinput-exists thumbnail',
 					'style' => 'max-width: ' . $this->width . 'px; max-height: ' . $this->height . 'px;',
 		]);
-	}
-
-	private function getButtons($caption)
-	{
-		$input = parent::getControl($caption);
-
-		$selector = Html::el('span', ['class' => 'btn default btn-file'])
-				->add(Html::el('span', ['class' => 'fileinput-new'])->setText($this->translator->translate($this->selectText)))
-				->add(Html::el('span', ['class' => 'fileinput-exists'])->setText($this->translator->translate($this->changeText)))
-				->add($input);
-
-		$removeLink = Html::el('a', [
-					'class' => 'btn red fileinput-exists',
-					'data-dismiss' => 'fileinput',
-				])
-				->href('#')
-				->setText($this->translator->translate($this->removeText));
-
-		return Html::el('div')
-						->add($selector)
-						->add(Html::el('span')->setHtml('&nbsp;'))
-						->add($removeLink);
-	}
-
-	public function isFilled()
-	{
-		$isImage = $this->value instanceof FileUpload ? $this->value->isImage() : (bool) $this->value;
-		return parent::isFilled() && $isImage;
 	}
 
 }
