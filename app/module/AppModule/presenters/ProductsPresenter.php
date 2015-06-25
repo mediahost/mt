@@ -2,6 +2,8 @@
 
 namespace App\AppModule\Presenters;
 
+use App\Components\Product\Form\CsvStockImport;
+use App\Components\Product\Form\ICsvStockImportFactory;
 use App\Components\Product\Form\IStockAddFactory;
 use App\Components\Product\Form\IStockBasicFactory;
 use App\Components\Product\Form\IStockCategoryFactory;
@@ -67,6 +69,9 @@ class ProductsPresenter extends BasePresenter
 
 	/** @var IStockSimilarFactory @inject */
 	public $iStockSimilarFactory;
+
+	/** @var ICsvStockImportFactory @inject */
+	public $iCsvStockImportFactory;
 
 	/** @var IStocksGridFactory @inject */
 	public $iStocksGridFactory;
@@ -243,6 +248,32 @@ class ProductsPresenter extends BasePresenter
 		$message = new TaggedString('Product \'%s\' was successfully saved.', (string) $stock);
 		$this->flashMessage($message, 'success');
 		$this->redirect('edit', $stock->id);
+	}
+
+	/** @return CsvStockImport */
+	public function createComponentCsvImportForm()
+	{
+		$control = $this->iCsvStockImportFactory->create();
+		$control->setLang($this->lang);
+		$control->onSuccess = function (array $importedStocks) {
+			$count = count($importedStocks);
+			if ($count) {
+				$message = new TaggedString('%s product was successfully updated.', $count);
+				$message->setForm($count);
+				$type = 'success';
+			} else {
+				$message = 'No product was updated';
+				$type = 'warning';
+			}
+			$this->flashMessage($message, $type);
+		};
+		$control->onFail = function ($message) {
+			$this->flashMessage($message, 'danger');
+		};
+		$control->onDone = function () {
+			$this->redirect('this');
+		};
+		return $control;
 	}
 
 	// </editor-fold>

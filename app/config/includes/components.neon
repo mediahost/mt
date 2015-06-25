@@ -2,6 +2,9 @@
 # !!!must have "crete:" for components with events!!!
 
 services:
+	# Other extensions
+	- {implement: App\Extensions\Csv\IParserFactory, inject: yes}
+
 	# Auth
 	- {create: App\Components\Auth\ConnectManager, implement: App\Components\Auth\IConnectManagerFactory, inject: yes}
 	- {create: App\Components\Auth\FacebookConnect, implement: App\Components\Auth\IFacebookConnectFactory, inject: yes}
