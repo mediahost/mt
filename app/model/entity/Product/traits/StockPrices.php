@@ -12,19 +12,18 @@ use Nette\Reflection\ClassType;
 
 /**
  * @property Price $price
- * @property float $priceVat
- * @property float $purchasePrice
- * @property float $oldPrice
+ * @property Price $purchasePrice
+ * @property Price $oldPrice
  * @property array $groupDiscounts
  */
 trait StockPrices
 {
 
 	/** @ORM\Column(type="float", nullable=true) */
-	protected $purchasePrice;
+	private $purchasePrice;
 
 	/** @ORM\Column(type="float", nullable=true) */
-	protected $oldPrice;
+	private $oldPrice;
 
 	/** @ORM\ManyToOne(targetEntity="Vat") */
 	protected $vat;
@@ -70,15 +69,15 @@ trait StockPrices
 	protected $groupDiscounts;
 
 	/**
-	 * @param Group $group
+	 * @param Group|int $groupOrLevel Group or level
 	 * @return Price
 	 */
-	public function getPrice($group = NULL)
+	public function getPrice($groupOrLevel = NULL)
 	{
-		if ($group instanceof Group) {
-			$level = $this->getLevelFromGroup($group);
+		if ($groupOrLevel instanceof Group) {
+			$level = $this->getLevelFromGroup($groupOrLevel);
 		} else {
-			$level = $group;
+			$level = $groupOrLevel;
 		}
 		$priceProperties = self::getPriceProperties();
 		if ($level && array_key_exists($level, $priceProperties)) {
@@ -90,15 +89,42 @@ trait StockPrices
 		return new Price($this->vat, $priceValue);
 	}
 
+	/** @return Price|NULL */
+	public function getPurchasePrice()
+	{
+		if ($this->purchasePrice === NULL) {
+			return NULL;
+		}
+		return new Price($this->vat, $this->purchasePrice);
+	}
+
+	/** @return Price|NULL */
+	public function getOldPrice()
+	{
+		if ($this->oldPrice === NULL) {
+			return NULL;
+		}
+		return new Price($this->vat, $this->oldPrice);
+	}
+
+	/** @return Discount|NULL */
+	public function getDiscountByGroup(Group $group)
+	{
+		return $this->getDiscountByLevel($group->level);
+	}
+
+	/*	 * ******************************************************************* */
+
+	public function setDefaltPrice($value, $withVat = FALSE)
+	{
+		$this->setPrice($value, NULL, $withVat);
+		$this->recalculateOtherPrices();
+		return $this;
+	}
+
 	public function setPrice($value, Group $group = NULL, $withVat = FALSE)
 	{
-		$price = new Price($this->vat);
-
-		if ($withVat) {
-			$price->withVat = $value;
-		} else {
-			$price->withoutVat = $value;
-		}
+		$price = new Price($this->vat, $value, !$withVat);
 
 		$priceProperties = self::getPriceProperties();
 		$level = $this->getLevelFromGroup($group);
@@ -111,41 +137,24 @@ trait StockPrices
 		return $this;
 	}
 
-	public function setDefaltPrice($value, $withVat = FALSE)
+	public function setPurchasePrice($value, $withVat = FALSE)
 	{
-		$this->setPrice($value, NULL, $withVat);
-		$this->recalculateOtherPrices();
+		if ($value === NULL) {
+			$this->purchasePrice = NULL;
+		} else {
+			$price = new Price($this->vat, $value, !$withVat);
+			$this->purchasePrice = $price->withoutVat;
+		}
 		return $this;
 	}
 
-	protected function getLevelFromGroup(Group $group = NULL)
+	public function setOldPrice($value, $withVat = FALSE)
 	{
-		return $group ? $group->level : NULL;
-	}
-
-	public static function getPriceProperties()
-	{
-		$properties = [];
-		$reflection = new ClassType(Stock::getClassName());
-		foreach ($reflection->properties as $property) {
-			if (preg_match('/^price(\d+)$/', $property->name, $matches)) {
-				$properties[$matches[1]] = $matches[0];
-			}
-		}
-		return $properties;
-	}
-
-	protected function recalculateOtherPrices()
-	{
-		$priceProperties = self::getPriceProperties();
-		$defaultPrice = $this->getPrice();
-		foreach ($priceProperties as $level => $property) {
-			$discount = $this->getDiscountByLevel($level);
-			if ($discount) {
-				$this->$property = $discount->getDiscountedPrice($defaultPrice);
-			} else {
-				$this->$property = $defaultPrice;
-			}
+		if ($value === NULL) {
+			$this->oldPrice = NULL;
+		} else {
+			$price = new Price($this->vat, $value, !$withVat);
+			$this->oldPrice = $price->withoutVat;
 		}
 		return $this;
 	}
@@ -168,9 +177,40 @@ trait StockPrices
 		return $this;
 	}
 
-	public function getDiscountByGroup(Group $group)
+	/*	 * ******************************************************************* */
+
+	public static function getPriceProperties()
 	{
-		return $this->getDiscountByLevel($group->level);
+		$properties = [];
+		$reflection = new ClassType(Stock::getClassName());
+		foreach ($reflection->properties as $property) {
+			if (preg_match('/^price(\d+)$/', $property->name, $matches)) {
+				$properties[$matches[1]] = $matches[0];
+			}
+		}
+		return $properties;
+	}
+
+	/*	 * ******************************************************************* */
+
+	protected function getLevelFromGroup(Group $group = NULL)
+	{
+		return $group ? $group->level : NULL;
+	}
+
+	protected function recalculateOtherPrices()
+	{
+		$priceProperties = self::getPriceProperties();
+		$defaultPrice = $this->getPrice();
+		foreach ($priceProperties as $level => $property) {
+			$discount = $this->getDiscountByLevel($level);
+			if ($discount) {
+				$this->$property = $discount->getDiscountedPrice($defaultPrice);
+			} else {
+				$this->$property = $defaultPrice;
+			}
+		}
+		return $this;
 	}
 
 	/** @return GroupDiscount|NULL */

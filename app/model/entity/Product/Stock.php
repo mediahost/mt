@@ -16,10 +16,9 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  * @property Variant $variant2
  * @property Variant $variant3
  * @property Price $price
- * @property float $priceVat
- * @property ArrayCollection $groupDiscounts
- * @property float $purchasePrice
- * @property float $oldPrice
+ * @property array $groupDiscounts
+ * @property Price $purchasePrice
+ * @property Price $oldPrice
  * @property boolean $active
  * @property int $quantity
  * @property int $lock

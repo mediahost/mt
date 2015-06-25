@@ -37,8 +37,7 @@ class Discount extends BaseEntity
 	
 	public function getDiscountedPrice(Price $price)
 	{
-		$discounted = new Price();
-		$discounted->setVat($price->vat);
+		$discounted = new Price($price->vat);
 		switch ($this->type) {
 			case self::PERCENTAGE:
 				$amount = $price->withoutVat * ($this->value / 100);

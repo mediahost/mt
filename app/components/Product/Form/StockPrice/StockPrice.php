@@ -9,6 +9,7 @@ use App\Forms\Renderers\MetronicHorizontalFormRenderer;
 use App\Model\Entity\Discount;
 use App\Model\Entity\Group;
 use App\Model\Entity\GroupDiscount;
+use App\Model\Entity\Price;
 use App\Model\Entity\Stock;
 use App\Model\Entity\Vat;
 use App\Model\Facade\VatFacade;
@@ -55,7 +56,7 @@ class StockPrice extends StockBase
 			$groupPrice = $this->defaultWithVat ? $this->stock->getPrice($group)->withVat : $this->stock->getPrice($group)->withoutVat;
 			$discount = $this->stock->getDiscountByGroup($group);
 			$placeholderPrice = $discount && $discount->type === Discount::PERCENTAGE ? $groupPrice : $defaultPrice;
-			
+
 			$fixed->addText($group->id, $group->name)
 					->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
 					->setAttribute('placeholder', $this->exchangeHelper->format($placeholderPrice));
@@ -68,11 +69,9 @@ class StockPrice extends StockBase
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
 
 		$form->addText('purchase', 'Purchase price')
-				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
-				->setOption('description', 'Vat included');
+				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
 		$form->addText('old', 'Old price')
-				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
-				->setOption('description', 'Vat included');
+				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
 
 		$form->addSubmit('save', 'Save');
 
@@ -90,23 +89,24 @@ class StockPrice extends StockBase
 
 	private function load(ArrayHash $values)
 	{
-		$this->stock->purchasePrice = $values->purchase > 0 ? $values->purchase : NULL;
-		$this->stock->oldPrice = $values->old > 0 ? $values->old : NULL;
+		$this->stock->setPurchasePrice($values->purchase > 0 ? $values->purchase : NULL, $values->with_vat);
+		$this->stock->setOldPrice($values->old > 0 ? $values->old : NULL, $values->with_vat);
 
 		$vatRepo = $this->em->getRepository(Vat::getClassName());
 		$vat = $vatRepo->find($values->vat);
 		$this->stock->vat = $vat;
 
 		$groupRepo = $this->em->getRepository(Group::getClassName());
-		
+
 		$fixed = $values->{Discount::FIXED_PRICE};
 		$percents = $values->{Discount::PERCENTAGE};
 		foreach ($fixed as $groupId => $fixedValue) {
+			$fixedValue = Price::strToFloat($fixedValue);
 			if ($fixedValue > 0) {
 				$discount = new Discount($fixedValue, Discount::FIXED_PRICE);
 			} else if ($percents->$groupId &&
 					0 < $percents->$groupId && $percents->$groupId <= 100) {
-				$discount = new Discount($percents[$groupId], Discount::PERCENTAGE);
+				$discount = new Discount(100 - $percents->$groupId, Discount::PERCENTAGE);
 			} else {
 				continue;
 			}
@@ -130,10 +130,17 @@ class StockPrice extends StockBase
 	/** @return array */
 	protected function getDefaults()
 	{
-		$values = [
-			'purchase' => $this->stock->purchasePrice,
-			'old' => $this->stock->oldPrice,
-		];
+		$values = [];
+		if ($this->stock->purchasePrice) {
+			$values += [
+				'purchase' => $this->defaultWithVat ? $this->stock->purchasePrice->withVat : $this->stock->purchasePrice->withoutVat,
+			];
+		}
+		if ($this->stock->oldPrice) {
+			$values += [
+				'old' => $this->defaultWithVat ? $this->stock->oldPrice->withVat : $this->stock->oldPrice->withoutVat,
+			];
+		}
 		if ($this->stock->price) {
 			$values += [
 				'price' => $this->defaultWithVat ? $this->stock->price->withVat : $this->stock->price->withoutVat,
@@ -143,7 +150,15 @@ class StockPrice extends StockBase
 		}
 		foreach ($this->stock->groupDiscounts as $groupDiscount) {
 			/* @var $groupDiscount GroupDiscount */
-			$values[$groupDiscount->discount->type][$groupDiscount->group->id] = $groupDiscount->discount->value;
+			switch ($groupDiscount->discount->type) {
+				case Discount::PERCENTAGE:
+					$value = 100 - $groupDiscount->discount->value;
+					break;
+				default:
+					$value = $groupDiscount->discount->value;
+					break;
+			}
+			$values[$groupDiscount->discount->type][$groupDiscount->group->id] = $value;
 		}
 		return $values;
 	}

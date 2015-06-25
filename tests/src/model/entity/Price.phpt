@@ -23,8 +23,7 @@ class PriceTest extends BaseTestCase
 	 */
 	public function testSetAndGet($vat, $priceWithout, $priceWith)
 	{
-		$price = new Price();
-		$price->vat = new Vat($vat);
+		$price = new Price(new Vat($vat));
 		
 		$vatSum = round($priceWith - $priceWithout, $price->precision);
 		
