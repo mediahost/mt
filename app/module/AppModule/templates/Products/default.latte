@@ -1,10 +1,10 @@
 {block pageTitle}
-	{_'Products'}
+{_'Products'}
 {/block}
 
 {block breadcrumbItems}
 <li><span>{_'Products'}</span></li>
-{/block}
+		{/block}
 
 {block content}
 <div class="row">
@@ -12,7 +12,7 @@
 		<div class="portlet light">
 			<div class="portlet-title">
 				<div class="caption">
-					<i class="icon-users"></i>
+					<i class="fa fa-files-o"></i>
 					<span class="caption-subject bold uppercase">{_'Products'}</span>
 				</div>
 				<div class="actions">
@@ -25,6 +25,22 @@
 			</div>
 			<div class="portlet-body">
 				{control stocksGrid}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-upload"></i>
+					<span class="caption-subject bold uppercase">{_'CSV Update'}</span>
+				</div>
+			</div>
+			<div class="portlet-body">
+				{control csvImportForm}
 			</div>
 		</div>
 	</div>

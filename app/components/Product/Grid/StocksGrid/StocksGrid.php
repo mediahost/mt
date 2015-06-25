@@ -4,6 +4,7 @@ namespace App\Components\Product\Grid;
 
 use App\Components\BaseControl;
 use App\Extensions\Grido\BaseGrid;
+use App\Model\Entity\Discount;
 use App\Model\Entity\Group;
 use App\Model\Entity\Price;
 use App\Model\Entity\Stock;
@@ -36,9 +37,6 @@ class StocksGrid extends BaseControl
 		$grid->setDefaultSort([
 			'quantity' => 'DESC',
 		]);
-
-		$noVatText = $this->translator->translate('no VAT');
-		$withVatText = $this->translator->translate('with VAT');
 
 		/*		 * ************************************************ */
 		$grid->addColumnNumber('id', 'ID')
@@ -93,9 +91,13 @@ class StocksGrid extends BaseControl
 		$groups = $groupRepo->findAll();
 		foreach ($groups as $group) {
 			$priceLevel = 'price' . $group->level;
-			$grid->addColumnNumber($priceLevel, (string) $group . ' ' . $noVatText)
+			$grid->addColumnNumber($priceLevel, (string) $group)
 					->setOnlyForExport()
-					->setCustomRenderExport(function ($row) use ($priceLevel) {
+					->setCustomRenderExport(function ($row) use ($priceLevel, $group) {
+						$discount = $row->getDiscountByGroup($group);
+						if ($discount && $discount->type === Discount::PERCENTAGE) {
+							return $discount->value . '%';
+						}
 						return Price::floatToStr($row->$priceLevel->withoutVat);
 					});
 		}
