@@ -28,8 +28,7 @@ class DiscountTest extends BaseTestCase
 		list($fixedValue, $expFixWitout, $expFixWith) = $fixed;
 		list($minusValue, $expMinWitout, $expMinWith) = $minus;
 		
-		$price = new Price();
-		$price->vat = new Vat($vat);
+		$price = new Price(new Vat($vat));
 		$price->setWithoutVat($priceWithout);
 		
 		$discountPercent = new Discount();
