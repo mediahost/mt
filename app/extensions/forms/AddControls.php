@@ -18,6 +18,7 @@ use App\Forms\Controls\TextInputBased\ServerValidatedTextInput;
 use App\Forms\Controls\TextInputBased\Spinner;
 use App\Forms\Controls\TextInputBased\TagInput;
 use App\Forms\Controls\TextInputBased\TouchSpin;
+use App\Forms\Controls\UploadBased\UploadFile;
 use App\Forms\Controls\UploadBased\UploadImageWithPreview;
 
 trait AddControls
@@ -205,6 +206,18 @@ trait AddControls
 	public function addUploadImageWithPreview($name, $label = NULL, $multiple = FALSE)
 	{
 		return $this[$name] = new UploadImageWithPreview($label, $multiple);
+	}
+
+	/**
+	 * Adds control that allows the user to upload files.
+	 * @param  string  control name
+	 * @param  string  label
+	 * @param  bool  allows to upload multiple files
+	 * @return UploadFile
+	 */
+	public function addUpload($name, $label = NULL, $multiple = FALSE)
+	{
+		return $this[$name] = new UploadFile($label, $multiple);
 	}
 
 	// </editor-fold>

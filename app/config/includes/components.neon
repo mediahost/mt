@@ -29,6 +29,7 @@ services:
 	- {implement: App\Components\Product\Form\IStockParameterFactory, inject: yes}
 	- {implement: App\Components\Product\Form\IStockSignFactory, inject: yes}
 	- {implement: App\Components\Product\Form\IStockSimilarFactory, inject: yes}
+	- {implement: App\Components\Product\Form\ICsvStockImportFactory, inject: yes}
 	- {implement: App\Components\Product\Grid\IStocksGridFactory, inject: yes}
 
 	# Group

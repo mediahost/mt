@@ -16,6 +16,9 @@ class TaggedString
 	/** @var array */
 	private $replacements = [];
 
+	/** @var int */
+	private $form;
+
 	/** @var Gettext */
 	private $translator;
 
@@ -43,6 +46,12 @@ class TaggedString
 		return $this;
 	}
 	
+	public function setForm($form)
+	{
+		$this->form = $form;
+		return $this;
+	}
+	
 	public function setTranslator(Gettext $translator)
 	{
 		$this->translator = $translator;
@@ -51,7 +60,7 @@ class TaggedString
 
 	public function __toString()
 	{
-		$string = $this->translator ? $this->translator->translate($this->taggedString) : $this->taggedString;
+		$string = $this->translator ? $this->translator->translate($this->taggedString, $this->form) : $this->taggedString;
 		return vsprintf($string, $this->replacements);
 	}
 
