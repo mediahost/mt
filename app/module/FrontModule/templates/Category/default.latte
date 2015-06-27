@@ -1,10 +1,17 @@
 {includeblock '../categories.latte'}
 
 {block breadcrumbItems}
+{ifset $category}
 <li n:foreach="$category->path as $parent">
 	<a n:href="Category: url => $parent->url">{$parent}</a>
 </li>
 <li class="active">{$category}</li>
+{else}
+<li>
+	<span>{_'Search'}</span>
+</li>
+<li class="active" n:ifset="$searched">{$searched}</li>
+{/ifset}
 {/block}
 
 {block content}
