@@ -42,7 +42,7 @@
 	<h3>
 		<a href="{plink Product: 'url' => $product->url}">{$product}</a>
 	</h3>
-	<div class="pi-price">{$stock->price|currencyVat}</div>
+	<div class="pi-price">{$stock->getPrice($priceLevel)|currencyVat}</div>
 	<a href="#" class="btn btn-default add2cart">{_'Add to cart'}</a>
 </div>
 {/define}
