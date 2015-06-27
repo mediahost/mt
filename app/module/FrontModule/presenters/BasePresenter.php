@@ -64,6 +64,7 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->template->showSlider = $this->showSlider;
 		$this->template->showBrands = $this->showBrands;
 		$this->template->showSteps = $this->showSteps;
+		$this->template->priceLevel = $this->priceLevel;
 		
 		$this->template->topStocks = $this->stockFacade->getTops();
 		$this->template->bestsellerStocks = $this->stockFacade->getBestSellers();

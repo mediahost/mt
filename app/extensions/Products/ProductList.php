@@ -7,6 +7,7 @@ use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Helpers;
 use App\Model\Entity\Category;
+use App\Model\Entity\Stock;
 use Doctrine\ORM\Query\Expr\OrderBy;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Exception;
@@ -23,6 +24,7 @@ class ProductList extends Control
 
 	const ORDER_ASC = 'ASC';
 	const ORDER_DESC = 'DESC';
+	const DEFAULT_PRICE_LEVEL = 'defaultPrice';
 
 	/** @var int @persistent */
 	public $page = 1;
@@ -60,6 +62,12 @@ class ProductList extends Control
 	/** @var QueryBuilder */
 	protected $qb;
 
+	/** @var int */
+	protected $priceLevel;
+
+	/** @var string */
+	protected $priceLevelName = self::DEFAULT_PRICE_LEVEL;
+
 	/** @var int total count of items */
 	protected $count;
 
@@ -89,6 +97,20 @@ class ProductList extends Control
 	public function setQb(QueryBuilder $model)
 	{
 		$this->qb = $model;
+
+		return $this;
+	}
+
+	public function setPriceLevel($level)
+	{
+		$this->priceLevel = $level;
+
+		$allowedProperties = Stock::getPriceProperties();
+		if (array_key_exists($level, $allowedProperties)) {
+			$this->priceLevelName = $allowedProperties[$level];
+		} else {
+			$this->priceLevelName = self::DEFAULT_PRICE_LEVEL;
+		}
 
 		return $this;
 	}
@@ -421,7 +443,7 @@ class ProductList extends Control
 		} catch (InvalidArgumentException $exc) {
 			$this->flashMessage('This sorting method isn\t supported.', 'warning');
 		}
-		
+
 		$orderBy = new OrderBy();
 		foreach ($this->sorting as $key => $value) {
 			switch ($key) {
@@ -435,7 +457,7 @@ class ProductList extends Control
 					$orderBy->add('t.name', $value);
 					break;
 				case 'price':
-					$orderBy->add('s.defaultPrice', $value);
+					$orderBy->add('s.' . $this->priceLevelName, $value);
 					break;
 			}
 		}
@@ -551,6 +573,7 @@ class ProductList extends Control
 		}
 
 		$this->template->stocks = $data;
+		$this->template->priceLevel = $this->priceLevel;
 		$this->template->paginator = $this->paginator;
 		$this->template->itemsPerRow = $this->itemsPerRow;
 		$this->template->lang = $this->lang;
