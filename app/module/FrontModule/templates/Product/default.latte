@@ -35,8 +35,8 @@
 						</div>
 						<div class="product-other-images" n:if="count($product->images)">
 							<a n:foreach="$product->images as $image"
-							   href="{$basePath}/foto/{$image->image|size}" class="fancybox-button" rel="photos-lib">
-								<img alt="{$product}" src="{$basePath}/foto/{$product->image|size:'60','75'}">
+							   href="{$basePath}/foto/{$image|size}" class="fancybox-button" rel="photos-lib">
+								<img alt="{$product}" src="{$basePath}/foto/{$image|size:'60','75'}">
 							</a>
 						</div>
 					</div>
