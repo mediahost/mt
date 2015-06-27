@@ -30,10 +30,19 @@
 
 	$.nette.ext('loader', {
 		start: function (jqXHR, settings) {
+			var targetAttr = 'data-target-loading';
 			var parentPortlet = null;
 			if (settings.nette.form && settings.nette.form.length) {
-				this.element = settings.nette.form;
-				var parentPortlet = this.element.closest('.portlet');
+				var form = settings.nette.form;
+				if (form.attr(targetAttr)) {
+					this.element = $(form.attr(targetAttr));
+					var parentPortlet = this.element;
+				} else {
+					this.element = settings.nette.form;
+					var parentPortlet = this.element.closest('.portlet');
+				}
+			} else if (settings.nette.el.attr(targetAttr)) {
+				var parentPortlet = $(settings.nette.el.attr(targetAttr));
 			} else {
 				var parentPortlet = settings.nette.el.closest('.portlet');
 			}
@@ -42,7 +51,8 @@
 			}
 			Metronic.blockUI({
 				target: this.element,
-				animate: true
+				animate: true,
+				overlayColor: 'none'
 			});
 		},
 		complete: function () {

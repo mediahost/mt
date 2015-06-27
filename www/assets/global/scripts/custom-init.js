@@ -8,6 +8,7 @@ var GlobalCustomInit = function () {
 			ComponentsPickers.init();
 			Maps.init();
 			UITree.init();
+			Forms.init();
 
 			GridoStart.init();
 			if (typeof MultipleFileUpload != 'undefined') {
@@ -20,6 +21,10 @@ var GlobalCustomInit = function () {
 		onReloadModalEvent: function () {
 			ComponentsDropdowns.init(); // init form components after ajax load
 			Nette.initAllForms(); // reinit all nette forms
+		},
+		onReloadProductList: function () {
+			Layout.initUniform();
+			Layout.initSliderRange();
 		}
 	};
 

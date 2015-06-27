@@ -3,7 +3,11 @@
 namespace App\Extensions\Products;
 
 use App\Extensions\Products\Components\Paginator;
+use App\Forms\Form;
+use App\Forms\Renderers\MetronicFormRenderer;
+use App\Helpers;
 use App\Model\Entity\Category;
+use Doctrine\ORM\Query\Expr\OrderBy;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Exception;
 use InvalidArgumentException;
@@ -11,6 +15,8 @@ use Kdyby\Doctrine\QueryBuilder;
 use Nette\Application\UI\Control;
 use Nette\Localization\ITranslator;
 use Nette\Templating\FileTemplate;
+use Nette\Utils\ArrayHash;
+use Nette\Utils\Strings;
 
 class ProductList extends Control
 {
@@ -24,11 +30,8 @@ class ProductList extends Control
 	/** @var int @persistent */
 	public $perPage;
 
-	/** @var array */
-	public $sort = array();
-
-	/** @var array */
-	public $filter = array();
+	/** @var string @persistent */
+	public $sort;
 
 	/** @var array event on render */
 	public $onRender;
@@ -37,7 +40,16 @@ class ProductList extends Control
 	public $onFetchData;
 
 	/** @var array */
-	protected $perPageList = array(9, 18, 27, 36, 45);
+	protected $filter = array();
+
+	/** @var array */
+	protected $sorting = array();
+
+	/** @var array */
+	protected $perPageListMultiples = [1, 2, 3, 6];
+
+	/** @var array */
+	protected $perPageList = [9, 18, 27, 56];
 
 	/** @var int */
 	protected $itemsPerRow = 3;
@@ -66,6 +78,9 @@ class ProductList extends Control
 	/** @var string */
 	protected $defaultLang = 'en';
 
+	/** @var bool */
+	protected $ajax;
+
 	/**
 	 * Sets a QueryBuilder.
 	 * @param QueryBuilder $model
@@ -92,10 +107,7 @@ class ProductList extends Control
 		$this->rowsPerPage = $rowsPerPageInt;
 		$itemsPerPage = $this->getDefaultPerPage();
 
-		if (!in_array($itemsPerPage, $this->perPageList)) {
-			$this->perPageList[] = $itemsPerPage;
-			sort($this->perPageList);
-		}
+		$this->resetPerPageList($itemsPerPage);
 
 		return $this;
 	}
@@ -117,19 +129,40 @@ class ProductList extends Control
 	 * @return ProductList
 	 * @throws InvalidArgumentException
 	 */
-	public function setSort(array $sort)
+	public function setSorting($sort)
 	{
-		static $replace = array('asc' => self::ORDER_ASC, 'desc' => self::ORDER_DESC);
-
 		foreach ($sort as $column => $dir) {
-			$dir = strtr(strtolower($dir), $replace);
-			if (!in_array($dir, $replace)) {
-				throw new InvalidArgumentException("Dir '$dir' for column '$column' is not allowed.");
-			}
-
-			$this->sort[$column] = $dir;
+			$this->checkSortDirection($column, $dir);
+			$this->sorting[$column] = $dir;
 		}
 
+		return $this;
+	}
+
+	public function addSorting($column, $dir = NULL, $asFirst = TRUE)
+	{
+		if ($dir === NULL && preg_match('/^(\w+)_(\w+)$/', $column, $matches)) {
+			$column = $matches[1];
+			$dir = $matches[2];
+		}
+		$this->checkSortDirection($column, $dir);
+
+		if ($asFirst) {
+			$this->sorting = [$column => $dir] + $this->sorting;
+		} else {
+			$this->sorting[$column] = $dir;
+		}
+
+		return $this;
+	}
+
+	public function checkSortDirection($column, &$dir)
+	{
+		$replace = array('asc' => self::ORDER_ASC, 'desc' => self::ORDER_DESC);
+		$dir = strtr(strtolower($dir), $replace);
+		if (!in_array($dir, $replace)) {
+			throw new InvalidArgumentException("Dir '$dir' for column '$column' is not allowed.");
+		}
 		return $this;
 	}
 
@@ -142,6 +175,15 @@ class ProductList extends Control
 	{
 		$this->perPageList = $perPageList;
 
+		return $this;
+	}
+
+	public function resetPerPageList($firstItem)
+	{
+		$this->perPageList = $this->perPageListMultiples;
+		foreach ($this->perPageList as $key => $value) {
+			$this->perPageList[$key] = $firstItem * $value;
+		}
 		return $this;
 	}
 
@@ -176,6 +218,12 @@ class ProductList extends Control
 	public function setPaginator(Paginator $paginator)
 	{
 		$this->paginator = $paginator;
+		return $this;
+	}
+
+	public function allowAjax($value = TRUE)
+	{
+		$this->ajax = $value;
 		return $this;
 	}
 
@@ -368,7 +416,14 @@ class ProductList extends Control
 
 	protected function applySorting()
 	{
-		foreach ($this->sort as $key => $value) {
+		try {
+			$this->addSorting($this->sort);
+		} catch (InvalidArgumentException $exc) {
+			$this->flashMessage('This sorting method isn\t supported.', 'warning');
+		}
+		
+		$orderBy = new OrderBy();
+		foreach ($this->sorting as $key => $value) {
 			switch ($key) {
 				case 'name':
 					$this->qb
@@ -377,8 +432,15 @@ class ProductList extends Control
 							->setParameter('lang', $this->lang)
 							->setParameter('defaultLang', $this->defaultLang)
 							->orderBy('t.name', $value);
+					$orderBy->add('t.name', $value);
+					break;
+				case 'price':
+					$orderBy->add('s.defaultPrice', $value);
 					break;
 			}
+		}
+		if ($orderBy->count()) {
+			$this->qb->orderBy($orderBy);
 		}
 	}
 
@@ -403,6 +465,7 @@ class ProductList extends Control
 	 */
 	public function handlePage($page)
 	{
+		$this->page = $page;
 		$this->reload();
 	}
 
@@ -414,7 +477,6 @@ class ProductList extends Control
 	public function reload()
 	{
 		if ($this->presenter->isAjax()) {
-			$this->presenter->payload->grido = TRUE;
 			$this->redrawControl();
 		} else {
 			$this->redirect('this');
@@ -438,7 +500,22 @@ class ProductList extends Control
 
 	public function render()
 	{
-		$this->renderList();
+		if ($this->presenter->isAjax()) {
+			if ($this->isControlInvalid('productList')) {
+				$this->renderList();
+			}
+			if ($this->isControlInvalid('productFilter')) {
+				$this->renderFilter();
+			}
+			if ($this->isControlInvalid('productPaginator')) {
+				$this->renderPaginator();
+			}
+			if ($this->isControlInvalid('productSorting')) {
+				$this->renderSorting();
+			}
+		} else {
+			$this->renderList();
+		}
 	}
 
 	public function renderList()
@@ -472,12 +549,71 @@ class ProductList extends Control
 		if ($this->onRender) {
 			$this->onRender($this);
 		}
-		
+
 		$this->template->stocks = $data;
 		$this->template->paginator = $this->paginator;
 		$this->template->itemsPerRow = $this->itemsPerRow;
 		$this->template->lang = $this->lang;
+		$this->template->ajax = $this->ajax;
 		$this->template->render();
+	}
+
+	/*	 * ******************************************************************************************* */
+
+	protected function createComponentSortingForm($name)
+	{
+		$form = new Form($this, $name);
+		$form->setTranslator($this->translator);
+		$form->setRenderer(new MetronicFormRenderer());
+		$form->getElementPrototype()->class = !$this->ajax ? : 'ajax';
+
+		$form->addSelect('sort', 'Sort by', $this->getSortingMethods())
+				->setDefaultValue($this->getDefaultSortingMethod())
+				->getControlPrototype()->class('input-sm sendOnChange');
+
+		$form->addSelect('perPage', 'Show', $this->getItemsForCountSelect())
+				->getControlPrototype()->class('input-sm sendOnChange');
+		$defaultPerPage = array_search($this->perPage, $this->perPageList);
+		if ($defaultPerPage !== FALSE) {
+			$form['perPage']->setDefaultValue($this->perPage);
+		}
+
+		$form->onSuccess[] = $this->processSortingForm;
+	}
+
+	public function processSortingForm(Form $param, ArrayHash $values)
+	{
+		$this->sort = $values->sort;
+		$key = array_search($values->perPage, $this->perPageList);
+		if ($key !== FALSE) {
+			$this->perPage = $key ? $values->perPage : NULL;
+		}
+		$this->reload();
+	}
+
+	/** @return array */
+	protected function getItemsForCountSelect()
+	{
+		return array_combine($this->perPageList, $this->perPageList);
+	}
+
+	/** @return array */
+	protected function getSortingMethods()
+	{
+		return [
+			'price_asc' => 'Price (Low > High)',
+			'price_desc' => 'Price (High > Low)',
+			'name_asc' => 'Name (A - Z)',
+			'name_desc' => 'Name (Z - A)',
+		];
+	}
+
+	protected function getDefaultSortingMethod()
+	{
+		$sorting = $this->sorting;
+		list($name, $order) = each($sorting);
+		$code = Helpers::concatStrings('_', Strings::webalize($name), Strings::webalize($order));
+		return $code;
 	}
 
 }

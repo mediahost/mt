@@ -16,3 +16,9 @@ jQuery(document).ready(function () {
 	// Global components
 	GlobalCustomInit.init();
 });
+
+$.nette.ext('netteAjax', {
+	complete: function () {
+		GlobalCustomInit.onReloadProductList();
+	}
+});
