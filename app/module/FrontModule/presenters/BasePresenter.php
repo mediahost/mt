@@ -6,6 +6,7 @@ use App\BaseModule\Presenters\BasePresenter as BaseBasePresenter;
 use App\Extensions\Products\ProductList;
 use App\Model\Entity\Category;
 use App\Model\Entity\Product;
+use App\Model\Entity\Sign;
 use App\Model\Entity\Stock;
 use App\Model\Repository\CategoryRepository;
 use App\Model\Repository\ProductRepository;
@@ -57,24 +58,23 @@ abstract class BasePresenter extends BaseBasePresenter
 	protected function beforeRender()
 	{
 		parent::beforeRender();
+		
 		$this->template->categories = $this->categories;
 		$this->template->activeCategory = $this->activeCategory;
 		$this->template->showSlider = $this->showSlider;
 		$this->template->showBrands = $this->showBrands;
 		$this->template->showSteps = $this->showSteps;
-
-		$categoriesSettings = $this->moduleService->getModuleSettings('categories');
-		$this->template->expandOnlyActiveCategories = $categoriesSettings ? $categoriesSettings->expandOnlyActiveCategories : FALSE;
-		$this->template->maxCategoryDeep = $categoriesSettings ? $categoriesSettings->maxDeep : 3;
-		$this->template->showProductsCount = $categoriesSettings ? $categoriesSettings->showProductsCount : FALSE;
-
+		
 		$this->template->topStocks = $this->stockFacade->getTops();
 		$this->template->bestsellerStocks = $this->stockFacade->getBestSellers();
 		$this->template->newStocks = $this->stockFacade->getNews();
 		$this->template->saleStocks = $this->stockFacade->getSales();
 		$this->template->visitedStocks = $this->stockFacade->getLastVisited();
+
+		$this->loadTemplateCategoriesSettings();
+		$this->loadTemplateSigns();
 	}
-	
+
 	protected function loadPriceLevel()
 	{
 		if ($this->user->loggedIn) {
@@ -82,6 +82,29 @@ abstract class BasePresenter extends BaseBasePresenter
 			if ($identity->group) {
 				$this->priceLevel = $identity->group->level;
 			}
+		}
+	}
+
+	protected function loadTemplateCategoriesSettings()
+	{
+		$categoriesSettings = $this->moduleService->getModuleSettings('categories');
+		$this->template->expandOnlyActiveCategories = $categoriesSettings ? $categoriesSettings->expandOnlyActiveCategories : FALSE;
+		$this->template->maxCategoryDeep = $categoriesSettings ? $categoriesSettings->maxDeep : 3;
+		$this->template->showProductsCount = $categoriesSettings ? $categoriesSettings->showProductsCount : FALSE;
+	}
+
+	protected function loadTemplateSigns()
+	{
+		$signSettings = $this->moduleService->getModuleSettings('signs');
+		if ($signSettings) {
+			$signRepo = $this->em->getRepository(Sign::getClassName());
+			$newSign = $signRepo->find($signSettings->new);
+			$newSign->setCurrentLocale($this->lang);
+			$saleSign = $signRepo->find($signSettings->sale);
+			$saleSign->setCurrentLocale($this->lang);
+
+			$this->template->newSign = $newSign;
+			$this->template->saleSign = $saleSign;
 		}
 	}
 
