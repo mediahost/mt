@@ -429,6 +429,7 @@ class ProductList extends Control
 
 	protected function applyFiltering()
 	{
+		$this->filterNotDeleted();
 		$this->filterOnlyActive();
 		foreach ($this->filter as $key => $value) {
 			switch ($key) {
@@ -442,13 +443,19 @@ class ProductList extends Control
 		}
 	}
 
+	protected function filterNotDeleted()
+	{
+		$this->qb
+				->andWhere('p.deletedAt IS NULL OR p.deletedAt > :now')
+				->setParameter('now', new DateTime());
+		return $this;
+	}
+
 	protected function filterOnlyActive()
 	{
 		$this->qb
 				->andWhere('p.active = :active')
-				->setParameter('active', TRUE)
-				->andWhere('p.deletedAt IS NULL OR p.deletedAt > :now')
-				->setParameter('now', new DateTime());
+				->setParameter('active', TRUE);
 		return $this;
 	}
 
