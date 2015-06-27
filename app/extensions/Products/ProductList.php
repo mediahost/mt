@@ -25,6 +25,7 @@ class ProductList extends Control
 	const ORDER_ASC = 'ASC';
 	const ORDER_DESC = 'DESC';
 	const DEFAULT_PRICE_LEVEL = 'defaultPrice';
+	const DEFAULT_LANGUAGE = 'en';
 
 	/** @var int @persistent */
 	public $page = 1;
@@ -41,11 +42,19 @@ class ProductList extends Control
 	/** @var array event for modifying data */
 	public $onFetchData;
 
+	// <editor-fold defaultstate="collapsed" desc="protected variables">
+
 	/** @var array */
 	protected $filter = array();
 
 	/** @var array */
 	protected $sorting = array();
+
+	/** @var string */
+	protected $lang = self::DEFAULT_LANGUAGE;
+
+	/** @var string */
+	protected $defaultLang = self::DEFAULT_LANGUAGE;
 
 	/** @var array */
 	protected $perPageListMultiples = [1, 2, 3, 6];
@@ -80,20 +89,15 @@ class ProductList extends Control
 	/** @var ITranslator */
 	protected $translator;
 
-	/** @var string */
-	protected $lang = 'en';
-
-	/** @var string */
-	protected $defaultLang = 'en';
-
 	/** @var bool */
 	protected $ajax;
 
-	/**
-	 * Sets a QueryBuilder.
-	 * @param QueryBuilder $model
-	 * @return ProductList
-	 */
+	// </editor-fold>
+
+	/* 	 SETTERS ******************************************************************************************* */
+
+	// <editor-fold defaultstate="collapsed" desc="public setters">
+
 	public function setQb(QueryBuilder $model)
 	{
 		$this->qb = $model;
@@ -116,26 +120,7 @@ class ProductList extends Control
 	}
 
 	/**
-	 * Sets the number of items per page.
-	 * @param int $itemsPerRow
-	 * @param int $rowsPerPage
-	 * @return ProductList
-	 */
-	public function setItemsPerPage($itemsPerRow, $rowsPerPage)
-	{
-		$itemsPerRowInt = (int) $itemsPerRow;
-		$rowsPerPageInt = (int) $rowsPerPage;
-		$this->itemsPerRow = $itemsPerRowInt;
-		$this->rowsPerPage = $rowsPerPageInt;
-		$itemsPerPage = $this->getDefaultPerPage();
-
-		$this->resetPerPageList($itemsPerPage);
-
-		return $this;
-	}
-
-	/**
-	 * Sets filtering.
+	 * Add filtering.
 	 * @param array $filter
 	 * @return ProductList
 	 */
@@ -146,7 +131,7 @@ class ProductList extends Control
 	}
 
 	/**
-	 * Sets sorting.
+	 * Set sorting.
 	 * @param array $sort
 	 * @return ProductList
 	 * @throws InvalidArgumentException
@@ -178,21 +163,19 @@ class ProductList extends Control
 		return $this;
 	}
 
-	public function checkSortDirection($column, &$dir)
+	public function setItemsPerPage($itemsPerRow, $rowsPerPage)
 	{
-		$replace = array('asc' => self::ORDER_ASC, 'desc' => self::ORDER_DESC);
-		$dir = strtr(strtolower($dir), $replace);
-		if (!in_array($dir, $replace)) {
-			throw new InvalidArgumentException("Dir '$dir' for column '$column' is not allowed.");
-		}
+		$itemsPerRowInt = (int) $itemsPerRow;
+		$rowsPerPageInt = (int) $rowsPerPage;
+		$this->itemsPerRow = $itemsPerRowInt;
+		$this->rowsPerPage = $rowsPerPageInt;
+		$itemsPerPage = $this->getDefaultPerPage();
+
+		$this->resetPerPageList($itemsPerPage);
+
 		return $this;
 	}
 
-	/**
-	 * Sets items to per-page select.
-	 * @param array $perPageList
-	 * @return ProductList
-	 */
 	public function setPerPageList(array $perPageList)
 	{
 		$this->perPageList = $perPageList;
@@ -200,67 +183,121 @@ class ProductList extends Control
 		return $this;
 	}
 
-	public function resetPerPageList($firstItem)
+	public function setTranslator(ITranslator $translator)
+	{
+		$this->translator = $translator;
+
+		return $this;
+	}
+
+	public function setLang($language, $defaultLang = self::DEFAULT_LANGUAGE)
+	{
+		$this->lang = $language;
+		$this->defaultLang = $defaultLang;
+
+		return $this;
+	}
+
+	public function setPaginator(Paginator $paginator)
+	{
+		$this->paginator = $paginator;
+
+		return $this;
+	}
+
+	public function setAjax($value = TRUE)
+	{
+		$this->ajax = $value;
+
+		return $this;
+	}
+
+	public function setTemplateFile($file)
+	{
+		$this->getTemplate()->setFile($file);
+
+		return $this;
+	}
+
+	// </editor-fold>
+	// <editor-fold defaultstate="collapsed" desc="protected setters">
+
+	protected function checkSortDirection($column, &$dir)
+	{
+		$replace = array('asc' => self::ORDER_ASC, 'desc' => self::ORDER_DESC);
+		$dir = strtr(strtolower($dir), $replace);
+		if (!in_array($dir, $replace)) {
+			throw new InvalidArgumentException("Dir '$dir' for column '$column' is not allowed.");
+		}
+
+		return $this;
+	}
+
+	protected function resetPerPageList($firstItem)
 	{
 		$this->perPageList = $this->perPageListMultiples;
 		foreach ($this->perPageList as $key => $value) {
 			$this->perPageList[$key] = $firstItem * $value;
 		}
+
 		return $this;
+	}
+
+	// </editor-fold>
+
+	/* 	 GETTERS ******************************************************************************************* */
+
+	// <editor-fold defaultstate="collapsed" desc="public getters">
+
+	/**
+	 * Returns items per page.
+	 * @return int
+	 */
+	public function getPerPage()
+	{
+		return $this->perPage === NULL ? $this->getDefaultPerPage() : $this->perPage;
 	}
 
 	/**
-	 * Sets translator.
-	 * @param ITranslator $translator
-	 * @return ProductList
+	 * Returns list of possible items per page.
+	 * @return array
 	 */
-	public function setTranslator(ITranslator $translator)
+	public function getPerPageList()
 	{
-		$this->translator = $translator;
-		return $this;
+		return $this->perPageList;
 	}
 
 	/**
-	 * Sets language.
-	 * @param string $language
-	 * @return ProductList
+	 * Returns translator.
+	 * @return ITranslator
 	 */
-	public function setLang($language, $defaultLang = 'en')
+	public function getTranslator()
 	{
-		$this->lang = $language;
-		$this->defaultLang = $defaultLang;
-		return $this;
+		return $this->translator;
 	}
 
 	/**
-	 * Sets custom paginator.
-	 * @param Paginator $paginator
-	 * @return ProductList
+	 * @return Paginator
+	 * @internal
 	 */
-	public function setPaginator(Paginator $paginator)
+	public function getPaginator()
 	{
-		$this->paginator = $paginator;
-		return $this;
-	}
+		if ($this->paginator === NULL) {
+			$this->paginator = new Paginator();
+			$this->paginator->setItemsPerPage($this->getPerPage());
+		}
 
-	public function allowAjax($value = TRUE)
-	{
-		$this->ajax = $value;
-		return $this;
+		return $this->paginator;
 	}
 
 	/**
-	 * Sets file name of custom template.
-	 * @param string $file
-	 * @return ProductList
+	 * @return QueryBuilder
+	 * @internal
 	 */
-	public function setTemplateFile($file)
+	public function getQb()
 	{
-		$this->getTemplate()->setFile($file);
-		return $this;
+		return $this->qb;
 	}
-
-	/*	 * ******************************************************************************************* */
 
 	/**
 	 * Returns total count of data.
@@ -274,33 +311,6 @@ class ProductList extends Control
 		}
 
 		return $this->count;
-	}
-
-	/**
-	 * Returns default per page.
-	 * @return int
-	 */
-	public function getDefaultPerPage()
-	{
-		return $this->itemsPerRow * $this->rowsPerPage;
-	}
-
-	/**
-	 * Returns list of possible items per page.
-	 * @return array
-	 */
-	public function getPerPageList()
-	{
-		return $this->perPageList;
-	}
-
-	/**
-	 * Returns items per page.
-	 * @return int
-	 */
-	public function getPerPage()
-	{
-		return $this->perPage === NULL ? $this->getDefaultPerPage() : $this->perPage;
 	}
 
 	/**
@@ -349,24 +359,6 @@ class ProductList extends Control
 	}
 
 	/**
-	 * Returns translator.
-	 * @return ITranslator
-	 */
-	public function getTranslator()
-	{
-		return $this->translator;
-	}
-
-	/**
-	 * @return QueryBuilder
-	 * @internal
-	 */
-	public function getQb()
-	{
-		return $this->qb;
-	}
-
-	/**
 	 * @return array
 	 * @internal
 	 */
@@ -375,7 +367,11 @@ class ProductList extends Control
 		$data = array();
 
 		// DoctrinePaginator is better if the query uses ManyToMany associations
-		$result = $this->qb->getMaxResults() !== NULL || $this->qb->getFirstResult() !== NULL ? new DoctrinePaginator($this->qb->getQuery()) : $this->qb->getQuery()->getResult();
+		if ($this->qb->getMaxResults() !== NULL || $this->qb->getFirstResult() !== NULL) {
+			$result = new DoctrinePaginator($this->qb->getQuery());
+		} else {
+			$result = $this->qb->getQuery()->getResult();
+		}
 
 		foreach ($result as $item) {
 			// Return only entity itself
@@ -385,21 +381,49 @@ class ProductList extends Control
 		return $data;
 	}
 
-	/**
-	 * @return Paginator
-	 * @internal
-	 */
-	public function getPaginator()
-	{
-		if ($this->paginator === NULL) {
-			$this->paginator = new Paginator();
-			$this->paginator->setItemsPerPage($this->getPerPage());
-		}
+	// </editor-fold>
+	// <editor-fold defaultstate="collapsed" desc="protected getters">
 
-		return $this->paginator;
+	/**
+	 * Returns default per page.
+	 * @return int
+	 */
+	protected function getDefaultPerPage()
+	{
+		return $this->itemsPerRow * $this->rowsPerPage;
 	}
 
-	/*	 * ******************************************************************************************* */
+	protected function getDefaultSortingMethod()
+	{
+		$sorting = $this->sorting;
+		list($name, $order) = each($sorting);
+		$code = Helpers::concatStrings('_', Strings::webalize($name), Strings::webalize($order));
+
+		return $code;
+	}
+
+	/** @return array */
+	protected function getItemsForCountSelect()
+	{
+		return array_combine($this->perPageList, $this->perPageList);
+	}
+
+	/** @return array */
+	protected function getSortingMethods()
+	{
+		return [
+			'price_asc' => 'Price (Low > High)',
+			'price_desc' => 'Price (High > Low)',
+			'name_asc' => 'Name (A - Z)',
+			'name_desc' => 'Name (Z - A)',
+		];
+	}
+
+	// </editor-fold>
+
+	/* 	 SORTING & FILTERING & PAGING ********************************************************************** */
+
+	// <editor-fold defaultstate="collapsed" desc="filter, sort, paging">
 
 	protected function applyFiltering()
 	{
@@ -479,7 +503,11 @@ class ProductList extends Control
 				->setMaxResults($limit);
 	}
 
-	/*	 * ******************************************************************************************* */
+	// </editor-fold>
+
+	/* 	 SIGNALS ******************************************************************************************* */
+
+	// <editor-fold defaultstate="collapsed" desc="signals">
 
 	/**
 	 * @param int $page
@@ -505,7 +533,11 @@ class ProductList extends Control
 		}
 	}
 
-	/*	 * ******************************************************************************************* */
+	// </editor-fold>
+
+	/* 	 TEMPLATES ***************************************************************************************** */
+
+	// <editor-fold defaultstate="collapsed" desc="templates">
 
 	/**
 	 * @return FileTemplate
@@ -581,7 +613,8 @@ class ProductList extends Control
 		$this->template->render();
 	}
 
-	/*	 * ******************************************************************************************* */
+	// </editor-fold>
+	// <editor-fold defaultstate="collapsed" desc="forms">
 
 	protected function createComponentSortingForm($name)
 	{
@@ -614,29 +647,5 @@ class ProductList extends Control
 		$this->reload();
 	}
 
-	/** @return array */
-	protected function getItemsForCountSelect()
-	{
-		return array_combine($this->perPageList, $this->perPageList);
-	}
-
-	/** @return array */
-	protected function getSortingMethods()
-	{
-		return [
-			'price_asc' => 'Price (Low > High)',
-			'price_desc' => 'Price (High > Low)',
-			'name_asc' => 'Name (A - Z)',
-			'name_desc' => 'Name (Z - A)',
-		];
-	}
-
-	protected function getDefaultSortingMethod()
-	{
-		$sorting = $this->sorting;
-		list($name, $order) = each($sorting);
-		$code = Helpers::concatStrings('_', Strings::webalize($name), Strings::webalize($order));
-		return $code;
-	}
-
+	// </editor-fold>
 }

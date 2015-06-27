@@ -58,14 +58,14 @@ abstract class BasePresenter extends BaseBasePresenter
 	protected function beforeRender()
 	{
 		parent::beforeRender();
-		
+
 		$this->template->categories = $this->categories;
 		$this->template->activeCategory = $this->activeCategory;
 		$this->template->showSlider = $this->showSlider;
 		$this->template->showBrands = $this->showBrands;
 		$this->template->showSteps = $this->showSteps;
 		$this->template->priceLevel = $this->priceLevel;
-		
+
 		$this->template->topStocks = $this->stockFacade->getTops();
 		$this->template->bestsellerStocks = $this->stockFacade->getBestSellers();
 		$this->template->newStocks = $this->stockFacade->getNews();
@@ -115,6 +115,9 @@ abstract class BasePresenter extends BaseBasePresenter
 		$list->setTranslator($this->translator);
 		$list->setItemsPerPage($this->pageConfigService->rowsPerPage, $this->pageConfigService->itemsPerRow);
 		$list->setLang($this->lang, $this->languageService->defaultLanguage);
+
+		$list->setAjax();
+		$list->setPriceLevel($this->priceLevel);
 
 		$list->qb = $this->stockRepo->createQueryBuilder('s')
 				->innerJoin('s.product', 'p');

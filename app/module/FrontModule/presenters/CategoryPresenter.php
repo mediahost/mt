@@ -23,8 +23,6 @@ class CategoryPresenter extends BasePresenter
 
 		/* @var $products ProductList */
 		$products = $this['products'];
-		$products->setPriceLevel($this->priceLevel);
-		$products->allowAjax();
 		$products->sorting = [
 			'price' => ProductList::ORDER_DESC,
 			'name' => ProductList::ORDER_ASC,
