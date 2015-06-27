@@ -113,6 +113,12 @@ trait StockPrices
 		return $this->getDiscountByLevel($group->level);
 	}
 
+	/** @return GroupDiscount|NULL */
+	public function getGroupDiscountByGroup(Group $group)
+	{
+		return $this->getGroupDiscountByLevel($group->level);
+	}
+
 	/*	 * ******************************************************************* */
 
 	public function setDefaltPrice($value, $withVat = FALSE)
@@ -175,6 +181,21 @@ trait StockPrices
 		$this->recalculateOtherPrices();
 
 		return $this;
+	}
+
+	public function removeDiscountsByGroup(Group $group)
+	{
+		$removedElements = [];
+		$removeWithGroup = function ($key, GroupDiscount $groupDiscount) use ($group, &$removedElements) {
+			if ($groupDiscount->group->id === $group->id) {
+				$removedElements[] = $groupDiscount;
+				$this->groupDiscounts->removeElement($groupDiscount);
+			}
+			return TRUE;
+		};
+		$this->groupDiscounts->forAll($removeWithGroup);
+		
+		return $removedElements;
 	}
 
 	/*	 * ******************************************************************* */

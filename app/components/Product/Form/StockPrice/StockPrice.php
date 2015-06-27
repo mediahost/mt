@@ -96,26 +96,44 @@ class StockPrice extends StockBase
 		$vat = $vatRepo->find($values->vat);
 		$this->stock->vat = $vat;
 
-		$groupRepo = $this->em->getRepository(Group::getClassName());
-
 		$fixed = $values->{Discount::FIXED_PRICE};
 		$percents = $values->{Discount::PERCENTAGE};
 		foreach ($fixed as $groupId => $fixedValue) {
+
 			$fixedValue = Price::strToFloat($fixedValue);
+			$discount = NULL;
 			if ($fixedValue > 0) {
 				$discount = new Discount($fixedValue, Discount::FIXED_PRICE);
 			} else if ($percents->$groupId &&
 					0 < $percents->$groupId && $percents->$groupId <= 100) {
 				$discount = new Discount(100 - $percents->$groupId, Discount::PERCENTAGE);
-			} else {
-				continue;
 			}
-			$group = $groupRepo->find($groupId);
-			if ($group) {
-				$this->stock->addDiscount($discount, $group);
-			}
+
+			$this->loadDiscount($discount, $groupId);
 		}
 		$this->stock->setDefaltPrice($values->price, $values->with_vat);
+
+		return $this;
+	}
+
+	private function loadDiscount($discount, $groupId)
+	{
+		$groupRepo = $this->em->getRepository(Group::getClassName());
+		$groupDiscountRepo = $this->em->getRepository(GroupDiscount::getClassName());
+
+		$group = $groupRepo->find($groupId);
+		if (!$group) {
+			return $this;
+		}
+
+		if ($discount) {
+			$this->stock->addDiscount($discount, $group);
+		} else {
+			$removedElements = $this->stock->removeDiscountsByGroup($group);
+			foreach ($removedElements as $removedElement) {
+				$groupDiscountRepo->delete($removedElement);
+			}
+		}
 
 		return $this;
 	}
