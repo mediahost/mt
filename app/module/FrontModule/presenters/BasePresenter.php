@@ -4,6 +4,7 @@ namespace App\FrontModule\Presenters;
 
 use App\BaseModule\Presenters\BasePresenter as BaseBasePresenter;
 use App\Extensions\Products\ProductList;
+use App\Forms\Form;
 use App\Model\Entity\Category;
 use App\Model\Entity\Product;
 use App\Model\Entity\Sign;
@@ -41,6 +42,9 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	/** @var int */
 	protected $priceLevel = NULL;
+	
+	/** @var string */
+	protected $searched;
 
 	protected function startup()
 	{
@@ -128,6 +132,28 @@ abstract class BasePresenter extends BaseBasePresenter
 				->innerJoin('s.product', 'p');
 
 		return $list;
+	}
+
+	public function createComponentSearch($name)
+	{
+		$form = new Form($this, $name);
+		$form->setTranslator($this->translator);
+		
+		$form->addText('search')
+//				->addRule(Form::MIN_LENGTH, 'Insert %s chars at least', 2)
+				->setDefaultValue($this->searched)
+				->setAttribute('placeholder', 'Search')
+				->getControlPrototype()->class = 'form-control';
+		
+		$form->addSubmit('send', 'Search')
+				->getControlPrototype()->class = 'btn btn-primary';
+		
+		$form->onSuccess[] = $this->searchSucceeded;
+	}
+
+	public function searchSucceeded(Form $form, $values)
+	{
+		$this->redirect('Category:search', $values->search);
 	}
 
 }

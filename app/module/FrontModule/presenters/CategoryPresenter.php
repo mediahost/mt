@@ -30,6 +30,8 @@ class CategoryPresenter extends BasePresenter
 
 	public function actionSearch($text)
 	{
+		$this->searched = $text;
+		
 		/* @var $products ProductList */
 		$products = $this['products'];
 		$products->filter = [

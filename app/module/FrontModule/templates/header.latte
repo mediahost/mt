@@ -26,14 +26,16 @@
 		
 		<!-- BEGIN TOP SEARCH -->
 		<div class="search-box">
-			<form action="#">
+			{form search}
+				{? $form->render('begin')}
 				<div class="input-group">
-					<input type="text" placeholder="{_'Search'}" class="form-control" />
+					{input search}
 					<span class="input-group-btn">
-						<button class="btn btn-primary" type="submit">{_'Search'}</button>
+						{input send}
 					</span>
 				</div>
-			</form>
+				{? $form->render('end')}
+			{/form}
 		</div> 
 		<!-- END TOP SEARCH -->
 		
