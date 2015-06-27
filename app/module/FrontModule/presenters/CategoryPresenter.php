@@ -23,10 +23,6 @@ class CategoryPresenter extends BasePresenter
 
 		/* @var $products ProductList */
 		$products = $this['products'];
-		$products->sorting = [
-			'price' => ProductList::ORDER_DESC,
-			'name' => ProductList::ORDER_ASC,
-		];
 		$products->filter = [
 			'category' => $category->childrenArray,
 		];
