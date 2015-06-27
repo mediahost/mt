@@ -28,4 +28,16 @@ class CategoryPresenter extends BasePresenter
 		];
 	}
 
+	public function actionSearch($text)
+	{
+		/* @var $products ProductList */
+		$products = $this['products'];
+		$products->filter = [
+			'fulltext' => $text,
+		];
+		
+		$this->template->searched = $text;
+		$this->setView('default');
+	}
+
 }

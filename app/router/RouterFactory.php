@@ -55,6 +55,12 @@ class RouterFactory
 		// </editor-fold>
 		// <editor-fold desc="Front">
 
+		$frontRouter[] = new Route('search[/<text>]', [
+			'presenter' => 'Category',
+			'action' => 'search',
+			'text' => NULL,
+		]);
+
 		$slugs = '[0-9a-z/-]+';
 		$sluggablePresenters = [ // alias => Presenter
 			'c' => 'Category',

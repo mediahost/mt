@@ -8,6 +8,7 @@ use App\Forms\Renderers\MetronicFormRenderer;
 use App\Helpers;
 use App\Model\Entity\Category;
 use App\Model\Entity\Stock;
+use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\Query\Expr\OrderBy;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Exception;
@@ -17,6 +18,7 @@ use Nette\Application\UI\Control;
 use Nette\Localization\ITranslator;
 use Nette\Templating\FileTemplate;
 use Nette\Utils\ArrayHash;
+use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 
 class ProductList extends Control
@@ -433,6 +435,9 @@ class ProductList extends Control
 				case 'category':
 					$this->filterByCategory($value);
 					break;
+				case 'fulltext':
+					$this->filterByFulltext($value);
+					break;
 			}
 		}
 	}
@@ -441,7 +446,9 @@ class ProductList extends Control
 	{
 		$this->qb
 				->andWhere('p.active = :active')
-				->setParameter('active', TRUE);
+				->setParameter('active', TRUE)
+				->andWhere('p.deletedAt IS NULL OR p.deletedAt > :now')
+				->setParameter('now', new DateTime());
 		return $this;
 	}
 
@@ -457,6 +464,21 @@ class ProductList extends Control
 					->andWhere('categories = :category')
 					->setParameter('category', $category);
 		}
+		return $this;
+	}
+
+	protected function filterByFulltext($text)
+	{
+		$words = preg_split('/\s+/', $text, -1, PREG_SPLIT_NO_EMPTY);
+		$conditions = new Andx();
+		foreach ($words as $key => $word) {
+			$keyword = 'word' . $key;
+			if (strlen($word) > 1) {
+				$conditions->add('t.name LIKE :' . $keyword);
+				$this->qb->setParameter($keyword, "%$word%");
+			}
+		}
+		$this->qb->andWhere($conditions);
 		return $this;
 	}
 

@@ -4,7 +4,7 @@
 		<div n:block="count" class="col-md-4 col-sm-4 items-info">
 			{_'Items %s to %s of %s total', NULL, $paginator->countBegin, $paginator->countEnd, $paginator->itemCount}
 		</div>
-		<div n:block="paginator" class="col-md-8 col-sm-8">
+		<div n:block="paginator" class="col-md-8 col-sm-8" n:if="count($paginator->getSteps()) > 1">
 			<ul class="pagination pull-right">
 				<li>
 					<a n:href="page! page => $paginator->page - 1" 
