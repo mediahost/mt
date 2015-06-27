@@ -36,7 +36,7 @@
 						<div class="product-other-images" n:if="count($product->images)">
 							<a n:foreach="$product->images as $image"
 							   href="{$basePath}/foto/{$image|size}" class="fancybox-button" rel="photos-lib">
-								<img alt="{$product}" src="{$basePath}/foto/{$image|size:'60','75'}">
+								<img alt="{$product}" src="{$basePath}/foto/{$image|size:'65'}">
 							</a>
 						</div>
 					</div>
@@ -159,8 +159,8 @@
 						</div>
 					</div>
 
-					<div class="sticker sticker-new"></div>
-					<div class="sticker sticker-sale"></div>
+					<div class="sticker sticker-new" n:if="$product->hasSign($newSign)"></div>
+					<div class="sticker sticker-sale" n:if="$product->hasSign($saleSign)"></div>
 				</div>
             </div>
 
