@@ -117,6 +117,7 @@ abstract class BasePresenter extends BaseBasePresenter
 	{
 		$list = new ProductList();
 		$list->setTranslator($this->translator);
+		$list->setExchange($this->exchange, $this->currency);
 		$list->setItemsPerPage($this->pageConfigService->rowsPerPage, $this->pageConfigService->itemsPerRow);
 		$list->setLang($this->lang, $this->languageService->defaultLanguage);
 
@@ -140,7 +141,6 @@ abstract class BasePresenter extends BaseBasePresenter
 		$form->setTranslator($this->translator);
 		
 		$form->addText('search')
-//				->addRule(Form::MIN_LENGTH, 'Insert %s chars at least', 2)
 				->setDefaultValue($this->searched)
 				->setAttribute('placeholder', 'Search')
 				->getControlPrototype()->class = 'form-control';

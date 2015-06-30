@@ -421,18 +421,39 @@ var Layout = function () {
         },
 
         initSliderRange: function () {
-            $( "#slider-range" ).slider({
-              range: true,
-              min: 0,
-              max: 500,
-              values: [ 50, 250 ],
-              slide: function( event, ui ) {
-                $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
-              }
-            });
-            $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
-            " - $" + $( "#slider-range" ).slider( "values", 1 ) );
-        },
+			var id = '#slider-range';
+			var amountId = $(id).attr('data-for');
+			var ammountEl = $('#' + amountId);
+			var prefix = ammountEl.attr('data-prefix') ? ammountEl.attr('data-prefix') : '';
+			var suffix = ammountEl.attr('data-suffix') ? ammountEl.attr('data-suffix') : '';
+			var glue = ammountEl.attr('data-glue') ? ammountEl.attr('data-glue') : ' - ';
+			var min = ammountEl.attr('data-min') ? parseInt(ammountEl.attr('data-min')) : 0;
+			var max = ammountEl.attr('data-max') ? parseInt(ammountEl.attr('data-max')) : 1000;
+			var values = ammountEl.val();
+			var valueMin = ammountEl.attr('data-value-min') ? parseInt(ammountEl.attr('data-value-min')) : min;
+			var valueMax = ammountEl.attr('data-value-max') ? parseInt(ammountEl.attr('data-value-max')) : max;
+			if (values) {
+				var matches = String(values).match(/^\D*(\d+)\D+(\d+)\D*$/);
+				if (matches) {
+					valueMin = matches[1];
+					valueMax = matches[2];
+				}
+			}
+			$(id).slider({
+				range: true,
+				min: min,
+				max: max,
+				values: [valueMin, valueMax],
+				slide: function (event, ui) {
+					ammountEl.val(prefix + ui.values[ 0 ] + suffix + glue + prefix + ui.values[ 1 ] + suffix);
+				},
+				change: function (event, ui) {
+					ammountEl.closest('form.sendOnChange').submit();
+				}
+			});
+			ammountEl.val(prefix + $(id).slider('values', 0) + suffix +
+					glue + prefix + $(id).slider('values', 1) + suffix);
+		},
 
         // wrapper function to scroll(focus) to an element
         scrollTo: function (el, offeset) {

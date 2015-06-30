@@ -12,6 +12,7 @@ use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\Query\Expr\OrderBy;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Exception;
+use h4kuna\Exchange\Exchange;
 use InvalidArgumentException;
 use Kdyby\Doctrine\QueryBuilder;
 use Nette\Application\UI\Control;
@@ -37,6 +38,18 @@ class ProductList extends Control
 
 	/** @var string @persistent */
 	public $sort;
+
+	/** @var bool @persistent */
+	public $showAvailable = TRUE;
+
+	/** @var bool @persistent */
+	public $showNotAvailable = TRUE;
+
+	/** @var int @persistent */
+	public $minPrice;
+
+	/** @var int @persistent */
+	public $maxPrice;
 
 	/** @var array event on render */
 	public $onRender;
@@ -91,8 +104,17 @@ class ProductList extends Control
 	/** @var ITranslator */
 	protected $translator;
 
+	/** @var Exchange */
+	protected $exchange;
+
+	/** @var string */
+	protected $currencySymbol;
+
 	/** @var bool */
 	protected $ajax;
+
+	/** @var array */
+	protected $limitPrices = [];
 
 	// </editor-fold>
 
@@ -188,6 +210,14 @@ class ProductList extends Control
 	public function setTranslator(ITranslator $translator)
 	{
 		$this->translator = $translator;
+
+		return $this;
+	}
+
+	public function setExchange(Exchange $exchange, $currency)
+	{
+		$this->exchange = $exchange;
+		$this->currencySymbol = $this->exchange[$currency]->getFormat()->getSymbol();
 
 		return $this;
 	}
@@ -421,6 +451,29 @@ class ProductList extends Control
 		];
 	}
 
+	protected function getLimitPrices()
+	{
+		if (!count($this->limitPrices)) {
+			$qb = clone $this->qb;
+			$qb->select("MIN(s.{$this->priceLevelName}) AS minimum, MAX(s.{$this->priceLevelName}) AS maximum");
+			$result = $qb->getQuery()->getOneOrNullResult();
+			$this->limitPrices = [$result['minimum'], $result['maximum']];
+		}
+		return $this->limitPrices;
+	}
+
+	protected function getLimitPriceMin()
+	{
+		list($minPrice, $maxPrice) = $this->getLimitPrices();
+		return $minPrice;
+	}
+
+	protected function getLimitPriceMax()
+	{
+		list($minPrice, $maxPrice) = $this->getLimitPrices();
+		return $maxPrice;
+	}
+
 	// </editor-fold>
 
 	/* 	 SORTING & FILTERING & PAGING ********************************************************************** */
@@ -431,6 +484,9 @@ class ProductList extends Control
 	{
 		$this->filterNotDeleted();
 		$this->filterOnlyActive();
+		if ($this->showAvailable !== $this->showNotAvailable) {
+			$this->filterByInStore($this->showAvailable);
+		}
 		foreach ($this->filter as $key => $value) {
 			switch ($key) {
 				case 'category':
@@ -441,6 +497,13 @@ class ProductList extends Control
 					break;
 			}
 		}
+
+		// get limit prices before edit price part of query
+		$this->getLimitPrices();
+
+		if ($this->minPrice && $this->maxPrice) {
+			$this->filterByPrice([$this->minPrice, $this->maxPrice]);
+		}
 	}
 
 	protected function filterNotDeleted()
@@ -448,6 +511,7 @@ class ProductList extends Control
 		$this->qb
 				->andWhere('p.deletedAt IS NULL OR p.deletedAt > :now')
 				->setParameter('now', new DateTime());
+
 		return $this;
 	}
 
@@ -456,6 +520,7 @@ class ProductList extends Control
 		$this->qb
 				->andWhere('p.active = :active')
 				->setParameter('active', TRUE);
+
 		return $this;
 	}
 
@@ -471,6 +536,7 @@ class ProductList extends Control
 					->andWhere('categories = :category')
 					->setParameter('category', $category);
 		}
+
 		return $this;
 	}
 
@@ -486,6 +552,36 @@ class ProductList extends Control
 			}
 		}
 		$this->qb->andWhere($conditions);
+
+		return $this;
+	}
+
+	protected function filterByPrice(array $prices)
+	{
+		list($lowPrice, $highPrice) = $prices;
+
+		if ($lowPrice >= 0) {
+			$this->qb->andWhere("s.{$this->priceLevelName} >= :lowPrice")
+					->setParameter('lowPrice', $lowPrice);
+		}
+		if ($highPrice >= 0) {
+			$this->qb->andWhere("s.{$this->priceLevelName} <= :highPrice")
+					->setParameter('highPrice', $highPrice);
+		}
+
+		return $this;
+	}
+
+	protected function filterByInStore($isInStore)
+	{
+		if ($isInStore) {
+			$this->qb->andWhere("s.inStore >= :inStore")
+					->setParameter('inStore', 1);
+		} else {
+			$this->qb->andWhere("s.inStore = :inStore")
+					->setParameter('inStore', 0);
+		}
+
 		return $this;
 	}
 
@@ -650,14 +746,14 @@ class ProductList extends Control
 		$form = new Form($this, $name);
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
-		$form->getElementPrototype()->class = !$this->ajax ? : 'ajax';
+		$form->getElementPrototype()->class = 'sendOnChange ' . (!$this->ajax ? : 'ajax');
 
 		$form->addSelect('sort', 'Sort by', $this->getSortingMethods())
 				->setDefaultValue($this->getDefaultSortingMethod())
-				->getControlPrototype()->class('input-sm sendOnChange');
+				->getControlPrototype()->class('input-sm');
 
 		$form->addSelect('perPage', 'Show', $this->getItemsForCountSelect())
-				->getControlPrototype()->class('input-sm sendOnChange');
+				->getControlPrototype()->class('input-sm');
 		$defaultPerPage = array_search($this->perPage, $this->perPageList);
 		if ($defaultPerPage !== FALSE) {
 			$form['perPage']->setDefaultValue($this->perPage);
@@ -673,6 +769,67 @@ class ProductList extends Control
 		if ($key !== FALSE) {
 			$this->perPage = $key ? $values->perPage : NULL;
 		}
+		$this->reload();
+	}
+
+	protected function createComponentFilterForm($name)
+	{
+		$form = new Form($this, $name);
+		$form->setTranslator($this->translator);
+		$form->setRenderer(new MetronicFormRenderer());
+		$form->getElementPrototype()->class = 'sendOnChange ' . (!$this->ajax ? : 'ajax');
+
+		$availabilities = [
+			1 => 'Not Available',
+			2 => 'In Stock',
+		];
+		$defaultAvailablity = [];
+		if ($this->showNotAvailable) {
+			$defaultAvailablity[] = 1;
+		}
+		if ($this->showAvailable) {
+			$defaultAvailablity[] = 2;
+		}
+		$form->addCheckboxList('availability', NULL, $availabilities)
+				->setDefaultValue($defaultAvailablity);
+
+		$limitMinPrice = $this->getLimitPriceMin();
+		$limitMaxPrice = $this->getLimitPriceMax();
+		$form->addText('price', 'Range:')
+				->setAttribute('data-value-min', $this->minPrice)
+				->setAttribute('data-value-max', $this->maxPrice)
+				->setAttribute('data-min', $limitMinPrice)
+				->setAttribute('data-max', $limitMaxPrice)
+				->setAttribute('data-glue', ' - ')
+				->setAttribute('data-prefix', '')
+				->setAttribute('data-suffix', $this->currencySymbol);
+
+		$form->onSuccess[] = $this->processFilterForm;
+	}
+
+	public function processFilterForm(Form $param, ArrayHash $values)
+	{
+		$this->showAvailable = FALSE;
+		$this->showNotAvailable = FALSE;
+		foreach ($values->availability as $available) {
+			switch ($available) {
+				case 1:
+					$this->showNotAvailable = TRUE;
+					break;
+				case 2:
+					$this->showAvailable = TRUE;
+					break;
+			}
+		}
+
+		$prefix = preg_quote('');
+		$suffix = preg_quote($this->currencySymbol);
+		$glue = preg_quote(' - ');
+		if (preg_match('/^' . $prefix . '(\d+)' . $suffix . $glue . $prefix . '(\d+)' . $suffix . '$/', $values->price, $matches)) {
+			$this->minPrice = $matches[1];
+			$this->maxPrice = $matches[2];
+		}
+
 		$this->reload();
 	}
 

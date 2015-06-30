@@ -1,15 +1,19 @@
 {snippet productFilter}
-	<h3>{_'Availability'}</h3>
-	<div class="checkbox-list">
-		<label><input type="checkbox">{_'Not Available'} (3)</label>
-		<label><input type="checkbox">{_'In Stock'} (26)</label>
-	</div>
+	{form filterForm}
+		{? $form->render('begin')}
+		<h3>{_'Availability'}</h3>
+		<div class="checkbox-list">
+			{input availability}
+		</div>
 
-	<h3>{_'Price'}</h3>
-	<p>
-		<label for="amount">{_'Range'}:</label>
-		<input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;">
-	</p>
-	<div id="slider-range"></div> 
-	{* TODO: nahradit funkčním prvkem; odsranit demo pohyblivost z JS(Layout init) i CSS (add style for slider) *}
+		<h3>{_'Price'}</h3>
+		<p>
+			{label price /}
+			{input price, class => '', style => 'border:0; color:#767F88;'}
+		</p>
+		<div id="slider-range" data-for="{$form['price']->getControlPrototype()->id}"></div>
+
+		{? $form->render('end')}
+	{/form}
+
 {/snippet}
