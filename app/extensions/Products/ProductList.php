@@ -480,6 +480,21 @@ class ProductList extends Control
 
 	// <editor-fold defaultstate="collapsed" desc="filter, sort, paging">
 
+	private function appendTranslation()
+	{
+		$dql = $this->qb->getDQLParts();
+		foreach ($this->qb->getRootAliases() as $rootAlias) {
+			foreach ($dql['join'][$rootAlias] as $join) {
+				if ($join->getAlias() === 't') {
+					return $this;
+				}
+			}
+		}
+		$this->qb->innerJoin('p.translations', 't');
+
+		return $this;
+	}
+
 	protected function applyFiltering()
 	{
 		$this->filterNotDeleted();
@@ -551,6 +566,7 @@ class ProductList extends Control
 				$this->qb->setParameter($keyword, "%$word%");
 			}
 		}
+		$this->appendTranslation();
 		$this->qb->andWhere($conditions);
 
 		return $this;
@@ -597,8 +613,8 @@ class ProductList extends Control
 		foreach ($this->sorting as $key => $value) {
 			switch ($key) {
 				case 'name':
+					$this->appendTranslation();
 					$this->qb
-							->innerJoin('p.translations', 't')
 							->andWhere('t.locale = :lang OR t.locale = :defaultLang')
 							->setParameter('lang', $this->lang)
 							->setParameter('defaultLang', $this->defaultLang)
