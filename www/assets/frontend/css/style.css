@@ -722,6 +722,9 @@ body.page-header-fixed {
 	margin-left: 270px;
 	margin-right: 267px;
 }
+.search-box input[type=text] {
+	height: 34px;
+}
 
 /* reduce navigation */
 /*.page-header-fixed .site-logo,
