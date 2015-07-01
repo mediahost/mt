@@ -27,13 +27,14 @@
         {
             var url = $(this).data('grido-suggest-handler'),
                 wildcard = $(this).data('grido-suggest-replacement');
-
+				
             var options = {
                 limit: $(this).data('grido-suggest-limit'),
-                datumTokenizer: window.Bloodhound.tokenizers.obj.whitespace('value'),
-                queryTokenizer: window.Bloodhound.tokenizers.whitespace,
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
                 remote: {
-                    url: url.replace(wildcard, '%QUERY')
+                    url: url.replace(wildcard, '%QUERY'),
+					wildcard: '%QUERY'
                 }
             };
 
@@ -44,14 +45,11 @@
                 };
             }
 
-            var source = new window.Bloodhound(options);
-            source.initialize();
+            var source = new Bloodhound(options);
 
             $(this).typeahead(null, {
-                displayKey: function(item) {
-                    return item;
-                },
-                source: source.ttAdapter()
+                source: source,
+				limit: 10
             });
 
             $(this).on('typeahead:selected', function() {

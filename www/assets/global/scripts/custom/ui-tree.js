@@ -2,7 +2,7 @@ var UITree = function () {
 
 	var handleCategoryTree = function ()
 	{
-		var translates = {
+		var locale = {
 			'edit' : {
 				'en': 'Edit',
 				'cs': 'Upravit',
@@ -67,26 +67,26 @@ var UITree = function () {
 					var instance = $(treeID).jstree(true);
 					return {
 						"Edit": {
-							"label": translates.edit[lang],
+							"label": locale.edit[lang],
 							"action": function (obj) {
 								window.location.href = node.a_attr.href;
 							}
 						},
 						"Rename": {
-							"label": translates.rename[lang],
+							"label": locale.rename[lang],
 							"action": function (obj) {
 								instance.edit(node);
 							}
 						},
 						"Create": {
-							"label": translates.create_subcategory[lang],
+							"label": locale.create_subcategory[lang],
 							"action": function (obj) {
 								var newNode = instance.create_node(node);
 								instance.edit(newNode);
 							}
 						},
 						"Remove": {
-							"label": translates.remove[lang],
+							"label": locale.remove[lang],
 							"action": function (obj) {
 								instance.delete_node(node);
 							}
