@@ -4,6 +4,9 @@ jQuery(document).ready(function () {
 	Layout.initUniform();
 	$.nette.init(); // https://github.com/vojtech-dobes/nette.ajax.js
 	
+	// Global components
+	GlobalCustomInit.init();
+	
 	Layout.initTwitter();
 	Layout.initSliderRange();
 	Layout.initOWL();
@@ -12,9 +15,6 @@ jQuery(document).ready(function () {
 
 	// special for pages
 	Login.init();
-	
-	// Global components
-	GlobalCustomInit.init();
 });
 
 $.nette.ext('netteAjax', {
