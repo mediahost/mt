@@ -87,6 +87,9 @@ abstract class BasePresenter extends Presenter
 	/** @var GroupFacade @inject */
 	public $groupFacade;
 
+	/** @var int */
+	protected $priceLevel = NULL;
+
 	// </editor-fold>
 
 	protected function startup()
@@ -95,6 +98,7 @@ abstract class BasePresenter extends Presenter
 		$this->loadUserSettings();
 		$this->setLang();
 		$this->setCurrency();
+		$this->loadPriceLevel();
 	}
 
 	protected function beforeRender()
@@ -229,6 +233,16 @@ abstract class BasePresenter extends Presenter
 				$originRate = (float) $currency->getForeing();
 				$rateRelated = $originRate / $dbRate;
 				$this->exchange->addRate($code, $rateRelated);
+			}
+		}
+	}
+
+	private function loadPriceLevel()
+	{
+		if ($this->user->loggedIn) {
+			$identity = $this->user->identity;
+			if ($identity->group) {
+				$this->priceLevel = $identity->group->level;
 			}
 		}
 	}

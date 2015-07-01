@@ -39,9 +39,6 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	/** @var bool */
 	protected $showSteps = TRUE;
-
-	/** @var int */
-	protected $priceLevel = NULL;
 	
 	/** @var string */
 	protected $searched;
@@ -52,7 +49,6 @@ abstract class BasePresenter extends BaseBasePresenter
 		if ($this->isInstallPresenter()) {
 			return;
 		}
-		$this->loadPriceLevel();
 		$this->stockRepo = $this->em->getRepository(Stock::getClassName());
 		$this->productRepo = $this->em->getRepository(Product::getClassName());
 		$this->categoryRepo = $this->em->getRepository(Category::getClassName());
@@ -78,16 +74,6 @@ abstract class BasePresenter extends BaseBasePresenter
 
 		$this->loadTemplateCategoriesSettings();
 		$this->loadTemplateSigns();
-	}
-
-	protected function loadPriceLevel()
-	{
-		if ($this->user->loggedIn) {
-			$identity = $this->user->identity;
-			if ($identity->group) {
-				$this->priceLevel = $identity->group->level;
-			}
-		}
 	}
 
 	protected function loadTemplateCategoriesSettings()
@@ -142,8 +128,8 @@ abstract class BasePresenter extends BaseBasePresenter
 		
 		$form->addText('search')
 				->setDefaultValue($this->searched)
-				->setAttribute('placeholder', 'Search')
-				->getControlPrototype()->class = 'form-control';
+				->setAttribute('placeholder', 'Search by Keyword')
+				->getControlPrototype()->class = 'form-control typeahead';
 		
 		$form->addSubmit('send', 'Search')
 				->getControlPrototype()->class = 'btn btn-primary';

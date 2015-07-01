@@ -6,3 +6,4 @@ var configVars = JSON.parse(configJson.textContent || configJson.innerHTML);
 var basePath = configVars.basePath;
 var lang = configVars.lang;
 var currencySymbol = configVars.currencySymbol;
+var currencyName = configVars.currencyName;

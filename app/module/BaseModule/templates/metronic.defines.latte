@@ -110,7 +110,8 @@
 	{
 		"basePath" : {{$basePath}},
 		"lang" : {{$lang}},
-		"currencySymbol" : {{$currency->getFormat()->getSymbol()}}
+		"currencySymbol" : {{$currency->getFormat()->getSymbol()}},
+		"currencyName" : {{strtolower($currency->getCode())}}
 	}
 </script>
 <script src="{$basePath}/assets/global/scripts/config.js" type="text/javascript"></script>
