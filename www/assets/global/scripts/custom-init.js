@@ -2,18 +2,19 @@ var GlobalCustomInit = function () {
 
 	return {
 		init: function () {
+			ComponentsFormTools.init();
 			ComponentsDropdowns.init();
 			ComponentsNoUiSliders.init();
-			ComponentsFormTools.init();
 			ComponentsPickers.init();
-			Maps.init();
-			UITree.init();
-			Forms.init();
 
+			Forms.init();
 			GridoStart.init();
 			if (typeof MultipleFileUpload != 'undefined') {
 				MultipleFileUpload.init();
 			}
+			
+			UITree.init();
+			Maps.init();
 		},
 		onReloadGridoEvent: function () {
 			Metronic.init();
