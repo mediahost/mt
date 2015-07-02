@@ -86,13 +86,13 @@ class ProducersPresenter extends BasePresenter
 	 */
 	public function actionDelete($id)
 	{
-		$user = $this->producerRepo->find($id);
-		if (!$user) {
+		$producer = $this->producerRepo->find($id);
+		if (!$producer) {
 			$this->flashMessage('Producer wasn\'t found.', 'danger');
 		} else {
 			try {
-				$this->producerRepo->delete($user);
-				$this->flashMessage('User was deleted.', 'success');
+				$this->producerRepo->delete($producer);
+				$this->flashMessage('Producer was deleted.', 'success');
 			} catch (Exception $e) {
 				$this->flashMessage('This producer can\'t be deleted.', 'danger');
 			}
