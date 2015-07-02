@@ -32,6 +32,9 @@ class GroupsGrid extends BaseControl
 		$grid->getColumn('level')->headerPrototype->width = '5%';
 
 		$grid->addColumnText('name', 'Group')
+				->setCustomRender(function ($row) {
+					return $row->translate($this->lang)->name;
+				})
 				->setSortable()
 				->setFilterText()
 				->setSuggestion();

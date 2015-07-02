@@ -16,7 +16,7 @@ class CategoryPresenter extends BasePresenter
 		}
 		$category->setCurrentLocale($this->lang);
 		if ($category->url !== $url) {
-			$this->redirect('Category:', ['url' => $category->url]);
+			$this->redirect('this', ['url' => $category->url]);
 		}
 		$this->activeCategory = $category;
 		$this->template->category = $category;
