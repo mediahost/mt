@@ -61,5 +61,9 @@ services:
 	- {implement: App\Components\Sign\Form\ISignEditFactory, inject: yes}
 	- {implement: App\Components\Sign\Grid\ISignsGridFactory, inject: yes}
 
+	# Pages
+	- {implement: App\Components\Page\Form\IPageEditFactory, inject: yes}
+	- {implement: App\Components\Page\Grid\IPagesGridFactory, inject: yes}
+
 	# Example
 	- {implement: App\Components\Example\Form\IExampleFormFactory, inject: yes}

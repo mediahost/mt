@@ -26,6 +26,7 @@ services:
 			- addResource('discounts')
 			- addResource('parameters')
 			- addResource('signs')
+			- addResource('pages')
 
 			- addResource('examples')
 			- addResource('service')
@@ -48,5 +49,6 @@ services:
 			- allow('admin', 'settings')
 			- allow('admin', 'parameters')
 			- allow('admin', 'signs')
+			- allow('admin', 'pages')
 
 			- allow('superadmin') # Full access for superadmin
