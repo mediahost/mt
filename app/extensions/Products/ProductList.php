@@ -809,8 +809,8 @@ class ProductList extends Control
 		$form->addCheckboxList('availability', NULL, $availabilities)
 				->setDefaultValue($defaultAvailablity);
 
-		$limitMinPrice = $this->getLimitPriceMin();
-		$limitMaxPrice = $this->getLimitPriceMax();
+		$limitMinPrice = floor($this->getLimitPriceMin());
+		$limitMaxPrice = ceil($this->getLimitPriceMax());
 		$form->addText('price', 'Range:')
 				->setAttribute('data-value-min', $this->minPrice)
 				->setAttribute('data-value-max', $this->maxPrice)
