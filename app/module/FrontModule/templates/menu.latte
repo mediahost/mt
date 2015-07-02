@@ -108,7 +108,7 @@
                 </li>
 			</ul>
 		</li>
-		<li class="dropdown active">
+		<li class="dropdown">
 			<a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">Servis telefonov</a>
 			<ul class="dropdown-menu">
                 <li><a n:href="this">Home Default</a></li>
@@ -131,9 +131,14 @@
                 <li><a n:href="this">Terms &amp; Conditions</a></li>
 			</ul>
 		</li>
-		<li><a n:href="this">Velkoobchod</a></li>
-		<li><a n:href="this">Kontakt</a></li>
+		<li n:if="$menuPages->page2">{include pageLink, page => $menuPages->page2}</li>
+		<li n:if="$menuPages->page1">{include pageLink, page => $menuPages->page1}</li>
 	</ul>
 </div>
 <!-- END NAVIGATION -->
 {/block}
+
+{define pageLink}
+{? $page->setCurrentLocale($lang)}
+<a n:href="Page: $page->slug">{$page}</a>
+{/define}

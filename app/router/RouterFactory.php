@@ -65,6 +65,7 @@ class RouterFactory
 		$sluggablePresenters = [ // alias => Presenter
 			'c' => 'Category',
 			'p' => 'Product',
+			'page' => 'Page',
 		];
 		foreach ($sluggablePresenters as $alias => $presenter) {
 			$frontRouter[] = new Route($alias . '/<url ' . $slugs . '>', [

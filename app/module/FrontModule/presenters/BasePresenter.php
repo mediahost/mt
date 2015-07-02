@@ -6,12 +6,14 @@ use App\BaseModule\Presenters\BasePresenter as BaseBasePresenter;
 use App\Extensions\Products\ProductList;
 use App\Forms\Form;
 use App\Model\Entity\Category;
+use App\Model\Entity\Page;
 use App\Model\Entity\Product;
 use App\Model\Entity\Sign;
 use App\Model\Entity\Stock;
 use App\Model\Repository\CategoryRepository;
 use App\Model\Repository\ProductRepository;
 use App\Model\Repository\StockRepository;
+use Nette\Utils\ArrayHash;
 
 abstract class BasePresenter extends BaseBasePresenter
 {
@@ -39,7 +41,7 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	/** @var bool */
 	protected $showSteps = TRUE;
-	
+
 	/** @var string */
 	protected $searched;
 
@@ -72,8 +74,18 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->template->saleStocks = $this->stockFacade->getSales();
 		$this->template->visitedStocks = $this->stockFacade->getLastVisited();
 
+		$this->loadTemplateMenu();
 		$this->loadTemplateCategoriesSettings();
 		$this->loadTemplateSigns();
+	}
+
+	protected function loadTemplateMenu()
+	{
+		$pageRepo = $this->em->getRepository(Page::getClassName());
+		$this->template->menuPages = ArrayHash::from([
+					'page1' => $pageRepo->find(1),
+					'page2' => $pageRepo->find(2),
+		]);
 	}
 
 	protected function loadTemplateCategoriesSettings()
@@ -109,7 +121,7 @@ abstract class BasePresenter extends BaseBasePresenter
 
 		$list->setAjax();
 		$list->setPriceLevel($this->priceLevel);
-		
+
 		$list->sorting = [
 			'price' => ProductList::ORDER_DESC,
 			'name' => ProductList::ORDER_ASC,
@@ -125,15 +137,15 @@ abstract class BasePresenter extends BaseBasePresenter
 	{
 		$form = new Form($this, $name);
 		$form->setTranslator($this->translator);
-		
+
 		$form->addText('search')
-				->setDefaultValue($this->searched)
-				->setAttribute('placeholder', 'Search by Keyword')
-				->getControlPrototype()->class = 'form-control typeahead';
-		
+						->setDefaultValue($this->searched)
+						->setAttribute('placeholder', 'Search by Keyword')
+						->getControlPrototype()->class = 'form-control typeahead';
+
 		$form->addSubmit('send', 'Search')
-				->getControlPrototype()->class = 'btn btn-primary';
-		
+						->getControlPrototype()->class = 'btn btn-primary';
+
 		$form->onSuccess[] = $this->searchSucceeded;
 	}
 

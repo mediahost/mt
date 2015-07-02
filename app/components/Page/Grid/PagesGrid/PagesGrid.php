@@ -33,6 +33,9 @@ class PagesGrid extends BaseControl
 		]);
 
 		$grid->addColumnText('name', 'Page')
+				->setCustomRender(function ($row) {
+					return $row->translate($this->lang)->name;
+				})
 				->setSortable()
 				->setFilterText()
 				->setSuggestion();
