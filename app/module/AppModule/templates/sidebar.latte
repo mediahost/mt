@@ -81,6 +81,13 @@
 						<span class="title">{_'Discounts'}</span><span class="selected"></span>
 					</a>
 				</li>
+				<li n:if="$user->isAllowed('pages', 'default')"
+					n:class="$presenter->isLinkCurrent('Pages:*') ? active">
+					<a n:href="Pages:">
+						<i class="fa fa-bullhorn"></i>
+						<span class="title">{_'Pages'}</span><span class="selected"></span>
+					</a>
+				</li>
 			{/if}
 			<!-- END ADMIN -->
 

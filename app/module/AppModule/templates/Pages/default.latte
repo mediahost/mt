@@ -1,0 +1,31 @@
+{block pageTitle}
+	{_'Pages'}
+{/block}
+
+{block breadcrumbItems}
+<li><span>{_'Pages'}</span></li>
+{/block}
+
+{block content}
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-bullhorn"></i>
+					<span class="caption-subject bold uppercase">{_'Pages'}</span>
+				</div>
+				<div class="actions">
+					<a n:href="Pages:add" class="btn btn-circle green-sharp">
+						<i class="fa fa-plus"></i> {_'Add Page'}
+					</a>
+					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body">
+				{control pagesGrid}
+			</div>
+		</div>
+	</div>
+</div>
