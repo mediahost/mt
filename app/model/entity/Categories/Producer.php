@@ -18,7 +18,7 @@ use Knp\DoctrineBehaviors\Model;
  * @property array $products
  * @property array $path
  * @property string $url
- * @property array $products
+ * @property array $lines
  */
 class Producer extends BaseEntity
 {
@@ -27,7 +27,7 @@ class Producer extends BaseEntity
 	use CategoryBase;
 	use Model\Sluggable\Sluggable;
 
-	/** @ORM\Column(type="string", length=256, nullable=true) */
+	/** @ORM\Column(type="string", length=256) */
 	protected $name;
 
 	/** @ORM\ManyToOne(targetEntity="Producer", inversedBy="children") */
@@ -38,6 +38,9 @@ class Producer extends BaseEntity
 	
 	/** @ORM\OneToMany(targetEntity="Product", mappedBy="producer") */
 	protected $products;
+
+	/** @ORM\OneToMany(targetEntity="ProducerLine", mappedBy="producer", cascade={"persist"}) */
+	protected $lines;
 
 	public function __construct($name = NULL)
 	{
@@ -52,6 +55,13 @@ class Producer extends BaseEntity
 	{
 		$category->parent = $this;
 		$this->children->add($category);
+		return $this;
+	}
+	
+	public function addLine(ProducerLine $line)
+	{
+		$line->producer = $this;
+		$this->lines->add($line);
 		return $this;
 	}
 
