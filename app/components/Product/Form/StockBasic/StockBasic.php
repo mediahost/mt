@@ -25,7 +25,7 @@ class StockBasic extends StockBase
 		$form = new Form;
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
-		
+
 		$product = $this->stock->product;
 		$product->setCurrentLocale($this->lang);
 
@@ -36,8 +36,9 @@ class StockBasic extends StockBase
 				->setDefaultValue(TRUE);
 		$form->addTextArea('perex', 'Perex')
 				->setAttribute('placeholder', $product->perex);
-		$form->addWysiHtml('description', 'Description')
-				->setAttribute('placeholder', $product->description);
+		$form->addWysiHtml('description', 'Description', 10)
+						->setAttribute('placeholder', $product->description)
+						->getControlPrototype()->class[] = 'page-html-content';
 
 		$form->addSubmit('save', 'Save');
 
@@ -91,6 +92,7 @@ class StockBasic extends StockBase
 		}
 		return $values;
 	}
+
 }
 
 interface IStockBasicFactory
