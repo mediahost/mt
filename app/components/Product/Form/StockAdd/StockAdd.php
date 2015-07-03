@@ -74,7 +74,8 @@ class StockAdd extends StockBase
 
 		$form->addGroup('Description');
 		$form->addTextArea('perex', 'Perex');
-		$form->addWysiHtml('description', 'Description');
+		$form->addWysiHtml('description', 'Description', 10)
+						->getControlPrototype()->class[] = 'page-html-content';
 
 		$form->addSubmit('save', 'Save');
 
@@ -121,7 +122,7 @@ class StockAdd extends StockBase
 		$categoryRepo = $this->em->getRepository(Category::getClassName());
 		$category = $categoryRepo->find($values->main_category);
 		$this->stock->product->mainCategory = $category;
-		
+
 		$unitRepo = $this->em->getRepository(Unit::getClassName());
 		$unit = $unitRepo->findOneByName(Unit::DEFAULT_NAME);
 		$this->stock->product->unit = $unit;
