@@ -23,6 +23,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  * @property int $quantity
  * @property int $lock
  * @property int $inStore
+ * @property string $code
  * @property string $barcode
  */
 class Stock extends BaseEntity
@@ -46,6 +47,9 @@ class Stock extends BaseEntity
 	
 	/** @ORM\Column(type="boolean") */
 	protected $active = TRUE;
+	
+	/** @ORM\Column(type="string", length=100, nullable=true) */
+	protected $code;
 	
 	/** @ORM\Column(type="string", length=100, nullable=true) */
 	protected $barcode;
