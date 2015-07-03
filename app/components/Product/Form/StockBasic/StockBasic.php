@@ -25,19 +25,21 @@ class StockBasic extends StockBase
 		$form = new Form;
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
-		
+
 		$product = $this->stock->product;
 		$product->setCurrentLocale($this->lang);
 
 		$form->addText('name', 'Name')
 				->setAttribute('placeholder', $product->name);
+		$form->addText('code', 'Code');
 		$form->addText('barcode', 'Barcode');
 		$form->addCheckSwitch('active', 'Active')
 				->setDefaultValue(TRUE);
 		$form->addTextArea('perex', 'Perex')
 				->setAttribute('placeholder', $product->perex);
-		$form->addWysiHtml('description', 'Description')
-				->setAttribute('placeholder', $product->description);
+		$form->addWysiHtml('description', 'Description', 10)
+						->setAttribute('placeholder', $product->description)
+						->getControlPrototype()->class[] = 'page-html-content';
 
 		$form->addSubmit('save', 'Save');
 
@@ -56,6 +58,7 @@ class StockBasic extends StockBase
 	private function load(ArrayHash $values)
 	{
 		$this->stock->barcode = $values->barcode;
+		$this->stock->code = $values->code;
 		$this->stock->active = $values->active;
 
 		$this->stock->product->translateAdd($this->lang)->name = $values->name;
@@ -78,6 +81,7 @@ class StockBasic extends StockBase
 	protected function getDefaults()
 	{
 		$values = [
+			'code' => $this->stock->code,
 			'barcode' => $this->stock->barcode,
 			'active' => $this->stock->active,
 		];
@@ -91,6 +95,7 @@ class StockBasic extends StockBase
 		}
 		return $values;
 	}
+
 }
 
 interface IStockBasicFactory
