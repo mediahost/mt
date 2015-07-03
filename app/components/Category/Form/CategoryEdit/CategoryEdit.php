@@ -43,6 +43,15 @@ class CategoryEdit extends BaseControl
 				->addCondition(Form::FILLED)
 				->addRule(Form::IMAGE, 'Image must be in valid image format');
 
+		$form->addUploadImageWithPreview('slider', 'Slider')
+				->setPreview('/foto/500-200/' . $this->category->slider, $this->category->name)
+				->setSize(500, 200)
+				->addCondition(Form::FILLED)
+				->addRule(Form::IMAGE, 'Image must be in valid image format');
+
+		$form->addWysiHtml('html', 'Text', 10)
+						->getControlPrototype()->class[] = 'page-html-content';
+
 		$form->addSubmit('save', 'Save');
 
 		$form->setDefaults($this->getDefaults());
@@ -61,10 +70,14 @@ class CategoryEdit extends BaseControl
 	{
 		$lang = $this->category->isNew() ? $this->languageService->defaultLanguage : $this->lang;
 		$this->category->translateAdd($lang)->name = $values->name;
+		$this->category->translateAdd($lang)->html = $values->html;
 		$this->category->mergeNewTranslations();
 		
 		if ($values->image->isImage()) {
 			$this->category->image = $values->image;
+		}
+		if ($values->slider->isImage()) {
+			$this->category->slider = $values->slider;
 		}
 		return $this;
 	}
@@ -81,7 +94,9 @@ class CategoryEdit extends BaseControl
 	{
 		$values = [
 			'name' => $this->category->name,
+			'html' => $this->category->html,
 			'image' => $this->category->image,
+			'slider' => $this->category->slider,
 		];
 		return $values;
 	}

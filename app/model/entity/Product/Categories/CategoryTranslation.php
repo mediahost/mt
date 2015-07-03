@@ -10,6 +10,7 @@ use Knp\DoctrineBehaviors\Model;
  * @ORM\Entity
  *
  * @property string $name
+ * @property string $html
  */
 class CategoryTranslation extends BaseEntity
 {
@@ -19,6 +20,9 @@ class CategoryTranslation extends BaseEntity
 
 	/** @ORM\Column(type="string", length=256, nullable=true) */
 	protected $name;
+
+	/** @ORM\Column(type="text", nullable=true) */
+	protected $html;
 
 	protected function getSluggableFields()
 	{

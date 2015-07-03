@@ -15,10 +15,12 @@ use Nette\Utils\Strings;
  * @property array $children
  * @property-read bool $hasChildren
  * @property string $name
- * @property array $products
+ * @property string $html
  * @property array $path
  * @property string $url
  * @property array $products
+ * @property Image $image
+ * @property Image $slider
  */
 class Category extends BaseTranslatable
 {
@@ -38,6 +40,9 @@ class Category extends BaseTranslatable
 
 	/** @ORM\OneToOne(targetEntity="Image", cascade="all") */
 	protected $image;
+
+	/** @ORM\OneToOne(targetEntity="Image", cascade="all") */
+	protected $slider;
 
 	public function __construct($name = NULL, $currentLocale = NULL)
 	{
@@ -64,6 +69,18 @@ class Category extends BaseTranslatable
 		}
 		$this->image->requestedFilename = 'category_image_' . Strings::webalize(microtime());
 		$this->image->setFolder(Image::FOLDER_CATEGORIES);
+		return $this;
+	}
+
+	public function setSlider(FileUpload $file)
+	{
+		if (!$this->slider instanceof Image) {
+			$this->slider = new Image($file);
+		} else {
+			$this->slider->setFile($file);
+		}
+		$this->slider->requestedFilename = 'category_slider_' . Strings::webalize(microtime());
+		$this->slider->setFolder(Image::FOLDER_CATEGORIES);
 		return $this;
 	}
 
