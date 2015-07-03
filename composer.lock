@@ -33,12 +33,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dg/ftp-deployment.git",
-                "reference": "c2c2206af003c9aaba074e6a0f2e14319cb66861"
+                "reference": "86fbff9a07f59887446f5bbfe48a281ea4e30f93"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dg/ftp-deployment/zipball/c2c2206af003c9aaba074e6a0f2e14319cb66861",
-                "reference": "c2c2206af003c9aaba074e6a0f2e14319cb66861",
+                "url": "https://api.github.com/repos/dg/ftp-deployment/zipball/86fbff9a07f59887446f5bbfe48a281ea4e30f93",
+                "reference": "86fbff9a07f59887446f5bbfe48a281ea4e30f93",
                 "shasum": ""
             },
             "require": {
@@ -76,7 +76,7 @@
                 "ftp",
                 "ssh"
             ],
-            "time": "2015-06-14 14:39:14"
+            "time": "2015-06-30 14:00:22"
         },
         {
             "name": "doctrine/annotations",
@@ -1818,12 +1818,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Kdyby/Validator.git",
-                "reference": "29e8eb70c88d7e3b9b125ac098a75872d4eb7152"
+                "reference": "4e9fa62ba04b655eb0c3d069432198ef967ac965"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kdyby/Validator/zipball/29e8eb70c88d7e3b9b125ac098a75872d4eb7152",
-                "reference": "29e8eb70c88d7e3b9b125ac098a75872d4eb7152",
+                "url": "https://api.github.com/repos/Kdyby/Validator/zipball/4e9fa62ba04b655eb0c3d069432198ef967ac965",
+                "reference": "4e9fa62ba04b655eb0c3d069432198ef967ac965",
                 "shasum": ""
             },
             "require": {
@@ -1896,7 +1896,7 @@
                 "nette",
                 "validation"
             ],
-            "time": "2015-06-17 15:36:22"
+            "time": "2015-06-27 15:55:05"
         },
         {
             "name": "knplabs/doctrine-behaviors",
