@@ -1,34 +1,42 @@
 body.ecommerce {
 	background: #f9f9f9;
 }
-.ecommerce h1, .ecommerce h2, .ecommerce h3, .ecommerce h4, .ecommerce h5, .ecommerce h6 {
+body.page-html-content {
+	font-size: 13px !important;
+}
+.page-html-content {
+	font-family: 'Open Sans', Arial, sans-serif !important;
+}
+.ecommerce h1, .ecommerce h2, .ecommerce h3, .ecommerce h4, .ecommerce h5, .ecommerce h6,
+.page-html-content h1, .page-html-content h2, .page-html-content h3, 
+.page-html-content h4, .page-html-content h5, .page-html-content h6{
 	font-family: "PT Sans Narrow", sans-serif;
 	margin: 0 0 10px;
 	text-transform: uppercase;
 }
-.ecommerce h1 {
+.ecommerce h1, .page-html-content h1 {
 	font-size: 23px;
 }
-.ecommerce h2 {
+.ecommerce h2, .page-html-content h2 {
 	font-size: 20px;
 }
-.ecommerce .content-page h2, 
-.ecommerce .content-page h3, 
-.ecommerce .content-page h4, 
-.ecommerce .content-page h5, 
-.ecommerce .content-page h6 {
+.ecommerce .content-page h2, .page-html-content h2
+.ecommerce .content-page h3, .page-html-content h3
+.ecommerce .content-page h4, .page-html-content h4
+.ecommerce .content-page h5, .page-html-content h5
+.ecommerce .content-page h6, .page-html-content h6 {
 	padding-top: 10px;
 }
-.ecommerce .content-page h3 {
+.ecommerce .content-page h3, .page-html-content h3 {
 	font-size: 20px;
 	margin-bottom: 7px;
 }
-.ecommerce .content-page h4 {
+.ecommerce .content-page h4, .page-html-content h4 {
 	font-size: 17px;
 	margin-bottom: 4px;
 }
-.ecommerce .content-page h5, 
-.ecommerce .content-page h6 {
+.ecommerce .content-page h5, .page-html-content h5 
+.ecommerce .content-page h6, .page-html-content h6 {
 	font: 700 15px "Open Sans", Arial, sans-serif;
 	margin-bottom: 2px;
 }
@@ -77,7 +85,7 @@ Header and header elements
 .ecommerce .header-navigation .dropdown-menu > li.active > a,
 .ecommerce .header-navigation .header-navigation-content .header-navigation-col li > a:hover,
 .ecommerce .header-navigation .header-navigation-content .header-navigation-col li.active > a {
-  color: #fff;
+	color: #fff;
 }
 .ecommerce .header-navigation ul > li.active > a {
 	/*border-bottom: 2px solid #E44F00;*/
@@ -91,41 +99,44 @@ Header and header elements
 	margin-top: -3px;
 }
 .ecommerce .reduce-header .header-navigation > ul > li.dropdown:hover > a:after { 
-  bottom: 0;
+	bottom: 0;
+}
+.page-html-content p {
+	margin-bottom: 20px;
 }
 
 /* nav brands */
 .nav-brands {
-  clear: both;
-  margin: -20px -15px;
-  padding: 20px 0 0;
-  width: auto;
+	clear: both;
+	margin: -20px -15px;
+	padding: 20px 0 0;
+	width: auto;
 }
 .nav-brands ul {
-  margin: 0;
-  padding: 10px 0;
-  list-style: none;
-  background: #fff;
-  width: 100%;
-  overflow: hidden;
-  border-top: solid 1px #f0f0f0;
+	margin: 0;
+	padding: 10px 0;
+	list-style: none;
+	background: #fff;
+	width: 100%;
+	overflow: hidden;
+	border-top: solid 1px #f0f0f0;
 }
 .nav-brands li {
-  float: none;
-  margin-right: 0 !important;
-  border: none !important;
-  display: inline-block;
+	float: none;
+	margin-right: 0 !important;
+	border: none !important;
+	display: inline-block;
 }
 .nav-brands img {
-  width: auto;
-  height: 70px;
+	width: auto;
+	height: 70px;
 }
 .nav-brands a {
-  padding: 0 !important;
+	padding: 0 !important;
 }
 .nav-brands a:hover {
-  background: #fff;
-  color: #fff;
+	background: #fff;
+	color: #fff;
 }
 
 /* Top cart block */
@@ -943,25 +954,25 @@ table .product-quantity .input-group {
 	position: static;
 }
 .product-quantity .btn {
-  text-align: center;
-  height: 18px !important;
-  width: 18px;
-  padding: 0 2px 0 1px !important;
-  text-align: center;
-  background: #edeff1;
-  border-radius: 0 !important;
-  font-size: 18px !important;
-  line-height: 1 !important;
-  color: #616b76;
-  margin: 0 !important;
-  position: absolute;
-  right: 0;
+	text-align: center;
+	height: 18px !important;
+	width: 18px;
+	padding: 0 2px 0 1px !important;
+	text-align: center;
+	background: #edeff1;
+	border-radius: 0 !important;
+	font-size: 18px !important;
+	line-height: 1 !important;
+	color: #616b76;
+	margin: 0 !important;
+	position: absolute;
+	right: 0;
 }
 .product-quantity .quantity-up {
-  top: 0;
+	top: 0;
 }
 .product-quantity .quantity-down {
-  bottom: 0;
+	bottom: 0;
 }
 .product-quantity .btn i {
 	position: relative;

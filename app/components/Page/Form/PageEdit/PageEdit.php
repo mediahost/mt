@@ -40,7 +40,7 @@ class PageEdit extends BaseControl
 						->setAttribute('placeholder', 'Shortly about contain of page')
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XL;
 
-		$form->addWysiHtml('html', 'Text')
+		$form->addWysiHtml('html', 'Text', 30)
 						->setRequired('Content is required')
 						->getControlPrototype()->class[] = 'page-html-content';
 
