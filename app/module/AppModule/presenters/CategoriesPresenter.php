@@ -21,10 +21,26 @@ class CategoriesPresenter extends BasePresenter
 	 * @resource('categories')
 	 * @privilege('default')
 	 */
-	public function actionDefault()
+	public function actionDefault($id)
 	{
-		$categoryRepo = $this->em->getRepository(Category::getClassName());
-		$this->template->categories = $categoryRepo->findAll();
+		if ($id) {
+			$categoryRepo = $this->em->getRepository(Category::getClassName());
+			$this->category = $categoryRepo->find($id);
+			if (!$this->category) {
+				$this->flashMessage('Category wasn\'t find', 'warning');
+				$this->redirect('default');
+			}
+			$this->category->setCurrentLocale($this->lang);
+			$this['categoryForm']->setCategory($this->category);
+		}
+	}
+
+	public function renderDefault()
+	{
+		$this->template->category = $this->category;
+		if ($this->isAjax()) {
+			$this->redrawControl();
+		}
 	}
 
 	/**
@@ -36,29 +52,6 @@ class CategoriesPresenter extends BasePresenter
 	{
 		$this->category = new Category();
 		$this['categoryForm']->setCategory($this->category);
-		$this->setView('edit');
-	}
-
-	/**
-	 * @secured
-	 * @resource('categories')
-	 * @privilege('edit')
-	 */
-	public function actionEdit($id)
-	{
-		$categoryRepo = $this->em->getRepository(Category::getClassName());
-		$this->category = $categoryRepo->find($id);
-		if (!$this->category) {
-			$this->flashMessage('Category wasn\'t find', 'warning');
-			$this->redirect('default');
-		}
-		$this->category->setCurrentLocale($this->lang);
-		$this['categoryForm']->setCategory($this->category);
-	}
-
-	public function renderEdit()
-	{
-		$this->template->category = $this->category;
 	}
 
 	// <editor-fold desc="forms">
@@ -68,10 +61,14 @@ class CategoriesPresenter extends BasePresenter
 	{
 		$control = $this->iCategoryEditFactory->create();
 		$control->setLang($this->lang);
-		$control->onAfterSave = function (Category $savedCategory) {
+		$control->onAfterSave = function (Category $savedCategory, $addNext) {
 			$message = new TaggedString('Category \'%s\' was successfully saved.', (string) $savedCategory);
 			$this->flashMessage($message, 'success');
-			$this->redirect('default');
+			if ($addNext) {
+				$this->redirect('add');
+			} else {
+				$this->redirect('default', ['id' => $savedCategory->id]);
+			}
 		};
 		return $control;
 	}

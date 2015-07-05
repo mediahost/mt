@@ -13,15 +13,17 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  * @property string $name
  * @property ProducerLine $line
  */
-class ProducerModel extends BaseEntity
+class ProducerModel extends BaseEntity implements IProducer
 {
+
+	const ID = 'm';
 
 	use Identifier;
 
 	/** @ORM\Column(type="string", length=256) */
 	protected $name;
 
-	/** @ORM\ManyToOne(targetEntity=ProducerLinee", inversedBy="models") */
+	/** @ORM\ManyToOne(targetEntity="ProducerLine", inversedBy="models") */
 	protected $line;
 
 	public function __construct($name)
@@ -30,14 +32,19 @@ class ProducerModel extends BaseEntity
 		parent::__construct();
 	}
 
+	public function getFullName($glue = ' / ')
+	{
+		return Helpers::concatStrings($glue, (string) $this->line->producer, (string) $this->line, (string) $this);
+	}
+
 	public function __toString()
 	{
 		return (string) $this->name;
 	}
 
-	public function getFullName($glue = ' / ')
+	public function isNew()
 	{
-		return Helpers::concatStrings($glue, (string) $this->line->producer, (string) $this->line, (string) $this);
+		return $this->id === NULL;
 	}
 
 }

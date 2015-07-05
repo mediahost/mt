@@ -7,13 +7,18 @@ use App\Components\BaseControlException;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Producer;
+use App\Model\Entity\ProducerLine;
+use App\Model\Entity\ProducerModel;
 use Nette\Utils\ArrayHash;
 
 class ProducerEdit extends BaseControl
 {
 
-	/** @var Producer */
-	private $producer;
+	/** @var Producer|ProducerLine|ProducerModel */
+	private $entity;
+
+	/** @var string */
+	private $type;
 
 	// <editor-fold desc="events">
 
@@ -27,14 +32,26 @@ class ProducerEdit extends BaseControl
 	{
 		$this->checkEntityExistsBeforeRender();
 
-		$form = new Form;
+		$form = new Form();
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer);
 
 		$form->addText('name', 'Name')
 				->setRequired('Name is required');
+		
+		switch ($this->type) {
+			case Producer::ID:
+				break;
+			case ProducerLine::ID:
+				break;
+			case ProducerModel::ID:
+				break;
+		}
 
 		$form->addSubmit('save', 'Save');
+		if ($this->entity->isNew()) {
+			$form->addSubmit('saveAdd', 'Save & Add next');
+		}
 
 		$form->setDefaults($this->getDefaults());
 		$form->onSuccess[] = $this->formSucceeded;
@@ -45,19 +62,42 @@ class ProducerEdit extends BaseControl
 	{
 		$this->load($values);
 		$this->save();
-		$this->onAfterSave($this->producer);
+		
+		$componentsArray = (array) $form->getComponents();
+		$isSubmitedByAdd = array_key_exists('saveAdd', $componentsArray) ? $form['saveAdd']->submittedBy : FALSE;
+		$this->onAfterSave($this->entity, $this->type, $isSubmitedByAdd);
 	}
 
 	private function load(ArrayHash $values)
 	{
-		$this->producer->name = $values->name;
+		$this->entity->name = $values->name;
+		switch ($this->type) {
+			case Producer::ID:
+				break;
+			case ProducerLine::ID:
+				break;
+			case ProducerModel::ID:
+				break;
+		}
 		return $this;
 	}
 
 	private function save()
 	{
-		$producerRepo = $this->em->getRepository(Producer::getClassName());
-		$producerRepo->save($this->producer);
+		switch ($this->type) {
+			case Producer::ID:
+				$repo = $this->em->getRepository(Producer::getClassName());
+				break;
+			case ProducerLine::ID:
+				$repo = $this->em->getRepository(ProducerLine::getClassName());
+				break;
+			case ProducerModel::ID:
+				$repo = $this->em->getRepository(ProducerModel::getClassName());
+				break;
+			default:
+				return $this;
+		}
+		$repo->save($this->entity);
 		return $this;
 	}
 
@@ -65,23 +105,38 @@ class ProducerEdit extends BaseControl
 	protected function getDefaults()
 	{
 		$values = [
-			'name' => $this->producer->name,
+			'name' => $this->entity->name,
 		];
+		switch ($this->type) {
+			case Producer::ID:
+				break;
+			case ProducerLine::ID:
+				break;
+			case ProducerModel::ID:
+				break;
+		}
 		return $values;
 	}
 
 	private function checkEntityExistsBeforeRender()
 	{
-		if (!$this->producer) {
-			throw new BaseControlException('Use setProducer(\App\Model\Entity\Producer) before render');
+		if (!$this->entity || !$this->type) {
+			throw new BaseControlException('Use setProducer() before render');
 		}
 	}
 
 	// <editor-fold desc="setters & getters">
 
-	public function setProducer(Producer $producer)
+	public function setProducer($producerOrLineOrModel)
 	{
-		$this->producer = $producer;
+		if ($producerOrLineOrModel instanceof Producer) {
+			$this->type = Producer::ID;
+		} else if ($producerOrLineOrModel instanceof ProducerLine) {
+			$this->type = ProducerLine::ID;
+		} else if ($producerOrLineOrModel instanceof ProducerModel) {
+			$this->type = ProducerModel::ID;
+		}
+		$this->entity = $producerOrLineOrModel;
 		return $this;
 	}
 

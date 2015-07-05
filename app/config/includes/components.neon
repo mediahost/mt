@@ -41,7 +41,6 @@ services:
 
 	# Producers
 	- {implement: App\Components\Producer\Form\IProducerEditFactory, inject: yes}
-	- {implement: App\Components\Producer\Grid\IProducersGridFactory, inject: yes}
 
 	# Category
 	- {implement: App\Components\Category\Form\ICategoryEditFactory, inject: yes}

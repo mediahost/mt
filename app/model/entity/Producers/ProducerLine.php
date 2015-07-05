@@ -13,9 +13,13 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  * @property string $name
  * @property Producer $producer
  * @property array $models
+ * @property-read bool $hasModels
  */
-class ProducerLine extends BaseEntity
+class ProducerLine extends BaseEntity implements IProducer
 {
+
+	const ID = 'l';
+
 	use Identifier;
 
 	/** @ORM\Column(type="string", length=256) */
@@ -33,7 +37,7 @@ class ProducerLine extends BaseEntity
 		$this->models = new ArrayCollection();
 		parent::__construct();
 	}
-	
+
 	public function addModel(ProducerModel $model)
 	{
 		$model->line = $this;
@@ -41,9 +45,19 @@ class ProducerLine extends BaseEntity
 		return $this;
 	}
 
+	public function getHasModels()
+	{
+		return (bool) count($this->models);
+	}
+
 	public function __toString()
 	{
 		return (string) $this->name;
+	}
+
+	public function isNew()
+	{
+		return $this->id === NULL;
 	}
 
 }

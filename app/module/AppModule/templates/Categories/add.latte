@@ -7,13 +7,7 @@
 	<a n:href="Categories:">{_'Categories'}</a>
 </li>
 <li>
-	<span>
-		{if $category->isNew()}
-			{_'Add Main Category'}
-		{else}
-			{_'Edit of %s', NULL, $category}
-		{/if}
-	</span>
+	<span>{_'Add Main Category'}</span>
 </li>
 {/block}
 
@@ -25,11 +19,7 @@
 				<div class="caption font-green-sharp">
 					<i class="fa fa-edit font-green-sharp"></i>
 					<span class="caption-subject bold uppercase">
-						{if $category->isNew()}
-							{_'New Main Category'}
-						{else}
-							{$category}
-						{/if}
+						{_'New Main Category'}
 					</span>
 				</div>
 				<div class="actions">

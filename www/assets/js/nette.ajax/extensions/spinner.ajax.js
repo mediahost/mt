@@ -49,11 +49,14 @@
 			if (parentPortlet && parentPortlet.length) {
 				this.element = parentPortlet;
 			}
-			Metronic.blockUI({
+			var options = {
 				target: this.element,
-				animate: true,
-				overlayColor: 'none'
-			});
+				animate: true
+			};
+			if (this.element.hasClass('loadingNoOverlay')) {
+				options.overlayColor = 'none';
+			}
+			Metronic.blockUI(options);
 		},
 		complete: function () {
 			Metronic.unblockUI(this.element);

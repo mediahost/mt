@@ -762,7 +762,7 @@ class ProductList extends Control
 		$form = new Form($this, $name);
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
-		$form->getElementPrototype()->class = 'sendOnChange ' . (!$this->ajax ? : 'ajax');
+		$form->getElementPrototype()->class = ['sendOnChange', 'loadingNoOverlay', !$this->ajax ? : 'ajax'];
 
 		$form->addSelect('sort', 'Sort by', $this->getSortingMethods())
 				->setDefaultValue($this->getDefaultSortingMethod())
@@ -793,7 +793,7 @@ class ProductList extends Control
 		$form = new Form($this, $name);
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
-		$form->getElementPrototype()->class = 'sendOnChange ' . (!$this->ajax ? : 'ajax');
+		$form->getElementPrototype()->class = ['sendOnChange', 'loadingNoOverlay', !$this->ajax ? : 'ajax'];
 
 		$availabilities = [
 			1 => 'Not Available',

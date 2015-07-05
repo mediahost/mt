@@ -9,9 +9,9 @@
 {/block}
 
 {block content}
-<div class="row">
-	<div class="col-md-12">
-		<div class="portlet light">
+<div class="row" id="categories-tree-view">
+	<div class="col-lg-6">
+		<div class="portlet light" id="categories-tree" data-selected-id="{if $category}{$category->id}{/if}">
 			<div class="portlet-title">
 				<div class="caption">
 					<i class="icon-notebook"></i>
@@ -29,6 +29,34 @@
 			</div>
 			<div class="portlet-body">
 				<div id="category_tree"></div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-6">
+		<div class="portlet light" n:snippet="categoryPortlet">
+			<div class="portlet-title">
+				<div class="caption font-green-sharp">
+					<i class="fa fa-edit font-green-sharp"></i>
+					<span class="caption-subject bold uppercase">
+						{if $category}
+							{_'Edit of category'} '<em>{$category}</em>'
+						{else}
+							{_'Edit selected category'}
+						{/if}
+					</span>
+				</div>
+				<div class="actions">
+					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form" n:if="$category">
+				{control categoryForm}
+			</div>
+			<div class="portlet-body" n:if="!$category">
+				<div class="note note-info">
+					<p>{_'Select some category from tree'}</p>
+				</div>
 			</div>
 		</div>
 	</div>
