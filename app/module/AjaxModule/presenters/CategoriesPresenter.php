@@ -25,9 +25,6 @@ class CategoriesPresenter extends BasePresenter
 				$item['text'] = (string) $category;
 				$item['children'] = $category->hasChildren;
 				$item['type'] = 'loaded';
-				$item['a_attr'] = [
-					'href' => $this->link('//:App:Categories:edit', $category->id),
-				];
 				$this->addRawData(NULL, $item);
 			}
 		} else {

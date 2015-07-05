@@ -2,48 +2,85 @@
 
 namespace App\AppModule\Presenters;
 
-use App\Components\Producer\Grid\ProducersGrid;
-use App\Components\Producer\Grid\IProducersGridFactory;
-use App\Components\Producer\Form\ProducerEdit;
 use App\Components\Producer\Form\IProducerEditFactory;
+use App\Components\Producer\Form\ProducerEdit;
 use App\Model\Entity\Producer;
+use App\Model\Entity\ProducerLine;
+use App\Model\Entity\ProducerModel;
 use App\TaggedString;
-use Exception;
-use Kdyby\Doctrine\EntityRepository;
+use Nette\Utils\Strings;
 
 class ProducersPresenter extends BasePresenter
 {
 
-	/** @var Producer */
-	private $producerEntity;
+	/** @var string */
+	private $type;
 
-	/** @var EntityRepository */
-	private $producerRepo;
+	/** @var Producer */
+	private $entity;
 
 	// <editor-fold desc="injects">
 
 	/** @var IProducerEditFactory @inject */
 	public $iProducerEditFactory;
 
-	/** @var IProducersGridFactory @inject */
-	public $iProducersGridFactory;
-
 	// </editor-fold>
-
-	protected function startup()
-	{
-		parent::startup();
-		$this->producerRepo = $this->em->getRepository(Producer::getClassName());
-	}
 
 	/**
 	 * @secured
 	 * @resource('producers')
 	 * @privilege('default')
 	 */
-	public function actionDefault()
+	public function actionDefault($id)
 	{
-		
+		$itemId = Producer::getItemId($id, $this->type);
+		if ($itemId) {
+			switch ($this->type) {
+				case Producer::ID:
+					$repo = $this->em->getRepository(Producer::getClassName());
+					break;
+				case ProducerLine::ID:
+					$repo = $this->em->getRepository(ProducerLine::getClassName());
+					break;
+				case ProducerModel::ID:
+					$repo = $this->em->getRepository(ProducerModel::getClassName());
+					break;
+				default:
+					$this->flashMessage('Wrong ID format.', 'warning');
+					$this->redirect('default');
+					break;
+			}
+		}
+		if (isset($repo)) {
+			$this->entity = $repo->find($itemId);
+			if (!$this->entity) {
+				$message = new TaggedString('This %s wasn\'t found.', $this->getEntityTypeName());
+				$this->flashMessage($message, 'warning');
+				$this->redirect('default');
+			} else {
+				$this['producerForm']->setProducer($this->entity);
+			}
+		}
+	}
+
+	public function renderDefault()
+	{
+		switch ($this->type) {
+			case Producer::ID:
+			case ProducerLine::ID:
+			case ProducerModel::ID:
+				$this->template->entity = $this->entity;
+				$this->template->entityFullId = $this->type . Producer::SEPARATOR . $this->entity->id;
+				break;
+			default:
+				$this->template->entity = NULL;
+				$this->template->entityFullId = NULL;
+				break;
+		}
+		$this->template->entityTypeName = $this->getEntityTypeName();
+		if ($this->isAjax()) {
+			$this->redrawControl();
+		}
 	}
 
 	/**
@@ -53,51 +90,21 @@ class ProducersPresenter extends BasePresenter
 	 */
 	public function actionAdd()
 	{
-		$this->producerEntity = new Producer();
-		$this['producerForm']->setProducer($this->producerEntity);
-		$this->setView('edit');
+		$this->entity = new Producer();
+		$this['producerForm']->setProducer($this->entity);
 	}
 
-	/**
-	 * @secured
-	 * @resource('producers')
-	 * @privilege('edit')
-	 */
-	public function actionEdit($id)
+	private function getEntityTypeName($type = NULL)
 	{
-		$this->producerEntity = $this->producerRepo->find($id);
-		if (!$this->producerEntity) {
-			$this->flashMessage('This producer wasn\'t found.', 'warning');
-			$this->redirect('default');
-		} else {
-			$this['producerForm']->setProducer($this->producerEntity);
+		if ($type === NULL) {
+			$type = $this->type;
 		}
-	}
-
-	public function renderEdit()
-	{
-		$this->template->isAdd = $this->producerEntity->isNew();
-	}
-
-	/**
-	 * @secured
-	 * @resource('producers')
-	 * @privilege('delete')
-	 */
-	public function actionDelete($id)
-	{
-		$producer = $this->producerRepo->find($id);
-		if (!$producer) {
-			$this->flashMessage('Producer wasn\'t found.', 'danger');
-		} else {
-			try {
-				$this->producerRepo->delete($producer);
-				$this->flashMessage('Producer was deleted.', 'success');
-			} catch (Exception $e) {
-				$this->flashMessage('This producer can\'t be deleted.', 'danger');
-			}
-		}
-		$this->redirect('default');
+		$names = [
+			Producer::ID => 'producer',
+			ProducerLine::ID => 'line',
+			ProducerModel::ID => 'model',
+		];
+		return array_key_exists($type, $names) ? $names[$type] : NULL;
 	}
 
 	// <editor-fold desc="forms">
@@ -106,21 +113,16 @@ class ProducersPresenter extends BasePresenter
 	public function createComponentProducerForm()
 	{
 		$control = $this->iProducerEditFactory->create();
-		$control->onAfterSave = function (Producer $savedProducer) {
-			$message = new TaggedString('Producer \'%s\' was successfully saved.', (string) $savedProducer);
+		$control->onAfterSave = function ($saved, $type, $addNext) {
+			$typeName = Strings::firstUpper($this->getEntityTypeName($type));
+			$message = new TaggedString($typeName . ' \'%s\' was successfully saved.', (string) $saved);
 			$this->flashMessage($message, 'success');
-			$this->redirect('default');
+			if ($addNext) {
+				$this->redirect('add');
+			} else {
+				$this->redirect('default', ['id' => $type . Producer::SEPARATOR . $saved->id]);
+			}
 		};
-		return $control;
-	}
-
-	// </editor-fold>
-	// <editor-fold desc="grids">
-
-	/** @return ProducersGrid */
-	public function createComponentProducersGrid()
-	{
-		$control = $this->iProducersGridFactory->create();
 		return $control;
 	}
 

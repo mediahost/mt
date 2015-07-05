@@ -1,19 +1,23 @@
 {block pageTitle}
-	{_'Producers'}
+{_'Producers'}
 {/block}
 
 {block breadcrumbItems}
-<li><span>{_'Producers'}</span></li>
+<li>
+	<span>{_'Producers'}</span>
+</li>
 {/block}
 
 {block content}
-<div class="row">
-	<div class="col-md-12">
-		<div class="portlet light">
+<div class="row" id="producers-tree-view">
+	<div class="col-lg-6">
+		<div class="portlet light" id="producers-tree" data-selected-id="{$entityFullId}">
 			<div class="portlet-title">
 				<div class="caption">
 					<i class="fa fa-building"></i>
-					<span class="caption-subject bold uppercase">{_'Producers'}</span>
+					<span class="caption-subject bold uppercase">
+						{_'Producers'}
+					</span>
 				</div>
 				<div class="actions">
 					<a n:href="Producers:add" class="btn btn-circle green-sharp">
@@ -24,7 +28,35 @@
 				</div>
 			</div>
 			<div class="portlet-body">
-				{control producersGrid}
+				<div id="producer_tree"></div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-6">
+		<div class="portlet light" n:snippet="producerPortlet">
+			<div class="portlet-title">
+				<div class="caption font-green-sharp">
+					<i class="fa fa-edit font-green-sharp"></i>
+					<span class="caption-subject bold uppercase">
+						{if $entity}
+							{_'Edit of %', NULL, $entityTypeName} '<em>{$entity}</em>'
+						{else}
+							{_'Edit selected producer, line or model'}
+						{/if}
+					</span>
+				</div>
+				<div class="actions">
+					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form" n:if="$entity">
+				{control producerForm}
+			</div>
+			<div class="portlet-body" n:if="!$entity">
+				<div class="note note-info">
+					<p>{_'Select some producer, list or model from tree'}</p>
+				</div>
 			</div>
 		</div>
 	</div>

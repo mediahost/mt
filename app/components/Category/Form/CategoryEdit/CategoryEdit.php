@@ -27,10 +27,10 @@ class CategoryEdit extends BaseControl
 	{
 		$this->checkEntityExistsBeforeRender();
 
-		$form = new Form;
+		$form = new Form();
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer);
-		
+
 		$defaultLanguage = $this->languageService->defaultLanguage;
 
 		$form->addText('name', 'Name')
@@ -38,13 +38,13 @@ class CategoryEdit extends BaseControl
 				->setAttribute('placeholder', $this->category->translate($defaultLanguage)->name);
 
 		$form->addUploadImageWithPreview('image', 'Image')
-				->setPreview('/foto/200-150/' . $this->category->image, $this->category->name)
+				->setPreview('/foto/200-150/' . ($this->category->image ? $this->category->image : 'default.png'), $this->category->name)
 				->setSize(200, 150)
 				->addCondition(Form::FILLED)
 				->addRule(Form::IMAGE, 'Image must be in valid image format');
 
 		$form->addUploadImageWithPreview('slider', 'Slider')
-				->setPreview('/foto/500-200/' . $this->category->slider, $this->category->name)
+				->setPreview('/foto/500-200/' . ($this->category->slider ? $this->category->slider : 'default.png'), $this->category->name)
 				->setSize(500, 200)
 				->addCondition(Form::FILLED)
 				->addRule(Form::IMAGE, 'Image must be in valid image format');
@@ -53,6 +53,9 @@ class CategoryEdit extends BaseControl
 						->getControlPrototype()->class[] = 'page-html-content';
 
 		$form->addSubmit('save', 'Save');
+		if ($this->category->isNew()) {
+			$form->addSubmit('saveAdd', 'Save & Add next');
+		}
 
 		$form->setDefaults($this->getDefaults());
 		$form->onSuccess[] = $this->formSucceeded;
@@ -63,7 +66,10 @@ class CategoryEdit extends BaseControl
 	{
 		$this->load($values);
 		$this->save();
-		$this->onAfterSave($this->category);
+		
+		$componentsArray = (array) $form->getComponents();
+		$isSubmitedByAdd = array_key_exists('saveAdd', $componentsArray) ? $form['saveAdd']->submittedBy : FALSE;
+		$this->onAfterSave($this->category, $isSubmitedByAdd);
 	}
 
 	private function load(ArrayHash $values)
@@ -72,7 +78,7 @@ class CategoryEdit extends BaseControl
 		$this->category->translateAdd($lang)->name = $values->name;
 		$this->category->translateAdd($lang)->html = $values->html;
 		$this->category->mergeNewTranslations();
-		
+
 		if ($values->image->isImage()) {
 			$this->category->image = $values->image;
 		}

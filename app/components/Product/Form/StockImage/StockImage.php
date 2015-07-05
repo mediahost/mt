@@ -30,7 +30,7 @@ class StockImage extends StockBase
 		$imageSizeY = 150;
 		
 		$form->addUploadImageWithPreview('image', 'Main Image')
-				->setPreview("/foto/{$imageSizeX}-{$imageSizeY}/" . $this->stock->product->image, $this->stock->product->name)
+				->setPreview("/foto/{$imageSizeX}-{$imageSizeY}/" . ($this->stock->product->image ? $this->stock->product->image : 'default.png'), $this->stock->product->name)
 				->setSize($imageSizeX, $imageSizeY)
 				->addCondition(Form::FILLED)
 				->addRule(Form::IMAGE, 'Image must be in valid image format');
