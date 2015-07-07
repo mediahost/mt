@@ -34,7 +34,7 @@ class ProducerFacade extends Object
 		$producers = [];
 		foreach ($this->producerRepo->findAll() as $producer) {
 			/* @var $producer Producer */
-			$producers[$producer->id] = $producer->treeName;
+			$producers[$producer->id] = (string) $producer;
 		}
 		@uasort($producers, 'strcoll');
 		return $producers;
