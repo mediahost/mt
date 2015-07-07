@@ -24,7 +24,7 @@ class Required extends BaseControl
 	/** @return Form */
 	protected function createComponentForm()
 	{
-		$form = new Form;
+		$form = new Form();
 		$form->setRenderer(new MetronicFormRenderer());
 		$form->setTranslator($this->translator);
 		

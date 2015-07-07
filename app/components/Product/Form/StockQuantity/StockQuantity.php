@@ -24,7 +24,7 @@ class StockQuantity extends StockBase
 	{
 		$this->checkEntityExistsBeforeRender();
 
-		$form = new Form;
+		$form = new Form();
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicHorizontalFormRenderer());
 
