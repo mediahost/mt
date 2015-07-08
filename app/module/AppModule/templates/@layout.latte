@@ -4,7 +4,8 @@
 <!--[if !IE]><!-->
 <html lang="{$lang}" class="no-js">
 	<!--<![endif]-->
-	{includeblock '../../BaseModule/templates/metronic.defines.latte'}
+	{*includeblock '../../BaseModule/templates/metronic.defines.latte'*}
+	{includeblock '../../BaseModule/templates/scripts.defines.latte'}
 
 	<!-- BEGIN HEAD -->
 	<head>
@@ -17,11 +18,12 @@
 		<meta content="" name="description"/>
 		<meta content="" name="author"/>
 
-		{include cssMetronicCore}
-		{include cssMetronicAdminTheme}
-
-		{control cssApp}
+		{* <AssetsLoader> *}
+		{control cssCore}
+		{control cssAdmin}
+		<link href="{$basePath}/assets/admin/css/themes/{$designSettings->color}.css" rel="stylesheet" type="text/css" id="style_color"/>
 		{control cssPrint}
+		{* </AssetsLoader> *}
 
 		<link href="{$basePath}/favicon.ico" rel="shortcut icon">
 
@@ -88,8 +90,11 @@
 
 		{block scripts}
 		<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
-		{include jsMetronicCore}
-		{include jsAdminApp}
+		{include #scriptsAppVars}
+		{control jsCore}
+		{include #scriptsPacePlugin}
+		{control jsAdmin}
+		{include #scriptsIEOnly}
 		<!-- END JAVASCRIPTS -->
 		{/block}
 	</body>

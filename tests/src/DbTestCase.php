@@ -25,7 +25,7 @@ abstract class DbTestCase extends BaseTestCase
 		if (!$this->schemaTool instanceof SchemaTool) {
 			$this->schemaTool = new SchemaTool($this->em);
 		}
-		$this->setOwnDb();
+//		$this->setOwnDb();
 		$this->schemaTool->updateSchema($this->getClasses());
 	}
 

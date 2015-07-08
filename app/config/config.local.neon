@@ -1,0 +1,63 @@
+doctrine:
+	host: localhost
+	user: root
+	password: 
+	dbname: mt2
+
+facebook:
+	appId: '842365949188917'
+	appSecret: '3af671f94c5a079c7fd2a6080f71d3a7'
+
+twitter:
+	consumerKey: 'osW5qpSxQQpta4a7NkVymEwdR'
+	consumerSecretKey: 'SZNM1FhgcVqdtH2KyD392Clx5DkEIXXh2jNbFfoLHhyeevvRIN'
+
+installer:
+	lock: TRUE # při TRUE zamyká instalaci po spuštění, pak je potřeba odmazat temp/install pro novou instalaci
+	doctrine: FALSE # aktualizuje DB podle entit
+	initUsers: ['user_mail' = ['password', 'admin']]
+#	adminer: FALSE # instaluje potřebná nastavení pro adminer - na SERVERU je potřeba ověřit funkčnost (používá chmod)
+#	composer: FALSE # spouští composer - NEPOUŽÍVAT na serveru (spouští shell_exec)
+
+nette:
+	mailer:
+		smtp: FALSE # při FALSE využívá mail(); při TRUE je potřeba nastavit údaje
+#		host: smtp.gmail.com
+#		secure: ssl
+#		username: user@gmail.com
+#		password: heslo
+
+# Při zakomentování bloku nette:mailer: je možné využít MailPanel níže
+#nette:
+#	debugger:
+#		bar:
+#			- JanDrabek\MailPanel\MailPanel
+#services:
+#	nette.mailer: JanDrabek\MailPanel\SessionMailer
+
+settings:
+	modules: # default FALSE for all
+		registrableRole: TRUE # for definition whitch role is registrable in RoleFacade
+	modulesSettings:
+		registrableRole:
+			roles: ['candidate', 'company'] # role names
+	pageInfo:
+		projectName: My Project
+		author: author
+		description: description
+	pageConfig:
+		itemsPerPage: 9
+		itemsPerRow: 3
+		rowsPerPage: 3
+	expiration:
+		remember = 14 days
+		notRemember = 30 minutes
+	design:
+		color: default
+		headerFixed: TRUE
+		containerBgSolid: TRUE
+	passwords:
+		length: 5
+	languages:
+		default: en
+		allowed: ['en' = 'English', 'cs' = 'Czech', 'sk' = 'Slovak']

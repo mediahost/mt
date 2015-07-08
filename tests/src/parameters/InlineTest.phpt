@@ -17,18 +17,18 @@ $container = require __DIR__ . '/../bootstrap.php';
 class InlineTest extends DbTestCase
 {
 
-	protected function setUp()
-	{
-		parent::setUp();
-		$this->updateSchema();
-		$this->importDbDataFromFile(realpath('./sql/parameter_inline.sql')); // $this->createProducts(20000);
-	}
+//	protected function setUp()
+//	{
+//		parent::setUp();
+////		$this->updateSchema();
+//		$this->importDbDataFromFile(realpath('./sql/parameter_inline.sql')); // $this->createProducts(20000);
+//	}
 
-	protected function tearDown()
-	{
-		$this->dropSchema();
-		parent::tearDown();
-	}
+//	protected function tearDown()
+//	{
+//		$this->dropSchema();
+//		parent::tearDown();
+//	}
 
 	public function testOne()
 	{

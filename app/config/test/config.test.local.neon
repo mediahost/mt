@@ -1,0 +1,27 @@
+doctrine:
+	host: localhost
+	user: root # user must have right to create DB
+	password: 
+	dbname: mt2
+
+facebook:
+	appId: '842365949188917'
+	appSecret: '3af671f94c5a079c7fd2a6080f71d3a7'
+
+twitter:
+	consumerKey: 'osW5qpSxQQpta4a7NkVymEwdR'
+	consumerSecretKey: 'SZNM1FhgcVqdtH2KyD392Clx5DkEIXXh2jNbFfoLHhyeevvRIN'
+
+installer:
+	lock: TRUE
+	doctrine: FALSE
+#	initUsers: ['user_mail' = ['password', 'name_of_role']]
+	initUsers: ['admin' = ['admin', 'admin'], 'superadmin' = ['superadmin', 'superadmin'], 'signed' = ['signed', 'signed'], 'user' = ['user', 'user']]
+
+nette:
+	mailer:
+		smtp: FALSE
+
+gettextTranslator:
+	files:
+		all: %appDir%/lang/locale

@@ -10,6 +10,7 @@ includes:
 	- extensions/doctrine.neon
 	- extensions/webloader.neon
 	- extensions/currencies.neon
+	- extensions/assetsLoader.neon
 
 	# Includes
 	- includes/components.neon

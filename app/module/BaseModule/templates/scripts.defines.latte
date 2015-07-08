@@ -1,0 +1,21 @@
+{define #scriptsIEOnly}
+	<!--[if lt IE 9]>
+	<script src="{$basePath}/assets/global/plugins/respond.min.js"></script>
+	<script src="{$basePath}/assets/global/plugins/excanvas.min.js"></script>
+	<![endif]-->
+{/define}
+
+{define #scriptsAppVars}
+	<script id="jsConf" type="text/json" n:syntax="double">
+		{
+			"basePath" : {{$basePath}},
+			"lang" : {{$lang}},
+			"currencySymbol" : {{$currency->getFormat()->getSymbol()}},
+			"currencyName" : {{strtolower($currency->getCode())}}
+		}
+	</script>
+{/define}
+
+{define #scriptsPacePlugin}
+<script src="{$basePath}/assets/global/plugins/pace/pace.min.js" n:if="!isset($pacePluginOff)" data-pace-options='{"ajax": true,"document": true}' type="text/javascript"></script>
+{/define}

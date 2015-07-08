@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0c6ccf62761fff335151e6b98d77d3b2",
+    "hash": "af83531d8968ad05daf2f2f6a33200c1",
     "packages": [
         {
             "name": "dg/adminer-custom",
@@ -824,6 +824,73 @@
             "description": "Object wrapper above number_format",
             "homepage": "https://github.com/h4kuna/number-format",
             "time": "2015-04-09 16:25:37"
+        },
+        {
+            "name": "ipub/assets-loader",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/iPublikuj/assets-loader.git",
+                "reference": "992664d31b164ca3c473997f7215e403c0d2c832"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/iPublikuj/assets-loader/zipball/992664d31b164ca3c473997f7215e403c0d2c832",
+                "reference": "992664d31b164ca3c473997f7215e403c0d2c832",
+                "shasum": ""
+            },
+            "require": {
+                "latte/latte": "~2.2",
+                "nette/application": "~2.2",
+                "nette/caching": "~2.2",
+                "nette/di": "~2.2",
+                "nette/http": "~2.2",
+                "nette/utils": "~2.2",
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "janmarek/mockista": "@dev",
+                "nette/bootstrap": "~2.2",
+                "nette/forms": "~2.2",
+                "nette/mail": "~2.2",
+                "nette/robot-loader": "~2.2",
+                "nette/safe-stream": "~2.2",
+                "nette/tester": "@dev",
+                "tracy/tracy": "@dev"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "IPub\\AssetsLoader\\": "src/"
+                },
+                "classmap": [
+                    "src/IPub/AssetsLoader/Application/Presenter.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause",
+                "GPL-2.0",
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "iPublikuj:cms",
+                    "email": "info@ipublikuj.eu",
+                    "homepage": "http://www.ipublikuj.eu/"
+                }
+            ],
+            "description": "Extension for loading static CSS and JS files for Nette Framework",
+            "homepage": "https://github.com/iPublikuj/assets-loader",
+            "keywords": [
+                "JS",
+                "assets",
+                "css",
+                "javascript",
+                "nette",
+                "tools"
+            ],
+            "time": "2015-06-03 19:53:01"
         },
         {
             "name": "jandrabek/nette-mailpanel",
@@ -2174,7 +2241,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/natxet/CssMin/zipball/f076e41392b0008efb47074a133ec1d90dc8c99f",
+                "url": "https://api.github.com/repos/natxet/CssMin/zipball/4026975145f645a77e087a26e7b0a1c9209b0191",
                 "reference": "f076e41392b0008efb47074a133ec1d90dc8c99f",
                 "shasum": ""
             },
@@ -2279,12 +2346,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/bootstrap.git",
-                "reference": "f8fb4c73807c6888d904ea8c04324f2d94169c52"
+                "reference": "8d2ee3ac4ad082c23cfb4b2bd198566afd6bb0e0"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/nette/bootstrap/zipball/8d2ee3ac4ad082c23cfb4b2bd198566afd6bb0e0",
-                "reference": "f8fb4c73807c6888d904ea8c04324f2d94169c52",
+                "reference": "8d2ee3ac4ad082c23cfb4b2bd198566afd6bb0e0",
                 "shasum": ""
             },
             "require": {
@@ -2337,7 +2404,7 @@
             ],
             "description": "Nette Bootstrap",
             "homepage": "http://nette.org",
-            "time": "2015-05-21 14:47:56"
+            "time": "2015-06-17 12:20:29"
         },
         {
             "name": "nette/caching",
@@ -4186,7 +4253,7 @@
             ],
             "authors": [
                 {
-                    "name": "Pádraic Brady",
+                    "name": "Padraic Brady",
                     "email": "padraic.brady@gmail.com",
                     "homepage": "http://blog.astrumfutura.com"
                 },
@@ -4342,6 +4409,7 @@
         "o5/grido": 20,
         "h4kuna/exchange": 20,
         "freaz/nette-gettext-translator": 20,
+        "ipub/assets-loader": 20,
         "nette/tester": 20,
         "kdyby/tester-extras": 20
     },

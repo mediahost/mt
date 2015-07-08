@@ -13,10 +13,11 @@ use App\Model\Entity\Stock;
 use App\Model\Repository\CategoryRepository;
 use App\Model\Repository\ProductRepository;
 use App\Model\Repository\StockRepository;
+use IPub\AssetsLoader\Components\CssLoader;
+use IPub\AssetsLoader\Components\JsLoader;
 use Nette\Utils\ArrayHash;
 
-abstract class BasePresenter extends BaseBasePresenter
-{
+abstract class BasePresenter extends BaseBasePresenter {
 
 	/** @var CategoryRepository */
 	protected $categoryRepo;
@@ -45,8 +46,7 @@ abstract class BasePresenter extends BaseBasePresenter
 	/** @var string */
 	protected $searched;
 
-	protected function startup()
-	{
+	protected function startup() {
 		parent::startup();
 		if ($this->isInstallPresenter()) {
 			return;
@@ -57,8 +57,7 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->categories = $this->categoryRepo->findBy(['parent' => NULL]);
 	}
 
-	protected function beforeRender()
-	{
+	protected function beforeRender() {
 		parent::beforeRender();
 
 		$this->template->categories = $this->categories;
@@ -79,8 +78,7 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->loadTemplateSigns();
 	}
 
-	protected function loadTemplateMenu()
-	{
+	protected function loadTemplateMenu() {
 		$pageRepo = $this->em->getRepository(Page::getClassName());
 		$this->template->menuPages = ArrayHash::from([
 					'page1' => $pageRepo->find(1),
@@ -88,16 +86,14 @@ abstract class BasePresenter extends BaseBasePresenter
 		]);
 	}
 
-	protected function loadTemplateCategoriesSettings()
-	{
+	protected function loadTemplateCategoriesSettings() {
 		$categoriesSettings = $this->moduleService->getModuleSettings('categories');
 		$this->template->expandOnlyActiveCategories = $categoriesSettings ? $categoriesSettings->expandOnlyActiveCategories : FALSE;
 		$this->template->maxCategoryDeep = $categoriesSettings ? $categoriesSettings->maxDeep : 3;
 		$this->template->showProductsCount = $categoriesSettings ? $categoriesSettings->showProductsCount : FALSE;
 	}
 
-	protected function loadTemplateSigns()
-	{
+	protected function loadTemplateSigns() {
 		$signSettings = $this->moduleService->getModuleSettings('signs');
 		if ($signSettings) {
 			$signRepo = $this->em->getRepository(Sign::getClassName());
@@ -111,8 +107,7 @@ abstract class BasePresenter extends BaseBasePresenter
 		}
 	}
 
-	public function createComponentProducts()
-	{
+	public function createComponentProducts() {
 		$list = new ProductList();
 		$list->setTranslator($this->translator);
 		$list->setExchange($this->exchange, $this->currency);
@@ -133,8 +128,21 @@ abstract class BasePresenter extends BaseBasePresenter
 		return $list;
 	}
 
-	public function createComponentSearch($name)
-	{
+	/**
+	 * @return CssLoader
+	 */
+	protected function createComponentCssFront() {
+		return $this->assetsLoader->createCssLoader('front');
+	}
+
+	/**
+	 * @return JsLoader
+	 */
+	protected function createComponentJsFront() {
+		return $this->assetsLoader->createJsLoader('front');
+	}
+
+	public function createComponentSearch($name) {
 		$form = new Form($this, $name);
 		$form->setTranslator($this->translator);
 
@@ -149,8 +157,7 @@ abstract class BasePresenter extends BaseBasePresenter
 		$form->onSuccess[] = $this->searchSucceeded;
 	}
 
-	public function searchSucceeded(Form $form, $values)
-	{
+	public function searchSucceeded(Form $form, $values) {
 		$this->redirect('Category:search', $values->search);
 	}
 

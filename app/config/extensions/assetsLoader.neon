@@ -1,0 +1,193 @@
+# Assets-loader
+# ['scriptCompressor'] # Měl by se spouštět pouze na ještě neminifikované soubory
+
+extensions:
+    assetsLoader: IPub\AssetsLoader\DI\AssetsLoaderExtension
+
+parameters:
+	assetsLoader:
+		packages:
+			# Metronic
+			metronic:
+				core:
+					css:
+						# Global mandatory styles
+						- %wwwDir%/assets/global/plugins/font-awesome/css/font-awesome.min.css
+						- %wwwDir%/assets/global/plugins/simple-line-icons/simple-line-icons.min.css
+						- %wwwDir%/assets/global/plugins/bootstrap/css/bootstrap.min.css
+						- %wwwDir%/assets/global/plugins/uniform/css/uniform.default.min.css
+						# Ppage level plugin styles
+						- %wwwDir%/assets/global/plugins/pace/themes/pace-theme-minimal.min.css
+						- %wwwDir%/assets/global/plugins/bootstrap-datepicker/css/datepicker3.min.css
+						- %wwwDir%/assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.min.css
+						- %wwwDir%/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css
+						- %wwwDir%/assets/global/plugins/bootstrap-toastr/toastr.min.css
+						- %wwwDir%/assets/global/plugins/jquery-multi-select/css/multi-select.min.css
+						- %wwwDir%/assets/global/plugins/select2.4/css/select2.min.css
+						- %wwwDir%/assets/global/plugins/jquery-tags-input/jquery.tagsinput.min.css
+						- %wwwDir%/assets/global/plugins/nouislider/jquery.nouislider.min.css
+						- %wwwDir%/assets/global/plugins/nouislider/jquery.nouislider.pips.min.css
+						- %wwwDir%/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css
+						- %wwwDir%/assets/global/plugins/typeahead/typeahead.min.css
+						- %wwwDir%/assets/global/plugins/fancybox/source/jquery.fancybox.min.css
+						- %wwwDir%/assets/global/plugins/carousel-owl-carousel/owl-carousel/owl.carousel.min.css
+						- %wwwDir%/assets/global/plugins/slider-layer-slider/css/layerslider.min.css
+						- %wwwDir%/assets/global/plugins/jstree/dist/themes/default/style.min.css
+						# Global theme styles
+						- %wwwDir%/assets/global/css/components.css
+						- %wwwDir%/assets/global/css/plugins.css
+						- %wwwDir%/assets/global/plugins/grido/grido.css
+					js:
+						- %wwwDir%/assets/global/plugins/jquery.min.js
+						- %wwwDir%/assets/global/plugins/jquery-migrate.min.js
+						- %wwwDir%/assets/global/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js
+						- %wwwDir%/assets/global/plugins/bootstrap/js/bootstrap.min.js
+						- %wwwDir%/assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js
+						- %wwwDir%/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js
+						- %wwwDir%/assets/global/plugins/jquery.blockui.min.js
+						- %wwwDir%/assets/global/plugins/jquery.cookie.min.js
+						- %wwwDir%/assets/global/plugins/uniform/jquery.uniform.min.js
+						# Global plugins
+						- %wwwDir%/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js
+						- %wwwDir%/assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.min.js
+						- %wwwDir%/assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.min.js
+						- %wwwDir%/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js
+						- %wwwDir%/assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.min.js
+						- %wwwDir%/assets/global/plugins/bootstrap-toastr/toastr.min.js
+						- %wwwDir%/assets/global/plugins/fuelux/js/spinner.min.js
+						- %wwwDir%/assets/global/plugins/jquery-validation/js/jquery.validate.min.js
+						- %wwwDir%/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.min.js
+						- %wwwDir%/assets/global/plugins/select2.4/js/select2.min.js
+						- %wwwDir%/assets/global/plugins/jquery-tags-input/jquery.tagsinput.min.js
+						- %wwwDir%/assets/global/plugins/backstretch/jquery.backstretch.min.js
+						- %wwwDir%/assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js
+						- %wwwDir%/assets/global/plugins/jquery.input-ip-address-control-1.0.min.js
+						- %wwwDir%/assets/global/plugins/nouislider/jquery.nouislider.all.min.js
+						- %wwwDir%/assets/global/plugins/liblink/jquery.liblink.min.js
+						- "https://maps.google.com/maps/api/js?sensor=true"
+						- %wwwDir%/assets/global/plugins/gmaps/gmaps.min.js
+						- %wwwDir%/assets/global/plugins/fancybox/source/jquery.fancybox.pack.js
+						- %wwwDir%/assets/global/plugins/zoom/jquery.zoom.min.js
+						- %wwwDir%/assets/global/plugins/carousel-owl-carousel/owl-carousel/owl.carousel.min.js
+						- %wwwDir%/assets/global/plugins/slider-layer-slider/js/greensock.js
+						- %wwwDir%/assets/global/plugins/slider-layer-slider/js/layerslider.transitions.js
+						- %wwwDir%/assets/global/plugins/slider-layer-slider/js/layerslider.kreaturamedia.jquery.js
+						- %wwwDir%/assets/global/plugins/jstree/dist/jstree.min.js
+				frontTheme:
+					css:
+						- "http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all"
+						- "http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all"
+						- http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css
+						- %wwwDir%/assets/frontend/css/style.css
+						- %wwwDir%/assets/frontend/css/style-shop.css
+						- %wwwDir%/assets/frontend/css/style-layer-slider.css
+						- %wwwDir%/assets/frontend/css/style-responsive.css
+						- %wwwDir%/assets/frontend/css/custom.css
+				adminTheme:
+					css:
+						- "http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all"
+						- %wwwDir%/assets/admin/css/layout.css
+						- %wwwDir%/assets/admin/css/custom.css
+			app:
+				pre:
+					js:
+						- %wwwDir%/assets/js/phpjs/functions/url/urlencode.js
+						- %wwwDir%/assets/js/phpjs/functions/filesystem/file_exists.js
+						- %wwwDir%/assets/global/scripts/config.js
+						- %wwwDir%/assets/js/nette.ajax/nette.ajax.min.js
+						- %wwwDir%/assets/js/nette.ajax/extensions/confirm.ajax.js
+						- %wwwDir%/assets/js/nette.ajax/extensions/spinner.ajax.js
+						- %wwwDir%/assets/js/live-form-validation.js
+						- %wwwDir%/assets/js/nette.serversidevalidation.js
+						- %wwwDir%/assets/global/scripts/metronic.js
+						- %wwwDir%/assets/global/scripts/custom/forms.js
+						- %wwwDir%/assets/global/scripts/custom/login.js
+						- %wwwDir%/assets/global/scripts/custom/components-pickers.js
+						- %wwwDir%/assets/global/scripts/custom/html-editors.js
+						- %wwwDir%/assets/global/scripts/custom/components-form-tools.js
+						- %wwwDir%/assets/global/scripts/custom/ui-toastr.js
+						- %wwwDir%/assets/global/scripts/custom/fullscreen.js
+						- %wwwDir%/assets/global/scripts/custom/table-managed.js
+						- %wwwDir%/assets/global/scripts/custom/components-dropdowns.js
+						- %wwwDir%/assets/global/scripts/custom/components-nouisliders.js
+						- %wwwDir%/assets/global/scripts/custom/maps.js
+						- %wwwDir%/assets/global/scripts/custom/layerslider.js
+						- %wwwDir%/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js
+						- %wwwDir%/assets/global/plugins/typeahead/typeahead.bundle.min.js
+						- %wwwDir%/assets/global/plugins/grido/grido.js
+						- %wwwDir%/assets/global/plugins/grido/js/grido.typeahead.js
+						- %wwwDir%/assets/global/plugins/grido/js/grido.nette.ajax.js
+						- %wwwDir%/assets/global/scripts/custom/grido.js
+						- %wwwDir%/assets/global/scripts/custom/ui-tree.js
+						- %wwwDir%/assets/global/scripts/custom-init.js
+				post:
+					js:
+						- %wwwDir%/assets/js/main.js
+				
+
+assetsLoader:
+	routes:
+		assets: "assets-files/<id>[-t<timestamp>][-<gzipped>].<type>"
+		files: "assets-files-images/<id>[-t<timestamp>]"
+
+	assets:
+		core:
+			css:
+				gzip: true
+				filters:
+					files: ['cssUrlsFilter']
+					content : ['styleCompressor', 'cssImportFilter']
+			js:
+				gzip: true
+			packages:
+				- %assetsLoader.packages.metronic.core%
+				- %assetsLoader.packages.app.pre%
+
+		front:
+			css:
+				gzip: true
+				files:
+					- {files: ["*.less"], from: %wwwDir%/less/front/includes}
+				filters:
+					files: ['cssUrlsFilter', 'lessFilter']
+					content : ['styleCompressor', 'cssImportFilter']
+			js:
+				gzip: true
+				files:
+					- %wwwDir%/assets/frontend/scripts/layout.js
+					- %wwwDir%/assets/frontend/scripts/back-to-top.js
+					- %wwwDir%/assets/frontend/scripts/init.js
+			packages:
+				- %assetsLoader.packages.metronic.frontTheme%
+				- %assetsLoader.packages.app.post%
+
+		admin:
+			css:
+				gzip: true
+				files:
+					- {files: ["*.less"], from: %wwwDir%/less/app/includes}
+				filters:
+					files: ['cssUrlsFilter', 'lessFilter']
+					content : ['styleCompressor', 'cssImportFilter']
+			js:
+				gzip: true
+				files:
+					- %wwwDir%/assets/admin/scripts/layout.js
+					- %wwwDir%/assets/admin/scripts/quick-sidebar.js
+					- %wwwDir%/assets/admin/scripts/custom/app-content.js
+					- %wwwDir%/assets/admin/scripts/init.js
+				filters:
+			packages:
+				- %assetsLoader.packages.metronic.adminTheme%
+				- %assetsLoader.packages.app.post%
+
+		print:
+			css:
+				gzip: true
+				files:
+					- {files: ["*.less"], from: %wwwDir%/less/print/includes}
+				filters:
+					files: ['cssUrlsFilter', 'lessFilter']
+					content : ['styleCompressor', 'cssImportFilter']
+			js:
+				gzip: true

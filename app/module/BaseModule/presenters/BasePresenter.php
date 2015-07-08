@@ -19,17 +19,16 @@ use App\TaggedString;
 use GettextTranslator\Gettext;
 use h4kuna\Exchange\Exchange;
 use h4kuna\Exchange\ExchangeException;
+use IPub\AssetsLoader\Components\CssLoader;
+use IPub\AssetsLoader\Components\JsLoader;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\ForbiddenRequestException;
 use Nette\Application\UI\Presenter;
-use WebLoader\Nette\CssLoader;
-use WebLoader\Nette\LoaderFactory;
 
 /**
  * Base presenter for all application presenters.
  */
-abstract class BasePresenter extends Presenter
-{
+abstract class BasePresenter extends Presenter {
 
 	/** @persistent */
 	public $lang = '';
@@ -41,9 +40,6 @@ abstract class BasePresenter extends Presenter
 	public $backlink = '';
 
 	// <editor-fold desc="injects">
-
-	/** @var LoaderFactory @inject */
-	public $webLoader;
 
 	/** @var Exchange @inject */
 	public $exchange;
@@ -90,10 +86,14 @@ abstract class BasePresenter extends Presenter
 	/** @var int */
 	protected $priceLevel = NULL;
 
+	/**
+	 * Trait injecting AssetsLoader
+	 */
+	use \IPub\AssetsLoader\TAssetsLoader;
+
 	// </editor-fold>
 
-	protected function startup()
-	{
+	protected function startup() {
 		parent::startup();
 		$this->loadUserSettings();
 		$this->setLang();
@@ -101,8 +101,7 @@ abstract class BasePresenter extends Presenter
 		$this->loadPriceLevel();
 	}
 
-	protected function beforeRender()
-	{
+	protected function beforeRender() {
 		$this->template->lang = $this->lang;
 		$this->template->setTranslator($this->translator);
 		$this->template->allowedLanguages = $this->languageService->allowedLanguages;
@@ -115,8 +114,7 @@ abstract class BasePresenter extends Presenter
 		}
 	}
 
-	protected function isInstallPresenter()
-	{
+	protected function isInstallPresenter() {
 		$presenterExceptions = [
 			'Front:Install',
 		];
@@ -126,8 +124,7 @@ abstract class BasePresenter extends Presenter
 	// <editor-fold desc="flash messages">
 
 	/** Translate flash messages if not HTML */
-	public function flashMessage($message, $type = 'info')
-	{
+	public function flashMessage($message, $type = 'info') {
 		if (is_string($message)) {
 			$message = $this->translator->translate($message);
 		} else if ($message instanceof TaggedString) {
@@ -140,8 +137,7 @@ abstract class BasePresenter extends Presenter
 	// </editor-fold>
 	// <editor-fold desc="requirments">
 
-	public function checkRequirements($element)
-	{
+	public function checkRequirements($element) {
 		$secured = $element->getAnnotation('secured');
 		$resource = $element->getAnnotation('resource');
 		$privilege = $element->getAnnotation('privilege');
@@ -151,8 +147,7 @@ abstract class BasePresenter extends Presenter
 		}
 	}
 
-	private function checkSecured($resource, $privilege)
-	{
+	private function checkSecured($resource, $privilege) {
 		if (!$this->user->loggedIn) {
 			$this->flashMessage('You should be logged in!');
 			$this->redirect(':Front:Sign:in', ['backlink' => $this->storeRequest()]);
@@ -164,8 +159,7 @@ abstract class BasePresenter extends Presenter
 	// </editor-fold>
 	// <editor-fold desc="settings">
 
-	protected function loadUserSettings()
-	{
+	protected function loadUserSettings() {
 		$this->settingStorage->loggedIn = $this->user->loggedIn;
 		if ($this->user->identity instanceof Entity\User) {
 			$this->settingStorage->user = $this->user->identity;
@@ -175,8 +169,7 @@ abstract class BasePresenter extends Presenter
 	// </editor-fold>
 	// <editor-fold desc="language">
 
-	private function setLang()
-	{
+	private function setLang() {
 		if ($this->isInstallPresenter()) { // defaultLanguage for some presenters
 			$this->lang = NULL;
 			return;
@@ -201,8 +194,7 @@ abstract class BasePresenter extends Presenter
 	// </editor-fold>
 	// <editor-fold desc="currency">
 
-	private function setCurrency()
-	{
+	private function setCurrency() {
 		if ($this->isInstallPresenter()) {
 			$this->currency = NULL;
 			return;
@@ -219,8 +211,7 @@ abstract class BasePresenter extends Presenter
 		$this->loadCurrencyRates();
 	}
 
-	private function loadCurrencyRates()
-	{
+	private function loadCurrencyRates() {
 		$rateRepo = $this->em->getRepository(Entity\Rate::getClassName());
 		$rates = $rateRepo->findPairs('value');
 
@@ -237,8 +228,7 @@ abstract class BasePresenter extends Presenter
 		}
 	}
 
-	private function loadPriceLevel()
-	{
+	private function loadPriceLevel() {
 		if ($this->user->loggedIn) {
 			$identity = $this->user->identity;
 			if ($identity->group) {
@@ -250,8 +240,7 @@ abstract class BasePresenter extends Presenter
 	// </editor-fold>
 	// <editor-fold desc="handlers">
 
-	public function handleChangeLanguage($newLang)
-	{
+	public function handleChangeLanguage($newLang) {
 		if ($this->languageService->isAllowed($newLang)) {
 			$this->languageService->userLanguage = $newLang;
 			$this->redirect('this', ['lang' => $newLang]);
@@ -261,8 +250,7 @@ abstract class BasePresenter extends Presenter
 		}
 	}
 
-	public function handleChangeCurrency($newCurrency)
-	{
+	public function handleChangeCurrency($newCurrency) {
 		try {
 			$currency = $this->exchange[$newCurrency];
 			$newCode = strtolower($currency->getCode());
@@ -278,36 +266,32 @@ abstract class BasePresenter extends Presenter
 	// <editor-fold desc="components">
 
 	/** @return SignOut */
-	public function createComponentSignOut()
-	{
+	public function createComponentSignOut() {
 		return $this->iSignOutFactory->create();
 	}
 
 	// </editor-fold>
-	// <editor-fold desc="css webloader">
+	// <editor-fold desc="Assets-loader: Components' factories">
 
-	/** @return CssLoader */
-	protected function createComponentCssFront()
-	{
-		$css = $this->webLoader->createCssLoader('front')
-				->setMedia('screen,projection,tv');
-		return $css;
+	/**
+	 * @return CssLoader
+	 */
+	protected function createComponentCssCore() {
+		return $this->assetsLoader->createCssLoader('core');
 	}
 
-	/** @return CssLoader */
-	protected function createComponentCssApp()
-	{
-		$css = $this->webLoader->createCssLoader('app')
-				->setMedia('screen,projection,tv');
-		return $css;
+	/**
+	 * @return JsLoader
+	 */
+	protected function createComponentJsCore() {
+		return $this->assetsLoader->createJsLoader('core');
 	}
 
-	/** @return CssLoader */
-	protected function createComponentCssPrint()
-	{
-		$css = $this->webLoader->createCssLoader('print')
-				->setMedia('print');
-		return $css;
+	/**
+	 * @return CssLoader
+	 */
+	protected function createComponentCssPrint() {
+		return $this->assetsLoader->createCssLoader('print');
 	}
 
 	// </editor-fold>
