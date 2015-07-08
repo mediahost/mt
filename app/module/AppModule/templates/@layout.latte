@@ -18,12 +18,14 @@
 		<meta content="" name="description"/>
 		<meta content="" name="author"/>
 
-		{* <AssetsLoader> *}
-		{control cssCore}
-		{control cssAdmin}
-		<link href="{$basePath}/assets/admin/css/themes/{$designSettings->color}.css" rel="stylesheet" type="text/css" id="style_color"/>
-		{control cssPrint}
-		{* </AssetsLoader> *}
+		{block styles}
+			{* <AssetsLoader> *}
+			{control cssCore}
+			{control cssAdmin}
+			<link href="{$basePath}/assets/admin/css/themes/{$designSettings->color}.css" rel="stylesheet" type="text/css" id="style_color"/>
+			{control cssPrint}
+			{* </AssetsLoader> *}
+		{/block}
 
 		<link href="{$basePath}/favicon.ico" rel="shortcut icon">
 

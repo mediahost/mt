@@ -26,12 +26,14 @@
 		<meta property="og:image" content="{link //:Foto:Foto:}">
 		<meta property="og:url" content="{link //this}">
 		
-		{* <AssetsLoader> *}
-		{control cssCore}
-		{control cssFront}
-		<link href="{$basePath}/assets/frontend/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color"/>
-		{control cssPrint}
-		{* </AssetsLoader> *}
+		{block styles}
+			{* <AssetsLoader> *}
+			{control cssCore}
+			{control cssFront}
+			<link href="{$basePath}/assets/frontend/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color"/>
+			{control cssPrint}
+			{* </AssetsLoader> *}
+		{/block}
 		
 		<link href="{$basePath}/favicon.ico" rel="shortcut icon">
 
