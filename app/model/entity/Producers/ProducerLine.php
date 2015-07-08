@@ -50,6 +50,11 @@ class ProducerLine extends BaseEntity implements IProducer
 		return (bool) count($this->models);
 	}
 
+	public function getFullName($glue = ' / ')
+	{
+		return Helpers::concatStrings($glue, (string) $this->line->producer, (string) $this);
+	}
+
 	public function __toString()
 	{
 		return (string) $this->name;

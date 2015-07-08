@@ -7,6 +7,8 @@ use App\Model\Entity\Producer;
 
 /**
  * @property Producer $producer
+ * @property ProducerLine $producerLine
+ * @property ProducerModel $producerModel
  * @property Category $mainCategory
  * @property array $categories
  */
@@ -15,6 +17,12 @@ trait ProductCategories
 
 	/** @ORM\ManyToOne(targetEntity="Producer", inversedBy="products") */
 	protected $producer;
+
+	/** @ORM\ManyToOne(targetEntity="ProducerLine", inversedBy="products") */
+	protected $producerLine;
+
+	/** @ORM\ManyToOne(targetEntity="ProducerModel", inversedBy="products") */
+	protected $producerModel;
 
 	/** @ORM\ManyToOne(targetEntity="Category") */
 	protected $mainCategory;
