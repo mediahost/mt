@@ -13,6 +13,7 @@ use App\Extensions\Settings\Model\Storage\DefaultSettingsStorage;
 use App\Model\Entity;
 use App\Model\Facade\GroupFacade;
 use App\Model\Facade\ParameterFacade;
+use App\Model\Facade\ProducerFacade;
 use App\Model\Facade\StockFacade;
 use App\Model\Facade\UserFacade;
 use App\TaggedString;
@@ -86,6 +87,9 @@ abstract class BasePresenter extends Presenter
 
 	/** @var GroupFacade @inject */
 	public $groupFacade;
+
+	/** @var ProducerFacade @inject */
+	public $producerFacade;
 
 	/** @var int */
 	protected $priceLevel = NULL;

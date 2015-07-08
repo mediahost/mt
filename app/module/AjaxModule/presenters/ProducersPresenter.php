@@ -61,6 +61,32 @@ class ProducersPresenter extends BasePresenter
 		}
 	}
 
+	public function actionGetLinesList($producer)
+	{
+		$producerRepo = $this->em->getRepository(Producer::getClassName());
+		$findedProducer = $producerRepo->find($producer);
+
+		if ($findedProducer) {
+			$lines = $this->producerFacade->getLinesList($findedProducer);
+			$this->addRawData('items', $lines);
+		} else {
+			$this->setError('This producer wasn\'t finded.');
+		}
+	}
+
+	public function actionGetModelsList($line)
+	{
+		$lineRepo = $this->em->getRepository(ProducerLine::getClassName());
+		$findedLine = $lineRepo->find($line);
+
+		if ($findedLine) {
+			$models = $this->producerFacade->getModelsList($findedLine);
+			$this->addRawData('items', $models);
+		} else {
+			$this->setError('This producer wasn\'t finded.');
+		}
+	}
+
 	/**
 	 * @secured
 	 * @resource('producers')

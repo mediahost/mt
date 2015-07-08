@@ -21,8 +21,11 @@ class Select2 extends SelectBox
 	public function setPrompt($prompt)
 	{
 		$this->setPlaceholder($prompt);
-		$attr = 'data-allow_clear';
-		$this->control->$attr = 'true';
+		
+		$attr = 'data-placeholder';
+		$text = $this->translate($prompt);
+		$this->control->$attr = $text;
+		
 		return parent::setPrompt('');
 	}
 
@@ -34,7 +37,18 @@ class Select2 extends SelectBox
 	public function setPlaceholder($value)
 	{
 		$attr = 'data-placeholder';
-		$this->control->$attr = $value;
+		$this->control->$attr = $this->translate($value);
+		return $this;
+	}
+
+	/**
+	 * Disables or enables control.
+	 * @param  bool
+	 * @return self
+	 */
+	public function setDisabled($value = TRUE)
+	{
+		$this->disabled = $value;
 		return $this;
 	}
 

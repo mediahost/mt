@@ -26,6 +26,8 @@ use Nette\Utils\DateTime;
  * @property boolean $active
  * @property Unit $unit
  * @property Producer $producer
+ * @property ProducerLine $producerLine
+ * @property ProducerModel $producerModel
  * @property Category $mainCategory
  * @property array $categories
  * @property ArrayCollection $similars
