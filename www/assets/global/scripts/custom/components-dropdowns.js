@@ -18,6 +18,7 @@ var ComponentsDropdowns = function () {
 		};
 
 		$('select.select2').each(function () {
+			$(this).prop('disabled', this.hasAttribute('data-disabled') ? 'disabled' : false);
 			var params = {};
 			for (var i = 0, attrs = this.attributes, l = attrs.length; i < l; i++) {
 				var attr = attrs.item(i).nodeName;

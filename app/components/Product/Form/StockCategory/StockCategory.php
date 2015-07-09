@@ -68,13 +68,13 @@ class StockCategory extends StockBase
 						->getControlPrototype()->class[] = $select2DependendClasses;
 
 		$form->addSelect2('line', 'Line', $lines)
-//						->setDisabled(!$isAllowedLine)
+						->setDisabled(!$isAllowedLine)
 						->setPrompt($isAllowedLine ? 'Select some line' : 'First select producer')
 						->setDefaultValue($lineDefault)
 						->getControlPrototype()->class[] = $select2DependendClasses;
 
 		$form->addSelect2('model', 'Model', $models)
-//						->setDisabled(!$isAllowedModel)
+						->setDisabled(!$isAllowedModel)
 						->setPrompt($isAllowedModel ? 'Select some model' : 'First select line')
 						->setDefaultValue($modelDefault)
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XL;
@@ -120,7 +120,7 @@ class StockCategory extends StockBase
 		}
 
 		$models = [];
-		$lineValue = $lineControl->getRawValue();
+		$lineValue = $lineControl->getValue();
 		if ($lineValue && array_key_exists($lineValue, $lines)) {
 			$lineControl->setDefaultValue($lineValue);
 
@@ -135,7 +135,7 @@ class StockCategory extends StockBase
 			}
 		}
 
-		$modelValue = $modelControl->getRawValue();
+		$modelValue = $modelControl->getValue();
 		if ($modelValue && array_key_exists($modelValue, $models)) {
 			$modelControl->setDefaultValue($modelValue);
 		}
@@ -144,7 +144,7 @@ class StockCategory extends StockBase
 	private function resetSelect2(Select2 $select, $prompt, $items = [])
 	{
 		$select
-//				->setDisabled()
+				->setDisabled()
 				->setPrompt($prompt)
 				->setItems($items);
 
@@ -153,8 +153,8 @@ class StockCategory extends StockBase
 
 	public function formSucceeded(Form $form, $values)
 	{
-		$values->line = $form['line']->getRawValue();
-		$values->model = $form['model']->getRawValue();
+		$values->line = $form['line']->getValue();
+		$values->model = $form['model']->getValue();
 
 		if ($form['save']->submittedBy) {
 			$this->load($values);
