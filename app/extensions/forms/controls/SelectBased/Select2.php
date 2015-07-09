@@ -48,7 +48,8 @@ class Select2 extends SelectBox
 	 */
 	public function setDisabled($value = TRUE)
 	{
-		$this->disabled = $value;
+		$attr = 'data-disabled';
+		$this->control->$attr = $value ? 'disabled' : FALSE;
 		return $this;
 	}
 
