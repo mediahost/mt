@@ -28,7 +28,7 @@ class Rate extends BaseControl
 	{
 		$form = new Form();
 		$form->setTranslator($this->translator);
-		$form->setRenderer(new MetronicFormRenderer);
+		$form->setRenderer(new MetronicFormRenderer());
 
 		$defaultCurrency = $this->exchange->getDefault();
 		$defaultSymbol = $defaultCurrency->getFormat()->symbol;

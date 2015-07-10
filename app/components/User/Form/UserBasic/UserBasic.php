@@ -53,7 +53,7 @@ class UserBasic extends BaseControl
 
 		$form = new Form();
 		$form->setTranslator($this->translator);
-		$form->setRenderer(new MetronicFormRenderer);
+		$form->setRenderer(new MetronicFormRenderer());
 
 		$mail = $form->addServerValidatedText('mail', 'E-mail')
 				->addRule(Form::EMAIL, 'Fill right format')
