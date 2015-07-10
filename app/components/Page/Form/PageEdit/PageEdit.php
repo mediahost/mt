@@ -40,6 +40,9 @@ class PageEdit extends BaseControl
 						->setAttribute('placeholder', 'Shortly about contain of page')
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XL;
 
+		$form->addText('link', 'Link')
+						->setAttribute('placeholder', 'Fill if you want to redirect to other page');
+
 		$form->addWysiHtml('html', 'Text', 30)
 						->setRequired('Content is required')
 						->getControlPrototype()->class[] = 'page-html-content';
@@ -64,6 +67,7 @@ class PageEdit extends BaseControl
 		$this->page->translateAdd($lang)->name = $values->name;
 		$this->page->translateAdd($lang)->html = $values->html;
 		$this->page->comment = $values->comment;
+		$this->page->link = $values->link;
 		$this->page->mergeNewTranslations();
 		return $this;
 	}
@@ -84,6 +88,7 @@ class PageEdit extends BaseControl
 			$values = [
 				'name' => $this->page->name,
 				'comment' => $this->page->comment,
+				'link' => $this->page->link,
 				'html' => $this->page->html,
 			];
 		}
