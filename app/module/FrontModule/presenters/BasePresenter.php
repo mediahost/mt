@@ -83,8 +83,9 @@ abstract class BasePresenter extends BaseBasePresenter
 	{
 		$pageRepo = $this->em->getRepository(Page::getClassName());
 		$this->template->menuPages = ArrayHash::from([
-					'page1' => $pageRepo->find(1),
+					'page1' => $pageRepo->find(3),
 					'page2' => $pageRepo->find(2),
+					'page3' => $pageRepo->find(1),
 		]);
 	}
 

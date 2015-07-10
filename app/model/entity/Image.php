@@ -74,6 +74,7 @@ class Image extends BaseEntity
 			case self::FOLDER_PRODUCTS:
 			case self::FOLDER_USERS:
 			case self::FOLDER_CATEGORIES:
+			case self::FOLDER_PRODUCERS:
 			case self::FOLDER_DEFAULT:
 				$this->folderToSave = $folder;
 				break;

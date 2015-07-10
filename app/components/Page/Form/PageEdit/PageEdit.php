@@ -8,6 +8,7 @@ use App\Forms\Controls\TextInputBased\MetronicTextInputBase;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Page;
+use Nette\Application\UI\InvalidLinkException;
 use Nette\Utils\ArrayHash;
 
 class PageEdit extends BaseControl
@@ -41,7 +42,7 @@ class PageEdit extends BaseControl
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XL;
 
 		$form->addText('link', 'Link')
-						->setAttribute('placeholder', 'Fill if you want to redirect to other page');
+				->setAttribute('placeholder', 'Fill if you want to redirect to other page');
 
 		$form->addWysiHtml('html', 'Text', 30)
 						->setRequired('Content is required')
@@ -56,9 +57,13 @@ class PageEdit extends BaseControl
 
 	public function formSucceeded(Form $form, $values)
 	{
-		$this->load($values);
-		$this->save();
-		$this->onAfterSave($this->page);
+		try {
+			$this->load($values);
+			$this->save();
+			$this->onAfterSave($this->page);
+		} catch (InvalidLinkException $e) {
+			$form['link']->addError('This link is invalid');
+		}
 	}
 
 	private function load(ArrayHash $values)
@@ -67,6 +72,10 @@ class PageEdit extends BaseControl
 		$this->page->translateAdd($lang)->name = $values->name;
 		$this->page->translateAdd($lang)->html = $values->html;
 		$this->page->comment = $values->comment;
+		$realLink = @$this->presenter->link($values->link);
+		if (preg_match('@^#error@', $realLink)) {
+			throw new InvalidLinkException();
+		}
 		$this->page->link = $values->link;
 		$this->page->mergeNewTranslations();
 		return $this;

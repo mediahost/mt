@@ -56,6 +56,11 @@ class ProducerEdit extends BaseControl
 
 		switch ($this->type) {
 			case Producer::ID:
+				$form->addUploadImageWithPreview('image', 'Image')
+						->setPreview('/foto/200-150/' . ($this->entity->image ? $this->entity->image : 'default.png'), (string) $this->entity)
+						->setSize(200, 150)
+						->addCondition(Form::FILLED)
+						->addRule(Form::IMAGE, 'Image must be in valid image format');
 				break;
 			case ProducerLine::ID:
 				break;
@@ -108,6 +113,7 @@ class ProducerEdit extends BaseControl
 		$this->entity->name = $values->name;
 		switch ($this->type) {
 			case Producer::ID:
+				$this->loadProducer($values);
 				break;
 			case ProducerLine::ID:
 				break;
@@ -116,6 +122,13 @@ class ProducerEdit extends BaseControl
 				break;
 		}
 		return $this;
+	}
+
+	private function loadProducer(ArrayHash $values)
+	{
+		if ($values->image->isImage()) {
+			$this->entity->image = $values->image;
+		}
 	}
 
 	private function loadProducerModel(ArrayHash $values)
@@ -166,6 +179,7 @@ class ProducerEdit extends BaseControl
 		];
 		switch ($this->type) {
 			case Producer::ID:
+				$values['image'] = $this->entity->image;
 				break;
 			case ProducerLine::ID:
 				break;
