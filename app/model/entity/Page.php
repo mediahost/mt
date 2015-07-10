@@ -11,6 +11,7 @@ use Knp\DoctrineBehaviors\Model;
  * @property string $name
  * @property string $html
  * @property string $comment
+ * @property string $link
  */
 class Page extends BaseTranslatable
 {
@@ -19,6 +20,15 @@ class Page extends BaseTranslatable
 
 	/** @ORM\Column(type="string", length=100) */
 	protected $comment;
+
+	/** @ORM\Column(type="string", length=256) */
+	protected $link;
+	
+	public function isInterLink()
+	{
+		$isExtern = preg_match('/(^http|^//\w+|\.//)/', $this->link);
+		return !$isExtern;
+	}
 
 	public function __toString()
 	{

@@ -45,6 +45,11 @@ class PagesGrid extends BaseControl
 				->setFilterText()
 				->setSuggestion();
 
+		$grid->addColumnText('link', 'Link')
+				->setSortable()
+				->setFilterText()
+				->setSuggestion();
+
 		$grid->addActionHref('edit', 'Edit')
 				->setIcon('fa fa-edit');
 
