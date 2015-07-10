@@ -29,7 +29,7 @@ class CategoryEdit extends BaseControl
 
 		$form = new Form();
 		$form->setTranslator($this->translator);
-		$form->setRenderer(new MetronicFormRenderer);
+		$form->setRenderer(new MetronicFormRenderer());
 
 		$defaultLanguage = $this->languageService->defaultLanguage;
 

@@ -29,7 +29,7 @@ class UnitsEdit extends BaseControl
 
 		$form = new Form();
 		$form->setTranslator($this->translator);
-		$form->setRenderer(new MetronicFormRenderer);
+		$form->setRenderer(new MetronicFormRenderer());
 
 		$unitsContainer = $form->addContainer('units');
 		foreach ($this->units as $unit) {
