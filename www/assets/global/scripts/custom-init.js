@@ -14,18 +14,31 @@ var GlobalCustomInit = function () {
 			}
 			
 			UITree.init();
+			HtmlEditors.init();
 			Maps.init();
+		},
+		initFormComponents: function () {
+			Metronic.initComponents();
+			ComponentsFormTools.init();
+			ComponentsDropdowns.init();
+			ComponentsNoUiSliders.init();
+			ComponentsPickers.init();
+			ComponentsDropdowns.init();
+			HtmlEditors.init();
 		},
 		onReloadGridoEvent: function () {
 			Metronic.init();
 		},
 		onReloadModalEvent: function () {
-			ComponentsDropdowns.init(); // init form components after ajax load
-			Nette.initAllForms(); // reinit all nette forms
+			this.initFormComponents();
+			Nette.initAllForms();
 		},
 		onReloadProductList: function () {
 			Layout.initUniform();
 			Layout.initSliderRange();
+		},
+		onChangeJSTree: function () {
+			this.initFormComponents();
 		}
 	};
 

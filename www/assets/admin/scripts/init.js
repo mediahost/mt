@@ -7,7 +7,6 @@ jQuery(document).ready(function () {
 	GlobalCustomInit.init();
 
 	// components
-	HtmlEditors.init();
 	UIToastr.init();
 	Fullscreen.init();
 

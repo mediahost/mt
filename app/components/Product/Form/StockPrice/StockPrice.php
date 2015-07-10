@@ -45,7 +45,7 @@ class StockPrice extends StockBase
 		$defaultPrice = $this->defaultWithVat ? $this->stock->price->withVat : $this->stock->price->withoutVat;
 
 		$form->addCheckSwitch('with_vat', 'Prices are with VAT', 'YES', 'NO')
-				->setDefaultValue(FALSE);
+				->setDefaultValue($this->defaultWithVat);
 		$form->addText('price', 'Price')
 				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
 				->setRequired();

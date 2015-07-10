@@ -3,33 +3,75 @@
 namespace App\Model\Entity;
 
 use App\Helpers;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
-use Kdyby\Doctrine\Entities\BaseEntity;
+use Knp\DoctrineBehaviors\Model;
+use Nette\Http\FileUpload;
+use Nette\Utils\Strings;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Model\Repository\ProducerModelRepository")
  *
  * @property string $name
+ * @property string $html
  * @property ProducerLine $line
  */
-class ProducerModel extends BaseEntity implements IProducer
+class ProducerModel extends BaseTranslatable implements IProducer
 {
 
 	const ID = 'm';
 
-	use Identifier;
+	use Model\Translatable\Translatable;
 
 	/** @ORM\Column(type="string", length=256) */
 	protected $name;
 
+	/** @ORM\OneToOne(targetEntity="Image", cascade="all") */
+	protected $image;
+
 	/** @ORM\ManyToOne(targetEntity="ProducerLine", inversedBy="models") */
 	protected $line;
 
-	public function __construct($name)
+	/** @ORM\OneToMany(targetEntity="ParameterPrice", mappedBy="model", cascade={"persist", "remove"}) */
+	protected $parameterPrices;
+
+	public function __construct($name, $currentLocale = NULL)
 	{
 		$this->name = $name;
-		parent::__construct();
+		$this->parameterPrices = new ArrayCollection();
+		parent::__construct($currentLocale);
+	}
+
+	public function setImage(FileUpload $file)
+	{
+		if (!$this->image instanceof Image) {
+			$this->image = new Image($file);
+		} else {
+			$this->image->setFile($file);
+		}
+		$this->image->requestedFilename = 'producer_model_' . Strings::webalize(microtime());
+		$this->image->setFolder(Image::FOLDER_PRODUCERS);
+
+		return $this;
+	}
+
+	public function getParameterPriceByParameter(ModelParameter $parameter, $create = FALSE)
+	{
+		$isForParameter = function (ParameterPrice $parameterPrice) use ($parameter) {
+			return (int) $parameterPrice->parameter->id === (int) $parameter->id;
+		};
+		$parameterPrices = $this->parameterPrices->filter($isForParameter);
+		if ($parameterPrices->count()) {
+			$parameterPrice = $parameterPrices->first();
+		} else if ($create) {
+			$parameterPrice = new ParameterPrice($parameter);
+			$parameterPrice->model = $this;
+			$this->parameterPrices->add($parameterPrice);
+		} else {
+			$parameterPrice = NULL;
+		}
+
+		return $parameterPrice;
 	}
 
 	public function getFullName($glue = ' / ')
