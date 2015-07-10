@@ -54,6 +54,9 @@ class PagesGrid extends BaseControl
 							$message = $this->translator->translate('Are you sure you want to delete \'%s\'?');
 							return sprintf($message, (string) $item);
 						})
+						->setDisable(function($item) {
+							return !$this->presenter->canDelete($item);
+						})
 				->elementPrototype->class[] = 'red';
 
 		$grid->setActionWidth("20%");
