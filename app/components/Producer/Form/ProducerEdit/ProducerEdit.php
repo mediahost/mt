@@ -4,11 +4,16 @@ namespace App\Components\Producer\Form;
 
 use App\Components\BaseControl;
 use App\Components\BaseControlException;
+use App\Forms\Controls\TextInputBased\MetronicTextInputBase;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
+use App\Model\Entity\ModelParameter;
+use App\Model\Entity\ParameterPrice;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
+use App\Model\Entity\Vat;
+use App\Model\Facade\VatFacade;
 use Nette\Utils\ArrayHash;
 
 class ProducerEdit extends BaseControl
@@ -26,6 +31,15 @@ class ProducerEdit extends BaseControl
 	public $onAfterSave = [];
 
 	// </editor-fold>
+	// <editor-fold desc="variables">
+
+	/** @var VatFacade @inject */
+	public $vatFacade;
+
+	/** @var bool */
+	private $defaultWithVat = TRUE;
+
+	// </editor-fold>
 
 	/** @return Form */
 	protected function createComponentForm()
@@ -34,17 +48,38 @@ class ProducerEdit extends BaseControl
 
 		$form = new Form();
 		$form->setTranslator($this->translator);
-		$form->setRenderer(new MetronicFormRenderer);
+		$form->setRenderer(new MetronicFormRenderer());
 
+		$form->addGroup();
 		$form->addText('name', 'Name')
 				->setRequired('Name is required');
-		
+
 		switch ($this->type) {
 			case Producer::ID:
 				break;
 			case ProducerLine::ID:
 				break;
 			case ProducerModel::ID:
+				$form->addWysiHtml('html', 'Text', 8);
+				$form->addUploadImageWithPreview('image', 'Image')
+						->setPreview('/foto/200-150/' . ($this->entity->image ? $this->entity->image : 'default.png'), (string) $this->entity)
+						->setSize(200, 150)
+						->addCondition(Form::FILLED)
+						->addRule(Form::IMAGE, 'Image must be in valid image format');
+
+				$form->addGroup('Prices');
+
+				$form->addCheckSwitch('with_vat', 'Prices are with VAT', 'YES', 'NO')
+						->setDefaultValue($this->defaultWithVat);
+				$form->addSelect2('vat', 'Vat', $this->vatFacade->getValues())
+								->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
+				$parameterRepo = $this->em->getRepository(ModelParameter::getClassName());
+				$parameters = $parameterRepo->findAll();
+				$prices = $form->addContainer('prices');
+				foreach ($parameters as $parameter) {
+					$prices->addText($parameter->id, (string) $parameter)
+							->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
+				}
 				break;
 		}
 
@@ -62,7 +97,7 @@ class ProducerEdit extends BaseControl
 	{
 		$this->load($values);
 		$this->save();
-		
+
 		$componentsArray = (array) $form->getComponents();
 		$isSubmitedByAdd = array_key_exists('saveAdd', $componentsArray) ? $form['saveAdd']->submittedBy : FALSE;
 		$this->onAfterSave($this->entity, $this->type, $isSubmitedByAdd);
@@ -77,9 +112,31 @@ class ProducerEdit extends BaseControl
 			case ProducerLine::ID:
 				break;
 			case ProducerModel::ID:
+				$this->loadProducerModel($values);
 				break;
 		}
 		return $this;
+	}
+
+	private function loadProducerModel(ArrayHash $values)
+	{
+		$lang = $this->entity->isNew() ? $this->languageService->defaultLanguage : $this->lang;
+		$this->entity->translateAdd($lang)->html = $values->html;
+		$this->entity->mergeNewTranslations();
+		if ($values->image->isImage()) {
+			$this->entity->image = $values->image;
+		}
+		$vatRepo = $this->em->getRepository(Vat::getClassName());
+		$vat = $vatRepo->find($values->vat);
+		$paramRepo = $this->em->getRepository(ModelParameter::getClassName());
+		foreach ($values->prices as $parameterId => $price) {
+			$parameter = $paramRepo->find($parameterId);
+			if ($parameter) {
+				$parameterPrice = $this->entity->getParameterPriceByParameter($parameter, TRUE);
+				$parameterPrice->vat = $vat;
+				$parameterPrice->setPrice($price, $values->with_vat);
+			}
+		}
 	}
 
 	private function save()
@@ -113,6 +170,14 @@ class ProducerEdit extends BaseControl
 			case ProducerLine::ID:
 				break;
 			case ProducerModel::ID:
+				$values['html'] = $this->entity->translate($this->lang)->html;
+				$values['image'] = $this->entity->image;
+				$values['with_vat'] = $this->defaultWithVat;
+				$values['prices'] = [];
+				foreach ($this->entity->parameterPrices as $parameterPrice) {
+					$values['prices'][$parameterPrice->parameter->id] = $this->defaultWithVat ? $parameterPrice->price->withVat : $parameterPrice->price->withoutVat;
+					$values['vat'] = $parameterPrice->vat->id;
+				}
 				break;
 		}
 		return $values;

@@ -423,6 +423,7 @@ var UITree = function () {
 							}
 							Metronic.unblockUI($(treeBlockId));
 							Metronic.unblockUI($(editBlockId));
+							GlobalCustomInit.onChangeJSTree();
 						});
 			}
 		});

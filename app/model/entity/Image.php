@@ -25,6 +25,7 @@ class Image extends BaseEntity
 	const FOLDER_PRODUCTS = 'products/images';
 	const FOLDER_USERS = 'users/images';
 	const FOLDER_CATEGORIES = 'category/images';
+	const FOLDER_PRODUCERS = 'producers/images';
 	const DEFAULT_IMAGE = 'default.png';
 
 	use Identifier;
