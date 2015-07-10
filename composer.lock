@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "09200f9e61e9509df7ecfdbfab3ac467",
+    "hash": "0c6ccf62761fff335151e6b98d77d3b2",
     "packages": [
         {
             "name": "dg/adminer-custom",
@@ -673,47 +673,6 @@
                 "orm"
             ],
             "time": "2014-12-16 13:45:01"
-        },
-        {
-            "name": "foowie/dependentselectbox",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/foowie/dependentselectbox.git",
-                "reference": "fd71801a079618d25d25ccf581da565ad5ccbfef"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/foowie/dependentselectbox/zipball/fd71801a079618d25d25ccf581da565ad5ccbfef",
-                "reference": "fd71801a079618d25d25ccf581da565ad5ccbfef",
-                "shasum": ""
-            },
-            "require": {
-                "nette/nette": "*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "DependentSelectBox": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause",
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Daniel Robenek"
-                }
-            ],
-            "description": "Selectbox whose options are depended on another selectbox. Library for Nette Framework",
-            "homepage": "http://addons.nette.org/cs/dependentselectbox",
-            "keywords": [
-                "nette",
-                "selectbox"
-            ],
-            "time": "2014-07-09 13:03:27"
         },
         {
             "name": "freaz/nette-gettext-translator",
@@ -2211,12 +2170,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/natxet/CssMin.git",
-                "reference": "f076e41392b0008efb47074a133ec1d90dc8c99f"
+                "reference": "4026975145f645a77e087a26e7b0a1c9209b0191"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/natxet/CssMin/zipball/f076e41392b0008efb47074a133ec1d90dc8c99f",
-                "reference": "f076e41392b0008efb47074a133ec1d90dc8c99f",
+                "url": "https://api.github.com/repos/natxet/CssMin/zipball/4026975145f645a77e087a26e7b0a1c9209b0191",
+                "reference": "4026975145f645a77e087a26e7b0a1c9209b0191",
                 "shasum": ""
             },
             "require": {
@@ -2250,7 +2209,7 @@
                 "css",
                 "minify"
             ],
-            "time": "2015-05-21 16:53:45"
+            "time": "2015-07-07 10:45:37"
         },
         {
             "name": "nette/application",
@@ -3375,16 +3334,16 @@
         },
         {
             "name": "nextras/forms",
-            "version": "v1.5.0",
+            "version": "v1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextras/forms.git",
-                "reference": "d04a2fe7e3ed7dfbb16f1570bdbbde556eb9f3b0"
+                "reference": "89e3dc466cb214f59d0c61691025cbc123116265"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextras/forms/zipball/d04a2fe7e3ed7dfbb16f1570bdbbde556eb9f3b0",
-                "reference": "d04a2fe7e3ed7dfbb16f1570bdbbde556eb9f3b0",
+                "url": "https://api.github.com/repos/nextras/forms/zipball/89e3dc466cb214f59d0c61691025cbc123116265",
+                "reference": "89e3dc466cb214f59d0c61691025cbc123116265",
                 "shasum": ""
             },
             "require": {
@@ -3394,10 +3353,14 @@
                 "nette/utils": "~2.2",
                 "php": ">=5.4"
             },
+            "require-dev": {
+                "latte/latte": "~2.2",
+                "nette/tester": "~1.4"
+            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4-dev"
+                    "dev-master": "1.5-dev"
                 }
             },
             "autoload": {
@@ -3430,7 +3393,7 @@
                 "form",
                 "nette"
             ],
-            "time": "2015-06-16 21:10:46"
+            "time": "2015-07-09 09:39:46"
         },
         {
             "name": "o5/grido",
@@ -4383,7 +4346,6 @@
         "o5/grido": 20,
         "h4kuna/exchange": 20,
         "freaz/nette-gettext-translator": 20,
-        "foowie/dependentselectbox": 20,
         "nette/tester": 20,
         "kdyby/tester-extras": 20
     },

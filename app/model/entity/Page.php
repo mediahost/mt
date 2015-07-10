@@ -26,8 +26,8 @@ class Page extends BaseTranslatable
 	
 	public function isInterLink()
 	{
-		$isExtern = preg_match('/(^http|^//\w+|\.//)/', $this->link);
-		return !$isExtern;
+		$isExtern = preg_match('@(^http|^/\w+|\./)@', $this->link);
+		return $this->link && !$isExtern;
 	}
 
 	public function __toString()

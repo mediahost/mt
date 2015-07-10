@@ -2,11 +2,14 @@
 
 namespace App\Model\Entity;
 
+use App\Helpers;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
 use Knp\DoctrineBehaviors\Model;
+use Nette\Http\FileUpload;
+use Nette\Utils\Strings;
 
 /**
  * @ORM\Entity
@@ -15,6 +18,7 @@ use Knp\DoctrineBehaviors\Model;
  * @property array $children
  * @property-read bool $hasChildren
  * @property string $name
+ * @property Image $image
  * @property array $products
  * @property array $path
  * @property string $url
@@ -26,13 +30,17 @@ class Producer extends BaseEntity implements IProducer
 
 	const ID = 'p';
 	const SEPARATOR = '-';
-	
+
 	use Identifier;
-	use Model\Sluggable\Sluggable;
+
+use Model\Sluggable\Sluggable;
 
 	/** @ORM\Column(type="string", length=256) */
 	protected $name;
-	
+
+	/** @ORM\OneToOne(targetEntity="Image", cascade="all") */
+	protected $image;
+
 	/** @ORM\OneToMany(targetEntity="Product", mappedBy="producer") */
 	protected $products;
 
@@ -47,7 +55,20 @@ class Producer extends BaseEntity implements IProducer
 		$this->lines = new ArrayCollection();
 		parent::__construct();
 	}
-	
+
+	public function setImage(FileUpload $file)
+	{
+		if (!$this->image instanceof Image) {
+			$this->image = new Image($file);
+		} else {
+			$this->image->setFile($file);
+		}
+		$this->image->requestedFilename = 'producer_' . Strings::webalize(microtime());
+		$this->image->setFolder(Image::FOLDER_PRODUCERS);
+
+		return $this;
+	}
+
 	public function addLine(ProducerLine $line)
 	{
 		$line->producer = $this;
@@ -77,7 +98,7 @@ class Producer extends BaseEntity implements IProducer
 
 	public static function getItemId($id, &$type = NULL)
 	{
-		$allowedTypes = \App\Helpers::concatStrings('|', self::ID, ProducerLine::ID, ProducerModel::ID);
+		$allowedTypes = Helpers::concatStrings('|', self::ID, ProducerLine::ID, ProducerModel::ID);
 		$separator = preg_quote(self::SEPARATOR);
 		if (preg_match('/^(' . $allowedTypes . ')' . $separator . '(\d+)$/i', $id, $matches)) {
 			$type = $matches[1];

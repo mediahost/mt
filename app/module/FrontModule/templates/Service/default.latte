@@ -1,0 +1,122 @@
+{includeblock '../categories.latte'}
+
+{block breadcrumbItems}
+<li class="active">
+	{ifset $activeProducer}
+		<span>{_'%s for %s', NULL, $page, $activeProducer}</span>
+	{else}
+		<span>{$page}</span>
+	{/ifset}
+</li>
+{/block}
+
+{block content}
+<div class="container">
+	<!-- BEGIN SIDEBAR & CONTENT -->
+	<div class="row">
+
+		<!-- BEGIN SIDEBAR -->
+		<div class="sidebar col-md-3 col-sm-5">
+			{include categories}
+		</div>
+		<!-- END SIDEBAR -->
+
+		<!-- BEGIN CONTENT -->
+		<div class="col-md-9 col-sm-7" n:snippet="serviceContent">
+			{var targetForAjaxLoaging = '#snippet--serviceContent'}
+
+			<div class="row margin-bottom-20">
+				{ifset $activeProducer}
+					<h1>{_'%s for %s', NULL, $page, $activeProducer}</h1>
+				{else}
+					<h1>{$page}</h1>
+				{/ifset}
+				<div class="content-page">
+					<div class="page-html-content">
+						{$page->html|noescape}
+					</div>
+				</div>
+			</div>
+
+			<div class="row" n:if="!$activeProducer">
+				<div n:foreach="$producers as $producer" class="col-sm-6 col-md-3 col-lg-2">
+					<a n:if="$producer->hasLines"
+					   n:href="this, 'producer' => $producer->id" 
+					   class="thumbnail ajax"
+					   data-target-loading="{$targetForAjaxLoaging}">
+						<img src="{$basePath}/foto/{$producer->image|size:'200'}" alt="{$producer}">
+					</a>
+				</div>
+			</div>
+
+			<div class="row" n:if="$activeProducer">
+				<div class="col-md-3 lines">
+					<div class="panel">
+						<div class="panel-body">
+							<h3 class="panel-title" n:if="$activeProducer->hasLines">{_'Select Line'}:</h3>
+						</div>
+						<ul class="list-group">
+							<a n:foreach="$lines as $line"
+							   n:if="$line->hasModels"
+							   n:href="this, 'producer' => $activeProducer->id, 'line' => $line->id" 
+							   n:class="list-group-item, ajax, $activeLine && $activeLine->id === $line->id ? active"
+							   data-target-loading="{$targetForAjaxLoaging}">
+								{$line}
+							</a>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-3 models" n:if="$activeLine">
+					<div class="panel">
+						<div class="panel-body">
+							<h3 class="panel-title" n:if="$activeLine->hasModels">{_'Select Model'}:</h3>
+						</div>
+						<ul class="list-group">
+							<a n:foreach="$models as $model"
+							   n:href="this, 'producer' => $activeProducer->id, 'line' => $activeLine->id, 'model' => $model->id" 
+							   n:class="list-group-item, ajax, $activeModel && $activeModel->id === $model->id ? active"
+							   data-target-loading="{$targetForAjaxLoaging}">
+								{$model}
+							</a>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-6 model-view" n:if="$activeModel">
+					<div class="panel">
+						<div class="panel-heading">
+							<h3 class="panel-title">{$activeModel}</h3>
+						</div>
+						<div class="panel-body">
+							<p>
+								<img src="{$basePath}/foto/{$activeModel->image|size:'120':'120'}" class="thumbnail" alt="{$activeModel}" />
+								{$activeModel->html|noescape}
+							</p>
+							<p n:if="$activeModel && count($activeModel->parameterPrices)">
+								<a href="#price-list" class="btn blue">{_'Price List'} &raquo;</a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row" n:if="$activeModel && count($activeModel->parameterPrices)" id="price-list">
+				<h4>{_'Post warranty, paid service interventions'}</h4>
+				<div class="list-group">
+					<div n:foreach="$activeModel->parameterPrices as $parameterPrice"
+						 class="list-group-item">
+						{var parameter => $parameterPrice->parameter}
+						{? $parameter->setCurrentLocale($lang)}
+						<h4 class="list-group-item-heading">{$parameter}</h4>
+						<div class="list-group-item-text row">
+							<div class="col-md-9">{$parameter->text}</div>
+							<div class="col-md-3 text-right"><b>{$parameterPrice->price|currency}</b></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- END CONTENT -->
+
+	</div>
+	<!-- END SIDEBAR & CONTENT -->
+</div>

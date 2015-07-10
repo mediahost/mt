@@ -53,7 +53,7 @@
 				target: this.element,
 				animate: true
 			};
-			if (this.element.hasClass('loadingNoOverlay')) {
+			if (this.element && this.element.hasClass('loadingNoOverlay')) {
 				options.overlayColor = 'none';
 			}
 			Metronic.blockUI(options);

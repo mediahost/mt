@@ -108,31 +108,9 @@
                 </li>
 			</ul>
 		</li>
-		<li class="dropdown">
-			<a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">Servis telefonov</a>
-			<ul class="dropdown-menu">
-                <li><a n:href="this">Home Default</a></li>
-                <li><a n:href="this">Home Header Fixed</a></li>
-                <li><a n:href="this">Home Light Footer</a></li>
-                <li><a n:href="this">Product List</a></li>
-                <li><a n:href="this">Search Result</a></li>
-                <li class="active"><a n:href="this">Product Page</a></li>
-                <li><a n:href="this">Shopping Cart (Null Cart)</a></li>
-                <li><a n:href="this">Shopping Cart</a></li>
-                <li><a n:href="this">Checkout</a></li>
-                <li><a n:href="this">About</a></li>
-                <li><a n:href="this">Contacts</a></li>
-                <li><a n:href="this">My account</a></li>
-                <li><a n:href="this">My Wish List</a></li>
-                <li><a n:href="this">Product Comparison</a></li>
-                <li><a n:href="this">Standart Forms</a></li>
-                <li><a n:href="this">FAQ</a></li>
-                <li><a n:href="this">Privacy Policy</a></li>
-                <li><a n:href="this">Terms &amp; Conditions</a></li>
-			</ul>
-		</li>
-		<li n:if="$menuPages->page2">{include pageLink, page => $menuPages->page2}</li>
 		<li n:if="$menuPages->page1">{include pageLink, page => $menuPages->page1}</li>
+		<li n:if="$menuPages->page2">{include pageLink, page => $menuPages->page2}</li>
+		<li n:if="$menuPages->page3">{include pageLink, page => $menuPages->page3}</li>
 	</ul>
 </div>
 <!-- END NAVIGATION -->
@@ -140,5 +118,5 @@
 
 {define pageLink}
 {? $page->setCurrentLocale($lang)}
-<a n:href="Page: $page->slug">{$page}</a>
+<a {if $page->isInterLink()}href="{link $page->link}"{else}href="{link Page: $page->slug}"{/if}>{$page}</a>
 {/define}
