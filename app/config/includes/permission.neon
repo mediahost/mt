@@ -50,5 +50,6 @@ services:
 			- allow('admin', 'parameters')
 			- allow('admin', 'signs')
 			- allow('admin', 'pages')
+			- deny('admin', 'pages', 'delete') # pages can be link to template, only superadmin can delete
 
 			- allow('superadmin') # Full access for superadmin

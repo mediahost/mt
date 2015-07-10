@@ -100,6 +100,11 @@ class PagesPresenter extends BasePresenter
 		$this->redirect('default');
 	}
 
+	public function canDelete(Page $page)
+	{
+		return $this->user->isAllowed('pages', 'delete');
+	}
+
 	// <editor-fold desc="forms">
 
 	/** @return PageEdit */
