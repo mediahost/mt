@@ -50,6 +50,7 @@ class ServicePresenter extends BasePresenter
 		if ($producer) {
 			$activeProducer = $producerRepo->find($producer);
 			if ($activeProducer) {
+				$activeProducer->setCurrentLocale($this->lang);
 				$lines = $activeProducer->lines;
 			}
 		}

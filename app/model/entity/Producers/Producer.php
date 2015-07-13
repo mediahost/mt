@@ -5,19 +5,18 @@ namespace App\Model\Entity;
 use App\Helpers;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
-use Kdyby\Doctrine\Entities\BaseEntity;
 use Knp\DoctrineBehaviors\Model;
 use Nette\Http\FileUpload;
 use Nette\Utils\Strings;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Model\Repository\ProducerRepository")
  *
  * @property Producer $parent
  * @property array $children
  * @property-read bool $hasChildren
  * @property string $name
+ * @property string $serviceHtml
  * @property Image $image
  * @property array $products
  * @property array $path
@@ -25,15 +24,14 @@ use Nette\Utils\Strings;
  * @property array $lines
  * @property-read bool $hasLines
  */
-class Producer extends BaseEntity implements IProducer
+class Producer extends BaseTranslatable implements IProducer
 {
 
 	const ID = 'p';
 	const SEPARATOR = '-';
 
-	use Identifier;
-
-use Model\Sluggable\Sluggable;
+	use Model\Translatable\Translatable;
+	use Model\Sluggable\Sluggable;
 
 	/** @ORM\Column(type="string", length=256) */
 	protected $name;
@@ -47,13 +45,13 @@ use Model\Sluggable\Sluggable;
 	/** @ORM\OneToMany(targetEntity="ProducerLine", mappedBy="producer", cascade={"persist"}) */
 	protected $lines;
 
-	public function __construct($name = NULL)
+	public function __construct($name = NULL, $currentLocale = NULL)
 	{
 		if ($name) {
 			$this->name = $name;
 		}
 		$this->lines = new ArrayCollection();
-		parent::__construct();
+		parent::__construct($currentLocale);
 	}
 
 	public function setImage(FileUpload $file)
