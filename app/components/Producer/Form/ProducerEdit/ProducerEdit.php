@@ -61,6 +61,7 @@ class ProducerEdit extends BaseControl
 						->setSize(200, 150)
 						->addCondition(Form::FILLED)
 						->addRule(Form::IMAGE, 'Image must be in valid image format');
+				$form->addWysiHtml('service_html', 'Text for service', 8);
 				break;
 			case ProducerLine::ID:
 				break;
@@ -126,6 +127,9 @@ class ProducerEdit extends BaseControl
 
 	private function loadProducer(ArrayHash $values)
 	{
+		$lang = $this->entity->isNew() ? $this->languageService->defaultLanguage : $this->lang;
+		$this->entity->translateAdd($lang)->serviceHtml = $values->service_html;
+		$this->entity->mergeNewTranslations();
 		if ($values->image->isImage()) {
 			$this->entity->image = $values->image;
 		}
@@ -179,6 +183,7 @@ class ProducerEdit extends BaseControl
 		];
 		switch ($this->type) {
 			case Producer::ID:
+				$values['service_html'] = $this->entity->translate($this->lang)->serviceHtml;
 				$values['image'] = $this->entity->image;
 				break;
 			case ProducerLine::ID:
