@@ -95,6 +95,7 @@ class ServicePresenter extends BasePresenter
 	public function createComponentModelSelector()
 	{
 		$control = $this->iModelSelectorFactory->create();
+		$control->setAjax();
 		$control->onAfterSelect = function ($producer, $line, $model) {
 			$this->model = $model;
 			if ($this->isAjax()) {

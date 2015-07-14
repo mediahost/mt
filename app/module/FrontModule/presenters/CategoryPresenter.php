@@ -42,4 +42,15 @@ class CategoryPresenter extends BasePresenter
 		$this->setView('default');
 	}
 
+	public function actionAccessories($model)
+	{		
+		/* @var $products ProductList */
+		$products = $this['products'];
+		$products->filter = [
+			'model' => $model,
+		];
+		
+		$this->setView('default');
+	}
+
 }

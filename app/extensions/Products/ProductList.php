@@ -507,6 +507,9 @@ class ProductList extends Control
 				case 'category':
 					$this->filterByCategory($value);
 					break;
+				case 'model':
+					$this->filterByModel($value);
+					break;
 				case 'fulltext':
 					$this->filterByFulltext($value);
 					break;
@@ -550,6 +553,22 @@ class ProductList extends Control
 			$this->qb
 					->andWhere('categories = :category')
 					->setParameter('category', $category);
+		}
+
+		return $this;
+	}
+
+	protected function filterByModel($model)
+	{
+		$this->qb->innerJoin('p.accessoriesFor', 'accessoriesFor');
+		if (is_array($model)) {
+			$this->qb
+					->andWhere('accessoriesFor IN (:models)')
+					->setParameter('models', $model);
+		} else if ($model instanceof Category) {
+			$this->qb
+					->andWhere('categories = :model')
+					->setParameter('model', $model);
 		}
 
 		return $this;
