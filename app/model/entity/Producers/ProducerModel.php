@@ -34,6 +34,9 @@ class ProducerModel extends BaseTranslatable implements IProducer
 
 	/** @ORM\OneToMany(targetEntity="ParameterPrice", mappedBy="model", cascade={"persist", "remove"}) */
 	protected $parameterPrices;
+	
+	/** @ORM\ManyToMany(targetEntity="Product", mappedBy="accessoriesFor") */
+	protected $products;
 
 	public function __construct($name, $currentLocale = NULL)
 	{

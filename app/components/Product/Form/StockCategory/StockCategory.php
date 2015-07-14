@@ -53,6 +53,7 @@ class StockCategory extends StockBase
 		$producers = $this->producerFacade->getProducersList();
 		$lines = $this->producerFacade->getLinesList($producer);
 		$models = $this->producerFacade->getModelsList($producerLine);
+		$allModels = $this->producerFacade->getModelsList(NULL, TRUE);
 
 		$producerDefault = $producer ? $producer->id : NULL;
 		$lineDefault = $producerLine && array_key_exists($producerLine->id, $lines) ? $producerLine->id : NULL;
@@ -78,6 +79,8 @@ class StockCategory extends StockBase
 						->setPrompt($isAllowedModel ? 'Select some model' : 'First select line')
 						->setDefaultValue($modelDefault)
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XL;
+		
+		$form->addMultiSelect2('accessoriesFor', 'Accessories for', $allModels);
 
 		$form->addSubmit('save', 'Save');
 
@@ -177,8 +180,8 @@ class StockCategory extends StockBase
 		$this->stock->product->mainCategory = $mainCategory;
 
 		$otherCategories = [];
-		foreach ($values->categories as $categoryId) {
-			$otherCategories[] = $categoryRepo->find($categoryId);
+		foreach ($values->categories as $modelId) {
+			$otherCategories[] = $categoryRepo->find($modelId);
 		}
 		$this->stock->product->setCategories($otherCategories, $mainCategory);
 
@@ -208,6 +211,12 @@ class StockCategory extends StockBase
 			}
 		}
 
+		$accesoryModels = [];
+		foreach ($values->accessoriesFor as $modelId) {
+			$accesoryModels[] = $modelRepo->find($modelId);
+		}
+		$this->stock->product->setAccessoriesFor($accesoryModels);
+
 		return $this;
 	}
 
@@ -226,6 +235,9 @@ class StockCategory extends StockBase
 		];
 		foreach ($this->stock->product->categories as $category) {
 			$values['categories'][] = $category->id;
+		}
+		foreach ($this->stock->product->accessoriesFor as $model) {
+			$values['accessoriesFor'][] = $model->id;
 		}
 		return $values;
 	}

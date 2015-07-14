@@ -4,6 +4,7 @@ namespace App\Model\Entity\Traits;
 
 use App\Model\Entity\Category;
 use App\Model\Entity\Producer;
+use App\Model\Entity\ProducerModel;
 
 /**
  * @property Producer $producer
@@ -29,6 +30,9 @@ trait ProductCategories
 
 	/** @ORM\ManyToMany(targetEntity="Category", inversedBy="products") */
 	protected $categories;
+
+	/** @ORM\ManyToMany(targetEntity="ProducerModel", inversedBy="products") */
+	protected $accessoriesFor;
 	
 	public function setMainCategory(Category $category)
 	{
@@ -83,6 +87,42 @@ trait ProductCategories
 			$this->mainCategory = NULL;
 		}
 		return $this->categories->removeElement($category);
+	}
+
+	public function setAccessoriesFor(array $models)
+	{
+		$removeIdles = function ($key, ProducerModel $model) use ($models) {
+			if (!in_array($model, $models, TRUE)) {
+				$this->removeAccessoryModel($model);
+			}
+			return TRUE;
+		};
+		$this->accessoriesFor->forAll($removeIdles);
+		
+		foreach ($models as $model) {
+			if ($model instanceof ProducerModel) {
+				$this->addAccessoryModel($model);
+			}
+		}
+		return $this;
+	}
+
+	public function clearAccessoriesFor()
+	{
+		return $this->accessoriesFor->clear();
+	}
+
+	public function addAccessoryModel(ProducerModel $model)
+	{
+		if (!$this->accessoriesFor->contains($model)) {
+			$this->accessoriesFor->add($model);
+		}
+		return $this;
+	}
+
+	public function removeAccessoryModel(ProducerModel $model)
+	{
+		return $this->accessoriesFor->removeElement($model);
 	}
 
 }

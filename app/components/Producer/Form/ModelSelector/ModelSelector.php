@@ -35,7 +35,7 @@ class ModelSelector extends BaseControl
 		$form = new Form();
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
-		$form->getElementPrototype()->class = ['ajax', 'modelSelector'];
+		$form->getElementPrototype()->class = [$this->isAjax ? 'ajax' : '', 'modelSelector'];
 		$form->getElementPrototype()->addAttributes(['data-target-loading' => '#loaded-content']);
 
 		$producerRepo = $this->em->getRepository(Producer::getClassName());
