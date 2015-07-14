@@ -51,5 +51,12 @@ class ExchangeHelper
 	{
 		return $this->change($price, NULL, NULL, NULL, TRUE);
 	}
+	
+	public function formatNumber($number)
+	{
+		$format = clone $this->exchange->getWeb()->getFormat();
+		$format->symbol = NULL;
+		return $format->render($number);
+	}
 
 }

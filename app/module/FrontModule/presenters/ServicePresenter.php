@@ -2,9 +2,10 @@
 
 namespace App\FrontModule\Presenters;
 
+use App\Components\Producer\Form\IModelSelectorFactory;
+use App\Components\Producer\Form\ModelSelector;
 use App\Model\Entity\Page;
 use App\Model\Entity\Producer;
-use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
 
 class ServicePresenter extends BasePresenter
@@ -12,6 +13,16 @@ class ServicePresenter extends BasePresenter
 
 	/** @var Page */
 	private $page;
+
+	/** @var ProducerModel */
+	private $model;
+
+	// <editor-fold desc="injects">
+
+	/** @var IModelSelectorFactory @inject */
+	public $iModelSelectorFactory;
+
+	// </editor-fold>
 
 	public function actionDefault()
 	{
@@ -32,51 +43,66 @@ class ServicePresenter extends BasePresenter
 		$this->page->setCurrentLocale($this->lang);
 	}
 
-	public function renderDefault($producer = NULL, $line = NULL, $model = NULL)
+	public function renderDefault()
 	{
 		$this->template->page = $this->page;
 
 		$producerRepo = $this->em->getRepository(Producer::getClassName());
-		$lineRepo = $this->em->getRepository(ProducerLine::getClassName());
-		$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
 
 		$producers = $producerRepo->findAll();
-		$lines = [];
-		$models = [];
-		$activeProducer = NULL;
-		$activeLine = NULL;
-		$activeModel = NULL;
+		$producersTree = [];
+		foreach ($producers as $producerItem) {
+			$linesTree = [];
+			if (!$producerItem->hasLines) {
+				continue;
+			}
+			foreach ($producerItem->lines as $lineItem) {
+				if (!$lineItem->hasModels) {
+					continue;
+				}
+				$modelsTree = [];
+				foreach ($lineItem->models as $modelItem) {
+					$modelsTree[$modelItem->id] = [
+						'name' => (string) $modelItem,
+					];
+				}
+				$linesTree[$lineItem->id] = [
+					'name' => (string) $lineItem,
+					'children' => $modelsTree,
+				];
+			}
+			$producersTree[$producerItem->id] = [
+				'name' => (string) $producerItem,
+				'children' => $linesTree,
+			];
+		}
 
-		if ($producer) {
-			$activeProducer = $producerRepo->find($producer);
-			if ($activeProducer) {
-				$activeProducer->setCurrentLocale($this->lang);
-				$lines = $activeProducer->lines;
-			}
-		}
-		if ($line) {
-			$activeLine = $lineRepo->find($line);
-			if ($activeLine) {
-				$models = $activeLine->models;
-			}
-		}
-		if ($model) {
-			$activeModel = $modelRepo->find($model);
-			if ($activeModel) {
-				$activeModel->setCurrentLocale($this->lang);
-			}
-		}
-
+		$this->template->producersTree = $producersTree;
 		$this->template->producers = $producers;
-		$this->template->lines = $lines;
-		$this->template->models = $models;
-		$this->template->activeProducer = $activeProducer;
-		$this->template->activeLine = $activeLine;
-		$this->template->activeModel = $activeModel;
+		if ($this->model instanceof ProducerModel) {
+			$this->model->setCurrentLocale($this->lang);
+		}
+		$this->template->model = $this->model;
 
 		if ($this->isAjax()) {
 			$this->redrawControl();
 		}
 	}
 
+	// <editor-fold desc="forms">
+
+	/** @return ModelSelector */
+	public function createComponentModelSelector()
+	{
+		$control = $this->iModelSelectorFactory->create();
+		$control->onAfterSelect = function ($producer, $line, $model) {
+			$this->model = $model;
+			if ($this->isAjax()) {
+				$this->redrawControl();
+			}
+		};
+		return $control;
+	}
+
+	// </editor-fold>
 }

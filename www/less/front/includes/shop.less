@@ -118,6 +118,55 @@
 	}
 }
 
+.container .service {
+	#loaded-content {
+		margin: 0px;
+		padding: 0px;
+		.model-selector {
+			background-color: white;
+			padding-top: 20px;
+			padding-bottom: 20px;
+		}
+		label {
+			padding-left: 12px;
+			padding-right: 12px;
+			display: inline-block;
+			width: 100%;
+			text-transform: uppercase;
+		}
+		.panel {
+			.panel-body {
+				img.thumbnail {
+					float: right;
+					margin-bottom: 10px;
+				}
+			}
+			.table {
+				thead {
+					.price {
+						width: 120px;
+					}
+				}
+				tbody {
+					.text {
+						font-style: italic;
+					}
+					.price {
+						text-align: right;
+						color: #45B6AF;
+						padding-right: 30px;
+					}
+				}
+				tfoot {
+					td, th {
+						padding-top: 25px;
+					}
+				}
+			}
+		}
+	}
+}
+
 @media (min-width: 1025px) {
 	.categories-menu {
 		& > ul.list-group {

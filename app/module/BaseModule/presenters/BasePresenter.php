@@ -115,7 +115,9 @@ abstract class BasePresenter extends Presenter
 		$this->template->pageInfo = $this->pageInfoService;
 		$this->template->exchange = $this->exchange;
 		if ($this->currency) {
-			$this->template->currency = $this->exchange[$this->currency];
+			$currency = $this->exchange[$this->currency];
+			$this->template->currency = $currency;
+			$this->template->currencySymbol = $currency->getFormat()->getSymbol();
 		}
 	}
 

@@ -21,11 +21,6 @@ class Select2 extends SelectBox
 	public function setPrompt($prompt)
 	{
 		$this->setPlaceholder($prompt);
-		
-		$attr = 'data-placeholder';
-		$text = $this->translate($prompt);
-		$this->control->$attr = $text;
-		
 		return parent::setPrompt('');
 	}
 
