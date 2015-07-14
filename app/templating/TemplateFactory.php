@@ -41,6 +41,8 @@ class TemplateFactory extends ParentTemplateFactory
 		$latte->addFilter('currencyVat', [$this->exchange, 'formatVat']);
 		$latte->addFilter('change', [$this->exchange, 'change']);
 		$latte->addFilter('changeVat', [$this->exchange, 'changeVat']);
+		$latte->addFilter('asCurrency', [$this->exchange, 'formatNumber']);
+		$latte->addFilter('jsonEncode', ['Nette\Utils\Json', 'encode']);
 		return $template;
 	}
 

@@ -22,8 +22,9 @@ var ComponentsDropdowns = function () {
 			var params = {};
 			for (var i = 0, attrs = this.attributes, l = attrs.length; i < l; i++) {
 				var attr = attrs.item(i).nodeName;
-				if (attr === "placeholder") {
+				if (attr === "placeholder" || attr === "data-placeholder") {
 					params.placeholder = $(this).attr(attr);
+					params.allowClear = true;
 				} else if (attr === "data-tags") {
 					params.tags = JSON.parse($(this).attr(attr));
 				} else if (attr.substring(0, 5) === "data-") {

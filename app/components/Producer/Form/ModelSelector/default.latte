@@ -1,0 +1,28 @@
+{form form}	
+	{? $form->render('begin')}
+
+	<div class="col-lg-4">
+		<div class="form-group">
+			{label producer /}
+			{input producer}
+		</div>
+	</div>
+
+	<div class="col-lg-4">
+		<div class="form-group">
+			{label line /}
+			{input line}
+		</div>
+	</div>
+
+	<div class="col-lg-4">
+		<div class="form-group">
+			{label model /}
+			{input model}
+		</div>
+	</div>
+
+	{? $form->render('end');}
+{/form}
+
+<div id="treeProducers"  data-producers-tree="{$producersTree|jsonEncode}"></div>

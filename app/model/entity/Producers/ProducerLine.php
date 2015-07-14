@@ -44,6 +44,15 @@ class ProducerLine extends BaseEntity implements IProducer
 		$this->models->add($model);
 		return $this;
 	}
+	
+	public function getModelsArray()
+	{
+		$array = [];
+		foreach ($this->models as $model) {
+			$array[$model->id] = (string) $model;
+		}
+		return $array;
+	}
 
 	public function getHasModels()
 	{

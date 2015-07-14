@@ -73,6 +73,15 @@ class Producer extends BaseTranslatable implements IProducer
 		$this->lines->add($line);
 		return $this;
 	}
+	
+	public function getLinesArray()
+	{
+		$array = [];
+		foreach ($this->lines as $line) {
+			$array[$line->id] = (string) $line;
+		}
+		return $array;
+	}
 
 	public function getHasLines()
 	{
