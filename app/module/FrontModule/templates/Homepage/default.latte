@@ -5,89 +5,108 @@
 {block content}
 
 <div class="container">
-	<!-- BEGIN TOP PRODUCTS -->
-	<div class="row margin-bottom-40">
-		<div class="sidebar col-md-3 col-sm-4">
-			{include categories}
+	<div class="homepage">
+		
+		<div class="row margin-bottom-40">
+			<div class="sidebar col-md-3 col-sm-4">
+				{include categories}
+			</div>
+			<div class="col-md-9 col-sm-8">
+				{include accessories}
+				{include topProducts}
+			</div>
 		</div>
-		<div class="col-md-9 col-sm-8">
-            <h2>{_'Top products'}</h2>
-            <div class="owl-carousel owl-carousel3">
-				<div n:foreach="$topStocks as $stock">
-					{include product, stock => $stock, product => $stock->product}
+
+		<div class="row margin-bottom-40">
+			{include sales}
+			{include promo}
+		</div>
+
+		{include news}
+		{include lastVisited}
+		
+	</div>
+</div>
+{/block}
+
+{define topProducts}
+<h2>{_'Top products'}</h2>
+<div class="owl-carousel owl-carousel3">
+	<div n:foreach="$topStocks as $stock">
+		{include product, stock => $stock, product => $stock->product}
+	</div>
+</div>
+{/define}
+
+{define accessories}
+<h2>{_'Select your accessories for...'}</h2>
+<div class="model-selector clearfix">
+	{control modelSelector}
+</div>
+{/define}
+
+{define sales}
+<div class="col-md-6 two-items-bottom-items" n:ifset="$saleSign">
+	<h2>{$saleSign}</h2>
+	<div class="owl-carousel owl-carousel2">
+		<div n:foreach="$saleStocks as $stock">
+			{include product, stock => $stock, product => $stock->product}
+		</div>
+	</div>
+</div>
+{/define}
+
+{define promo}
+<div class="col-md-6 shop-index-carousel">
+	<div class="content-slider">
+		<div id="myCarousel" class="carousel slide" data-ride="carousel">
+			<!-- Indicators -->
+			<ol class="carousel-indicators">
+				<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+				<li data-target="#myCarousel" data-slide-to="1"></li>
+				<li data-target="#myCarousel" data-slide-to="2"></li>
+			</ol>
+			<div class="carousel-inner">
+				<div class="item active">
+					<img src="{$basePath}/images/promo/slide1.jpg" class="img-responsive" alt="promo">
 				</div>
-            </div>
-			<div>
-				{control modelSelector}
+				<div class="item">
+					<img src="{$basePath}/images/promo/slide2.jpg" class="img-responsive" alt="promo">
+				</div>
+				<div class="item">
+					<img src="{$basePath}/images/promo/slide3.jpg" class="img-responsive" alt="promo">
+				</div>
 			</div>
 		</div>
 	</div>
-	<!-- END TOP PRODUCTS -->
+</div>
+{/define}
 
-	<div class="row margin-bottom-40">
-		<!-- BEGIN SALES -->
-		<div class="col-md-6 two-items-bottom-items" n:ifset="$saleSign">
-			<h2>{$saleSign}</h2>
-			<div class="owl-carousel owl-carousel2">
-				<div n:foreach="$saleStocks as $stock">
-					{include product, stock => $stock, product => $stock->product}
-				</div>
+{define news}
+<div class="row margin-bottom-35" n:ifset="$newSign">
+	<div class="col-md-12 sale-product">
+		<h2>{$newSign}</h2>
+		<div class="owl-carousel owl-carousel5">
+			<div n:foreach="$newStocks as $stock">
+				{include product, stock => $stock, product => $stock->product}
 			</div>
 		</div>
-		<!-- END SALES -->
-		<!-- BEGIN PROMO -->
-		<div class="col-md-6 shop-index-carousel">
-			<div class="content-slider">
-				<div id="myCarousel" class="carousel slide" data-ride="carousel">
-					<!-- Indicators -->
-					<ol class="carousel-indicators">
-						<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-						<li data-target="#myCarousel" data-slide-to="1"></li>
-						<li data-target="#myCarousel" data-slide-to="2"></li>
-					</ol>
-					<div class="carousel-inner">
-						<div class="item active">
-							<img src="{$basePath}/images/promo/slide1.jpg" class="img-responsive" alt="promo">
-						</div>
-						<div class="item">
-							<img src="{$basePath}/images/promo/slide2.jpg" class="img-responsive" alt="promo">
-						</div>
-						<div class="item">
-							<img src="{$basePath}/images/promo/slide3.jpg" class="img-responsive" alt="promo">
-						</div>
-					</div>
-				</div>
+	</div>
+</div>
+{/define}
+
+{define lastVisited}
+<div class="row margin-bottom-35">
+	<div class="col-md-12 sale-product">
+		<h2>{_'Last visited'}</h2>
+		<div class="owl-carousel owl-carousel5">
+			<div n:foreach="$visitedStocks as $stock">
+				{include product, stock => $stock, product => $stock->product}
 			</div>
 		</div>
-		<!-- END PROMO -->
 	</div>
-
-	<!-- BEGIN NEWS -->
-	<div class="row margin-bottom-35" n:ifset="$newSign">
-		<div class="col-md-12 sale-product">
-            <h2>{$newSign}</h2>
-            <div class="owl-carousel owl-carousel5">
-				<div n:foreach="$newStocks as $stock">
-					{include product, stock => $stock, product => $stock->product}
-				</div>
-            </div>
-		</div>
-	</div>
-	<!-- END NEWS -->
-
-	<!-- BEGIN LAST VISITED -->
-	<div class="row margin-bottom-35">
-		<div class="col-md-12 sale-product">
-            <h2>{_'Last visited'}</h2>
-            <div class="owl-carousel owl-carousel5">
-				<div n:foreach="$visitedStocks as $stock">
-					{include product, stock => $stock, product => $stock->product}
-				</div>
-            </div>
-		</div>
-	</div>
-	<!-- END LAST VISITED -->
-</div>{/block}
+</div>
+{/define}
 
 {define product}
 <div class="product-item">
