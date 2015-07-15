@@ -77,11 +77,6 @@ class StockFacade extends Object
 		return $this->getDemoProducts();
 	}
 
-	public function getTops()
-	{
-		return $this->getDemoProducts();
-	}
-
 	public function getSales()
 	{
 		$signSettings = $this->moduleService->getModuleSettings('signs');
@@ -94,6 +89,13 @@ class StockFacade extends Object
 		$signSettings = $this->moduleService->getModuleSettings('signs');
 		$newSignId = $signSettings ? $signSettings->new : NULL;
 		return $this->getSignedProducts($newSignId);
+	}
+
+	public function getTops()
+	{
+		$signSettings = $this->moduleService->getModuleSettings('signs');
+		$topSignId = $signSettings ? $signSettings->top : NULL;
+		return $this->getSignedProducts($topSignId);
 	}
 
 	public function getLastVisited()
