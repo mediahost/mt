@@ -7,6 +7,9 @@ use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Helpers;
 use App\Model\Entity\Category;
+use App\Model\Entity\Producer;
+use App\Model\Entity\ProducerLine;
+use App\Model\Entity\ProducerModel;
 use App\Model\Entity\Stock;
 use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\Query\Expr\OrderBy;
@@ -507,8 +510,17 @@ class ProductList extends Control
 				case 'category':
 					$this->filterByCategory($value);
 					break;
+				case 'producer':
+					$this->filterByProducer($value);
+					break;
+				case 'line':
+					$this->filterByLine($value);
+					break;
 				case 'model':
 					$this->filterByModel($value);
+					break;
+				case 'accessoriesFor':
+					$this->filterByAccessoriesFor($value);
 					break;
 				case 'fulltext':
 					$this->filterByFulltext($value);
@@ -558,16 +570,61 @@ class ProductList extends Control
 		return $this;
 	}
 
+	protected function filterByProducer($producer)
+	{
+		if (is_array($producer)) {
+			$this->qb
+					->andWhere('p.producer IN (:producers)')
+					->setParameter('producers', $producer);
+		} else if ($producer instanceof Producer) {
+			$this->qb
+					->andWhere('p.producer = :producer')
+					->setParameter('producer', $producer);
+		}
+
+		return $this;
+	}
+
+	protected function filterByLine($line)
+	{
+		if (is_array($line)) {
+			$this->qb
+					->andWhere('p.producerLine IN (:lines)')
+					->setParameter('lines', $line);
+		} else if ($line instanceof ProducerLine) {
+			$this->qb
+					->andWhere('p.producerLine = :line')
+					->setParameter('line', $line);
+		}
+
+		return $this;
+	}
+
 	protected function filterByModel($model)
+	{
+		if (is_array($model)) {
+			$this->qb
+					->andWhere('p.producerModel IN (:models)')
+					->setParameter('models', $model);
+		} else if ($model instanceof ProducerModel) {
+			$this->qb
+					->andWhere('p.producerModel = :model')
+					->setParameter('model', $model);
+		}
+
+		return $this;
+	}
+
+	protected function filterByAccessoriesFor($model)
 	{
 		$this->qb->innerJoin('p.accessoriesFor', 'accessoriesFor');
 		if (is_array($model)) {
 			$this->qb
 					->andWhere('accessoriesFor IN (:models)')
 					->setParameter('models', $model);
-		} else if ($model instanceof Category) {
+		} else if ($model instanceof ProducerModel) {
 			$this->qb
-					->andWhere('categories = :model')
+					->andWhere('accessoriesFor = :model')
 					->setParameter('model', $model);
 		}
 

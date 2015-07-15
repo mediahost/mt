@@ -3,6 +3,7 @@
 namespace App\FrontModule\Presenters;
 
 use App\Extensions\Products\ProductList;
+use App\Model\Entity\ProducerModel;
 
 class CategoryPresenter extends BasePresenter
 {
@@ -31,26 +32,35 @@ class CategoryPresenter extends BasePresenter
 	public function actionSearch($text)
 	{
 		$this->searched = $text;
-		
+
 		/* @var $products ProductList */
 		$products = $this['products'];
 		$products->filter = [
 			'fulltext' => $text,
 		];
-		
+
 		$this->template->searched = $text;
 		$this->setView('default');
 	}
 
 	public function actionAccessories($model)
-	{		
-		/* @var $products ProductList */
-		$products = $this['products'];
-		$products->filter = [
-			'model' => $model,
-		];
-		
-		$this->setView('default');
+	{
+		$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
+		$modelEntity = $modelRepo->find($model);
+		if ($modelEntity) {
+			/* @var $products ProductList */
+			$products = $this['products'];
+			$products->filter = [
+				'accessoriesFor' => $modelEntity,
+			];
+
+			$this['modelSelector']->setModel($modelEntity);
+			$this->template->accessoriesFor = $modelEntity;
+			$this->setView('default');
+		} else {
+			$this->flashMessage('This model wasn\'t found.', 'warning');
+			$this->redirect('Homepage:');
+		}
 	}
 
 }

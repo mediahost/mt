@@ -2,23 +2,31 @@
 
 {block breadcrumbItems}
 {ifset $category}
-<li n:foreach="$category->path as $parent">
-	<a n:href="Category: url => $parent->url">{$parent}</a>
-</li>
-<li class="active">{$category}</li>
-{else}
-<li>
-	<span>{_'Search'}</span>
-</li>
-<li class="active" n:ifset="$searched">{$searched}</li>
-{/ifset}
-{/block}
+	<li n:foreach="$category->path as $parent">
+		<a n:href="Category: url => $parent->url">{$parent}</a>
+	</li>
+	<li class="active">{$category}</li>
+	{elseifset $searched}
+	<li>
+		<span>{_'Search'}</span>
+	</li>
+	<li class="active">{$searched}</li>
+	{elseifset $accessoriesFor}
+	<li>
+		<span>{$accessoriesFor->line->producer}</span>
+	</li>
+	<li>
+		<span>{$accessoriesFor->line}</span>
+	</li>
+	<li class="active">{$accessoriesFor}</li>
+	{/ifset}
+	{/block}
 
 {block content}
 <div class="container">
 	<!-- BEGIN SIDEBAR & CONTENT -->
-	<div class="row">
-		
+	<div class="row category">
+
 		<!-- BEGIN SIDEBAR -->
 		<div class="sidebar col-md-3 col-sm-5">
 			{include categories}
@@ -29,11 +37,24 @@
 			</div>
 		</div>
 		<!-- END SIDEBAR -->
-		
+
 		<!-- BEGIN CONTENT -->
 		<div class="col-md-9 col-sm-7">
 
-			{control products:sorting}
+
+			<div class="model-selector clearfix">
+				<h2>{_'Select your accessories for...'}</h2>
+				{control modelSelector}
+			</div>
+
+			<div class="row">
+				<div class="col-lg-5">
+					<h1 n:ifset="$category">{$category}</h1>
+					<h1 n:ifset="$searched">{$searched}</h1>
+					<h1 n:ifset="$accessoriesFor">{$accessoriesFor}</h1>
+				</div>
+				<div class="col-lg-6">{control products:sorting}</div>
+			</div>
 
 			{control products:list}
 
@@ -42,10 +63,10 @@
 				{control products:paginator}
 			</div>
 			<!-- END PAGINATOR -->
-			
+
 		</div>
 		<!-- END CONTENT -->
-		
+
 	</div>
 	<!-- END SIDEBAR & CONTENT -->
 </div>

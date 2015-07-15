@@ -8,6 +8,7 @@ use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
+use App\Model\Facade\ProducerFacade;
 use Nette\Utils\ArrayHash;
 
 class ModelSelector extends BaseControl
@@ -21,6 +22,9 @@ class ModelSelector extends BaseControl
 
 	/** @var ProducerModel */
 	private $model;
+	
+	/** @var ProducerFacade @inject */
+	public $producerFacade;
 
 	// <editor-fold desc="events">
 
@@ -42,19 +46,31 @@ class ModelSelector extends BaseControl
 		$lineRepo = $this->em->getRepository(ProducerLine::getClassName());
 		$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
 
-		$producers = $producerRepo->findPairs('name');
-		$lines = $lineRepo->findPairs('name');
-		$models = $modelRepo->findPairs('name');
+		$allProducers = $producerRepo->findPairs('name');
+		$allLines = $lineRepo->findPairs('name');
+		$allModels = $modelRepo->findPairs('name');
 
-		$form->addSelect2('producer', 'Producer', $producers)
+		$form->addSelect2('producer', 'Producer', $allProducers)
 				->setPrompt('Select some producer');
-		$form->addSelect2('line', 'Line', $lines)
-				->setPrompt('Select some line')
-				->setDisabled();
-		$form->addSelect2('model', 'Model', $models)
-						->setPrompt('Select some model')
-						->setDisabled()
-						->getControlPrototype()->class[] = 'sendFormOnChange';
+
+		$selectLine = $form->addSelect2('line', 'Line', $allLines)
+				->setPrompt('Select some line');
+		if ($this->producer) {
+			$filteredLines = $this->producerFacade->getLinesList($this->producer);
+			$selectLine->setItems($filteredLines);
+		} else {
+			$selectLine->setDisabled();
+		}
+
+		$selectModel = $form->addSelect2('model', 'Model', $allModels)
+				->setPrompt('Select some model');
+		if ($this->line) {
+			$filteredModels = $this->producerFacade->getModelsList($this->line);
+			$selectModel->setItems($filteredModels);
+		} else {
+			$selectModel->setDisabled();
+		}
+		$selectModel->getControlPrototype()->class[] = 'sendFormOnChange';
 
 		$form->addSubmit('save', 'Save');
 
@@ -65,6 +81,9 @@ class ModelSelector extends BaseControl
 
 	public function formSucceeded(Form $form, $values)
 	{
+		$values->line = $form['line']->getRawValue();
+		$values->model = $form['model']->getRawValue();
+		
 		$this->load($values);
 		$this->onAfterSelect($this->producer, $this->line, $this->model);
 	}
@@ -108,7 +127,36 @@ class ModelSelector extends BaseControl
 	protected function getDefaults()
 	{
 		$values = [];
+		if ($this->producer) {
+			$values['producer'] = $this->producer->id;
+		}
+		if ($this->line) {
+			$values['line'] = $this->line->id;
+		}
+		if ($this->model) {
+			$values['model'] = $this->model->id;
+		}
 		return $values;
+	}
+
+	public function setModel(ProducerModel $model)
+	{
+		$this->model = $model;
+		$this->setLine($model->line);
+		return $this;
+	}
+
+	public function setLine(ProducerLine $line)
+	{
+		$this->line = $line;
+		$this->setProducer($line->producer);
+		return $this;
+	}
+
+	public function setProducer(Producer $producer)
+	{
+		$this->producer = $producer;
+		return $this;
 	}
 
 	public function render()
