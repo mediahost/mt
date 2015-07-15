@@ -91,7 +91,7 @@ class Foto extends Object
 
 		if ($sizeX > 0) {
 			$resizedPath = Helpers::getPath($this->rootFolder, $sizeX . FotoHelpers::getSizeSeparator() . $sizeY);
-			Helpers::mkDirForce(Helpers::getPath($resizedPath, FotoHelpers::getFolderFromPath($name)));
+			FileSystem::createDir(Helpers::getPath($resizedPath, FotoHelpers::getFolderFromPath($name)));
 			$resized = Helpers::getPath($resizedPath, $name);
 
 			if (!file_exists($resized) || filemtime($filename) > filemtime($resized)) {
