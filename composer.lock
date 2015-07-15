@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0c6ccf62761fff335151e6b98d77d3b2",
+    "hash": "34f36186049d22e74d01b89843315b4a",
     "packages": [
         {
             "name": "dg/adminer-custom",
@@ -673,66 +673,6 @@
                 "orm"
             ],
             "time": "2014-12-16 13:45:01"
-        },
-        {
-            "name": "freaz/nette-gettext-translator",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/pupitooo/nette-gettext-translator.git",
-                "reference": "0bfe8321b925dc3b2071dde47782fefb63a5b5fe"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/pupitooo/nette-gettext-translator/zipball/0bfe8321b925dc3b2071dde47782fefb63a5b5fe",
-                "reference": "0bfe8321b925dc3b2071dde47782fefb63a5b5fe",
-                "shasum": ""
-            },
-            "require": {
-                "nette/nette": ">=2.1",
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "codeception/codeception": "*"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Patrik Votoček",
-                    "homepage": "http://patrik.votocek.cz"
-                },
-                {
-                    "name": "Tomáš Votruba",
-                    "homepage": "http://www.schmutzka.eu"
-                },
-                {
-                    "name": "Vojtěch Kijenský",
-                    "homepage": "http://www.positivezero.co.uk"
-                },
-                {
-                    "name": "Ondřej Musil",
-                    "homepage": "http://ondrejmusil.cz"
-                }
-            ],
-            "description": "Translator for Nette (PHP framework).",
-            "homepage": "https://github.com/freaz/nette-gettext-translator",
-            "keywords": [
-                "gettext",
-                "nette",
-                "translator"
-            ],
-            "support": {
-                "source": "https://github.com/pupitooo/nette-gettext-translator/tree/master"
-            },
-            "time": "2015-03-09 13:50:40"
         },
         {
             "name": "h4kuna/exchange",
@@ -2279,12 +2219,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/bootstrap.git",
-                "reference": "f8fb4c73807c6888d904ea8c04324f2d94169c52"
+                "reference": "8d2ee3ac4ad082c23cfb4b2bd198566afd6bb0e0"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/nette/bootstrap/zipball/8d2ee3ac4ad082c23cfb4b2bd198566afd6bb0e0",
-                "reference": "f8fb4c73807c6888d904ea8c04324f2d94169c52",
+                "reference": "8d2ee3ac4ad082c23cfb4b2bd198566afd6bb0e0",
                 "shasum": ""
             },
             "require": {
@@ -2337,7 +2277,7 @@
             ],
             "description": "Nette Bootstrap",
             "homepage": "http://nette.org",
-            "time": "2015-05-21 14:47:56"
+            "time": "2015-06-17 12:20:29"
         },
         {
             "name": "nette/caching",
@@ -4190,7 +4130,7 @@
             ],
             "authors": [
                 {
-                    "name": "Pádraic Brady",
+                    "name": "Padraic Brady",
                     "email": "padraic.brady@gmail.com",
                     "homepage": "http://blog.astrumfutura.com"
                 },
@@ -4345,7 +4285,6 @@
         "zeleznypa/nette-button-macros": 20,
         "o5/grido": 20,
         "h4kuna/exchange": 20,
-        "freaz/nette-gettext-translator": 20,
         "nette/tester": 20,
         "kdyby/tester-extras": 20
     },

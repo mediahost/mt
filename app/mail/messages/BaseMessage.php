@@ -3,7 +3,7 @@
 namespace App\Mail\Messages;
 
 use App\Extensions\Settings\Model\Service\PageInfoService;
-use GettextTranslator\Gettext;
+use Kdyby\Translation\ITranslator;
 use Latte\Engine;
 use Nette\Http\Request;
 use Nette\Mail\IMailer;
@@ -21,7 +21,7 @@ abstract class BaseMessage extends Message
 	/** @var Request @inject */
 	public $httpRequest;
 
-	/** @var Gettext @inject */
+	/** @var ITranslator @inject */
 	public $translator;
 
 	/** @var array */

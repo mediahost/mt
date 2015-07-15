@@ -12,7 +12,7 @@ class ProductPresenter extends BasePresenter
 			$this->flashMessage('Requested product isn\'t exist. Try to choose another from list.', 'warning');
 			$this->redirect('Homepage:');
 		}
-		$product->setCurrentLocale($this->lang);
+		$product->setCurrentLocale($this->locale);
 		if ($product->url !== $url) {
 			$this->redirect('Product:', ['url' => $product->url]);
 		}
@@ -28,7 +28,7 @@ class ProductPresenter extends BasePresenter
 			$this->flashMessage('Requested product isn\'t exist. Try to choose another from list.', 'warning');
 			$this->redirect('Homepage:');
 		}
-		$product->setCurrentLocale($this->lang);
+		$product->setCurrentLocale($this->locale);
 		$this->redirect('Product:', ['url' => $product->url]);
 	}
 

@@ -111,7 +111,7 @@ class PagesPresenter extends BasePresenter
 	public function createComponentPageForm()
 	{
 		$control = $this->iPageEditFactory->create();
-		$control->setLang($this->lang);
+		$control->setLang($this->locale);
 		$control->onAfterSave = function (Page $savedPage) {
 			$message = new TaggedString('Page \'%s\' was successfully saved.', (string) $savedPage);
 			$this->flashMessage($message, 'success');
@@ -127,7 +127,7 @@ class PagesPresenter extends BasePresenter
 	public function createComponentPagesGrid()
 	{
 		$control = $this->iPagesGridFactory->create();
-		$control->setLang($this->lang);
+		$control->setLang($this->locale);
 		return $control;
 	}
 

@@ -40,7 +40,7 @@ class ServicePresenter extends BasePresenter
 			$this->redirect('Homepage:');
 		}
 
-		$this->page->setCurrentLocale($this->lang);
+		$this->page->setCurrentLocale($this->locale);
 	}
 
 	public function renderDefault()
@@ -80,7 +80,7 @@ class ServicePresenter extends BasePresenter
 		$this->template->producersTree = $producersTree;
 		$this->template->producers = $producers;
 		if ($this->model instanceof ProducerModel) {
-			$this->model->setCurrentLocale($this->lang);
+			$this->model->setCurrentLocale($this->locale);
 		}
 		$this->template->model = $this->model;
 
