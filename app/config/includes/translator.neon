@@ -1,7 +1,9 @@
 extensions:
-	gettextTranslator: GettextTranslator\DI\Extension
+	translation: Kdyby\Translation\DI\TranslationExtension
 
-gettextTranslator:
-	lang: en
-	files:
-		all: %appDir%/lang/locale
+translation:
+	default: en
+	fallback: [en_US, en]
+	whitelist: [cs, en, sk]
+	resolvers:
+		session: on

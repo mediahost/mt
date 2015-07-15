@@ -67,7 +67,9 @@ abstract class BasePresenter extends BaseBasePresenter
 	protected function beforeRender()
 	{
 		parent::beforeRender();
-
+		if ($this->isInstallPresenter()) {
+			return;
+		}
 		$this->template->categories = $this->categories;
 		$this->template->activeCategory = $this->activeCategory;
 		$this->template->showSlider = $this->showSlider;
@@ -112,13 +114,13 @@ abstract class BasePresenter extends BaseBasePresenter
 			$signRepo = $this->em->getRepository(Sign::getClassName());
 			
 			$newSign = $signRepo->find($signSettings->new);
-			$newSign->setCurrentLocale($this->lang);
+			$newSign->setCurrentLocale($this->locale);
 			
 			$saleSign = $signRepo->find($signSettings->sale);
-			$saleSign->setCurrentLocale($this->lang);
+			$saleSign->setCurrentLocale($this->locale);
 			
 			$topSign = $signRepo->find($signSettings->top);
-			$topSign->setCurrentLocale($this->lang);
+			$topSign->setCurrentLocale($this->locale);
 
 			$this->template->newSign = $newSign;
 			$this->template->saleSign = $saleSign;
@@ -141,7 +143,7 @@ abstract class BasePresenter extends BaseBasePresenter
 		$list->setTranslator($this->translator);
 		$list->setExchange($this->exchange, $this->currency);
 		$list->setItemsPerPage($this->pageConfigService->rowsPerPage, $this->pageConfigService->itemsPerRow);
-		$list->setLang($this->lang, $this->languageService->defaultLanguage);
+		$list->setLang($this->locale, $this->languageService->defaultLanguage);
 
 		$list->setAjax();
 		$list->setPriceLevel($this->priceLevel);

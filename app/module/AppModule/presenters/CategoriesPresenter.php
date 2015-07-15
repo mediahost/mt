@@ -30,7 +30,7 @@ class CategoriesPresenter extends BasePresenter
 				$this->flashMessage('Category wasn\'t find', 'warning');
 				$this->redirect('default');
 			}
-			$this->category->setCurrentLocale($this->lang);
+			$this->category->setCurrentLocale($this->locale);
 			$this['categoryForm']->setCategory($this->category);
 		}
 	}
@@ -60,7 +60,7 @@ class CategoriesPresenter extends BasePresenter
 	public function createComponentCategoryForm()
 	{
 		$control = $this->iCategoryEditFactory->create();
-		$control->setLang($this->lang);
+		$control->setLang($this->locale);
 		$control->onAfterSave = function (Category $savedCategory, $addNext) {
 			$message = new TaggedString('Category \'%s\' was successfully saved.', (string) $savedCategory);
 			$this->flashMessage($message, 'success');

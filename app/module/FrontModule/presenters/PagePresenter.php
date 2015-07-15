@@ -16,7 +16,7 @@ class PagePresenter extends BasePresenter
 			$this->flashMessage('This page wasn\'t found.', 'warning');
 			$this->redirect('Homepage:');
 		}
-		$page->setCurrentLocale($this->lang);
+		$page->setCurrentLocale($this->locale);
 		if ($page->slug !== $url) {
 			$this->redirect('this', ['url' => $page->slug]);
 		}

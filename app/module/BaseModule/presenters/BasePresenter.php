@@ -17,10 +17,10 @@ use App\Model\Facade\ProducerFacade;
 use App\Model\Facade\StockFacade;
 use App\Model\Facade\UserFacade;
 use App\TaggedString;
-use GettextTranslator\Gettext;
 use h4kuna\Exchange\Exchange;
 use h4kuna\Exchange\ExchangeException;
 use Kdyby\Doctrine\EntityManager;
+use Kdyby\Translation\ITranslator;
 use Nette\Application\ForbiddenRequestException;
 use Nette\Application\UI\Presenter;
 use WebLoader\Nette\CssLoader;
@@ -33,7 +33,7 @@ abstract class BasePresenter extends Presenter
 {
 
 	/** @persistent */
-	public $lang = '';
+	public $locale = '';
 
 	/** @persistent */
 	public $currency = '';
@@ -52,7 +52,7 @@ abstract class BasePresenter extends Presenter
 	/** @var ISignOutFactory @inject */
 	public $iSignOutFactory;
 
-	/** @var Gettext @inject */
+	/** @var ITranslator @inject */
 	public $translator;
 
 	/** @var DefaultSettingsStorage @inject */
@@ -107,7 +107,7 @@ abstract class BasePresenter extends Presenter
 
 	protected function beforeRender()
 	{
-		$this->template->lang = $this->lang;
+		$this->template->lang = $this->locale;
 		$this->template->setTranslator($this->translator);
 		$this->template->allowedLanguages = $this->languageService->allowedLanguages;
 		$this->template->designSettings = $this->designService->settings;
@@ -184,7 +184,7 @@ abstract class BasePresenter extends Presenter
 	private function setLang()
 	{
 		if ($this->isInstallPresenter()) { // defaultLanguage for some presenters
-			$this->lang = NULL;
+			$this->locale = NULL;
 			return;
 		}
 
@@ -194,14 +194,14 @@ abstract class BasePresenter extends Presenter
 		 * V případě, že není jazyk nastaven ani v uživatelském nastavení, ani URL, pak se detekuje automaticky
 		 */
 		// for identity in session load from settings
-		if ($this->languageService->userLanguage || !$this->lang) {
-			$this->lang = $this->languageService->userLanguage;
+		if ($this->languageService->userLanguage || !$this->locale) {
+			$this->locale = $this->languageService->userLanguage;
 		}
 		// for no identity in session or not setted in identity (detect from browser or default)
-		if (!$this->lang) {
-			$this->lang = $this->languageService->detectedLanguage;
+		if (!$this->locale) {
+			$this->locale = $this->languageService->detectedLanguage;
 		}
-		$this->translator->setLang($this->lang);
+		$this->translator->setLocale($this->locale);
 	}
 
 	// </editor-fold>
@@ -260,7 +260,7 @@ abstract class BasePresenter extends Presenter
 	{
 		if ($this->languageService->isAllowed($newLang)) {
 			$this->languageService->userLanguage = $newLang;
-			$this->redirect('this', ['lang' => $newLang]);
+			$this->redirect('this', ['locale' => $newLang]);
 		} else {
 			$this->flashMessage('Requested language isn\'t supported.', 'warning');
 			$this->redirect('this');

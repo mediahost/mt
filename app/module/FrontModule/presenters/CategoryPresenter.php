@@ -17,7 +17,7 @@ class CategoryPresenter extends BasePresenter
 			$this->flashMessage('Requested category isn\'t exist. Try to choose another from list.', 'warning');
 			$this->redirect('Homepage:');
 		}
-		$category->setCurrentLocale($this->lang);
+		$category->setCurrentLocale($this->locale);
 		if ($category->url !== $url) {
 			$this->redirect('this', ['url' => $category->url]);
 		}
