@@ -3,10 +3,13 @@
 namespace App\FrontModule\Presenters;
 
 use App\BaseModule\Presenters\BasePresenter as BaseBasePresenter;
+use App\Components\Producer\Form\IModelSelectorFactory;
+use App\Components\Producer\Form\ModelSelector;
 use App\Extensions\Products\ProductList;
 use App\Forms\Form;
 use App\Model\Entity\Category;
 use App\Model\Entity\Page;
+use App\Model\Entity\ProducerModel;
 use App\Model\Entity\Product;
 use App\Model\Entity\Sign;
 use App\Model\Entity\Stock;
@@ -17,6 +20,9 @@ use Nette\Utils\ArrayHash;
 
 abstract class BasePresenter extends BaseBasePresenter
 {
+
+	/** @var IModelSelectorFactory @inject */
+	public $iModelSelectorFactory;
 
 	/** @var CategoryRepository */
 	protected $categoryRepo;
@@ -112,6 +118,8 @@ abstract class BasePresenter extends BaseBasePresenter
 		}
 	}
 
+	// <editor-fold desc="forms">
+
 	public function createComponentProducts()
 	{
 		$list = new ProductList();
@@ -155,4 +163,21 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->redirect('Category:search', $values->search);
 	}
 
+	/** @return ModelSelector */
+	public function createComponentModelSelector()
+	{
+		$control = $this->iModelSelectorFactory->create();
+		$control->setAjax(FALSE);
+		$control->onAfterSelect = function ($producer, $line, $model) {
+			if ($model instanceof ProducerModel) {
+				$this->redirect('Category:accessories', $model->id);
+			} else {
+				$this->flashMessage('This model wasn\'t found.', 'warning');
+				$this->redirect('this');
+			}
+		};
+		return $control;
+	}
+
+	// </editor-fold>
 }

@@ -3,17 +3,11 @@
 		{form sortingForm}
 			{? $form->render('begin')}
 			<div class="row list-view-sorting clearfix">
-				<div class="col-md-2 col-sm-2 list-view">
-					<a href="#"><i class="fa fa-th-large"></i></a>
-					<a href="#"><i class="fa fa-th-list"></i></a>
-				</div>
-				<div class="col-md-10 col-sm-10">
-					<div class="pull-right" 
-						 n:foreach="$form->getComponents() as $name => $component" 
-						 n:if="$component instanceof Nette\Forms\Controls\SelectBox">
-						{!=$form->renderer->renderLabel($form[$name])}
-						{input $form[$name]}
-					</div>
+				<div class="pull-right" 
+					 n:foreach="$form->getComponents() as $name => $component" 
+					 n:if="$component instanceof Nette\Forms\Controls\SelectBox">
+					{!=$form->renderer->renderLabel($form[$name])}
+					{input $form[$name]}
 				</div>
 			</div>
 			{? $form->render('end')}
