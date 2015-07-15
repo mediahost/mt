@@ -5,22 +5,8 @@
 	 n:if="$showBrands">
 	<div class="container">
 		<div class="owl-carousel owl-carousel6-brands">
-			{var brands => [
-				'canon',
-				'esprit',
-				'next',
-				'canon',
-				'puma',
-				'zara',
-				'canon',
-				'esprit',
-				'next',
-				'canon',
-				'puma',
-				'zara',
-			]}
-			<a n:href="this" n:foreach="$brands as $brand">
-				<img src="{$basePath}/images/brands/{$brand}.jpg" alt="{$brand}" title="{$brand}">
+			<a n:foreach="$producers as $producer" n:href="Category:producer, $producer->slug">
+				<img src="{$basePath}/foto/{$producer->image|size:169:100}" alt="{$producer}" title="{$producer}">
 			</a>
 		</div>
 	</div>

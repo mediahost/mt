@@ -9,6 +9,7 @@ use App\Extensions\Products\ProductList;
 use App\Forms\Form;
 use App\Model\Entity\Category;
 use App\Model\Entity\Page;
+use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerModel;
 use App\Model\Entity\Product;
 use App\Model\Entity\Sign;
@@ -83,6 +84,7 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->loadTemplateMenu();
 		$this->loadTemplateCategoriesSettings();
 		$this->loadTemplateSigns();
+		$this->loadTemplateProducers();
 	}
 
 	protected function loadTemplateMenu()
@@ -116,6 +118,13 @@ abstract class BasePresenter extends BaseBasePresenter
 			$this->template->newSign = $newSign;
 			$this->template->saleSign = $saleSign;
 		}
+	}
+
+	protected function loadTemplateProducers()
+	{
+		$producerRepo = $this->em->getRepository(Producer::getClassName());
+		$producers = $producerRepo->findAll();
+		$this->template->producers = $producers;
 	}
 
 	// <editor-fold desc="forms">

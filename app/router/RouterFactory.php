@@ -67,6 +67,14 @@ class RouterFactory
 			'model' => NULL,
 		]);
 
+		$frontRouter[] = new Route('producer[/<producer>[/<line>[/<model>]]]', [
+			'presenter' => 'Category',
+			'action' => 'producer',
+			'producer' => NULL,
+			'line' => NULL,
+			'model' => NULL,
+		]);
+
 		$slugs = '[0-9a-z/-]+';
 		$sluggablePresenters = [ // alias => Presenter
 			'c' => 'Category',
