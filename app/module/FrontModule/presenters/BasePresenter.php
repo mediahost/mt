@@ -75,10 +75,10 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->template->showSteps = $this->showSteps;
 		$this->template->priceLevel = $this->priceLevel;
 
-		$this->template->topStocks = $this->stockFacade->getTops();
-		$this->template->bestsellerStocks = $this->stockFacade->getBestSellers();
 		$this->template->newStocks = $this->stockFacade->getNews();
 		$this->template->saleStocks = $this->stockFacade->getSales();
+		$this->template->topStocks = $this->stockFacade->getTops();
+		$this->template->bestsellerStocks = $this->stockFacade->getBestSellers();
 		$this->template->visitedStocks = $this->stockFacade->getLastVisited();
 
 		$this->loadTemplateMenu();
@@ -110,13 +110,19 @@ abstract class BasePresenter extends BaseBasePresenter
 		$signSettings = $this->moduleService->getModuleSettings('signs');
 		if ($signSettings) {
 			$signRepo = $this->em->getRepository(Sign::getClassName());
+			
 			$newSign = $signRepo->find($signSettings->new);
 			$newSign->setCurrentLocale($this->lang);
+			
 			$saleSign = $signRepo->find($signSettings->sale);
 			$saleSign->setCurrentLocale($this->lang);
+			
+			$topSign = $signRepo->find($signSettings->top);
+			$topSign->setCurrentLocale($this->lang);
 
 			$this->template->newSign = $newSign;
 			$this->template->saleSign = $saleSign;
+			$this->template->topSign = $topSign;
 		}
 	}
 
