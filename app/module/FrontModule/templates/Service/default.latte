@@ -64,7 +64,8 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr n:foreach="$model->parameterPrices as $parameterPrice">
+								<tr n:foreach="$model->parameterPrices as $parameterPrice" 
+									n:if="$parameterPrice->price->withoutVat > 0">
 									{var parameter => $parameterPrice->parameter}
 									{? $parameter->setCurrentLocale($lang)}
 									<td class="name">
@@ -86,8 +87,10 @@
 										{_'Contact us:'}
 									</th>
 									<td>
-										<i class="fa fa-envelope-o"></i>
-										servis@mobilnetelefony.sk |
+										<a href="mailto:servis@mobilnetelefony.sk">
+											<i class="fa fa-envelope-o"></i>
+											servis@mobilnetelefony.sk
+										</a> |
 										<i class="fa fa-phone"></i> +421 908 84 84 84
 									</td>
 								</tr>
