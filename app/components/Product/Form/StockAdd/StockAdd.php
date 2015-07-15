@@ -106,7 +106,8 @@ class StockAdd extends StockBase
 
 		$vatRepo = $this->em->getRepository(Vat::getClassName());
 		$vat = $vatRepo->find($values->vat);
-		$this->stock->setPrice($values->price, $vat, $values->with_vat);
+		$this->stock->vat = $vat;
+		$this->stock->setPrice($values->price, NULL, $values->with_vat);
 
 		return $this;
 	}
