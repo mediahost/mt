@@ -25,7 +25,7 @@
 		<!-- BEGIN CONTENT -->
 		<div class="col-md-9 col-sm-7">
 
-            <div class="product-page">
+            <div class="product-page margin-bottom-30">
 				<div class="row">
 					<div class="col-md-6 col-sm-6">
 						<div class="product-main-image">
@@ -52,11 +52,11 @@
 							<div class="availability">
 								{_'Availability'}: 
 								{if $stock->inStore > 10}
-								<strong>{_'In Stock'}</strong>
+									<strong>{_'In Stock'}</strong>
 								{elseif $stock->inStore > 0}
-								<strong>{$stock->inStore} {$product->unit}</strong>
+									<strong>{$stock->inStore} {$product->unit}</strong>
 								{else}
-								<strong>{_'Temporarily Sold Out'}</strong>
+									<strong>{_'Temporarily Sold Out'}</strong>
 								{/if}
 							</div>
 						</div>
@@ -164,9 +164,48 @@
 				</div>
             </div>
 
+			<div class="product-page" n:if="count($product->similars)">
+				<div class="row">
+					<div class="col-md-12 similar-products">
+						<h2>{_'Similar products'}</h2>
+						<div class="owl-carousel owl-carousel4">
+							<div n:foreach="$product->similars as $similar" n:if="$similar->stock">
+								{include product, stock => $similar->stock, product => $similar}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
 		</div>
 		<!-- END CONTENT -->
 
 	</div>
 	<!-- END SIDEBAR & CONTENT -->
 </div>
+{/block}				
+							
+{define product}
+<div class="product-item">
+	<div class="pi-img-wrapper">
+		<img src="{$basePath}/foto/{$product->image|size:'250'}" class="img-responsive" alt="{$product}" />
+		<div>
+			<a href="{$basePath}/foto/{$product->image|size}" 
+			   class="btn btn-default fancybox-button">
+				{_'Zoom'}
+			</a>
+			<a n:href="Product: 'url' => $product->url" 
+			   class="btn btn-default fancybox-fast-view">
+				{_'View'}
+			</a>
+		</div>
+	</div>
+	<h3>
+		<a n:href="Product: 'url' => $product->url">{$product}</a>
+	</h3>
+	<div class="pi-price">{$stock->price|currencyVat}</div>
+	<a n:href="this" class="btn btn-default add2cart">{_'Add to cart'}</a>
+	<div n:if="$product->hasSign($newSign)" class="sticker sticker-new"></div>
+	<div n:if="$product->hasSign($saleSign)" class="sticker sticker-sale"></div>
+</div>
+{/define}
