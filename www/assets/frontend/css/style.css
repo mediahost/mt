@@ -868,6 +868,14 @@ Brands
 .brands .owl-buttons .owl-next:hover {
     background: #fff url(../img/fa-angle-brands.png) no-repeat -249px -217px;
 }
+.brands .owl-item {
+	display: table;
+	height: 100px;
+}
+.brands .owl-item a {
+	display: table-cell;
+	vertical-align: middle;
+}
 
 /***
 steps block and steps block elements
