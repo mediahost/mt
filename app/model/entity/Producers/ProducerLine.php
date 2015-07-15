@@ -4,11 +4,12 @@ namespace App\Model\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Model;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Model\Repository\ProducerLineRepository")
  *
  * @property string $name
  * @property Producer $producer
@@ -21,6 +22,7 @@ class ProducerLine extends BaseEntity implements IProducer
 	const ID = 'l';
 
 	use Identifier;
+	use Model\Sluggable\Sluggable;
 
 	/** @ORM\Column(type="string", length=256) */
 	protected $name;
@@ -72,6 +74,11 @@ class ProducerLine extends BaseEntity implements IProducer
 	public function isNew()
 	{
 		return $this->id === NULL;
+	}
+
+	protected function getSluggableFields()
+	{
+		return ['name'];
 	}
 
 }

@@ -22,6 +22,7 @@ class ProducerModel extends BaseTranslatable implements IProducer
 	const ID = 'm';
 
 	use Model\Translatable\Translatable;
+	use Model\Sluggable\Sluggable;
 
 	/** @ORM\Column(type="string", length=256) */
 	protected $name;
@@ -90,6 +91,11 @@ class ProducerModel extends BaseTranslatable implements IProducer
 	public function isNew()
 	{
 		return $this->id === NULL;
+	}
+
+	protected function getSluggableFields()
+	{
+		return ['name'];
 	}
 
 }
