@@ -3,6 +3,7 @@
 namespace App;
 
 use GettextTranslator\Gettext;
+use Kdyby\Translation\ITranslator;
 
 /**
  * String with tags to replace
@@ -52,7 +53,7 @@ class TaggedString
 		return $this;
 	}
 	
-	public function setTranslator(Gettext $translator)
+	public function setTranslator(ITranslator $translator)
 	{
 		$this->translator = $translator;
 		return $this;
