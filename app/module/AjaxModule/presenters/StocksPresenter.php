@@ -7,13 +7,13 @@ use App\Model\Entity\Stock;
 class StocksPresenter extends BasePresenter
 {
 
-	public function actionFindByFulltext($lang, $text, $page = 1, $perPage = 10)
+	public function actionFindByFulltext($text, $page = 1, $perPage = 10)
 	{
 		$offset = ($page - 1) * $perPage;
 		$limit = $offset + $perPage;
 
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
-		$stocks = $stockRepo->findByName($text, [$lang, $this->languageService->defaultLanguage], $limit, $offset, $totalCount);
+		$stocks = $stockRepo->findByName($text, [$this->locale, $this->languageService->defaultLanguage], $limit, $offset, $totalCount);
 
 		$this->addRawData('total_count', $totalCount ? $totalCount : count($stocks));
 
@@ -21,7 +21,7 @@ class StocksPresenter extends BasePresenter
 		foreach ($stocks as $stock) {
 			/* @var $stock Stock */
 			$product = $stock->product;
-			$product->setCurrentLocale($lang);
+			$product->setCurrentLocale($this->locale);
 			$price = $stock->getPrice($this->priceLevel);
 			$item = [];
 			$item['id'] = $stock->id;

@@ -7,20 +7,20 @@ use App\Model\Entity\Product;
 class ProductsPresenter extends BasePresenter
 {
 
-	public function actionFindByName($lang, $text, $page = 1, $perPage = 10)
+	public function actionFindByName($text, $page = 1, $perPage = 10)
 	{
 		$offset = ($page - 1) * $perPage;
 		$limit = $offset + $perPage;
 
 		$productRepo = $this->em->getRepository(Product::getClassName());
-		$products = $productRepo->findByName($text, [$lang, $this->languageService->defaultLanguage], $limit, $offset, $totalCount);
+		$products = $productRepo->findByName($text, [$this->locale, $this->languageService->defaultLanguage], $limit, $offset, $totalCount);
 
 		$this->addRawData('total_count', $totalCount ? $totalCount : count($products));
 
 		$items = [];
 		foreach ($products as $product) {
 			/* @var $product Product */
-			$product->setCurrentLocale($lang);
+			$product->setCurrentLocale($this->locale);
 			$item = [];
 			$item['id'] = $product->id;
 			$item['text'] = (string) $product;

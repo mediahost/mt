@@ -117,7 +117,7 @@ var UITree = function () {
 			var parent = data.parent;
 			var request = $.get(
 					basePath + '/ajax/categories/create-category',
-					{name: node.text, parent: parent, lang: lang}
+					{name: node.text, parent: parent, locale: lang}
 			).success(function (e) {
 				if (e.success && e.success.id) {
 					instance.set_id(node, e.success.id);
@@ -134,7 +134,7 @@ var UITree = function () {
 			var node = data.node;
 			var request = $.get(
 					basePath + '/ajax/categories/rename-category',
-					{id: node.id, name: node.text, lang: lang}
+					{id: node.id, name: node.text, locale: lang}
 			).success(function (e) {
 				if (e.success && e.success.id) {
 					instance.set_text(node, e.success.name);
@@ -357,7 +357,7 @@ var UITree = function () {
 			var parent = data.parent;
 			var request = $.get(
 					basePath + '/ajax/producers/create-producer',
-					{name: node.text, parent: parent, lang: lang}
+					{name: node.text, parent: parent, locale: lang}
 			).success(function (e) {
 				if (e.success && e.success.id) {
 					instance.set_id(node, e.success.id);
@@ -374,7 +374,7 @@ var UITree = function () {
 			var node = data.node;
 			var request = $.get(
 					basePath + '/ajax/producers/rename-producer',
-					{id: node.id, name: node.text, lang: lang}
+					{id: node.id, name: node.text, locale: lang}
 			).success(function (e) {
 				if (e.success && e.success.id) {
 					instance.set_text(node, e.success.name);
