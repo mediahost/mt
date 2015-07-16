@@ -46,7 +46,7 @@ var ComponentsDropdowns = function () {
 					delay: 250,
 					data: function (params) {
 						return {
-							lang: lang,
+							locale: lang,
 							text: params.term,
 							page: params.page,
 							perPage: 30
