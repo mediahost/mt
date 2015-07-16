@@ -25,8 +25,9 @@ class StockQuantity extends StockBase
 		$this->checkEntityExistsBeforeRender();
 
 		$form = new Form();
-		$form->setTranslator($this->translator);
-		$form->setRenderer(new MetronicHorizontalFormRenderer());
+		$form->setTranslator($this->translator)
+			->setRenderer(new MetronicHorizontalFormRenderer());
+		$form->getElementPrototype()->class('ajax');
 
 		$unitRepo = $this->em->getRepository(Unit::getClassName());
 		$defaultUnit = $unitRepo->find(1);

@@ -251,7 +251,12 @@ class ProductsPresenter extends BasePresenter
 			'type' => $this->translator->translate('Product'), 'name' => (string) $stock
 		]);
 		$this->flashMessage($message, 'success');
-		$this->redirect('edit', $stock->id);
+		
+		if ($this->isAjax()) {
+			$this->redrawControl();
+		} else {
+			$this->redirect('edit', $stock->id);			
+		}
 	}
 
 	/** @return CsvStockImport */
