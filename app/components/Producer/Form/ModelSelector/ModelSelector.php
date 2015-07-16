@@ -42,13 +42,9 @@ class ModelSelector extends BaseControl
 		$form->getElementPrototype()->class = [$this->isAjax ? 'ajax' : '', 'modelSelector'];
 		$form->getElementPrototype()->addAttributes(['data-target-loading' => '#loaded-content']);
 
-		$producerRepo = $this->em->getRepository(Producer::getClassName());
-		$lineRepo = $this->em->getRepository(ProducerLine::getClassName());
-		$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
-
-		$allProducers = $producerRepo->findPairs('name');
-		$allLines = $lineRepo->findPairs('name');
-		$allModels = $modelRepo->findPairs('name');
+		$allProducers = $this->producerFacade->getProducersList();
+		$allLines = $this->producerFacade->getLinesList();
+		$allModels = $this->producerFacade->getModelsList();
 
 		$form->addSelect2('producer', 'Producer', $allProducers)
 				->setPrompt('Select some producer');
