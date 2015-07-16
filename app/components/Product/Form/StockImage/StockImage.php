@@ -23,8 +23,9 @@ class StockImage extends StockBase
 		$this->checkEntityExistsBeforeRender();
 
 		$form = new Form();
-		$form->setTranslator($this->translator);
-		$form->setRenderer(new MetronicFormRenderer());
+		$form->setTranslator($this->translator)
+			->setRenderer(new MetronicFormRenderer());
+		$form->getElementPrototype()->class('ajax');
 
 		$imageSizeX = 200;
 		$imageSizeY = 150;
