@@ -36,8 +36,9 @@ class StockPrice extends StockBase
 		$this->checkEntityExistsBeforeRender();
 
 		$form = new Form();
-		$form->setTranslator($this->translator);
-		$form->setRenderer(new MetronicHorizontalFormRenderer());
+		$form->setTranslator($this->translator)
+			->setRenderer(new MetronicHorizontalFormRenderer());
+		$form->getElementPrototype()->class('ajax');
 
 		$groupRepo = $this->em->getRepository(Group::getClassName());
 		$groups = $groupRepo->findAll();

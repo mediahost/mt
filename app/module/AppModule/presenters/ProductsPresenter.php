@@ -247,7 +247,12 @@ class ProductsPresenter extends BasePresenter
 	{
 		$message = new TaggedString('Product \'%s\' was successfully saved.', (string) $stock);
 		$this->flashMessage($message, 'success');
-		$this->redirect('edit', $stock->id);
+		
+		if ($this->isAjax()) {
+			$this->redrawControl();
+		} else {
+			$this->redirect('edit', $stock->id);			
+		}
 	}
 
 	/** @return CsvStockImport */
