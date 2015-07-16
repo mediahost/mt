@@ -32,7 +32,7 @@ class Required extends BaseControl
 				->setAttribute('placeholder', 'E-mail')
 				->setRequired('Please enter your e-mail.')
 				->addRule(Form::EMAIL, 'E-mail has not valid format.')
-				->addServerRule([$this, 'validateMail'], $this->translator->translate('%s is already registered.'))
+				->addServerRule([$this, 'validateMail'], $this->translator->translate('%mail% is already registered.'))
 				->setOption('description', 'for example: example@domain.com');
 
 		$form->addSubmit('continue', 'Continue');

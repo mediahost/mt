@@ -3,7 +3,7 @@
 {block breadcrumbItems}
 <li class="active">
 	{ifset $activeProducer}
-		<span>{_'%s for %s', NULL, $page, $activeProducer}</span>
+		<span>{_'%type% for %name%', NULL, ['type' => $page, 'name' => $activeProducer}</span>
 	{else}
 		<span>{$page}</span>
 	{/ifset}

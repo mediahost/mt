@@ -58,7 +58,8 @@ class SettingsPresenter extends BasePresenter
 	{
 		$control = $this->iRateFormFactory->create();
 		$control->onAfterSave = function () {
-			$this->flashMessage('Rates was successfully saved.', 'success');
+			$message = $this->translator->translate('Rates was successfully saved.');
+			$this->flashMessage($message, 'success');
 			$this->redirect('default');
 		};
 		return $control;
@@ -71,7 +72,8 @@ class SettingsPresenter extends BasePresenter
 		$control->setUnits($this->unitRepo->findAll());
 		$control->setLang($this->locale);
 		$control->onAfterSave = function () {
-			$this->flashMessage('Units was successfully saved.', 'success');
+			$message = $this->translator->translate('Units was successfully saved.');
+			$this->flashMessage($message, 'success');
 			$this->redirect('units');
 		};
 		return $control;

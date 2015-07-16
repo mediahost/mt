@@ -8,7 +8,6 @@ use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use App\Model\Facade;
 use App\Model\Storage;
-use App\TaggedString;
 
 class SignPresenter extends BasePresenter
 {
@@ -96,10 +95,12 @@ class SignPresenter extends BasePresenter
 		if ($registration) {
 			$userRole = $this->roleFacade->findByName(Role::USER);
 			$user = $this->userFacade->createFromRegistration($registration, $userRole);
-			$this->flashMessage('Your e-mail has been seccessfully verified!', 'success');
+			$message = $this->translator->translate('Your e-mail has been seccessfully verified!');
+			$this->flashMessage($message, 'success');
 			$this->onVerify($this, $user);
 		} else {
-			$this->flashMessage('Verification token is incorrect.', 'warning');
+			$message = $this->translator->translate('Verification token is incorrect.');
+			$this->flashMessage($message, 'warning');
 			$this->redirect('in');
 		}
 	}
@@ -140,11 +141,12 @@ class SignPresenter extends BasePresenter
 			$message->addTo($user->mail);
 			$message->send();
 
-			$this->flashMessage('Recovery link has been sent to your mail.');
+			$flash = $this->translator->translate('Recovery link has been sent to your mail.');
+			$this->flashMessage($flash);
 			$this->redirect(':Front:Sign:in');
 		};
 		$control->onMissingUser[] = function ($mail) {
-			$message = new TaggedString('We do not register any user with mail \'%s\'.', $mail);
+			$message = $this->translator->translate('We do not register any user with mail \'%mail%\'.', NULL, ['mail' => $mail]);
 			$this->flashMessage($message, 'warning');
 			$this->redirect(':Front:Sign:lostPassword');
 		};
@@ -156,7 +158,8 @@ class SignPresenter extends BasePresenter
 	{
 		$control = $this->iRecoveryFactory->create();
 		$control->onFailToken[] = function () {
-			$this->flashMessage('Token to recovery your password is no longer active. Please request new one.', 'info');
+			$message = $this->translator->translate('Token to recovery your password is no longer active. Please request new one.');
+			$this->flashMessage($message, 'info');
 			$this->redirect(':Front:Sign:lostPassword');
 		};
 		return $control;

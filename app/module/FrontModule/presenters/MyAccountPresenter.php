@@ -9,7 +9,6 @@ use App\Components\Auth\SetPassword;
 use App\Model\Entity;
 use App\Model\Facade\CantDeleteUserException;
 use App\Model\Facade\UserFacade;
-use App\TaggedString;
 
 class MyAccountPresenter extends BasePresenter
 {
@@ -93,10 +92,12 @@ class MyAccountPresenter extends BasePresenter
 		try {
 			$this->userFacade->deleteById($this->user->id);
 			$this->user->logout();
-			$this->flashMessage('Your account has been deleted', 'success');
+			$message = $this->translator->translate('Your account has been deleted');
+			$this->flashMessage($message, 'success');
 			$this->redirect(":Front:Homepage:");
 		} catch (CantDeleteUserException $ex) {
-			$this->flashMessage('You can\'t delete account, because you are only one admin for your company.', 'danger');
+			$message = $this->translator->translate('You can\'t delete account, because you are only one admin for your company.');
+			$this->flashMessage($message, 'danger');
 			$this->redirect("this");
 		}
 	}
@@ -109,7 +110,8 @@ class MyAccountPresenter extends BasePresenter
 		$control = $this->iSetPasswordFactory->create();
 		$control->setUser($this->user);
 		$control->onSuccess[] = function () {
-			$this->flashMessage('Password has been successfuly set!', 'success');
+			$message = $this->translator->translate('Password has been successfuly set!');
+			$this->flashMessage($message, 'success');
 			$this->redirect('this');
 		};
 		return $control;
@@ -123,34 +125,35 @@ class MyAccountPresenter extends BasePresenter
 		$control->setUser($userDao->find($this->user->id));
 		$control->setAppActivateRedirect($this->link('password'));
 		$control->onConnect[] = function ($type) {
-			$message = new TaggedString('%s was connected.', $type);
+			$message = $this->translator->translate('%name% was connected.', NULL, ['name' => $type]);
 			$this->flashMessage($message, 'success');
 			if (!$this->isAjax()) {
 				$this->redirect('this');
 			}
 		};
 		$control->onDisconnect[] = function (Entity\User $user, $type) {
-			$message = new TaggedString('%s was disconnected.', $type);
+			$message = $this->translator->translate('%name% was disconnected.', NULL, ['name' => $type]);
 			$this->flashMessage($message, 'success');
 			if (!$this->isAjax()) {
 				$this->redirect('this');
 			}
 		};
 		$control->onLastConnection[] = function () {
-			$this->flashMessage('Last login method is not possible deactivate.', 'danger');
+			$message = $this->translator->translate('Last login method is not possible deactivate.');
+			$this->flashMessage($message, 'danger');
 			if (!$this->isAjax()) {
 				$this->redirect('this');
 			}
 		};
 		$control->onInvalidType[] = function ($type) {
-			$message = new TaggedString('We can\'t find \'%s\' to disconnect.', $type);
+			$message = $this->translator->translate('We can\'t find \'%name%\' to disconnect.', NULL, ['name' => $type]);
 			$this->flashMessage($message, 'danger');
 			if (!$this->isAjax()) {
 				$this->redirect('this');
 			}
 		};
 		$control->onUsingConnection[] = function ($type) {
-			$message = new TaggedString('Logged %s account is using by another account.', $type);
+			$message = $this->translator->translate('Logged %name% account is using by another account.', NULL, ['name' => $type]);
 			$this->flashMessage($message, 'danger');
 			if (!$this->isAjax()) {
 				$this->redirect('this');

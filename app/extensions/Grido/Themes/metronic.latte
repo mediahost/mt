@@ -203,7 +203,7 @@
 								<div class="col-md-3 col-sm-12">
 									<div n:block="count" class="count form-inline text-right">
 										<span class="text">
-											{= sprintf($template->translate('Grido.Items'), $paginator->getCountBegin(), $paginator->getCountEnd(), $control->getCount())}
+											{_'Grido.Items', NULL, ['begin' => $paginator->getCountBegin(), 'end' => $paginator->getCountEnd(), 'count' => $control->getCount()]}
 										</span>
 										{input count, class => 'form-control input-xsmall'}
 										{formContainer buttons}

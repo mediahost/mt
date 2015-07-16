@@ -9,7 +9,8 @@ class ProductPresenter extends BasePresenter
 	{
 		$product = $this->productRepo->findOneByUrl($url);
 		if (!$product) {
-			$this->flashMessage('Requested product isn\'t exist. Try to choose another from list.', 'warning');
+			$message = $this->translator->translate('Requested product isn\'t exist. Try to choose another from list.');
+			$this->flashMessage($message, 'warning');
 			$this->redirect('Homepage:');
 		}
 		$product->setCurrentLocale($this->locale);
@@ -25,7 +26,8 @@ class ProductPresenter extends BasePresenter
 	{
 		$product = $this->productRepo->find($id);
 		if (!$product) {
-			$this->flashMessage('Requested product isn\'t exist. Try to choose another from list.', 'warning');
+			$message = $this->translator->translate('Requested product isn\'t exist. Try to choose another from list.');
+			$this->flashMessage($message, 'warning');
 			$this->redirect('Homepage:');
 		}
 		$product->setCurrentLocale($this->locale);

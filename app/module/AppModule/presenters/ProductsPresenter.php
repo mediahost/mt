@@ -28,7 +28,6 @@ use App\Components\Product\Grid\IStocksGridFactory;
 use App\Components\Product\Grid\StocksGrid;
 use App\Model\Entity\Image;
 use App\Model\Entity\Stock;
-use App\TaggedString;
 use Kdyby\Doctrine\EntityRepository;
 
 class ProductsPresenter extends BasePresenter
@@ -112,7 +111,8 @@ class ProductsPresenter extends BasePresenter
 	{
 		$this->stockEntity = $this->stockRepo->find($id);
 		if (!$this->stockEntity) {
-			$this->flashMessage('This product wasn\'t found.', 'warning');
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Product')]);
+			$this->flashMessage($message, 'warning');
 			$this->redirect('default');
 		} else {
 			$this->stockEntity->product->setCurrentLocale($this->locale);
@@ -144,9 +144,11 @@ class ProductsPresenter extends BasePresenter
 		$image = $imageRepo->find($imageId);
 		if ($image && $this->stockEntity->product->hasOtherImage($image)) {
 			$imageRepo->delete($image);
-			$this->flashMessage('Image was successfully deleted', 'success');
+			$message = $this->translator->translate('successfullyDeleted', NULL, ['name' => $this->translator->translate('Image')]);
+			$this->flashMessage($message, 'success');
 		} else {
-			$this->flashMessage('This image wasn\'t found for this product.', 'warning');
+			$message = $this->translator->translate('This image wasn\'t found for this product.');
+			$this->flashMessage($message, 'warning');
 		}
 		$this->redirect('this');
 	}
@@ -245,7 +247,9 @@ class ProductsPresenter extends BasePresenter
 
 	public function afterStockSave(Stock $stock)
 	{
-		$message = new TaggedString('Product \'%s\' was successfully saved.', (string) $stock);
+		$message = $this->translator->translate('successfullySaved', NULL, [
+			'type' => $this->translator->translate('Product'), 'name' => (string) $stock
+		]);
 		$this->flashMessage($message, 'success');
 		$this->redirect('edit', $stock->id);
 	}
@@ -258,11 +262,10 @@ class ProductsPresenter extends BasePresenter
 		$control->onSuccess = function (array $importedStocks) {
 			$count = count($importedStocks);
 			if ($count) {
-				$message = new TaggedString('%s product was successfully updated.', $count);
-				$message->setForm($count);
+				$message = $this->translator->translate('%count% product was successfully updated.', $count, ['count' => $count]);
 				$type = 'success';
 			} else {
-				$message = 'No product was updated';
+				$message = $this->translator->translate('No product was updated');
 				$type = 'warning';
 			}
 			$this->flashMessage($message, $type);

@@ -55,8 +55,8 @@ class ModelParametersGrid extends BaseControl
 		$grid->addActionHref('deleteParameter', 'Delete')
 						->setIcon('fa fa-trash-o')
 						->setConfirm(function($item) {
-							$message = $this->translator->translate('Are you sure you want to delete \'%s\'?');
-							return sprintf($message, (string) $item);
+							$message = $this->translator->translate('Are you sure you want to delete \'%name%\'?', NULL, ['name' => (string) $item]);
+							return $message;
 						})
 				->elementPrototype->class[] = 'red';
 
