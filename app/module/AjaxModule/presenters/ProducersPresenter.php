@@ -182,6 +182,10 @@ class ProducersPresenter extends BasePresenter
 			case ProducerModel::ID:
 				$repo = $this->em->getRepository(ProducerModel::getClassName());
 				break;
+			default:
+				$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('Type')]);
+				$this->setError($message);
+				break;
 		}
 
 		try {
