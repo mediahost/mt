@@ -51,7 +51,7 @@ class MetronicHorizontalFormRenderer extends MetronicFormRenderer
 	{
 		parent::customizeInitedForm($form);
 
-		$form->getElementPrototype()->class('form-horizontal');
+		$form->getElementPrototype()->class('form-horizontal', TRUE);
 
 		$usedPrimary = FALSE;
 		foreach ($form->getControls() as $control) {
