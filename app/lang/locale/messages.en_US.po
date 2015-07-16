@@ -4,6 +4,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: en_US\n"
 
+msgid "Czech"
+msgstr "Czech"
+
+msgid "Slovak"
+msgstr "Slovak"
+
+msgid "English"
+msgstr "English"
+
 msgid "Loading..."
 msgstr "Loading..."
 
