@@ -108,7 +108,7 @@ var ComponentsDropdowns = function () {
 			datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
 			queryTokenizer: Bloodhound.tokenizers.whitespace,
 			remote: {
-				url: basePath + '/ajax/stocks/find-by-fulltext?text=%QUERY&currency=' + currencyName + '&lang=' + lang,
+				url: basePath + '/ajax/stocks/find-by-fulltext?text=%QUERY&currency=' + currencyName + '&locale=' + lang,
 				wildcard: '%QUERY',
 				transform: transformFinded
 			}
