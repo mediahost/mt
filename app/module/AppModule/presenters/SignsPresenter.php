@@ -7,7 +7,6 @@ use App\Components\Sign\Form\SignEdit;
 use App\Components\Sign\Grid\ISignsGridFactory;
 use App\Components\Sign\Grid\SignsGrid;
 use App\Model\Entity\Sign;
-use App\TaggedString;
 use Exception;
 use Kdyby\Doctrine\EntityRepository;
 
@@ -67,7 +66,8 @@ class SignsPresenter extends BasePresenter
 	{
 		$this->signEntity = $this->signRepo->find($id);
 		if (!$this->signEntity) {
-			$this->flashMessage('This sign wasn\'t found.', 'warning');
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Sign')]);
+			$this->flashMessage($message, 'warning');
 			$this->redirect('default');
 		} else {
 			$this['signForm']->setSign($this->signEntity);
@@ -88,13 +88,16 @@ class SignsPresenter extends BasePresenter
 	{
 		$group = $this->signRepo->find($id);
 		if (!$group) {
-			$this->flashMessage('Sign wasn\'t found.', 'danger');
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Sign')]);
+			$this->flashMessage($message, 'danger');
 		} else {
 			try {
 				$this->signRepo->delete($group);
-				$this->flashMessage('Sign was deleted.', 'success');
+				$message = $this->translator->translate('successfullyDeleted', NULL, ['name' => $this->translator->translate('Sign')]);
+				$this->flashMessage($message, 'success');
 			} catch (Exception $e) {
-				$this->flashMessage('This sign can\'t be deleted.', 'danger');
+				$message = $this->translator->translate('cannotDelete', NULL, ['name' => $this->translator->translate('Sign')]);
+				$this->flashMessage($message, 'danger');
 			}
 		}
 		$this->redirect('default');
@@ -108,7 +111,9 @@ class SignsPresenter extends BasePresenter
 		$control = $this->iSignEditFactory->create();
 		$control->setLang($this->locale);
 		$control->onAfterSave = function (Sign $savedSign) {
-			$message = new TaggedString('Sign \'%s\' was successfully saved.', (string) $savedSign);
+			$message = $this->translator->translate('successfullySaved', NULL, [
+				'type' => $this->translator->translate('Sign'), 'name' => (string) $savedSign
+			]);
 			$this->flashMessage($message, 'success');
 			$this->redirect('default');
 		};

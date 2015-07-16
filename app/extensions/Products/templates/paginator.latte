@@ -2,7 +2,7 @@
 	{if count($stocks)}
 		{var targetSelector => '#snippet-products-productPaginator'}
 		<div n:block="count" class="col-md-4 col-sm-4 items-info">
-			{_'Items %s to %s of %s total', NULL, $paginator->countBegin, $paginator->countEnd, $paginator->itemCount}
+			{_'Items %begin% to %end% of %count% total', NULL, ['begin' => $paginator->countBegin, 'end' => $paginator->countEnd, 'count' => $paginator->itemCount]}
 		</div>
 		<div n:block="paginator" class="col-md-8 col-sm-8" n:if="count($paginator->getSteps()) > 1">
 			<ul class="pagination pull-right">

@@ -11,7 +11,6 @@ use App\Model\Entity\ModelParameter;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
-use App\TaggedString;
 use Nette\Utils\Strings;
 
 class ProducersPresenter extends BasePresenter
@@ -59,7 +58,8 @@ class ProducersPresenter extends BasePresenter
 					$repo = $this->em->getRepository(ProducerModel::getClassName());
 					break;
 				default:
-					$this->flashMessage('Wrong ID format.', 'warning');
+					$message = $this->translator->translate('Wrong ID format.');
+					$this->flashMessage($message, 'warning');
 					$this->redirect('default');
 					break;
 			}
@@ -67,7 +67,7 @@ class ProducersPresenter extends BasePresenter
 		if (isset($repo)) {
 			$this->entity = $repo->find($itemId);
 			if (!$this->entity) {
-				$message = new TaggedString('This %s wasn\'t found.', $this->getEntityTypeName());
+				$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->getEntityTypeName()]);
 				$this->flashMessage($message, 'warning');
 				$this->redirect('default');
 			} else {
@@ -129,7 +129,8 @@ class ProducersPresenter extends BasePresenter
 		$parameterRepo = $this->em->getRepository(ModelParameter::getClassName());
 		$this->parameter = $parameterRepo->find($id);
 		if (!$this->parameter) {
-			$this->flashMessage('This parameter wasn\'t found.', 'warning');
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Parameter')]);
+			$this->flashMessage($message, 'warning');
 			$this->redirect('default');
 		} else {
 			$this['parameterForm']->setParameter($this->parameter);
@@ -151,13 +152,16 @@ class ProducersPresenter extends BasePresenter
 		$parameterRepo = $this->em->getRepository(ModelParameter::getClassName());
 		$this->parameter = $parameterRepo->find($id);
 		if (!$this->parameter) {
-			$this->flashMessage('Parameter wasn\'t found.', 'danger');
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Parameter')]);
+			$this->flashMessage($message, 'danger');
 		} else {
 			try {
 				$parameterRepo->delete($this->parameter);
-				$this->flashMessage('Parameter was deleted.', 'success');
+				$message = $this->translator->translate('successfullyDeleted', NULL, ['name' => $this->translator->translate('Parameter')]);
+				$this->flashMessage($message, 'success');
 			} catch (Exception $e) {
-				$this->flashMessage('This Parameter can\'t be deleted.', 'danger');
+				$message = $this->translator->translate('cannotDelete', NULL, ['name' => $this->translator->translate('Parameter')]);
+				$this->flashMessage($message, 'danger');
 			}
 		}
 		$this->redirect('default');
@@ -185,7 +189,9 @@ class ProducersPresenter extends BasePresenter
 		$control->setLang($this->locale);
 		$control->onAfterSave = function ($saved, $type, $addNext) {
 			$typeName = Strings::firstUpper($this->getEntityTypeName($type));
-			$message = new TaggedString($typeName . ' \'%s\' was successfully saved.', (string) $saved);
+			$message = $this->translator->translate('successfullySaved', NULL, [
+				'type' => $this->translator->translate($typeName), 'name' => (string) $saved
+			]);
 			$this->flashMessage($message, 'success');
 			if ($addNext) {
 				$this->redirect('add');
@@ -202,7 +208,9 @@ class ProducersPresenter extends BasePresenter
 		$control = $this->iModelParameterEditFactory->create();
 		$control->setLang($this->locale);
 		$control->onAfterSave = function (ModelParameter $saved) {
-			$message = new TaggedString('Parameter \'%s\' was successfully saved.', (string) $saved);
+			$message = $this->translator->translate('successfullySaved', NULL, [
+				'type' => $this->translator->translate('Parameter'), 'name' => (string) $saved
+			]);
 			$this->flashMessage($message, 'success');
 			$this->redirect('default');
 		};

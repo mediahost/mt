@@ -5,7 +5,6 @@ namespace App\AppModule\Presenters;
 use App\Components\Category\Form\CategoryEdit;
 use App\Components\Category\Form\ICategoryEditFactory;
 use App\Model\Entity\Category;
-use App\TaggedString;
 
 class CategoriesPresenter extends BasePresenter
 {
@@ -27,7 +26,8 @@ class CategoriesPresenter extends BasePresenter
 			$categoryRepo = $this->em->getRepository(Category::getClassName());
 			$this->category = $categoryRepo->find($id);
 			if (!$this->category) {
-				$this->flashMessage('Category wasn\'t find', 'warning');
+				$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Category')]);
+				$this->flashMessage($message, 'warning');
 				$this->redirect('default');
 			}
 			$this->category->setCurrentLocale($this->locale);
@@ -62,7 +62,9 @@ class CategoriesPresenter extends BasePresenter
 		$control = $this->iCategoryEditFactory->create();
 		$control->setLang($this->locale);
 		$control->onAfterSave = function (Category $savedCategory, $addNext) {
-			$message = new TaggedString('Category \'%s\' was successfully saved.', (string) $savedCategory);
+			$message = $this->translator->translate('successfullySaved', NULL, [
+				'type' => $this->translator->translate('Category'), 'name' => (string) $savedCategory
+			]);
 			$this->flashMessage($message, 'success');
 			if ($addNext) {
 				$this->redirect('add');

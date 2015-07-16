@@ -26,11 +26,11 @@ class StockSeo extends StockBase
 		$form->addText('url', 'Url')
 				->setAttribute('placeholder', $product->slug)
 				->addCondition(Form::FILLED)
-				->addRule(Form::MIN_LENGTH, 'Url must have %s character at least', 5);
+				->addRule(Form::MIN_LENGTH, 'Url must have %count% character at least', 5);
 		$form->addText('title', 'Title')
 				->setAttribute('placeholder', $product->name)
 				->addCondition(Form::FILLED)
-				->addRule(Form::MIN_LENGTH, 'Title must have %s character at least', 5);
+				->addRule(Form::MIN_LENGTH, 'Title must have %count% character at least', 5);
 		$form->addTextArea('keywords', 'Keywords');
 		$form->addTextArea('description', 'Description')
 				->setAttribute('placeholder', $product->perex);

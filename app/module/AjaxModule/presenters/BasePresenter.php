@@ -74,7 +74,7 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	protected function setError($message)
 	{
-		$this->data['error'] = $this->translator->translate($message);
+		$this->data['error'] = $message;
 		return $this;
 	}
 

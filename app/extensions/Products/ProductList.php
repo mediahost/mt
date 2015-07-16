@@ -682,7 +682,8 @@ class ProductList extends Control
 		try {
 			$this->addSorting($this->sort);
 		} catch (InvalidArgumentException $exc) {
-			$this->flashMessage('This sorting method isn\t supported.', 'warning');
+			$message = $this->translator->translate('This sorting method isn\'t supported.');
+			$this->flashMessage($message, 'warning');
 		}
 
 		$orderBy = new OrderBy();

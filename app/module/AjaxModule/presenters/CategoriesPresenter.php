@@ -43,7 +43,8 @@ class CategoriesPresenter extends BasePresenter
 		$categoryRepo = $this->em->getRepository(Category::getClassName());
 
 		if (empty($name)) {
-			$this->setError('Name can\'t be empty.');
+			$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('Name')]);
+			$this->setError($message);
 			return;
 		}
 
@@ -53,7 +54,8 @@ class CategoriesPresenter extends BasePresenter
 		if ($parentId) {
 			$parent = $categoryRepo->find($parentId);
 			if (!$parent) {
-				$this->setError('Parent category wasn\'t find.');
+				$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Parent category')]);
+				$this->setError($message);
 				return;
 			}
 			$category->parent = $parent;
@@ -75,11 +77,13 @@ class CategoriesPresenter extends BasePresenter
 		$categoryRepo = $this->em->getRepository(Category::getClassName());
 
 		if (empty($name)) {
-			$this->setError('Name can\'t be empty.');
+			$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('Name')]);
+			$this->setError($message);
 			return;
 		}
 		if (empty($lang)) {
-			$this->setError('Lang can\'t be empty.');
+			$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('Lang')]);
+			$this->setError($message);
 			return;
 		}
 
@@ -92,7 +96,8 @@ class CategoriesPresenter extends BasePresenter
 			$categoryRepo->save($category);
 			$this->addData('name', $category->translate($lang)->name);
 		} catch (ORMException $e) {
-			$this->setError('ID can\'t be empty.');
+			$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('ID')]);
+			$this->setError($message);
 		}
 	}
 
@@ -109,15 +114,18 @@ class CategoriesPresenter extends BasePresenter
 			/* @var $category Category */
 			$category = $categoryRepo->find($id);
 			if (!$category) {
-				$this->setError('Category wasn\'t find.');
+				$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Category')]);
+				$this->setError($message);
 				return;
 			}
 			$categoryRepo->delete($category);
 			$this->addData('id', $category->id);
 		} catch (ORMException $e) {
-			$this->setError('ID can\'t be empty.');
+			$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('ID')]);
+			$this->setError($message);
 		} catch (DBALException $e) {
-			$this->setError('Category can\'t be deleted.');
+			$message = $this->translator->translate('cannotDelete', NULL, ['name' => $this->translator->translate('Category')]);
+			$this->setError($message);
 		}
 	}
 

@@ -12,7 +12,8 @@ class SignOut extends BaseControl
 	public function handleSignOut()
 	{
 		$this->presenter->user->logout();
-		$this->presenter->flashMessage('You have been successfuly signed out.', 'success');
+		$message = $this->translator->translate('You have been successfuly signed out.');
+		$this->presenter->flashMessage($message, 'success');
 		$this->presenter->redirect(self::REDIRECT_AFTER_LOGOUT);
 	}
 

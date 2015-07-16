@@ -15,10 +15,12 @@ class DesignPresenter extends BasePresenter
 				$this->designService->color = $color;
 				$this->addData('color', $color);
 			} else {
-				$this->setError('This color isn\'t supported.');
+				$message = $this->translator->translate('This color isn\'t supported.');
+				$this->setError($message);
 			}
 		} else {
-			$this->setError('You aren\'logged in.');
+			$message = $this->translator->translate('You aren\'t logged in.');
+			$this->setError($message);
 		}
 	}
 
@@ -44,7 +46,8 @@ class DesignPresenter extends BasePresenter
 			$this->addData('sidebarMenuLight', $this->designService->settings->sidebarMenuLight);
 			$this->addData('sidebarMenuHover', $this->designService->settings->sidebarMenuHover);
 		} else {
-			$this->setError('You aren\'logged in.');
+			$message = $this->translator->translate('You aren\'t logged in.');
+			$this->setError($message);
 		}
 	}
 
@@ -54,7 +57,8 @@ class DesignPresenter extends BasePresenter
 			$this->designService->sidebarClosed = $value;
 			$this->addData('sidebarClosed', $this->designService->settings->sidebarClosed);
 		} else {
-			$this->setError('You aren\'logged in.');
+			$message = $this->translator->translate('You aren\'t logged in.');
+			$this->setError($message);
 		}
 	}
 

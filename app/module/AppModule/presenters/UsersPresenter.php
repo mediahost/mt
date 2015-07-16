@@ -9,7 +9,6 @@ use App\Components\User\Form\UserBasic;
 use App\Model\Entity\User;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
-use App\TaggedString;
 use Kdyby\Doctrine\EntityRepository;
 use Nette\Security\User as IdentityUser;
 
@@ -79,10 +78,12 @@ class UsersPresenter extends BasePresenter
 	{
 		$this->userEntity = $this->userRepo->find($id);
 		if (!$this->userEntity) {
-			$this->flashMessage('This user wasn\'t found.', 'warning');
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('User')]);
+			$this->flashMessage($message, 'warning');
 			$this->redirect('default');
 		} else if (!$this->canEdit($this->user, $this->userEntity)) {
-			$this->flashMessage('You can\'t edit this user.', 'danger');
+			$message = $this->translator->translate('You can\'t edit this user.');
+			$this->flashMessage($message, 'danger');
 			$this->redirect('default');
 		} else {
 			$this['userForm']->setUser($this->userEntity);
@@ -101,7 +102,8 @@ class UsersPresenter extends BasePresenter
 	 */
 	public function actionView($id)
 	{
-		$this->flashMessage('Not implemented yet.', 'warning');
+		$message = $this->translator->translate('Not implemented yet.');
+		$this->flashMessage($message, 'warning');
 		$this->redirect('default');
 	}
 
@@ -114,12 +116,15 @@ class UsersPresenter extends BasePresenter
 	{
 		$user = $this->userRepo->find($id);
 		if (!$user) {
-			$this->flashMessage('User wasn\'t found.', 'danger');
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('User')]);
+			$this->flashMessage($message, 'danger');
 		} else if (!$this->canDelete($this->user, $user)) {
-			$this->flashMessage('You can\'t delete this user.', 'danger');
+			$message = $this->translator->translate('cannotDelete', NULL, ['name' => $this->translator->translate('User')]);
+			$this->flashMessage($message, 'danger');
 		} else {
 			$this->userFacade->delete($user);
-			$this->flashMessage('User was deleted.', 'success');
+			$message = $this->translator->translate('successfullyDeleted', NULL, ['name' => $this->translator->translate('User')]);
+			$this->flashMessage($message, 'success');
 		}
 		$this->redirect('default');
 	}
@@ -133,12 +138,14 @@ class UsersPresenter extends BasePresenter
 	{
 		$user = $this->userRepo->find($id);
 		if (!$user) {
-			$this->flashMessage('User wasn\'t found.', 'danger');
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('User')]);
+			$this->flashMessage($message, 'danger');
 		} else if (!$this->canAccess($this->user, $user)) {
-			$this->flashMessage('You can\'t access to this user.', 'danger');
+			$message = $this->translator->translate('You can\'t access to this user.');
+			$this->flashMessage($message, 'danger');
 		} else {
 			$this->user->login($user);
-			$message = new TaggedString('You are logged as \'%s\'.', $user);
+			$message = $this->translator->translate('You are logged as \'%name\'.', NULL, ['name' => $user]);
 			$this->flashMessage($message, 'success');
 			$this->redirect('Dashboard:');
 		}
@@ -198,7 +205,9 @@ class UsersPresenter extends BasePresenter
 		$control = $this->iUserBasicFactory->create();
 		$control->setIdentityRoles($this->user->roles);
 		$control->onAfterSave = function (User $savedUser) {
-			$message = new TaggedString('User \'%s\' was successfully saved.', (string) $savedUser);
+			$message = $this->translator->translate('successfullySaved', NULL, [
+				'type' => $this->translator->translate('User'), 'name' => (string) $savedUser
+			]);
 			$this->flashMessage($message, 'success');
 			$this->redirect('default');
 		};

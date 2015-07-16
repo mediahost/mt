@@ -14,7 +14,8 @@ class CategoryPresenter extends BasePresenter
 	{
 		$category = $this->categoryRepo->findOneByUrl($url);
 		if (!$category) {
-			$this->flashMessage('Requested category isn\'t exist. Try to choose another from list.', 'warning');
+			$message = $this->translator->translate('Requested category isn\'t exist. Try to choose another from list.');
+			$this->flashMessage($message, 'warning');
 			$this->redirect('Homepage:');
 		}
 		$category->setCurrentLocale($this->locale);
@@ -60,7 +61,8 @@ class CategoryPresenter extends BasePresenter
 			$this->template->accessoriesFor = $modelEntity;
 			$this->setView('default');
 		} else {
-			$this->flashMessage('This model wasn\'t found.', 'warning');
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Model')]);
+			$this->flashMessage($message, 'warning');
 			$this->redirect('Homepage:');
 		}
 	}
@@ -102,7 +104,8 @@ class CategoryPresenter extends BasePresenter
 
 			$this->setView('default');
 		} else {
-			$this->flashMessage('This producer wasn\'t found.', 'warning');
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Producer')]);
+			$this->flashMessage($message, 'warning');
 			$this->redirect('Homepage:');
 		}
 	}
