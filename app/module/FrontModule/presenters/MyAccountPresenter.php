@@ -96,7 +96,7 @@ class MyAccountPresenter extends BasePresenter
 			$this->flashMessage($message, 'success');
 			$this->redirect(":Front:Homepage:");
 		} catch (CantDeleteUserException $ex) {
-			$message = $this->translator->translate('You can\'t delete account, because you are only one admin for your company.');
+			$message = $this->translator->translate('You can\'t delete account.');
 			$this->flashMessage($message, 'danger');
 			$this->redirect("this");
 		}

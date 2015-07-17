@@ -57,7 +57,7 @@ class ProducersPresenter extends BasePresenter
 				$this->addRawData(NULL, $item);
 			}
 		} else {
-			$message = $this->translator->translate('There are no child for this selection.');
+			$message = $this->translator->translate('There is no child for this selection.');
 			$this->setError($message);
 		}
 	}

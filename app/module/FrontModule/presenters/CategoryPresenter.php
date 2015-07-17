@@ -14,7 +14,7 @@ class CategoryPresenter extends BasePresenter
 	{
 		$category = $this->categoryRepo->findOneByUrl($url);
 		if (!$category) {
-			$message = $this->translator->translate('Requested category isn\'t exist. Try to choose another from list.');
+			$message = $this->translator->translate('Requested category doesn\'t exist. Try to choose another from list.');
 			$this->flashMessage($message, 'warning');
 			$this->redirect('Homepage:');
 		}

@@ -36,7 +36,7 @@ msgid "Twitter"
 msgstr "Twitter"
 
 msgid "or login using"
-msgstr "nebo přihlásit přes"
+msgstr "nebo se přihlaste přes"
 
 msgid "Google"
 msgstr "Google"
@@ -45,7 +45,7 @@ msgid "Linkedin"
 msgstr "Linkedin"
 
 msgid "or register with"
-msgstr "nebo registrovat přes"
+msgstr "nebo se registrujte přes"
 
 msgid "other image"
 msgstr "Jiný obrázek"
@@ -78,10 +78,10 @@ msgid "View"
 msgstr "Detail"
 
 msgid "Add to cart"
-msgstr "Přidat do košíku. "
+msgstr "Do košíku"
 
 msgid "This ia a system generated email and reply is not required."
-msgstr "Tento email je generován systémem a nelze na něj odpovídat. "
+msgstr "Tento email je generován systémem a nelze na něj odpovídat."
 
 msgid "Unsubscribe"
 msgstr "Odhlásit odběr"
@@ -98,14 +98,11 @@ msgstr "Ochrana osobních údajů"
 msgid "Terms of Use"
 msgstr "Podmínky použití"
 
-msgid "Thank you for joining the"
-msgstr "Děkujeme Vám, že jste se přidali k"
-
-msgid "Community!"
-msgstr "Komunity!"
+msgid "Thank you for joining the %name%"
+msgstr "Děkujeme Vám, že jste se přidali k věrnostnímu programu %name%"
 
 msgid "Your registration was successfull."
-msgstr "Vaše registrace proběhla úspěšně. "
+msgstr "Vaše registrace proběhla úspěšně."
 
 msgid "You can set your password"
 msgstr "Můžete si nastavit své heslo"
@@ -113,11 +110,8 @@ msgstr "Můžete si nastavit své heslo"
 msgid "Please click the following URL to to set you password"
 msgstr "Prosím, klikněte na následující odkaz pro nastavení Vašeho hesla"
 
-msgid ""
-"If clicking the URL above does not work, copy and paste the URL into a "
-"browser window."
-msgstr ""
-"Pokud na tento odkaz nelze kliknout, zkopírujte ho a vložte do prohlížeče."
+msgid "If clicking the URL above does not work, copy and paste the URL into a browser window."
+msgstr "Pokud na tento odkaz nelze kliknout, zkopírujte ho a vložte do prohlížeče."
 
 msgid "The link will expire in an hour."
 msgstr "Platnost odkazu vyprší za hodinu."
@@ -147,7 +141,7 @@ msgid "Dashboard"
 msgstr "Úvodní stránka"
 
 msgid "reports & statistics"
-msgstr "reporty a statistiky "
+msgstr "reporty a statistiky"
 
 msgid "Example Form"
 msgstr "Vzorový formulář"
@@ -161,29 +155,17 @@ msgstr "Formulář"
 msgid "by Mediahost"
 msgstr "Mediahost"
 
-msgid "Groups"
-msgstr "Skupiny"
-
-msgid "Add Group"
-msgstr "Přidat skupinu"
-
 msgid "Add"
-msgstr "Přidat "
+msgstr "Přidat"
 
 msgid "Edit"
 msgstr "Upravit"
-
-msgid "group"
-msgstr "skupina"
 
 msgid "Full Screen"
 msgstr "Celá obrazovka"
 
 msgid "Sign out"
 msgstr "Odhlásit"
-
-msgid "ver.2"
-msgstr "ver.2"
 
 msgid "Home"
 msgstr "Domů"
@@ -193,6 +175,9 @@ msgstr "Stránky"
 
 msgid "Add Page"
 msgstr "Přidat stránku"
+
+msgid "Edit Page"
+msgstr "Upravit stránku"
 
 msgid "page"
 msgstr "stránka"
@@ -215,7 +200,7 @@ msgstr "Číslo"
 msgid "YES or NO"
 msgstr "ANO nebo NE"
 
-msgid "Edit parameter"
+msgid "Edit Parameter"
 msgstr "Upravit parametr"
 
 msgid "Producers"
@@ -224,14 +209,14 @@ msgstr "Výrobci"
 msgid "Add Producer"
 msgstr "Přidat výrobce"
 
-msgid "Add producer"
-msgstr "Přidat výrobce "
-
 msgid "Model Parameters"
 msgstr "Parametry modelu"
 
 msgid "Add Model Parameter"
-msgstr "Přidat parametry modelu"
+msgstr "Přidat parametr modelu"
+
+msgid "Edit Model Parameter"
+msgstr "Úprava parametru modelu"
 
 msgid "Edit of %name%"
 msgstr "Upravit %name%"
@@ -239,14 +224,8 @@ msgstr "Upravit %name%"
 msgid "Edit selected producer, line or model"
 msgstr "Upravit vybraného výrobce, řadu nebo model"
 
-msgid "Select some producer, list or model from tree"
-msgstr "Vybrat výrobce, řadu nebo model ze stromu"
-
-msgid "model parameter"
-msgstr "parametr modelu"
-
-msgid "Add product"
-msgstr "Přidat zboží"
+msgid "Select some producer, line or model from tree"
+msgstr "Vyberte výrobce, řadu nebo model ze stromu"
 
 msgid "Products"
 msgstr "Zboží"
@@ -258,7 +237,7 @@ msgid "CSV Update"
 msgstr "CSV aktualizace"
 
 msgid "Basic data"
-msgstr "Základní údaje "
+msgstr "Základní údaje"
 
 msgid "Prices"
 msgstr "Ceny"
@@ -267,7 +246,7 @@ msgid "Quantity"
 msgstr "Množství"
 
 msgid "Classification"
-msgstr "Klasifikace "
+msgstr "Klasifikace"
 
 msgid "SEO"
 msgstr "SEO"
@@ -372,14 +351,11 @@ msgstr "Online obchod"
 msgid "Add Sign"
 msgstr "Přidat příznak"
 
-msgid "sign"
-msgstr "příznak"
+msgid "Edit Sign"
+msgstr "Upravit příznak"
 
 msgid "Theme Color"
 msgstr "Barva tématu"
-
-msgid "$designColorName"
-msgstr "$designColorName"
 
 msgid "Layout"
 msgstr "Rozložení"
@@ -400,7 +376,7 @@ msgid "Default"
 msgstr "Výchozí"
 
 msgid "Sidebar Mode"
-msgstr "Mód bočního menu "
+msgstr "Mód bočního menu"
 
 msgid "Sidebar Menu"
 msgstr "Boční menu"
@@ -415,7 +391,7 @@ msgid "Sidebar Style"
 msgstr "Sidebar Style"
 
 msgid "Light"
-msgstr "Světlý "
+msgstr "Světlý"
 
 msgid "Sidebar Position"
 msgstr "Sidebar Position"
@@ -432,8 +408,8 @@ msgstr "Patička"
 msgid "Add User"
 msgstr "Přidat uživatele"
 
-msgid "user"
-msgstr "uživatel"
+msgid "Edit User"
+msgstr "Upravit uživatele"
 
 msgid "View Cart"
 msgstr "Prohlédnout košík"
@@ -451,7 +427,7 @@ msgid "Filter"
 msgstr "Filtr"
 
 msgid "Select your accessories for..."
-msgstr "Vyberte si příslušenství pro... "
+msgstr "Vyberte si příslušenství pro..."
 
 msgid "Access Denied"
 msgstr "Přistup zamítnut"
@@ -459,12 +435,8 @@ msgstr "Přistup zamítnut"
 msgid "You do not have permission to view this page."
 msgstr "Nemáte oprávnění ke shlédnutí této stránky."
 
-msgid ""
-"Please try contact the web site administrator if you believe you should be "
-"able to view this page."
-msgstr ""
-"Prosím, zkuste kontaktovat administrátora tohoto webu, pokud si myslíte, že "
-"byste sem měli mít přístup."
+msgid "Please try contact the web site administrator if you believe you should be able to view this page."
+msgstr "Prosím, zkuste kontaktovat administrátora tohoto webu, pokud si myslíte, že byste sem měli mít přístup."
 
 msgid "Return home"
 msgstr "Zpátky domů"
@@ -479,7 +451,7 @@ msgid "We can not find the page you're looking for."
 msgstr "Nemůžeme najít stránku, kterou hledáte."
 
 msgid "or try the search bar above."
-msgstr "nebo zkuste použít vyhledávání nahoře. "
+msgstr "nebo zkuste použít vyhledávání nahoře."
 
 msgid "Page Not Found"
 msgstr "Stránka nenalezena"
@@ -490,12 +462,8 @@ msgstr "Metoda nepovolena"
 msgid "The requested method is not allowed for the URL."
 msgstr "Požadovaná metoda není povolena pro tuto URL"
 
-msgid ""
-"The page you requested has been taken off the site. We apologize for the "
-"inconvenience."
-msgstr ""
-"Stránka, kterou hledáte byla z webu smazána. Omlouváme se za způsobené "
-"nepříjemnosti."
+msgid "The page you requested has been taken off the site. We apologize for the inconvenience."
+msgstr "Stránka, kterou hledáte byla z webu smazána. Omlouváme se za způsobené nepříjemnosti."
 
 msgid "Oops..."
 msgstr "Ups..."
@@ -503,11 +471,8 @@ msgstr "Ups..."
 msgid "Sorry, we have a problem."
 msgstr "Je nám líto, máme problém."
 
-msgid ""
-"Your browser sent a request that this server could not understand or process."
-msgstr ""
-"Váš prohlížeč poslal žádost, které tento server nerozumí nebo ji neumí "
-"zpracovat. "
+msgid "Your browser sent a request that this server could not understand or process."
+msgstr "Váš prohlížeč poslal žádost, které tento server nerozumí nebo ji neumí zpracovat."
 
 msgid "Oops! Something went wrong."
 msgstr "Ups! Něco se pokazilo."
@@ -523,6 +488,9 @@ msgstr "Chyba serveru"
 
 msgid "Error"
 msgstr "Chyba"
+
+msgid "FreeShipping"
+msgstr "Zdarma"
 
 msgid "Free shipping"
 msgstr "Doprava zdarma"
@@ -543,10 +511,10 @@ msgid "Open hours"
 msgstr "Otevírací doba"
 
 msgid "Our Contacts"
-msgstr "Naše kontakty "
+msgstr "Naše kontakty"
 
 msgid "Phone"
-msgstr "Telefon "
+msgstr "Telefon"
 
 msgid "Email"
 msgstr "Email"
@@ -597,7 +565,7 @@ msgid "Delete Account"
 msgstr "Smazat účet"
 
 msgid "Do you really want to delete all data for your account?"
-msgstr "Opravdu chcete vymazat všechny údaje ze svého účtu? "
+msgstr "Opravdu chcete vymazat všechny údaje ze svého účtu?"
 
 msgid "Yes, I want"
 msgstr "Ano, chci"
@@ -639,20 +607,19 @@ msgid "Price with vat"
 msgstr "Cena s DPH"
 
 msgid "Contact us:"
-msgstr "Kontaktujte nás: "
+msgstr "Kontaktujte nás:"
 
 msgid "Sign In"
-msgstr "Přihlásit se "
+msgstr "Přihlásit se"
 
 msgid "Don't you have"
-msgstr "Nemáte "
+msgstr "Doposud nemáte"
 
 msgid "your account"
-msgstr "váš účet"
+msgstr "svůj účet"
 
-msgid ""
-"Create it and gain an advantage over the other job seekers just like you."
-msgstr "Vytvořte si jej a získejte tak výhodu nad ostatními uchazeči o práci."
+msgid "Create account and gain an advantage in bonus program."
+msgstr "Vytvořte si účet a získejte výhody věrnostního programu."
 
 msgid "Create an account"
 msgstr "Vytvořit účet"
@@ -673,10 +640,10 @@ msgid "Registration"
 msgstr "Registrace"
 
 msgid "Easy to create..."
-msgstr "Easy to create..."
+msgstr "Hned hotovo..."
 
 msgid "Discounted shipping for"
-msgstr "Zlevněné poštovné pro "
+msgstr "Zlevněné poštovné pro"
 
 msgid "Admin"
 msgstr "Admin"
@@ -687,9 +654,6 @@ msgstr "%code% kurz"
 msgid "We do not register any user with mail '%mail%'."
 msgstr "Není registrován žádný uživatel s emailem '%mail%'."
 
-msgid "Group '%name%' was successfully saved."
-msgstr "Skupina '%name%' byla úspěšně uložena."
-
 msgid "Logged %name% account is using by another account."
 msgstr "Přihlašovací jméno %name% je používano jiným účtem."
 
@@ -697,56 +661,37 @@ msgid "We can't find '%name%' to disconnect."
 msgstr "Nemůžeme najít '%name%' k odpojení."
 
 msgid "Last login method is not possible deactivate."
-msgstr "Poslední přihlašovací metodu nelze deaktivovat. "
+msgstr "Poslední přihlašovací metodu nelze deaktivovat."
 
 msgid "%name% was connected."
 msgstr "%name% byl připojen."
 
 msgid "%name% was disconnected."
-msgstr "%name% byl odpojen. "
+msgstr "%name% byl odpojen."
 
 msgid "Password has been successfuly set!"
 msgstr "Heslo bylo úspěšně nastaveno!"
 
-msgid ""
-"You can't delete account, because you are only one admin for your company."
-msgstr "Nemůžete vymazat účet, protože jste jediný admin pro vaši společnost. "
+msgid "You can't delete account."
+msgstr "Nemůžete vymazat účet."
 
 msgid "Your account has been deleted"
 msgstr "Váš účet byl smazán"
-
-msgid "User '%name' was successfully saved."
-msgstr "Uživatel '%name' byl úspěšně uložen."
 
 msgid "You are logged as '%name'."
 msgstr "Jste přihlášen jako '%name%'."
 
 msgid "You can't access to this user."
-msgstr "Nelze získat přístup k tomuto uživateli. "
-
-msgid "User was deleted."
-msgstr "Uživatel byl smazán."
-
-msgid "You can't delete this user."
-msgstr "Nemůžete smazat tohoto uživatele. "
+msgstr "Nelze získat přístup k tomuto uživateli."
 
 msgid "Not implemented yet."
 msgstr "Zatím není implementován."
 
 msgid "You can't edit this user."
-msgstr "Nemůžete upravovat tohoto uživatele. "
-
-msgid "Sign '%name%' was successfully saved."
-msgstr "Příznak '%name%' byl úspěšně uložen."
-
-msgid "This sign can't be deleted."
-msgstr ""
-
-msgid "Sign was deleted."
-msgstr "Sign was deleted."
+msgstr "Nemůžete upravovat tohoto uživatele."
 
 msgid "You have reached the maximum of user groups."
-msgstr "Dosáhli jste maximálního počtu uživatelských skupin. "
+msgstr "Dosáhli jste maximálního počtu uživatelských skupin."
 
 msgid "This image wasn't found for this product."
 msgstr "Obrázek nebyl pro tento produkt."
@@ -755,13 +700,13 @@ msgid "You aren't logged in."
 msgstr "Nejste přihlášen."
 
 msgid "This color isn't supported."
-msgstr "Tato barva není podporována. "
+msgstr "Tato barva není podporována."
 
-msgid "There are no child for this selection."
+msgid "There is no child for this selection."
 msgstr "Pro vybrané neexistuje potomek."
 
 msgid "Error while saving producer."
-msgstr "Chyba při ukládání výrobce. "
+msgstr "Chyba při ukládání výrobce."
 
 msgid "wasntFound"
 msgstr "%name% nebyl nalezen."
@@ -782,12 +727,19 @@ msgid "successfullyUpdated"
 msgstr "%type% '%name%' byl úspěšně aktualizován"
 
 msgid "%count% product was successfully updated."
-msgstr ""
-"%count% zboží bylo úspěšně aktualizováno.|%count% zboží bylo úspěšně "
-"aktualizováno."
+msgstr "%count% zboží bylo úspěšně aktualizováno.|%count% zboží bylo úspěšně aktualizováno."
 
 msgid "Group"
 msgstr "Skupina"
+
+msgid "Groups"
+msgstr "Skupiny"
+
+msgid "Add Group"
+msgstr "Přidat skupinu"
+
+msgid "Edit Group"
+msgstr "Upravit skupinu"
 
 msgid "Parameter"
 msgstr "Parametr"
@@ -799,10 +751,10 @@ msgid "Sign"
 msgstr "Příznak"
 
 msgid "User"
-msgstr "Uživatel "
+msgstr "Uživatel"
 
 msgid "Producer"
-msgstr "Výrobce "
+msgstr "Výrobce"
 
 msgid "Line"
 msgstr "Řada"
@@ -822,8 +774,14 @@ msgstr "Entita"
 msgid "Category"
 msgstr "Kategorie"
 
+msgid "Main category"
+msgstr "Hlavní kategorie"
+
 msgid "Parent category"
 msgstr "Nadřazená kategorie"
+
+msgid "Select some category"
+msgstr "Vybrat kategorii"
 
 msgid "Lang"
 msgstr "Jazyk"
@@ -838,16 +796,16 @@ msgid "Your e-mail has been seccessfully verified!"
 msgstr "Váš email byl úspěšně ověřen!"
 
 msgid "Verification token is incorrect."
-msgstr "Ověřovací token je nesprávný. "
+msgstr "Ověřovací token je nesprávný."
 
 msgid "Recovery link has been sent to your mail."
 msgstr "Odkaz na obnovu byl odeslán na váš email."
 
 msgid "You have reached the maximum of free parameters for this type."
-msgstr "Dosáhli jste maximálního počtu volných parametrů pro tento typ. "
+msgstr "Dosáhli jste maximálního počtu volných parametrů pro tento typ."
 
 msgid "You are logged in."
-msgstr "Jste přihlášen. "
+msgstr "Jste přihlášen."
 
 msgid "Your account has been seccessfully created."
 msgstr "Váš účet byl úspěšně vytvořen."
@@ -860,7 +818,7 @@ msgstr ""
 "Poslali jsme vám ověřovací email. Prosím, zkontrolujte si svou schránku!"
 
 msgid "%mail% is already registered."
-msgstr "%mail% je již registrován. "
+msgstr "%mail% je již registrován."
 
 msgid "At least %count% characters long."
 msgstr "Alespoň %count% znaků dlouhé."
@@ -868,26 +826,20 @@ msgstr "Alespoň %count% znaků dlouhé."
 msgid "This module isn't allowed."
 msgstr "Tento modul není povolen."
 
-msgid "Requested product isn't exist. Try to choose another from list."
+msgid "Requested product does't exist. Try to choose another from list."
 msgstr "Požadovaný produkt neexistuje. Zkuste si vybrat ze seznamu jiný."
 
-msgid "Requested category isn't exist. Try to choose another from list."
-msgstr "Requested category does not exist. Try to choose another from list."
+msgid "Requested category doesn't exist. Try to choose another from list."
+msgstr "Požadovaná kategorie neexistuje. Zkuste si vybrat ze seznamu jinou."
 
 msgid "Requested currency isn't supported."
-msgstr "Požadovaná měna není podporována. "
+msgstr "Požadovaná měna není podporována."
 
 msgid "Requested language isn't supported."
-msgstr "Požadovaný jazyk není podporován. "
+msgstr "Požadovaný jazyk není podporován."
 
 msgid "You should be logged in!"
 msgstr "Měl byste být přihlášen!"
-
-msgid "Units was successfully saved."
-msgstr "Jednotky byly úspěšně uloženy."
-
-msgid "Rates was successfully saved."
-msgstr "Kurzy byly úspěšně uloženy."
 
 msgid "DB was reinstaled"
 msgstr "DB byla přeinstalována"
@@ -911,7 +863,7 @@ msgid "We are sorry, facebook authentication failed hard."
 msgstr "Omlouváme se za selhání na Facebooku."
 
 msgid "You have been successfuly signed out."
-msgstr "Byl jste úspěšně odhlášen. "
+msgstr "Byl jste úspěšně odhlášen."
 
 msgid "E-mail account"
 msgstr "E-mail účet"
@@ -941,7 +893,7 @@ msgid "Please re-enter your password"
 msgstr "Prosím, znovu napište své heslo"
 
 msgid "Password must be at least %count% characters long."
-msgstr "Heslo musí být alespoň %count% znaků dlouhé. "
+msgstr "Heslo musí být alespoň %count% znaků dlouhé."
 
 msgid "Re-type Your Password"
 msgstr "Znovu napište své heslo"
@@ -956,7 +908,7 @@ msgid "Please enter your e-mail."
 msgstr "Prosím, napište svůj email."
 
 msgid "E-mail has not valid format."
-msgstr "Email nemá platný formát. "
+msgstr "Email nemá platný formát."
 
 msgid "for example: example@domain.com"
 msgstr "například: example@domain.com"
@@ -1034,7 +986,7 @@ msgid "NO"
 msgstr "NE"
 
 msgid "CSV file"
-msgstr "CSV soubor "
+msgstr "CSV soubor"
 
 msgid "Update Products"
 msgstr "Aktualizovat zboží"
@@ -1053,12 +1005,6 @@ msgstr "včetně DPH"
 
 msgid "Vat"
 msgstr "DPH"
-
-msgid "Main category"
-msgstr "Hlavní kategorie"
-
-msgid "Select some category"
-msgstr "Vybrat kategorii"
 
 msgid "Perex"
 msgstr "Perex"
@@ -1106,7 +1052,7 @@ msgid "Public"
 msgstr "Veřejný"
 
 msgid "View on web"
-msgstr "Zobrazit na webu"
+msgstr "Na webu"
 
 msgid "Fill right format"
 msgstr "Vyplňte správný formát"
@@ -1119,3 +1065,9 @@ msgstr "Role"
 
 msgid "Access"
 msgstr "Přístup"
+
+msgid "Forget Password?"
+msgstr "Zapomněli jste heslo?"
+
+msgid "Remember"
+msgstr "Zapamatovat si"
