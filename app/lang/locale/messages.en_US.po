@@ -514,6 +514,12 @@ msgstr "Latest Tweets"
 msgid "Loading tweets by"
 msgstr "Loading tweets by"
 
+msgid "Facebook Posts"
+msgstr "Facebook Posts"
+
+msgid "Our Facebook"
+msgstr "Our Facebook"
+
 msgid "Terms of Service"
 msgstr "Terms of Service"
 
