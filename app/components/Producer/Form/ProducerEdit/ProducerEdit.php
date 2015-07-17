@@ -73,6 +73,8 @@ class ProducerEdit extends BaseControl
 						->addCondition(Form::FILLED)
 						->addRule(Form::IMAGE, 'Image must be in valid image format');
 
+				$form->addSubmit('partSave', 'Save')
+						->getControlPrototype()->class[] = 'btn-primary';
 				$form->addGroup('Prices');
 
 				$form->addCheckSwitch('with_vat', 'Prices are with VAT', 'YES', 'NO')
@@ -89,7 +91,8 @@ class ProducerEdit extends BaseControl
 				break;
 		}
 
-		$form->addSubmit('save', 'Save');
+		$form->addSubmit('save', 'Save')
+						->getControlPrototype()->class[] = 'btn-primary';
 		if ($this->entity->isNew()) {
 			$form->addSubmit('saveAdd', 'Save & Add next');
 		}
