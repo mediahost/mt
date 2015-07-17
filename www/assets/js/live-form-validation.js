@@ -740,7 +740,7 @@ Nette.initForm = function(form) {
 	});
 	
 	if ($(form).hasClass('sendOnChange')) {
-		$(form).on('change', function () {
+		$(form).off('change').on('change', function () {
 			$(this).submit();
 		});
 	}
