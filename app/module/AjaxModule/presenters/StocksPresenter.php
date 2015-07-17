@@ -3,6 +3,7 @@
 namespace App\AjaxModule\Presenters;
 
 use App\Model\Entity\Stock;
+use Nette\Utils\Strings;
 
 class StocksPresenter extends BasePresenter
 {
@@ -26,6 +27,8 @@ class StocksPresenter extends BasePresenter
 			$item = [];
 			$item['id'] = $stock->id;
 			$item['text'] = (string) $product;
+			$item['text'] = 'nějaký další název, který přeskočí jeden řádek a propíše se do druhého';
+			$item['shortText'] = Strings::truncate($item['text'], 30);
 			$item['description'] = $product->description;
 			$item['perex'] = $product->perex;
 			$item['priceNoVat'] = $price->withoutVat;
