@@ -55,7 +55,7 @@ class SignIn extends BaseControl
 		$form->addCheckbox('remember', 'Remember')
 						->getLabelPrototype()->class = "rememberme check";
 
-		$form->addSubmit('signIn', 'Sign in');
+		$form->addSubmit('signIn', 'Sign In');
 
 		$form->onSuccess[] = $this->formSucceeded;
 		return $form;
