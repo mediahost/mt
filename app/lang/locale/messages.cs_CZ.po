@@ -580,7 +580,7 @@ msgid "Personal Info"
 msgstr "Osobní informace"
 
 msgid "Soacial Connection"
-msgstr "Social Connection"
+msgstr "Spojení s účty"
 
 msgid "Change Password"
 msgstr "Změnit heslo"
