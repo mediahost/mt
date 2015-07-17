@@ -30,21 +30,8 @@
 	body.page-header-fixed {
 		padding-top: 121px !important; /* height of the header */
 	}
-
-	.header .header-navigation {
-		display: block !important;
-		clear: both;
-		margin-top: -10px;
-		float: left !important;
-	}
 	.reduce-header .header-navigation {
 		margin-top: -6px;
-	}
-	.header .header-navigation > ul > li {
-		margin-right: 27px;
-	}
-	.header .header-navigation > ul > li > a {
-		padding: 5px 0 18px;
 	}
 	.reduce-header .header-navigation > ul > li > a {
 		padding-bottom: 13px;	
@@ -78,14 +65,44 @@
 }
 /* END min width 1025px max width 1205 */
 
+@media (min-width: 1200px) {
+	.ecommerce .header-navigation > ul > li > a {
+		padding: 25px 15px;
+	}
+}
+
+@media (max-width: 1199px) {
+	.search-box {
+		margin-top: 23px;
+		margin-left: 300px;
+	}
+	.header .top-cart-block {
+		margin-top: 25px;
+	}
+	.ecommerce .site-logo {
+		padding-top: 26px;
+	}
+	.ecommerce .site-logo img {
+		width: 200px;
+	}
+	.ecommerce .header-navigation > ul > li > a {
+		padding: 20px 12px;
+	}
+}
+
 /* BEGIN max width 1024px */
 @media (max-width: 1024px) {
+	.ecommerce .site-logo {
+		padding-top: 8px;
+		padding-bottom: 8px;
+	}
 	body.page-header-fixed {
 		padding-top: 107px !important; /* height of the header */
 	}
 
-	.header .mobi-toggler {
+	.ecommerce .header .mobi-toggler {
 		display: block;
+		margin-top: 24px;
 	}
 	.header .header-navigation {
 		float: none !important;		
@@ -126,7 +143,7 @@
 	}
 
 	.header-navigation > ul > li.dropdown:hover > a:after {
-	    border: none;
+		border: none;
 	}
 
 	.header-navigation > ul > li > a > i.fa-angle-down {
@@ -275,17 +292,18 @@
 
 /* BEGIN max width 992px */	
 @media (max-width: 992px) {
-	
-	.ecommerce .site-logo {
-		padding-bottom: 0px;
-	}
-	
 	.search-box {
 		clear: both;
-		float: left;
-		margin: 10px 0 15px;
+		margin-left: 0px;
+		margin-bottom: 15px;
 	}
-	
+	.ecommerce .site-logo {
+		padding-bottom: 10px;
+	}
+	.ecommerce .site-logo img {
+		width: 180px;
+	}
+
 	.shop-index-carousel {
 		margin-left: 0;
 		margin-right: 10px;
@@ -462,7 +480,7 @@
 		padding-top: 0;
 	}
 	.pre-footer .pre-footer-subscribe-box {
-    	padding-bottom: 25px;
+		padding-bottom: 25px;
 	}
 	.ecommerce .pre-footer-subscribe-box form {
 		width: 100%;
@@ -570,11 +588,11 @@
 	}
 
 	.glyphicons-demo ul li {
-	    width: 12.5%;
+		width: 12.5%;
 	}
 
 	.tab-style-1 .tab-content img {
-    	margin: 5px 0 10px;
+		margin: 5px 0 10px;
 	}
 	.testimonials-v1 {
 		padding-top: 20px;
@@ -593,7 +611,7 @@
 	}
 
 	.blog-posts h2, .ecommerce .blog-posts h2 {
-	    padding-top: 15px;
+		padding-top: 15px;
 	}
 
 	.ecommerce .footer {
@@ -603,7 +621,7 @@
 		padding-top: 10px;
 	}
 	.ecommerce .pre-footer address {
-	    margin-bottom: 15px !important;
+		margin-bottom: 15px !important;
 	}
 	.footer img {
 		margin-bottom: 10px;
@@ -631,6 +649,7 @@
 		clear: both;
 		float: left;
 		padding-top: 0;
+		padding-bottom: 8px;
 		margin: 0 0 5px;
 		margin-top: 0px !important;
 		width: 100%;
@@ -680,7 +699,7 @@
 	}
 
 	.checkout-content {
-	    padding: 0 0 40px;
+		padding: 0 0 40px;
 	}
 	.checkout-page h2 a {
 		padding: 9px 10px 8px;
@@ -757,16 +776,16 @@
 /* BEGIN max width 390px */
 @media (max-width: 390px) {
 	.steps-block .fa-truck, .steps-block .fa-gift, .steps-block .fa-phone {
-	    border: 2px solid #FFFFFF;
-	    border-radius: 30px !important;
-	    float: left;
-	    font-size: 20px;
-	    width: 40px;
-	    height: 40px;
-	    margin-right: 11px;
-	    padding-top: 12px;
-	    text-align: center;
-	    vertical-align: middle;	    
+		border: 2px solid #FFFFFF;
+		border-radius: 30px !important;
+		float: left;
+		font-size: 20px;
+		width: 40px;
+		height: 40px;
+		margin-right: 11px;
+		padding-top: 12px;
+		text-align: center;
+		vertical-align: middle;	    
 	}
 	.ecommerce .steps-block h2 {
 		font-size: 25px;
@@ -799,8 +818,8 @@
 		margin-top: 10px;
 	}
 	.price-availability-block .availability {
-	    clear: left;
-	    float: left;
+		clear: left;
+		float: left;
 	}
 	.product-page-options .pull-left {
 		margin-bottom: 10px;

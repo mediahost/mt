@@ -133,7 +133,7 @@ var ComponentsDropdowns = function () {
 					'<div class="col-sm-2 image">',
 						'<img src="' + result.image_thumbnail_100 + '" style="max-width: 100%" />',
 					'</div>',
-					'<div class="col-sm-7 text">' + result.text + '</div>',
+					'<div class="col-sm-7 text">' + result.shortText + '</div>',
 					'<div class="col-sm-3 price"><strong>' + result.priceWithVatFormated + '</strong></div>',
 				'</a>',
 				'</div>'
