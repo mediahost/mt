@@ -520,10 +520,16 @@ msgid "Email"
 msgstr "Email"
 
 msgid "Latest Tweets"
-msgstr "Poslední Tweety"
+msgstr "Naše Tweety"
 
 msgid "Loading tweets by"
 msgstr "Načítání tweetů"
+
+msgid "Facebook Posts"
+msgstr "Naše příspěvky"
+
+msgid "Our Facebook"
+msgstr "Náš Facebook"
 
 msgid "Terms of Service"
 msgstr "Obchodní podmínky"
