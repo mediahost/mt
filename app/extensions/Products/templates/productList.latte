@@ -1,7 +1,6 @@
 {snippet productList}
 	<!-- BEGIN PRODUCT LIST -->
 	{foreach $stocks as $stock}
-		{? $stock->product->setCurrentLocale($lang)}
 		{var isLastOnRow => !($iterator->counter % $itemsPerRow)}
 		{if $iterator->first}
 			<div class="row product-list">

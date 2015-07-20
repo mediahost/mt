@@ -9,6 +9,7 @@ use App\Model\Repository\SignRepository;
 use App\Model\Repository\StockRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Object;
+use Nette\Utils\DateTime;
 
 class StockFacade extends Object
 {
@@ -32,21 +33,6 @@ class StockFacade extends Object
 		$this->signRepo = $this->em->getRepository(Sign::getClassName());
 	}
 
-	private function getDemoProducts()
-	{
-		$sorting = [
-			0 => 'ASC',
-			1 => 'DESC',
-		];
-		return $this->stockRepo
-						->createQueryBuilder('s')
-						->innerJoin('s.product', 'p')
-						->orderBy('s.id', $sorting[rand(0, 1)])
-						->setMaxResults(10)
-						->getQuery()
-						->getResult();
-	}
-
 	private function getSignedProducts($signId)
 	{
 		if (!$signId) {
@@ -65,16 +51,13 @@ class StockFacade extends Object
 				->innerJoin('s.product', 'p')
 				->innerJoin('p.signs', 'signs')
 				->where('signs = :sign')
-				->setParameter('sign', $newSign);
+				->AndWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
+				->setParameter('sign', $newSign)
+				->setParameter('now', new DateTime());
 		return $qb->orderBy('s.id', $sorting[rand(0, 1)])
 						->setMaxResults(10)
 						->getQuery()
 						->getResult();
-	}
-
-	public function getBestSellers()
-	{
-		return $this->getDemoProducts();
 	}
 
 	public function getSales()
@@ -96,6 +79,28 @@ class StockFacade extends Object
 		$signSettings = $this->moduleService->getModuleSettings('signs');
 		$topSignId = $signSettings ? $signSettings->top : NULL;
 		return $this->getSignedProducts($topSignId);
+	}
+
+	private function getDemoProducts()
+	{
+		$sorting = [
+			0 => 'ASC',
+			1 => 'DESC',
+		];
+		return $this->stockRepo
+						->createQueryBuilder('s')
+						->innerJoin('s.product', 'p')
+						->where('s.deletedAt IS NULL OR s.deletedAt > :now')
+						->setParameter('now', new DateTime())
+						->orderBy('s.id', $sorting[rand(0, 1)])
+						->setMaxResults(10)
+						->getQuery()
+						->getResult();
+	}
+
+	public function getBestSellers()
+	{
+		return $this->getDemoProducts();
 	}
 
 	public function getLastVisited()

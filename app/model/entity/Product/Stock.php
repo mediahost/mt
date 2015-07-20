@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
+use Knp\DoctrineBehaviors\Model;
+use Nette\Utils\DateTime;
 
 /**
  * @ORM\Entity(repositoryClass="App\Model\Repository\StockRepository")
@@ -19,6 +21,12 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  * @property array $groupDiscounts
  * @property Price $purchasePrice
  * @property Price $oldPrice
+ * @property mixed $createdBy
+ * @property mixed $updatedBy
+ * @property mixed $deletedBy
+ * @property DateTime $createdAt
+ * @property DateTime $updatedAt
+ * @property DateTime $deletedAt
  * @property boolean $active
  * @property int $quantity
  * @property int $lock
@@ -30,27 +38,31 @@ class Stock extends BaseEntity
 {
 
 	use Identifier;
+	use Model\Blameable\Blameable;
+	use Model\Loggable\Loggable;
+	use Model\Timestampable\Timestampable;
+	use Model\SoftDeletable\SoftDeletable;
 	use Traits\StockPrices;
 	use Traits\StockQuantities;
-	
-    /** @ORM\ManyToOne(targetEntity="Product", inversedBy="stocks", cascade={"persist"}) */
-    protected $product;
-	
-    /** @ORM\ManyToOne(targetEntity="Variant") */
-    protected $variant1;
-	
-    /** @ORM\ManyToOne(targetEntity="Variant") */
-    protected $variant2;
-	
-    /** @ORM\ManyToOne(targetEntity="Variant") */
-    protected $variant3;
-	
+
+	/** @ORM\ManyToOne(targetEntity="Product", inversedBy="stocks", cascade={"persist"}) */
+	protected $product;
+
+	/** @ORM\ManyToOne(targetEntity="Variant") */
+	protected $variant1;
+
+	/** @ORM\ManyToOne(targetEntity="Variant") */
+	protected $variant2;
+
+	/** @ORM\ManyToOne(targetEntity="Variant") */
+	protected $variant3;
+
 	/** @ORM\Column(type="boolean") */
 	protected $active = TRUE;
-	
+
 	/** @ORM\Column(type="string", length=100, nullable=true) */
 	protected $code;
-	
+
 	/** @ORM\Column(type="string", length=100, nullable=true) */
 	protected $barcode;
 

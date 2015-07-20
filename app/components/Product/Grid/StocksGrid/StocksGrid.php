@@ -10,6 +10,7 @@ use App\Model\Entity\Price;
 use App\Model\Entity\Stock;
 use Grido\DataSources\Doctrine;
 use Grido\Grid;
+use Nette\Utils\DateTime;
 
 class StocksGrid extends BaseControl
 {
@@ -27,8 +28,10 @@ class StocksGrid extends BaseControl
 				->leftJoin('s.product', 'p')
 				->leftJoin('p.translations', 't')
 				->where('t.locale = :lang OR t.locale = :defaultLang')
+				->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
 				->setParameter('lang', $this->lang)
-				->setParameter('defaultLang', $this->languageService->defaultLanguage);
+				->setParameter('defaultLang', $this->languageService->defaultLanguage)
+				->setParameter('now', new DateTime());
 		$grid->model = new Doctrine($qb, [
 			'product' => 'p',
 			'product.name' => 't.name',
