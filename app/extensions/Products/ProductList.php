@@ -55,10 +55,13 @@ class ProductList extends Control
 	public $maxPrice;
 
 	/** @var array event on render */
-	public $onRender;
+	public $onRender = [];
 
 	/** @var array event for modifying data */
-	public $onFetchData;
+	public $onFetchData = [];
+
+	/** @var array event for modifying each item */
+	public $onEachItem = [];
 
 	// <editor-fold defaultstate="collapsed" desc="protected variables">
 
@@ -190,7 +193,7 @@ class ProductList extends Control
 		return $this;
 	}
 
-	public function setItemsPerPage($itemsPerRow, $rowsPerPage)
+	public function setItemsPerPage($itemsPerRow, $rowsPerPage = 1)
 	{
 		$itemsPerRowInt = (int) $itemsPerRow;
 		$rowsPerPageInt = (int) $rowsPerPage;
@@ -236,6 +239,13 @@ class ProductList extends Control
 	public function setPaginator(Paginator $paginator)
 	{
 		$this->paginator = $paginator;
+
+		return $this;
+	}
+
+	public function setPage($page)
+	{
+		$this->page = $page;
 
 		return $this;
 	}
@@ -385,8 +395,11 @@ class ProductList extends Control
 				$this->page = 1;
 			}
 
-			if ($this->onFetchData) {
-				$this->onFetchData($this);
+			$this->onFetchData($this, $data);
+
+			foreach ($data as $item) {
+				$item->product->setCurrentLocale($this->lang);
+				$this->onEachItem($this, $item);
 			}
 		}
 
@@ -539,6 +552,7 @@ class ProductList extends Control
 	protected function filterNotDeleted()
 	{
 		$this->qb
+				->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
 				->andWhere('p.deletedAt IS NULL OR p.deletedAt > :now')
 				->setParameter('now', new DateTime());
 
@@ -637,10 +651,8 @@ class ProductList extends Control
 		$conditions = new Andx();
 		foreach ($words as $key => $word) {
 			$keyword = 'word' . $key;
-			if (strlen($word) > 1) {
-				$conditions->add('t.name LIKE :' . $keyword);
-				$this->qb->setParameter($keyword, "%$word%");
-			}
+			$conditions->add('t.name LIKE :' . $keyword);
+			$this->qb->setParameter($keyword, "%$word%");
 		}
 		$this->appendTranslation();
 		$this->qb->andWhere($conditions);

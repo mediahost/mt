@@ -136,6 +136,30 @@ class ProductsPresenter extends BasePresenter
 	/**
 	 * @secured
 	 * @resource('products')
+	 * @privilege('delete')
+	 */
+	public function actionDelete($id)
+	{
+		$this->stockEntity = $this->stockRepo->find($id);
+		if (!$this->stockEntity) {
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Product')]);
+			$this->flashMessage($message, 'danger');
+		} else {
+			try {
+				$this->stockRepo->delete($this->stockEntity);
+				$message = $this->translator->translate('successfullyDeleted', NULL, ['name' => $this->translator->translate('Product')]);
+				$this->flashMessage($message, 'success');
+			} catch (Exception $e) {
+				$message = $this->translator->translate('cannotDelete', NULL, ['name' => $this->translator->translate('Product')]);
+				$this->flashMessage($message, 'danger');
+			}
+		}
+		$this->redirect('default');
+	}
+
+	/**
+	 * @secured
+	 * @resource('products')
 	 * @privilege('deleteImage')
 	 */
 	public function handleDeleteImage($imageId)
