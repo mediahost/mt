@@ -13,6 +13,7 @@ services:
 	- {class: App\Model\Facade\StockFacade, inject: yes}
 	- {class: App\Model\Facade\ParameterFacade, inject: yes}
 	- {class: App\Model\Facade\GroupFacade, inject: yes}
+	- {class: App\Model\Facade\PohodaFacade, inject: yes}
 
 	# Storages
 	- {class: App\Model\Storage\SignUpStorage, inject: yes}
