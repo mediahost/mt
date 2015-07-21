@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Drahak\Restful\Application\Routes\ResourceRoute;
 use Nette\Application\IRouter;
 use Nette\Application\Routers\Route;
 use Nette\Application\Routers\RouteList;
@@ -22,6 +23,7 @@ class RouterFactory
 		$router[] = new Route('index.php', 'Front:Default:default', Route::ONE_WAY);
 
 		$router[] = $fotoRouter = new RouteList('Foto');
+		$router[] = $apiRouter = new RouteList('Api');
 		$router[] = $ajaxRouter = new RouteList('Ajax');
 		$router[] = $adminRouter = new RouteList('App');
 		$router[] = $frontRouter = new RouteList('Front');
@@ -33,6 +35,34 @@ class RouterFactory
 			'action' => 'default',
 			'size' => NULL,
 			'name' => NULL,
+		]);
+
+		// </editor-fold>
+		// <editor-fold desc="Api">
+
+		$apiRouter[] = new ResourceRoute('xml_pohoda/objednavky.php', [
+			'presenter' => 'Pohoda',
+			'action' => 'readOrders',
+				], ResourceRoute::GET);
+
+		$apiRouter[] = new ResourceRoute('xml_pohoda/download_stock.php', [
+			'presenter' => 'Pohoda',
+			'action' => 'readStorageCart'
+				], ResourceRoute::GET);
+
+		$apiRouter[] = new ResourceRoute('xml_pohoda/zasoby.php', [
+			'presenter' => 'Pohoda',
+			'action' => 'createStore'
+				], ResourceRoute::POST);
+
+		$apiRouter[] = new ResourceRoute('xml_pohoda/zasoby_short.php', [
+			'presenter' => 'Pohoda',
+			'action' => 'createShortStock'
+				], ResourceRoute::POST);
+
+		$apiRouter[] = new ResourceRoute('api/<presenter>/<relation>', [
+			'presenter' => 'Default',
+			'action' => 'default'
 		]);
 
 		// </editor-fold>
