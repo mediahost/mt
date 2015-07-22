@@ -11,7 +11,7 @@ use Tracy\Debugger;
 class PohodaPresenter extends BasePresenter
 {
 
-	const LOGNAME = 'PohodaApi';
+	const LOGNAME = 'pohoda_api';
 	const PARAM_FILE = 'file';
 
 	/** @var IRequest @inject */
@@ -34,11 +34,11 @@ class PohodaPresenter extends BasePresenter
 	{
 		try {
 			$xml = $this->getFileContent($use_gzip_upload);
-			$this->pohodaFacade->recieveXml($xml, $this->action);
+			$this->pohodaFacade->recieveStore($xml);
 			$this->resource->state = 'ok';
 		} catch (Exception $ex) {
 			$this->resource->state = 'error';
-			$this->resource->message = $ex->getMessage();
+			$this->resource->message = 'Error while processing XML';
 			Debugger::log($ex->getMessage(), self::LOGNAME);
 		}
 		$this->setView('state');
@@ -48,11 +48,11 @@ class PohodaPresenter extends BasePresenter
 	{
 		try {
 			$xml = $this->getFileContent($use_gzip_upload);
-			$this->pohodaFacade->recieveXml($xml, $this->action);
+			$this->pohodaFacade->recieveShortStock($xml);
 			$this->resource->state = 'ok';
 		} catch (Exception $ex) {
 			$this->resource->state = 'error';
-			$this->resource->message = $ex->getMessage();
+			$this->resource->message = 'Error while processing XML';
 			Debugger::log($ex->getMessage(), self::LOGNAME);
 		}
 		$this->setView('state');
@@ -60,6 +60,7 @@ class PohodaPresenter extends BasePresenter
 
 	private function getFileContent($gzip)
 	{
+		$content = NULL;
 		$files = $this->httpRequest->getFiles();
 		if (array_key_exists(self::PARAM_FILE, $files)) {
 			$file = $files[self::PARAM_FILE];
