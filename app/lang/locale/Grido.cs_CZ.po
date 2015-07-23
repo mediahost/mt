@@ -1,0 +1,44 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: cs_CZ\n"
+
+msgid "Invert"
+msgstr "Obrátit"
+
+msgid "Actions"
+msgstr "Akce"
+
+msgid "SelectSomeRow"
+msgstr "Vyberte nějaký sloupec"
+
+msgid "First"
+msgstr "První"
+
+msgid "Previous"
+msgstr "Předchozí"
+
+msgid "EnterPage"
+msgstr "Zadejte stranu"
+
+msgid "Next"
+msgstr "Další"
+
+msgid "Last"
+msgstr "Poslední"
+
+msgid "ExportAllItems"
+msgstr "Exportovat všechny položky"
+
+msgid "NoResults"
+msgstr "Žádný výsledek"
+
+msgid "Reset"
+msgstr "Vynulovat"
+
+msgid "Search"
+msgstr "Vyhledat"
+
+msgid "Items"
+msgstr "Zobrazeno %begin% až %end% z celkových %count%"

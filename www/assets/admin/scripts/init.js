@@ -2,7 +2,7 @@ jQuery(document).ready(function () {
 	Metronic.init(); // init metronic core componets
 	Layout.init(); // init layout
 	$.nette.init(); // https://github.com/vojtech-dobes/nette.ajax.js
-	
+
 	// Global components
 	GlobalCustomInit.init();
 
@@ -18,9 +18,17 @@ $('.modal.ajax').on('loaded.bs.modal', function (e) {
 });
 
 $.nette.ext('netteAjax', {
-	complete: function () {
-		GlobalCustomInit.onReloadGridoEvent();
-		GlobalCustomInit.onReloadModalEvent();
+	complete: function (payload) {
+		for (i in payload.snippets) {
+			switch (String(i)) {
+				case 'snippet--flashMessages':
+					break;
+				default:
+					GlobalCustomInit.onReloadGridoEvent();
+					GlobalCustomInit.onReloadModalEvent();
+					break;
+			}
+		}
 	}
 });
 

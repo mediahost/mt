@@ -112,13 +112,13 @@ abstract class BasePresenter extends BaseBasePresenter
 		$signSettings = $this->moduleService->getModuleSettings('signs');
 		if ($signSettings) {
 			$signRepo = $this->em->getRepository(Sign::getClassName());
-			
+
 			$newSign = $signRepo->find($signSettings->new);
 			$newSign->setCurrentLocale($this->locale);
-			
+
 			$saleSign = $signRepo->find($signSettings->sale);
 			$saleSign->setCurrentLocale($this->locale);
-			
+
 			$topSign = $signRepo->find($signSettings->top);
 			$topSign->setCurrentLocale($this->locale);
 
@@ -189,7 +189,8 @@ abstract class BasePresenter extends BaseBasePresenter
 			if ($model instanceof ProducerModel) {
 				$this->redirect('Category:accessories', $model->id);
 			} else {
-				$this->flashMessage('This model wasn\'t found.', 'warning');
+				$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Model')]);
+				$this->flashMessage($message, 'warning');
 				$this->redirect('this');
 			}
 		};

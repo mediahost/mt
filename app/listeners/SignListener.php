@@ -10,9 +10,9 @@ use App\Model\Entity\User;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
 use App\Model\Storage\SignUpStorage;
-use App\TaggedString;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Events\Subscriber;
+use Kdyby\Translation\ITranslator;
 use Nette\Application\Application;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Presenter;
@@ -51,6 +51,9 @@ class SignListener extends Object implements Subscriber
 
 	/** @var ExpirationService @inject */
 	public $expirationService;
+
+	/** @var ITranslator @inject */
+	public $translator;
 
 	// </editor-fold>
 
@@ -116,7 +119,7 @@ class SignListener extends Object implements Subscriber
 		if (!$existedUser) {
 			$this->verify($control, $user);
 		} else {
-			$message = new TaggedString('%s is already registered.', $user->mail);
+			$message = $this->translator->translate('%mail% is already registered.', NULL, ['mail' => $user->mail]);
 			$control->presenter->flashMessage($message);
 			$control->presenter->redirect(self::REDIRECT_SIGNIN_PAGE);
 		}
@@ -145,8 +148,8 @@ class SignListener extends Object implements Subscriber
 			$message->addTo($user->mail);
 			$message->send();
 
-
-			$control->presenter->flashMessage('We have sent you a verification e-mail. Please check your inbox!', 'success');
+			$flash = $this->translator->translate('We have sent you a verification e-mail. Please check your inbox!');
+			$control->presenter->flashMessage($flash, 'success');
 			$control->presenter->redirect(self::REDIRECT_SIGNIN_PAGE);
 		}
 	}
@@ -158,7 +161,8 @@ class SignListener extends Object implements Subscriber
 	 */
 	public function onRecovery(Presenter $presenter, User $user)
 	{
-		$presenter->flashMessage('Your password has been successfully changed!', 'success');
+		$message = $this->translator->translate('Your password has been successfully changed!');
+		$presenter->flashMessage($message, 'success');
 		$this->onSuccess($presenter, $user);
 	}
 
@@ -173,7 +177,8 @@ class SignListener extends Object implements Subscriber
 		$message->addTo($user->mail);
 		$message->send();
 
-		$presenter->flashMessage('Your account has been seccessfully created.', 'success');
+		$flash = $this->translator->translate('Your account has been seccessfully created.');
+		$presenter->flashMessage($flash, 'success');
 		$this->onSuccess($presenter, $user);
 	}
 
@@ -194,7 +199,8 @@ class SignListener extends Object implements Subscriber
 		}
 
 		$presenter->user->login($user);
-		$presenter->flashMessage('You are logged in.', 'success');
+		$message = $this->translator->translate('You are logged in.');
+		$presenter->flashMessage($message, 'success');
 
 		$presenter->restoreRequest($presenter->backlink);
 		if ($presenter->user->isAllowed('dashboard')) {

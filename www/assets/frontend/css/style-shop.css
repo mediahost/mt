@@ -67,7 +67,7 @@ Header and header elements
 .ecommerce .header-navigation {
 	font: 19px "PT Sans Narrow", sans-serif;
 	letter-spacing: 1px;
-	margin: 0;
+	text-transform: uppercase;
 }
 .ecommerce .header-navigation > ul > li > a {
 	color: #767f88;

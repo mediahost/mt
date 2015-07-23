@@ -14,6 +14,7 @@ return array(
 			/nbproject
 			/deployment
 			/doc
+			/files
 			log/*
 			!log/.htaccess
 			temp/*

@@ -5,8 +5,8 @@
 }
 
 .portlet > .portlet-title > .actions .btn-icon-only {
-  height: 27px;
-  width: 27px;
+	height: 27px;
+	width: 27px;
 }
 
 .pagination .btn {
@@ -15,10 +15,4 @@
 
 .ecommerce .header-navigation > ul > li > a {
 	font-size: 15px;
-}
-
-@media (min-width: 1206px) {
-	.ecommerce .header-navigation > ul > li > a {
-		padding: 23px 12px;
-	}
 }

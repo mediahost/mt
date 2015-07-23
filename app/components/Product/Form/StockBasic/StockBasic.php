@@ -34,8 +34,7 @@ class StockBasic extends StockBase
 				->setAttribute('placeholder', $product->name);
 		$form->addText('code', 'Code');
 		$form->addText('barcode', 'Barcode');
-		$form->addCheckSwitch('active', 'Active')
-				->setDefaultValue(TRUE);
+		$form->addCheckSwitch('active', 'Active');
 		$form->addTextArea('perex', 'Perex')
 				->setAttribute('placeholder', $product->perex);
 		$form->addWysiHtml('description', 'Description', 10)

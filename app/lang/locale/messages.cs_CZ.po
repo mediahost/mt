@@ -1,86 +1,1079 @@
-# Created: 2014-09-26 18:19:26
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2015-04-23 18:22+0100\n"
-"Project-Id-Version: SourceCode\n"
-"POT-Creation-Date: 2014-08-24 12:34+0100\n"
-"Last-Translator: Petr Poupě <pupe.dupe@gmail.com>\n"
-"Language-Team: \n"
-"MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "Language: cs_CZ\n"
-"X-Generator: Poedit 1.6.10\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"X-Generator: Poedit 1.8.2\n"
 
-msgid "Login"
-msgstr "Přihlásit se"
+msgid "Czech"
+msgstr "Čeština"
 
-msgid "Logout"
-msgstr "Odhlásit se"
+msgid "Slovak"
+msgstr "Slovenština"
 
-msgid "My Account"
-msgstr "Můj profil"
+msgid "English"
+msgstr "Angličtina"
 
-msgid "Sign In"
-msgstr "Přihlásit se"
+msgid "Loading..."
+msgstr "Načítám..."
 
-msgid "Registration"
-msgstr "Registrace"
+msgid "Deactivate"
+msgstr "Deaktivovat"
 
-msgid "Remember me"
-msgstr "Neodhlašovat"
+msgid "Activate"
+msgstr "Aktivovat"
+
+msgid "Facebook"
+msgstr "Facebook"
+
+msgid "Twitter"
+msgstr "Twitter"
+
+msgid "or login using"
+msgstr "nebo se přihlaste přes"
+
+msgid "Google"
+msgstr "Google"
+
+msgid "Linkedin"
+msgstr "Linkedin"
+
+msgid "or register with"
+msgstr "nebo se registrujte přes"
+
+msgid "other image"
+msgstr "Jiný obrázek"
+
+msgid "Delete"
+msgstr "Smazat"
+
+msgid "Availability"
+msgstr "Dostupnost"
+
+msgid "Price"
+msgstr "Cena"
+
+msgid "Items %begin% to %end% of %count% total"
+msgstr "Položka %begin% až %end% z %count%  celkem"
+
+msgid "Despite our efforts, we found no product."
+msgstr "Navzdory naší snaze jsme nenašli žádné zboží."
+
+msgid "Try entering a different category, or possibly change product filter."
+msgstr "Zkuste vstoupit do jiné kategorie nebo změnit kritéria filtru zboží."
+
+msgid "We believe, then you will find your product."
+msgstr "Věříme, že poté najdete svoje zboží."
+
+msgid "Zoom"
+msgstr "Náhled"
+
+msgid "View"
+msgstr "Detail"
+
+msgid "Add to cart"
+msgstr "Do košíku"
+
+msgid "This ia a system generated email and reply is not required."
+msgstr "Tento email je generován systémem a nelze na něj odpovídat."
+
+msgid "Unsubscribe"
+msgstr "Odhlásit odběr"
+
+msgid "from this newsletter instantly."
+msgstr "z toho newsletteru okamžitě."
+
+msgid "About Us"
+msgstr "O nás"
+
+msgid "Privacy Policy"
+msgstr "Ochrana osobních údajů"
+
+msgid "Terms of Use"
+msgstr "Podmínky použití"
+
+msgid "Thank you for joining the %name%"
+msgstr "Děkujeme Vám, že jste se přidali k věrnostnímu programu %name%"
+
+msgid "Your registration was successfull."
+msgstr "Vaše registrace proběhla úspěšně."
+
+msgid "You can set your password"
+msgstr "Můžete si nastavit své heslo"
+
+msgid "Please click the following URL to to set you password"
+msgstr "Prosím, klikněte na následující odkaz pro nastavení Vašeho hesla"
+
+msgid "If clicking the URL above does not work, copy and paste the URL into a browser window."
+msgstr "Pokud na tento odkaz nelze kliknout, zkopírujte ho a vložte do prohlížeče."
+
+msgid "The link will expire in an hour."
+msgstr "Platnost odkazu vyprší za hodinu."
+
+msgid "Please click the following URL to activate your account"
+msgstr "Prosím, klikněte na následující odkaz, abyste aktivovali svůj účet"
+
+msgid "Categories"
+msgstr "Kategorie"
+
+msgid "Add Main Category"
+msgstr "Přidat hlavní kategorii"
+
+msgid "New Main Category"
+msgstr "Nová hlavní kategorie"
+
+msgid "Edit of category"
+msgstr "Upravit kategorii"
+
+msgid "Edit selected category"
+msgstr "Upravit vybranou kategorii"
+
+msgid "Select some category from tree"
+msgstr "Vyberte kategorii ze stromu"
+
+msgid "Dashboard"
+msgstr "Úvodní stránka"
+
+msgid "reports & statistics"
+msgstr "reporty a statistiky"
+
+msgid "Example Form"
+msgstr "Vzorový formulář"
+
+msgid "Examples"
+msgstr "Příklady"
+
+msgid "Form"
+msgstr "Formulář"
+
+msgid "by Mediahost"
+msgstr "Mediahost"
+
+msgid "Add"
+msgstr "Přidat"
+
+msgid "Edit"
+msgstr "Upravit"
+
+msgid "Full Screen"
+msgstr "Celá obrazovka"
+
+msgid "Sign out"
+msgstr "Odhlásit"
+
+msgid "Home"
+msgstr "Domů"
+
+msgid "Pages"
+msgstr "Stránky"
+
+msgid "Add Page"
+msgstr "Přidat stránku"
+
+msgid "Edit Page"
+msgstr "Upravit stránku"
+
+msgid "page"
+msgstr "stránka"
+
+msgid "Parameters"
+msgstr "Parametry"
+
+msgid "Add new parameter"
+msgstr "Přidat nový parametr"
+
+msgid "Add Parameter"
+msgstr "Přidat parametr"
+
+msgid "String"
+msgstr "Řetězec"
+
+msgid "Number"
+msgstr "Číslo"
+
+msgid "YES or NO"
+msgstr "ANO nebo NE"
+
+msgid "Edit Parameter"
+msgstr "Upravit parametr"
+
+msgid "Producers"
+msgstr "Výrobci"
+
+msgid "Add Producer"
+msgstr "Přidat výrobce"
+
+msgid "Model Parameters"
+msgstr "Parametry modelu"
+
+msgid "Add Model Parameter"
+msgstr "Přidat parametr modelu"
+
+msgid "Edit Model Parameter"
+msgstr "Úprava parametru modelu"
+
+msgid "Edit of %name%"
+msgstr "Upravit %name%"
+
+msgid "Edit selected producer, line or model"
+msgstr "Upravit vybraného výrobce, řadu nebo model"
+
+msgid "Select some producer, line or model from tree"
+msgstr "Vyberte výrobce, řadu nebo model ze stromu"
+
+msgid "Products"
+msgstr "Zboží"
+
+msgid "Add Product"
+msgstr "Přidat zboží"
+
+msgid "CSV Update"
+msgstr "CSV aktualizace"
+
+msgid "Basic data"
+msgstr "Základní údaje"
+
+msgid "Prices"
+msgstr "Ceny"
+
+msgid "Quantity"
+msgstr "Množství"
+
+msgid "Classification"
+msgstr "Klasifikace"
+
+msgid "SEO"
+msgstr "SEO"
+
+msgid "Images"
+msgstr "Obrázky"
+
+msgid "Signs"
+msgstr "Příznaky"
+
+msgid "Similars"
+msgstr "Podobné zboží"
+
+msgid "Service Creators"
+msgstr "Service Creators"
+
+msgid "Services"
+msgstr "Services"
+
+msgid "Creators"
+msgstr "Creators"
+
+msgid "Nothing"
+msgstr "Nic"
+
+msgid "Nothing yet"
+msgstr "Zatím nic"
+
+msgid "Service Tools"
+msgstr "Servisní nástroje"
+
+msgid "Tools"
+msgstr "Nástroje"
+
+msgid "Import Init Data to DB"
+msgstr "Importovat inicializační data do DB"
+
+msgid "contains RE-INSTALL DB"
+msgstr "obsahuje RE-INSTALL DB"
+
+msgid "Clear all data in DB and imports initial data from test backup."
+msgstr ""
+"Smazat všechna data v DB a importovat počáteční data z testovací zálohy."
+
+msgid "Please create BACKUP before do this DB schema!"
+msgstr "Prosím, vytvořte ZÁLOHU předtím, než nahrajete toto DB schéma"
+
+msgid "Install DB"
+msgstr "Instalovat databázi"
+
+msgid "Run istalation procedure."
+msgstr "Spustit instalaci."
+
+msgid "DB will be maintained."
+msgstr "Databáze bude zachována."
+
+msgid "Reinstall DB"
+msgstr "Znovu instalovat databázi."
+
+msgid "Clear actual DB schema and reinstall DB"
+msgstr "Smazat aktuální DB schéma a přeinstalovat DB"
 
 msgid "Settings"
 msgstr "Nastavení"
 
-msgid "Grido.HintNumber"
-msgstr "Můžete použít <, <=, >, >=, <>. Např.: '>= %d'"
+msgid "E-Shop"
+msgstr "E-Shop"
 
-msgid "Grido.SelectSomeRow"
-msgstr "Vyberte řádek"
+msgid "Currency rate"
+msgstr "Kurz měny"
 
-msgid "Grido.Invert"
-msgstr "Obrátit výběr"
+msgid "Units"
+msgstr "Jednotky"
 
-msgid "Grido.Items"
-msgstr "Položky %d - %d z %d"
+msgid "Edit units"
+msgstr "Upravit jednotky"
 
-msgid "Grido.First"
-msgstr "První"
+msgid "Administration"
+msgstr "Správa"
 
-msgid "Grido.Previous"
-msgstr "Předchozí"
+msgid "Orders"
+msgstr "Objednávky"
 
-msgid "Grido.Next"
-msgstr "Další"
+msgid "Users"
+msgstr "Uživatelé"
 
-msgid "Grido.Last"
-msgstr "Poslední"
+msgid "Discounts"
+msgstr "Slevy"
 
-msgid "Grido.Actions"
-msgstr "Akce"
+msgid "Superadmin"
+msgstr "Superadmin"
 
-msgid "Grido.Search"
-msgstr "Vyhledat"
+msgid "Service"
+msgstr "Servis"
 
-msgid "Grido.Reset"
-msgstr "Resetovat"
+msgid "E-shop"
+msgstr "E-shop"
 
-msgid "Grido.ItemsPerPage"
-msgstr "Položek na stránku"
+msgid "Online Store"
+msgstr "Online obchod"
 
-msgid "Grido.Selected"
-msgstr "Vybrané..."
+msgid "Add Sign"
+msgstr "Přidat příznak"
 
-msgid "Grido.EnterPage"
-msgstr "Zadejte stranu:"
+msgid "Edit Sign"
+msgstr "Upravit příznak"
 
-msgid "Grido.NoResults"
-msgstr "Žádné výsledky."
+msgid "Theme Color"
+msgstr "Barva tématu"
 
-msgid "Grido.ExportAllItems"
-msgstr "Exportovat všechny položky"
+msgid "Layout"
+msgstr "Rozložení"
 
-msgid "Czech"
-msgstr "Čeština"
+msgid "Fluid"
+msgstr "Plovoucí"
+
+msgid "Boxed"
+msgstr "Boxed"
+
+msgid "Header"
+msgstr "Hlavička"
+
+msgid "Fixed"
+msgstr "Pevný"
+
+msgid "Default"
+msgstr "Výchozí"
+
+msgid "Sidebar Mode"
+msgstr "Mód bočního menu"
+
+msgid "Sidebar Menu"
+msgstr "Boční menu"
+
+msgid "Accordion"
+msgstr "Accordion"
+
+msgid "Hover"
+msgstr "Hover"
+
+msgid "Sidebar Style"
+msgstr "Sidebar Style"
+
+msgid "Light"
+msgstr "Světlý"
+
+msgid "Sidebar Position"
+msgstr "Sidebar Position"
+
+msgid "Left"
+msgstr "Levý"
+
+msgid "Right"
+msgstr "Pravý"
+
+msgid "Footer"
+msgstr "Patička"
+
+msgid "Add User"
+msgstr "Přidat uživatele"
+
+msgid "Edit User"
+msgstr "Upravit uživatele"
+
+msgid "View Cart"
+msgstr "Prohlédnout košík"
+
+msgid "Checkout"
+msgstr "Pokladna"
+
+msgid "Bestsellers"
+msgstr "Bestsellery"
+
+msgid "Search"
+msgstr "Hledat"
+
+msgid "Filter"
+msgstr "Filtr"
+
+msgid "Select your accessories for..."
+msgstr "Vyberte si příslušenství pro..."
+
+msgid "Access Denied"
+msgstr "Přistup zamítnut"
+
+msgid "You do not have permission to view this page."
+msgstr "Nemáte oprávnění ke shlédnutí této stránky."
+
+msgid "Please try contact the web site administrator if you believe you should be able to view this page."
+msgstr "Prosím, zkuste kontaktovat administrátora tohoto webu, pokud si myslíte, že byste sem měli mít přístup."
+
+msgid "Return home"
+msgstr "Zpátky domů"
+
+msgid "Logout"
+msgstr "Odhlásit"
+
+msgid "Oops!  You're lost."
+msgstr "Ups!  Ztratili jste se."
+
+msgid "We can not find the page you're looking for."
+msgstr "Nemůžeme najít stránku, kterou hledáte."
+
+msgid "or try the search bar above."
+msgstr "nebo zkuste použít vyhledávání nahoře."
+
+msgid "Page Not Found"
+msgstr "Stránka nenalezena"
+
+msgid "Method Not Allowed"
+msgstr "Metoda nepovolena"
+
+msgid "The requested method is not allowed for the URL."
+msgstr "Požadovaná metoda není povolena pro tuto URL"
+
+msgid "The page you requested has been taken off the site. We apologize for the inconvenience."
+msgstr "Stránka, kterou hledáte byla z webu smazána. Omlouváme se za způsobené nepříjemnosti."
+
+msgid "Oops..."
+msgstr "Ups..."
+
+msgid "Sorry, we have a problem."
+msgstr "Je nám líto, máme problém."
+
+msgid "Your browser sent a request that this server could not understand or process."
+msgstr "Váš prohlížeč poslal žádost, které tento server nerozumí nebo ji neumí zpracovat."
+
+msgid "Oops! Something went wrong."
+msgstr "Ups! Něco se pokazilo."
+
+msgid "We are fixing it!"
+msgstr "Už na tom pracujeme!"
+
+msgid "Please come back in a while."
+msgstr "Prosím, vraťte se za chvíli."
+
+msgid "Server Error"
+msgstr "Chyba serveru"
+
+msgid "Error"
+msgstr "Chyba"
+
+msgid "FreeShipping"
+msgstr "Zdarma"
+
+msgid "Free shipping"
+msgstr "Doprava zdarma"
+
+msgid "when buying over"
+msgstr "při nákupu nad"
+
+msgid "Extra Gifts"
+msgstr "Extra dárky"
+
+msgid "Free gifts for selected products"
+msgstr "Dárky zdarma k vybraným výrobkům"
+
+msgid "Order by phone"
+msgstr "Objednat po telefonu"
+
+msgid "Open hours"
+msgstr "Otevírací doba"
+
+msgid "Our Contacts"
+msgstr "Naše kontakty"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Latest Tweets"
+msgstr "Naše Tweety"
+
+msgid "Loading tweets by"
+msgstr "Načítání tweetů"
+
+msgid "Facebook Posts"
+msgstr "Naše příspěvky"
+
+msgid "Our Facebook"
+msgstr "Náš Facebook"
+
+msgid "Terms of Service"
+msgstr "Obchodní podmínky"
+
+msgid "Logo"
+msgstr "Logo"
+
+msgid "Top products"
+msgstr "Top zboží"
+
+msgid "Last visited"
+msgstr "Poslední navštívené"
+
+msgid "My Account"
+msgstr "Můj účet"
+
+msgid "Account"
+msgstr "Účet"
+
+msgid "My Social Connection"
+msgstr "Sociální sítě"
+
+msgid "Edit your account information"
+msgstr "Upravte své údaje o účtu"
+
+msgid "Connect your account with Facebook or Twitter"
+msgstr "Propojte svůj účet s Facebookem nebo Twitterem"
+
+msgid "Change your password"
+msgstr "Změňte své heslo"
+
+msgid "My Orders"
+msgstr "Moje objednávky"
+
+msgid "View your order history"
+msgstr "Prohlédněte si historii svých objednávek"
+
+msgid "Delete Account"
+msgstr "Smazat účet"
+
+msgid "Do you really want to delete all data for your account?"
+msgstr "Opravdu chcete vymazat všechny údaje ze svého účtu?"
+
+msgid "Yes, I want"
+msgstr "Ano, chci"
+
+msgid "Personal Info"
+msgstr "Osobní informace"
+
+msgid "Soacial Connection"
+msgstr "Spojení s účty"
+
+msgid "Change Password"
+msgstr "Změnit heslo"
+
+msgid "In Stock"
+msgstr "Skladem"
+
+msgid "Temporarily Sold Out"
+msgstr "Dočasně vyprodáno"
+
+msgid "Description"
+msgstr "Popis"
+
+msgid "Reviews"
+msgstr "Recenze"
+
+msgid "Additional features"
+msgstr "Additional Features"
+
+msgid "%type% for %name%"
+msgstr "%type% pro %name%"
+
+msgid "Post warranty, paid service interventions"
+msgstr "Pozáruční placené servisní zásahy"
+
+msgid "Repair"
+msgstr "Oprava"
+
+msgid "Price with vat"
+msgstr "Cena s DPH"
+
+msgid "Contact us:"
+msgstr "Kontaktujte nás:"
+
+msgid "Sign In"
+msgstr "Přihlásit se"
+
+msgid "Don't you have"
+msgstr "Doposud nemáte"
+
+msgid "your account"
+msgstr "svůj účet"
+
+msgid "Create account and gain an advantage in bonus program."
+msgstr "Vytvořte si účet a získejte výhody věrnostního programu."
+
+msgid "Create an account"
+msgstr "Vytvořit účet"
+
+msgid "Forgot Your Password?"
+msgstr "Zapomněli jste své heslo?"
+
+msgid "Enter your e-mail address below to set new one."
+msgstr "Zadejte svou emailovou adresu pro nastavení nového."
+
+msgid "Password recovery"
+msgstr "Obnova hesla"
+
+msgid "Enter a new password to your account."
+msgstr "Zadejte nové heslo k vašemu účtu."
+
+msgid "Registration"
+msgstr "Registrace"
+
+msgid "Easy to create..."
+msgstr "Hned hotovo..."
+
+msgid "Discounted shipping for"
+msgstr "Zlevněné poštovné pro"
+
+msgid "Admin"
+msgstr "Admin"
+
+msgid "%code% rate"
+msgstr "%code% kurz"
+
+msgid "We do not register any user with mail '%mail%'."
+msgstr "Není registrován žádný uživatel s emailem '%mail%'."
+
+msgid "Logged %name% account is using by another account."
+msgstr "Přihlašovací jméno %name% je používano jiným účtem."
+
+msgid "We can't find '%name%' to disconnect."
+msgstr "Nemůžeme najít '%name%' k odpojení."
+
+msgid "Last login method is not possible deactivate."
+msgstr "Poslední přihlašovací metodu nelze deaktivovat."
+
+msgid "%name% was connected."
+msgstr "%name% byl připojen."
+
+msgid "%name% was disconnected."
+msgstr "%name% byl odpojen."
+
+msgid "Password has been successfuly set!"
+msgstr "Heslo bylo úspěšně nastaveno!"
+
+msgid "You can't delete account."
+msgstr "Nemůžete vymazat účet."
+
+msgid "Your account has been deleted"
+msgstr "Váš účet byl smazán"
+
+msgid "You are logged as '%name'."
+msgstr "Jste přihlášen jako '%name%'."
+
+msgid "You can't access to this user."
+msgstr "Nelze získat přístup k tomuto uživateli."
+
+msgid "Not implemented yet."
+msgstr "Zatím není implementován."
+
+msgid "You can't edit this user."
+msgstr "Nemůžete upravovat tohoto uživatele."
+
+msgid "You have reached the maximum of user groups."
+msgstr "Dosáhli jste maximálního počtu uživatelských skupin."
+
+msgid "This image wasn't found for this product."
+msgstr "Obrázek nebyl pro tento produkt."
+
+msgid "You aren't logged in."
+msgstr "Nejste přihlášen."
+
+msgid "This color isn't supported."
+msgstr "Tato barva není podporována."
+
+msgid "There is no child for this selection."
+msgstr "Pro vybrané neexistuje potomek."
+
+msgid "Error while saving producer."
+msgstr "Chyba při ukládání výrobce."
+
+msgid "wasntFound"
+msgstr "%name% nebyl nalezen."
+
+msgid "cantBeEmpty"
+msgstr "%name% nemůže být prázdný"
+
+msgid "cannotDelete"
+msgstr "%name% nemůže být smazán"
+
+msgid "successfullyDeleted"
+msgstr "%name% byl úspěšně smazán"
+
+msgid "successfullySaved"
+msgstr "%type% '%name%' byl úspěšně uložen"
+
+msgid "successfullyUpdated"
+msgstr "%type% '%name%' byl úspěšně aktualizován"
+
+msgid "%count% product was successfully updated."
+msgstr "%count% zboží bylo úspěšně aktualizováno.|%count% zboží bylo úspěšně aktualizováno."
+
+msgid "Group"
+msgstr "Skupina"
+
+msgid "Groups"
+msgstr "Skupiny"
+
+msgid "Add Group"
+msgstr "Přidat skupinu"
+
+msgid "Edit Group"
+msgstr "Upravit skupinu"
+
+msgid "Parameter"
+msgstr "Parametr"
+
+msgid "Product"
+msgstr "Zboží"
+
+msgid "Sign"
+msgstr "Příznak"
+
+msgid "User"
+msgstr "Uživatel"
+
+msgid "Producer"
+msgstr "Výrobce"
+
+msgid "Line"
+msgstr "Řada"
+
+msgid "Model"
+msgstr "Model"
+
+msgid "Page"
+msgstr "Stránka"
+
+msgid "Entity type"
+msgstr "Typ entity"
+
+msgid "Entity"
+msgstr "Entita"
+
+msgid "Category"
+msgstr "Kategorie"
+
+msgid "Main category"
+msgstr "Hlavní kategorie"
+
+msgid "Parent category"
+msgstr "Nadřazená kategorie"
+
+msgid "Select some category"
+msgstr "Vybrat kategorii"
+
+msgid "Lang"
+msgstr "Jazyk"
+
+msgid "Name"
+msgstr "Název"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Your e-mail has been seccessfully verified!"
+msgstr "Váš email byl úspěšně ověřen!"
+
+msgid "Verification token is incorrect."
+msgstr "Ověřovací token je nesprávný."
+
+msgid "Recovery link has been sent to your mail."
+msgstr "Odkaz na obnovu byl odeslán na váš email."
+
+msgid "You have reached the maximum of free parameters for this type."
+msgstr "Dosáhli jste maximálního počtu volných parametrů pro tento typ."
+
+msgid "You are logged in."
+msgstr "Jste přihlášen."
+
+msgid "Your account has been seccessfully created."
+msgstr "Váš účet byl úspěšně vytvořen."
+
+msgid "Your password has been successfully changed!"
+msgstr "Vaše heslo bylo úspěšně změněno!"
+
+msgid "We have sent you a verification e-mail. Please check your inbox!"
+msgstr ""
+"Poslali jsme vám ověřovací email. Prosím, zkontrolujte si svou schránku!"
+
+msgid "%mail% is already registered."
+msgstr "%mail% je již registrován."
+
+msgid "At least %count% characters long."
+msgstr "Alespoň %count% znaků dlouhé."
+
+msgid "This module isn't allowed."
+msgstr "Tento modul není povolen."
+
+msgid "Requested product does't exist. Try to choose another from list."
+msgstr "Požadovaný produkt neexistuje. Zkuste si vybrat ze seznamu jiný."
+
+msgid "Requested category doesn't exist. Try to choose another from list."
+msgstr "Požadovaná kategorie neexistuje. Zkuste si vybrat ze seznamu jinou."
+
+msgid "Requested currency isn't supported."
+msgstr "Požadovaná měna není podporována."
+
+msgid "Requested language isn't supported."
+msgstr "Požadovaný jazyk není podporován."
+
+msgid "You should be logged in!"
+msgstr "Měl byste být přihlášen!"
+
+msgid "DB was reinstaled"
+msgstr "DB byla přeinstalována"
+
+msgid "DB was instaled"
+msgstr "DB byla instalována"
+
+msgid "Data was imported from SQL files"
+msgstr "Data byla importována z SQL souborů"
+
+msgid "This sorting method isn't supported."
+msgstr "Tato třídící metoda není podporována."
+
+msgid "This is only example form"
+msgstr "Toto je pouze vzorový formulář"
+
+msgid "We are sorry, twitter authentication failed hard."
+msgstr "Omlouváme se za selhání na Twitteru."
+
+msgid "We are sorry, facebook authentication failed hard."
+msgstr "Omlouváme se za selhání na Facebooku."
+
+msgid "You have been successfuly signed out."
+msgstr "Byl jste úspěšně odhlášen."
+
+msgid "E-mail account"
+msgstr "E-mail účet"
+
+msgid "Please enter your e-mail"
+msgstr "Prosím, vložte svůj email"
+
+msgid "E-mail"
+msgstr "E-mail"
+
+msgid "Fill right e-mail format"
+msgstr "Vyplňte správný formát emailu"
+
+msgid "Send"
+msgstr "Odeslat"
+
+msgid "New password"
+msgstr "Nové heslo"
+
+msgid "Password"
+msgstr "Heslo"
+
+msgid "Please enter your password"
+msgstr "Prosím, napište své heslo"
+
+msgid "Please re-enter your password"
+msgstr "Prosím, znovu napište své heslo"
+
+msgid "Password must be at least %count% characters long."
+msgstr "Heslo musí být alespoň %count% znaků dlouhé."
+
+msgid "Re-type Your Password"
+msgstr "Znovu napište své heslo"
+
+msgid "Passwords must be equal."
+msgstr "Hesla musí být shodná."
+
+msgid "Set new password"
+msgstr "Nastavit nové heslo"
+
+msgid "Please enter your e-mail."
+msgstr "Prosím, napište svůj email."
+
+msgid "E-mail has not valid format."
+msgstr "Email nemá platný formát."
+
+msgid "for example: example@domain.com"
+msgstr "například: example@domain.com"
+
+msgid "Continue"
+msgstr "Pokračovat"
+
+msgid "Image must be in valid image format"
+msgstr "Obrázek musí být v platném formátu"
+
+msgid "Slider"
+msgstr "Slider"
+
+msgid "Save & Add next"
+msgstr "Uložit a přidat další"
+
+msgid "Text"
+msgstr "Text"
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "Name is required"
+msgstr "Je vyžadováno jméno"
+
+msgid "ID #"
+msgstr "ID #"
+
+msgid "Are you sure you want to delete '%name%'?"
+msgstr "Jste si jisti, že chce vymazat '%name%'?"
+
+msgid "Shortly about contain of page"
+msgstr "Krátce o obsahu stránky"
+
+msgid "Fill if you want to redirect to other page"
+msgstr "Vyplňte, pokud chcete přesměrovat na jinou stránku"
+
+msgid "Content is required"
+msgstr "Obsah je vyžadovaný"
+
+msgid "This link is invalid"
+msgstr "Tento odkat je neplatný"
+
+msgid "Comment"
+msgstr "Komentář"
+
+msgid "Link"
+msgstr "Odkaz"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Text is required"
+msgstr "Je vyžadován text"
+
+msgid "Select some producer"
+msgstr "Vybrat výrobce"
+
+msgid "Select some line"
+msgstr "Vybrat řadu"
+
+msgid "Select some model"
+msgstr "Vybrat model"
+
+msgid "Text for service"
+msgstr "Text pro servis"
+
+msgid "Prices are with VAT"
+msgstr "Ceny jsou s DPH"
+
+msgid "YES"
+msgstr "ANO"
+
+msgid "NO"
+msgstr "NE"
+
+msgid "CSV file"
+msgstr "CSV soubor"
+
+msgid "Update Products"
+msgstr "Aktualizovat zboží"
+
+msgid "Product title"
+msgstr "Název zboží"
+
+msgid "Insert product name"
+msgstr "Vložit název zboží"
+
+msgid "Active"
+msgstr "Aktivní"
+
+msgid "Vat included"
+msgstr "včetně DPH"
+
+msgid "Vat"
+msgstr "DPH"
+
+msgid "Perex"
+msgstr "Perex"
+
+msgid "Code"
+msgstr "Kód"
+
+msgid "Barcode"
+msgstr "Čárový kód"
+
+msgid "All categories"
+msgstr "Všechny kategorie"
+
+msgid "Main Image"
+msgstr "Hlavní obrázek"
+
+msgid "New other image"
+msgstr "Další nový obrázek"
+
+msgid "Purchase price"
+msgstr "Kupní cena"
+
+msgid "Old price"
+msgstr "Stará cena"
+
+msgid "Url"
+msgstr "URL"
+
+msgid "Url must have %count% character at least"
+msgstr "Url musí mít alespoň %count% znaků"
+
+msgid "Title must have %count% character at least"
+msgstr "Název musí mít alespoň %count% znaků"
+
+msgid "Keywords"
+msgstr "Klíčová slova"
+
+msgid "Store"
+msgstr "Obchod"
+
+msgid "Locked"
+msgstr "Zamčený"
+
+msgid "Public"
+msgstr "Veřejný"
+
+msgid "View on web"
+msgstr "Na webu"
+
+msgid "Fill right format"
+msgstr "Vyplňte správný formát"
+
+msgid "Mail must be filled"
+msgstr "Mail musí být vyplněn"
+
+msgid "Roles"
+msgstr "Role"
+
+msgid "Access"
+msgstr "Přístup"
+
+msgid "Forget Password?"
+msgstr "Zapomněli jste heslo?"
+
+msgid "Remember"
+msgstr "Zapamatovat si"

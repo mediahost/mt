@@ -28,7 +28,8 @@ class ServicePresenter extends BasePresenter
 	{
 		$serviceSettings = $this->moduleService->getModuleSettings('service');
 		if (!$serviceSettings) {
-			$this->flashMessage('This module isn\'t allowed.', 'warning');
+			$message = $this->translator->translate('This module isn\'t allowed.');
+			$this->flashMessage($message, 'warning');
 			$this->redirect('Homepage:');
 		}
 
@@ -36,7 +37,8 @@ class ServicePresenter extends BasePresenter
 		$this->page = $pageRepo->find($serviceSettings->pageId);
 
 		if (!$this->page) {
-			$this->flashMessage('This page wasn\'t found.', 'warning');
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Page')]);
+			$this->flashMessage($message, 'warning');
 			$this->redirect('Homepage:');
 		}
 

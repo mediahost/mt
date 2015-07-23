@@ -16,7 +16,6 @@ use App\Model\Facade\ParameterFacade;
 use App\Model\Facade\ProducerFacade;
 use App\Model\Facade\StockFacade;
 use App\Model\Facade\UserFacade;
-use App\TaggedString;
 use h4kuna\Exchange\Exchange;
 use h4kuna\Exchange\ExchangeException;
 use Kdyby\Doctrine\EntityManager;
@@ -129,21 +128,6 @@ abstract class BasePresenter extends Presenter
 		return in_array($this->presenter->name, $presenterExceptions);
 	}
 
-	// <editor-fold desc="flash messages">
-
-	/** Translate flash messages if not HTML */
-	public function flashMessage($message, $type = 'info')
-	{
-		if (is_string($message)) {
-			$message = $this->translator->translate($message);
-		} else if ($message instanceof TaggedString) {
-			$message->setTranslator($this->translator);
-			$message = (string) $message;
-		}
-		parent::flashMessage($message, $type);
-	}
-
-	// </editor-fold>
 	// <editor-fold desc="requirments">
 
 	public function checkRequirements($element)
@@ -160,7 +144,8 @@ abstract class BasePresenter extends Presenter
 	private function checkSecured($resource, $privilege)
 	{
 		if (!$this->user->loggedIn) {
-			$this->flashMessage('You should be logged in!');
+			$message = $this->translator->translate('You should be logged in!');
+			$this->flashMessage($message);
 			$this->redirect(':Front:Sign:in', ['backlink' => $this->storeRequest()]);
 		} elseif (!$this->user->isAllowed($resource, $privilege)) {
 			throw new ForbiddenRequestException;
@@ -248,7 +233,8 @@ abstract class BasePresenter extends Presenter
 			$this->languageService->userLanguage = $newLang;
 			$this->redirect('this', ['locale' => $newLang]);
 		} else {
-			$this->flashMessage('Requested language isn\'t supported.', 'warning');
+			$message = $this->translator->translate('Requested language isn\'t supported.');
+			$this->flashMessage($message, 'warning');
 			$this->redirect('this');
 		}
 	}
@@ -261,7 +247,8 @@ abstract class BasePresenter extends Presenter
 			// TODO: save to user settings
 			$this->redirect('this', ['currency' => $newCode]);
 		} catch (ExchangeException $ex) {
-			$this->flashMessage('Requested currency isn\'t supported.', 'warning');
+			$message = $this->translator->translate('Requested currency isn\'t supported.');
+			$this->flashMessage($message, 'warning');
 			$this->redirect('this');
 		}
 	}

@@ -59,17 +59,17 @@ class UserBasic extends BaseControl
 				->addRule(Form::EMAIL, 'Fill right format')
 				->addRule(Form::FILLED, 'Mail must be filled');
 		if ($this->user->isNew()) {
-			$mail->addServerRule([$this, 'validateMail'], $this->translator->translate('%s is already registered.'));
+			$mail->addServerRule([$this, 'validateMail'], $this->translator->translate('%mail% is already registered.'));
 		} else {
 			$mail->setDisabled();
 		}
 
 		$password = $form->addText('password', 'Password');
 		if ($this->user->isNew()) {
-			$helpText = new TaggedString('At least %d characters long.', $this->passwordService->length);
+			$helpText = new TaggedString('At least %count% characters long.', $this->passwordService->length);
 			$helpText->setTranslator($this->translator);
 			$password->addRule(Form::FILLED, 'Password must be filled')
-					->addRule(Form::MIN_LENGTH, 'Password must be at least %d characters long.', $this->passwordService->length)
+					->addRule(Form::MIN_LENGTH, 'Password must be at least %count% characters long.', $this->passwordService->length)
 					->setOption('description', (string) $helpText);
 		}
 
@@ -100,7 +100,7 @@ class UserBasic extends BaseControl
 			$this->save();
 			$this->onAfterSave($this->user);
 		} catch (DuplicateEntryException $exc) {
-			$message = new TaggedString('\'%s\' is already registred', $values->mail);
+			$message = $this->translator->translate('%mail% is already registered.', NULL, ['mail' => $values->mail]);
 			$form['mail']->addError($message);
 		}
 	}

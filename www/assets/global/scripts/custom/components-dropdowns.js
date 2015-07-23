@@ -7,13 +7,15 @@ var ComponentsDropdowns = function () {
 				return result.text;
 			var markup = '<div class="clearfix">' +
 					'<div class="col-sm-1">' +
-					'<img src="' + result.image_thumbnail_100 + '" style="max-width: 100%" />' +
+						'<img src="' + result.image_thumbnail_100 + '" style="max-width: 100%" />' +
 					'</div>' +
-					'<div clas="col-sm-10">' +
-					'<div class="clearfix">' +
-					'<div class="col-sm-10">' + result.text + '</div>' +
+					'<div clas="col-sm-12">' +
+						'<div class="clearfix">' +
+							'<div class="col-sm-10">' + result.text + '</div>' +
+							'<div class="col-sm-2"><b>' + result.priceWithVatFormated + '</b></div>' +
+						'</div>' +
 					'</div>';
-			markup += '</div></div>';
+			markup += '</div>';
 			return markup;
 		};
 
@@ -41,12 +43,12 @@ var ComponentsDropdowns = function () {
 			}
 			if ($(this).hasClass('autocompleteProducts')) {
 				params.ajax = {
-					url: basePath + '/ajax/products/find-by-name',
-					dataType: 'jsonp',
+					url: basePath + '/product/search-json',
+					dataType: 'json',
 					delay: 250,
 					data: function (params) {
 						return {
-							lang: lang,
+							locale: lang,
 							text: params.term,
 							page: params.page,
 							perPage: 30
@@ -108,7 +110,7 @@ var ComponentsDropdowns = function () {
 			datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
 			queryTokenizer: Bloodhound.tokenizers.whitespace,
 			remote: {
-				url: basePath + '/ajax/stocks/find-by-fulltext?text=%QUERY&currency=' + currencyName + '&lang=' + lang,
+				url: basePath + '/category/search-json/?text=%QUERY&currency=' + currencyName + '&locale=' + lang,
 				wildcard: '%QUERY',
 				transform: transformFinded
 			}
@@ -133,7 +135,7 @@ var ComponentsDropdowns = function () {
 					'<div class="col-sm-2 image">',
 						'<img src="' + result.image_thumbnail_100 + '" style="max-width: 100%" />',
 					'</div>',
-					'<div class="col-sm-7 text">' + result.text + '</div>',
+					'<div class="col-sm-7 text">' + result.shortText + '</div>',
 					'<div class="col-sm-3 price"><strong>' + result.priceWithVatFormated + '</strong></div>',
 				'</a>',
 				'</div>'

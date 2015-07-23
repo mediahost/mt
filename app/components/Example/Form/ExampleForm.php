@@ -31,7 +31,7 @@ class ExampleForm extends BaseControl
 		$values = [1 => 'test1', 2 => 'test2'];
 
 		$form->addText('text', 'Text');
-		$form->addText('phone', 'Phone')
+			$form->addText('phone', 'Phone')
 				->setAttribute('class', 'mask_phone');
 		$form->addText('date', 'Date')
 				->setAttribute('class', 'mask_date');
@@ -89,7 +89,8 @@ class ExampleForm extends BaseControl
 
 	public function formSucceeded(Form $form, $values)
 	{
-		$this->presenter->flashMessage('This is only example form', 'success');
+		$message = $this->translator->translate('This is only example form');
+		$this->presenter->flashMessage($message, 'success');
 		$this->onAfterSave($form, $values);
 	}
 
