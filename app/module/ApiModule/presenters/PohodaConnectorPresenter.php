@@ -8,7 +8,7 @@ use Nette\Http\FileUpload;
 use Nette\Http\IRequest;
 use Tracy\Debugger;
 
-class PohodaPresenter extends BasePresenter
+class PohodaConnectorPresenter extends BasePresenter
 {
 
 	const LOGNAME = 'pohoda_api';
@@ -19,20 +19,25 @@ class PohodaPresenter extends BasePresenter
 
 	/** @var PohodaFacade @inject */
 	public $pohodaFacade;
-	
+
 	/** TODO: move to module settings */
-	private $allowedReadShortStock = TRUE;
+	private $allowedReadStorageCart = TRUE;
 	private $allowedReadOrders = TRUE;
 	private $allowedCreateStore = TRUE;
 	private $allowedCreateShortStock = TRUE;
+	private $ico = '123456789';
 
-	public function actionReadShortStock()
+	public function actionReadStorageCart()
 	{
-		if (!$this->allowedReadShortStock) {
+		if (!$this->allowedReadStorageCart) {
 			$this->resource->state = 'error';
 			$this->resource->message = 'This module is not allowed';
+		} else {
+			$this->resource->ico = $this->ico;
+			$this->resource->stocks = [];
+			$this->pohodaFacade->setLastSync(PohodaFacade::SHORT_STOCK, PohodaFacade::LAST_DOWNLOAD);
+			$this->setView('storageCart');
 		}
-		$this->resource->stock = 'actionReadShortStock ' . rand(1, 100);
 	}
 
 	public function actionReadOrders()
@@ -41,7 +46,9 @@ class PohodaPresenter extends BasePresenter
 			$this->resource->state = 'error';
 			$this->resource->message = 'This module is not allowed';
 		}
-		$this->setView();
+
+		$this->pohodaFacade->setLastSync(PohodaFacade::ORDERS, PohodaFacade::LAST_DOWNLOAD);
+		$this->resource->orders = rand(1, 100);
 	}
 
 	public function actionCreateStore($use_gzip_upload)
@@ -53,6 +60,7 @@ class PohodaPresenter extends BasePresenter
 		try {
 			$xml = $this->getFileContent($use_gzip_upload);
 			$this->pohodaFacade->recieveStore($xml);
+			$this->pohodaFacade->setLastSync(PohodaFacade::STORE, PohodaFacade::LAST_UPDATE);
 			$this->resource->state = 'ok';
 		} catch (Exception $ex) {
 			$this->resource->state = 'error';
@@ -71,6 +79,7 @@ class PohodaPresenter extends BasePresenter
 		try {
 			$xml = $this->getFileContent($use_gzip_upload);
 			$this->pohodaFacade->recieveShortStock($xml);
+			$this->pohodaFacade->setLastSync(PohodaFacade::SHORT_STOCK, PohodaFacade::LAST_UPDATE);
 			$this->resource->state = 'ok';
 		} catch (Exception $ex) {
 			$this->resource->state = 'error';

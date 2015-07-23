@@ -19,8 +19,9 @@ use XMLReader;
 class PohodaFacade extends Object
 {
 
-	const TYPE_STORE = 'store';
-	const TYPE_SHORT_STOCK = 'short_stock';
+	const STORE = 'store';
+	const SHORT_STOCK = 'short_stock';
+	const ORDERS = 'orders';
 	const DIR_FOR_IMPORT = 'files/pohoda-xml-import';
 	const FOLDER_UPLOADED = 'uploaded';
 	const FOLDER_PARSED = 'parsed';
@@ -44,14 +45,14 @@ class PohodaFacade extends Object
 
 	public function recieveStore($xml)
 	{
-		$type = self::TYPE_STORE;
+		$type = self::STORE;
 		$filename = $this->recieveXml($xml, $type);
 		return $this->parseXml($filename, $type);
 	}
 
 	public function recieveShortStock($xml)
 	{
-		$type = self::TYPE_SHORT_STOCK;
+		$type = self::SHORT_STOCK;
 		$filename = $this->recieveXml($xml, $type);
 		return $this->parseXml($filename, $type);
 	}
@@ -77,8 +78,8 @@ class PohodaFacade extends Object
 	{
 		$time = NULL;
 		switch ($type) {
-			case self::TYPE_STORE:
-			case self::TYPE_SHORT_STOCK:
+			case self::STORE:
+			case self::SHORT_STOCK:
 				$time = $this->getLastSyncDate(Strings::webalize($type), $sync);
 				break;
 		}
@@ -233,8 +234,7 @@ class PohodaFacade extends Object
 		$reader->close();
 
 		$this->onParseXml();
-
-		$this->setLastSync($type, self::LAST_UPDATE);
+		
 		$this->removeOlderParsedXml(DateTime::from('-' . $this->removeParsedXmlOlderThan), $type);
 		$this->moveXml($filename, self::FOLDER_PARSED, $type);
 	}
@@ -260,8 +260,8 @@ class PohodaFacade extends Object
 		if ($type) {
 			$folders[] = $type;
 		} else {
-			$folders[] = self::TYPE_STORE;
-			$folders[] = self::TYPE_SHORT_STOCK;
+			$folders[] = self::STORE;
+			$folders[] = self::SHORT_STOCK;
 		}
 		$paths = [];
 		foreach ($folders as $folder) {
