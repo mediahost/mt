@@ -41,22 +41,22 @@ class RouterFactory
 		// <editor-fold desc="Api">
 
 		$apiRouter[] = new ResourceRoute('xml_pohoda/objednavky.php', [
-			'presenter' => 'Pohoda',
+			'presenter' => 'PohodaConnector',
 			'action' => 'readOrders',
 				], ResourceRoute::GET);
 
 		$apiRouter[] = new ResourceRoute('xml_pohoda/download_stock.php', [
-			'presenter' => 'Pohoda',
+			'presenter' => 'PohodaConnector',
 			'action' => 'readStorageCart'
 				], ResourceRoute::GET);
 
 		$apiRouter[] = new ResourceRoute('xml_pohoda/zasoby.php', [
-			'presenter' => 'Pohoda',
+			'presenter' => 'PohodaConnector',
 			'action' => 'createStore'
 				], ResourceRoute::POST);
 
 		$apiRouter[] = new ResourceRoute('xml_pohoda/zasoby_short.php', [
-			'presenter' => 'Pohoda',
+			'presenter' => 'PohodaConnector',
 			'action' => 'createShortStock'
 				], ResourceRoute::POST);
 
