@@ -19,19 +19,37 @@ class PohodaPresenter extends BasePresenter
 
 	/** @var PohodaFacade @inject */
 	public $pohodaFacade;
+	
+	/** TODO: move to module settings */
+	private $allowedReadShortStock = TRUE;
+	private $allowedReadOrders = TRUE;
+	private $allowedCreateStore = TRUE;
+	private $allowedCreateShortStock = TRUE;
 
 	public function actionReadShortStock()
 	{
-		$this->resource->message = 'actionReadShortStock ' . rand(1, 100);
+		if (!$this->allowedReadShortStock) {
+			$this->resource->state = 'error';
+			$this->resource->message = 'This module is not allowed';
+		}
+		$this->resource->stock = 'actionReadShortStock ' . rand(1, 100);
 	}
 
 	public function actionReadOrders()
 	{
+		if (!$this->allowedReadOrders) {
+			$this->resource->state = 'error';
+			$this->resource->message = 'This module is not allowed';
+		}
 		$this->setView();
 	}
 
 	public function actionCreateStore($use_gzip_upload)
 	{
+		if (!$this->allowedCreateStore) {
+			$this->resource->state = 'error';
+			$this->resource->message = 'This module is not allowed';
+		}
 		try {
 			$xml = $this->getFileContent($use_gzip_upload);
 			$this->pohodaFacade->recieveStore($xml);
@@ -41,11 +59,15 @@ class PohodaPresenter extends BasePresenter
 			$this->resource->message = 'Error while processing XML';
 			Debugger::log($ex->getMessage(), self::LOGNAME);
 		}
-		$this->setView('state');
+		$this->setView('stockItemResponse');
 	}
 
 	public function actionCreateShortStock($use_gzip_upload)
 	{
+		if (!$this->allowedCreateShortStock) {
+			$this->resource->state = 'error';
+			$this->resource->message = 'This module is not allowed';
+		}
 		try {
 			$xml = $this->getFileContent($use_gzip_upload);
 			$this->pohodaFacade->recieveShortStock($xml);
@@ -55,7 +77,7 @@ class PohodaPresenter extends BasePresenter
 			$this->resource->message = 'Error while processing XML';
 			Debugger::log($ex->getMessage(), self::LOGNAME);
 		}
-		$this->setView('state');
+		$this->setView('stockItemResponse');
 	}
 
 	private function getFileContent($gzip)
