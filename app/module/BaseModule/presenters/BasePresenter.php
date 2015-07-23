@@ -5,7 +5,6 @@ namespace App\BaseModule\Presenters;
 use App\Components\Auth\ISignOutFactory;
 use App\Components\Auth\SignOut;
 use App\Extensions\Settings\Model\Service\DesignService;
-use App\Extensions\Settings\Model\Service\LanguageService;
 use App\Extensions\Settings\Model\Service\ModuleService;
 use App\Extensions\Settings\Model\Service\PageConfigService;
 use App\Extensions\Settings\Model\Service\PageInfoService;
@@ -60,9 +59,6 @@ abstract class BasePresenter extends Presenter
 	/** @var DesignService @inject */
 	public $designService;
 
-	/** @var LanguageService @inject */
-	public $languageService;
-
 	/** @var ModuleService @inject */
 	public $moduleService;
 
@@ -108,7 +104,7 @@ abstract class BasePresenter extends Presenter
 	{
 		$this->template->lang = $this->translator->locale;
 		$this->template->setTranslator($this->translator);
-		$this->template->allowedLanguages = $this->languageService->allowedLanguages;
+		$this->template->allowedLanguages = $this->translator->getAvailableLocales();
 		$this->template->designSettings = $this->designService->settings;
 		$this->template->designColors = $this->designService->colors;
 		$this->template->pageInfo = $this->pageInfoService;
@@ -229,8 +225,8 @@ abstract class BasePresenter extends Presenter
 
 	public function handleChangeLanguage($newLang)
 	{
-		if ($this->languageService->isAllowed($newLang)) {
-			$this->languageService->userLanguage = $newLang;
+		if ($this->translator->isAllowed($newLang)) {
+//			$this->languageService->userLanguage = $newLang;
 			$this->redirect('this', ['locale' => $newLang]);
 		} else {
 			$message = $this->translator->translate('Requested language isn\'t supported.');

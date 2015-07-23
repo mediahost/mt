@@ -2,13 +2,12 @@
 
 namespace App\Components;
 
-use App\Extensions\Settings\Model\Service\LanguageService;
 use App\Extensions\Settings\Model\Service\PasswordService;
 use Exception;
 use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\EntityManager;
+use Kdyby\Translation\Translator;
 use Nette\Application\UI;
-use Nette\Localization\ITranslator;
 
 abstract class BaseControl extends UI\Control
 {
@@ -18,13 +17,10 @@ abstract class BaseControl extends UI\Control
 	/** @var EntityManager @inject */
 	public $em;
 
-	/** @var LanguageService @inject */
-	public $languageService;
-
 	/** @var PasswordService @inject */
 	public $passwordService;
 
-	/** @var ITranslator @inject */
+	/** @var Translator @inject */
 	public $translator;
 
 	/** @var Exchange @inject */
