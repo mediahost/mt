@@ -8,7 +8,6 @@ use App\Components\Page\Grid\IPagesGridFactory;
 use App\Components\Page\Grid\PagesGrid;
 use App\Model\Entity\Page;
 use App\Model\Repository\PageRepository;
-use App\TaggedString;
 use Exception;
 
 class PagesPresenter extends BasePresenter
@@ -67,7 +66,8 @@ class PagesPresenter extends BasePresenter
 	{
 		$this->pageEntity = $this->pageRepo->find($id);
 		if (!$this->pageEntity) {
-			$this->flashMessage('This page wasn\'t found.', 'warning');
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Page')]);
+			$this->flashMessage($message, 'warning');
 			$this->redirect('default');
 		} else {
 			$this['pageForm']->setPage($this->pageEntity);
@@ -88,13 +88,16 @@ class PagesPresenter extends BasePresenter
 	{
 		$page = $this->pageRepo->find($id);
 		if (!$page) {
-			$this->flashMessage('Page wasn\'t found.', 'danger');
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Page')]);
+			$this->flashMessage($message, 'danger');
 		} else {
 			try {
 				$this->pageRepo->delete($page);
-				$this->flashMessage('Page was deleted.', 'success');
+				$message = $this->translator->translate('successfullyDeleted', NULL, ['name' => $this->translator->translate('Page')]);
+				$this->flashMessage($message, 'success');
 			} catch (Exception $e) {
-				$this->flashMessage('This page can\'t be deleted.', 'danger');
+				$message = $this->translator->translate('cannotDelete', NULL, ['name' => $this->translator->translate('Page')]);
+				$this->flashMessage($message, 'danger');
 			}
 		}
 		$this->redirect('default');
@@ -113,7 +116,9 @@ class PagesPresenter extends BasePresenter
 		$control = $this->iPageEditFactory->create();
 		$control->setLang($this->locale);
 		$control->onAfterSave = function (Page $savedPage) {
-			$message = new TaggedString('Page \'%s\' was successfully saved.', (string) $savedPage);
+			$message = $this->translator->translate('successfullySaved', NULL, [
+				'type' => $this->translator->translate('Page'), 'name' => (string) $savedPage
+			]);
 			$this->flashMessage($message, 'success');
 			$this->redirect('default');
 		};

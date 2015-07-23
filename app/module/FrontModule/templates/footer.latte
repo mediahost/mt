@@ -21,7 +21,7 @@
 			<div class="col-md-4 steps-block-col">
 				<i class="fa fa-truck"></i>
 				<div>
-					<h2>{_'Free shipping'}</h2>
+					<h2>{_'FreeShipping'}</h2>
 					<em>{_'when buying over'} {300|currency}</em>
 				</div>
 				<span>&nbsp;</span>
@@ -122,15 +122,24 @@
 
 			<!-- BEGIN TWITTER BLOCK --> 
 			<div class="col-md-4 col-sm-6 pre-footer-col">
-				<h2 class="margin-bottom-0">{_'Latest Tweets'}</h2>
-				<a class="twitter-timeline" 
-				   href="https://twitter.com/twitterapi" 
-				   data-tweet-limit="2" data-theme="dark" 
-				   data-link-color="#57C8EB" 
-				   data-widget-id="580719359452139520" 
-				   data-chrome="noheader nofooter noscrollbar noborders transparent">
-					{_'Loading tweets by'} @NetteFramework...
-				</a>
+				<h2 class="margin-bottom-20">{_'Our Facebook'}</h2>
+
+				{var fbURL => 'https://www.facebook.com/mobilnetelefony.sk'}
+				<div id="fb-root"></div>
+				<div class="fb-page"
+					 data-href="{$fbURL}" 
+					 data-small-header="false" 
+					 data-adapt-container-width="true" 
+					 data-hide-cover="false" 
+					 data-show-facepile="true" 
+					 data-show-posts="false">
+					<div class="fb-xfbml-parse-ignore">
+						<blockquote cite="{$fbURL}">
+							<a href="{$fbURL}">{$pageInfo->projectName}</a>
+						</blockquote>
+					</div>
+				</div>
+
 			</div>
 			<!-- END TWITTER BLOCK -->
 		</div>

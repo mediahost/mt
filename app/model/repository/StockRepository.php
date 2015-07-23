@@ -42,5 +42,13 @@ class StockRepository extends BaseRepository
 						->setFirstResult($offset)
 						->getResult();
 	}
+	
+	public function delete($stock, $deleteWithProduct = TRUE)
+	{
+		if ($deleteWithProduct && $stock->product) {
+			parent::delete($stock->product);
+		}
+		return parent::delete($stock);
+	}
 
 }

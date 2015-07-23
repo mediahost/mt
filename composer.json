@@ -66,6 +66,7 @@
 		"o5/grido": "@dev",
 		"h4kuna/exchange": "dev-master",
 		"kdyby/translation": "dev-master"
+		"drahak/restful": "@dev"
 	},
 	"require-dev": {
 		"nette/tester": "1.3.*@dev",

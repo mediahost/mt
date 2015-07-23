@@ -458,6 +458,9 @@ body.page-header-fixed {
   padding-top: 22px;
   padding-bottom: 22px;
 }
+.site-logo img {
+	width: 330px;
+}
 
 .header .mobi-toggler {
   float: right;
@@ -482,11 +485,9 @@ body.page-header-fixed {
 
 /* Navigation */
 .header-navigation {
-	font: 15px "Open Sans", sans-serif;
-	margin: 0 10px 0 0;
+	/*margin: 0 10px 0 0;*/
 	padding: 0;
-	float: left;
-	text-transform: uppercase;
+	float: right;
 }
 .header-navigation ul {
 	margin: 0;
@@ -719,8 +720,7 @@ body.page-header-fixed {
 
 .search-box {
 	margin-top: 28px;
-	margin-left: 270px;
-	margin-right: 267px;
+	margin-left: 470px;
 }
 .search-box input[type=text] {
 	height: 34px;

@@ -13,7 +13,8 @@ class PagePresenter extends BasePresenter
 		$page = $pageRepo->findOneByUrl($url);
 		
 		if (!$page) {
-			$this->flashMessage('This page wasn\'t found.', 'warning');
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Page')]);
+			$this->flashMessage($message, 'warning');
 			$this->redirect('Homepage:');
 		}
 		$page->setCurrentLocale($this->locale);

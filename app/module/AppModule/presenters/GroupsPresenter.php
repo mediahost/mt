@@ -7,7 +7,6 @@ use App\Components\Group\Grid\IGroupsGridFactory;
 use App\Components\Group\Form\GroupEdit;
 use App\Components\Group\Form\IGroupEditFactory;
 use App\Model\Entity\Group;
-use App\TaggedString;
 use Exception;
 use Kdyby\Doctrine\EntityRepository;
 
@@ -55,7 +54,8 @@ class GroupsPresenter extends BasePresenter
 	{
 		$nextLevel = $this->groupFacade->getLastUnusedLevel();
 		if (!$nextLevel) {
-			$this->flashMessage('You have reached the maximum of user groups.', 'warning');
+			$message = $this->translator->translate('You have reached the maximum of user groups.');
+			$this->flashMessage($message, 'warning');
 			$this->redirect('default');
 		}
 		$this->groupEntity = new Group($this->groupFacade->getLastUnusedLevel());
@@ -72,7 +72,8 @@ class GroupsPresenter extends BasePresenter
 	{
 		$this->groupEntity = $this->groupRepo->find($id);
 		if (!$this->groupEntity) {
-			$this->flashMessage('This group wasn\'t found.', 'warning');
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Group')]);
+			$this->flashMessage($message, 'warning');
 			$this->redirect('default');
 		} else {
 			$this['groupForm']->setGroup($this->groupEntity);
@@ -93,13 +94,16 @@ class GroupsPresenter extends BasePresenter
 	{
 		$group = $this->groupRepo->find($id);
 		if (!$group) {
-			$this->flashMessage('Group wasn\'t found.', 'danger');
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Group')]);
+			$this->flashMessage($message, 'danger');
 		} else {
 			try {
 				$this->groupRepo->delete($group);
-				$this->flashMessage('Group was deleted.', 'success');
+				$message = $this->translator->translate('successfullyDeleted', NULL, ['name' => $this->translator->translate('Group')]);
+				$this->flashMessage($message, 'success');
 			} catch (Exception $e) {
-				$this->flashMessage('This group can\'t be deleted.', 'danger');
+				$message = $this->translator->translate('cannotDelete', NULL, ['name' => $this->translator->translate('Group')]);
+				$this->flashMessage($message, 'danger');
 			}
 		}
 		$this->redirect('default');
@@ -112,7 +116,9 @@ class GroupsPresenter extends BasePresenter
 	{
 		$control = $this->iGroupEditFactory->create();
 		$control->onAfterSave = function (Group $savedGroup) {
-			$message = new TaggedString('Group \'%s\' was successfully saved.', (string) $savedGroup);
+			$message = $this->translator->translate('successfullySaved', NULL, [
+				'type' => $this->translator->translate('Group'), 'name' => (string) $savedGroup
+			]);
 			$this->flashMessage($message, 'success');
 			$this->redirect('default');
 		};

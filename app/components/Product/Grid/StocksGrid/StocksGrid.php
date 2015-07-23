@@ -10,6 +10,7 @@ use App\Model\Entity\Price;
 use App\Model\Entity\Stock;
 use Grido\DataSources\Doctrine;
 use Grido\Grid;
+use Nette\Utils\DateTime;
 
 class StocksGrid extends BaseControl
 {
@@ -27,15 +28,17 @@ class StocksGrid extends BaseControl
 				->leftJoin('s.product', 'p')
 				->leftJoin('p.translations', 't')
 				->where('t.locale = :lang OR t.locale = :defaultLang')
+				->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
 				->setParameter('lang', $this->lang)
-				->setParameter('defaultLang', $this->languageService->defaultLanguage);
+				->setParameter('defaultLang', $this->languageService->defaultLanguage)
+				->setParameter('now', new DateTime());
 		$grid->model = new Doctrine($qb, [
 			'product' => 'p',
 			'product.name' => 't.name',
 		]);
 
 		$grid->setDefaultSort([
-			'quantity' => 'DESC',
+			'id' => 'DESC',
 		]);
 
 		/*		 * ************************************************ */
@@ -145,8 +148,8 @@ class StocksGrid extends BaseControl
 		$grid->addActionHref('delete', 'Delete')
 						->setIcon('fa fa-trash-o')
 						->setConfirm(function($item) {
-							$message = $this->translator->translate('Are you sure you want to delete \'%s\'?');
-							return sprintf($message, (string) $item);
+							$message = $this->translator->translate('Are you sure you want to delete \'%name%\'?', NULL, ['name' => (string) $item]);
+							return $message;
 						})
 				->elementPrototype->class[] = 'red';
 

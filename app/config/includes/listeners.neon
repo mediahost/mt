@@ -4,3 +4,5 @@ services:
 	- {class: App\Listeners\SignListener, tags: [kdyby.subscriber], inject: yes}
 	# Entity Listeners
 	- {class: App\Listeners\Model\Entity\ImageListener, inject: yes}
+	# Facade Listeners
+	- {class: App\Listeners\Model\Facade\PohodaListener, tags: [kdyby.subscriber], inject: yes}

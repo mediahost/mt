@@ -1,0 +1,44 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sk_SK\n"
+
+msgid "Invert"
+msgstr "Invert"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "SelectSomeRow"
+msgstr "Select Some Row"
+
+msgid "First"
+msgstr "First"
+
+msgid "Previous"
+msgstr "Previous"
+
+msgid "EnterPage"
+msgstr "Enter Page"
+
+msgid "Next"
+msgstr "Next"
+
+msgid "Last"
+msgstr "Last"
+
+msgid "ExportAllItems"
+msgstr "Export All Items"
+
+msgid "NoResults"
+msgstr "No Results"
+
+msgid "Reset"
+msgstr "Reset"
+
+msgid "Search"
+msgstr "Search"
+
+msgid "Items"
+msgstr "Items %begin% to %end% of %count% total"

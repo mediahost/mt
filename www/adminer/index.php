@@ -2,6 +2,7 @@
 
 $allowedIPs = [
     '94.113.177.5', // Petr - Brno
+    '95.82.152.229', // Petr - COWO
     '127.0.0.1',
     '::1',
 ];
@@ -9,7 +10,7 @@ $allowedIPs = [
 if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) || !isset($_SERVER['REMOTE_ADDR']) ||
         !in_array($_SERVER['REMOTE_ADDR'], $allowedIPs)) {
     header('HTTP/1.1 403 Forbidden');
-    echo 'Adminer is available only from localhost';
+    echo 'Adminer is available only from localhost (' . $_SERVER['REMOTE_ADDR'] . ')';
     for ($i = 2e3; $i; $i--)
         echo substr(" \t\r\n", rand(0, 3), 1);
     exit;

@@ -57,7 +57,8 @@ class ProducersPresenter extends BasePresenter
 				$this->addRawData(NULL, $item);
 			}
 		} else {
-			$this->setError('There are no child for this selection.');
+			$message = $this->translator->translate('There is no child for this selection.');
+			$this->setError($message);
 		}
 	}
 
@@ -70,7 +71,8 @@ class ProducersPresenter extends BasePresenter
 			$lines = $this->producerFacade->getLinesList($findedProducer);
 			$this->addRawData('items', $lines);
 		} else {
-			$this->setError('This producer wasn\'t finded.');
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Producer')]);
+			$this->setError($message);
 		}
 	}
 
@@ -83,7 +85,8 @@ class ProducersPresenter extends BasePresenter
 			$models = $this->producerFacade->getModelsList($findedLine);
 			$this->addRawData('items', $models);
 		} else {
-			$this->setError('This producer wasn\'t finded.');
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Producer')]);
+			$this->setError($message);
 		}
 	}
 
@@ -95,7 +98,8 @@ class ProducersPresenter extends BasePresenter
 	public function actionCreateProducer($name, $parent)
 	{
 		if (empty($name)) {
-			$this->setError('Name can\'t be empty.');
+			$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('Name')]);
+			$this->setError($message);
 			return;
 		}
 
@@ -115,7 +119,8 @@ class ProducersPresenter extends BasePresenter
 		}
 
 		if (empty($createdId)) {
-			$this->setError('Error while saving producer.');
+			$message = $this->translator->translate('Error while saving producer.');
+			$this->setError($message);
 			return;
 		}
 
@@ -161,7 +166,8 @@ class ProducersPresenter extends BasePresenter
 	public function actionRenameProducer($id, $name)
 	{
 		if (empty($name)) {
-			$this->setError('Name can\'t be empty.');
+			$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('Name')]);
+			$this->setError($message);
 			return;
 		}
 
@@ -176,6 +182,10 @@ class ProducersPresenter extends BasePresenter
 			case ProducerModel::ID:
 				$repo = $this->em->getRepository(ProducerModel::getClassName());
 				break;
+			default:
+				$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('Type')]);
+				$this->setError($message);
+				break;
 		}
 
 		try {
@@ -185,7 +195,8 @@ class ProducersPresenter extends BasePresenter
 
 			$this->addData('name', $entity->name);
 		} catch (ORMException $e) {
-			$this->setError('ID can\'t be empty.');
+			$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('ID')]);
+			$this->setError($message);
 		}
 	}
 
@@ -208,22 +219,26 @@ class ProducersPresenter extends BasePresenter
 				$repo = $this->em->getRepository(ProducerModel::getClassName());
 				break;
 			default:
-				$this->setError('Entity type wasn\'t find.');
+				$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Entity type')]);
+				$this->setError($message);
 				return;
 		}
 
 		try {
 			$entity = $repo->find($itemId);
 			if (!$entity) {
-				$this->setError('Entity wasn\'t find.');
+				$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Entity')]);
+				$this->setError($message);
 				return;
 			}
 			$repo->delete($entity);
 			$this->addData('id', $entity->id);
 		} catch (ORMException $e) {
-			$this->setError('ID can\'t be empty.');
+			$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('ID')]);
+			$this->setError($message);
 		} catch (DBALException $e) {
-			$this->setError('Entity can\'t be deleted.');
+			$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('Entity')]);
+			$this->setError($message);
 		}
 	}
 

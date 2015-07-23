@@ -87,6 +87,7 @@
 					<div class="header-navigation-content">
 						<div class="row">
 							<div class="col-md-3 col-sm-4 col-xs-6" n:foreach="$newStocks as $stock">
+								{continueIf $iterator->counter > 4}
 								{var product => $stock->product}
 								<div class="product-item">
 									<div class="pi-img-wrapper">

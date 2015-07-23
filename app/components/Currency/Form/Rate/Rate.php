@@ -39,7 +39,7 @@ class Rate extends BaseControl
 			if ($code !== $defaultCurrency->getCode()) {
 				$currency->revertRate();
 				$rating = sprintf('ECB: 1%s = %.3f %s', $defaultSymbol, $currency->getRate(), $code);
-				$rates->addText($code, $this->translator->translate('%s rate', NULL, $code))
+				$rates->addText($code, $this->translator->translate('%code% rate', NULL, ['code' => $code]))
 								->setOption('description', $rating)
 								->setAttribute('placeholder', $currency->getRate())
 								->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_M;

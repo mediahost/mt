@@ -8,7 +8,6 @@ use App\Components\Parameter\Form\ParameterAdd;
 use App\Components\Parameter\Form\ParameterEdit;
 use App\Components\Parameter\Grid\IParametersGridFactory;
 use App\Model\Entity\Parameter;
-use App\TaggedString;
 use Exception;
 use Kdyby\Doctrine\EntityRepository;
 
@@ -68,7 +67,8 @@ class ParametersPresenter extends BasePresenter
 		}
 		$lastUnusedCode = $this->parameterFacade->getLastUnusedCode($type);
 		if (!$lastUnusedCode) {
-			$this->flashMessage('You have reached the maximum of free parameters for this type.', 'warning');
+			$message = $this->translator->translate('You have reached the maximum of free parameters for this type.');
+			$this->flashMessage($message, 'warning');
 			$this->redirect('default');
 		}		
 		$this->parameterEntity = new Parameter($lastUnusedCode);
@@ -84,7 +84,8 @@ class ParametersPresenter extends BasePresenter
 	{
 		$this->parameterEntity = $this->parameterRepo->find($id);
 		if (!$this->parameterEntity) {
-			$this->flashMessage('This parameter wasn\'t found.', 'warning');
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Parameter')]);
+			$this->flashMessage($message, 'warning');
 			$this->redirect('default');
 		} else {
 			$this['parameterEditForm']->setParameter($this->parameterEntity);
@@ -100,13 +101,16 @@ class ParametersPresenter extends BasePresenter
 	{
 		$parameter = $this->parameterRepo->find($id);
 		if (!$parameter) {
-			$this->flashMessage('Parameter wasn\'t found.', 'danger');
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Parameter')]);
+			$this->flashMessage($message, 'danger');
 		} else {
 			try {
 				$this->parameterRepo->delete($parameter);
-				$this->flashMessage('Parameter was deleted.', 'success');
+				$message = $this->translator->translate('successfullyDeleted', NULL, ['name' => $this->translator->translate('Parameter')]);
+				$this->flashMessage($message, 'success');
 			} catch (Exception $e) {
-				$this->flashMessage('This parameter can\'t be deleted.', 'danger');
+				$message = $this->translator->translate('cannotDelete', NULL, ['name' => $this->translator->translate('Parameter')]);
+				$this->flashMessage($message, 'danger');
 			}
 		}
 		$this->redirect('default');
@@ -134,7 +138,9 @@ class ParametersPresenter extends BasePresenter
 
 	public function afterSave(Parameter $savedParameter)
 	{
-		$message = new TaggedString('Parameter \'%s\' was successfully saved.', (string) $savedParameter);
+		$message = $this->translator->translate('successfullySaved', NULL, [
+			'type' => $this->translator->translate('Parameter'), 'name' => (string) $savedParameter
+		]);
 		$this->flashMessage($message, 'success');
 		$this->redirect('default');
 	}
