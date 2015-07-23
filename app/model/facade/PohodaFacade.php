@@ -12,6 +12,7 @@ use Nette\DI\Container;
 use Nette\Object;
 use Nette\Utils\DateTime;
 use Nette\Utils\FileSystem;
+use Nette\Utils\Finder;
 use Nette\Utils\Strings;
 use XMLReader;
 
@@ -23,10 +24,8 @@ class PohodaFacade extends Object
 	const DIR_FOR_IMPORT = 'files/pohoda-xml-import';
 	const FOLDER_UPLOADED = 'uploaded';
 	const FOLDER_PARSED = 'parsed';
-	const DATA_STRING = 'string';
-	const DATA_INT = 'int';
-	const DATA_BOOL = 'bool';
-	const DATA_FLOAT = 'float';
+	const LAST_UPDATE = 'last-update';
+	const LAST_DOWNLOAD = 'last-download';
 
 	/** @var array */
 	public $onRecieveXml = [];
@@ -39,6 +38,9 @@ class PohodaFacade extends Object
 
 	/** @var Container @inject */
 	public $container;
+	
+	/** TODO: move to module settings */
+	private $removeParsedXmlOlderThan = '1 month';
 
 	public function recieveStore($xml)
 	{
@@ -54,18 +56,6 @@ class PohodaFacade extends Object
 		return $this->parseXml($filename, $type);
 	}
 
-	public function getLastUpdate($type)
-	{
-		$time = NULL;
-		switch ($type) {
-			case self::TYPE_STORE:
-			case self::TYPE_SHORT_STOCK:
-				$time = $this->getLastUpdateDate(Strings::webalize($type));
-				break;
-		}
-		return $time;
-	}
-
 	protected function recieveXml($xml, $type)
 	{
 		if ($xml) {
@@ -75,6 +65,24 @@ class PohodaFacade extends Object
 		} else {
 			throw new Exception('XML file is empty');
 		}
+	}
+
+	public function setLastSync($type, $sync = self::LAST_UPDATE)
+	{
+		$filename = $this->getFilenameLastSync($type, $sync);
+		file_put_contents($filename, time());
+	}
+
+	public function getLastSync($type, $sync = self::LAST_UPDATE)
+	{
+		$time = NULL;
+		switch ($type) {
+			case self::TYPE_STORE:
+			case self::TYPE_SHORT_STOCK:
+				$time = $this->getLastSyncDate(Strings::webalize($type), $sync);
+				break;
+		}
+		return $time;
 	}
 
 	protected function parseXml($filename, $type, $startLine = NULL, $finishLine = NULL)
@@ -226,7 +234,8 @@ class PohodaFacade extends Object
 
 		$this->onParseXml();
 
-		$this->setLastUpdate($type);
+		$this->setLastSync($type, self::LAST_UPDATE);
+		$this->removeOlderParsedXml(DateTime::from('-' . $this->removeParsedXmlOlderThan), $type);
 		$this->moveXml($filename, self::FOLDER_PARSED, $type);
 	}
 
@@ -245,10 +254,27 @@ class PohodaFacade extends Object
 		return $dest;
 	}
 
-	protected function setLastUpdate($type)
+	protected function removeOlderParsedXml(DateTime $date, $type = NULL)
 	{
-		$filename = $this->getFilenameLastUpdate($type);
-		file_put_contents($filename, time());
+		$folders = [];
+		if ($type) {
+			$folders[] = $type;
+		} else {
+			$folders[] = self::TYPE_STORE;
+			$folders[] = self::TYPE_SHORT_STOCK;
+		}
+		$paths = [];
+		foreach ($folders as $folder) {
+			$paths[] = realpath($this->getDirForXml(self::FOLDER_PARSED, $folder));
+		}
+		foreach (Finder::findFiles('*.xml')->in($paths) as $filename => $file) {
+			if (preg_match('/(\d+).xml$/', $filename, $matches)) {
+				$xmlTime = DateTime::from($matches[1]);
+				if ($xmlTime < $date) {
+					FileSystem::delete($filename);
+				}
+			}
+		}
 	}
 
 	protected function getRootDir()
@@ -275,19 +301,21 @@ class PohodaFacade extends Object
 		return $this->getDirForXml($dir, $folder) . '/' . $filename;
 	}
 
-	protected function getFilenameLastUpdate($type)
+	protected function getFilenameLastSync($type, $sync)
 	{
 		$filename = Strings::webalize($type) . '.time';
-		return $this->getRootDir() . '/' . $filename;
+		$dir = Helpers::getPath($this->getRootDir(), $sync);
+		FileSystem::createDir($dir);
+		return $dir . '/' . $filename;
 	}
 
-	protected function getLastUpdateDate($type)
+	protected function getLastSyncDate($type, $sync)
 	{
-		$filename = $this->getFilenameLastUpdate($type);
+		$filename = $this->getFilenameLastSync($type, $sync);
 		if (is_file($filename)) {
 			$content = file_get_contents($filename);
 			if ($content) {
-				return new DateTime($content);
+				return DateTime::from($content);
 			}
 		}
 		return NULL;
