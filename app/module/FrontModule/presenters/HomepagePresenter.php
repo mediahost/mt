@@ -33,9 +33,12 @@ class HomepagePresenter extends BasePresenter
 	{
 //		$xml = file_get_contents('./stock_20150721070056.xml');
 //		$this->pohodaFacade->recieveStore($xml);
+		$xml = file_get_contents('./short_stock_20150715015849.xml');
+		$this->pohodaFacade->recieveShortStock($xml);
 //		var_dump($this->pohodaFacade->getLastUpdate(PohodaFacade::TYPE_SHORT_STOCK));
 //		$this->pohodaFacade->removeOlderParsedXml(\Nette\Utils\DateTime::from('2015-07-22 13:57:50'));
-		$time = $this->pohodaFacade->getLastSync(PohodaFacade::STORE, PohodaFacade::LAST_UPDATE);
+//		$time = $this->pohodaFacade->getLastSync(PohodaFacade::ALL_PRODUCTS, PohodaFacade::LAST_UPDATE);
+//		\Tracy\Debugger::barDump($time);
 		$this->terminate();
 	}
 

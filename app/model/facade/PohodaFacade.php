@@ -20,7 +20,8 @@ class PohodaFacade extends Object
 {
 
 	const STORE = 'store';
-	const SHORT_STOCK = 'short_stock';
+	const SHORT_STOCK = 'short-stock';
+	const ANY_IMPORT = 'any-import';
 	const ORDERS = 'orders';
 	const DIR_FOR_IMPORT = 'files/pohoda-xml-import';
 	const FOLDER_UPLOADED = 'uploaded';
@@ -39,9 +40,21 @@ class PohodaFacade extends Object
 
 	/** @var Container @inject */
 	public $container;
-	
+
 	/** TODO: move to module settings */
 	private $removeParsedXmlOlderThan = '1 month';
+	private $vatRates = [
+		'high' => 20,
+		'low' => 15,
+		'none' => 0,
+	];
+
+	public function importProducts()
+	{
+		exit;
+//		$pohodaRepo = $this->em->getRepository(PohodaItem::getClassName());
+//		$pohodaItems = $pohodaRepo->findBy(['isInternet' => 'true']);
+	}
 
 	public function recieveStore($xml)
 	{
@@ -80,10 +93,17 @@ class PohodaFacade extends Object
 		switch ($type) {
 			case self::STORE:
 			case self::SHORT_STOCK:
+			case self::ANY_IMPORT:
 				$time = $this->getLastSyncDate(Strings::webalize($type), $sync);
 				break;
 		}
 		return $time;
+	}
+
+	public function clearLastSync($type, $sync)
+	{
+		$filename = $this->getFilenameLastSync($type, $sync);
+		FileSystem::delete($filename);
 	}
 
 	protected function parseXml($filename, $type, $startLine = NULL, $finishLine = NULL)
@@ -132,7 +152,8 @@ class PohodaFacade extends Object
 									$reader->name === 'stk:sellingPriceWithVAT' ||
 									$reader->name === 'stk:purchasingRateVAT' ||
 									$reader->name === 'stk:sellingRateVAT' ||
-									$reader->name === 'stk:isSales'
+									$reader->name === 'stk:isSales' ||
+									$reader->name === 'stk:isInternet'
 									)) {
 								$item->{$reader->name} = $reader->readString();
 							}
@@ -178,8 +199,8 @@ class PohodaFacade extends Object
 						}
 					} // stk:stockPriceItem
 				} // product end
-				// update/add storage
-				if (isset($item->storage) && isset($item->storage->typ_id) && isset($item->storage->typ_ids)) {
+
+				if (isset($item->storage) && isset($item->storage->typ_id) && isset($item->storage->typ_ids)) { // update/add storage
 					$storage = $storageRepo->find($item->storage->typ_id);
 					if (!$storage) {
 						$storage = new PohodaStorage($item->storage->typ_id);
@@ -200,10 +221,12 @@ class PohodaFacade extends Object
 					$optional = [
 						'stk_name' => 'name',
 						'stk_isSales' => 'isSales',
+						'stk_isInternet' => 'isInternet',
 						'stk_purchasingRateVAT' => 'purchasingRateVAT',
 						'stk_sellingRateVAT' => 'sellingRateVAT',
 						'stk_purchasingPrice' => 'purchasingPrice',
 						'stk_sellingPrice' => 'sellingPrice',
+						'stk_sellingPriceWithVAT' => 'sellingPriceWithVAT',
 						'stk_count' => 'count',
 						'stk_countReceivedOrders' => 'countReceivedOrders',
 					];
@@ -215,11 +238,20 @@ class PohodaFacade extends Object
 					if (isset($item->stockPrice) && is_array($item->stockPrice)) {
 						foreach ($item->stockPrice as $priceItem) {
 							if (isset($priceItem->typ_id) && $priceItem->typ_id === '1') {
+								$item->stockPrice1 = $priceItem->typ_price;
 								$product->priceItem1 = $priceItem->typ_price;
 							}
 						}
 					}
-
+					
+					// recount selling price
+					$sellingVatRate = $this->vatRates[$product->sellingRateVAT];
+					if (isset($item->sellingPrice) && isset($item->sellingPriceWithVAT)) {
+						$product->setRecountedSellingPrice($item->sellingPrice, $item->sellingPriceWithVAT, $sellingVatRate);
+					} else if (isset($item->stockPrice1)) {
+						$product->setRecountedSellingPrice(NULL, $item->stockPrice1, $sellingVatRate);
+					}
+					
 					$this->em->persist($product);
 					$counter++;
 				}
@@ -230,11 +262,12 @@ class PohodaFacade extends Object
 				}
 			} // products end
 		} // READER END
+
 		$this->em->flush();
 		$reader->close();
 
-		$this->onParseXml();
-		
+		$this->onParseXml($type);
+
 		$this->removeOlderParsedXml(DateTime::from('-' . $this->removeParsedXmlOlderThan), $type);
 		$this->moveXml($filename, self::FOLDER_PARSED, $type);
 	}

@@ -7,7 +7,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
 use Knp\DoctrineBehaviors\Model;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Model\Repository\PohodaItemRepository")
  *
  * @property int $id
  * @property string $code
@@ -23,9 +23,15 @@ use Knp\DoctrineBehaviors\Model;
  * @property string $purchasingRateVAT
  * @property string $sellingRateVAT
  * @property string $isSales
+ * @property string $isInternet
  */
 class PohodaItem extends BaseEntity
 {
+
+	const VALUE_VAT_HIGH = 'high';
+	const VALUE_VAT_LOW = 'low';
+	const VALUE_VAT_NONE = 'none';
+	const VALUE_TRUE = 'true';
 
 	use Model\Timestampable\Timestampable;
 
@@ -54,26 +60,35 @@ class PohodaItem extends BaseEntity
 	/** @ORM\Column(type="string", length=20, nullable=true) */
 	protected $countReceivedOrders;
 
-	/** @ORM\Column(type="string", length=50, nullable=true) */
-	protected $purchasingPrice;
-
-	/** @ORM\Column(type="string", length=50, nullable=true) */
-	protected $priceItem1;
-
-	/** @ORM\Column(type="string", length=50, nullable=true) */
-	protected $sellingPrice;
-
-	/** @ORM\Column(type="string", length=20, nullable=true) */
-	protected $sellingPriceWithVAT;
-
-	/** @ORM\Column(type="string", length=10, nullable=true) */
-	protected $purchasingRateVAT;
-
-	/** @ORM\Column(type="string", length=10, nullable=true) */
-	protected $sellingRateVAT;
-
 	/** @ORM\Column(type="string", length=10, nullable=true) */
 	protected $isSales;
+
+	/** @ORM\Column(type="string", length=10, nullable=true) */
+	protected $isInternet;
+
+	/** @ORM\Column(type="string", length=50, nullable=true) */
+	protected $purchasingPrice; // Nákupní cena. Pokud není uvedena, bere se jako NULOVÁ. | Pokud není uveden atribut payVAT, jedná se o "Nákupní cena bez DPH".
+
+	/** @ORM\Column(type="string", length=10, nullable=true) */
+	protected $purchasingRateVAT; // Sazba DPH pro nákup.
+
+	/** @ORM\Column(type="string", length=50, nullable=true) */
+	protected $priceItem1; // Cena zásoby. ID = 1
+
+	/** @ORM\Column(type="string", length=50, nullable=true) */
+	protected $sellingPrice; // Prodejní cena. Pokud není uvedena, bere se jako NULOVÁ. | Pokud není uveden atribut payVAT, jedná se o "Prodejní cena bez DPH".
+
+	/** @ORM\Column(type="string", length=20, nullable=true) */
+	protected $sellingPriceWithVAT; // with VAT
+
+	/** @ORM\Column(type="string", length=10, nullable=true) */
+	protected $sellingRateVAT; // Sazba DPH pro prodej.
+
+	/** @ORM\Column(type="float", nullable=true) */
+	private $recountedSellingWithoutVat;
+
+	/** @ORM\Column(type="float", nullable=true) */
+	private $recountedSellingWithVat;
 
 	public function __construct($id)
 	{
@@ -81,9 +96,68 @@ class PohodaItem extends BaseEntity
 		parent::__construct();
 	}
 
-	public function __toString()
+	public function getName()
 	{
-		return (string) ($this->code . ':' . $this->value);
+		return (string) $this->name;
+	}
+
+	public function getEan()
+	{
+		return (string) $this->ean;
+	}
+
+	public function getCount()
+	{
+		return (int) $this->count;
+	}
+
+	public function getCountRecievedOrders()
+	{
+		return (int) $this->countReceivedOrders;
+	}
+
+	public function getIsSales()
+	{
+		return ($this->isSales === self::VALUE_TRUE);
+	}
+
+	public function getIsInternet()
+	{
+		return ($this->isInternet === self::VALUE_TRUE);
+	}
+
+	public function getSellingRateVAT()
+	{
+		switch ($this->sellingRateVAT) {
+			case self::VALUE_VAT_HIGH:
+			case self::VALUE_VAT_LOW:
+			case self::VALUE_VAT_NONE:
+				return $this->sellingRateVAT;
+			default:
+				return self::VALUE_VAT_NONE;
+		}
+	}
+
+	public function setRecountedSellingPrice($valueWithoutVat = NULL, $valueWithVat = NULL, $vatValue = 0)
+	{
+		$vat = new Vat($vatValue);
+		if ($valueWithoutVat) {
+			$price = new Price($vat, $valueWithoutVat, TRUE);
+		} else {
+			$price = new Price($vat, $valueWithVat, FALSE);
+		}
+		$this->recountedSellingWithoutVat = $price->withoutVat;
+		$this->recountedSellingWithVat = $price->withVat;
+	}
+
+	public function getPurchasingPriceWithoutVat()
+	{
+		return (float) $this->purchasingPrice;
+	}
+
+	public function getSellingPriceWithoutVat()
+	{
+		return (float) $this->sellingPrice;
 	}
 
 }
