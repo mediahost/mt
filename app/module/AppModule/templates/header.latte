@@ -25,14 +25,17 @@
 				<!-- BEGIN LANGUAGE BAR -->
 				<li class="dropdown dropdown-language" n:if="$user->loggedIn">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-						<img alt="{_$allowedLanguages[$lang]}" src="{$basePath}/assets/global/img/flags/{$lang}.png">
-						<span class="langname">{_$allowedLanguages[$lang]}</span> <i class="fa fa-angle-down"></i>
+						<img alt="{_locale.$lang}" src="{$basePath}/assets/global/img/flags/{$lang}.png">
+						<span class="langname">{_locale.$lang}</span> <i class="fa fa-angle-down"></i>
 					</a>
 					<ul class="dropdown-menu dropdown-menu-default">
-						<li n:foreach="$allowedLanguages as $langCode => $langName" n:if="$langCode !== $lang">
-							<a n:href="changeLanguage! $langCode">
-							<img alt="{_$langName}" src="{$basePath}/assets/global/img/flags/{$langCode}.png" />{_$langName}</a>
-						</li>
+						{foreach $allowedLanguages as $locale}
+							{var $code = substr($locale,0,2)}
+							<li n:if="$code !== $lang">
+								<a n:href="changeLanguage! $code">
+								<img alt="{_locale.$code}" src="{$basePath}/assets/global/img/flags/{$code}.png" />{_locale.$code}</a>
+							</li>
+						{/foreach}
 					</ul>
 				</li>
 				<!-- END LANGUAGE BAR -->
