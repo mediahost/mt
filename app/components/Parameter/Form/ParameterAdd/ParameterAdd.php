@@ -31,7 +31,7 @@ class ParameterAdd extends BaseControl
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
 		
-		$this->parameter->setCurrentLocale($this->languageService->defaultLanguage);
+		$this->parameter->setCurrentLocale($this->translator->getDefaultLocale());
 
 		$form->addText('name', 'Name')
 				->setRequired('Name is required');

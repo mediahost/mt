@@ -2,10 +2,10 @@
 
 namespace App\Model\Facade;
 
-use App\Extensions\Settings\Model\Service\LanguageService;
 use App\Model\Entity\Unit;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\EntityRepository;
+use Kdyby\Translation\Translator;
 use Nette\Object;
 
 class UnitFacade extends Object
@@ -14,8 +14,8 @@ class UnitFacade extends Object
 	/** @var EntityManager @inject */
 	public $em;
 
-	/** @var LanguageService @inject */
-	public $languageService;
+	/** @var Translator @inject */
+	public $translator;
 
 	/** @var EntityRepository */
 	private $unitRepo;
@@ -29,7 +29,7 @@ class UnitFacade extends Object
 	public function getUnitsList($lang = NULL)
 	{
 		if ($lang === NULL) {
-			$lang = $this->languageService->defaultLanguage;
+			$lang = $this->translator->getDefaultLocale();
 		}
 		$vats = [];
 		foreach ($this->unitRepo->findAll() as $unit) {

@@ -23,7 +23,7 @@ class ParametersGrid extends BaseControl
 				->leftJoin('p.translations', 't')
 				->where('t.locale = :lang OR t.locale = :defaultLang')
 				->setParameter('lang', $this->lang)
-				->setParameter('defaultLang', $this->languageService->defaultLanguage);
+				->setParameter('defaultLang', $this->translator->getDefaultLocale());
 		$grid->model = new Doctrine($qb, [
 			'name' => 't.name',
 		]);

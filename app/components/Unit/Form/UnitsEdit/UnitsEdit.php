@@ -56,7 +56,7 @@ class UnitsEdit extends BaseControl
 	private function saveUnit($id, $value)
 	{
 		$unitRepo = $this->em->getRepository(Unit::getClassName());
-		$defaultLang = $this->languageService->defaultLanguage;
+		$defaultLang = $this->translator->getDefaultLocale();
 		$isLangDefault = $this->lang === $defaultLang;
 		/* @var $unit Unit */
 		$unit = $unitRepo->find($id);
@@ -82,7 +82,7 @@ class UnitsEdit extends BaseControl
 		];
 		foreach ($this->units as $unit) {
 			$unit->setCurrentLocale($this->lang);
-			if ($unit->translate($this->lang)->name !== $unit->translate($this->languageService->defaultLanguage)->name) {
+			if ($unit->translate($this->lang)->name !== $unit->translate($this->translator->getDefaultLocale())->name) {
 				$values['units'][$unit->id] = $unit->translate($this->lang)->name;
 			}
 		}

@@ -130,7 +130,7 @@ class ProducerEdit extends BaseControl
 
 	private function loadProducer(ArrayHash $values)
 	{
-		$lang = $this->entity->isNew() ? $this->languageService->defaultLanguage : $this->lang;
+		$lang = $this->entity->isNew() ? $this->translator->getDefaultLocale() : $this->lang;
 		$this->entity->translateAdd($lang)->serviceHtml = $values->service_html;
 		$this->entity->mergeNewTranslations();
 		if ($values->image->isImage()) {
@@ -140,7 +140,7 @@ class ProducerEdit extends BaseControl
 
 	private function loadProducerModel(ArrayHash $values)
 	{
-		$lang = $this->entity->isNew() ? $this->languageService->defaultLanguage : $this->lang;
+		$lang = $this->entity->isNew() ? $this->translator->getDefaultLocale() : $this->lang;
 		$this->entity->translateAdd($lang)->html = $values->html;
 		$this->entity->mergeNewTranslations();
 		if ($values->image->isImage()) {

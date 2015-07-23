@@ -31,7 +31,7 @@ class SignEdit extends BaseControl
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
 
-		$defaultLang = $this->languageService->defaultLanguage;
+		$defaultLang = $this->translator->getDefaultLocale();
 
 		$form->addText('name', 'Name')
 				->setRequired('Name is required')
@@ -53,7 +53,7 @@ class SignEdit extends BaseControl
 
 	private function load(ArrayHash $values)
 	{
-		$defaultLang = $this->languageService->defaultLanguage;
+		$defaultLang = $this->translator->getDefaultLocale();
 		if ($this->sign->isNew() && $defaultLang !== $this->lang) {
 			$this->sign->translateAdd($defaultLang)->name = $values->name;
 		}

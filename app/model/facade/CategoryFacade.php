@@ -2,10 +2,10 @@
 
 namespace App\Model\Facade;
 
-use App\Extensions\Settings\Model\Service\LanguageService;
 use App\Model\Entity\Category;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\EntityRepository;
+use Kdyby\Translation\Translator;
 use Nette\Object;
 
 class CategoryFacade extends Object
@@ -14,8 +14,8 @@ class CategoryFacade extends Object
 	/** @var EntityManager @inject */
 	public $em;
 
-	/** @var LanguageService @inject */
-	public $languageService;
+	/** @var Translator @inject */
+	public $translator;
 
 	/** @var EntityRepository */
 	private $categoryRepo;
@@ -29,7 +29,7 @@ class CategoryFacade extends Object
 	public function getCategoriesList($lang = NULL)
 	{
 		if ($lang === NULL) {
-			$lang = $this->languageService->defaultLanguage;
+			$lang = $this->translator->getDefaultLocale();
 		}
 		$categories = [];
 		foreach ($this->categoryRepo->findAll() as $category) {

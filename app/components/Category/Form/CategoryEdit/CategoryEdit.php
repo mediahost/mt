@@ -31,7 +31,7 @@ class CategoryEdit extends BaseControl
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
 
-		$defaultLanguage = $this->languageService->defaultLanguage;
+		$defaultLanguage = $this->translator->getDefaultLocale();
 
 		$form->addText('name', 'Name')
 				->setRequired('Name is required')
@@ -74,7 +74,7 @@ class CategoryEdit extends BaseControl
 
 	private function load(ArrayHash $values)
 	{
-		$lang = $this->category->isNew() ? $this->languageService->defaultLanguage : $this->lang;
+		$lang = $this->category->isNew() ? $this->translator->getDefaultLocale() : $this->lang;
 		$this->category->translateAdd($lang)->name = $values->name;
 		$this->category->translateAdd($lang)->html = $values->html;
 		$this->category->mergeNewTranslations();

@@ -8,7 +8,6 @@ use Nette\Utils\ArrayHash;
 
 /**
  * @property ArrayHash $expiration Expiration default settings
- * @property ArrayHash $languages Languages default settings
  * @property ArrayHash $passwords Passwords default settings
  * @property ArrayHash $design Design default settings
  * @property ArrayHash $pageConfig Page Controls default settings
@@ -24,9 +23,6 @@ class DefaultSettingsStorage extends Object
 
 	/** @var ArrayHash */
 	private $expiration;
-
-	/** @var ArrayHash */
-	private $languages;
 
 	/** @var ArrayHash */
 	private $passwords;
@@ -66,19 +62,6 @@ class DefaultSettingsStorage extends Object
 	public function getExpiration()
 	{
 		return $this->expiration;
-	}
-
-	/** @return self */
-	public function setLanguages(array $languages)
-	{
-		$this->languages = ArrayHash::from($languages);
-		return $this;
-	}
-	
-	/** @return ArrayHash */
-	public function getLanguages()
-	{
-		return $this->languages;
 	}
 
 	/** @return self */

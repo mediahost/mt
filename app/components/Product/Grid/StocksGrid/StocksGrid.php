@@ -30,7 +30,7 @@ class StocksGrid extends BaseControl
 				->where('t.locale = :lang OR t.locale = :defaultLang')
 				->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
 				->setParameter('lang', $this->lang)
-				->setParameter('defaultLang', $this->languageService->defaultLanguage)
+				->setParameter('defaultLang', $this->translator->getDefaultLocale())
 				->setParameter('now', new DateTime());
 		$grid->model = new Doctrine($qb, [
 			'product' => 'p',
