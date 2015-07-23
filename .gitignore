@@ -2,17 +2,14 @@
 ## Log
 #################
 /log/*
-!/log/
 !/log/.htaccess
 
 #################
 ## Temp
 #################
 /temp/*
-!/temp/
 !/temp/.htaccess
 /www/webtemp/*
-!/www/webtemp/
 !/www/webtemp/.htaccess
 
 #################
@@ -36,7 +33,6 @@
 #################
 /tests/test.log
 /tests/tmp/*
-!/tests/tmp/
 
 #################
 ## Bin

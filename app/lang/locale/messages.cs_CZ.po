@@ -19,7 +19,7 @@ msgstr "Přihlásit se"
 msgid "Logout"
 msgstr "Odhlásit se"
 
-msgid "My Profile"
+msgid "My Account"
 msgstr "Můj profil"
 
 msgid "Sign In"
