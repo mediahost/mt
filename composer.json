@@ -65,7 +65,7 @@
 		"nextras/forms": "~1.4",
 		"o5/grido": "@dev",
 		"h4kuna/exchange": "dev-master",
-		"kdyby/translation": "* v2.2.0",
+		"kdyby/translation": "dev-master",
 		"drahak/restful": "@dev"
 	},
 	"require-dev": {

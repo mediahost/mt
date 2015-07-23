@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "05c49754b52a75752451f6d64d9afcaf",
+    "hash": "995bbe3df3286dd05c96697cff1cca44",
     "packages": [
         {
             "name": "dg/adminer-custom",
@@ -1719,16 +1719,16 @@
         },
         {
             "name": "kdyby/translation",
-            "version": "v2.2.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Kdyby/Translation.git",
-                "reference": "d61f9d899616cb02c57b234eb4174618dcdfbf76"
+                "reference": "e4ba0c17df5b9c3b1a70b4d753fe6157f902ade4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kdyby/Translation/zipball/d61f9d899616cb02c57b234eb4174618dcdfbf76",
-                "reference": "d61f9d899616cb02c57b234eb4174618dcdfbf76",
+                "url": "https://api.github.com/repos/Kdyby/Translation/zipball/e4ba0c17df5b9c3b1a70b4d753fe6157f902ade4",
+                "reference": "e4ba0c17df5b9c3b1a70b4d753fe6157f902ade4",
                 "shasum": ""
             },
             "require": {
@@ -1741,11 +1741,12 @@
                 "nette/php-generator": "~2.3@dev",
                 "nette/reflection": "~2.3@dev",
                 "nette/utils": "~2.3@dev",
-                "symfony/config": "~2.6",
-                "symfony/translation": "~2.6"
+                "symfony/config": "~2.5",
+                "symfony/translation": "~2.5"
             },
             "require-dev": {
                 "latte/latte": "~2.3@dev",
+                "mockery/mockery": "~0.9",
                 "nette/application": "~2.3@dev",
                 "nette/bootstrap": "~2.3@dev",
                 "nette/caching": "~2.3@dev",
@@ -1763,10 +1764,10 @@
                 "nette/robot-loader": "~2.3@dev",
                 "nette/safe-stream": "~2.3@dev",
                 "nette/security": "~2.3@dev",
-                "nette/tester": "~1.3@rc",
+                "nette/tester": "~1.4",
                 "nette/tokenizer": "~2.2@dev",
                 "nette/utils": "~2.3@dev",
-                "symfony/console": "~2.5",
+                "symfony/console": "~2.3",
                 "tracy/tracy": "~2.3@dev"
             },
             "suggest": {
@@ -1809,7 +1810,7 @@
                 "nette",
                 "translation"
             ],
-            "time": "2015-05-09 17:33:00"
+            "time": "2015-07-17 15:36:20"
         },
         {
             "name": "kdyby/validator",
@@ -4322,6 +4323,7 @@
         "zeleznypa/nette-button-macros": 20,
         "o5/grido": 20,
         "h4kuna/exchange": 20,
+        "kdyby/translation": 20,
         "drahak/restful": 20,
         "nette/tester": 20,
         "kdyby/tester-extras": 20

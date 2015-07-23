@@ -51,7 +51,6 @@ services:
 		factory: @httpRequest::getUrl()
 
 	nette.templateFactory: App\Templating\TemplateFactory
-	security.userStorage: Majkl578\NetteAddons\Doctrine2Identity\Http\UserStorage
 
 extensions:
 	onControlCreate: App\Extensions\ListenersGenericRegistration\DI\EventOnControlCreateCreateExtension
@@ -59,3 +58,4 @@ extensions:
 	installer: App\Extensions\Installer\DI\InstallerExtension
 	settings: App\Extensions\Settings\DI\SettingsExtension
 	foto: App\Extensions\Foto\DI\FotoExtension
+	userStorage: App\Extensions\UserStorage\DI\UserStorageExtension

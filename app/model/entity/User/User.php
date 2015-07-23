@@ -17,9 +17,9 @@ use Nette\Security\IIdentity;
  * @ORM\Entity(repositoryClass="App\Model\Repository\UserRepository")
  *
  * @property string $mail
- * @method self setMail(string $mail)
- * @property PageConfigSettings $pageConfigSettings
- * @property PageDesignSettings $pageDesignSettings
+ * @property string $locale
+ * @property string $currency
+ * @method User setMail(string $mail)
  */
 class User extends BaseEntity implements IIdentity, IUserSocials
 {
@@ -30,14 +30,20 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	use UserPassword;
 	use UserSocials;
 
-	/** @ORM\Column(type="string", nullable=false, unique=true) */
+	/**
+	 * @ORM\Column(type="string", nullable=false, unique=true)
+	 */
 	protected $mail;
 
-	/** @ORM\OneToOne(targetEntity="PageConfigSettings", fetch="EAGER", cascade={"persist", "remove"}) */
-	protected $pageConfigSettings;
+	/**
+	 * @ORM\Column(type="string", length=8, nullable=true)
+	 */
+	protected $locale;
 
-	/** @ORM\OneToOne(targetEntity="PageDesignSettings", fetch="EAGER", cascade={"persist", "remove"}) */
-	protected $pageDesignSettings;
+	/**
+	 * @ORM\Column(type="string", length=8, nullable=true)
+	 */
+	protected $currency;
 
 	public function __construct($mail = NULL)
 	{
@@ -57,9 +63,9 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	public function toArray()
 	{
 		return [
-				'id'   => $this->id,
-				'mail' => $this->mail,
-				'role' => $this->roles->toArray(),
+			'id' => $this->id,
+			'mail' => $this->mail,
+			'role' => $this->roles->toArray(),
 		];
 	}
 
