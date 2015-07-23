@@ -6,4 +6,4 @@ translation:
 	fallback: [en_US, en]
 	whitelist: [cs, en, sk]
 	resolvers:
-		session: on
+		header: off
