@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "34f36186049d22e74d01b89843315b4a",
+    "hash": "3966159fd46088a6a4812346a622ebe3",
     "packages": [
         {
             "name": "dg/adminer-custom",
@@ -1660,16 +1660,16 @@
         },
         {
             "name": "kdyby/translation",
-            "version": "v2.2.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Kdyby/Translation.git",
-                "reference": "d61f9d899616cb02c57b234eb4174618dcdfbf76"
+                "reference": "dbcdae9e95c6ca56f73d103f696bdbe1f151c669"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kdyby/Translation/zipball/d61f9d899616cb02c57b234eb4174618dcdfbf76",
-                "reference": "d61f9d899616cb02c57b234eb4174618dcdfbf76",
+                "url": "https://api.github.com/repos/Kdyby/Translation/zipball/dbcdae9e95c6ca56f73d103f696bdbe1f151c669",
+                "reference": "dbcdae9e95c6ca56f73d103f696bdbe1f151c669",
                 "shasum": ""
             },
             "require": {
@@ -1682,11 +1682,12 @@
                 "nette/php-generator": "~2.3@dev",
                 "nette/reflection": "~2.3@dev",
                 "nette/utils": "~2.3@dev",
-                "symfony/config": "~2.6",
-                "symfony/translation": "~2.6"
+                "symfony/config": "~2.5",
+                "symfony/translation": "~2.5"
             },
             "require-dev": {
                 "latte/latte": "~2.3@dev",
+                "mockery/mockery": "~0.9",
                 "nette/application": "~2.3@dev",
                 "nette/bootstrap": "~2.3@dev",
                 "nette/caching": "~2.3@dev",
@@ -1704,10 +1705,10 @@
                 "nette/robot-loader": "~2.3@dev",
                 "nette/safe-stream": "~2.3@dev",
                 "nette/security": "~2.3@dev",
-                "nette/tester": "~1.3@rc",
+                "nette/tester": "~1.4",
                 "nette/tokenizer": "~2.2@dev",
                 "nette/utils": "~2.3@dev",
-                "symfony/console": "~2.5",
+                "symfony/console": "~2.3",
                 "tracy/tracy": "~2.3@dev"
             },
             "suggest": {
@@ -1750,7 +1751,7 @@
                 "nette",
                 "translation"
             ],
-            "time": "2015-05-09 17:33:00"
+            "time": "2015-07-15 02:02:08"
         },
         {
             "name": "kdyby/validator",
@@ -2061,27 +2062,30 @@
         },
         {
             "name": "majkl578/nette-identity-doctrine",
-            "version": "2.1",
+            "version": "v2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Majkl578/nette-identity-doctrine.git",
-                "reference": "f6e6d459a0a4d14cf17d3167c456090dc88b8de6"
+                "reference": "2e005a80a35cd61699a923c0d9fe4d66e7cdae63"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Majkl578/nette-identity-doctrine/zipball/f6e6d459a0a4d14cf17d3167c456090dc88b8de6",
-                "reference": "f6e6d459a0a4d14cf17d3167c456090dc88b8de6",
+                "url": "https://api.github.com/repos/Majkl578/nette-identity-doctrine/zipball/2e005a80a35cd61699a923c0d9fe4d66e7cdae63",
+                "reference": "2e005a80a35cd61699a923c0d9fe4d66e7cdae63",
                 "shasum": ""
             },
             "require": {
                 "doctrine/orm": "~2.3",
-                "nette/nette": "~2.0",
+                "nette/nette": "~2.1",
                 "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "kdyby/doctrine": "~2.0"
             },
             "type": "nette-addon",
             "autoload": {
-                "psr-0": {
-                    "Majkl578\\NetteAddons\\Doctrine2Identity\\": "lib/"
+                "psr-4": {
+                    "Majkl578\\NetteAddons\\Doctrine2Identity\\": "lib"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2102,7 +2106,7 @@
                 "orm",
                 "security"
             ],
-            "time": "2013-12-09 14:24:34"
+            "time": "2015-07-12 19:14:41"
         },
         {
             "name": "natxet/CssMin",
@@ -3495,16 +3499,16 @@
         },
         {
             "name": "symfony/config",
-            "version": "v2.7.1",
+            "version": "v2.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config.git",
-                "reference": "58ded81f1f582a87c528ef3dae9a859f78b5f374"
+                "reference": "6c905bbed1e728226de656e4c07d620dfe9e80d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/58ded81f1f582a87c528ef3dae9a859f78b5f374",
-                "reference": "58ded81f1f582a87c528ef3dae9a859f78b5f374",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/6c905bbed1e728226de656e4c07d620dfe9e80d9",
+                "reference": "6c905bbed1e728226de656e4c07d620dfe9e80d9",
                 "shasum": ""
             },
             "require": {
@@ -3541,20 +3545,20 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2015-06-11 14:06:56"
+            "time": "2015-07-09 16:07:40"
         },
         {
             "name": "symfony/console",
-            "version": "v2.7.1",
+            "version": "v2.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "564398bc1f33faf92fc2ec86859983d30eb81806"
+                "reference": "8cf484449130cabfd98dcb4694ca9945802a21ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/564398bc1f33faf92fc2ec86859983d30eb81806",
-                "reference": "564398bc1f33faf92fc2ec86859983d30eb81806",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/8cf484449130cabfd98dcb4694ca9945802a21ed",
+                "reference": "8cf484449130cabfd98dcb4694ca9945802a21ed",
                 "shasum": ""
             },
             "require": {
@@ -3598,20 +3602,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2015-06-10 15:30:22"
+            "time": "2015-07-09 16:07:40"
         },
         {
             "name": "symfony/filesystem",
-            "version": "v2.7.1",
+            "version": "v2.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Filesystem.git",
-                "reference": "a0d43eb3e17d4f4c6990289805a488a0482a07f3"
+                "reference": "2d7b2ddaf3f548f4292df49a99d19c853d43f0b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/a0d43eb3e17d4f4c6990289805a488a0482a07f3",
-                "reference": "a0d43eb3e17d4f4c6990289805a488a0482a07f3",
+                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/2d7b2ddaf3f548f4292df49a99d19c853d43f0b8",
+                "reference": "2d7b2ddaf3f548f4292df49a99d19c853d43f0b8",
                 "shasum": ""
             },
             "require": {
@@ -3647,20 +3651,20 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2015-06-08 09:37:21"
+            "time": "2015-07-09 16:07:40"
         },
         {
             "name": "symfony/property-access",
-            "version": "v2.7.1",
+            "version": "v2.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/PropertyAccess.git",
-                "reference": "c30871f355c311b33bd0b9be7d07514f920f2f8d"
+                "reference": "e7e04d79fcf9c2bac53810cfd78c1afc3ac55005"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/PropertyAccess/zipball/c30871f355c311b33bd0b9be7d07514f920f2f8d",
-                "reference": "c30871f355c311b33bd0b9be7d07514f920f2f8d",
+                "url": "https://api.github.com/repos/symfony/PropertyAccess/zipball/e7e04d79fcf9c2bac53810cfd78c1afc3ac55005",
+                "reference": "e7e04d79fcf9c2bac53810cfd78c1afc3ac55005",
                 "shasum": ""
             },
             "require": {
@@ -3707,20 +3711,20 @@
                 "property path",
                 "reflection"
             ],
-            "time": "2015-06-08 09:37:21"
+            "time": "2015-06-16 13:26:24"
         },
         {
             "name": "symfony/translation",
-            "version": "v2.7.1",
+            "version": "v2.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Translation.git",
-                "reference": "8349a2b0d11bd0311df9e8914408080912983a0b"
+                "reference": "c8dc34cc936152c609cdd722af317e4239d10dd6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Translation/zipball/8349a2b0d11bd0311df9e8914408080912983a0b",
-                "reference": "8349a2b0d11bd0311df9e8914408080912983a0b",
+                "url": "https://api.github.com/repos/symfony/Translation/zipball/c8dc34cc936152c609cdd722af317e4239d10dd6",
+                "reference": "c8dc34cc936152c609cdd722af317e4239d10dd6",
                 "shasum": ""
             },
             "require": {
@@ -3768,20 +3772,20 @@
             ],
             "description": "Symfony Translation Component",
             "homepage": "https://symfony.com",
-            "time": "2015-06-11 17:26:34"
+            "time": "2015-07-09 16:07:40"
         },
         {
             "name": "symfony/validator",
-            "version": "v2.7.1",
+            "version": "v2.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Validator.git",
-                "reference": "3c58b1ef26ab2114f8f84d1808937b9b76bad8f5"
+                "reference": "26a190dbdf7a19fc2251c2d59547a717918b6c77"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Validator/zipball/3c58b1ef26ab2114f8f84d1808937b9b76bad8f5",
-                "reference": "3c58b1ef26ab2114f8f84d1808937b9b76bad8f5",
+                "url": "https://api.github.com/repos/symfony/Validator/zipball/26a190dbdf7a19fc2251c2d59547a717918b6c77",
+                "reference": "26a190dbdf7a19fc2251c2d59547a717918b6c77",
                 "shasum": ""
             },
             "require": {
@@ -3838,7 +3842,7 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "https://symfony.com",
-            "time": "2015-06-08 09:37:21"
+            "time": "2015-07-02 06:17:05"
         },
         {
             "name": "tedivm/jshrink",
@@ -4214,16 +4218,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v2.7.1",
+            "version": "v2.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Process.git",
-                "reference": "552d8efdc80980cbcca50b28d626ac8e36e3cdd1"
+                "reference": "48aeb0e48600321c272955132d7606ab0a49adb3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Process/zipball/552d8efdc80980cbcca50b28d626ac8e36e3cdd1",
-                "reference": "552d8efdc80980cbcca50b28d626ac8e36e3cdd1",
+                "url": "https://api.github.com/repos/symfony/Process/zipball/48aeb0e48600321c272955132d7606ab0a49adb3",
+                "reference": "48aeb0e48600321c272955132d7606ab0a49adb3",
                 "shasum": ""
             },
             "require": {
@@ -4259,7 +4263,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2015-06-08 09:37:21"
+            "time": "2015-07-01 11:25:50"
         }
     ],
     "aliases": [],
@@ -4285,6 +4289,7 @@
         "zeleznypa/nette-button-macros": 20,
         "o5/grido": 20,
         "h4kuna/exchange": 20,
+        "kdyby/translation": 20,
         "nette/tester": 20,
         "kdyby/tester-extras": 20
     },

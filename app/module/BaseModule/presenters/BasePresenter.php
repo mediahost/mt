@@ -20,7 +20,7 @@ use App\TaggedString;
 use h4kuna\Exchange\Exchange;
 use h4kuna\Exchange\ExchangeException;
 use Kdyby\Doctrine\EntityManager;
-use Kdyby\Translation\ITranslator;
+use Kdyby\Translation\Translator;
 use Nette\Application\ForbiddenRequestException;
 use Nette\Application\UI\Presenter;
 use WebLoader\Nette\CssLoader;
@@ -33,7 +33,7 @@ abstract class BasePresenter extends Presenter
 {
 
 	/** @persistent */
-	public $locale = '';
+	public $locale;
 
 	/** @persistent */
 	public $currency = '';
@@ -52,7 +52,7 @@ abstract class BasePresenter extends Presenter
 	/** @var ISignOutFactory @inject */
 	public $iSignOutFactory;
 
-	/** @var ITranslator @inject */
+	/** @var Translator @inject */
 	public $translator;
 
 	/** @var DefaultSettingsStorage @inject */
@@ -100,14 +100,14 @@ abstract class BasePresenter extends Presenter
 	{
 		parent::startup();
 		$this->loadUserSettings();
-		$this->setLang();
+		$this->setLocale();
 		$this->setCurrency();
 		$this->loadPriceLevel();
 	}
 
 	protected function beforeRender()
 	{
-		$this->template->lang = $this->locale;
+		$this->template->lang = $this->translator->locale;
 		$this->template->setTranslator($this->translator);
 		$this->template->allowedLanguages = $this->languageService->allowedLanguages;
 		$this->template->designSettings = $this->designService->settings;
@@ -179,29 +179,15 @@ abstract class BasePresenter extends Presenter
 	}
 
 	// </editor-fold>
-	// <editor-fold desc="language">
+	// <editor-fold desc="locale">
 
-	private function setLang()
+	public function setLocale()
 	{
-		if ($this->isInstallPresenter()) { // defaultLanguage for some presenters
-			$this->locale = NULL;
-			return;
-		}
-
-		/**
-		 * Nejvyšší prioritu má jazyk nastavený u uživatele
-		 * Druhou prioritu má jazyk zadaný v URL
-		 * V případě, že není jazyk nastaven ani v uživatelském nastavení, ani URL, pak se detekuje automaticky
-		 */
-		// for identity in session load from settings
-		if ($this->languageService->userLanguage || !$this->locale) {
-			$this->locale = $this->languageService->userLanguage;
-		}
-		// for no identity in session or not setted in identity (detect from browser or default)
-		if (!$this->locale) {
-			$this->locale = $this->languageService->detectedLanguage;
-		}
-		$this->translator->setLocale($this->locale);
+//		if ($this->locale !== $this->user->identity->pageConfigSettings->language) {
+//			$this->user->identity->pageConfigSettings->language = $this->locale;
+//			$this->em->persist($this->user->identity)
+//					->flush();
+//		}
 	}
 
 	// </editor-fold>
