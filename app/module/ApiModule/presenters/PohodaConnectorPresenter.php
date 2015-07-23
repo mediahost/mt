@@ -8,7 +8,7 @@ use Nette\Http\FileUpload;
 use Nette\Http\IRequest;
 use Tracy\Debugger;
 
-class PohodaPresenter extends BasePresenter
+class PohodaConnectorPresenter extends BasePresenter
 {
 
 	const LOGNAME = 'pohoda_api';
