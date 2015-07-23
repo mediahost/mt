@@ -24,8 +24,6 @@ abstract class BasePresenter extends ResourcePresenter
 		$presenter = substr($name, strrpos(':' . $name, ':'));
 		$action = $view ? $view : $this->action;
 		$templatePath = __DIR__ . "/../templates/{$presenter}/{$action}.latte";
-		
-		\Tracy\Debugger::barDump($templatePath);
 		$this->template->setFile(realpath($templatePath));
 		
 		$this->sendResponse(new TextResponse($this->template));
