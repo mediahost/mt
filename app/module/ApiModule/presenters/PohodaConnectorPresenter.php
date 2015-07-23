@@ -25,7 +25,7 @@ class PohodaConnectorPresenter extends BasePresenter
 	private $allowedReadOrders = TRUE;
 	private $allowedCreateStore = TRUE;
 	private $allowedCreateShortStock = TRUE;
-	private $ico = '123456789';
+	private $ico = '45654433';
 
 	public function actionReadStorageCart()
 	{

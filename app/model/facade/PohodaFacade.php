@@ -184,7 +184,7 @@ class PohodaFacade extends Object
 					if (!$storage) {
 						$storage = new PohodaStorage($item->storage->typ_id);
 					}
-					$storage->name = $item->storage->typ_id;
+					$storage->name = $item->storage->typ_ids;
 					$this->em->persist($storage);
 				}
 

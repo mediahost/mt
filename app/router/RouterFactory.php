@@ -43,12 +43,12 @@ class RouterFactory
 		$apiRouter[] = new ResourceRoute('xml_pohoda/objednavky.php', [
 			'presenter' => 'PohodaConnector',
 			'action' => 'readOrders',
-				], ResourceRoute::GET);
+				], ResourceRoute::GET | ResourceRoute::POST);
 
 		$apiRouter[] = new ResourceRoute('xml_pohoda/download_stock.php', [
 			'presenter' => 'PohodaConnector',
 			'action' => 'readStorageCart'
-				], ResourceRoute::GET);
+				], ResourceRoute::GET | ResourceRoute::POST);
 
 		$apiRouter[] = new ResourceRoute('xml_pohoda/zasoby.php', [
 			'presenter' => 'PohodaConnector',
