@@ -60,7 +60,6 @@ class PohodaConnectorPresenter extends BasePresenter
 		try {
 			$xml = $this->getFileContent($use_gzip_upload);
 			$this->pohodaFacade->recieveStore($xml);
-			$this->pohodaFacade->setLastSync(PohodaFacade::STORE, PohodaFacade::LAST_UPDATE);
 			$this->resource->state = 'ok';
 		} catch (Exception $ex) {
 			$this->resource->state = 'error';
@@ -79,7 +78,6 @@ class PohodaConnectorPresenter extends BasePresenter
 		try {
 			$xml = $this->getFileContent($use_gzip_upload);
 			$this->pohodaFacade->recieveShortStock($xml);
-			$this->pohodaFacade->setLastSync(PohodaFacade::SHORT_STOCK, PohodaFacade::LAST_UPDATE);
 			$this->resource->state = 'ok';
 		} catch (Exception $ex) {
 			$this->resource->state = 'error';
