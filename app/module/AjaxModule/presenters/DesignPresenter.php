@@ -51,15 +51,4 @@ class DesignPresenter extends BasePresenter
 		}
 	}
 
-	public function actionSetSidebarClosed($value)
-	{
-		if ($this->user->loggedIn) {
-			$this->designService->sidebarClosed = $value;
-			$this->addData('sidebarClosed', $this->designService->settings->sidebarClosed);
-		} else {
-			$message = $this->translator->translate('You aren\'t logged in.');
-			$this->setError($message);
-		}
-	}
-
 }

@@ -10,7 +10,7 @@
             <a n:href="this">
 				<img src="{$basePath}/images/logo/logo_admin.png" alt="logo" width="150" class="logo-default"/>
 			</a>
-            <div class="menu-toggler sidebar-toggler" data-url="{link :Ajax:Design:setSidebarClosed}"></div>
+            <div class="menu-toggler sidebar-toggler" data-url="{link toggleSidebar!}"></div>
         </div>
         <!-- END LOGO -->
 
@@ -25,15 +25,15 @@
 				<!-- BEGIN LANGUAGE BAR -->
 				<li class="dropdown dropdown-language" n:if="$user->loggedIn">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-						<img alt="{_locale.$lang}" src="{$basePath}/assets/global/img/flags/{$lang}.png">
-						<span class="langname">{_locale.$lang}</span> <i class="fa fa-angle-down"></i>
+						<img alt="{_locale_$lang}" src="{$basePath}/assets/global/img/flags/{$lang}.png">
+						<span class="langname">{_locale_$lang}</span> <i class="fa fa-angle-down"></i>
 					</a>
 					<ul class="dropdown-menu dropdown-menu-default">
 						{foreach $allowedLanguages as $locale}
 							{var $code = substr($locale,0,2)}
 							<li n:if="$code !== $lang">
-								<a n:href="changeLanguage! $code">
-								<img alt="{_locale.$code}" src="{$basePath}/assets/global/img/flags/{$code}.png" />{_locale.$code}</a>
+								<a n:href="this locale => $code">
+								<img alt="{_locale_$code}" src="{$basePath}/assets/global/img/flags/{$code}.png" />{_locale_$code}</a>
 							</li>
 						{/foreach}
 					</ul>

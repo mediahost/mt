@@ -37,28 +37,19 @@ class UserFacadeSettersTest extends UserFacade
 	public function testAppendSettings()
 	{
 		$newConfigSettings = new PageConfigSettings();
-		$newDesignSettings = new PageDesignSettings();
-		$newDesignSettings->color = 'red';
-		$this->userFacade->appendSettings(self::ID_NEW, $newConfigSettings, $newDesignSettings);
+		$this->userFacade->appendSettings(self::ID_NEW, $newConfigSettings);
 
 		$user1 = $this->userRepo->find(self::ID_NEW);
 		/* @var $user1 User */
 		Assert::null($user1->pageConfigSettings->language);
-		Assert::same('red', $user1->pageDesignSettings->color);
-		Assert::null($user1->pageDesignSettings->footerFixed);
 
 		$rewriteConfigSettings = new PageConfigSettings();
 		$rewriteConfigSettings->language = 'de';
-		$rewriteDesignSettings = new PageDesignSettings();
-		$rewriteDesignSettings->color = 'blue';
-		$rewriteDesignSettings->footerFixed = TRUE;
-		$this->userFacade->appendSettings(self::ID_NEW, $rewriteConfigSettings, $rewriteDesignSettings);
+		$this->userFacade->appendSettings(self::ID_NEW, $rewriteConfigSettings);
 
 		$user2 = $this->userRepo->find(self::ID_NEW);
 		/* @var $user2 User */
 		Assert::same('de', $user2->pageConfigSettings->language);
-		Assert::same('red', $user2->pageDesignSettings->color);
-		Assert::same(TRUE, $user2->pageDesignSettings->footerFixed);
 	}
 
 }
