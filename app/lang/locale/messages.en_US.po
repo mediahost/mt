@@ -1137,3 +1137,6 @@ msgstr "automaticly generated"
 
 msgid "Unable to generate a unique code. Try send form again."
 msgstr "Unable to generate a unique code. Try send form again."
+
+msgid "Product must be synchronized"
+msgstr "Product must be synchronized"

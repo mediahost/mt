@@ -33,9 +33,8 @@ class StockBasic extends StockBase
 		$form->addText('name', 'Name')
 				->setAttribute('placeholder', $product->name);
 		$form->addText('pohodaCode', 'Code for Pohoda', NULL, 20)
-				->setAttribute('placeholder', 'automaticly generated')
-				->setAttribute('class', MetronicTextInputBase::SIZE_XL)
-				->setOption('description', 'Identification for synchronizing');
+				->setOption('description', 'Identification for synchronizing')
+				->addRule(Form::FILLED, 'Product must be synchronized');
 		$form->addText('barcode', 'Barcode');
 		$form->addCheckSwitch('active', 'Active');
 		$form->addTextArea('perex', 'Perex')
