@@ -18,17 +18,16 @@ class PohodaPresenter extends BasePresenter
 	{
 		$lastDataChangeTime = $this->pohodaFacade->getLastSync(PohodaFacade::ANY_IMPORT, PohodaFacade::LAST_UPDATE);
 		if ($lastDataChangeTime || $all) {
-			try {
-				$this->pohodaFacade->importProducts();
-			} catch (Exception $ex) {
-				$this->status = parent::STATUS_ERROR;
-				$this->message = 'Synchronize failed';
-				Debugger::log($ex->getMessage(), self::LOGNAME);
-			}
-
-			$this->status = parent::STATUS_OK;
-			$this->message = 'Synchronize was successfull';
-			$this->pohodaFacade->clearLastSync(PohodaFacade::ANY_IMPORT, PohodaFacade::LAST_UPDATE);
+//			try {
+				$this->pohodaFacade->importFullProducts($lastDataChangeTime);
+				$this->status = parent::STATUS_OK;
+				$this->message = 'Synchronize was successfull';
+//				$this->pohodaFacade->clearLastSync(PohodaFacade::ANY_IMPORT, PohodaFacade::LAST_UPDATE);
+//			} catch (Exception $ex) {
+//				$this->status = parent::STATUS_ERROR;
+//				$this->message = 'Synchronize failed';
+//				Debugger::log($ex->getMessage(), self::LOGNAME);
+//			}
 		} else {
 			$this->status = parent::STATUS_OK;
 			$this->message = 'No change from last import';

@@ -6,6 +6,7 @@ use App\Helpers;
 use App\Model\Entity\PohodaItem;
 use App\Model\Entity\PohodaStorage;
 use App\Model\Entity\Special\XmlItem;
+use App\Model\Entity\Stock;
 use Exception;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Database\UniqueConstraintViolationException;
@@ -52,14 +53,42 @@ class PohodaFacade extends Object
 	];
 	private $newCodeLenght = 6;
 	private $newCodeCharlist = '0-9';
+	private $pohoda_language = 'sk';
 
-	public function importProducts()
+	public function importFullProducts($lastChange = NULL)
+	{
+		$pohodaRepo = $this->em->getRepository(PohodaItem::getClassName());
+		$stockRepo = $this->em->getRepository(Stock::getClassName());
+		$conditions = [
+			'isInternet' => 'true',
+			'code' => [2301, 1344],
+		];
+		$pohodaItems = $pohodaRepo->findGroupedBy($conditions);
+		foreach ($pohodaItems as $group) {
+			/* @var $pohodaProduct PohodaItem */
+			list($pohodaProduct, $totalCount) = $group;
+			$pohodaProduct->totalCount = $totalCount;
+			\Tracy\Debugger::barDump($pohodaProduct);
+
+			/* @var $stock Stock */
+			$stock = $stockRepo->findOneByPohodaCode($pohodaProduct->code);
+			if ($stock) {
+				$stock->product->translateAdd($this->pohoda_language)->name = $pohodaProduct->name;
+				$stock->product->mergeNewTranslations();
+				$stockRepo->save($stock);
+				\Tracy\Debugger::barDump($stock);
+			}
+		}
+		exit;
+	}
+
+	public function importStocksOnly()
 	{
 		exit;
 //		$pohodaRepo = $this->em->getRepository(PohodaItem::getClassName());
 //		$pohodaItems = $pohodaRepo->findBy(['isInternet' => 'true']);
 	}
-	
+
 	public function getNewCode()
 	{
 		$pohodaRepo = $this->em->getRepository(PohodaItem::getClassName());
@@ -261,7 +290,7 @@ class PohodaFacade extends Object
 							}
 						}
 					}
-					
+
 					// recount selling price
 					$sellingVatRate = $this->vatRates[$product->sellingRateVAT];
 					if (isset($item->sellingPrice) && isset($item->sellingPriceWithVAT)) {
@@ -269,7 +298,7 @@ class PohodaFacade extends Object
 					} else if (isset($item->stockPrice1)) {
 						$product->setRecountedSellingPrice(NULL, $item->stockPrice1, $sellingVatRate);
 					}
-					
+
 					$this->em->persist($product);
 					$counter++;
 				}
