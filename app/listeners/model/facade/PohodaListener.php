@@ -2,23 +2,33 @@
 
 namespace App\Listeners\Model\Facade;
 
+use App\Model\Facade\PohodaFacade;
 use Kdyby\Events\Subscriber;
 use Nette\Object;
-use Tracy\Debugger;
 
 class PohodaListener extends Object implements Subscriber
 {
 
+	/** @var PohodaFacade @inject */
+	public $pohodaFacade;
+
 	public function getSubscribedEvents()
 	{
 		return [
-			'App\Model\Facade\PohodaFacade::onRecieveXml' => 'recieveXml',
+			'App\Model\Facade\PohodaFacade::onRecieveXml' => 'onRecieveXml',
+			'App\Model\Facade\PohodaFacade::onParseXml' => 'onParseXml',
 		];
 	}
 
-	public function recieveXml()
+	public function onRecieveXml()
 	{
-//		Debugger::log('recieve XML', 'pohoda');
+		
+	}
+
+	public function onParseXml($type)
+	{
+		$this->pohodaFacade->setLastSync($type, PohodaFacade::LAST_UPDATE);
+		$this->pohodaFacade->setLastSync(PohodaFacade::ANY_IMPORT, PohodaFacade::LAST_UPDATE);
 	}
 
 }
