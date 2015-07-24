@@ -84,7 +84,7 @@ trait UserFacadeCreates
 		}
 
 		$registration->verificationToken = Random::generate(32);
-		$registration->verificationExpiration = new DateTime('now + ' . $this->expirationService->verification);
+		$registration->verificationExpiration = new DateTime('now + ' . $this->settings->expiration->verification);
 
 		$this->registrationRepo->save($registration);
 

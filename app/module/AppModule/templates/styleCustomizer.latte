@@ -6,14 +6,14 @@
 	<div class="toggler-close">
 	</div>
 	<div class="theme-options"
-		data-url="{link :Ajax:Design:setLayout}">
+		data-url="{link this}">
 		<div class="theme-option theme-colors clearfix">
 			<span>{_'Theme Color'|upper}</span>
 			<ul>
 				<li n:foreach="$designColors as $designColorCode => $designColorName"
 					n:class="'color-' . $designColorCode, tooltips, $designSettings->color === $designColorCode ? current"
 					data-style="{$designColorCode}"
-					data-url="{link :Ajax:Design:setColor, $designColorCode}"
+					data-url="{link this, color => $designColorCode}"
 					data-container="body"
 					{if $iterator->isLast()}data-html="true"{/if}
 					data-original-title="{_$designColorName}">
