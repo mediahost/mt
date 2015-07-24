@@ -54,11 +54,14 @@ class PohodaItem extends BaseEntity
 	/** @ORM\Column(type="string", length=20, nullable=true) */
 	protected $ean;
 
-	/** @ORM\Column(type="string", length=20, nullable=true) */
+	/** @ORM\Column(type="integer", nullable=true) */
 	protected $count;
 
-	/** @ORM\Column(type="string", length=20, nullable=true) */
+	/** @ORM\Column(type="integer", nullable=true) */
 	protected $countReceivedOrders;
+	
+	/** @var int */
+	protected $totalCount;
 
 	/** @ORM\Column(type="string", length=10, nullable=true) */
 	protected $isSales;
@@ -114,6 +117,11 @@ class PohodaItem extends BaseEntity
 	public function getCountRecievedOrders()
 	{
 		return (int) $this->countReceivedOrders;
+	}
+
+	public function getTotalCount()
+	{
+		return $this->totalCount ? (int) $this->totalCount : $this->getCount();
 	}
 
 	public function getIsSales()
