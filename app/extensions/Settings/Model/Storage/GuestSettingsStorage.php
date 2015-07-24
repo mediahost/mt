@@ -4,7 +4,6 @@ namespace App\Extensions\Settings\Model\Storage;
 
 use App\Extensions\Settings\Model\Service\PageConfigService;
 use App\Model\Entity\PageConfigSettings;
-use App\Model\Entity\PageDesignSettings;
 use Nette\Http\Session;
 use Nette\Http\SessionSection;
 use Nette\Object;
@@ -13,7 +12,6 @@ use Nette\Object;
  * Storage for unsigned user's customization settings
  * 
  * @property PageConfigService $pageSettings
- * @property PageDesignService $designSettings
  * @property-read bool $empty
  */
 class GuestSettingsStorage extends Object
@@ -49,36 +47,16 @@ class GuestSettingsStorage extends Object
 		}
 		return NULL;
 	}
-
-	/**
-	 * @param PageDesignSettings $settings
-	 * @return self
-	 */
-	public function setDesignSettings(PageDesignSettings $settings)
-	{
-		$this->section->design = $settings;
-		return $this;
-	}
-
-	/** @return PageDesignSettings */
-	public function getDesignSettings()
-	{
-		if (isset($this->section->design)) {
-			return $this->section->design;
-		}
-		return NULL;
-	}
 	
 	public function isEmpty()
 	{
-		return (!isset($this->section->page) && !isset($this->section->design));
+		return (!isset($this->section->page));
 	}
 
 	/** @return self */
 	public function wipe()
 	{
 		unset($this->section->page);
-		unset($this->section->design);
 		return $this;
 	}
 

@@ -4,11 +4,11 @@ namespace App\BaseModule\Presenters;
 
 use App\Components\Auth\ISignOutFactory;
 use App\Components\Auth\SignOut;
-use App\Extensions\Settings\Model\Service\DesignService;
 use App\Extensions\Settings\Model\Service\ModuleService;
 use App\Extensions\Settings\Model\Service\PageConfigService;
 use App\Extensions\Settings\Model\Service\PageInfoService;
 use App\Extensions\Settings\Model\Storage\DefaultSettingsStorage;
+use App\Extensions\Settings\SettingsStorage;
 use App\Model\Entity;
 use App\Model\Facade\GroupFacade;
 use App\Model\Facade\ParameterFacade;
@@ -53,11 +53,11 @@ abstract class BasePresenter extends Presenter
 	/** @var Translator @inject */
 	public $translator;
 
+	/** @var SettingsStorage @inject */
+	public $settingsStorage;
+	
 	/** @var DefaultSettingsStorage @inject */
-	public $settingStorage;
-
-	/** @var DesignService @inject */
-	public $designService;
+	public $defaultSettingStorage;
 
 	/** @var ModuleService @inject */
 	public $moduleService;
@@ -105,8 +105,8 @@ abstract class BasePresenter extends Presenter
 		$this->template->lang = $this->translator->locale;
 		$this->template->setTranslator($this->translator);
 		$this->template->allowedLanguages = $this->translator->getAvailableLocales();
-		$this->template->designSettings = $this->designService->settings;
-		$this->template->designColors = $this->designService->colors;
+		$this->template->designSettings = $this->settingsStorage->design;
+		$this->template->designColors = $this->settingsStorage->design->colors;
 		$this->template->pageInfo = $this->pageInfoService;
 		$this->template->exchange = $this->exchange;
 		if ($this->currency) {
@@ -153,9 +153,9 @@ abstract class BasePresenter extends Presenter
 
 	protected function loadUserSettings()
 	{
-		$this->settingStorage->loggedIn = $this->user->loggedIn;
+		$this->defaultSettingStorage->loggedIn = $this->user->loggedIn;
 		if ($this->user->identity instanceof Entity\User) {
-			$this->settingStorage->user = $this->user->identity;
+			$this->defaultSettingStorage->user = $this->user->identity;
 		}
 	}
 
@@ -222,11 +222,6 @@ abstract class BasePresenter extends Presenter
 
 	// </editor-fold>
 	// <editor-fold desc="handlers">
-
-	public function handleChangeLanguage($newLang)
-	{
-		$this->redirect('this', ['locale' => $newLang]);
-	}
 
 	public function handleChangeCurrency($newCurrency)
 	{

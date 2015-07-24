@@ -2,8 +2,6 @@
 
 namespace App\Extensions\Settings\DI;
 
-use Nette\Configurator;
-use Nette\DI\Compiler;
 use Nette\DI\CompilerExtension;
 
 class SettingsExtension extends CompilerExtension
@@ -40,6 +38,7 @@ class SettingsExtension extends CompilerExtension
 			'sidebarFixed' => FALSE,
 			'sidebarReversed' => FALSE,
 			'sidebarMenuHover' => FALSE,
+			'sidebarMenuLight' => FALSE,
 		],
 	];
 
@@ -48,9 +47,8 @@ class SettingsExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig($this->defaults);
 
-		$builder->addDefinition($this->prefix('defaults'))
-				->setClass('App\Extensions\Settings\Model\Storage\DefaultSettingsStorage')
-				->addSetup('setModules', [$config['modules'], $config['modulesSettings']])
+		$builder->addDefinition($this->prefix('settings'))
+				->setClass('App\Extensions\Settings\SettingsStorage')
 				->addSetup('setPageInfo', [$config['pageInfo']])
 				->addSetup('setPageConfig', [$config['pageConfig']])
 				->addSetup('setExpiration', [$config['expiration']])
@@ -58,12 +56,13 @@ class SettingsExtension extends CompilerExtension
 				->addSetup('setDesign', [$config['design']])
 				->setInject(TRUE);
 
-		$builder->addDefinition($this->prefix('guest'))
-				->setClass('App\Extensions\Settings\Model\Storage\GuestSettingsStorage')
+		$builder->addDefinition($this->prefix('defaults'))
+				->setClass('App\Extensions\Settings\Model\Storage\DefaultSettingsStorage')
+				->addSetup('setModules', [$config['modules'], $config['modulesSettings']])
 				->setInject(TRUE);
 
-		$builder->addDefinition($this->prefix('design'))
-				->setClass('App\Extensions\Settings\Model\Service\DesignService')
+		$builder->addDefinition($this->prefix('guest'))
+				->setClass('App\Extensions\Settings\Model\Storage\GuestSettingsStorage')
 				->setInject(TRUE);
 
 		$builder->addDefinition($this->prefix('password'))
@@ -85,14 +84,6 @@ class SettingsExtension extends CompilerExtension
 		$builder->addDefinition($this->prefix('module'))
 				->setClass('App\Extensions\Settings\Model\Service\ModuleService')
 				->setInject(TRUE);
-	}
-
-	/** @param Configurator $configurator */
-	public static function register(Configurator $configurator)
-	{
-		$configurator->onCompile[] = function ($config, Compiler $compiler) {
-			$compiler->addExtension('settings', new SettingsExtension());
-		};
 	}
 
 }
