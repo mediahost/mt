@@ -89,7 +89,7 @@ class StockBasic extends StockBase
 		];
 		if ($this->stock->product) {
 			$this->stock->product->setCurrentLocale($this->lang);
-			$values = [
+			$values += [
 				'name' => $this->stock->product->name,
 				'perex' => $this->stock->product->perex,
 				'description' => $this->stock->product->description,

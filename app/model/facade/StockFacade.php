@@ -51,8 +51,9 @@ class StockFacade extends Object
 				->innerJoin('s.product', 'p')
 				->innerJoin('p.signs', 'signs')
 				->where('signs = :sign')
+				->andWhere('s.active = :active')
 				->andWhere('p.active = :active')
-				->AndWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
+				->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
 				->setParameter('active', TRUE)
 				->setParameter('sign', $newSign)
 				->setParameter('now', new DateTime());
@@ -92,7 +93,8 @@ class StockFacade extends Object
 		return $this->stockRepo
 						->createQueryBuilder('s')
 						->innerJoin('s.product', 'p')
-						->where('p.active = :active')
+						->where('s.active = :active')
+						->andWhere('p.active = :active')
 						->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
 						->setParameter('active', TRUE)
 						->setParameter('now', new DateTime())

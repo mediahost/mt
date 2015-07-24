@@ -12,6 +12,10 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  */
 abstract class BaseTranslatable extends BaseEntity
 {
+	
+	const DEFAULT_LOCALE = 'sk';
+	
+	protected $defaultLocale = self::DEFAULT_LOCALE;
 
 	use Identifier;
 

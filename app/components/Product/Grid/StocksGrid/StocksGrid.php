@@ -7,10 +7,12 @@ use App\Extensions\Grido\BaseGrid;
 use App\Model\Entity\Discount;
 use App\Model\Entity\Group;
 use App\Model\Entity\Price;
+use App\Model\Entity\Sign;
 use App\Model\Entity\Stock;
 use Grido\DataSources\Doctrine;
 use Grido\Grid;
 use Nette\Utils\DateTime;
+use Nette\Utils\Html;
 
 class StocksGrid extends BaseControl
 {
@@ -40,6 +42,10 @@ class StocksGrid extends BaseControl
 		$grid->setDefaultSort([
 			'id' => 'DESC',
 		]);
+		
+		
+		$signRepo = $this->em->getRepository(Sign::getClassName());
+		$signs = $signRepo->findAll();
 
 		/*		 * ************************************************ */
 		$grid->addColumnNumber('id', 'ID')
@@ -56,8 +62,21 @@ class StocksGrid extends BaseControl
 		/*		 * ************************************************ */
 		$grid->addColumnText('title', 'Product title')
 				->setColumn('product.name')
-				->setCustomRender(function ($row) {
-					return $row->product->translate($this->lang)->name;
+				->setCustomRender(function ($row) use ($signs) {
+					$name = $row->product->translate($this->lang)->name;
+					$signColors = [
+						1 => 'danger',
+						2 => 'success',
+						3 => 'primary',
+					];
+					foreach ($signs as $sign) {
+						if ($row->product->hasSign($sign)) {
+							$sign->setCurrentLocale($this->lang);
+							$color = array_key_exists($sign->id, $signColors) ? $signColors[$sign->id] : 'label-info';
+							$name .= ' ' . Html::el('span class="badge badge-roundless badge-' . $color . '"')->setText($sign);
+						}
+					}
+					return $name;
 				})
 				->setSortable()
 				->setFilterText()
