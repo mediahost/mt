@@ -28,7 +28,7 @@ class LoggedListener extends Object implements Subscriber
 	public function userLoggedIn(Security\User $identity)
 	{
 		if (!$this->guestStorage->empty) {
-			$this->userFacade->appendSettings($identity->id, $this->guestStorage->pageSettings, $this->guestStorage->designSettings);
+			$this->userFacade->appendSettings($identity->id, $this->guestStorage->pageSettings);
 			$this->guestStorage->wipe();
 		}
 	}

@@ -20,6 +20,15 @@ msgstr "Slovenština"
 msgid "English"
 msgstr "Angličtina"
 
+msgid "locale_cs"
+msgstr "Čeština"
+
+msgid "locale_sk"
+msgstr "Slovenština"
+
+msgid "locale_en"
+msgstr "Angličtina"
+
 msgid "Loading..."
 msgstr "Načítám..."
 

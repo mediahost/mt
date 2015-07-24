@@ -21,12 +21,12 @@
 		<!-- END CURRENCIES -->
 		<!-- BEGIN LANGS -->
 		<li class="langs-block">
-			<a href="javascript:void(0);" class="current">{_locale.$lang}</a>
+			<a href="javascript:void(0);" class="current">{_locale_$lang}</a>
 			<div class="langs-block-others-wrapper">
 				<div class="langs-block-others">
 					{foreach $allowedLanguages as $locale}
 						{var $code = substr($locale,0,2)}
-						<a n:if="$code !== $lang" n:href="this locale => $code">{_locale.$code}</a>
+						<a n:if="$code !== $lang" n:href="this locale => $code">{_locale_$code}</a>
 					{/foreach}
 				</div>
 			</div>
