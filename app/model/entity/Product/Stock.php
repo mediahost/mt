@@ -66,6 +66,9 @@ class Stock extends BaseEntity
 	/** @ORM\Column(type="string", length=20, nullable=true) */
 	protected $pohodaCode;
 
+	/** @ORM\Column(type="string", length=20, nullable=true) */
+	protected $importedFrom;
+
 	public function __construct()
 	{
 		$this->groupDiscounts = new ArrayCollection();
