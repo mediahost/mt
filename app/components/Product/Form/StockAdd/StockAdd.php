@@ -115,7 +115,7 @@ class StockAdd extends StockBase
 
 	private function loadProduct(ArrayHash $values)
 	{
-		$this->stock->product->setCurrentLocale($this->languageService->defaultLanguage);
+		$this->stock->product->setCurrentLocale($this->translator->getDefaultLocale());
 		$this->stock->product->name = $values->name;
 		$this->stock->product->perex = $values->perex;
 		$this->stock->product->description = $values->description;

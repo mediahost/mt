@@ -2,7 +2,6 @@
 
 namespace App\Model\Facade;
 
-use App\Extensions\Settings\Model\Service\LanguageService;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
@@ -15,9 +14,6 @@ class ProducerFacade extends Object
 
 	/** @var EntityManager @inject */
 	public $em;
-
-	/** @var LanguageService @inject */
-	public $languageService;
 
 	/** @var EntityRepository */
 	private $producerRepo;
