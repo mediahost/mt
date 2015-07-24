@@ -31,7 +31,7 @@ class StocksGrid extends BaseControl
 				->leftJoin('p.translations', 't')
 				->where('t.locale = :lang OR t.locale = :defaultLang')
 				->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
-				->setParameter('lang', $this->lang)
+				->setParameter('lang', $this->translator->getLocale())
 				->setParameter('defaultLang', $this->translator->getDefaultLocale())
 				->setParameter('now', new DateTime());
 		$grid->model = new Doctrine($qb, [
@@ -63,7 +63,7 @@ class StocksGrid extends BaseControl
 		$grid->addColumnText('title', 'Product title')
 				->setColumn('product.name')
 				->setCustomRender(function ($row) use ($signs) {
-					$name = $row->product->translate($this->lang)->name;
+					$name = $row->product->translate($this->translator->getLocale())->name;
 					$signColors = [
 						1 => 'danger',
 						2 => 'success',
@@ -71,7 +71,7 @@ class StocksGrid extends BaseControl
 					];
 					foreach ($signs as $sign) {
 						if ($row->product->hasSign($sign)) {
-							$sign->setCurrentLocale($this->lang);
+							$sign->setCurrentLocale($this->translator->getLocale());
 							$color = array_key_exists($sign->id, $signColors) ? $signColors[$sign->id] : 'label-info';
 							$name .= ' ' . Html::el('span class="badge badge-roundless badge-' . $color . '"')->setText($sign);
 						}

@@ -68,7 +68,7 @@ class PageEdit extends BaseControl
 
 	private function load(ArrayHash $values)
 	{
-		$lang = $this->page->isNew() ? $this->translator->getDefaultLocale() : $this->lang;
+		$lang = $this->page->isNew() ? $this->translator->getDefaultLocale() : $this->translator->getLocale();
 		$this->page->translateAdd($lang)->name = $values->name;
 		$this->page->translateAdd($lang)->html = $values->html;
 		$this->page->comment = $values->comment;
@@ -93,7 +93,7 @@ class PageEdit extends BaseControl
 	{
 		$values = [];
 		if (!$this->page->isNew()) {
-			$this->page->setCurrentLocale($this->lang);
+			$this->page->setCurrentLocale($this->translator->getLocale());
 			$values = [
 				'name' => $this->page->name,
 				'comment' => $this->page->comment,

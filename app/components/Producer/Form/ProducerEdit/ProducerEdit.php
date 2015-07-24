@@ -130,7 +130,7 @@ class ProducerEdit extends BaseControl
 
 	private function loadProducer(ArrayHash $values)
 	{
-		$lang = $this->entity->isNew() ? $this->translator->getDefaultLocale() : $this->lang;
+		$lang = $this->entity->isNew() ? $this->translator->getDefaultLocale() : $this->translator->getLocale();
 		$this->entity->translateAdd($lang)->serviceHtml = $values->service_html;
 		$this->entity->mergeNewTranslations();
 		if ($values->image->isImage()) {
@@ -140,7 +140,7 @@ class ProducerEdit extends BaseControl
 
 	private function loadProducerModel(ArrayHash $values)
 	{
-		$lang = $this->entity->isNew() ? $this->translator->getDefaultLocale() : $this->lang;
+		$lang = $this->entity->isNew() ? $this->translator->getDefaultLocale() : $this->translator->getLocale();
 		$this->entity->translateAdd($lang)->html = $values->html;
 		$this->entity->mergeNewTranslations();
 		if ($values->image->isImage()) {
@@ -186,13 +186,13 @@ class ProducerEdit extends BaseControl
 		];
 		switch ($this->type) {
 			case Producer::ID:
-				$values['service_html'] = $this->entity->translate($this->lang)->serviceHtml;
+				$values['service_html'] = $this->entity->translate($this->translator->getLocale())->serviceHtml;
 				$values['image'] = $this->entity->image;
 				break;
 			case ProducerLine::ID:
 				break;
 			case ProducerModel::ID:
-				$values['html'] = $this->entity->translate($this->lang)->html;
+				$values['html'] = $this->entity->translate($this->translator->getLocale())->html;
 				$values['image'] = $this->entity->image;
 				$values['with_vat'] = $this->defaultWithVat;
 				$values['prices'] = [];

@@ -64,7 +64,7 @@ abstract class BaseControl extends UI\Control
 	 */
 	public function setLang($lang)
 	{
-		$this->lang = $lang;
+		$this->lang = $this->translator->getLocale();
 		return $this;
 	}
 

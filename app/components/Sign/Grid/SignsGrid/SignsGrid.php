@@ -22,7 +22,7 @@ class SignsGrid extends BaseControl
 		$qb = $repo->createQueryBuilder('g')
 				->leftJoin('g.translations', 't')
 				->where('t.locale = :lang OR t.locale = :defaultLang')
-				->setParameter('lang', $this->lang)
+				->setParameter('lang', $this->translator->getLocale())
 				->setParameter('defaultLang', $this->translator->getDefaultLocale());
 		$grid->model = new Doctrine($qb, [
 			'name' => 't.name',
@@ -40,7 +40,7 @@ class SignsGrid extends BaseControl
 		$grid->addColumnText('name', 'Sign')
 				->setColumn('name')
 				->setCustomRender(function ($row) {
-					return $row->translate($this->lang)->name;
+					return $row->translate($this->translator->getLocale())->name;
 				})
 				->setSortable()
 				->setFilterText()
