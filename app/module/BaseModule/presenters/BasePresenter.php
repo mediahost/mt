@@ -225,14 +225,7 @@ abstract class BasePresenter extends Presenter
 
 	public function handleChangeLanguage($newLang)
 	{
-		if ($this->translator->isAllowed($newLang)) {
-//			$this->languageService->userLanguage = $newLang;
-			$this->redirect('this', ['locale' => $newLang]);
-		} else {
-			$message = $this->translator->translate('Requested language isn\'t supported.');
-			$this->flashMessage($message, 'warning');
-			$this->redirect('this');
-		}
+		$this->redirect('this', ['locale' => $newLang]);
 	}
 
 	public function handleChangeCurrency($newCurrency)
