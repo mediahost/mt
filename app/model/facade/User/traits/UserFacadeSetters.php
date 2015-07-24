@@ -3,7 +3,6 @@
 namespace App\Model\Facade\Traits;
 
 use App\Model\Entity\PageConfigSettings;
-use App\Model\Entity\PageDesignSettings;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use InvalidArgumentException;
@@ -33,10 +32,9 @@ trait UserFacadeSetters
 	 * Append settings to user
 	 * @param int $userId
 	 * @param PageConfigSettings $configSettings
-	 * @param PageDesignSettings $designSettings
 	 * @return self
 	 */
-	public function appendSettings($userId, PageConfigSettings $configSettings = NULL, PageDesignSettings $designSettings = NULL)
+	public function appendSettings($userId, PageConfigSettings $configSettings = NULL)
 	{
 		$user = $this->userRepo->find($userId);
 		if ($user && $configSettings) {
@@ -46,13 +44,7 @@ trait UserFacadeSetters
 			$user->pageConfigSettings->append($configSettings);
 			$this->em->persist($user->pageConfigSettings);
 		}
-		if ($user && $designSettings) {
-			if (!$user->pageDesignSettings instanceof PageDesignSettings) {
-				$user->pageDesignSettings = new PageDesignSettings;
-			}
-			$user->pageDesignSettings->append($designSettings);
-			$this->em->persist($user->pageDesignSettings);
-		}
+
 		$this->em->flush();
 		return $this;
 	}

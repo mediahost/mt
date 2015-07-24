@@ -45,6 +45,11 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	 */
 	protected $currency;
 
+	/**
+	 * @ORM\Column(type="boolean", nullable=true)
+	 */
+	protected $sidebarClosed;
+
 	public function __construct($mail = NULL)
 	{
 		$this->roles = new ArrayCollection;
