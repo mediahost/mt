@@ -1134,3 +1134,6 @@ msgstr "Identification for synchronizing"
 
 msgid "automaticly generated"
 msgstr "automaticly generated"
+
+msgid "Unable to generate a unique code. Try send form again."
+msgstr "Unable to generate a unique code. Try send form again."

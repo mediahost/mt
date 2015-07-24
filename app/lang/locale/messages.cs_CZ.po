@@ -1095,3 +1095,6 @@ msgstr "Identifikace pro synchronizaci"
 
 msgid "automaticly generated"
 msgstr "automaticky generovaný"
+
+msgid "Unable to generate a unique code. Try send form again."
+msgstr "Nepodařilo se vygenerovat unikátní kód. Pokuste se odeslat formulář znovu."

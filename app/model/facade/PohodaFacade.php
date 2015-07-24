@@ -8,11 +8,13 @@ use App\Model\Entity\PohodaStorage;
 use App\Model\Entity\Special\XmlItem;
 use Exception;
 use Kdyby\Doctrine\EntityManager;
+use Nette\Database\UniqueConstraintViolationException;
 use Nette\DI\Container;
 use Nette\Object;
 use Nette\Utils\DateTime;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Finder;
+use Nette\Utils\Random;
 use Nette\Utils\Strings;
 use XMLReader;
 
@@ -48,12 +50,28 @@ class PohodaFacade extends Object
 		'low' => 15,
 		'none' => 0,
 	];
+	private $newCodeLenght = 6;
+	private $newCodeCharlist = '0-9';
 
 	public function importProducts()
 	{
 		exit;
 //		$pohodaRepo = $this->em->getRepository(PohodaItem::getClassName());
 //		$pohodaItems = $pohodaRepo->findBy(['isInternet' => 'true']);
+	}
+	
+	public function getNewCode()
+	{
+		$pohodaRepo = $this->em->getRepository(PohodaItem::getClassName());
+		$tries = 0;
+		for ($i = 0; $i < $tries; $i++) {
+			$newCode = Random::generate($this->newCodeLenght, $this->newCodeCharlist);
+			$finded = $pohodaRepo->findBy(['code' => $newCode]);
+			if (!$finded) {
+				return $newCode;
+			}
+		}
+		throw new UniqueConstraintViolationException('Generating unique code was failed.');
 	}
 
 	public function recieveStore($xml)
