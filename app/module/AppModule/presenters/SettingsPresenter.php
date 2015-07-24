@@ -70,7 +70,6 @@ class SettingsPresenter extends BasePresenter
 	{
 		$control = $this->iUnitControlFactory->create();
 		$control->setUnits($this->unitRepo->findAll());
-		$control->setLang($this->locale);
 		$control->onAfterSave = function () {
 			$message = $this->translator->translate('Units was successfully saved.');
 			$this->flashMessage($message, 'success');

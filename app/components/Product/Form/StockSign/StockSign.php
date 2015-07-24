@@ -37,7 +37,7 @@ class StockSign extends StockBase
 		$signs = $form->addContainer('signs');
 		foreach ($allSigns as $sign) {
 			/* @var $sign Sign */
-			$sign->setCurrentLocale($this->lang);
+			$sign->setCurrentLocale($this->translator->getLocale());
 			$signs->addCheckSwitch($sign->id, $sign->name, 'YES', 'NO');
 		}
 

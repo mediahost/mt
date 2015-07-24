@@ -50,7 +50,7 @@ class ParameterEdit extends BaseControl
 
 	private function load(ArrayHash $values)
 	{
-		$this->parameter->translateAdd($this->lang)->name = $values->name;
+		$this->parameter->translateAdd($this->translator->getLocale())->name = $values->name;
 		$this->parameter->mergeNewTranslations();
 		return $this;
 	}
@@ -66,7 +66,7 @@ class ParameterEdit extends BaseControl
 	protected function getDefaults()
 	{
 		$values = [
-			'name' => $this->parameter->translate($this->lang)->name,
+			'name' => $this->parameter->translate($this->translator->getLocale())->name,
 		];
 		return $values;
 	}

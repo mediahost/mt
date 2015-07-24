@@ -33,12 +33,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dg/ftp-deployment.git",
-                "reference": "86fbff9a07f59887446f5bbfe48a281ea4e30f93"
+                "reference": "02e5c6321e94d440a1b7f22059d55ec9ffed43dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dg/ftp-deployment/zipball/86fbff9a07f59887446f5bbfe48a281ea4e30f93",
-                "reference": "86fbff9a07f59887446f5bbfe48a281ea4e30f93",
+                "url": "https://api.github.com/repos/dg/ftp-deployment/zipball/02e5c6321e94d440a1b7f22059d55ec9ffed43dc",
+                "reference": "02e5c6321e94d440a1b7f22059d55ec9ffed43dc",
                 "shasum": ""
             },
             "require": {
@@ -76,7 +76,7 @@
                 "ftp",
                 "ssh"
             ],
-            "time": "2015-06-30 14:00:22"
+            "time": "2015-07-23 17:10:25"
         },
         {
             "name": "doctrine/annotations",
@@ -1904,12 +1904,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mediahost/DoctrineBehaviors.git",
-                "reference": "ecaf6f38110de8ade5ea00296339e6bec445a7bf"
+                "reference": "88df898f09a2c2448e3d0c87f2fb148923a6e4dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mediahost/DoctrineBehaviors/zipball/ecaf6f38110de8ade5ea00296339e6bec445a7bf",
-                "reference": "ecaf6f38110de8ade5ea00296339e6bec445a7bf",
+                "url": "https://api.github.com/repos/mediahost/DoctrineBehaviors/zipball/88df898f09a2c2448e3d0c87f2fb148923a6e4dd",
+                "reference": "88df898f09a2c2448e3d0c87f2fb148923a6e4dd",
                 "shasum": ""
             },
             "require": {
@@ -1958,7 +1958,7 @@
             "support": {
                 "source": "https://github.com/mediahost/DoctrineBehaviors/tree/master"
             },
-            "time": "2015-05-20 20:04:54"
+            "time": "2015-07-24 14:09:27"
         },
         {
             "name": "latte/latte",
@@ -4168,7 +4168,7 @@
             ],
             "authors": [
                 {
-                    "name": "Pádraic Brady",
+                    "name": "Padraic Brady",
                     "email": "padraic.brady@gmail.com",
                     "homepage": "http://blog.astrumfutura.com"
                 },

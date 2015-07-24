@@ -18,6 +18,7 @@ use Exception;
 use h4kuna\Exchange\Exchange;
 use InvalidArgumentException;
 use Kdyby\Doctrine\QueryBuilder;
+use Kdyby\Translation\Translator;
 use Nette\Application\UI\Control;
 use Nette\Localization\ITranslator;
 use Nette\Templating\FileTemplate;
@@ -31,7 +32,6 @@ class ProductList extends Control
 	const ORDER_ASC = 'ASC';
 	const ORDER_DESC = 'DESC';
 	const DEFAULT_PRICE_LEVEL = 'defaultPrice';
-	const DEFAULT_LANGUAGE = 'en';
 
 	/** @var int @persistent */
 	public $page = 1;
@@ -71,12 +71,6 @@ class ProductList extends Control
 	/** @var array */
 	protected $sorting = array();
 
-	/** @var string */
-	protected $lang = self::DEFAULT_LANGUAGE;
-
-	/** @var string */
-	protected $defaultLang = self::DEFAULT_LANGUAGE;
-
 	/** @var array */
 	protected $perPageListMultiples = [1, 2, 3, 6];
 
@@ -107,7 +101,7 @@ class ProductList extends Control
 	/** @var Paginator */
 	protected $paginator;
 
-	/** @var ITranslator */
+	/** @var Translator */
 	protected $translator;
 
 	/** @var Exchange */
@@ -224,14 +218,6 @@ class ProductList extends Control
 	{
 		$this->exchange = $exchange;
 		$this->currencySymbol = $this->exchange[$currency]->getFormat()->getSymbol();
-
-		return $this;
-	}
-
-	public function setLang($language, $defaultLang = self::DEFAULT_LANGUAGE)
-	{
-		$this->lang = $language;
-		$this->defaultLang = $defaultLang;
 
 		return $this;
 	}
@@ -398,7 +384,7 @@ class ProductList extends Control
 			$this->onFetchData($this, $data);
 
 			foreach ($data as $item) {
-				$item->product->setCurrentLocale($this->lang);
+				$item->product->setCurrentLocale($this->translator->getLocale());
 				$this->onEachItem($this, $item);
 			}
 		}
@@ -704,9 +690,9 @@ class ProductList extends Control
 				case 'name':
 					$this->appendTranslation();
 					$this->qb
-							->andWhere('t.locale = :lang OR t.locale = :defaultLang')
-							->setParameter('lang', $this->lang)
-							->setParameter('defaultLang', $this->defaultLang)
+							->andWhere('t.locale = :locale OR t.locale = :defaultLocale')
+							->setParameter('locale', $this->translator->getDefaultLocale())
+							->setParameter('defaultLocale', $this->translator->getDefaultLocale())
 							->orderBy('t.name', $value);
 					$orderBy->add('t.name', $value);
 					break;
@@ -838,7 +824,7 @@ class ProductList extends Control
 		$this->template->priceLevel = $this->priceLevel;
 		$this->template->paginator = $this->paginator;
 		$this->template->itemsPerRow = $this->itemsPerRow;
-		$this->template->lang = $this->lang;
+		$this->template->lang = $this->translator->getLocale();
 		$this->template->ajax = $this->ajax;
 		$this->template->render();
 	}

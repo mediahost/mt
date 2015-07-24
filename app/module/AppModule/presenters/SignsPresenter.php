@@ -109,7 +109,6 @@ class SignsPresenter extends BasePresenter
 	public function createComponentSignForm()
 	{
 		$control = $this->iSignEditFactory->create();
-		$control->setLang($this->locale);
 		$control->onAfterSave = function (Sign $savedSign) {
 			$message = $this->translator->translate('successfullySaved', NULL, [
 				'type' => $this->translator->translate('Sign'), 'name' => (string) $savedSign
@@ -127,7 +126,6 @@ class SignsPresenter extends BasePresenter
 	public function createComponentSignsGrid()
 	{
 		$control = $this->iSignsGridFactory->create();
-		$control->setLang($this->locale);
 		return $control;
 	}
 

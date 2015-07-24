@@ -56,19 +56,18 @@ class UnitsEdit extends BaseControl
 	private function saveUnit($id, $value)
 	{
 		$unitRepo = $this->em->getRepository(Unit::getClassName());
-		$defaultLang = $this->translator->getDefaultLocale();
-		$isLangDefault = $this->lang === $defaultLang;
+		$isLangDefault = $this->translator->getLocale() === $this->translator->getDefaultLocale();
 		/* @var $unit Unit */
 		$unit = $unitRepo->find($id);
 		if ($isLangDefault && empty($value)) {
 			// skip
 		} else if (empty($value)) { // delete empty translations
-			$translation = $unit->translate($this->lang);
-			if ($translation->getLocale() === $this->lang) {
-				$unit->removeTranslation($unit->translateAdd($this->lang));
+			$translation = $unit->translate($this->translator->getLocale());
+			if ($translation->getLocale() === $this->translator->getLocale()) {
+				$unit->removeTranslation($unit->translateAdd($this->translator->getLocale()));
 			}
 		} else {
-			$unit->translateAdd($this->lang)->name = $value;
+			$unit->translateAdd($this->translator->getLocale())->name = $value;
 		}
 		$unit->mergeNewTranslations();
 		$unitRepo->save($unit);
@@ -81,9 +80,9 @@ class UnitsEdit extends BaseControl
 			'units' => [],
 		];
 		foreach ($this->units as $unit) {
-			$unit->setCurrentLocale($this->lang);
-			if ($unit->translate($this->lang)->name !== $unit->translate($this->translator->getDefaultLocale())->name) {
-				$values['units'][$unit->id] = $unit->translate($this->lang)->name;
+			$unit->setCurrentLocale($this->translator->getLocale());
+			if ($unit->translate($this->translator->getLocale())->name !== $unit->translate($this->translator->getDefaultLocale())->name) {
+				$values['units'][$unit->id] = $unit->translate($this->translator->getLocale())->name;
 			}
 		}
 		return $values;
