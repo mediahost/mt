@@ -10,7 +10,9 @@ use App\Model\Entity\Stock;
 use App\Model\Entity\Unit;
 use App\Model\Entity\Vat;
 use App\Model\Facade\CategoryFacade;
+use App\Model\Facade\PohodaFacade;
 use App\Model\Facade\VatFacade;
+use Nette\Database\UniqueConstraintViolationException;
 use Nette\Utils\ArrayHash;
 
 /**
@@ -26,6 +28,9 @@ class StockAdd extends StockBase
 	/** @var CategoryFacade @inject */
 	public $categoryFacade;
 
+	/** @var PohodaFacade @inject */
+	public $pohodaFacade;
+
 	// </editor-fold>
 
 	/** @return Form */
@@ -35,7 +40,7 @@ class StockAdd extends StockBase
 
 		$form = new Form();
 		$form->setTranslator($this->translator)
-			->setRenderer(new MetronicHorizontalFormRenderer());
+				->setRenderer(new MetronicHorizontalFormRenderer());
 		$form->getElementPrototype()->class('ajax');
 
 		$unitRepo = $this->em->getRepository(Unit::getClassName());
@@ -48,6 +53,10 @@ class StockAdd extends StockBase
 		$form->addText('name', 'Product title', NULL, 150)
 				->setAttribute('class', MetronicTextInputBase::SIZE_XL)
 				->setRequired('Insert product name');
+		$form->addText('pohodaCode', 'Code for Pohoda', NULL, 20)
+				->setAttribute('placeholder', 'automaticly generated')
+				->setAttribute('class', MetronicTextInputBase::SIZE_XL)
+				->setOption('description', 'Identification for synchronizing');
 		$form->addCheckSwitch('active', 'Active')
 				->setDefaultValue(TRUE);
 
@@ -87,9 +96,13 @@ class StockAdd extends StockBase
 
 	public function formSucceeded(Form $form, $values)
 	{
-		$this->load($values);
-		$this->save();
-		$this->onAfterSave($this->stock);
+		try {
+			$this->load($values);
+			$this->save();
+			$this->onAfterSave($this->stock);
+		} catch (UniqueConstraintViolationException $ex) {
+			$form->addError('Unable to generate a unique code. Try send form again.');
+		}
 	}
 
 	private function load(ArrayHash $values)
@@ -102,6 +115,7 @@ class StockAdd extends StockBase
 
 	private function loadStock(ArrayHash $values)
 	{
+		$this->stock->pohodaCode = $values->pohodaCode ? $values->pohodaCode : $this->pohodaFacade->getNewCode();
 		$this->stock->quantity = $values->quantity > 1 ? $values->quantity : 0;
 		$this->stock->active = $values->active;
 
