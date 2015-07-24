@@ -197,8 +197,8 @@ class ProductList extends Control
 	{
 		$itemsPerRowInt = (int) $itemsPerRow;
 		$rowsPerPageInt = (int) $rowsPerPage;
-		$this->itemsPerRow = $itemsPerRowInt;
-		$this->rowsPerPage = $rowsPerPageInt;
+		$this->itemsPerRow = $itemsPerRowInt ? $itemsPerRowInt : 1;
+		$this->rowsPerPage = $rowsPerPageInt ? $rowsPerPageInt : 1;
 		$itemsPerPage = $this->getDefaultPerPage();
 
 		$this->resetPerPageList($itemsPerPage);
