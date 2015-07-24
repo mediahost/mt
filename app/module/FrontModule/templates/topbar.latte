@@ -21,14 +21,13 @@
 		<!-- END CURRENCIES -->
 		<!-- BEGIN LANGS -->
 		<li class="langs-block">
-			<a href="javascript:void(0);" class="current">{_$allowedLanguages[$lang]}</a>
+			<a href="javascript:void(0);" class="current">{_locale.$lang}</a>
 			<div class="langs-block-others-wrapper">
 				<div class="langs-block-others">
-					<a n:foreach="$allowedLanguages as $langCode => $langName"
-					   n:if="$langCode !== $lang"
-					   n:href="this locale => $langCode">
-						{_$langName}
-					</a>
+					{foreach $allowedLanguages as $locale}
+						{var $code = substr($locale,0,2)}
+						<a n:if="$code !== $lang" n:href="this locale => $code">{_locale.$code}</a>
+					{/foreach}
 				</div>
 			</div>
 		</li>

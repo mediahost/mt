@@ -26,11 +26,6 @@ class SettingsExtension extends CompilerExtension
 			'remember' => '14 days',
 			'notRemember' => '30 minutes',
 		],
-		'languages' => [
-			'default' => 'en', // code
-			'allowed' => ['en' => 'English', 'cs' => 'Czech'], // code => name
-			'recognize' => ['en' => 'en', 'cs' => 'cs'], // toDetect => code - http://www.metamodpro.com/browser-language-codes
-		],
 		'passwords' => [
 			'length' => 8,
 		],
@@ -59,7 +54,6 @@ class SettingsExtension extends CompilerExtension
 				->addSetup('setPageInfo', [$config['pageInfo']])
 				->addSetup('setPageConfig', [$config['pageConfig']])
 				->addSetup('setExpiration', [$config['expiration']])
-				->addSetup('setLanguages', [$config['languages']])
 				->addSetup('setPasswords', [$config['passwords']])
 				->addSetup('setDesign', [$config['design']])
 				->setInject(TRUE);
@@ -70,10 +64,6 @@ class SettingsExtension extends CompilerExtension
 
 		$builder->addDefinition($this->prefix('design'))
 				->setClass('App\Extensions\Settings\Model\Service\DesignService')
-				->setInject(TRUE);
-
-		$builder->addDefinition($this->prefix('language'))
-				->setClass('App\Extensions\Settings\Model\Service\LanguageService')
 				->setInject(TRUE);
 
 		$builder->addDefinition($this->prefix('password'))
