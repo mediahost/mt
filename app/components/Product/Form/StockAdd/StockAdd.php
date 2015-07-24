@@ -10,7 +10,9 @@ use App\Model\Entity\Stock;
 use App\Model\Entity\Unit;
 use App\Model\Entity\Vat;
 use App\Model\Facade\CategoryFacade;
+use App\Model\Facade\PohodaFacade;
 use App\Model\Facade\VatFacade;
+use Nette\Forms\IControl;
 use Nette\Utils\ArrayHash;
 
 /**
@@ -25,6 +27,9 @@ class StockAdd extends StockBase
 
 	/** @var CategoryFacade @inject */
 	public $categoryFacade;
+
+	/** @var PohodaFacade @inject */
+	public $pohodaFacade;
 
 	// </editor-fold>
 
@@ -48,6 +53,10 @@ class StockAdd extends StockBase
 		$form->addText('name', 'Product title', NULL, 150)
 				->setAttribute('class', MetronicTextInputBase::SIZE_XL)
 				->setRequired('Insert product name');
+		$form->addText('pohodaCode', 'Code for Pohoda', NULL, 20)
+				->setAttribute('placeholder', 'automaticly generated')
+				->setAttribute('class', MetronicTextInputBase::SIZE_XL)
+				->setOption('description', 'Identification for synchronizing');
 		$form->addCheckSwitch('active', 'Active')
 				->setDefaultValue(TRUE);
 
@@ -102,6 +111,7 @@ class StockAdd extends StockBase
 
 	private function loadStock(ArrayHash $values)
 	{
+		$this->stock->pohodaCode = $values->pohodaCode;
 		$this->stock->quantity = $values->quantity > 1 ? $values->quantity : 0;
 		$this->stock->active = $values->active;
 

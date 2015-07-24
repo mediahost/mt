@@ -1077,3 +1077,12 @@ msgstr "Zapomněli jste heslo?"
 
 msgid "Remember"
 msgstr "Zapamatovat si"
+
+msgid "Code for Pohoda"
+msgstr "Kód pro Pohodu"
+
+msgid "Identification for synchronizing"
+msgstr "Identifikace pro synchronizaci"
+
+msgid "automaticly generated"
+msgstr "automaticky generovaný"

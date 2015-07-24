@@ -48,6 +48,12 @@ class StocksGrid extends BaseControl
 		$grid->getColumn('id')->headerPrototype->width = '5%';
 
 		/*		 * ************************************************ */
+		$grid->addColumnNumber('pohodaCode', 'Code')
+				->setSortable()
+				->setFilterNumber();
+		$grid->getColumn('pohodaCode')->headerPrototype->width = '5%';
+
+		/*		 * ************************************************ */
 		$grid->addColumnText('title', 'Product title')
 				->setColumn('product.name')
 				->setCustomRender(function ($row) {
