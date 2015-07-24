@@ -12,7 +12,7 @@ use App\Model\Entity\Vat;
 use App\Model\Facade\CategoryFacade;
 use App\Model\Facade\PohodaFacade;
 use App\Model\Facade\VatFacade;
-use Nette\Forms\IControl;
+use Nette\Database\UniqueConstraintViolationException;
 use Nette\Utils\ArrayHash;
 
 /**
@@ -40,7 +40,7 @@ class StockAdd extends StockBase
 
 		$form = new Form();
 		$form->setTranslator($this->translator)
-			->setRenderer(new MetronicHorizontalFormRenderer());
+				->setRenderer(new MetronicHorizontalFormRenderer());
 		$form->getElementPrototype()->class('ajax');
 
 		$unitRepo = $this->em->getRepository(Unit::getClassName());
@@ -96,9 +96,13 @@ class StockAdd extends StockBase
 
 	public function formSucceeded(Form $form, $values)
 	{
-		$this->load($values);
-		$this->save();
-		$this->onAfterSave($this->stock);
+		try {
+			$this->load($values);
+			$this->save();
+			$this->onAfterSave($this->stock);
+		} catch (UniqueConstraintViolationException $ex) {
+			$form->addError('Unable to generate a unique code. Try send form again.');
+		}
 	}
 
 	private function load(ArrayHash $values)
@@ -111,7 +115,7 @@ class StockAdd extends StockBase
 
 	private function loadStock(ArrayHash $values)
 	{
-		$this->stock->pohodaCode = $values->pohodaCode;
+		$this->stock->pohodaCode = $values->pohodaCode ? $values->pohodaCode : $this->pohodaFacade->getNewCode();
 		$this->stock->quantity = $values->quantity > 1 ? $values->quantity : 0;
 		$this->stock->active = $values->active;
 
