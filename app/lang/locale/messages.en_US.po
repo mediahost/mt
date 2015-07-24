@@ -1116,3 +1116,12 @@ msgstr "Forget Password?"
 
 msgid "Remember"
 msgstr "Remember"
+
+msgid "Code for Pohoda"
+msgstr "Code for Pohoda"
+
+msgid "Identification for synchronizing"
+msgstr "Identification for synchronizing"
+
+msgid "automaticly generated"
+msgstr "automaticly generated"

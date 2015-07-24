@@ -32,7 +32,10 @@ class StockBasic extends StockBase
 
 		$form->addText('name', 'Name')
 				->setAttribute('placeholder', $product->name);
-		$form->addText('code', 'Code');
+		$form->addText('pohodaCode', 'Code for Pohoda', NULL, 20)
+				->setAttribute('placeholder', 'automaticly generated')
+				->setAttribute('class', MetronicTextInputBase::SIZE_XL)
+				->setOption('description', 'Identification for synchronizing');
 		$form->addText('barcode', 'Barcode');
 		$form->addCheckSwitch('active', 'Active');
 		$form->addTextArea('perex', 'Perex')
@@ -58,7 +61,7 @@ class StockBasic extends StockBase
 	private function load(ArrayHash $values)
 	{
 		$this->stock->barcode = $values->barcode;
-		$this->stock->code = $values->code;
+		$this->stock->pohodaCode = $values->pohodaCode;
 		$this->stock->active = $values->active;
 
 		$this->stock->product->translateAdd($this->lang)->name = $values->name;
@@ -81,7 +84,7 @@ class StockBasic extends StockBase
 	protected function getDefaults()
 	{
 		$values = [
-			'code' => $this->stock->code,
+			'pohodaCode' => $this->stock->pohodaCode,
 			'barcode' => $this->stock->barcode,
 			'active' => $this->stock->active,
 		];

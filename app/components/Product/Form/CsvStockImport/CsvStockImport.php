@@ -57,14 +57,15 @@ class CsvStockImport extends BaseControl
 
 	private function getColumnsAliases()
 	{
-		$groupRepo = $this->em->getRepository(Group::getClassName());
-		$groups = $groupRepo->findAll();
 		$aliases = [
 			0 => 'id',
-			1 => 'name',
-			2 => 'purchasePrice',
-			3 => 'defaultPrice',
+			1 => 'pohodaCode',
+			2 => 'name',
+			3 => 'purchasePrice',
+			4 => 'defaultPrice',
 		];
+		$groupRepo = $this->em->getRepository(Group::getClassName());
+		$groups = $groupRepo->findAll();
 		foreach ($groups as $group) {
 			$aliases[] = 'price' . $group->level;
 		}
