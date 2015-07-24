@@ -94,10 +94,7 @@ class SettingsStorage extends Object
 	public function getDesign()
 	{
 		if ($this->user->identity->sidebarClosed !== NULL) {
-			Debugger::barDump('Není NULL');
 			$this->design->sidebarClosed = $this->user->identity->sidebarClosed;
-		} else {
-			Debugger::barDump('Je NULL');
 		}
 
 		return $this->design;
