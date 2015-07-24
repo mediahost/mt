@@ -63,7 +63,7 @@ class PohodaFacade extends Object
 	public function getNewCode()
 	{
 		$pohodaRepo = $this->em->getRepository(PohodaItem::getClassName());
-		$tries = 0;
+		$tries = 5;
 		for ($i = 0; $i < $tries; $i++) {
 			$newCode = Random::generate($this->newCodeLenght, $this->newCodeCharlist);
 			$finded = $pohodaRepo->findBy(['code' => $newCode]);
