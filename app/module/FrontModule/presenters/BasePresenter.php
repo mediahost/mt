@@ -101,30 +101,30 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	protected function loadTemplateCategoriesSettings()
 	{
-		$categoriesSettings = $this->moduleService->getModuleSettings('categories');
-		$this->template->expandOnlyActiveCategories = $categoriesSettings ? $categoriesSettings->expandOnlyActiveCategories : FALSE;
-		$this->template->maxCategoryDeep = $categoriesSettings ? $categoriesSettings->maxDeep : 3;
-		$this->template->showProductsCount = $categoriesSettings ? $categoriesSettings->showProductsCount : FALSE;
+		$categories = $this->settings->modules->categories;
+		$this->template->expandOnlyActiveCategories = $categories->enabled ? $categories->expandOnlyActiveCategories : FALSE;
+		$this->template->maxCategoryDeep = $categories->enabled ? $categories->maxDeep : 3;
+		$this->template->showProductsCount = $categories->enabled ? $categories->showProductsCount : FALSE;
 	}
 
 	protected function loadTemplateSigns()
 	{
-		$signSettings = $this->moduleService->getModuleSettings('signs');
-		if ($signSettings) {
+		$signs = $this->settings->modules->signs;
+		if ($signs->enabled) {
 			$signRepo = $this->em->getRepository(Sign::getClassName());
 
-			$newSign = $signRepo->find($signSettings->new);
-			$newSign->setCurrentLocale($this->locale);
+			$new = $signRepo->find($signs->values->new);
+			$new->setCurrentLocale($this->locale);
 
-			$saleSign = $signRepo->find($signSettings->sale);
-			$saleSign->setCurrentLocale($this->locale);
+			$sale = $signRepo->find($signs->values->sale);
+			$sale->setCurrentLocale($this->locale);
 
-			$topSign = $signRepo->find($signSettings->top);
-			$topSign->setCurrentLocale($this->locale);
+			$top = $signRepo->find($signs->values->top);
+			$top->setCurrentLocale($this->locale);
 
-			$this->template->newSign = $newSign;
-			$this->template->saleSign = $saleSign;
-			$this->template->topSign = $topSign;
+			$this->template->newSign = $new;
+			$this->template->saleSign = $sale;
+			$this->template->topSign = $top;
 		}
 	}
 
@@ -142,7 +142,7 @@ abstract class BasePresenter extends BaseBasePresenter
 		$list = new ProductList();
 		$list->setTranslator($this->translator);
 		$list->setExchange($this->exchange, $this->currency);
-		$list->setItemsPerPage($this->pageConfigService->rowsPerPage, $this->pageConfigService->itemsPerRow);
+		$list->setItemsPerPage($this->settings->pageConfig->rowsPerPage, $this->settings->pageConfig->itemsPerRow);
 		$list->setLang($this->locale, $this->translator->getDefaultLocale());
 
 		$list->setAjax();

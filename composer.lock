@@ -33,12 +33,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dg/ftp-deployment.git",
-                "reference": "86fbff9a07f59887446f5bbfe48a281ea4e30f93"
+                "reference": "02e5c6321e94d440a1b7f22059d55ec9ffed43dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dg/ftp-deployment/zipball/86fbff9a07f59887446f5bbfe48a281ea4e30f93",
-                "reference": "86fbff9a07f59887446f5bbfe48a281ea4e30f93",
+                "url": "https://api.github.com/repos/dg/ftp-deployment/zipball/02e5c6321e94d440a1b7f22059d55ec9ffed43dc",
+                "reference": "02e5c6321e94d440a1b7f22059d55ec9ffed43dc",
                 "shasum": ""
             },
             "require": {
@@ -76,7 +76,7 @@
                 "ftp",
                 "ssh"
             ],
-            "time": "2015-06-30 14:00:22"
+            "time": "2015-07-23 17:10:25"
         },
         {
             "name": "doctrine/annotations",

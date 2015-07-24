@@ -2,7 +2,6 @@
 
 namespace App\Model\Facade;
 
-use App\Extensions\Settings\Model\Service\ModuleService;
 use App\Model\Entity\Role;
 use Kdyby\Doctrine\EntityDao;
 use Kdyby\Doctrine\EntityManager;
@@ -13,9 +12,6 @@ class RoleFacade extends Object
 
 	/** @var EntityManager @inject */
 	public $em;
-
-	/** @var ModuleService @inject */
-	public $moduleService;
 
 	/** @var EntityDao */
 	private $roleDao;

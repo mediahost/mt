@@ -53,11 +53,11 @@ class SignUp extends BaseControl
 				->addServerRule([$this, 'validateMail'], $this->translator->translate('%mail% is already registered.'))
 				->setOption('description', 'for example: example@domain.com');
 
-		$helpText = $this->translator->translate('At least %count% characters long.', NULL, ['count' => $this->passwordService->length]);
+		$helpText = $this->translator->translate('At least %count% characters long.', NULL, ['count' => $this->settings->passwords->minLength]);
 		$form->addPassword('password', 'Password')
 				->setAttribute('placeholder', 'Password')
 				->setRequired('Please enter your password')
-				->addRule(Form::MIN_LENGTH, 'Password must be at least %count% characters long.', $this->passwordService->length)
+				->addRule(Form::MIN_LENGTH, 'Password must be at least %count% characters long.', $this->settings->passwords->minLength)
 				->setOption('description', $helpText);
 
 		$form->addPassword('passwordVerify', 'Re-type Your Password')

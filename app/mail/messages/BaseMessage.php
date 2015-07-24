@@ -2,7 +2,7 @@
 
 namespace App\Mail\Messages;
 
-use App\Extensions\Settings\Model\Service\PageInfoService;
+use App\Extensions\Settings\SettingsStorage;
 use Kdyby\Translation\ITranslator;
 use Latte\Engine;
 use Nette\Http\Request;
@@ -15,8 +15,8 @@ abstract class BaseMessage extends Message
 	/** @var IMailer @inject */
 	public $mailer;
 
-	/** @var PageInfoService @inject */
-	public $pageInfoService;
+	/** @var SettingsStorage @inject */
+	public $settings;
 
 	/** @var Request @inject */
 	public $httpRequest;
@@ -46,7 +46,7 @@ abstract class BaseMessage extends Message
 	{
 		$this->params['hostUrl'] = $this->httpRequest->url->hostUrl;
 		$this->params['basePath'] = $this->httpRequest->url->basePath;
-		$this->params['pageInfo'] = $this->pageInfoService;
+		$this->params['pageInfo'] = $this->settings->pageInfo;
 		$this->params['isNewsletter'] = $this->isNewsletter;
 		$this->params['unsubscribeLink'] = $this->unsubscribeLink ? $this->unsubscribeLink : $this->params['hostUrl'];
 		

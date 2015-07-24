@@ -15,7 +15,7 @@ trait UserFacadeRecovery
 	 */
 	public function setRecovery(User &$user)
 	{
-		$user->setRecovery(Random::generate(32), 'now + ' . $this->expirationService->recovery);
+		$user->setRecovery(Random::generate(32), 'now + ' . $this->settings->recovery);
 		return $this;
 	}
 

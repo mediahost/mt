@@ -2,7 +2,6 @@
 
 namespace App\Model\Facade\Traits;
 
-use App\Model\Entity\PageConfigSettings;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use InvalidArgumentException;
@@ -26,27 +25,6 @@ trait UserFacadeSetters
 		} else {
 			throw new InvalidArgumentException;
 		}
-	}
-
-	/**
-	 * Append settings to user
-	 * @param int $userId
-	 * @param PageConfigSettings $configSettings
-	 * @return self
-	 */
-	public function appendSettings($userId, PageConfigSettings $configSettings = NULL)
-	{
-		$user = $this->userRepo->find($userId);
-		if ($user && $configSettings) {
-			if (!$user->pageConfigSettings instanceof PageConfigSettings) {
-				$user->pageConfigSettings = new PageConfigSettings;
-			}
-			$user->pageConfigSettings->append($configSettings);
-			$this->em->persist($user->pageConfigSettings);
-		}
-
-		$this->em->flush();
-		return $this;
 	}
 
 }
