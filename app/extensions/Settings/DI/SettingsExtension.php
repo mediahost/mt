@@ -19,7 +19,7 @@ class SettingsExtension extends CompilerExtension
 			],
 			'signs' => [
 				'enabled' => FALSE,
-				'values' => [
+				'values;' => [
 					'new' => 1,
 					'sale' => 2,
 					'top' => 3,
