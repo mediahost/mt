@@ -3,8 +3,7 @@
 namespace App\CronModule\Presenters;
 
 use App\Model\Facade\PohodaFacade;
-use Exception;
-use Tracy\Debugger;
+use Nette\Application\ForbiddenRequestException;
 
 class PohodaPresenter extends BasePresenter
 {
@@ -16,6 +15,10 @@ class PohodaPresenter extends BasePresenter
 
 	public function actionSynchronize($all = FALSE)
 	{
+		if (!$this->settings->modules->pohoda->enabled) {
+			throw new ForbiddenRequestException('Pohoda module is not allowed');
+		}
+		
 		$lastDataChangeTime = $this->pohodaFacade->getLastSync(PohodaFacade::ANY_IMPORT, PohodaFacade::LAST_UPDATE);
 		if ($lastDataChangeTime || $all) {
 //			try {

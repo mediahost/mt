@@ -37,6 +37,9 @@ nette:
 
 settings:
 	modules:
+		cron:
+			enabled: TRUE
+			allowedIps: ['127.0.0.1']
 		categories:
 			enabled: TRUE
 			expandOnlyActiveCategories: TRUE

@@ -2,6 +2,7 @@
 
 namespace App\Model\Facade;
 
+use App\Extensions\Settings\SettingsStorage;
 use App\Helpers;
 use App\Model\Entity\PohodaItem;
 use App\Model\Entity\PohodaStorage;
@@ -17,6 +18,7 @@ use Nette\Utils\FileSystem;
 use Nette\Utils\Finder;
 use Nette\Utils\Random;
 use Nette\Utils\Strings;
+use Tracy\Debugger;
 use XMLReader;
 
 class PohodaFacade extends Object
@@ -44,21 +46,14 @@ class PohodaFacade extends Object
 	/** @var Container @inject */
 	public $container;
 
-	/** TODO: move to module settings */
-	private $removeParsedXmlOlderThan = '1 month';
-	private $vatRates = [
-		'high' => 20,
-		'low' => 15,
-		'none' => 0,
-	];
-	private $newCodeLenght = 6;
-	private $newCodeCharlist = '0-9';
-	private $pohoda_language = 'sk';
+	/** @var SettingsStorage @inject */
+	public $settings;
 
 	public function importFullProducts($lastChange = NULL)
 	{
 		$pohodaRepo = $this->em->getRepository(PohodaItem::getClassName());
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
+		$language = $this->settings->modules->pohoda->language;
 		$conditions = [
 			'isInternet' => 'true',
 			'code' => [2301, 1344],
@@ -68,15 +63,15 @@ class PohodaFacade extends Object
 			/* @var $pohodaProduct PohodaItem */
 			list($pohodaProduct, $totalCount) = $group;
 			$pohodaProduct->totalCount = $totalCount;
-			\Tracy\Debugger::barDump($pohodaProduct);
+			Debugger::barDump($pohodaProduct);
 
 			/* @var $stock Stock */
 			$stock = $stockRepo->findOneByPohodaCode($pohodaProduct->code);
 			if ($stock) {
-				$stock->product->translateAdd($this->pohoda_language)->name = $pohodaProduct->name;
+				$stock->product->translateAdd($language)->name = $pohodaProduct->name;
 				$stock->product->mergeNewTranslations();
 				$stockRepo->save($stock);
-				\Tracy\Debugger::barDump($stock);
+				Debugger::barDump($stock);
 			}
 		}
 		exit;
@@ -94,7 +89,9 @@ class PohodaFacade extends Object
 		$pohodaRepo = $this->em->getRepository(PohodaItem::getClassName());
 		$tries = 5;
 		for ($i = 0; $i < $tries; $i++) {
-			$newCode = Random::generate($this->newCodeLenght, $this->newCodeCharlist);
+			$newCodeLenght = $this->settings->modules->pohoda->newCodeLenght;
+			$newCodeCharlist = $this->settings->modules->pohoda->newCodeCharlist;
+			$newCode = Random::generate($newCodeLenght, $newCodeCharlist);
 			$finded = $pohodaRepo->findBy(['code' => $newCode]);
 			if (!$finded) {
 				return $newCode;
@@ -292,7 +289,8 @@ class PohodaFacade extends Object
 					}
 
 					// recount selling price
-					$sellingVatRate = $this->vatRates[$product->sellingRateVAT];
+					$vatRates = $this->settings->modules->pohoda->vatRates;
+					$sellingVatRate = $vatRates[$product->sellingRateVAT];
 					if (isset($item->sellingPrice) && isset($item->sellingPriceWithVAT)) {
 						$product->setRecountedSellingPrice($item->sellingPrice, $item->sellingPriceWithVAT, $sellingVatRate);
 					} else if (isset($item->stockPrice1)) {
@@ -315,7 +313,8 @@ class PohodaFacade extends Object
 
 		$this->onParseXml($type);
 
-		$this->removeOlderParsedXml(DateTime::from('-' . $this->removeParsedXmlOlderThan), $type);
+		$minusTime = '-' . $this->settings->modules->pohoda->removeParsedXmlOlderThan;
+		$this->removeOlderParsedXml(DateTime::from($minusTime), $type);
 		$this->moveXml($filename, self::FOLDER_PARSED, $type);
 	}
 

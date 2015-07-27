@@ -20,20 +20,13 @@ class PohodaConnectorPresenter extends BasePresenter
 	/** @var PohodaFacade @inject */
 	public $pohodaFacade;
 
-	/** TODO: move to module settings */
-	private $allowedReadStorageCart = TRUE;
-	private $allowedReadOrders = TRUE;
-	private $allowedCreateStore = TRUE;
-	private $allowedCreateShortStock = TRUE;
-	private $ico = '45654433';
-
 	public function actionReadStorageCart()
 	{
-		if (!$this->allowedReadStorageCart) {
+		if (!$this->settings->modules->pohoda->enabled || !$this->settings->modules->pohoda->allowedReadStorageCart) {
 			$this->resource->state = 'error';
 			$this->resource->message = 'This module is not allowed';
 		} else {
-			$this->resource->ico = $this->ico;
+			$this->resource->ico = $this->settings->modules->pohoda->ico;
 			$this->resource->stocks = [];
 			$this->pohodaFacade->setLastSync(PohodaFacade::SHORT_STOCK, PohodaFacade::LAST_DOWNLOAD);
 			$this->setView('storageCart');
@@ -42,7 +35,7 @@ class PohodaConnectorPresenter extends BasePresenter
 
 	public function actionReadOrders()
 	{
-		if (!$this->allowedReadOrders) {
+		if (!$this->settings->modules->pohoda->enabled || !$this->settings->modules->pohoda->allowedReadOrders) {
 			$this->resource->state = 'error';
 			$this->resource->message = 'This module is not allowed';
 		}
@@ -53,7 +46,7 @@ class PohodaConnectorPresenter extends BasePresenter
 
 	public function actionCreateStore($use_gzip_upload)
 	{
-		if (!$this->allowedCreateStore) {
+		if (!$this->settings->modules->pohoda->enabled || !$this->settings->modules->pohoda->allowedCreateStore) {
 			$this->resource->state = 'error';
 			$this->resource->message = 'This module is not allowed';
 		}
@@ -71,7 +64,7 @@ class PohodaConnectorPresenter extends BasePresenter
 
 	public function actionCreateShortStock($use_gzip_upload)
 	{
-		if (!$this->allowedCreateShortStock) {
+		if (!$this->settings->modules->pohoda->enabled || !$this->settings->modules->pohoda->allowedCreateShortStock) {
 			$this->resource->state = 'error';
 			$this->resource->message = 'This module is not allowed';
 		}
