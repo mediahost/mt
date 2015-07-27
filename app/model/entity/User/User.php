@@ -25,10 +25,14 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 {
 
 	use Identifier;
-	use UserRoles;
-	use UserGroups;
-	use UserPassword;
-	use UserSocials;
+
+use UserRoles;
+
+use UserGroups;
+
+use UserPassword;
+
+use UserSocials;
 
 	/**
 	 * @ORM\Column(type="string", nullable=false, unique=true)
@@ -49,22 +53,22 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	 * @ORM\Column(type="boolean", nullable=true)
 	 */
 	protected $sidebarClosed;
-	
+
 	/**
-	 * @ORM\OneToMany(targetEntity="LastVisited", mappedBy="user")
+	 * @ORM\OneToMany(targetEntity="VisitedProduct", mappedBy="user", fetch="EXTRA_LAZY")
 	 */
-	protected $lastVisited;
+	protected $visitedProducts;
 
 	public function __construct($mail = NULL)
 	{
 		$this->roles = new ArrayCollection;
 		$this->groups = new ArrayCollection();
-		$this->lastVisited = new ArrayCollection();
-		
+		$this->visitedProducts = new ArrayCollection();
+
 		if ($mail) {
 			$this->mail = $mail;
 		}
-		
+
 		parent::__construct();
 	}
 
@@ -85,6 +89,11 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	public function isNew()
 	{
 		return $this->id === NULL;
+	}
+
+	public function hasVisited($visited)
+	{
+		return $this->visitedProducts->contains($visited);
 	}
 
 }

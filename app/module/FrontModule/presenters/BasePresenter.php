@@ -81,7 +81,7 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->template->saleStocks = $this->stockFacade->getSales();
 		$this->template->topStocks = $this->stockFacade->getTops();
 		$this->template->bestsellerStocks = $this->stockFacade->getBestSellers();
-		$this->template->visitedStocks = $this->stockFacade->getLastVisited();
+		$this->template->visitedStocks = $this->user->storage->getVisited();
 
 		$this->loadTemplateMenu();
 		$this->loadTemplateCategoriesSettings();
