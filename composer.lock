@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "995bbe3df3286dd05c96697cff1cca44",
+    "hash": "b5bf57bc7599912feb897326371c6621",
     "packages": [
         {
             "name": "dg/adminer-custom",
@@ -1904,12 +1904,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mediahost/DoctrineBehaviors.git",
-                "reference": "ecaf6f38110de8ade5ea00296339e6bec445a7bf"
+                "reference": "88df898f09a2c2448e3d0c87f2fb148923a6e4dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mediahost/DoctrineBehaviors/zipball/ecaf6f38110de8ade5ea00296339e6bec445a7bf",
-                "reference": "ecaf6f38110de8ade5ea00296339e6bec445a7bf",
+                "url": "https://api.github.com/repos/mediahost/DoctrineBehaviors/zipball/88df898f09a2c2448e3d0c87f2fb148923a6e4dd",
+                "reference": "88df898f09a2c2448e3d0c87f2fb148923a6e4dd",
                 "shasum": ""
             },
             "require": {
@@ -1958,7 +1958,7 @@
             "support": {
                 "source": "https://github.com/mediahost/DoctrineBehaviors/tree/master"
             },
-            "time": "2015-05-20 20:04:54"
+            "time": "2015-07-24 14:09:27"
         },
         {
             "name": "latte/latte",
