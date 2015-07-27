@@ -94,10 +94,7 @@ class SettingsStorage extends Object
 	public function getDesign()
 	{
 		if ($this->user->identity->sidebarClosed !== NULL) {
-			Debugger::barDump('Není NULL');
 			$this->design->sidebarClosed = $this->user->identity->sidebarClosed;
-		} else {
-			Debugger::barDump('Je NULL');
 		}
 
 		return $this->design;
@@ -140,15 +137,12 @@ class SettingsStorage extends Object
 	}
 
 	/**
-	 * Set modules allowing and module settings
-	 * @param array
 	 * @param array
 	 * @return SettingsStorage
 	 */
-	public function setModules($modules, $settings)
+	public function setModules(array $values)
 	{
-		$this->modules = ArrayHash::from($modules);
-		$this->modulesSettings = ArrayHash::from($settings);
+		$this->modules = ArrayHash::from($values);
 		return $this;
 	}
 
@@ -158,14 +152,6 @@ class SettingsStorage extends Object
 	public function getModules()
 	{
 		return $this->modules;
-	}
-
-	/**
-	 * @return ArrayHash
-	 */
-	public function getModuleSettings()
-	{
-		return $this->modulesSettings;
 	}
 
 }

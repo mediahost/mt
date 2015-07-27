@@ -2,7 +2,6 @@
 
 namespace App\Listeners;
 
-use App\Extensions\Settings\Model\Service\ExpirationService;
 use App\Extensions\Settings\SettingsStorage;
 use App\Mail\Messages\ICreateRegistrationMessageFactory;
 use App\Mail\Messages\IVerificationMessageFactory;

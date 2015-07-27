@@ -2,7 +2,7 @@
 
 namespace App\Model\Facade;
 
-use App\Extensions\Settings\Model\Service\ModuleService;
+use App\Extensions\Settings\SettingsStorage;
 use App\Model\Entity\Sign;
 use App\Model\Entity\Stock;
 use App\Model\Repository\SignRepository;
@@ -17,8 +17,8 @@ class StockFacade extends Object
 	/** @var EntityManager @inject */
 	public $em;
 
-	/** @var ModuleService @inject */
-	public $moduleService;
+	/** @var SettingsStorage @inject */
+	public $settings;
 
 	/** @var StockRepository */
 	private $stockRepo;
@@ -65,23 +65,23 @@ class StockFacade extends Object
 
 	public function getSales()
 	{
-		$signSettings = $this->moduleService->getModuleSettings('signs');
-		$saleSignId = $signSettings ? $signSettings->sale : NULL;
-		return $this->getSignedProducts($saleSignId);
+		$signs = $this->settings->modules->signs;
+		$id = $signs->enabled ? $signs->values->sale : NULL;
+		return $this->getSignedProducts($id);
 	}
 
 	public function getNews()
 	{
-		$signSettings = $this->moduleService->getModuleSettings('signs');
-		$newSignId = $signSettings ? $signSettings->new : NULL;
-		return $this->getSignedProducts($newSignId);
+		$signs = $this->settings->modules->signs;
+		$id = $signs->enabled ? $signs->values->new : NULL;
+		return $this->getSignedProducts($id);
 	}
 
 	public function getTops()
 	{
-		$signSettings = $this->moduleService->getModuleSettings('signs');
-		$topSignId = $signSettings ? $signSettings->top : NULL;
-		return $this->getSignedProducts($topSignId);
+		$signs = $this->settings->modules->signs;
+		$id = $signs->enabled ? $signs->values->top : NULL;
+		return $this->getSignedProducts($id);
 	}
 
 	private function getDemoProducts()

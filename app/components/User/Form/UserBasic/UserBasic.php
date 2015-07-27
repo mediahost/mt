@@ -66,10 +66,10 @@ class UserBasic extends BaseControl
 
 		$password = $form->addText('password', 'Password');
 		if ($this->user->isNew()) {
-			$helpText = new TaggedString('At least %count% characters long.', $this->passwordService->length);
+			$helpText = new TaggedString('At least %count% characters long.', $this->settings->passwords->minLength);
 			$helpText->setTranslator($this->translator);
 			$password->addRule(Form::FILLED, 'Password must be filled')
-					->addRule(Form::MIN_LENGTH, 'Password must be at least %count% characters long.', $this->passwordService->length)
+					->addRule(Form::MIN_LENGTH, 'Password must be at least %count% characters long.', $this->settings->passwords->minLength)
 					->setOption('description', (string) $helpText);
 		}
 

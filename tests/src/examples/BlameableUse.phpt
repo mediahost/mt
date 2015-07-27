@@ -2,8 +2,6 @@
 
 namespace Test\Examples;
 
-use App\Model\Entity\PageConfigSettings;
-use App\Model\Entity\PageDesignSettings;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use App\Model\Entity\UserCallable;
@@ -217,8 +215,6 @@ class BlameableUseTest extends BaseUse
 		return [
 			$this->em->getClassMetadata(Blameable::getClassName()),
 			$this->em->getClassMetadata(User::getClassName()),
-			$this->em->getClassMetadata(PageConfigSettings::getClassName()),
-			$this->em->getClassMetadata(PageDesignSettings::getClassName()),
 			$this->em->getClassMetadata(Role::getClassName()),
 		];
 	}
