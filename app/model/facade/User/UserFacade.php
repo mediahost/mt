@@ -2,8 +2,7 @@
 
 namespace App\Model\Facade;
 
-use App\Extensions\Settings\Model\Service\ExpirationService;
-use App\Model\Entity\PageConfigSettings;
+use App\Extensions\Settings\SettingsStorage;
 use App\Model\Entity\Registration;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
@@ -40,17 +39,17 @@ class UserFacade extends Object
 
 	/** @var EntityDao */
 	private $roleDao;
+	
+	/** @var SettingsStorage */
+	private $settings;
 
-	/** @var EntityDao */
-	private $configSettingsDao;
-
-	public function __construct(EntityManager $em)
+	public function __construct(EntityManager $em, SettingsStorage $settings)
 	{
 		$this->em = $em;
 		$this->userRepo = $this->em->getRepository(User::getClassName());
 		$this->registrationRepo = $this->em->getRepository(Registration::getClassName());
 		$this->roleDao = $this->em->getDao(Role::getClassName());
-		$this->configSettingsDao = $this->em->getDao(PageConfigSettings::getClassName());
+		$this->settings = $settings;
 	}
 
 	public function isUnique($mail)

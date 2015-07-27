@@ -26,15 +26,15 @@ class ServicePresenter extends BasePresenter
 
 	public function actionDefault()
 	{
-		$serviceSettings = $this->moduleService->getModuleSettings('service');
-		if (!$serviceSettings) {
+		$service = $this->settings->modules->service;
+		if (!$service->enabled) {
 			$message = $this->translator->translate('This module isn\'t allowed.');
 			$this->flashMessage($message, 'warning');
 			$this->redirect('Homepage:');
 		}
 
 		$pageRepo = $this->em->getRepository(Page::getClassName());
-		$this->page = $pageRepo->find($serviceSettings->pageId);
+		$this->page = $pageRepo->find($service->pageId);
 
 		if (!$this->page) {
 			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Page')]);

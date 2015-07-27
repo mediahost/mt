@@ -2,7 +2,6 @@
 
 namespace App\Listeners;
 
-use App\Extensions\Settings\Model\Storage\GuestSettingsStorage;
 use App\Model\Facade\UserFacade;
 use Kdyby\Events\Subscriber;
 use Nette\Object;
@@ -10,9 +9,6 @@ use Nette\Security;
 
 class LoggedListener extends Object implements Subscriber
 {
-
-	/** @var GuestSettingsStorage @inject */
-	public $guestStorage;
 
 	/** @var UserFacade @inject */
 	public $userFacade;
@@ -25,12 +21,14 @@ class LoggedListener extends Object implements Subscriber
 		);
 	}
 
+	/**
+	 * @param \Nette\Security\User $identity
+	 */
 	public function userLoggedIn(Security\User $identity)
 	{
-		if (!$this->guestStorage->empty) {
-			$this->userFacade->appendSettings($identity->id, $this->guestStorage->pageSettings);
-			$this->guestStorage->wipe();
-		}
+		/** @todo Metoda import nad entitou User dostane jako argument předchozího uživatele
+		 * (tedy guesta) a z něj překopíruje nějaká data. Jaké řeší ono metoda import().
+		 */
 	}
 
 	public function userLoggedOut(Security\User $user)

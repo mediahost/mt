@@ -2,7 +2,7 @@
 
 namespace App\Components;
 
-use App\Extensions\Settings\Model\Service\PasswordService;
+use App\Extensions\Settings\SettingsStorage;
 use Exception;
 use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\EntityManager;
@@ -17,8 +17,8 @@ abstract class BaseControl extends UI\Control
 	/** @var EntityManager @inject */
 	public $em;
 
-	/** @var PasswordService @inject */
-	public $passwordService;
+	/** @var SettingsStorage @inject */
+	public $settings;
 
 	/** @var Translator @inject */
 	public $translator;

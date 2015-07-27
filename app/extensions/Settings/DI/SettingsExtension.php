@@ -9,9 +9,48 @@ class SettingsExtension extends CompilerExtension
 
 	/** @var array */
 	public $defaults = [
-		'modules' => [], // auto generated default FALSE
-		'modulesSettings' => [], // auto generated default NULL
-		'pageInfo' => [],
+		'modules' => [
+			'categories' => [
+				'enabled' => FALSE,
+				'expandOnlyActiveCategories' => TRUE, // TRUE -> expand only active category | FALSE -> expand all categories
+				'maxDeep' => 4, // count of levels to show subcategories
+				'showOnlyNonEmpty' => TRUE, // TRUE -> fetch only categories with some products // not implemented yet
+				'showProductsCount' => FALSE, // TRUE -> show count of product after category name
+			],
+			'signs' => [
+				'enabled' => FALSE,
+				'values' => [
+					'new' => 1,
+					'sale' => 2,
+					'top' => 3,
+				],
+			],
+			'service' => [
+				'enabled' => FALSE,
+				'pageId' => 3,
+			],
+			'pohoda' => [
+				'enabled' => FALSE,
+				'ico' => '',
+				'allowedReadStorageCart' => FALSE,
+				'allowedReadOrders' => FALSE,
+				'allowedCreateStore' => FALSE,
+				'allowedCreateShortStock' => FALSE,
+				'removeParsedXmlOlderThan' => '1 month',
+				'newCodeLenght' => 8,
+				'newCodeCharlist' => 'a-Z0-9',
+				'vatRates' => [
+					'high' => 21,
+					'low' => 15,
+					'none' => 0,
+				],
+			],
+		],
+		'pageInfo' => [
+			'projectName' => 'projectName',
+			'author' => 'author',
+			'description' => 'description',
+		],
 		'pageConfig' => [
 			'itemsPerPage' => 20,
 			'itemsPerRow' => 3,
@@ -25,7 +64,7 @@ class SettingsExtension extends CompilerExtension
 			'notRemember' => '30 minutes',
 		],
 		'passwords' => [
-			'length' => 8,
+			'minLength' => 8,
 		],
 		'design' => [
 			'colors' => ['default' => 'Default'], // code => name
@@ -54,35 +93,7 @@ class SettingsExtension extends CompilerExtension
 				->addSetup('setExpiration', [$config['expiration']])
 				->addSetup('setPasswords', [$config['passwords']])
 				->addSetup('setDesign', [$config['design']])
-				->setInject(TRUE);
-
-		$builder->addDefinition($this->prefix('defaults'))
-				->setClass('App\Extensions\Settings\Model\Storage\DefaultSettingsStorage')
-				->addSetup('setModules', [$config['modules'], $config['modulesSettings']])
-				->setInject(TRUE);
-
-		$builder->addDefinition($this->prefix('guest'))
-				->setClass('App\Extensions\Settings\Model\Storage\GuestSettingsStorage')
-				->setInject(TRUE);
-
-		$builder->addDefinition($this->prefix('password'))
-				->setClass('App\Extensions\Settings\Model\Service\PasswordService')
-				->setInject(TRUE);
-
-		$builder->addDefinition($this->prefix('expiration'))
-				->setClass('App\Extensions\Settings\Model\Service\ExpirationService')
-				->setInject(TRUE);
-
-		$builder->addDefinition($this->prefix('pageInfo'))
-				->setClass('App\Extensions\Settings\Model\Service\PageInfoService')
-				->setInject(TRUE);
-
-		$builder->addDefinition($this->prefix('pageConfig'))
-				->setClass('App\Extensions\Settings\Model\Service\PageConfigService')
-				->setInject(TRUE);
-
-		$builder->addDefinition($this->prefix('module'))
-				->setClass('App\Extensions\Settings\Model\Service\ModuleService')
+				->addSetup('setModules', [$config['modules']])
 				->setInject(TRUE);
 	}
 

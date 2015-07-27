@@ -2,7 +2,6 @@
 
 namespace Test\Model\Facade;
 
-use App\Extensions\Settings\Model\Storage\DefaultSettingsStorage;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
 use Test\DbTestCase;
@@ -15,9 +14,6 @@ abstract class BaseFacade extends DbTestCase
 
 	/** @var UserFacade @inject */
 	public $userFacade;
-
-	/** @var DefaultSettingsStorage @inject */
-	public $defaultSettings;
 
 	protected function setUp()
 	{
