@@ -8,8 +8,10 @@ use App\Model\Entity\PohodaItem;
 use App\Model\Entity\PohodaStorage;
 use App\Model\Entity\Special\XmlItem;
 use App\Model\Entity\Stock;
+use App\Model\Repository\PohodaItemRepository;
 use Exception;
 use Kdyby\Doctrine\EntityManager;
+use MissingSettingsException;
 use Nette\Database\UniqueConstraintViolationException;
 use Nette\DI\Container;
 use Nette\Object;
@@ -18,7 +20,6 @@ use Nette\Utils\FileSystem;
 use Nette\Utils\Finder;
 use Nette\Utils\Random;
 use Nette\Utils\Strings;
-use Tracy\Debugger;
 use XMLReader;
 
 class PohodaFacade extends Object
@@ -33,12 +34,16 @@ class PohodaFacade extends Object
 	const FOLDER_PARSED = 'parsed';
 	const LAST_UPDATE = 'last-update';
 	const LAST_DOWNLOAD = 'last-download';
+	const LAST_CONVERT = 'last-convert';
 
 	/** @var array */
-	public $onRecieveXml = [];
+	public $onDoneRecieveXml = [];
 
 	/** @var array */
-	public $onParseXml = [];
+	public $onStartParseXml = [];
+
+	/** @var array */
+	public $onDoneParseXml = [];
 
 	/** @var EntityManager @inject */
 	public $em;
@@ -49,39 +54,47 @@ class PohodaFacade extends Object
 	/** @var SettingsStorage @inject */
 	public $settings;
 
-	public function importFullProducts($lastChange = NULL)
+	public function updateFullProducts($lastChange = NULL)
 	{
+		/* @var $pohodaRepo PohodaItemRepository */
 		$pohodaRepo = $this->em->getRepository(PohodaItem::getClassName());
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
 		$language = $this->settings->modules->pohoda->language;
+		if (!$language) {
+			throw new MissingSettingsException('Pohoda language must be set.');
+		}
 		$conditions = [
 			'isInternet' => 'true',
-			'code' => [2301, 1344],
 		];
-		$pohodaItems = $pohodaRepo->findGroupedBy($conditions);
+		if ($lastChange) {
+			$conditions['updatedAt >='] = $lastChange;
+		}
+
+		$pohodaItems = $pohodaRepo->findArrGroupedBy($conditions);
+		$i = 0;
 		foreach ($pohodaItems as $group) {
-			/* @var $pohodaProduct PohodaItem */
-			list($pohodaProduct, $totalCount) = $group;
-			$pohodaProduct->totalCount = $totalCount;
-			Debugger::barDump($pohodaProduct);
+			list($pohodaProductArr, $totalCount) = $group;
 
 			/* @var $stock Stock */
-			$stock = $stockRepo->findOneByPohodaCode($pohodaProduct->code);
-			if ($stock) {
-				$stock->product->translateAdd($language)->name = $pohodaProduct->name;
-				$stock->product->mergeNewTranslations();
-				$stockRepo->save($stock);
-				Debugger::barDump($stock);
+			if (array_key_exists('code', $pohodaProductArr)) {
+				$stock = $stockRepo->findOneByPohodaCode($pohodaProductArr['code']);
+				if ($stock) {
+					$stock->product->translateAdd($language)->name = $pohodaProductArr['name'];
+					$stock->product->mergeNewTranslations();
+					$stock->quantity = $totalCount;
+					$stock->purchasePrice = $pohodaProductArr['purchasingPrice'];
+					$stock->price = $pohodaProductArr['recountedSellingWithoutVat'];
+					$stock->barcode = $pohodaProductArr['ean'];
+					$this->em->persist($stock);
+					$i++;
+				}
+			}
+
+			if ($i % 500 === 0) {
+				$this->em->flush();
 			}
 		}
-		exit;
-	}
-
-	public function importStocksOnly()
-	{
-		exit;
-//		$pohodaRepo = $this->em->getRepository(PohodaItem::getClassName());
-//		$pohodaItems = $pohodaRepo->findBy(['isInternet' => 'true']);
+		$this->em->flush();
 	}
 
 	public function getNewCode()
@@ -118,7 +131,7 @@ class PohodaFacade extends Object
 	{
 		if ($xml) {
 			$savedFilename = $this->createXml($xml, $type);
-			$this->onRecieveXml();
+			$this->onDoneRecieveXml();
 			return $savedFilename;
 		} else {
 			throw new Exception('XML file is empty');
@@ -157,6 +170,8 @@ class PohodaFacade extends Object
 
 		$productRepo = $this->em->getRepository(PohodaItem::getClassName());
 		$storageRepo = $this->em->getRepository(PohodaStorage::getClassName());
+
+		$this->onStartParseXml($type);
 
 		$reader = new XMLReader();
 		$reader->open($filename);
@@ -311,7 +326,7 @@ class PohodaFacade extends Object
 		$this->em->flush();
 		$reader->close();
 
-		$this->onParseXml($type);
+		$this->onDoneParseXml($type);
 
 		$minusTime = '-' . $this->settings->modules->pohoda->removeParsedXmlOlderThan;
 		$this->removeOlderParsedXml(DateTime::from($minusTime), $type);

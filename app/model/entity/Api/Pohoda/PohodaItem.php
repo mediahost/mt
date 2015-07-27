@@ -88,10 +88,10 @@ class PohodaItem extends BaseEntity
 	protected $sellingRateVAT; // Sazba DPH pro prodej.
 
 	/** @ORM\Column(type="float", nullable=true) */
-	private $recountedSellingWithoutVat;
+	protected $recountedSellingWithoutVat;
 
 	/** @ORM\Column(type="float", nullable=true) */
-	private $recountedSellingWithVat;
+	protected $recountedSellingWithVat;
 
 	public function __construct($id)
 	{
