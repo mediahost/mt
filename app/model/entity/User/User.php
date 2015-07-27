@@ -49,14 +49,22 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	 * @ORM\Column(type="boolean", nullable=true)
 	 */
 	protected $sidebarClosed;
+	
+	/**
+	 * @ORM\OneToMany(targetEntity="LastVisited", mappedBy="user")
+	 */
+	protected $lastVisited;
 
 	public function __construct($mail = NULL)
 	{
 		$this->roles = new ArrayCollection;
 		$this->groups = new ArrayCollection();
+		$this->lastVisited = new ArrayCollection();
+		
 		if ($mail) {
 			$this->mail = $mail;
 		}
+		
 		parent::__construct();
 	}
 
