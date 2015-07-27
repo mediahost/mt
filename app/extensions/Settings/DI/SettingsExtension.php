@@ -10,6 +10,10 @@ class SettingsExtension extends CompilerExtension
 	/** @var array */
 	public $defaults = [
 		'modules' => [
+			'cron' => [ // access to cron scripts
+				'enabled' => FALSE,
+				'allowedIps' => ['127.0.0.1'],
+			],
 			'categories' => [ // product categories
 				'enabled' => FALSE,
 				'expandOnlyActiveCategories' => TRUE, // TRUE -> expand only active category | FALSE -> expand all categories
@@ -32,6 +36,7 @@ class SettingsExtension extends CompilerExtension
 			'pohoda' => [
 				'enabled' => FALSE,
 				'ico' => '',
+				'language' => '',
 				'allowedReadStorageCart' => FALSE,
 				'allowedReadOrders' => FALSE,
 				'allowedCreateStore' => FALSE,

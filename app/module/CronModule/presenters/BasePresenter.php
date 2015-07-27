@@ -3,6 +3,7 @@
 namespace App\CronModule\Presenters;
 
 use App\BaseModule\Presenters\BasePresenter as BaseBasePresenter;
+use Nette\Application\ForbiddenRequestException;
 use Nette\Http\Request;
 use Nette\Security\AuthenticationException;
 
@@ -21,14 +22,14 @@ abstract class BasePresenter extends BaseBasePresenter
 	/** @var string */
 	protected $message;
 	
-	/** TODO: move to module settings */
-	private $allowedIps = ['127.0.0.1'];
-	
 	protected function startup()
 	{
 		parent::startup();
 		$ip = $this->request->getRemoteAddress();
-		if (!in_array($this->request->getRemoteAddress(), $this->allowedIps)) {
+		if ($this->settings->cron->enabled) {
+			throw new ForbiddenRequestException('Cron module is not allowed.');
+		}
+		if (!in_array($this->request->getRemoteAddress(), $this->settings->cron->allowedIps)) {
 			throw new AuthenticationException('Your IP (' . $ip . ') is not allowed.');
 		}
 	}
