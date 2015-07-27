@@ -22,7 +22,7 @@ class StockSeo extends StockBase
 		$form->getElementPrototype()->class('ajax');
 
 		$product = $this->stock->product;
-		$product->setCurrentLocale($this->lang);
+		$product->setCurrentLocale($this->translator->getLocale());
 
 		$form->addText('url', 'Url')
 				->setAttribute('placeholder', $product->slug)
@@ -52,14 +52,14 @@ class StockSeo extends StockBase
 
 	private function load(ArrayHash $values)
 	{
-		$this->stock->product->setCurrentLocale($this->lang);
+		$this->stock->product->setCurrentLocale($this->translator->getLocale());
 		$expectedSlug = Strings::webalize($this->stock->product->name);
 		if ($values->url && $values->url !== $expectedSlug) {
-			$this->stock->product->translateAdd($this->lang)->slug = $values->url;
+			$this->stock->product->translateAdd($this->translator->getLocale())->slug = $values->url;
 		}
-		$this->stock->product->translateAdd($this->lang)->seo->name = $values->title;
-		$this->stock->product->translateAdd($this->lang)->seo->keywords = $values->keywords;
-		$this->stock->product->translateAdd($this->lang)->seo->description = $values->description;
+		$this->stock->product->translateAdd($this->translator->getLocale())->seo->name = $values->title;
+		$this->stock->product->translateAdd($this->translator->getLocale())->seo->keywords = $values->keywords;
+		$this->stock->product->translateAdd($this->translator->getLocale())->seo->description = $values->description;
 		$this->stock->product->mergeNewTranslations();
 
 		return $this;
@@ -77,7 +77,7 @@ class StockSeo extends StockBase
 	{
 		$values = [];
 		if ($this->stock->product) {
-			$this->stock->product->setCurrentLocale($this->lang);
+			$this->stock->product->setCurrentLocale($this->translator->getLocale());
 			$values += [
 				'url' => $this->stock->product->slug,
 			];

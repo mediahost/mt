@@ -28,7 +28,7 @@ class StockBasic extends StockBase
 		$form->getElementPrototype()->class('ajax');
 		
 		$product = $this->stock->product;
-		$product->setCurrentLocale($this->lang);
+		$product->setCurrentLocale($this->translator->getLocale());
 
 		$form->addText('name', 'Name')
 				->setAttribute('placeholder', $product->name);
@@ -63,9 +63,9 @@ class StockBasic extends StockBase
 		$this->stock->pohodaCode = $values->pohodaCode;
 		$this->stock->active = $values->active;
 
-		$this->stock->product->translateAdd($this->lang)->name = $values->name;
-		$this->stock->product->translateAdd($this->lang)->perex = $values->perex;
-		$this->stock->product->translateAdd($this->lang)->description = $values->description;
+		$this->stock->product->translateAdd($this->translator->getLocale())->name = $values->name;
+		$this->stock->product->translateAdd($this->translator->getLocale())->perex = $values->perex;
+		$this->stock->product->translateAdd($this->translator->getLocale())->description = $values->description;
 		$this->stock->product->mergeNewTranslations();
 		$this->stock->product->active = $values->active;
 
@@ -88,8 +88,8 @@ class StockBasic extends StockBase
 			'active' => $this->stock->active,
 		];
 		if ($this->stock->product) {
-			$this->stock->product->setCurrentLocale($this->lang);
-			$values = [
+			$this->stock->product->setCurrentLocale($this->translator->getLocale());
+			$values += [
 				'name' => $this->stock->product->name,
 				'perex' => $this->stock->product->perex,
 				'description' => $this->stock->product->description,

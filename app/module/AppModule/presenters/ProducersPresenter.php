@@ -186,7 +186,6 @@ class ProducersPresenter extends BasePresenter
 	public function createComponentProducerForm()
 	{
 		$control = $this->iProducerEditFactory->create();
-		$control->setLang($this->locale);
 		$control->onAfterSave = function ($saved, $type, $addNext) {
 			$typeName = Strings::firstUpper($this->getEntityTypeName($type));
 			$message = $this->translator->translate('successfullySaved', NULL, [
@@ -206,7 +205,6 @@ class ProducersPresenter extends BasePresenter
 	public function createComponentParameterForm()
 	{
 		$control = $this->iModelParameterEditFactory->create();
-		$control->setLang($this->locale);
 		$control->onAfterSave = function (ModelParameter $saved) {
 			$message = $this->translator->translate('successfullySaved', NULL, [
 				'type' => $this->translator->translate('Parameter'), 'name' => (string) $saved
@@ -224,7 +222,6 @@ class ProducersPresenter extends BasePresenter
 	public function createComponentParametersGrid()
 	{
 		$control = $this->iModelParametersGridFactory->create();
-		$control->setLang($this->locale);
 		return $control;
 	}
 

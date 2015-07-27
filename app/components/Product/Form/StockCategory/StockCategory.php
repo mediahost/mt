@@ -39,7 +39,7 @@ class StockCategory extends StockBase
 			->setRenderer(new MetronicHorizontalFormRenderer());
 		$form->getElementPrototype()->class('ajax');
 
-		$categories = $this->categoryFacade->getCategoriesList($this->lang);
+		$categories = $this->categoryFacade->getCategoriesList($this->translator->getLocale());
 
 		$form->addSelect2('main_category', 'Main category', $categories)
 						->setRequired('Select some category')

@@ -33,6 +33,11 @@ class BaseGrid extends Grid
 
 		return count($date) == 3 ? ['birthday', '= ?', "{$date[2]}-{$date[1]}-{$date[0]}"] : NULL;
 	}
+	
+	public function addColumnNumber($name, $label, $decimals = 0, $decPoint = ',', $thousandsSep = '')
+	{
+		return parent::addColumnNumber($name, $label, $decimals, $decPoint, $thousandsSep);
+	}
 
 	/**
 	 * @param string $name

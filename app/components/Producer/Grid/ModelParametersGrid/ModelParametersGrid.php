@@ -23,7 +23,7 @@ class ModelParametersGrid extends BaseControl
 		$qb = $repo->createQueryBuilder('p')
 				->leftJoin('p.translations', 't')
 				->where('t.locale = :lang OR t.locale = :defaultLang')
-				->setParameter('lang', $this->lang)
+				->setParameter('lang', $this->translator->getLocale())
 				->setParameter('defaultLang', $this->translator->getDefaultLocale());
 		$grid->model = new Doctrine($qb, [
 			'name' => 't.name',
@@ -35,7 +35,7 @@ class ModelParametersGrid extends BaseControl
 
 		$grid->addColumnText('name', 'Name')
 				->setCustomRender(function ($row) {
-					return $row->translate($this->lang)->name;
+					return $row->translate($this->translator->getLocale())->name;
 				})
 				->setSortable()
 				->setFilterText()
@@ -43,7 +43,7 @@ class ModelParametersGrid extends BaseControl
 
 		$grid->addColumnText('text', 'Text')
 				->setCustomRender(function ($row) {
-					return Strings::truncate($row->translate($this->lang)->text, 20);
+					return Strings::truncate($row->translate($this->translator->getLocale())->text, 20);
 				})
 				->setSortable()
 				->setFilterText()

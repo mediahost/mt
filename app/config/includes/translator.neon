@@ -2,8 +2,8 @@ extensions:
 	translation: Kdyby\Translation\DI\TranslationExtension
 
 translation:
-	default: en
-	fallback: [en_US, en]
-	whitelist: [cs, en, sk]
+	default: sk
+	fallback: [sk_SK, sk]
+	whitelist: [en, sk, cs]
 	resolvers:
 		header: off

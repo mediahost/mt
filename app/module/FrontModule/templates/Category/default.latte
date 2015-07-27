@@ -56,21 +56,23 @@
 				{control modelSelector}
 			</div>
 
-			<div class="col-lg-6">
-				<h1 n:ifset="$category">{$category}</h1>
-				<h1 n:ifset="$searched">{$searched}</h1>
-				<h1 n:ifset="$accessoriesFor">{$accessoriesFor}</h1>
-				<h1 n:ifset="$producer">
-					{if $model}
-						{$model}
-					{elseif $line}
-						{$line}
-					{else}
-						{$producer}
-					{/if}
-				</h1>
+			<div class="clearfix">
+				<div class="col-lg-6">
+					<h1 n:ifset="$category">{$category}</h1>
+					<h1 n:ifset="$searched">{$searched}</h1>
+					<h1 n:ifset="$accessoriesFor">{$accessoriesFor}</h1>
+					<h1 n:ifset="$producer">
+						{if $model}
+							{$model}
+						{elseif $line}
+							{$line}
+						{else}
+							{$producer}
+						{/if}
+					</h1>
+				</div>
+				<div class="col-lg-6">{control products:sorting}</div>
 			</div>
-			<div class="col-lg-6">{control products:sorting}</div>
 
 			{control products:list}
 
