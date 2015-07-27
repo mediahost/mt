@@ -38,7 +38,7 @@ class StockParameter extends StockBase
 		$bools = $form->addContainer(Parameter::BOOLEAN);
 		foreach ($allParams as $param) {
 			/* @var $param Parameter */
-			$param->setCurrentLocale($this->lang);
+			$param->setCurrentLocale($this->translator->getLocale());
 			switch ($param->getType()) {
 				case Parameter::STRING:
 					$strings->addText($param->code, $param->name)

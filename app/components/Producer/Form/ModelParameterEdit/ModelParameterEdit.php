@@ -56,7 +56,7 @@ class ModelParameterEdit extends BaseControl
 
 	private function load(ArrayHash $values)
 	{
-		$lang = $this->parameter->isNew() ? $this->translator->getDefaultLocale() : $this->lang;
+		$lang = $this->parameter->isNew() ? $this->translator->getDefaultLocale() : $this->translator->getLocale();
 		$this->parameter->translateAdd($lang)->name = $values->name;
 		$this->parameter->translateAdd($lang)->text = $values->text;
 		$this->parameter->mergeNewTranslations();
@@ -75,7 +75,7 @@ class ModelParameterEdit extends BaseControl
 	{
 		$values = [];
 		if (!$this->parameter->isNew()) {
-			$this->parameter->setCurrentLocale($this->lang);
+			$this->parameter->setCurrentLocale($this->translator->getLocale());
 			$values = [
 				'name' => $this->parameter->name,
 				'text' => $this->parameter->text,

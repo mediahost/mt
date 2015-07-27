@@ -35,7 +35,7 @@ class StockSimilar extends StockBase
 		$similars = [];
 		$defaults = [];
 		foreach ($this->stock->product->similars as $product) {
-			$product->setCurrentLocale($this->lang);
+			$product->setCurrentLocale($this->translator->getLocale());
 			$similars[$product->id] = (string) $product;
 			$defaults[] = $product->id;
 		}

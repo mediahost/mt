@@ -60,7 +60,6 @@ class CategoriesPresenter extends BasePresenter
 	public function createComponentCategoryForm()
 	{
 		$control = $this->iCategoryEditFactory->create();
-		$control->setLang($this->locale);
 		$control->onAfterSave = function (Category $savedCategory, $addNext) {
 			$message = $this->translator->translate('successfullySaved', NULL, [
 				'type' => $this->translator->translate('Category'), 'name' => (string) $savedCategory

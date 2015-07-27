@@ -89,7 +89,6 @@ abstract class BasePresenter extends Presenter
 		$this->template->setTranslator($this->translator);
 		$this->template->allowedLanguages = $this->translator->getAvailableLocales();
 		$this->template->designSettings = $this->settings->design;
-		$this->template->designColors = $this->settings->design->colors;
 		$this->template->pageInfo = $this->settings->pageInfo;
 		$this->template->exchange = $this->exchange;
 		if ($this->currency) {

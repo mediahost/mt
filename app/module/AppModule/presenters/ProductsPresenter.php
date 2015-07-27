@@ -183,7 +183,6 @@ class ProductsPresenter extends BasePresenter
 	public function createComponentStockAddForm()
 	{
 		$control = $this->iStockAddFactory->create();
-		$control->setLang($this->locale);
 		$control->onAfterSave = $this->afterStockSave;
 		return $control;
 	}
@@ -192,7 +191,6 @@ class ProductsPresenter extends BasePresenter
 	public function createComponentStockBasicForm()
 	{
 		$control = $this->iStockBasicFactory->create();
-		$control->setLang($this->locale);
 		$control->onAfterSave = $this->afterStockSave;
 		return $control;
 	}
@@ -201,7 +199,6 @@ class ProductsPresenter extends BasePresenter
 	public function createComponentStockPriceForm()
 	{
 		$control = $this->iStockPriceFactory->create();
-		$control->setLang($this->locale);
 		$control->onAfterSave = $this->afterStockSave;
 		return $control;
 	}
@@ -210,7 +207,6 @@ class ProductsPresenter extends BasePresenter
 	public function createComponentStockQuantityForm()
 	{
 		$control = $this->iStockQuantityFactory->create();
-		$control->setLang($this->locale);
 		$control->onAfterSave = $this->afterStockSave;
 		return $control;
 	}
@@ -219,7 +215,6 @@ class ProductsPresenter extends BasePresenter
 	public function createComponentStockCategoryForm()
 	{
 		$control = $this->iStockCategoryFactory->create();
-		$control->setLang($this->locale);
 		$control->onAfterSave = $this->afterStockSave;
 		return $control;
 	}
@@ -228,7 +223,6 @@ class ProductsPresenter extends BasePresenter
 	public function createComponentStockSeoForm()
 	{
 		$control = $this->iStockSeoFactory->create();
-		$control->setLang($this->locale);
 		$control->onAfterSave = $this->afterStockSave;
 		return $control;
 	}
@@ -237,7 +231,6 @@ class ProductsPresenter extends BasePresenter
 	public function createComponentStockImageForm()
 	{
 		$control = $this->iStockImageFactory->create();
-		$control->setLang($this->locale);
 		$control->onAfterSave = $this->afterStockSave;
 		return $control;
 	}
@@ -246,7 +239,6 @@ class ProductsPresenter extends BasePresenter
 	public function createComponentStockParameterForm()
 	{
 		$control = $this->iStockParameterFactory->create();
-		$control->setLang($this->locale);
 		$control->onAfterSave = $this->afterStockSave;
 		return $control;
 	}
@@ -255,7 +247,6 @@ class ProductsPresenter extends BasePresenter
 	public function createComponentStockSignForm()
 	{
 		$control = $this->iStockSignFactory->create();
-		$control->setLang($this->locale);
 		$control->onAfterSave = $this->afterStockSave;
 		return $control;
 	}
@@ -264,7 +255,6 @@ class ProductsPresenter extends BasePresenter
 	public function createComponentStockSimilarForm()
 	{
 		$control = $this->iStockSimilarFactory->create();
-		$control->setLang($this->locale);
 		$control->onAfterSave = $this->afterStockSave;
 		return $control;
 	}
@@ -287,7 +277,6 @@ class ProductsPresenter extends BasePresenter
 	public function createComponentCsvImportForm()
 	{
 		$control = $this->iCsvStockImportFactory->create();
-		$control->setLang($this->locale);
 		$control->onSuccess = function (array $importedStocks) {
 			$count = count($importedStocks);
 			if ($count) {
@@ -315,7 +304,6 @@ class ProductsPresenter extends BasePresenter
 	public function createComponentStocksGrid()
 	{
 		$control = $this->iStocksGridFactory->create();
-		$control->setLang($this->locale);
 		return $control;
 	}
 

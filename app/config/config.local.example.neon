@@ -36,28 +36,36 @@ nette:
 #	nette.mailer: JanDrabek\MailPanel\SessionMailer
 
 settings:
-	modules: # default FALSE for all
-		registrableRole: TRUE # for definition whitch role is registrable in RoleFacade
-	modulesSettings:
-		registrableRole:
-			roles: ['candidate', 'company'] # role names
+	modules:
+		cron:
+			enabled: TRUE
+			allowedIps: ['127.0.0.1']
+		categories:
+			enabled: TRUE
+			expandOnlyActiveCategories: TRUE
+			maxDeep: 4
+		signs:
+			enabled: TRUE
+			values:
+				new: 1
+				sale: 2
+				top: 3
+		service:
+			enabled: TRUE
+			pageId: 3
 	pageInfo:
 		projectName: My Project
 		author: author
 		description: description
 	pageConfig:
-		itemsPerPage: 9
 		itemsPerRow: 3
 		rowsPerPage: 3
 	expiration:
-		remember = 14 days
-		notRemember = 30 minutes
+		remember: 14 days
+		notRemember: 30 minutes
 	design:
 		color: default
 		headerFixed: TRUE
 		containerBgSolid: TRUE
 	passwords:
-		length: 5
-	languages:
-		default: en
-		allowed: ['en' = 'English', 'cs' = 'Czech', 'sk' = 'Slovak']
+		minLength: 5

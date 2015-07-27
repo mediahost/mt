@@ -31,8 +31,8 @@ class StockQuantity extends StockBase
 
 		$unitRepo = $this->em->getRepository(Unit::getClassName());
 		$defaultUnit = $unitRepo->find(1);
-		$defaultUnit->setCurrentLocale($this->lang);
-		$units = $this->unitFacade->getUnitsList($this->lang);
+		$defaultUnit->setCurrentLocale($this->translator->getLocale());
+		$units = $this->unitFacade->getUnitsList($this->translator->getLocale());
 
 		$form->addTouchSpin('quantity', 'Quantity')
 				->setMax(1000)

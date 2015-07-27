@@ -5,11 +5,7 @@ namespace App\Extensions\Settings;
 use Nette\Object;
 use Nette\Security\User;
 use Nette\Utils\ArrayHash;
-use Tracy\Debugger;
 
-/**
- * @author Martin Šifra <me@martinsifra.cz>
- */
 class SettingsStorage extends Object
 {
 
@@ -33,9 +29,6 @@ class SettingsStorage extends Object
 
 	/** @var ArrayHash */
 	private $modules;
-
-	/** @var ArrayHash */
-	private $modulesSettings;
 
 	public function __construct(User $user)
 	{

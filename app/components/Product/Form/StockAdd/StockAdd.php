@@ -41,13 +41,12 @@ class StockAdd extends StockBase
 		$form = new Form();
 		$form->setTranslator($this->translator)
 				->setRenderer(new MetronicHorizontalFormRenderer());
-		$form->getElementPrototype()->class('ajax');
 
 		$unitRepo = $this->em->getRepository(Unit::getClassName());
 		$defaultUnit = $unitRepo->find(1);
-		$defaultUnit->setCurrentLocale($this->lang);
+		$defaultUnit->setCurrentLocale($this->translator->getLocale());
 
-		$categories = $this->categoryFacade->getCategoriesList($this->lang);
+		$categories = $this->categoryFacade->getCategoriesList($this->translator->getLocale());
 
 		$form->addGroup();
 		$form->addText('name', 'Product title', NULL, 150)

@@ -1098,3 +1098,12 @@ msgstr "automaticky generovaný"
 
 msgid "Product must be synchronized"
 msgstr "Produkt musí být synchronizován"
+
+msgid "Search by Keyword"
+msgstr "Co hledáte?"
+
+msgid "Not Available"
+msgstr "Nedostupné"
+
+msgid "Range:"
+msgstr "Rozsah:"

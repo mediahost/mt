@@ -22,7 +22,7 @@ class PagesGrid extends BaseControl
 		$qb = $repo->createQueryBuilder('p')
 				->leftJoin('p.translations', 't')
 				->where('t.locale = :lang OR t.locale = :defaultLang')
-				->setParameter('lang', $this->lang)
+				->setParameter('lang', $this->translator->getLocale())
 				->setParameter('defaultLang', $this->translator->getDefaultLocale());
 		$grid->model = new Doctrine($qb, [
 			'name' => 't.name',
@@ -34,7 +34,7 @@ class PagesGrid extends BaseControl
 
 		$grid->addColumnText('name', 'Page')
 				->setCustomRender(function ($row) {
-					return $row->translate($this->lang)->name;
+					return $row->translate($this->translator->getLocale())->name;
 				})
 				->setSortable()
 				->setFilterText()
