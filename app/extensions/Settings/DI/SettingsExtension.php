@@ -10,14 +10,14 @@ class SettingsExtension extends CompilerExtension
 	/** @var array */
 	public $defaults = [
 		'modules' => [
-			'categories' => [
+			'categories' => [ // product categories
 				'enabled' => FALSE,
 				'expandOnlyActiveCategories' => TRUE, // TRUE -> expand only active category | FALSE -> expand all categories
-				'maxDeep' => 4, // count of levels to show subcategories
+				'maxDeep' => 3, // count of levels to show subcategories
 				'showOnlyNonEmpty' => TRUE, // TRUE -> fetch only categories with some products // not implemented yet
 				'showProductsCount' => FALSE, // TRUE -> show count of product after category name
 			],
-			'signs' => [
+			'signs' => [ // fixed IDs for signs (příznaky)
 				'enabled' => FALSE,
 				'values' => [
 					'new' => 1,
@@ -27,7 +27,7 @@ class SettingsExtension extends CompilerExtension
 			],
 			'service' => [
 				'enabled' => FALSE,
-				'pageId' => 3,
+				'pageId' => 1, // ID of page in pages to show as basic info
 			],
 			'pohoda' => [
 				'enabled' => FALSE,
@@ -52,7 +52,6 @@ class SettingsExtension extends CompilerExtension
 			'description' => 'description',
 		],
 		'pageConfig' => [
-			'itemsPerPage' => 20,
 			'itemsPerRow' => 3,
 			'rowsPerPage' => 4,
 		],
@@ -67,7 +66,6 @@ class SettingsExtension extends CompilerExtension
 			'minLength' => 8,
 		],
 		'design' => [
-			'colors' => ['default' => 'Default'], // code => name
 			'color' => 'default',
 			'layoutBoxed' => FALSE,
 			'containerBgSolid' => FALSE,
