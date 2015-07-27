@@ -26,10 +26,10 @@ abstract class BasePresenter extends BaseBasePresenter
 	{
 		parent::startup();
 		$ip = $this->request->getRemoteAddress();
-		if ($this->settings->cron->enabled) {
+		if ($this->settings->modules->cron->enabled) {
 			throw new ForbiddenRequestException('Cron module is not allowed.');
 		}
-		if (!in_array($this->request->getRemoteAddress(), $this->settings->cron->allowedIps)) {
+		if (!in_array($this->request->getRemoteAddress(), $this->settings->modules->cron->allowedIps)) {
 			throw new AuthenticationException('Your IP (' . $ip . ') is not allowed.');
 		}
 	}
