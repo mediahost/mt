@@ -829,9 +829,6 @@ msgstr "Requested currency isn't supported."
 msgid "Requested language isn't supported."
 msgstr "Requested language isn't supported."
 
-msgid "You should be logged in!"
-msgstr "You should be logged in!"
-
 msgid "DB was reinstaled"
 msgstr "DB was reinstaled"
 

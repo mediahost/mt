@@ -7,8 +7,8 @@ use App\Model\Entity\VisitedProduct;
 use App\Model\Repository\StockRepository;
 use App\Model\Repository\VisitedProductRepository;
 use DateTime;
+use h4kuna\Exchange\Currency\IProperty;
 use Kdyby\Doctrine\EntityManager;
-use Majkl578\NetteAddons\Doctrine2Identity\Http\UserStorage;
 use Nette\Object;
 use Nette\Security\IIdentity;
 use Nette\Security\IUserStorage;
@@ -20,7 +20,7 @@ class UserStorageStrategy extends Object implements IUserStorage
 {
 
 	/**
-	 * @var UserStorage
+	 * @var IUserStorage
 	 */
 	private $userStorage;
 
@@ -100,6 +100,7 @@ class UserStorageStrategy extends Object implements IUserStorage
 	public function addVisited(Stock $stock)
 	{
 		if ($this->userStorage->isAuthenticated()) {
+			\Tracy\Debugger::barDump($stock->id);
 			$visited = $this->visitedRepo->findOneByUserAndStock($this->userStorage->identity, $stock);
 
 			if ($visited === NULL) {
@@ -108,8 +109,13 @@ class UserStorageStrategy extends Object implements IUserStorage
 						->setUser($this->userStorage->identity)
 						->setVisited(new DateTime());
 			} else {
-				$visited->setVisited(new DateTime());
+				$latest = $this->visitedRepo->findLatest($this->userStorage->identity);
+
+				if ($latest !== $visited) {
+					$visited->setVisited(new DateTime());
+				}
 			}
+
 			$this->em->persist($visited)
 					->flush();
 		} else {
@@ -126,7 +132,7 @@ class UserStorageStrategy extends Object implements IUserStorage
 	public function getVisited($limit = 5)
 	{
 		$ids = [];
-		
+
 		if ($this->userStorage->isAuthenticated()) {
 			$visited = $this->visitedRepo->findBy([
 				'user' => $this->userStorage->identity,
@@ -145,6 +151,40 @@ class UserStorageStrategy extends Object implements IUserStorage
 		$stocks = $this->stockRepo->findAssoc(['id' => $ids,], 'id');
 
 		return $stocks;
+	}
+
+	/**
+	 * @param string $locale
+	 * @return UserStorageStrategy
+	 */
+	public function setLocale($locale)
+	{
+		if ($this->userStorage->isAuthenticated()) {
+			$this->userStorage->identity->locale = $locale;
+			$this->em->persist($this->userStorage->identity)
+					->flush();
+		} else {
+			$this->guestStorage->identity->locale = $locale;
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @param IProperty $currency
+	 * @return UserStorageStrategy
+	 */
+	public function setCurrency($currency)
+	{
+		if ($this->userStorage->isAuthenticated()) {
+			$this->userStorage->identity->currency = $currency->getCode();
+			$this->em->persist($this->userStorage->identity)
+					->flush();
+		} else {
+			$this->guestStorage->identity->currency = $currency->getCode();
+		}
+
+		return $this;
 	}
 
 }

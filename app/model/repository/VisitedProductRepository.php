@@ -10,10 +10,12 @@ class VisitedProductRepository extends BaseRepository
 
 	public function findOneByUserAndStock(User $user, Stock $stock)
 	{
-		return $this->findOneBy([
-					'user' => $user,
-					'stock' => $stock,
-		]);
+		return $this->findOneBy(['user' => $user, 'stock' => $stock]);
+	}
+
+	public function findLatest(User $user)
+	{
+		return $this->findOneBy(['user' => $user], ['visited' => 'DESC']);
 	}
 
 }
