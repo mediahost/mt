@@ -119,7 +119,7 @@ class UserStorageStrategy extends Object implements IUserStorage
 
 			$this->guestStorage->addVisitedProduct($stock);
 
-			\Nette\Diagnostics\Debugger::barDump($this->guestStorage->visitedProducts);
+//			\Nette\Diagnostics\Debugger::barDump($this->guestStorage->visitedProducts);
 		}
 	}
 
@@ -140,7 +140,7 @@ class UserStorageStrategy extends Object implements IUserStorage
 			array_slice($ids, 0, $limit);
 		}
 
-		\Tracy\Debugger::barDump($ids);
+//		\Tracy\Debugger::barDump($ids);
 
 		$stocks = $this->stockRepo->findAssoc(['id' => $ids,], 'id');
 
