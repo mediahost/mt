@@ -89,6 +89,13 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->loadTemplateProducers();
 	}
 
+	public function handleSignOut()
+	{
+		$this->user->logout();
+		$this->presenter->flashMessage($this->translator->translate('flash.signOutSuccess'), 'success');
+		$this->presenter->redirect('this');
+	}
+
 	protected function loadTemplateMenu()
 	{
 		$pageRepo = $this->em->getRepository(Page::getClassName());

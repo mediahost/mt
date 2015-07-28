@@ -43,9 +43,6 @@ abstract class BasePresenter extends Presenter
 	/** @var Exchange @inject */
 	public $exchange;
 
-	/** @var ISignOutFactory @inject */
-	public $iSignOutFactory;
-
 	/** @var Translator @inject */
 	public $translator;
 
@@ -210,13 +207,6 @@ abstract class BasePresenter extends Presenter
 
 	// </editor-fold>
 	// <editor-fold desc="components">
-
-	/** @return SignOut */
-	public function createComponentSignOut()
-	{
-		return $this->iSignOutFactory->create();
-	}
-
 	// </editor-fold>
 	// <editor-fold desc="css webloader">
 
