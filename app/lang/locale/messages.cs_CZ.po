@@ -877,9 +877,6 @@ msgstr "Omlouváme se za selhání na Twitteru."
 msgid "We are sorry, facebook authentication failed hard."
 msgstr "Omlouváme se za selhání na Facebooku."
 
-msgid "You have been successfuly signed out."
-msgstr "Byl jste úspěšně odhlášen."
-
 msgid "E-mail account"
 msgstr "E-mail účet"
 

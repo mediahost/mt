@@ -11,7 +11,6 @@ services:
 	- {create: App\Components\Auth\TwitterConnect, implement: App\Components\Auth\ITwitterConnectFactory, inject: yes}
 	- {create: App\Components\Auth\SignIn, implement: App\Components\Auth\ISignInFactory, inject: yes}
 	- {create: App\Components\Auth\SignUp, implement: App\Components\Auth\ISignUpFactory, inject: yes}
-	- {implement: App\Components\Auth\ISignOutFactory, inject: yes}
 	- {create: App\Components\Auth\Forgotten, implement: App\Components\Auth\IForgottenFactory, inject: yes}
 	- {create: App\Components\Auth\Recovery, implement: App\Components\Auth\IRecoveryFactory, inject: yes}
 	- {create: App\Components\Auth\Required, implement: App\Components\Auth\IRequiredFactory, inject: yes}

@@ -48,7 +48,7 @@
 		</li>
 		<li n:if="$user->isAllowed('myAccount')"><a n:href="MyAccount:">{_'My Account'}</a></li>
 		<li>
-			<a href="{control signOut}"><i class="fa fa-sign-out"></i> {_'Sign out'}</a>
+			<a n:href="signOut!"><i class="fa fa-sign-out"></i> {_'Sign out'}</a>
 		</li>
 	</ul>
 </div>

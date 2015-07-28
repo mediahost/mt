@@ -853,9 +853,6 @@ msgstr "We are sorry, twitter authentication failed hard."
 msgid "We are sorry, facebook authentication failed hard."
 msgstr "We are sorry, facebook authentication failed hard."
 
-msgid "You have been successfuly signed out."
-msgstr "You have been successfuly signed out."
-
 msgid "E-mail account"
 msgstr "E-mail account"
 
