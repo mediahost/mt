@@ -15,7 +15,7 @@ msgid "Czech"
 msgstr "Čeština"
 
 msgid "Slovak"
-msgstr "Slovenština"
+msgstr "Slovenčina"
 
 msgid "English"
 msgstr "Angličtina"
@@ -24,7 +24,7 @@ msgid "locale_cs"
 msgstr "Čeština"
 
 msgid "locale_sk"
-msgstr "Slovenština"
+msgstr "Slovenčina"
 
 msgid "locale_en"
 msgstr "Angličtina"
