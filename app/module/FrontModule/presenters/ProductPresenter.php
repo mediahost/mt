@@ -4,6 +4,7 @@ namespace App\FrontModule\Presenters;
 
 use App\Extensions\Products\ProductList;
 use App\Model\Entity\Stock;
+use Nette\Application\BadRequestException;
 use Nette\Application\Responses\JsonResponse;
 use Nette\Utils\Strings;
 
@@ -17,7 +18,7 @@ class ProductPresenter extends BasePresenter
 		if (!$product) {
 			$message = $this->translator->translate('Requested product doesn\'t exist. Try to choose another from list.');
 			$this->flashMessage($message, 'warning');
-			$this->redirect('Homepage:');
+			throw new BadRequestException;
 		}
 		
 		$product->setCurrentLocale($this->locale);
@@ -40,7 +41,7 @@ class ProductPresenter extends BasePresenter
 		if (!$product) {
 			$message = $this->translator->translate('Requested product doesn\'t exist. Try to choose another from list.');
 			$this->flashMessage($message, 'warning');
-			$this->redirect('Homepage:');
+			throw new BadRequestException;
 		}
 		$product->setCurrentLocale($this->locale);
 		$this->redirect('Product:', ['url' => $product->url]);
