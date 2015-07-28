@@ -13,7 +13,7 @@
 		<!-- BEGIN CURRENCIES -->
 		<li class="shop-currencies">
 			<a n:foreach="$exchange as $currCode => $curr" 
-			   n:href="changeCurrency! $currCode"
+			   n:href="setCurrency! $currCode"
 			   n:class="$currCode == $currency->getCode() ? current">
 				{$curr->getFormat()->getSymbol()}
 			</a>

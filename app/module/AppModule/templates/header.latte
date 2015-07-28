@@ -61,9 +61,7 @@
                 <!-- END USER LOGIN DROPDOWN -->
 				
                 <li class="dropdown dropdown-quick-sidebar-toggler" n:if="$user->loggedIn">
-                    <a href="{control signOut}"
-					   class="dropdown-toggle"
-					   title="{_'Sign out'}">
+                    <a n:href="signOut!" class="dropdown-toggle" title="{_'Sign out'}">
                         <i class="icon-logout"></i>
                     </a>
                 </li>

@@ -148,7 +148,7 @@ abstract class BasePresenter extends BaseBasePresenter
 	{
 		$list = new ProductList();
 		$list->setTranslator($this->translator);
-		$list->setExchange($this->exchange, $this->currency);
+		$list->setExchange($this->exchange, $this->exchange->getWeb());
 		$list->setItemsPerPage($this->settings->pageConfig->rowsPerPage, $this->settings->pageConfig->itemsPerRow);
 
 		$list->setAjax();

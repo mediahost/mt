@@ -853,9 +853,6 @@ msgstr "Požadovaná měna není podporována."
 msgid "Requested language isn't supported."
 msgstr "Požadovaný jazyk není podporován."
 
-msgid "You should be logged in!"
-msgstr "Měl byste být přihlášen!"
-
 msgid "DB was reinstaled"
 msgstr "DB byla přeinstalována"
 
