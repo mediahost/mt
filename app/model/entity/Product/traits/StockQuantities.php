@@ -22,7 +22,7 @@ trait StockQuantities
 
 	public function setQuantity($quantity)
 	{
-		$this->quantity = $quantity > 1 ? $quantity : 0;
+		$this->quantity = $quantity >= 1 ? $quantity : 0;
 		$this->actualizeInStore();
 		
 		return $this;
@@ -30,7 +30,7 @@ trait StockQuantities
 
 	public function setLock($lock)
 	{
-		$this->locked = $lock > 1 ? $lock : 0;
+		$this->locked = $lock >= 1 ? $lock : 0;
 		$this->actualizeInStore();
 		
 		return $this;
