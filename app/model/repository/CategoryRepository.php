@@ -47,4 +47,37 @@ class CategoryRepository extends BaseRepository
 		}
 	}
 
+	/**
+	 * @param string $name
+	 * @param string $lang
+	 * @return Category
+	 */
+	public function findOneByName($name, $lang = NULL)
+	{
+		$qb = $this->createQueryBuilder('c')
+				->join('c.translations', 't')
+				->where('t.name = :name')
+				->setParameter('name', $name);
+		if ($lang) {
+			$qb->andWhere('t.locale = :lang')
+					->setParameter('lang', $lang);
+		}
+
+		try {
+			return $qb->setMaxResults(1)->getQuery()->getSingleResult();
+		} catch (NoResultException $e) {
+			return NULL;
+		}
+	}
+
+	public function delete($entity, $deleteRecursive = TRUE)
+	{
+		if ($deleteRecursive && $entity->hasChildren) {
+			foreach ($entity->children as $child) {
+				$this->delete($child);
+			}
+		}
+		return parent::delete($entity);
+	}
+
 }

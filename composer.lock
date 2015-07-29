@@ -1904,12 +1904,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mediahost/DoctrineBehaviors.git",
-                "reference": "88df898f09a2c2448e3d0c87f2fb148923a6e4dd"
+                "reference": "10d2dca149b722065ca75597edd19ccea41bf46a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mediahost/DoctrineBehaviors/zipball/88df898f09a2c2448e3d0c87f2fb148923a6e4dd",
-                "reference": "88df898f09a2c2448e3d0c87f2fb148923a6e4dd",
+                "url": "https://api.github.com/repos/mediahost/DoctrineBehaviors/zipball/10d2dca149b722065ca75597edd19ccea41bf46a",
+                "reference": "10d2dca149b722065ca75597edd19ccea41bf46a",
                 "shasum": ""
             },
             "require": {
@@ -1958,7 +1958,7 @@
             "support": {
                 "source": "https://github.com/mediahost/DoctrineBehaviors/tree/master"
             },
-            "time": "2015-07-24 14:09:27"
+            "time": "2015-07-29 09:06:13"
         },
         {
             "name": "latte/latte",

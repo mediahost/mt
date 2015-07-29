@@ -31,8 +31,15 @@ class Discount extends BaseEntity
 	public function __construct($value = 0, $type = self::PERCENTAGE)
 	{
 		parent::__construct();
-		$this->value = $value;
+		$this->setValue($value);
 		$this->type = $type;
+	}
+	
+	private function setValue($value)
+	{
+		$value = (0 <= $value && $value <= 100) ? $value : ($value > 100 ? 100 : 0);
+		$this->value = $value;
+		return $this;
 	}
 	
 	public function getDiscountedPrice(Price $price)
