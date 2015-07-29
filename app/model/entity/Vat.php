@@ -23,15 +23,20 @@ class Vat extends BaseEntity
 	/** @ORM\Column(type="float") */
 	protected $value;
 
-	public function __construct($value = NULL)
+	public function __construct($value)
 	{
-		if ($value) {
-			if (!is_numeric($value) || $value < 0 || 100 <= $value) {
-				throw new InvalidArgumentException($value . ' $value must be a number and greater or equal then 0 and lower than 100.');
-			}
-			$this->value = $value;
-		}
+		$this->setValue($value);
 		parent::__construct();
+	}
+
+	public function setValue($value)
+	{
+		if (!is_numeric($value) || $value < 0 || 100 <= $value) {
+			throw new InvalidArgumentException($value . ' $value must be a number and greater or equal then 0 and lower than 100.');
+		}
+		$this->value = $value;
+
+		return $this;
 	}
 
 	/**

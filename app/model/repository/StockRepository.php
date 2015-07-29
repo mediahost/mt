@@ -2,6 +2,7 @@
 
 namespace App\Model\Repository;
 
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
@@ -9,6 +10,33 @@ class StockRepository extends BaseRepository
 {
 
 	public function findByName($name, $lang = NULL, $limit = null, $offset = null, &$totalCount = null)
+	{
+		$qb = $this->getQbForFindByName($name, $lang);
+
+		if ($limit) {
+			$paginator = new Paginator($qb);
+			$totalCount = $paginator->count();
+		}
+
+		return $qb
+						->getQuery()
+						->setMaxResults($limit)
+						->setFirstResult($offset)
+						->getResult();
+	}
+
+	public function findOneByName($name, $lang = NULL)
+	{
+		$qb = $this->getQbForFindByName($name, $lang);
+		
+		try {
+			return $qb->setMaxResults(1)->getQuery()->getSingleResult();
+		} catch (NoResultException $e) {
+			return NULL;
+		}
+	}
+
+	private function getQbForFindByName($name, $lang = NULL)
 	{
 		$qb = $this->createQueryBuilder('s')
 				->select('s, p')
@@ -31,18 +59,9 @@ class StockRepository extends BaseRepository
 			$qb->andWhere($orExpr);
 		}
 
-		if ($limit) {
-			$paginator = new Paginator($qb);
-			$totalCount = $paginator->count();
-		}
-
-		return $qb
-						->getQuery()
-						->setMaxResults($limit)
-						->setFirstResult($offset)
-						->getResult();
+		return $qb;
 	}
-	
+
 	public function delete($stock, $deleteWithProduct = TRUE)
 	{
 		if ($deleteWithProduct && $stock->product) {

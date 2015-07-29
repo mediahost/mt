@@ -15,6 +15,7 @@ use Nette\Reflection\ClassType;
  * @property Price $purchasePrice
  * @property Price $oldPrice
  * @property array $groupDiscounts
+ * @property Vat $vat
  */
 trait StockPrices
 {
