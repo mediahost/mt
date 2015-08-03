@@ -30,7 +30,7 @@ abstract class BasePresenter extends Presenter
 	/** @persistent */
 	public $backlink = '';
 
-	// <editor-fold desc="injects">
+// <editor-fold desc="injects">
 
 	/** @var LoaderFactory @inject */
 	public $webLoader;
@@ -65,12 +65,12 @@ abstract class BasePresenter extends Presenter
 	/** @var int */
 	protected $priceLevel = NULL;
 
-	// </editor-fold>
+// </editor-fold>
 
 	protected function startup()
 	{
 		parent::startup();
-		$this->user->storage->setLocale($this->locale);
+		$this->setLocale();
 		$this->loadCurrencyRates();
 		$this->loadPriceLevel();
 	}
@@ -83,7 +83,7 @@ abstract class BasePresenter extends Presenter
 		$this->template->designSettings = $this->settings->design;
 		$this->template->pageInfo = $this->settings->pageInfo;
 		$this->template->exchange = $this->exchange;
-		
+
 		$currency = $this->exchange[$this->exchange->getWeb()];
 		$this->template->currency = $currency;
 		$this->template->currencySymbol = $currency->getFormat()->getSymbol();
@@ -97,7 +97,7 @@ abstract class BasePresenter extends Presenter
 		return in_array($this->presenter->name, $presenterExceptions);
 	}
 
-	// <editor-fold desc="requirments">
+// <editor-fold desc="requirments">
 
 	public function checkRequirements($element)
 	{
@@ -115,8 +115,8 @@ abstract class BasePresenter extends Presenter
 		}
 	}
 
-	// </editor-fold>
-	// <editor-fold desc="currency">
+// </editor-fold>
+// <editor-fold desc="currency">
 	private function loadCurrencyRates()
 	{
 		$rateRepo = $this->em->getRepository(Rate::getClassName());
@@ -145,8 +145,25 @@ abstract class BasePresenter extends Presenter
 		}
 	}
 
-	// </editor-fold>
-	// <editor-fold desc="handlers">
+// </editor-fold>
+	private function setLocale()
+	{
+		if ($this->user->isLoggedIn()) {
+			if ($this->user->identity->locale !== $this->locale) { // Locale has changed
+				$overwrite = $this->getParameter('overwrite', 'no');
+
+				if ($overwrite == 'yes') {
+					$this->user->storage->setLocale($this->locale);
+				}
+
+				$this->redirect('this', ['locale' => $this->user->identity->locale]);
+			}
+		} else {
+			$this->user->storage->setLocale($this->locale);
+		}
+	}
+
+// <editor-fold desc="handlers">
 
 	public function handleSetCurrency($currency)
 	{
@@ -160,10 +177,10 @@ abstract class BasePresenter extends Presenter
 		$this->redirect('this');
 	}
 
-	// </editor-fold>
-	// <editor-fold desc="components">
-	// </editor-fold>
-	// <editor-fold desc="css webloader">
+// </editor-fold>
+// <editor-fold desc="components">
+// </editor-fold>
+// <editor-fold desc="css webloader">
 
 	/** @return CssLoader */
 	protected function createComponentCssFront()
@@ -189,5 +206,5 @@ abstract class BasePresenter extends Presenter
 		return $css;
 	}
 
-	// </editor-fold>
+// </editor-fold>
 }

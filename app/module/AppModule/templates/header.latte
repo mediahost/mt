@@ -32,7 +32,7 @@
 						{foreach $allowedLanguages as $locale}
 							{var $code = substr($locale,0,2)}
 							<li n:if="$code !== $lang">
-								<a n:href="this locale => $code">
+								<a n:href="this locale => $code, overwrite => yes">
 								<img alt="{_locale_$code}" src="{$basePath}/assets/global/img/flags/{$code}.png" />{_locale_$code}</a>
 							</li>
 						{/foreach}
