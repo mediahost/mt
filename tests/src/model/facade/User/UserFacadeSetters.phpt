@@ -2,10 +2,7 @@
 
 namespace Test\Model\Facade;
 
-use App\Model\Entity\PageConfigSettings;
-use App\Model\Entity\PageDesignSettings;
 use App\Model\Entity\Role;
-use App\Model\Entity\User;
 use Tester\Assert;
 
 $container = require __DIR__ . '/../../../bootstrap.php';
@@ -32,24 +29,6 @@ class UserFacadeSettersTest extends UserFacade
 		$user->removeRole($role);
 		$this->userFacade->addRole($user, [Role::DEALER, Role::ADMIN]);
 		Assert::count(3, $user->roles);
-	}
-
-	public function testAppendSettings()
-	{
-		$newConfigSettings = new PageConfigSettings();
-		$this->userFacade->appendSettings(self::ID_NEW, $newConfigSettings);
-
-		$user1 = $this->userRepo->find(self::ID_NEW);
-		/* @var $user1 User */
-		Assert::null($user1->pageConfigSettings->language);
-
-		$rewriteConfigSettings = new PageConfigSettings();
-		$rewriteConfigSettings->language = 'de';
-		$this->userFacade->appendSettings(self::ID_NEW, $rewriteConfigSettings);
-
-		$user2 = $this->userRepo->find(self::ID_NEW);
-		/* @var $user2 User */
-		Assert::same('de', $user2->pageConfigSettings->language);
 	}
 
 }

@@ -24,24 +24,20 @@ class PriceTest extends BaseTestCase
 	public function testSetAndGet($vat, $priceWithout, $priceWith)
 	{
 		$price = new Price(new Vat($vat));
-		
+
 		$vatSum = round($priceWith - $priceWithout, $price->precision);
-		
+
 		$price->setWithoutVat($priceWithout);
 		Assert::same((float) $priceWithout, $price->withoutVat);
 		Assert::same((float) $priceWith, $price->withVat);
 		Assert::same((float) $vatSum, $price->vatSum);
-		
+
 		$price->setWithVat($priceWith);
 		Assert::same((float) $priceWithout, $price->withoutVat);
 		Assert::same((float) $priceWith, $price->withVat);
 		Assert::same((float) $vatSum, $price->vatSum);
-		
-		if ($vat > 0) {
-			Assert::same($priceWithout . ' (+' . $vat . '%)', (string) $price);
-		} else {
-			Assert::same((string) $priceWithout, (string) $price);
-		}
+
+		Assert::same((string) $priceWithout, (string) $price);
 	}
 
 	public function dataPrices()
