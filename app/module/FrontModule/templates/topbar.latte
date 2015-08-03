@@ -13,7 +13,7 @@
 		<!-- BEGIN CURRENCIES -->
 		<li class="shop-currencies">
 			<a n:foreach="$exchange as $currCode => $curr" 
-			   n:href="changeCurrency! $currCode"
+			   n:href="setCurrency! $currCode"
 			   n:class="$currCode == $currency->getCode() ? current">
 				{$curr->getFormat()->getSymbol()}
 			</a>
@@ -26,7 +26,12 @@
 				<div class="langs-block-others">
 					{foreach $allowedLanguages as $locale}
 						{var $code = substr($locale,0,2)}
-						<a n:if="$code !== $lang" n:href="this locale => $code">{_locale_$code}</a>
+						{if $user->loggedIn}
+							{var $args = [locale => $code, overwrite => yes]}
+						{else}
+							{var $args = [locale => $code]}
+						{/if}
+						<a n:if="$code !== $lang" n:href="this (expand) $args">{_locale_$code}</a>
 					{/foreach}
 				</div>
 			</div>
@@ -48,7 +53,7 @@
 		</li>
 		<li n:if="$user->isAllowed('myAccount')"><a n:href="MyAccount:">{_'My Account'}</a></li>
 		<li>
-			<a href="{control signOut}"><i class="fa fa-sign-out"></i> {_'Sign out'}</a>
+			<a n:href="signOut!"><i class="fa fa-sign-out"></i> {_'Sign out'}</a>
 		</li>
 	</ul>
 </div>

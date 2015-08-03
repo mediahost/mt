@@ -50,13 +50,21 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	 */
 	protected $sidebarClosed;
 
+	/**
+	 * @ORM\OneToMany(targetEntity="VisitedProduct", mappedBy="user", fetch="EXTRA_LAZY")
+	 */
+	protected $visitedProducts;
+
 	public function __construct($mail = NULL)
 	{
 		$this->roles = new ArrayCollection;
 		$this->groups = new ArrayCollection();
+		$this->visitedProducts = new ArrayCollection();
+
 		if ($mail) {
 			$this->mail = $mail;
 		}
+
 		parent::__construct();
 	}
 
@@ -77,6 +85,11 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	public function isNew()
 	{
 		return $this->id === NULL;
+	}
+
+	public function import(User $user)
+	{
+		
 	}
 
 }

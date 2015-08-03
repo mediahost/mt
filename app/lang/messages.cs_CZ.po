@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sk_SK\n"
+"Language: cs_CZ\n"
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
@@ -853,9 +853,6 @@ msgstr "Požadovaná měna není podporována."
 msgid "Requested language isn't supported."
 msgstr "Požadovaný jazyk není podporován."
 
-msgid "You should be logged in!"
-msgstr "Měl byste být přihlášen!"
-
 msgid "DB was reinstaled"
 msgstr "DB byla přeinstalována"
 
@@ -876,9 +873,6 @@ msgstr "Omlouváme se za selhání na Twitteru."
 
 msgid "We are sorry, facebook authentication failed hard."
 msgstr "Omlouváme se za selhání na Facebooku."
-
-msgid "You have been successfuly signed out."
-msgstr "Byl jste úspěšně odhlášen."
 
 msgid "E-mail account"
 msgstr "E-mail účet"

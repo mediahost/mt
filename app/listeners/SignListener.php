@@ -10,6 +10,7 @@ use App\Model\Entity\User;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
 use App\Model\Storage\SignUpStorage;
+use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Events\Subscriber;
 use Kdyby\Translation\ITranslator;
@@ -54,6 +55,9 @@ class SignListener extends Object implements Subscriber
 
 	/** @var ITranslator @inject */
 	public $translator;
+
+	/** @var Exchange @inject */
+	public $exchange;
 
 	// </editor-fold>
 
@@ -198,15 +202,20 @@ class SignListener extends Object implements Subscriber
 			$presenter->user->setExpiration($this->settingsStorage->expiration->notRemember, TRUE);
 		}
 
-		$presenter->user->login($user);
-		$message = $this->translator->translate('You are logged in.');
-		$presenter->flashMessage($message, 'success');
+		$this->exchange->setWeb($user->currency);
 
+		$presenter->user->login($user);
+		$presenter->flashMessage($this->translator->translate('You are logged in.'), 'success');
 		$presenter->restoreRequest($presenter->backlink);
+
+		$params = [
+			'locale' => $user->locale,
+		];
+
 		if ($presenter->user->isAllowed('dashboard')) {
-			$presenter->redirect(self::REDIRECT_AFTER_LOGIN_DASHBOARD);
+			$presenter->redirect(self::REDIRECT_AFTER_LOGIN_DASHBOARD, $params);
 		} else {
-			$presenter->redirect(self::REDIRECT_AFTER_LOGIN_HOMEPAGE);
+			$presenter->redirect(self::REDIRECT_AFTER_LOGIN_HOMEPAGE, $params);
 		}
 	}
 

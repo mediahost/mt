@@ -73,8 +73,5 @@
 		"kdyby/tester-extras": "@dev",
 		"mockery/mockery": "0.9.3"
 	},
-	"autoload-dev": {
-		"classmap": ["tests", "vendor/others", "app"]
-	},
 	"minimum-stability": "stable"
 }

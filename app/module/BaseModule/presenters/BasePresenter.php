@@ -2,10 +2,8 @@
 
 namespace App\BaseModule\Presenters;
 
-use App\Components\Auth\ISignOutFactory;
-use App\Components\Auth\SignOut;
 use App\Extensions\Settings\SettingsStorage;
-use App\Model\Entity;
+use App\Model\Entity\Rate;
 use App\Model\Facade\GroupFacade;
 use App\Model\Facade\ParameterFacade;
 use App\Model\Facade\ProducerFacade;
@@ -14,9 +12,9 @@ use App\Model\Facade\UserFacade;
 use h4kuna\Exchange\Exchange;
 use h4kuna\Exchange\ExchangeException;
 use Kdyby\Doctrine\EntityManager;
-use Kdyby\Translation\Translator;
 use Nette\Application\ForbiddenRequestException;
 use Nette\Application\UI\Presenter;
+use Symfony\Component\Translation\Translator;
 use WebLoader\Nette\CssLoader;
 use WebLoader\Nette\LoaderFactory;
 
@@ -30,21 +28,15 @@ abstract class BasePresenter extends Presenter
 	public $locale;
 
 	/** @persistent */
-	public $currency = '';
-
-	/** @persistent */
 	public $backlink = '';
 
-	// <editor-fold desc="injects">
+// <editor-fold desc="injects">
 
 	/** @var LoaderFactory @inject */
 	public $webLoader;
 
 	/** @var Exchange @inject */
 	public $exchange;
-
-	/** @var ISignOutFactory @inject */
-	public $iSignOutFactory;
 
 	/** @var Translator @inject */
 	public $translator;
@@ -73,13 +65,13 @@ abstract class BasePresenter extends Presenter
 	/** @var int */
 	protected $priceLevel = NULL;
 
-	// </editor-fold>
+// </editor-fold>
 
 	protected function startup()
 	{
 		parent::startup();
 		$this->setLocale();
-		$this->setCurrency();
+		$this->loadCurrencyRates();
 		$this->loadPriceLevel();
 	}
 
@@ -91,11 +83,10 @@ abstract class BasePresenter extends Presenter
 		$this->template->designSettings = $this->settings->design;
 		$this->template->pageInfo = $this->settings->pageInfo;
 		$this->template->exchange = $this->exchange;
-		if ($this->currency) {
-			$currency = $this->exchange[$this->currency];
-			$this->template->currency = $currency;
-			$this->template->currencySymbol = $currency->getFormat()->getSymbol();
-		}
+
+		$currency = $this->exchange[$this->exchange->getWeb()];
+		$this->template->currency = $currency;
+		$this->template->currencySymbol = $currency->getFormat()->getSymbol();
 	}
 
 	protected function isInstallPresenter()
@@ -106,7 +97,7 @@ abstract class BasePresenter extends Presenter
 		return in_array($this->presenter->name, $presenterExceptions);
 	}
 
-	// <editor-fold desc="requirments">
+// <editor-fold desc="requirments">
 
 	public function checkRequirements($element)
 	{
@@ -115,57 +106,20 @@ abstract class BasePresenter extends Presenter
 		$privilege = $element->getAnnotation('privilege');
 
 		if ($secured) {
-			$this->checkSecured($resource, $privilege);
+			if (!$this->user->loggedIn) {
+				$this->flashMessage($this->translator->translate('flash.signedInRequired'), 'warning');
+				$this->redirect(':Front:Sign:in', ['backlink' => $this->storeRequest()]);
+			} elseif (!$this->user->isAllowed($resource, $privilege)) {
+				throw new ForbiddenRequestException;
+			}
 		}
 	}
 
-	private function checkSecured($resource, $privilege)
-	{
-		if (!$this->user->loggedIn) {
-			$message = $this->translator->translate('You should be logged in!');
-			$this->flashMessage($message);
-			$this->redirect(':Front:Sign:in', ['backlink' => $this->storeRequest()]);
-		} elseif (!$this->user->isAllowed($resource, $privilege)) {
-			throw new ForbiddenRequestException;
-		}
-	}
-
-	// </editor-fold>
-	// <editor-fold desc="locale">
-
-	public function setLocale()
-	{
-//		if ($this->locale !== $this->user->identity->locale) {
-//			$this->user->identity->locale = $this->locale;
-//			$this->em->persist($this->user->identity)
-//					->flush();
-//		}
-	}
-
-	// </editor-fold>
-	// <editor-fold desc="currency">
-
-	private function setCurrency()
-	{
-		if ($this->isInstallPresenter()) {
-			$this->currency = NULL;
-			return;
-		}
-
-		if (!$this->currency) {
-//			$this->currency = 'czk'|NULL; // TODO: load from user setting
-		}
-
-		if (!array_key_exists(strtoupper($this->currency), $this->exchange)) {
-			$this->currency = strtolower($this->exchange->getDefault()->getCode());
-		}
-
-		$this->loadCurrencyRates();
-	}
-
+// </editor-fold>
+// <editor-fold desc="currency">
 	private function loadCurrencyRates()
 	{
-		$rateRepo = $this->em->getRepository(Entity\Rate::getClassName());
+		$rateRepo = $this->em->getRepository(Rate::getClassName());
 		$rates = $rateRepo->findPairs('value');
 
 		$defaultCode = $this->exchange->getDefault()->getCode();
@@ -191,34 +145,42 @@ abstract class BasePresenter extends Presenter
 		}
 	}
 
-	// </editor-fold>
-	// <editor-fold desc="handlers">
-
-	public function handleChangeCurrency($newCurrency)
+// </editor-fold>
+	private function setLocale()
 	{
-		try {
-			$currency = $this->exchange[$newCurrency];
-			$newCode = strtolower($currency->getCode());
-			// TODO: save to user settings
-			$this->redirect('this', ['currency' => $newCode]);
-		} catch (ExchangeException $ex) {
-			$message = $this->translator->translate('Requested currency isn\'t supported.');
-			$this->flashMessage($message, 'warning');
-			$this->redirect('this');
+		if ($this->user->isLoggedIn()) {
+			if ($this->user->identity->locale !== $this->locale) { // Locale has changed
+				$overwrite = $this->getParameter('overwrite', 'no');
+
+				if ($overwrite == 'yes') {
+					$this->user->storage->setLocale($this->locale);
+				}
+
+				$this->redirect('this', ['locale' => $this->user->identity->locale]);
+			}
+		} else {
+			$this->user->storage->setLocale($this->locale);
 		}
 	}
 
-	// </editor-fold>
-	// <editor-fold desc="components">
+// <editor-fold desc="handlers">
 
-	/** @return SignOut */
-	public function createComponentSignOut()
+	public function handleSetCurrency($currency)
 	{
-		return $this->iSignOutFactory->create();
+		try {
+			$this->exchange->setWeb($this->exchange[$currency], TRUE);
+			$this->user->storage->setCurrency($this->exchange[$currency]);
+		} catch (ExchangeException $e) {
+			$this->flashMessage($this->translator->translate('Requested currency isn\'t supported.'), 'warning');
+		}
+
+		$this->redirect('this');
 	}
 
-	// </editor-fold>
-	// <editor-fold desc="css webloader">
+// </editor-fold>
+// <editor-fold desc="components">
+// </editor-fold>
+// <editor-fold desc="css webloader">
 
 	/** @return CssLoader */
 	protected function createComponentCssFront()
@@ -244,5 +206,5 @@ abstract class BasePresenter extends Presenter
 		return $css;
 	}
 
-	// </editor-fold>
+// </editor-fold>
 }

@@ -81,12 +81,19 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->template->saleStocks = $this->stockFacade->getSales();
 		$this->template->topStocks = $this->stockFacade->getTops();
 		$this->template->bestsellerStocks = $this->stockFacade->getBestSellers();
-		$this->template->visitedStocks = $this->stockFacade->getLastVisited();
+		$this->template->visitedStocks = $this->user->storage->getVisited();
 
 		$this->loadTemplateMenu();
 		$this->loadTemplateCategoriesSettings();
 		$this->loadTemplateSigns();
 		$this->loadTemplateProducers();
+	}
+
+	public function handleSignOut()
+	{
+		$this->user->logout();
+		$this->presenter->flashMessage($this->translator->translate('flash.signOutSuccess'), 'success');
+		$this->presenter->redirect('this');
 	}
 
 	protected function loadTemplateMenu()
@@ -141,7 +148,7 @@ abstract class BasePresenter extends BaseBasePresenter
 	{
 		$list = new ProductList();
 		$list->setTranslator($this->translator);
-		$list->setExchange($this->exchange, $this->currency);
+		$list->setExchange($this->exchange, $this->exchange->getWeb());
 		$list->setItemsPerPage($this->settings->pageConfig->rowsPerPage, $this->settings->pageConfig->itemsPerRow);
 
 		$list->setAjax();

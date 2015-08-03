@@ -4,6 +4,7 @@ namespace App\FrontModule\Presenters;
 
 use App\Extensions\Products\ProductList;
 use App\Model\Entity\Stock;
+use Nette\Application\BadRequestException;
 use Nette\Application\Responses\JsonResponse;
 use Nette\Utils\Strings;
 
@@ -13,18 +14,25 @@ class ProductPresenter extends BasePresenter
 	public function actionDefault($url)
 	{
 		$product = $this->productRepo->findOneByUrl($url);
+		
 		if (!$product) {
 			$message = $this->translator->translate('Requested product doesn\'t exist. Try to choose another from list.');
 			$this->flashMessage($message, 'warning');
-			$this->redirect('Homepage:');
+			throw new BadRequestException;
 		}
+		
 		$product->setCurrentLocale($this->locale);
+		
 		if ($product->url !== $url) {
 			$this->redirect('Product:', ['url' => $product->url]);
 		}
+		
 		$this->activeCategory = $product->mainCategory;
 		$this->template->product = $product;
 		$this->template->stock = $product->stock;
+		
+		// Last visited
+		$this->user->storage->addVisited($product->stock);
 	}
 
 	public function actionViewById($id)
@@ -33,7 +41,7 @@ class ProductPresenter extends BasePresenter
 		if (!$product) {
 			$message = $this->translator->translate('Requested product doesn\'t exist. Try to choose another from list.');
 			$this->flashMessage($message, 'warning');
-			$this->redirect('Homepage:');
+			throw new BadRequestException;
 		}
 		$product->setCurrentLocale($this->locale);
 		$this->redirect('Product:', ['url' => $product->url]);

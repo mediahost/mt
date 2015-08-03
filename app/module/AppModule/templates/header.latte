@@ -32,7 +32,7 @@
 						{foreach $allowedLanguages as $locale}
 							{var $code = substr($locale,0,2)}
 							<li n:if="$code !== $lang">
-								<a n:href="this locale => $code">
+								<a n:href="this locale => $code, overwrite => yes">
 								<img alt="{_locale_$code}" src="{$basePath}/assets/global/img/flags/{$code}.png" />{_locale_$code}</a>
 							</li>
 						{/foreach}
@@ -53,7 +53,7 @@
                         </li>
                         <!--<li class="divider"></li>-->
                         <li>
-                            <a href="{control signOut}"><i class="icon-logout"></i> {_'Sign out'}</a>
+                            <a n:href="signOut!"><i class="icon-logout"></i> {_'Sign out'}</a>
                         </li>
                     </ul>
 
@@ -61,9 +61,7 @@
                 <!-- END USER LOGIN DROPDOWN -->
 				
                 <li class="dropdown dropdown-quick-sidebar-toggler" n:if="$user->loggedIn">
-                    <a href="{control signOut}"
-					   class="dropdown-toggle"
-					   title="{_'Sign out'}">
+                    <a n:href="signOut!" class="dropdown-toggle" title="{_'Sign out'}">
                         <i class="icon-logout"></i>
                     </a>
                 </li>

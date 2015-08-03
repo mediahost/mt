@@ -7,11 +7,10 @@ use Nette\Application\IRouter;
 use Nette\Application\Routers\Route;
 use Nette\Application\Routers\RouteList;
 
-/**
- * Router factory.
- */
 class RouterFactory
 {
+
+	const LOCALE_PARAM = '[<locale=sk cs|sk|en>/]';
 
 	/**
 	 * @return IRouter
@@ -80,7 +79,7 @@ class RouterFactory
 		// </editor-fold>
 		// <editor-fold desc="App">
 
-		$adminRouter[] = new Route('app/<presenter>/<action>[/<id>]', [
+		$adminRouter[] = new Route(self::LOCALE_PARAM . 'app/<presenter>/<action>[/<id>]', [
 			'presenter' => 'Dashboard',
 			'action' => 'default',
 			'id' => NULL,
@@ -89,19 +88,19 @@ class RouterFactory
 		// </editor-fold>
 		// <editor-fold desc="Front">
 
-		$frontRouter[] = new Route('search[/<text>]', [
+		$frontRouter[] = new Route(self::LOCALE_PARAM . 'search[/<text>]', [
 			'presenter' => 'Category',
 			'action' => 'search',
 			'text' => NULL,
 		]);
 
-		$frontRouter[] = new Route('accessories[/<model>]', [
+		$frontRouter[] = new Route(self::LOCALE_PARAM . 'accessories[/<model>]', [
 			'presenter' => 'Category',
 			'action' => 'accessories',
 			'model' => NULL,
 		]);
 
-		$frontRouter[] = new Route('producer[/<producer>[/<line>[/<model>]]]', [
+		$frontRouter[] = new Route(self::LOCALE_PARAM . 'producer[/<producer>[/<line>[/<model>]]]', [
 			'presenter' => 'Category',
 			'action' => 'producer',
 			'producer' => NULL,
@@ -116,14 +115,14 @@ class RouterFactory
 			'page' => 'Page',
 		];
 		foreach ($sluggablePresenters as $alias => $presenter) {
-			$frontRouter[] = new Route($alias . '/<url ' . $slugs . '>', [
+			$frontRouter[] = new Route(self::LOCALE_PARAM . $alias . '/<url ' . $slugs . '>', [
 				'presenter' => $presenter,
 				'action' => 'default',
 				'url' => NULL,
 			]);
 		}
 
-		$frontRouter[] = new Route('<presenter>/<action>[/<id>]', [
+		$frontRouter[] = new Route(self::LOCALE_PARAM . '<presenter>/<action>[/<id>]', [
 			'presenter' => 'Homepage',
 			'action' => 'default',
 			'id' => NULL,
