@@ -81,6 +81,13 @@
 						<span class="title">{_'Discounts'}</span><span class="selected"></span>
 					</a>
 				</li>
+				<li n:if="$user->isAllowed('buyout', 'default')"
+					n:class="$presenter->isLinkCurrent('Buyout:*') ? active">
+					<a n:href="Buyout:">
+						<i class="fa fa-balance-scale"></i>
+						<span class="title">{_'Buyout'}</span><span class="selected"></span>
+					</a>
+				</li>
 				<li n:if="$user->isAllowed('pages', 'default')"
 					n:class="$presenter->isLinkCurrent('Pages:*') ? active">
 					<a n:href="Pages:">
@@ -152,7 +159,7 @@
 			<li n:if="$user->isAllowed('producers', 'default')"
 				n:class="$presenter->isLinkCurrent('Producers:*') ? active">
 				<a n:href="Producers:">
-					<i class="fa fa-building"></i> 
+					<i class="fa fa-building-o"></i> 
 					<span class="title">{_'Producers'}</span>
 					<span class="selected"></span>
 				</a>
@@ -172,6 +179,15 @@
 				<a n:href="Signs:">
 					<i class="icon-tag"></i> 
 					<span class="title">{_'Signs'}</span>
+					<span class="selected"></span>
+				</a>
+			</li>
+			
+			<li n:if="$user->isAllowed('question', 'default')"
+				n:class="$presenter->isLinkCurrent('Question:*') ? active">
+				<a n:href="Question:">
+					<i class="fa fa-question"></i>
+					<span class="title">{_'Buyout questions'}</span>
 					<span class="selected"></span>
 				</a>
 			</li>
