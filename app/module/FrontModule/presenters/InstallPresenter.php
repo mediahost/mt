@@ -3,6 +3,7 @@
 namespace App\FrontModule\Presenters;
 
 use App\Extensions\Installer;
+use Nette\Application\UI\Presenter;
 
 class InstallPresenter extends BasePresenter
 {
@@ -18,7 +19,12 @@ class InstallPresenter extends BasePresenter
 		if ($this->user->loggedIn) {
 			$this->user->logout();
 		}
-		parent::startup();
+		Presenter::startup();
+	}
+	
+	protected function beforeRender()
+	{
+		Presenter::beforeRender();
 	}
 
 	public function actionDefault()

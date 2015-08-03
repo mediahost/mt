@@ -2,6 +2,7 @@
 
 namespace Test\Model\Entity;
 
+use App\Model\Entity\BaseTranslatable;
 use App\Model\Entity\Category;
 use App\Model\Entity\Producer;
 use App\Model\Entity\Product;
@@ -41,7 +42,7 @@ class ProductTest extends ProductTestBase
 
 	public function testTranslationManipulationWithLanguage()
 	{
-		$defaultLanguage = $this->getLanguageService()->language;
+		$defaultLanguage = BaseTranslatable::DEFAULT_LOCALE;
 
 		$this->product = new Product($defaultLanguage);
 		$this->product->name = self::NAME;
@@ -83,7 +84,7 @@ class ProductTest extends ProductTestBase
 
 	public function testTranslationSeo()
 	{
-		$defaultLanguage = $this->getLanguageService()->language;
+		$defaultLanguage = BaseTranslatable::DEFAULT_LOCALE;
 
 		$this->product = new Product($defaultLanguage);
 		$this->product->name = self::NAME;

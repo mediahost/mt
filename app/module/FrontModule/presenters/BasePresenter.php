@@ -55,9 +55,6 @@ abstract class BasePresenter extends BaseBasePresenter
 	protected function startup()
 	{
 		parent::startup();
-		if ($this->isInstallPresenter()) {
-			return;
-		}
 		$this->stockRepo = $this->em->getRepository(Stock::getClassName());
 		$this->productRepo = $this->em->getRepository(Product::getClassName());
 		$this->categoryRepo = $this->em->getRepository(Category::getClassName());
@@ -67,9 +64,6 @@ abstract class BasePresenter extends BaseBasePresenter
 	protected function beforeRender()
 	{
 		parent::beforeRender();
-		if ($this->isInstallPresenter()) {
-			return;
-		}
 		$this->template->categories = $this->categories;
 		$this->template->activeCategory = $this->activeCategory;
 		$this->template->showSlider = $this->showSlider;

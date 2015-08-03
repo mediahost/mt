@@ -2,6 +2,7 @@
 
 namespace Test\Examples;
 
+use App\Model\Entity\BaseTranslatable;
 use Kdyby\Doctrine\EntityDao;
 use Nette\DI\Container;
 use Test\Examples\Model\Entity\Article;
@@ -43,10 +44,10 @@ class TranslationUseTest extends BaseUse
 
 	public function testBaseUse()
 	{
-		$entity = new Article($this->getLanguageService()->language);
+		$entity = new Article(BaseTranslatable::DEFAULT_LOCALE);
 		
 		$entity->translate('fr')->title = 'fabuleux';
-        $entity->translate('en')->title = 'awesome';
+        $entity->translate(BaseTranslatable::DEFAULT_LOCALE)->title = 'awesome';
         $entity->translate('cs')->title = 'pecka';
 		$entity->mergeNewTranslations();
 		
@@ -54,10 +55,10 @@ class TranslationUseTest extends BaseUse
 		$this->em->flush();
 
 		$entityFinded = $this->articleDao->find($entity->id);
-		$entityFinded->setCurrentLocale($this->getLanguageService()->language);
+		$entityFinded->setCurrentLocale(BaseTranslatable::DEFAULT_LOCALE);
 		Assert::same('awesome', $entityFinded->title);
 		Assert::same('fabuleux', $entityFinded->translate('fr')->title);
-		Assert::same('awesome', $entityFinded->translate('en')->title);
+		Assert::same('awesome', $entityFinded->translate(BaseTranslatable::DEFAULT_LOCALE)->title);
 		Assert::same('pecka', $entityFinded->translate('cs')->title);
 		
 		$entityFinded->setCurrentLocale('cs');
@@ -66,21 +67,22 @@ class TranslationUseTest extends BaseUse
 
 	public function testUseDefault()
 	{
-		$entity = new Article('en');
+		$entity = new Article(BaseTranslatable::DEFAULT_LOCALE);
 		
 		// french isn't set
-        $entity->translate('en')->title = 'awesome';
+        $entity->translate(BaseTranslatable::DEFAULT_LOCALE)->title = 'awesome';
         $entity->translate('cs')->title = 'pecka';
 		$entity->mergeNewTranslations();
 		
 		$this->em->persist($entity);
 		$this->em->flush();
 		
+		/* @var $entityFinded Article */
 		$entityFinded = $this->articleDao->find($entity->id);
 		$entityFinded->setCurrentLocale('fr');
 		Assert::same('awesome', $entityFinded->title);
 		Assert::same('awesome', $entityFinded->translate('fr')->title);
-		Assert::same('awesome', $entityFinded->translate('en')->title);
+		Assert::same('awesome', $entityFinded->translate(BaseTranslatable::DEFAULT_LOCALE)->title);
 		Assert::same('pecka', $entityFinded->translate('cs')->title);
 	}
 
