@@ -69,6 +69,11 @@ class Parameter extends BaseTranslatable
 		}
 		return NULL;
 	}
+	
+	public function isNew()
+	{
+		return $this->id === NULL;
+	}
 
 	public function __toString()
 	{

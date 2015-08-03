@@ -2,9 +2,7 @@
 
 namespace App\AppModule\Presenters;
 
-use App\Components\Parameter\Form\IParameterAddFactory;
 use App\Components\Parameter\Form\IParameterEditFactory;
-use App\Components\Parameter\Form\ParameterAdd;
 use App\Components\Parameter\Form\ParameterEdit;
 use App\Components\Parameter\Grid\IParametersGridFactory;
 use App\Model\Entity\Parameter;
@@ -21,9 +19,6 @@ class ParametersPresenter extends BasePresenter
 	private $parameterRepo;
 
 	// <editor-fold desc="injects">
-
-	/** @var IParameterAddFactory @inject */
-	public $iParameterAddFactory;
 
 	/** @var IParameterEditFactory @inject */
 	public $iParameterEditFactory;
@@ -72,7 +67,8 @@ class ParametersPresenter extends BasePresenter
 			$this->redirect('default');
 		}		
 		$this->parameterEntity = new Parameter($lastUnusedCode);
-		$this['parameterAddForm']->setParameter($this->parameterEntity);
+		$this['parameterEditForm']->setParameter($this->parameterEntity);
+		$this->setView('edit');
 	}
 
 	/**
@@ -90,6 +86,11 @@ class ParametersPresenter extends BasePresenter
 		} else {
 			$this['parameterEditForm']->setParameter($this->parameterEntity);
 		}
+	}
+	
+	public function renderEdit()
+	{
+		$this->template->parameter = $this->parameterEntity;
 	}
 
 	/**
@@ -117,14 +118,6 @@ class ParametersPresenter extends BasePresenter
 	}
 
 	// <editor-fold desc="forms">
-
-	/** @return ParameterAdd */
-	public function createComponentParameterAddForm()
-	{
-		$control = $this->iParameterAddFactory->create();
-		$control->onAfterSave = $this->afterSave;
-		return $control;
-	}
 
 	/** @return ParameterEdit */
 	public function createComponentParameterEditForm()
