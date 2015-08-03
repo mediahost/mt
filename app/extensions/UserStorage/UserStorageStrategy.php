@@ -100,7 +100,6 @@ class UserStorageStrategy extends Object implements IUserStorage
 	public function addVisited(Stock $stock)
 	{
 		if ($this->userStorage->isAuthenticated()) {
-			\Tracy\Debugger::barDump($stock->id);
 			$visited = $this->visitedRepo->findOneByUserAndStock($this->userStorage->identity, $stock);
 
 			if ($visited === NULL) {
