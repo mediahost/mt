@@ -26,7 +26,12 @@
 				<div class="langs-block-others">
 					{foreach $allowedLanguages as $locale}
 						{var $code = substr($locale,0,2)}
-						<a n:if="$code !== $lang" n:href="this locale => $code">{_locale_$code}</a>
+						{if $user->loggedIn}
+							{var $args = [locale => $code, overwrite => yes]}
+						{else}
+							{var $args = [locale => $code]}
+						{/if}
+						<a n:if="$code !== $lang" n:href="this (expand) $args">{_locale_$code}</a>
 					{/foreach}
 				</div>
 			</div>

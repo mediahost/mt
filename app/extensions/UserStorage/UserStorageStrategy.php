@@ -146,11 +146,7 @@ class UserStorageStrategy extends Object implements IUserStorage
 			array_slice($ids, 0, $limit);
 		}
 
-//		\Tracy\Debugger::barDump($ids);
-
-		$stocks = $this->stockRepo->findAssoc(['id' => $ids,], 'id');
-
-		return $stocks;
+		return $this->stockRepo->findAssoc(['id' => $ids,], 'id');
 	}
 
 	/**
@@ -184,6 +180,12 @@ class UserStorageStrategy extends Object implements IUserStorage
 			$this->guestStorage->identity->currency = $currency->getCode();
 		}
 
+		return $this;
+	}
+
+	public function fromGuestToUser()
+	{
+		$this->userStorage->identity->import($this->guestStorage->identity);
 		return $this;
 	}
 
