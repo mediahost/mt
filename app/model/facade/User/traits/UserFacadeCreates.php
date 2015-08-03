@@ -25,7 +25,9 @@ trait UserFacadeCreates
 			$user = new User();
 			$user->setMail($mail)
 					->setPassword($password)
-					->addRole($role);
+					->addRole($role)
+					->setLocale($this->translator->getDefaultLocale())
+					->setCurrency($this->exchange->getDefault()->getCode());
 
 			return $this->userRepo->save($user);
 		}
@@ -43,7 +45,9 @@ trait UserFacadeCreates
 		$user = new User($registration->mail);
 		$user->setHash($registration->hash)
 				->addRole($role)
-				->setRequiredRole($registration->role);
+				->setRequiredRole($registration->role)
+				->setLocale($this->translator->getLocale())
+				->setCurrency($this->exchange->getWeb()->getCode());
 
 		if ($registration->facebookId) {
 			$user->facebook = new Facebook($registration->facebookId);
