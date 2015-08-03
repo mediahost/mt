@@ -7,8 +7,8 @@ use Doctrine\ORM\Query\Expr\Func;
 
 class PohodaItemRepository extends BaseRepository
 {
-	
-	public function findGroupedBy(array $criteria, $limit = null, $offset = null)
+
+	public function findArrGroupedBy(array $criteria, $limit = null, $offset = null)
 	{
 		$qb = $this->createQueryBuilder('p')
 				->addSelect(new Func('SUM', 'p.count'))
@@ -17,7 +17,7 @@ class PohodaItemRepository extends BaseRepository
 		return $qb->getQuery()
 						->setMaxResults($limit)
 						->setFirstResult($offset)
-						->getResult(AbstractQuery::HYDRATE_OBJECT);
+						->getResult(AbstractQuery::HYDRATE_ARRAY);
 	}
 
 }

@@ -15,17 +15,11 @@ class PohodaListener extends Object implements Subscriber
 	public function getSubscribedEvents()
 	{
 		return [
-			'App\Model\Facade\PohodaFacade::onRecieveXml' => 'onRecieveXml',
-			'App\Model\Facade\PohodaFacade::onParseXml' => 'onParseXml',
+			'App\Model\Facade\PohodaFacade::onStartParseXml' => 'onStartParseXml',
 		];
 	}
 
-	public function onRecieveXml()
-	{
-		
-	}
-
-	public function onParseXml($type)
+	public function onStartParseXml($type)
 	{
 		$this->pohodaFacade->setLastSync($type, PohodaFacade::LAST_UPDATE);
 		$this->pohodaFacade->setLastSync(PohodaFacade::ANY_IMPORT, PohodaFacade::LAST_UPDATE);

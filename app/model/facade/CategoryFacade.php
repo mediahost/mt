@@ -3,8 +3,8 @@
 namespace App\Model\Facade;
 
 use App\Model\Entity\Category;
+use App\Model\Repository\CategoryRepository;
 use Kdyby\Doctrine\EntityManager;
-use Kdyby\Doctrine\EntityRepository;
 use Kdyby\Translation\Translator;
 use Nette\Object;
 
@@ -17,7 +17,7 @@ class CategoryFacade extends Object
 	/** @var Translator @inject */
 	public $translator;
 
-	/** @var EntityRepository */
+	/** @var CategoryRepository */
 	private $categoryRepo;
 
 	public function __construct(EntityManager $em)

@@ -26,7 +26,7 @@ class UserCallable
 	public function __invoke()
 	{
 		$identity = $this->container->getService('security.user')->identity;
-		if ($identity) {
+		if ($identity->id) {
 			return $identity;
 		}
 	}

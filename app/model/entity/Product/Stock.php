@@ -21,6 +21,7 @@ use Nette\Utils\DateTime;
  * @property array $groupDiscounts
  * @property Price $purchasePrice
  * @property Price $oldPrice
+ * @property Vat $vat
  * @property mixed $createdBy
  * @property mixed $updatedBy
  * @property mixed $deletedBy
@@ -33,6 +34,7 @@ use Nette\Utils\DateTime;
  * @property int $inStore
  * @property string $barcode
  * @property string $pohodaCode
+ * @property string $importedFrom
  */
 class Stock extends BaseEntity
 {
