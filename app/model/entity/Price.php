@@ -101,18 +101,14 @@ class Price extends Object
 
 	public function __toString()
 	{
-		$string = (string) $this->getWithoutVat();
-		if ($this->vat && $this->vat->percent > 0) {
-			$string .= ' (+' . $this->vat . ')';
-		}
-		return $string;
+		return (string) $this->getWithoutVat();
 	}
-	
+
 	public static function strToFloat($string)
 	{
 		return (float) preg_replace('/,/', '.', $string);
 	}
-	
+
 	public static function floatToStr($float)
 	{
 		return preg_replace('/\./', ',', (string) $float);
