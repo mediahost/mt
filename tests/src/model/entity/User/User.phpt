@@ -2,8 +2,6 @@
 
 namespace Test\Model\Entity;
 
-use App\Model\Entity\PageConfigSettings;
-use App\Model\Entity\PageDesignSettings;
 use App\Model\Entity\Role;
 use Kdyby\Doctrine\EmptyValueException;
 use Tester\Assert;
@@ -21,14 +19,9 @@ class UserTest extends UserTestBase
 
 	public function testSetAndGet()
 	{
-		$this->user->pageConfigSettings = new PageConfigSettings;
-		$this->user->pageDesignSettings = new PageDesignSettings;
-
 		$this->saveUser();
 		Assert::same(self::MAIL, $this->user->mail);
 		Assert::same(self::MAIL, (string) $this->user);
-		Assert::type(PageConfigSettings::getClassName(), $this->user->pageConfigSettings);
-		Assert::type(PageDesignSettings::getClassName(), $this->user->pageDesignSettings);
 	}
 
 	public function testSaveEmptyMail()

@@ -2,9 +2,8 @@
 
 namespace Test\Model\Entity;
 
-use App\Extensions\Settings\Model\Service\LanguageService;
-use App\Extensions\Settings\Model\Storage\DefaultSettingsStorage;
 use App\Model\Entity;
+use App\Model\Facade\RoleFacade;
 use App\Model\Repository\ProductRepository;
 use App\Model\Repository\StockRepository;
 use Nette\DI\Container;
@@ -16,6 +15,9 @@ abstract class ProductTestBase extends DbTestCase
 	const NAME = 'my product name';
 	const DESC = 'my longer text as description';
 	const PEREX = 'my longer text as perex';
+
+	/** @var RoleFacade @inject */
+	public $roleFacade;
 
 	/** @var Entity\Product */
 	protected $product;
@@ -29,12 +31,6 @@ abstract class ProductTestBase extends DbTestCase
 	/** @var StockRepository */
 	protected $stockRepo;
 
-	/** @var DefaultSettingsStorage */
-	protected $defaultSettings;
-
-	/** @var LanguageService */
-	protected $languageService;
-
 	/** @var array */
 	private $logs = [];
 
@@ -44,8 +40,6 @@ abstract class ProductTestBase extends DbTestCase
 
 		$this->productRepo = $this->em->getRepository(Entity\Product::getClassName());
 		$this->stockRepo = $this->em->getRepository(Entity\Stock::getClassName());
-		
-		$this->defaultSettings = new DefaultSettingsStorage();
 
 		$loggedSubscriber = $this->getContainer()->getService('loggableSubscriber');
 		$loggedSubscriber->setLoggerCallable([$this, 'log']);
@@ -55,26 +49,13 @@ abstract class ProductTestBase extends DbTestCase
 	{
 		parent::setUp();
 		$this->updateSchema();
+		$this->roleFacade->create(Entity\Role::GUEST);
 	}
 
 	public function tearDown()
 	{
 		$this->dropSchema();
 		parent::tearDown();
-	}
-
-	protected function getLanguageService()
-	{
-		if (!$this->languageService) {
-			$this->defaultSettings->setLanguages([
-				'default' => 'en',
-				'allowed' => ['en' => 'English', 'fr' => 'French', 'cs' => 'Czech'],
-			]);
-			$this->languageService = new LanguageService();
-			$this->languageService->defaultStorage = $this->defaultSettings;
-			$this->languageService->em = $this->em;
-		}
-		return $this->languageService;
 	}
 
 	protected function saveProduct($safePersist = FALSE)
@@ -140,6 +121,7 @@ abstract class ProductTestBase extends DbTestCase
 			$this->em->getClassMetadata(Entity\GroupDiscount::getClassName()),
 			$this->em->getClassMetadata(Entity\Unit::getClassName()),
 			$this->em->getClassMetadata(Entity\UnitTranslation::getClassName()),
+			$this->em->getClassMetadata(Entity\Role::getClassName()),
 		];
 	}
 
