@@ -89,14 +89,6 @@ abstract class BasePresenter extends Presenter
 		$this->template->currencySymbol = $currency->getFormat()->getSymbol();
 	}
 
-	protected function isInstallPresenter()
-	{
-		$presenterExceptions = [
-			'Front:Install',
-		];
-		return in_array($this->presenter->name, $presenterExceptions);
-	}
-
 // <editor-fold desc="requirments">
 
 	public function checkRequirements($element)

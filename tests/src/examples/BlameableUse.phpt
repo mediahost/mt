@@ -5,6 +5,7 @@ namespace Test\Examples;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use App\Model\Entity\UserCallable;
+use App\Model\Facade\RoleFacade;
 use Kdyby\Doctrine\EntityRepository;
 use Knp\DoctrineBehaviors\ORM\Blameable\BlameableSubscriber;
 use Test\Examples\Model\Entity\Blameable;
@@ -24,9 +25,12 @@ class BlameableUseTest extends BaseUse
 
 	const USER = 'user1';
 
+	/** @var RoleFacade @inject */
+	public $roleFacade;
+
 	/** @var EntityRepository */
 	private $blameableRepo;
-	
+
 	/** @var BlameableSubscriber */
 	private $subscriber;
 
@@ -38,9 +42,11 @@ class BlameableUseTest extends BaseUse
 		if ($userCallback) {
 			$this->subscriber->setUserCallable($userCallback);
 		}
-		
+
 		$this->blameableRepo = $this->em->getRepository(Blameable::getClassName());
 		$this->updateSchema();
+
+		$this->roleFacade->create(Role::GUEST);
 	}
 
 	protected function tearDown()
@@ -52,7 +58,7 @@ class BlameableUseTest extends BaseUse
 	public function testCreate()
 	{
 		$this->init(self::USER, NULL, NULL);
-		
+
 		$entity = new Blameable();
 
 		$this->em->persist($entity);
@@ -66,7 +72,7 @@ class BlameableUseTest extends BaseUse
 	public function testUpdate()
 	{
 		$this->init(self::USER, NULL, NULL);
-		
+
 		$entity = new Blameable();
 
 		$this->em->persist($entity);
@@ -93,7 +99,7 @@ class BlameableUseTest extends BaseUse
 	public function testRemove()
 	{
 		$this->init(self::USER, NULL, NULL);
-		
+
 		$entity = new Blameable();
 
 		$this->em->persist($entity);
@@ -121,9 +127,9 @@ class BlameableUseTest extends BaseUse
 		$user1Callback = function() use($user1) {
 			return $user1;
 		};
-		
+
 		$this->init(NULL, $user1Callback, User::class);
-		
+
 		$this->em->persist($user1);
 		$this->em->persist($user2);
 		$this->em->flush();
@@ -150,54 +156,54 @@ class BlameableUseTest extends BaseUse
 	public function testSubscriberWithUnsignedIdentityCallback()
 	{
 		$userCallback = new UserCallable($this->getContainer());
-		
+
 		$this->init(NULL, $userCallback, User::class);
-		
+
 		$entity = new Blameable();
 
 		$this->em->persist($entity);
 		$this->em->flush();
-		
+
 		Assert::null($entity->createdBy);
 	}
 
 	public function testSubscriberWithSignedIdentityCallback()
 	{
 		$userCallback = new UserCallable($this->getContainer());
-		
+
 		$this->init(NULL, $userCallback, User::class);
-		
+
 		$user = new User('user@mail.com');
 		$this->em->persist($user);
 		$this->em->flush();
-		
+
 		$identity = $this->getContainer()->getService('security.user');
 		$identity->login($user);
-		
+
 		$entity = new Blameable();
-		
+
 		$this->em->persist($entity);
 		$this->em->flush();
 		$id = $entity->id;
 		$this->em->clear();
-		
+
 		$findedEntity = $this->blameableRepo->find($id);
-		
+
 		Assert::same($user->id, $findedEntity->createdBy->id);
 		Assert::same($user->mail, $findedEntity->createdBy->mail);
-		
+
 		$identity->logout();
 	}
 
-    public function testShould_only_persist_user_entity()
-    {
+	public function testShould_only_persist_user_entity()
+	{
 		$user = new User('user@mail.com');
 		$userCallback = function() use($user) {
 			return $user;
 		};
-		
+
 		$this->init('anonymouse', $userCallback, User::class);
-		
+
 		$this->em->persist($user);
 		$this->em->flush();
 
@@ -205,10 +211,10 @@ class BlameableUseTest extends BaseUse
 
 		$this->em->persist($entity);
 		$this->em->flush();
-		
+
 		Assert::null($entity->createdBy);
 		Assert::null($entity->updatedBy);
-    }
+	}
 
 	protected function getClasses()
 	{

@@ -15,7 +15,8 @@ twitter:
 installer:
 	lock: TRUE # při TRUE zamyká instalaci po spuštění, pak je potřeba odmazat temp/install pro novou instalaci
 	doctrine: FALSE # aktualizuje DB podle entit
-	initUsers: ['user_mail' = ['password', 'name_of_role']]
+	initUsers: 
+		user_mail: ['password', 'name_of_role']
 #	adminer: FALSE # instaluje potřebná nastavení pro adminer - na SERVERU je potřeba ověřit funkčnost (používá chmod)
 #	composer: FALSE # spouští composer - NEPOUŽÍVAT na serveru (spouští shell_exec)
 

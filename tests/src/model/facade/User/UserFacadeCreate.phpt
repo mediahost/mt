@@ -3,8 +3,6 @@
 namespace Test\Model\Facade;
 
 use App\Model\Entity\Facebook;
-use App\Model\Entity\PageConfigSettings;
-use App\Model\Entity\PageDesignSettings;
 use App\Model\Entity\Registration;
 use App\Model\Entity\Role;
 use App\Model\Entity\Twitter;
@@ -54,8 +52,6 @@ class UserFacadeCreateTest extends UserFacade
 		$user->password = $password;
 		$user->facebook = new Facebook('fb22');
 		$user->twitter = new Twitter('tw22');
-		$user->pageConfigSettings = new PageConfigSettings();
-		$user->pageDesignSettings = new PageDesignSettings();
 		$user->requiredRole = $role;
 
 		Assert::count(0, $this->registrationRepo->findAll());

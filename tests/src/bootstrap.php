@@ -39,4 +39,6 @@ if (!getenv(\Tester\Environment::RUNNER)) {
 	$configurator->enableDebugger($rootDir . '/../log/');
 }
 
+Drahak\Restful\DI\RestfulExtension::install($configurator);
+
 return $configurator->createContainer();

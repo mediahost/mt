@@ -15,13 +15,14 @@ twitter:
 installer:
 	lock: TRUE
 	doctrine: FALSE
-#	initUsers: ['user_mail' = ['password', 'name_of_role']]
-	initUsers: ['admin' = ['admin', 'admin'], 'superadmin' = ['superadmin', 'superadmin'], 'signed' = ['signed', 'signed'], 'user' = ['user', 'user']]
+#	initUsers: 
+#		user_mail: ['password', 'name_of_role']
+	initUsers: 
+		admin: ['admin', 'admin']
+		superadmin: ['superadmin', 'superadmin']
+		signed: ['signed', 'signed']
+		user: ['user', 'user']
 
 nette:
 	mailer:
 		smtp: FALSE
-
-gettextTranslator:
-	files:
-		all: %appDir%/lang/locale

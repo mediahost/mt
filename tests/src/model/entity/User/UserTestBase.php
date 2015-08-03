@@ -74,8 +74,6 @@ abstract class UserTestBase extends DbTestCase
 		return [
 				$this->em->getClassMetadata(User::getClassName()),
 				$this->em->getClassMetadata(Role::getClassName()),
-				$this->em->getClassMetadata(PageConfigSettings::getClassName()),
-				$this->em->getClassMetadata(PageDesignSettings::getClassName()),
 				$this->em->getClassMetadata(Facebook::getClassName()),
 				$this->em->getClassMetadata(Twitter::getClassName()),
 				$this->em->getClassMetadata(Group::getClassName()),

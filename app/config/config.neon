@@ -59,3 +59,4 @@ extensions:
 	settings: App\Extensions\Settings\DI\SettingsExtension
 	foto: App\Extensions\Foto\DI\FotoExtension
 	userStorage: App\Extensions\UserStorage\DI\UserStorageExtension
+	restful: Drahak\Restful\DI\RestfulExtension
