@@ -41,7 +41,7 @@
 						</div>
 					</div>
 					<div class="col-md-6 col-sm-6">
-						<h1>{$product}</h1>
+						<h1><a n:tag-if="$user->isAllowed('products')" n:href=":App:Products:edit $stock->id">{$product}</a></h1>
 						<div class="price-availability-block clearfix">
 							<div class="price">
 								<strong>{$stock->getPrice($priceLevel)|currencyVat}</strong>
