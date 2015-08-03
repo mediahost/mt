@@ -23,7 +23,7 @@ class SettingsExtension extends CompilerExtension
 			],
 			'signs' => [ // fixed IDs for signs (příznaky)
 				'enabled' => FALSE,
-				'values' => [
+				'values;' => [
 					'new' => 1,
 					'sale' => 2,
 					'top' => 3,

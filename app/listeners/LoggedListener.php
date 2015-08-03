@@ -5,7 +5,8 @@ namespace App\Listeners;
 use App\Model\Facade\UserFacade;
 use Kdyby\Events\Subscriber;
 use Nette\Object;
-use Nette\Security;
+use Nette\Security\IUserStorage;
+use Nette\Security\User;
 
 class LoggedListener extends Object implements Subscriber
 {
@@ -13,6 +14,9 @@ class LoggedListener extends Object implements Subscriber
 	/** @var UserFacade @inject */
 	public $userFacade;
 
+	/** @var IUserStorage @inject */
+	public $userStorage;
+	
 	public function getSubscribedEvents()
 	{
 		return array(
@@ -22,16 +26,14 @@ class LoggedListener extends Object implements Subscriber
 	}
 
 	/**
-	 * @param \Nette\Security\User $identity
+	 * @param User $identity
 	 */
-	public function userLoggedIn(Security\User $identity)
+	public function userLoggedIn(User $user)
 	{
-		/** @todo Metoda import nad entitou User dostane jako argument předchozího uživatele
-		 * (tedy guesta) a z něj překopíruje nějaká data. Jaké řeší ono metoda import().
-		 */
+		$this->userStorage->fromGuestToUser();
 	}
 
-	public function userLoggedOut(Security\User $user)
+	public function userLoggedOut(User $user)
 	{
 		
 	}

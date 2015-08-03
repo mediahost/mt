@@ -829,9 +829,6 @@ msgstr "Requested currency isn't supported."
 msgid "Requested language isn't supported."
 msgstr "Requested language isn't supported."
 
-msgid "You should be logged in!"
-msgstr "You should be logged in!"
-
 msgid "DB was reinstaled"
 msgstr "DB was reinstaled"
 
@@ -852,9 +849,6 @@ msgstr "We are sorry, twitter authentication failed hard."
 
 msgid "We are sorry, facebook authentication failed hard."
 msgstr "We are sorry, facebook authentication failed hard."
-
-msgid "You have been successfuly signed out."
-msgstr "You have been successfuly signed out."
 
 msgid "E-mail account"
 msgstr "E-mail account"
