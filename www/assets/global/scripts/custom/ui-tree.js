@@ -69,10 +69,10 @@ var UITree = function () {
 				},
 				'data': {
 					'url': function (node) {
-						return basePath + '/ajax/categories/get-subcategories';
+						return links['Categories:getSubcategories'];
 					},
 					'data': function (node) {
-						return {'parent': node.id, 'lang': lang};
+						return {'parent': node.id};
 					},
 					'dataType': 'jsonp'
 				}
@@ -116,8 +116,8 @@ var UITree = function () {
 			var node = data.node;
 			var parent = data.parent;
 			var request = $.get(
-					basePath + '/ajax/categories/create-category',
-					{name: node.text, parent: parent, locale: lang}
+					links['Categories:createCategory'],
+					{name: node.text, parent: parent}
 			).success(function (e) {
 				if (e.success && e.success.id) {
 					instance.set_id(node, e.success.id);
@@ -133,8 +133,8 @@ var UITree = function () {
 			var instance = data.instance;
 			var node = data.node;
 			var request = $.get(
-					basePath + '/ajax/categories/rename-category',
-					{id: node.id, name: node.text, locale: lang}
+					links['Categories:renameCategory'],
+					{id: node.id, name: node.text}
 			).success(function (e) {
 				if (e.success && e.success.id) {
 					instance.set_text(node, e.success.name);
@@ -151,7 +151,7 @@ var UITree = function () {
 			var node = data.node;
 			if ($.isNumeric(node.id)) {
 				var request = $.get(
-						basePath + '/ajax/categories/delete-category',
+						links['Categories:deleteCategory'],
 						{id: node.id}
 				).success(function (e) {
 					if (e.success && e.success.id) {
@@ -175,7 +175,7 @@ var UITree = function () {
 					target: $(editBlockId),
 					animate: true
 				});
-				$.post(basePath + '/app/categories/default/' + data.node.id)
+				$.post(links['Categories:default'], {categoryId: data.node.id})
 						.done(function (payload) {
 							if (payload.redirect) {
 								window.location.href = payload.redirect;
@@ -277,7 +277,7 @@ var UITree = function () {
 				},
 				'data': {
 					'url': function (node) {
-						return basePath + '/ajax/producers/get-producers';
+						return links['Producers:getProducers'];
 					},
 					'data': function (node) {
 						return {'parent': node.id, 'lang': lang};
@@ -356,8 +356,8 @@ var UITree = function () {
 			var node = data.node;
 			var parent = data.parent;
 			var request = $.get(
-					basePath + '/ajax/producers/create-producer',
-					{name: node.text, parent: parent, locale: lang}
+					links['Producers:createProducer'],
+					{name: node.text, parent: parent}
 			).success(function (e) {
 				if (e.success && e.success.id) {
 					instance.set_id(node, e.success.id);
@@ -373,8 +373,8 @@ var UITree = function () {
 			var instance = data.instance;
 			var node = data.node;
 			var request = $.get(
-					basePath + '/ajax/producers/rename-producer',
-					{id: node.id, name: node.text, locale: lang}
+					links['Producers:renameProducer'],
+					{id: node.id, name: node.text}
 			).success(function (e) {
 				if (e.success && e.success.id) {
 					instance.set_text(node, e.success.name);
@@ -390,7 +390,7 @@ var UITree = function () {
 			var instance = data.instance;
 			var node = data.node;
 			var request = $.get(
-					basePath + '/ajax/producers/delete-producer',
+					links['Producers:deleteProducer'],
 					{id: node.id}
 			).success(function (e) {
 				if (e.success && e.success.id) {
@@ -413,7 +413,9 @@ var UITree = function () {
 					target: $(editBlockId),
 					animate: true
 				});
-				$.post(basePath + '/app/producers/default/' + data.node.id)
+				console.log(links['Producers:default']);
+				console.log(data.node.id);
+				$.post(links['Producers:default'], {producerId: data.node.id})
 						.done(function (payload) {
 							if (payload.redirect) {
 								window.location.href = payload.redirect;
