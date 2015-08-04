@@ -20,6 +20,10 @@ services:
 	- {implement: App\Components\User\Form\IUserBasicFactory, inject: yes}
 	- {implement: App\Components\User\Grid\IUsersGridFactory, inject: yes}
 
+	# Buyout
+	- {implement: App\Components\Question\IGridControlFactory, inject: yes}
+	- {implement: App\Components\Question\IEntityControlFactory, inject: yes}
+
 	# Stock
 	- {implement: App\Components\Product\Form\IStockAddFactory, inject: yes}
 	- {implement: App\Components\Product\Form\IStockBasicFactory, inject: yes}

@@ -1,0 +1,33 @@
+{block pageTitle}
+{_'Buyout questions'}
+{/block}
+
+{block breadcrumbItems}
+<li><span>{_'Buyout questions'}</span></li>
+		{/block}
+
+{block content}
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-list"></i>
+					<span class="caption-subject bold uppercase">{_'Buyout questions'}</span>
+				</div>
+				<div class="actions">
+					<div class="btn-group">
+						<a n:href="Question:add" class="btn btn-circle green-sharp">
+							<i class="fa fa-plus"></i> {_'Add question'}
+						</a>
+					</div>
+					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body">
+				{control grid}
+			</div>
+		</div>
+	</div>
+</div>
