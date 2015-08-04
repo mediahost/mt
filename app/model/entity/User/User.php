@@ -30,29 +30,19 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	use UserPassword;
 	use UserSocials;
 
-	/**
-	 * @ORM\Column(type="string", nullable=false, unique=true)
-	 */
+	/** @ORM\Column(type="string", nullable=false, unique=true) */
 	protected $mail;
 
-	/**
-	 * @ORM\Column(type="string", length=8, nullable=true)
-	 */
+	/** @ORM\Column(type="string", length=8, nullable=true) */
 	protected $locale;
 
-	/**
-	 * @ORM\Column(type="string", length=8, nullable=true)
-	 */
+	/** @ORM\Column(type="string", length=8, nullable=true) */
 	protected $currency;
 
-	/**
-	 * @ORM\Column(type="boolean", nullable=true)
-	 */
+	/** @ORM\Column(type="boolean", nullable=true) */
 	protected $sidebarClosed;
 
-	/**
-	 * @ORM\OneToMany(targetEntity="VisitedProduct", mappedBy="user", fetch="EXTRA_LAZY")
-	 */
+	/** @ORM\OneToMany(targetEntity="VisitedProduct", mappedBy="user", fetch="EXTRA_LAZY") */
 	protected $visitedProducts;
 
 	public function __construct($mail = NULL)

@@ -14,8 +14,10 @@ use App\Model\Facade\Traits\UserFacadeRecovery;
 use App\Model\Facade\Traits\UserFacadeSetters;
 use App\Model\Repository\RegistrationRepository;
 use App\Model\Repository\UserRepository;
+use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\EntityDao;
 use Kdyby\Doctrine\EntityManager;
+use Kdyby\Translation\Translator;
 use Nette\Object;
 
 class UserFacade extends Object
@@ -30,6 +32,15 @@ class UserFacade extends Object
 
 	/** @var EntityManager @inject */
 	public $em;
+	
+	/** @var SettingsStorage @inject */
+	public $settings;
+	
+	/** @var Exchange @inject */
+	public $exchange;
+	
+	/** @var Translator @inject */
+	public $translator;
 
 	/** @var UserRepository */
 	private $userRepo;
@@ -39,17 +50,13 @@ class UserFacade extends Object
 
 	/** @var EntityDao */
 	private $roleDao;
-	
-	/** @var SettingsStorage */
-	private $settings;
 
-	public function __construct(EntityManager $em, SettingsStorage $settings)
+	public function __construct(EntityManager $em)
 	{
 		$this->em = $em;
 		$this->userRepo = $this->em->getRepository(User::getClassName());
 		$this->registrationRepo = $this->em->getRepository(Registration::getClassName());
 		$this->roleDao = $this->em->getDao(Role::getClassName());
-		$this->settings = $settings;
 	}
 
 	public function isUnique($mail)

@@ -43,9 +43,9 @@ class ProducersPresenter extends BasePresenter
 	 * @resource('producers')
 	 * @privilege('default')
 	 */
-	public function actionDefault($id)
+	public function actionDefault($producerId)
 	{
-		$itemId = Producer::getItemId($id, $this->type);
+		$itemId = Producer::getItemId($producerId, $this->type);
 		if ($itemId) {
 			switch ($this->type) {
 				case Producer::ID:

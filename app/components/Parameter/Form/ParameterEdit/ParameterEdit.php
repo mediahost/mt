@@ -12,7 +12,7 @@ use Nette\Utils\ArrayHash;
 class ParameterEdit extends BaseControl
 {
 
-	/** @var Group */
+	/** @var Parameter */
 	private $parameter;
 
 	// <editor-fold desc="events">
@@ -30,6 +30,8 @@ class ParameterEdit extends BaseControl
 		$form = new Form();
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
+		
+		$this->parameter->setCurrentLocale($this->getLocale());
 
 		$form->addText('name', 'Name')
 				->setRequired('Name is required');
@@ -50,7 +52,11 @@ class ParameterEdit extends BaseControl
 
 	private function load(ArrayHash $values)
 	{
-		$this->parameter->translateAdd($this->translator->getLocale())->name = $values->name;
+		if ($this->parameter->isNew()) {
+			$this->parameter->name = $values->name;
+		} else {
+			$this->parameter->translateAdd($this->getLocale())->name = $values->name;
+		}
 		$this->parameter->mergeNewTranslations();
 		return $this;
 	}
@@ -65,10 +71,20 @@ class ParameterEdit extends BaseControl
 	/** @return array */
 	protected function getDefaults()
 	{
-		$values = [
-			'name' => $this->parameter->translate($this->translator->getLocale())->name,
-		];
+		$values = [];
+		if (!$this->parameter->isNew()) {
+			$values['name'] = $this->parameter->translate($this->getLocale())->name;
+		}
 		return $values;
+	}
+
+	protected function getLocale()
+	{
+		if ($this->parameter->isNew()) {
+			return $this->translator->getDefaultLocale();
+		} else {
+			return $this->translator->getLocale();
+		}
 	}
 
 	private function checkEntityExistsBeforeRender()

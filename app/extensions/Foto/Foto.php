@@ -142,7 +142,9 @@ class Foto extends Object
 	public function create($source, &$filename, $folder = NULL, $defaultFormat = Image::PNG)
 	{
 		$format = NULL;
-		if ($source instanceof FileUpload) { // uploaded
+		if ($source instanceof Image) { // image
+			$img = $source;
+		} else if ($source instanceof FileUpload) { // uploaded
 			$img = Image::fromString($source->contents, $format);
 		} else if (is_string($source)) { // filename or string
 			$img = file_exists($source) ? Image::fromFile($source, $format) : Image::fromString($source, $format);

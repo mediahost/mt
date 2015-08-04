@@ -7,7 +7,7 @@
 	<a n:href="Parameters:">{_'Parameters'}</a>
 </li>
 <li>
-	<span>{_'Edit Parameter'}</span>
+	<span>{if $parameter->isNew()}{_'Add new parameter'}{else}{_'Edit Parameter'}{/if}</span>
 </li>
 {/block}
 
@@ -19,7 +19,7 @@
 				<div class="caption font-green-sharp">
 					<i class="fa fa-edit font-green-sharp"></i>
 					<span class="caption-subject bold uppercase">
-						{_'Edit Parameter'}
+						{if $parameter->isNew()}{_'Add new parameter'}{else}{_'Edit Parameter'}{/if}
 					</span>
 				</div>
 				<div class="actions">

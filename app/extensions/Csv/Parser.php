@@ -5,7 +5,7 @@ namespace App\Extensions\Csv;
 use App\Extensions\Csv\Exceptions\BeforeProcessException;
 use App\Extensions\Csv\Exceptions\InternalException;
 use App\Extensions\Csv\Exceptions\WhileProcessException;
-use App\TaggedString;
+use Kdyby\Translation\Translator;
 use Nette\Http\FileUpload;
 use Nette\Object;
 use Nette\Utils\Callback;
@@ -17,6 +17,9 @@ class Parser extends Object
 
 	const CHARSET_IN = "WINDOWS-1250";
 	const CHARSET_OUT = "UTF-8";
+
+	/** @var Translator @inject */
+	public $translator;
 
 	/** @var FileUpload */
 	private $file;
@@ -127,10 +130,10 @@ class Parser extends Object
 				$executed[$line] = $this->parseLine($line, $row);
 			} catch (InternalException $e) {
 				throw new WhileProcessException($executed, $e->getMessage());
-//			} catch (\Exception $e) {
-//				Debugger::log($e->getMessage(), Strings::webalize(get_class($this)));
-//				$message = new TaggedString('Proccessing failed on line %s.', $line);
-//				throw new WhileProcessException($executed, $message);
+			} catch (\Exception $e) {
+				Debugger::log($e->getMessage(), Strings::webalize(get_class($this)));
+				$message = $this->translator->translate('Proccessing failed on line %count%.', $line);
+				throw new WhileProcessException($executed, $message);
 			}
 		}
 
@@ -156,10 +159,14 @@ class Parser extends Object
 			$actualCount = count($row);
 			$expectedCount = count($this->rowAliases);
 			if ($actualCount !== $expectedCount) {
-				$text = 'Line #%s failed validation scheme'
-						. ' - should have %s columns'
-						. ' and it have %s.';
-				$message = new TaggedString($text, $lineNumber, $expectedCount, $actualCount);
+				$text = 'Line #%line% failed validation scheme'
+						. ' - should have %expected% columns'
+						. ' and it have %actual%.';
+				$message = $this->translator->translate($text, [
+					'line' => $lineNumber,
+					'expected' => $expectedCount,
+					'actual' => $actualCount
+				]);
 				throw new InternalException($message);
 			}
 		}
