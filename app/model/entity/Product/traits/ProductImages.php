@@ -5,6 +5,7 @@ namespace App\Model\Entity\Traits;
 use App\Model\Entity\Image;
 use Doctrine\Common\Collections\ArrayCollection;
 use Nette\Http\FileUpload;
+use Nette\Utils\Image as ImageUtils;
 use Nette\Utils\Strings;
 
 /**
@@ -24,19 +25,19 @@ trait ProductImages
 	 */
 	protected $images;
 
-	public function setImage(FileUpload $file)
+	public function setImage($file)
 	{
 		if (!$this->image instanceof Image) {
 			$this->image = new Image($file);
-		} else {
-			$this->image->setFile($file);
+		} else if ($file instanceof FileUpload || $file instanceof ImageUtils) {
+			$this->image->setSource($file);
 		}
 		$this->image->requestedFilename = 'product_image_' . Strings::webalize(microtime());
 		$this->image->setFolder(Image::FOLDER_PRODUCTS);
 		return $this;
 	}
 
-	public function setOtherImage(FileUpload $file)
+	public function setOtherImage($file)
 	{
 		$image = new Image($file);
 		$image->requestedFilename = 'product_image_' . Strings::webalize(microtime());

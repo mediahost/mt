@@ -66,12 +66,8 @@ class ImageListener extends Object implements Subscriber
 	private function createNewImage(Image $image, $folder)
 	{
 		$requestedFormat = ImageUtils::PNG;
-		if ($image->requestedFilename) {
-			$filename = $image->requestedFilename;
-		} else {
-			$filename = FotoHelpers::getFilenameWithoutExt($image->file->name);
-		}
-		$this->fotoService->create($image->file, $filename, $folder, $requestedFormat);
+		$filename = $image->requestedFilename;
+		$this->fotoService->create($image->source, $filename, $folder, $requestedFormat);
 		return $filename;
 	}
 
