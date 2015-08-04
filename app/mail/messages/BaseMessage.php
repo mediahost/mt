@@ -3,7 +3,7 @@
 namespace App\Mail\Messages;
 
 use App\Extensions\Settings\SettingsStorage;
-use Kdyby\Translation\ITranslator;
+use Kdyby\Translation\Translator;
 use Latte\Engine;
 use Nette\Http\Request;
 use Nette\Mail\IMailer;
@@ -21,7 +21,7 @@ abstract class BaseMessage extends Message
 	/** @var Request @inject */
 	public $httpRequest;
 
-	/** @var ITranslator @inject */
+	/** @var Translator @inject */
 	public $translator;
 
 	/** @var array */

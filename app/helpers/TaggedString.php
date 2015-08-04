@@ -2,7 +2,7 @@
 
 namespace App;
 
-use Kdyby\Translation\ITranslator;
+use Kdyby\Translation\Translator;
 
 /**
  * String with tags to replace
@@ -19,7 +19,7 @@ class TaggedString
 	/** @var int */
 	private $form;
 
-	/** @var ITranslator */
+	/** @var Translator */
 	private $translator;
 
 	public function __construct($taggedString, $replacement = NULL, $_ = null)
@@ -52,7 +52,7 @@ class TaggedString
 		return $this;
 	}
 	
-	public function setTranslator(ITranslator $translator)
+	public function setTranslator(Translator $translator)
 	{
 		$this->translator = $translator;
 		return $this;

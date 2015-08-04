@@ -50,7 +50,7 @@ class SignUp extends BaseControl
 				->setRequired('Please enter your e-mail.')
 				->setAttribute('placeholder', 'E-mail')
 				->addRule(Form::EMAIL, 'E-mail has not valid format.')
-				->addServerRule([$this, 'validateMail'], $this->translator->translate('%mail% is already registered.'))
+				->addServerRule([$this, 'validateMail'], $this->translator->translate('%value% is already registered.'))
 				->setOption('description', 'for example: example@domain.com');
 
 		$helpText = $this->translator->translate('At least %count% characters long.', NULL, ['count' => $this->settings->passwords->minLength]);
