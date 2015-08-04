@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model;
 use Nette\Http\FileUpload;
+use Nette\Utils\Image as ImageUtils;
 use Nette\Utils\Strings;
 
 /**
@@ -60,24 +61,24 @@ class Category extends BaseTranslatable
 		return $this;
 	}
 
-	public function setImage(FileUpload $file)
+	public function setImage($file)
 	{
 		if (!$this->image instanceof Image) {
 			$this->image = new Image($file);
-		} else {
-			$this->image->setFile($file);
+		} else if ($file instanceof FileUpload || $file instanceof ImageUtils) {
+			$this->image->setSource($file);
 		}
 		$this->image->requestedFilename = 'category_image_' . Strings::webalize(microtime());
 		$this->image->setFolder(Image::FOLDER_CATEGORIES);
 		return $this;
 	}
 
-	public function setSlider(FileUpload $file)
+	public function setSlider($file)
 	{
 		if (!$this->slider instanceof Image) {
 			$this->slider = new Image($file);
-		} else {
-			$this->slider->setFile($file);
+		} else if ($file instanceof FileUpload || $file instanceof ImageUtils) {
+			$this->slider->setSource($file);
 		}
 		$this->slider->requestedFilename = 'category_slider_' . Strings::webalize(microtime());
 		$this->slider->setFolder(Image::FOLDER_CATEGORIES);

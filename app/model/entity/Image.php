@@ -9,6 +9,8 @@ use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
 use Nette\Http\FileUpload;
 use Nette\Utils\DateTime;
+use Nette\Utils\Image as ImageUtils;
+use Nette\Utils\Random;
 
 /**
  * @ORM\Entity
@@ -36,22 +38,21 @@ class Image extends BaseEntity
 	/** @ORM\Column(type="datetime") */
 	protected $lastChange;
 
-	/** FileUpload */
-	public $file;
+	/** @var FileUpload */
+	private $file = NULL;
 
-	/** string */
-	public $requestedFilename;
+	/** @var ImageUtils */
+	private $image = NULL;
 
-	/** string */
+	/** @var string */
+	protected $requestedFilename;
+
+	/** @var string */
 	private $folderToSave = self::FOLDER_DEFAULT;
 
-	public function __construct($file)
+	public function __construct($source)
 	{
-		if ($file instanceof FileUpload) {
-			$this->setFile($file);
-		} else if (is_string($file)) {
-			$this->filename = $file;
-		}
+		$this->setSource($source);
 		parent::__construct();
 	}
 
@@ -59,15 +60,54 @@ class Image extends BaseEntity
 	{
 		return (string) $this->filename ? $this->filename : Image::DEFAULT_IMAGE;
 	}
+	
+	public function setSource($source)
+	{
+		if ($source instanceof FileUpload) {
+			$this->setFile($source);
+		} else if ($source instanceof ImageUtils) {
+			$this->setImage($source);
+		} else if (is_string($source)) {
+			$this->filename = $source;
+		}
+		return $this;
+	}
 
 	public function setFile(FileUpload $file, $requestedFilename = NULL)
 	{
 		$this->file = $file;
+		$this->image = NULL;
 		$this->requestedFilename = $requestedFilename;
-		$this->lastChange = new DateTime();
+		$this->actualizeLastChange();
+		return $this;
+	}
+
+	public function setImage(ImageUtils $image, $requestedFilename = NULL)
+	{
+		$this->image = $image;
+		$this->file = NULL;
+		$this->requestedFilename = $requestedFilename;
+		$this->actualizeLastChange();
 		return $this;
 	}
 	
+	public function getSource()
+	{
+		if ($this->file) {
+			return $this->file;
+		} else if ($this->image) {
+			return $this->image;
+		} else {
+			return NULL;
+		}
+	}
+
+	private function actualizeLastChange()
+	{
+		$this->lastChange = new DateTime();
+		return $this;
+	}
+
 	public function setFolder($folder = self::FOLDER_DEFAULT)
 	{
 		switch ($folder) {
@@ -84,7 +124,18 @@ class Image extends BaseEntity
 		}
 		return $this;
 	}
-	
+
+	public function getRequestedFilename()
+	{
+		if ($this->requestedFilename) {
+			return $this->requestedFilename;
+		} else if ($this->file instanceof FileUpload && $this->file->name) {
+			return FotoHelpers::getFilenameWithoutExt($this->file->name);
+		} else if ($this->file->name) {
+			return Random::generate();
+		}
+	}
+
 	public function getFolder()
 	{
 		return $this->folderToSave;
@@ -92,9 +143,14 @@ class Image extends BaseEntity
 
 	public function isChanged()
 	{
-		return (bool) $this->file->isImage();
+		if ($this->file instanceof FileUpload) {
+			return (bool) $this->file->isImage();
+		} else if ($this->image instanceof ImageUtils) {
+			return TRUE;
+		}
+		return FALSE;
 	}
-	
+
 	public static function returnSizedFilename($image, $sizeX = NULL, $sizeY = NULL)
 	{
 		$size = NULL;
