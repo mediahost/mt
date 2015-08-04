@@ -20,11 +20,11 @@ class CategoriesPresenter extends BasePresenter
 	 * @resource('categories')
 	 * @privilege('default')
 	 */
-	public function actionDefault($id)
+	public function actionDefault($categoryId)
 	{
-		if ($id) {
+		if ($categoryId) {
 			$categoryRepo = $this->em->getRepository(Category::getClassName());
-			$this->category = $categoryRepo->find($id);
+			$this->category = $categoryRepo->find($categoryId);
 			if (!$this->category) {
 				$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Category')]);
 				$this->flashMessage($message, 'warning');
