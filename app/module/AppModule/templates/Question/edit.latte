@@ -1,0 +1,31 @@
+{block pageTitle}
+	{_'Buyout questions'}
+{/block}
+
+{block breadcrumbItems}
+<li><a n:href="Pages:">{_'Buyout questions'}</a></li>
+<li><a n:href="this">{ifset $isEdit}{_'Edit'}{else}{_'Add'}{/ifset}</a></li>
+{/block}
+
+{block content}
+<div class="row">
+	<div class="col-md-8">
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption font-green-sharp">
+					<i class="fa fa-edit font-green-sharp"></i>
+					<span class="caption-subject bold uppercase">
+						{ifset $isEdit}{_'Edit buyout question'}{else}{_'Add buyout question'}{/ifset}
+					</span>
+				</div>
+				<div class="actions">
+					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				{control form}
+			</div>
+		</div>
+	</div>
+</div>
