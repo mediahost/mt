@@ -42,8 +42,8 @@ class StocksGrid extends BaseControl
 		$grid->setDefaultSort([
 			'id' => 'DESC',
 		]);
-		
-		
+
+
 		$signRepo = $this->em->getRepository(Sign::getClassName());
 		$signs = $signRepo->findAll();
 
@@ -58,6 +58,11 @@ class StocksGrid extends BaseControl
 				->setSortable()
 				->setFilterNumber();
 		$grid->getColumn('pohodaCode')->headerPrototype->width = '5%';
+
+		/*		 * ************************************************ */
+		$grid->addColumnImage('image', 'Image')
+				->setColumn('product.image')
+				->setSize(50, 32);
 
 		/*		 * ************************************************ */
 		$grid->addColumnText('title', 'Product title')
