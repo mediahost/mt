@@ -54,6 +54,9 @@ class StockImage extends StockBase
 	{
 		$this->load($values);
 		$this->save();
+		if ($this->presenter->isAjax()) {
+			$this->redrawControl();
+		}
 		$this->onAfterSave($this->stock);
 	}
 

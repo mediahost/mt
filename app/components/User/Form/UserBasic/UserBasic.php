@@ -10,7 +10,6 @@ use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
-use App\TaggedString;
 use Kdyby\Doctrine\DuplicateEntryException;
 use Nette\Forms\IControl;
 use Nette\Utils\ArrayHash;
@@ -59,18 +58,17 @@ class UserBasic extends BaseControl
 				->addRule(Form::EMAIL, 'Fill right format')
 				->addRule(Form::FILLED, 'Mail must be filled');
 		if ($this->user->isNew()) {
-			$mail->addServerRule([$this, 'validateMail'], $this->translator->translate('%mail% is already registered.'));
+			$mail->addServerRule([$this, 'validateMail'], $this->translator->translate('%value% is already registered.'));
 		} else {
 			$mail->setDisabled();
 		}
 
 		$password = $form->addText('password', 'Password');
 		if ($this->user->isNew()) {
-			$helpText = new TaggedString('At least %count% characters long.', $this->settings->passwords->minLength);
-			$helpText->setTranslator($this->translator);
+			$helpText = $this->translator->translate('At least %count% characters long.', $this->settings->passwords->minLength);
 			$password->addRule(Form::FILLED, 'Password must be filled')
 					->addRule(Form::MIN_LENGTH, 'Password must be at least %count% characters long.', $this->settings->passwords->minLength)
-					->setOption('description', (string) $helpText);
+					->setOption('description', $helpText);
 		}
 
 		$role = $form->addMultiSelectBoxes('roles', 'Roles', $this->getRoles())
@@ -100,7 +98,7 @@ class UserBasic extends BaseControl
 			$this->save();
 			$this->onAfterSave($this->user);
 		} catch (DuplicateEntryException $exc) {
-			$message = $this->translator->translate('%mail% is already registered.', NULL, ['mail' => $values->mail]);
+			$message = $this->translator->translate('%value% is already registered.', NULL, ['value' => $values->mail]);
 			$form['mail']->addError($message);
 		}
 	}

@@ -808,8 +808,8 @@ msgstr "Your password has been successfully changed!"
 msgid "We have sent you a verification e-mail. Please check your inbox!"
 msgstr "We have sent you a verification e-mail. Please check your inbox!"
 
-msgid "%mail% is already registered."
-msgstr "%mail% is already registered."
+msgid "%value% is already registered."
+msgstr "%value% is already registered."
 
 msgid "At least %count% characters long."
 msgstr "At least %count% characters long."
