@@ -52,7 +52,7 @@ class ServerValidatedTextInput extends TextInput implements ISignalReceiver
 		$payload = ['valid' => TRUE];
 		foreach ($this->serverValidators as $validator) {
 			if (!Callback::invoke($validator[0], $this, $validator[2])) {
-				$payload = ['valid' => FALSE, 'msg' => sprintf($validator[1], $value)];
+				$payload = ['valid' => FALSE, 'msg' => $this->translator->translate($validator[1], ['value' => $value])];
 				break;
 			}
 		}

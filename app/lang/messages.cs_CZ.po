@@ -832,8 +832,8 @@ msgid "We have sent you a verification e-mail. Please check your inbox!"
 msgstr ""
 "Poslali jsme vám ověřovací email. Prosím, zkontrolujte si svou schránku!"
 
-msgid "%mail% is already registered."
-msgstr "%mail% je již registrován."
+msgid "%value% is already registered."
+msgstr "%value% je již registrován."
 
 msgid "At least %count% characters long."
 msgstr "Alespoň %count% znaků dlouhé."

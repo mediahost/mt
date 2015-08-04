@@ -13,7 +13,7 @@ use App\Model\Storage\SignUpStorage;
 use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Events\Subscriber;
-use Kdyby\Translation\ITranslator;
+use Kdyby\Translation\Translator;
 use Nette\Application\Application;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Presenter;
@@ -53,7 +53,7 @@ class SignListener extends Object implements Subscriber
 	/** @var SettingsStorage @inject */
 	public $settingsStorage;
 
-	/** @var ITranslator @inject */
+	/** @var Translator @inject */
 	public $translator;
 
 	/** @var Exchange @inject */
@@ -123,7 +123,7 @@ class SignListener extends Object implements Subscriber
 		if (!$existedUser) {
 			$this->verify($control, $user);
 		} else {
-			$message = $this->translator->translate('%mail% is already registered.', NULL, ['mail' => $user->mail]);
+			$message = $this->translator->translate('%value% is already registered.', NULL, ['value' => $user->mail]);
 			$control->presenter->flashMessage($message);
 			$control->presenter->redirect(self::REDIRECT_SIGNIN_PAGE);
 		}

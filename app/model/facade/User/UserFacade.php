@@ -17,7 +17,7 @@ use App\Model\Repository\UserRepository;
 use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\EntityDao;
 use Kdyby\Doctrine\EntityManager;
-use Kdyby\Translation\ITranslator;
+use Kdyby\Translation\Translator;
 use Nette\Object;
 
 class UserFacade extends Object
@@ -39,7 +39,7 @@ class UserFacade extends Object
 	/** @var Exchange @inject */
 	public $exchange;
 	
-	/** @var ITranslator @inject */
+	/** @var Translator @inject */
 	public $translator;
 
 	/** @var UserRepository */
