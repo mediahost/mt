@@ -27,12 +27,6 @@ class EntityControl extends BaseControl
 		$form->addText('text', 'Text')
 				->setRequired('Text is required');
 
-		$form->addText('choiceA', 'Choice A')
-				->setRequired('Choice A is required');
-
-		$form->addText('choiceB', 'Choice B')
-				->setRequired('Choice B is required');
-
 		$form->addSubmit('save', 'Save');
 
 		$form->onSuccess[] = $this->formSucceeded;
@@ -54,8 +48,8 @@ class EntityControl extends BaseControl
 
 		$this->entity->translateAdd($locale)
 				->setText($values->text)
-				->setChoiceA($values->choiceA)
-				->setChoiceB($values->choiceB);
+				->setChoiceA($this->translator->translate('Yes'))
+				->setChoiceB($this->translator->translate('No'));
 
 		$this->entity->mergeNewTranslations();
 		$this->em->persist($this->entity)
