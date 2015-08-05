@@ -27,8 +27,6 @@ class GridControl extends BaseControl
 				->setParameter('defaultLang', $this->translator->getDefaultLocale());
 		$grid->model = new Doctrine($qb, [
 			'text' => 't.text',
-			'choiceA' => 't.choiceA',
-			'choiceB' => 't.choiceB',
 		]);
 
 		$grid->setDefaultSort([
@@ -48,16 +46,6 @@ class GridControl extends BaseControl
 				->setSortable()
 				->setFilterText()
 				->setSuggestion();
-
-		$grid->addColumnText('choiceA', 'Choice A')
-				->setCustomRender(function ($row) {
-					return $row->translate($this->translator->getLocale())->choiceA;
-				});
-
-		$grid->addColumnText('choiceB', 'Choice B')
-				->setCustomRender(function ($row) {
-					return $row->translate($this->translator->getLocale())->choiceB;
-				});
 
 		$grid->addActionHref('edit', 'Edit')
 				->setIcon('fa fa-edit');

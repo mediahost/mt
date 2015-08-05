@@ -11,6 +11,12 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "X-Generator: Poedit 1.8.2\n"
 
+msgid "Yes"
+msgstr "Áno"
+
+msgid "No"
+msgstr "Nie"
+
 msgid "Czech"
 msgstr "Čeština"
 
