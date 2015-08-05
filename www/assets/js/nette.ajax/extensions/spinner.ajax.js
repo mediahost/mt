@@ -30,6 +30,10 @@
 
 	$.nette.ext('loader', {
 		start: function (jqXHR, settings) {
+			if (!settings.nette) {
+				return;
+			}
+
 			var targetAttr = 'data-target-loading';
 			var parentPortlet = null;
 			if (settings.nette.form && settings.nette.form.length) {
