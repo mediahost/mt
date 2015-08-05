@@ -23,7 +23,7 @@ class SettingsExtension extends CompilerExtension
 			],
 			'signs' => [ // fixed IDs for signs (příznaky)
 				'enabled' => FALSE,
-				'values;' => [
+				'values' => [
 					'new' => 1,
 					'sale' => 2,
 					'top' => 3,
@@ -37,6 +37,8 @@ class SettingsExtension extends CompilerExtension
 				'enabled' => FALSE,
 				'ico' => '',
 				'language' => '',
+				'defaultStorage' => '',
+				'typePrice' => '',
 				'allowedReadStorageCart' => FALSE,
 				'allowedReadOrders' => FALSE,
 				'allowedCreateStore' => FALSE,
@@ -45,7 +47,7 @@ class SettingsExtension extends CompilerExtension
 				'newCodeLenght' => 8,
 				'newCodeCharlist' => 'a-Z0-9',
 				'vatRates' => [
-					'high' => 21,
+					'high' => 20,
 					'low' => 15,
 					'none' => 0,
 				],

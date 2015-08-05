@@ -5,6 +5,9 @@ namespace App\ApiModule\Presenters;
 use App\Extensions\Settings\SettingsStorage;
 use Drahak\Restful\Application\UI\ResourcePresenter;
 use Drahak\Restful\IResource;
+use h4kuna\Exchange\Exchange;
+use Kdyby\Doctrine\EntityManager;
+use Kdyby\Translation\Translator;
 use Nette\Application\Responses\TextResponse;
 
 abstract class BasePresenter extends ResourcePresenter
@@ -14,6 +17,15 @@ abstract class BasePresenter extends ResourcePresenter
 		'json' => IResource::JSON,
 		'xml' => IResource::XML,
 	];
+
+	/** @var EntityManager @inject */
+	public $em;
+
+	/** @var Exchange @inject */
+	public $exchange;
+
+	/** @var Translator @inject */
+	public $translator;
 
 	/** @var SettingsStorage @inject */
 	public $settings;

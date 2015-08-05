@@ -14,56 +14,59 @@
     xmlns:ftr="http://www.stormware.cz/schema/version_2/filter.xsd"
     >
     {foreach $stocks as $stock}
-        
-    <!-- INSERT -->
-    <dat:dataPackItem id="00{$stock->id}"
-                      version="2.0">
-        <stk:stock version="2.0">
-            <stk:stockHeader>
-                <!--  Zásoba  -->
-                <stk:stockType>card</stk:stockType>
-                <stk:code>{$stock->code}</stk:code>
-                <stk:isSales>true</stk:isSales>
-                <stk:isInternet>true</stk:isInternet>
-                <stk:purchasingRateVAT></stk:purchasingRateVAT>
-                <stk:sellingRateVAT></stk:sellingRateVAT>
-                <stk:name><![CDATA[{$stock->name}]]></stk:name>
-                <stk:unit>{$stock->unit|truncate:10:''}</stk:unit>
-                <stk:storage>
-                    <typ:ids></typ:ids>
-                </stk:storage>
-                <!--  Ceny  -->
-                <stk:typePrice>
-                    <typ:ids></typ:ids>
-                </stk:typePrice>
-                <stk:sellingPrice>{$stock->price}</stk:sellingPrice>
-                <stk:purchasingPrice n:if="$stock->purchasePrice">{$stock->purchasePrice}</stk:purchasingPrice>
-            </stk:stockHeader>
-        </stk:stock>
-    </dat:dataPackItem>
-            
-    <!-- UPDATE -->
-    <dat:dataPackItem n:foreach="$storages as $storageKey => $storageName"
-					  id="{$storageKey}010{$stock->id}"
-                      version="2.0">
-        <stk:stock version="2.0">
-            <stk:actionType>
-                <stk:update>
-                    <ftr:filter>
-                        <ftr:code>{$stock->code}</ftr:code>
-						<ftr:store>
-							<typ:ids>{$storageName}</typ:ids>
-						</ftr:store>
-                    </ftr:filter>
-                </stk:update>
-            </stk:actionType>
-            <stk:stockHeader>
-                <stk:sellingPrice>{$stock->price}</stk:sellingPrice>
-                <stk:purchasingPrice n:if="$stock->purchasePrice">{$stock->purchasePrice}</stk:purchasingPrice>
-                <stk:name><![CDATA[{$stock->name}]]></stk:name>
-            </stk:stockHeader>
-        </stk:stock>
-    </dat:dataPackItem>
-        
+		{var pohodaItems => $pohodaRepo->findByCodeAliasById($stock->pohodaCode)}
+
+		<!-- INSERT -->
+		<dat:dataPackItem n:if="!count($pohodaItems)"
+						  id="00{$stock->id}"
+						  version="2.0">
+			<stk:stock version="2.0">
+				<stk:stockHeader>
+					<!--  Zásoba  -->
+					<stk:stockType>card</stk:stockType>
+					<stk:code>{$stock->pohodaCode}</stk:code>
+					<stk:isSales>true</stk:isSales>
+					<stk:isInternet>true</stk:isInternet>
+					<stk:purchasingRateVAT>{include #vat, item => $stock}</stk:purchasingRateVAT>
+					<stk:sellingRateVAT>{include #vat, item => $stock}</stk:sellingRateVAT>
+					<stk:name><![CDATA[{$stock->product->name}]]></stk:name>
+					<stk:storage>
+						<typ:ids>{$defaultStorage}</typ:ids>
+					</stk:storage>
+					<!--  Ceny  -->
+					<stk:typePrice>
+						<typ:ids>{$typePrice}</typ:ids>
+					</stk:typePrice>
+					<stk:sellingPrice>{$stock->price}</stk:sellingPrice>
+					<stk:purchasingPrice n:if="$stock->purchasePrice">{$stock->purchasePrice}</stk:purchasingPrice>
+				</stk:stockHeader>
+			</stk:stock>
+		</dat:dataPackItem>
+
+		<!-- UPDATE -->
+		<dat:dataPackItem n:foreach="$pohodaItems as $key => $pohodaItem"
+						  id="{$key}00{$stock->id}"
+						  version="2.0">
+			<stk:stock version="2.0">
+				<stk:actionType>
+					<stk:update>
+						<ftr:filter>
+							<ftr:code>{$stock->pohodaCode}</ftr:code>
+							<ftr:store>
+								<typ:ids>{$pohodaItem->storage}</typ:ids>
+							</ftr:store>
+						</ftr:filter>
+					</stk:update>
+				</stk:actionType>
+				<stk:stockHeader>
+					<stk:sellingPrice>{dump $stock->price}</stk:sellingPrice>
+					<stk:purchasingPrice n:if="$stock->purchasePrice">{$stock->purchasePrice}</stk:purchasingPrice>
+					<stk:name><![CDATA[{$stock->product->name}]]></stk:name>
+				</stk:stockHeader>
+			</stk:stock>
+		</dat:dataPackItem>
+
     {/foreach}	
 </dat:dataPack>
+
+{define #vat}{var vat => (int) $item->vat->value}{if $vat === $vatRates->high}high{elseif $vat === $vatRates->low}low{else}none{/if}{/define}

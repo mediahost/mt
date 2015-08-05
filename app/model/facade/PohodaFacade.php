@@ -25,16 +25,16 @@ use XMLReader;
 class PohodaFacade extends Object
 {
 
-	const STORE = 'store';
-	const SHORT_STOCK = 'short-stock';
-	const ANY_IMPORT = 'any-import';
-	const ORDERS = 'orders';
+	const STORE = 'store'; // skladová karta
+	const SHORT_STOCK = 'short-stock'; // skladová zásoba
+	const ANY_IMPORT = 'any-import'; // jakýkoli import skladů
+	const ORDERS = 'orders'; // objednávky
 	const DIR_FOR_IMPORT = 'files/pohoda-xml-import';
 	const FOLDER_UPLOADED = 'uploaded';
 	const FOLDER_PARSED = 'parsed';
-	const LAST_UPDATE = 'last-update';
-	const LAST_DOWNLOAD = 'last-download';
-	const LAST_CONVERT = 'last-convert';
+	const LAST_DOWNLOAD = 'last-download'; // poslední stažení XML do PohodaConnectoru
+	const LAST_UPDATE = 'last-update'; // poslední nahrání XML do přechodné Pohoda DB
+	const LAST_CONVERT = 'last-convert'; // poslední převod produktů z Pohoda DB do vnitřní DB
 
 	/** @var array */
 	public $onDoneRecieveXml = [];
