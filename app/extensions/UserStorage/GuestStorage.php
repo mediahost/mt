@@ -15,20 +15,15 @@ use Nette\Security\IUserStorage;
 use SplStack;
 
 /**
- * @author Martin Šifra <me@martinsifra.cz>
  * @property SplStack $visitedProducts
  */
 class GuestStorage extends Object implements IUserStorage
 {
 
-	/**
-	 * @var SessionSection
-	 */
+	/** @var SessionSection */
 	private $section;
 
-	/**
-	 * @var RoleFacade
-	 */
+	/** @var RoleFacade */
 	private $roles;
 
 	public function __construct(Session $session, RoleFacade $roles)
