@@ -2,6 +2,8 @@
 
 namespace App\FrontModule\Presenters;
 
+use App\Components\Basket\Form\AddToCart;
+use App\Components\Basket\Form\IAddToCartFactory;
 use App\Extensions\Products\ProductList;
 use App\Model\Entity\Stock;
 use Nette\Application\BadRequestException;
@@ -10,6 +12,12 @@ use Nette\Utils\Strings;
 
 class ProductPresenter extends BasePresenter
 {
+
+	/** @var IAddToCartFactory @inject */
+	public $iAddToCartFactory;
+
+	/** @var Stock */
+	public $stock;
 
 	public function actionDefault($url)
 	{
@@ -27,12 +35,14 @@ class ProductPresenter extends BasePresenter
 			$this->redirect('Product:', ['url' => $product->url]);
 		}
 		
+		$this->stock = $product->stock;
+		
 		$this->activeCategory = $product->mainCategory;
 		$this->template->product = $product;
-		$this->template->stock = $product->stock;
+		$this->template->stock = $this->stock;
 		
 		// Last visited
-		$this->user->storage->addVisited($product->stock);
+		$this->user->storage->addVisited($this->stock);
 	}
 
 	public function actionViewById($id)
@@ -89,5 +99,19 @@ class ProductPresenter extends BasePresenter
 		$response = new JsonResponse($payload, 'application/json; charset=utf-8');
 		$this->sendResponse($response);
 	}
+	// <editor-fold desc="forms">
+
+	/** @return AddToCart */
+	public function createComponentAddToCart()
+	{
+		$control = $this->iAddToCartFactory->create();
+		$control->setStock($this->stock);
+		$control->setAjax(TRUE);
+		$control->onAfterAdd = function ($quantity) {
+		};
+		return $control;
+	}
+
+	// </editor-fold>
 
 }

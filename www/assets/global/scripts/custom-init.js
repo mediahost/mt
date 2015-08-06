@@ -36,6 +36,7 @@ var GlobalCustomInit = function () {
 		onReloadProductList: function () {
 			Layout.initUniform();
 			Layout.initSliderRange();
+			ComponentsFormTools.init();
 		},
 		onChangeJSTree: function () {
 			this.initFormComponents();

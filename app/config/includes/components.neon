@@ -16,6 +16,9 @@ services:
 	- {create: App\Components\Auth\Required, implement: App\Components\Auth\IRequiredFactory, inject: yes}
 	- {create: App\Components\Auth\SetPassword, implement: App\Components\Auth\ISetPasswordFactory, inject: yes}
 
+	# Basket
+	- {implement: App\Components\Basket\Form\IAddToCartFactory, inject: yes}
+
 	# User
 	- {implement: App\Components\User\Form\IUserBasicFactory, inject: yes}
 	- {implement: App\Components\User\Grid\IUsersGridFactory, inject: yes}
