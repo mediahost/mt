@@ -385,6 +385,9 @@ var ComponentsFormTools = function () {
 						case "size":
 							size = $(this).attr(attr);
 							break;
+						case "disabled":
+							params[paramName] = ($(this).attr(attr) === 'true');
+							break;
 						default:
 							params[paramName] = $(this).attr(attr);
 							break;
