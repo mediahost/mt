@@ -59,7 +59,7 @@
 					</stk:update>
 				</stk:actionType>
 				<stk:stockHeader>
-					<stk:sellingPrice>{dump $stock->price}</stk:sellingPrice>
+					<stk:sellingPrice>{$stock->price}</stk:sellingPrice>
 					<stk:purchasingPrice n:if="$stock->purchasePrice">{$stock->purchasePrice}</stk:purchasingPrice>
 					<stk:name><![CDATA[{$stock->product->name}]]></stk:name>
 				</stk:stockHeader>
