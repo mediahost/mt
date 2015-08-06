@@ -82,8 +82,10 @@ class SignUp extends BaseControl
 	 */
 	public function formSucceeded(Form $form, ArrayHash $values)
 	{
-		$entity = new User;
+		$entity = new User();
 		$entity->setMail($values->mail)
+				->setLocale($this->translator->getLocale())
+				->setCurrency($this->exchange->getDefault()->getCode())
 				->setPassword($values->password);
 		$entity->requiredRole = $this->roleFacade->findByName($this->session->getRole(TRUE));
 

@@ -144,10 +144,10 @@ abstract class BasePresenter extends Presenter
 			if ($this->user->identity->locale !== $this->locale) { // Locale has changed
 				$overwrite = $this->getParameter('overwrite', 'no');
 
-				if ($overwrite == 'yes') {
+				if ($overwrite == 'yes' || $this->user->identity->locale === NULL) {
 					$this->user->storage->setLocale($this->locale);
 				}
-
+				
 				$this->redirect('this', ['locale' => $this->user->identity->locale]);
 			}
 		} else {
