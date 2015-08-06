@@ -13,35 +13,22 @@ use Nette\Object;
 use Nette\Security\IIdentity;
 use Nette\Security\IUserStorage;
 
-/**
- * @author Martin Šifra <me@martinsifra.cz>
- */
 class UserStorageStrategy extends Object implements IUserStorage
 {
 
-	/**
-	 * @var IUserStorage
-	 */
+	/** @var IUserStorage */
 	private $userStorage;
 
-	/**
-	 * @var GuestStorage
-	 */
+	/** @var GuestStorage */
 	private $guestStorage;
 
-	/**
-	 * @var VisitedProductRepository
-	 */
+	/** @var VisitedProductRepository */
 	private $visitedRepo;
 
-	/**
-	 * @var StockRepository
-	 */
+	/** @var StockRepository */
 	private $stockRepo;
 
-	/**
-	 * @var EntityManager
-	 */
+	/** @var EntityManager */
 	private $em;
 
 	public function __construct(EntityManager $em)
