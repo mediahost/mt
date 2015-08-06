@@ -119,6 +119,9 @@ class UserBasic extends BaseControl
 				$this->user->addRole($item);
 			}
 		}
+		$this->user
+				->setLocale($this->translator->getDefaultLocale())
+				->setCurrency($this->exchange->getDefault()->getCode());
 		return $this;
 	}
 

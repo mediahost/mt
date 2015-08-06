@@ -20,6 +20,8 @@ use Nette\Security\IIdentity;
  * @property string $locale
  * @property string $currency
  * @method User setMail(string $mail)
+ * @method User setLocale(string $locale)
+ * @method User setCurrency(string $code)
  */
 class User extends BaseEntity implements IIdentity, IUserSocials
 {
