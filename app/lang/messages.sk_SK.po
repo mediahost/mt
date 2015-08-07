@@ -1101,3 +1101,21 @@ msgstr "Nedostupné"
 
 msgid "Range:"
 msgstr "Rozsah:"
+
+msgid "Sort by"
+msgstr "Seřadit"
+
+msgid "Show"
+msgstr "Zobrazit"
+
+msgid "Price (Low > High)"
+msgstr "Od nejlevnějšího"
+
+msgid "Price (High > Low)"
+msgstr "Od nejdražšího"
+
+msgid "Name (A - Z)"
+msgstr "Názvu (A - Z)"
+
+msgid "Name (Z - A)"
+msgstr "Názvu (Z - A)"
