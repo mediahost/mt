@@ -31,17 +31,22 @@ class RateListener extends Object implements Subscriber
 
 	public function prePersist($params)
 	{
-		$this->clearRateCache();
+		$this->clearCache();
 	}
 
 	public function preUpdate($params)
 	{
-		$this->clearRateCache();
+		$this->clearCache();
+	}
+
+	public function postRemove($params)
+	{
+		$this->clearCache();
 	}
 
 	// </editor-fold>
 	
-	private function clearRateCache()
+	private function clearCache()
 	{
 		return $this->getRepository()->clearResultCache(RateRepository::ALL_RATES_CACHE_ID);
 	}
