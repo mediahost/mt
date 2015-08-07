@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b5bf57bc7599912feb897326371c6621",
+    "hash": "c2acd9c27357438f5111deaff0015e6c",
     "packages": [
         {
             "name": "dg/adminer-custom",
@@ -881,7 +881,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/janmarek/WebLoader/zipball/fc0384c4965cdd2245a078e5658461bbc90f05f4",
+                "url": "https://api.github.com/repos/janmarek/WebLoader/zipball/4e7aa94264bab489d09829058fc1a75bcb760b09",
                 "reference": "fc0384c4965cdd2245a078e5658461bbc90f05f4",
                 "shasum": ""
             },
@@ -4325,6 +4325,7 @@
         "h4kuna/exchange": 20,
         "kdyby/translation": 20,
         "drahak/restful": 20,
+        "kdyby/doctrine-cache": 20,
         "nette/tester": 20,
         "kdyby/tester-extras": 20
     },

@@ -8,6 +8,8 @@ use Doctrine\ORM\NoResultException;
 class CategoryRepository extends BaseRepository
 {
 
+	const ALL_CATEGORIES_CACHE_ID = 'all-categories';
+
 	/**
 	 * @param string|array $url
 	 * @param string $lang
@@ -68,6 +70,16 @@ class CategoryRepository extends BaseRepository
 		} catch (NoResultException $e) {
 			return NULL;
 		}
+	}
+
+	public function findAll()
+	{
+		$qb = $this->createQueryBuilder('c')
+				->join('c.translations', 't');
+
+		return $qb->getQuery()
+						->useResultCache(TRUE, self::CACHE_LIFETIME, self::ALL_CATEGORIES_CACHE_ID)
+						->getResult();
 	}
 
 	public function delete($entity, $deleteRecursive = TRUE)

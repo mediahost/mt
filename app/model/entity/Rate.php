@@ -6,7 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\BaseEntity;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Model\Repository\RateRepository")
+ * @ORM\EntityListeners({"App\Listeners\Model\Entity\RateListener"})
  *
  * @property string $code
  * @property float $value

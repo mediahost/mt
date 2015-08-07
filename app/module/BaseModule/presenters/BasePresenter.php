@@ -112,7 +112,7 @@ abstract class BasePresenter extends Presenter
 	private function loadCurrencyRates()
 	{
 		$rateRepo = $this->em->getRepository(Rate::getClassName());
-		$rates = $rateRepo->findPairs('value');
+		$rates = $rateRepo->findValuePairs();
 
 		$defaultCode = $this->exchange->getDefault()->getCode();
 		foreach ($this->exchange as $code => $currency) {
