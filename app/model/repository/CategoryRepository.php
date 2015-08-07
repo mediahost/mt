@@ -3,6 +3,7 @@
 namespace App\Model\Repository;
 
 use App\Model\Entity\Category;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\NoResultException;
 
 class CategoryRepository extends BaseRepository
@@ -75,6 +76,8 @@ class CategoryRepository extends BaseRepository
 	public function findAll()
 	{
 		$qb = $this->createQueryBuilder('c')
+				->select('c, ch, t')
+				->leftJoin('c.children', 'ch')
 				->join('c.translations', 't');
 
 		return $qb->getQuery()
