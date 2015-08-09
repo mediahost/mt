@@ -67,7 +67,7 @@
 		"h4kuna/exchange": "dev-master",
 		"kdyby/translation": "dev-master",
 		"drahak/restful": "@dev",
-		"kdyby/forms-replicator": "dev-master"
+		"kdyby/forms-replicator": "dev-master",
 		"kdyby/doctrine-cache": "@dev"
 	},
 	"require-dev": {
