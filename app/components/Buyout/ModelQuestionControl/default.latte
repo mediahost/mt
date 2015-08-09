@@ -1,0 +1,11 @@
+{form form}
+	{label buyoutPrice /}{input buyoutPrice}
+	{foreach $form['questions']->containers as $question}
+		<div class="row">
+			<div class="col-lg-6">{$question['text']->label} {$question['text']->control}</div>
+			<div class="col-lg-3">{$question['yes']->label} {$question['yes']->control}</div>
+			<div class="col-lg-3">{$question['no']->label} {$question['no']->control}</div>
+		</div>
+	{/foreach}
+	{input save}
+{/form}

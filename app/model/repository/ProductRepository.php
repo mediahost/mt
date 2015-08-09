@@ -69,14 +69,13 @@ class ProductRepository extends BaseRepository
 			}
 			$qb->andWhere($orExpr);
 		}
-		
+
 		if ($limit) {
 			$paginator = new Paginator($qb);
 			$totalCount = $paginator->count();
 		}
 
-		return $qb
-						->getQuery()
+		return $qb->getQuery()
 						->setMaxResults($limit)
 						->setFirstResult($offset)
 						->getResult();

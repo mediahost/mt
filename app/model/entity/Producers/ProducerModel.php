@@ -17,7 +17,7 @@ use Nette\Utils\Strings;
  * @property string $name
  * @property string $html
  * @property ProducerLine $line
- * @property ModelQuestion[] $questions
+ * @property ArrayCollection $questions
  */
 class ProducerModel extends BaseTranslatable implements IProducer
 {
@@ -25,7 +25,8 @@ class ProducerModel extends BaseTranslatable implements IProducer
 	const ID = 'm';
 
 	use Model\Translatable\Translatable;
-	use Model\Sluggable\Sluggable;
+
+use Model\Sluggable\Sluggable;
 
 	/** @ORM\Column(type="string", length=256) */
 	protected $name;
@@ -38,14 +39,14 @@ class ProducerModel extends BaseTranslatable implements IProducer
 
 	/** @ORM\OneToMany(targetEntity="ParameterPrice", mappedBy="model", cascade={"persist", "remove"}) */
 	protected $parameterPrices;
-	
+
 	/** @ORM\ManyToMany(targetEntity="Product", mappedBy="accessoriesFor") */
 	protected $products;
-	
+
 	/** @ORM\Column(type="float") */
 	protected $buyoutPrice;
-	
-    /** @ORM\OneToMany(targetEntity="App\Model\Entity\Buyout\ModelQuestion", mappedBy="model") */
+
+	/** @ORM\OneToMany(targetEntity="App\Model\Entity\Buyout\ModelQuestion", mappedBy="model") */
 	protected $questions;
 
 	public function __construct($name, $currentLocale = NULL)
@@ -91,6 +92,16 @@ class ProducerModel extends BaseTranslatable implements IProducer
 	public function getFullName($glue = ' / ')
 	{
 		return Helpers::concatStrings($glue, (string) $this->line->producer, (string) $this->line, (string) $this);
+	}
+
+	/**
+	 * @param Question2 $question
+	 * @return ProducerModel
+	 */
+	public function addQuestion(ModelQuestion $question)
+	{
+		$this->questions->add($question);
+		return $this;
 	}
 
 	public function __toString()
