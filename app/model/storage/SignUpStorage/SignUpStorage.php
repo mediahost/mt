@@ -39,7 +39,7 @@ class SignUpStorage extends Object
 	{
 		$defaults = [
 				'verification' => FALSE,
-				'user'         => new User,
+				'user'         => new User(),
 				'role'         => NULL,
 		];
 		foreach ($defaults as $property => $value) {

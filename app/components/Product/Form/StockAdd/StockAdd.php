@@ -82,7 +82,8 @@ class StockAdd extends StockBase
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XL;
 
 		$form->addGroup('Description');
-		$form->addTextArea('perex', 'Perex');
+		$form->addWysiHtml('perex', 'Perex', 4)
+						->getControlPrototype()->class[] = 'page-html-content';
 		$form->addWysiHtml('description', 'Description', 10)
 						->getControlPrototype()->class[] = 'page-html-content';
 

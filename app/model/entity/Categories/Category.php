@@ -11,6 +11,7 @@ use Nette\Utils\Strings;
 
 /**
  * @ORM\Entity(repositoryClass="App\Model\Repository\CategoryRepository")
+ * @ORM\EntityListeners({"App\Listeners\Model\Entity\CategoryListener"})
  *
  * @property Category $parent
  * @property array $children

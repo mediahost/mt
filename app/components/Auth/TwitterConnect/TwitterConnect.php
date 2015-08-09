@@ -85,6 +85,8 @@ class TwitterConnect extends BaseControl
 	{
 		$userData = $data['user'];
 		$user = new Entity\User();
+		$user->setLocale($this->translator->getLocale())
+				->setCurrency($this->exchange->getDefault()->getCode());
 		$user->requiredRole = $this->roleFacade->findByName($this->session->getRole(TRUE));
 
 		$twitter = new Entity\Twitter($userData->id_str);

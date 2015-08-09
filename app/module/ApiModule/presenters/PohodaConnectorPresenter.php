@@ -2,10 +2,16 @@
 
 namespace App\ApiModule\Presenters;
 
+use App\Extensions\Products\ProductList;
+use App\Model\Entity\PohodaItem;
+use App\Model\Entity\Stock;
 use App\Model\Facade\PohodaFacade;
+use App\Model\Repository\PohodaItemRepository;
+use App\Model\Repository\StockRepository;
 use Exception;
 use Nette\Http\FileUpload;
 use Nette\Http\IRequest;
+use Nette\Utils\ArrayHash;
 use Tracy\Debugger;
 
 class PohodaConnectorPresenter extends BasePresenter
@@ -26,8 +32,34 @@ class PohodaConnectorPresenter extends BasePresenter
 			$this->resource->state = 'error';
 			$this->resource->message = 'This module is not allowed';
 		} else {
-			$this->resource->ico = $this->settings->modules->pohoda->ico;
-			$this->resource->stocks = [];
+
+			/* @var $stockRepo StockRepository */
+			$stockRepo = $this->em->getRepository(Stock::getClassName());
+			/* @var $pohodaRepo PohodaItemRepository */
+			$pohodaRepo = $this->em->getRepository(PohodaItem::getClassName());
+
+			$lastConvert = $this->pohodaFacade->getLastSync(PohodaFacade::ANY_IMPORT, PohodaFacade::LAST_CONVERT);
+
+			$list = new ProductList();
+			$list->setTranslator($this->translator);
+			$list->setExchange($this->exchange, $this->exchange->getDefault());
+			$list->qb = $stockRepo->createQueryBuilder('s')
+					->innerJoin('s.product', 'p');
+			$list->filter = [
+				'updatedFrom' => $lastConvert,
+			];
+
+			$pohodaRepo->findAll(); // load all items in doctrine and find will be without SQL
+//			$pohodaRepo->findByCode([380, 2222, 1111, 1456]);
+			$this->template->stocks = $list->getData(FALSE);
+//			$this->template->stocks = $list->getData();
+			
+			$this->template->pohodaRepo = $pohodaRepo;
+			$this->template->ico = $this->settings->modules->pohoda->ico;
+			$this->template->defaultStorage = $this->settings->modules->pohoda->defaultStorage;
+			$this->template->typePrice = $this->settings->modules->pohoda->typePrice;
+			$this->template->vatRates = $this->settings->modules->pohoda->vatRates;
+
 			$this->pohodaFacade->setLastSync(PohodaFacade::SHORT_STOCK, PohodaFacade::LAST_DOWNLOAD);
 			$this->setView('storageCart');
 		}

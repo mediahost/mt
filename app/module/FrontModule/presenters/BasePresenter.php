@@ -58,12 +58,12 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->stockRepo = $this->em->getRepository(Stock::getClassName());
 		$this->productRepo = $this->em->getRepository(Product::getClassName());
 		$this->categoryRepo = $this->em->getRepository(Category::getClassName());
-		$this->categories = $this->categoryRepo->findBy(['parent' => NULL]);
+		$this->categories = $this->categoryRepo->findAll();
 	}
 
 	protected function beforeRender()
 	{
-		parent::beforeRender();
+		parent::beforeRender();		
 		$this->template->categories = $this->categories;
 		$this->template->activeCategory = $this->activeCategory;
 		$this->template->showSlider = $this->showSlider;

@@ -100,6 +100,8 @@ class FacebookConnect extends BaseControl
 	protected function createUser(ArrayHash $me)
 	{
 		$user = new Entity\User();
+		$user->setLocale($this->translator->getLocale())
+				->setCurrency($this->exchange->getDefault()->getCode());
 		$user->requiredRole = $this->roleFacade->findByName($this->session->getRole(TRUE));
 
 		if (isset($me->email)) {

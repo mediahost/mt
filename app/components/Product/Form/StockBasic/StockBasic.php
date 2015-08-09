@@ -24,9 +24,9 @@ class StockBasic extends StockBase
 
 		$form = new Form();
 		$form->setTranslator($this->translator)
-			->setRenderer(new MetronicFormRenderer());
+				->setRenderer(new MetronicFormRenderer());
 		$form->getElementPrototype()->class('ajax');
-		
+
 		$product = $this->stock->product;
 		$product->setCurrentLocale($this->translator->getLocale());
 
@@ -37,10 +37,9 @@ class StockBasic extends StockBase
 				->addRule(Form::FILLED, 'Product must be synchronized');
 		$form->addText('barcode', 'Barcode');
 		$form->addCheckSwitch('active', 'Active');
-		$form->addTextArea('perex', 'Perex')
-				->setAttribute('placeholder', $product->perex);
+		$form->addWysiHtml('perex', 'Perex', 4)
+						->getControlPrototype()->class[] = 'page-html-content';
 		$form->addWysiHtml('description', 'Description', 10)
-						->setAttribute('placeholder', $product->description)
 						->getControlPrototype()->class[] = 'page-html-content';
 
 		$form->addSubmit('save', 'Save');

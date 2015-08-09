@@ -3,6 +3,7 @@
 namespace App\Extensions\Grido;
 
 use App\Extensions\Grido\Columns\Boolean;
+use App\Extensions\Grido\Columns\Image;
 use Grido\Grid;
 
 /**
@@ -15,7 +16,7 @@ class BaseGrid extends Grid
 
 	/** @var string */
 	private $templateFile;
-	
+
 	/** @var string */
 	private $actionWidth;
 
@@ -33,7 +34,7 @@ class BaseGrid extends Grid
 
 		return count($date) == 3 ? ['birthday', '= ?', "{$date[2]}-{$date[1]}-{$date[0]}"] : NULL;
 	}
-	
+
 	public function addColumnNumber($name, $label, $decimals = 0, $decPoint = ',', $thousandsSep = '')
 	{
 		return parent::addColumnNumber($name, $label, $decimals, $decPoint, $thousandsSep);
@@ -55,6 +56,26 @@ class BaseGrid extends Grid
 		return $column;
 	}
 
+	/**
+	 * @param string $name
+	 * @param string $label
+	 * @return Boolean
+	 */
+	public function addColumnImage($name, $label, $sizeX = NULL, $sizeY = NULL)
+	{
+		$column = new Image($this, $name, $label);
+
+		$column->setDisableExport();
+		if ($sizeX && $sizeY) {
+			$column->setSize($sizeX, $sizeY);
+		}
+
+		$header = $column->headerPrototype;
+		$header->style['width'] = '2%';
+
+		return $column;
+	}
+
 	public function setTheme($theme = self::THEME_METRONIC)
 	{
 		switch ($theme) {
@@ -65,7 +86,7 @@ class BaseGrid extends Grid
 				break;
 		}
 	}
-	
+
 	public function setActionWidth($width)
 	{
 		$this->actionWidth = $width;

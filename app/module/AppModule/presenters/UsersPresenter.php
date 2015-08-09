@@ -147,7 +147,7 @@ class UsersPresenter extends BasePresenter
 			$this->user->login($user);
 			$message = $this->translator->translate('You are logged as \'%name\'.', NULL, ['name' => $user]);
 			$this->flashMessage($message, 'success');
-			$this->redirect('Dashboard:');
+			$this->redirect(':Front:Homepage:');
 		}
 		$this->redirect('default');
 	}

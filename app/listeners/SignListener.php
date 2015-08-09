@@ -11,6 +11,7 @@ use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
 use App\Model\Storage\SignUpStorage;
 use h4kuna\Exchange\Exchange;
+use h4kuna\Exchange\UnknownCurrencyException;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Events\Subscriber;
 use Kdyby\Translation\Translator;
@@ -202,7 +203,11 @@ class SignListener extends Object implements Subscriber
 			$presenter->user->setExpiration($this->settingsStorage->expiration->notRemember, TRUE);
 		}
 
-		$this->exchange->setWeb($user->currency);
+		try {
+			$this->exchange->setWeb($user->currency);
+		} catch (UnknownCurrencyException $ex) {
+			$this->exchange->setWeb($this->exchange->getDefault()->getCode());
+		}
 
 		$presenter->user->login($user);
 		$presenter->flashMessage($this->translator->translate('You are logged in.'), 'success');

@@ -73,6 +73,7 @@ class Stock extends BaseEntity
 
 	public function __construct()
 	{
+		$this->product = new Product();
 		$this->groupDiscounts = new ArrayCollection();
 		parent::__construct();
 	}
