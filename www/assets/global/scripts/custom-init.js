@@ -12,7 +12,7 @@ var GlobalCustomInit = function () {
 			if (typeof MultipleFileUpload != 'undefined') {
 				MultipleFileUpload.init();
 			}
-			
+
 			UITree.init();
 			HtmlEditors.init();
 			Maps.init();
