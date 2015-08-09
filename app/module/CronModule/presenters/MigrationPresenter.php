@@ -12,6 +12,7 @@ use App\Model\Entity\Vat;
 use App\Model\Facade\PohodaFacade;
 use App\Model\Repository\CategoryRepository;
 use Nette\Utils\ArrayHash;
+use Nette\Utils\Image;
 use Nette\Utils\Json;
 use Tracy\Debugger;
 
@@ -41,14 +42,19 @@ class MigrationPresenter extends BasePresenter
 	/** @var PohodaFacade @inject */
 	public $pohodaFacade;
 
-	public function actionUpdateProducts()
+	public function actionUpdateProducts($toInsert = 0, $toUpdate = 0)
 	{
-		list($inserted, $updated) = $this->actualizeProducts();
+		ini_set('max_execution_time', 200);
+		Debugger::timer();
+		$insertCount = $toInsert >= 0 ? ($toInsert <= 100 ? $toInsert : 100) : 0;
+		$updateCount = $toUpdate >= 0 ? ($toUpdate <= 100 ? $toUpdate : 100) : 0;
+		list($inserted, $updated) = $this->actualizeProducts($insertCount, $updateCount);
+		$time = Debugger::timer();
 		$this->status = parent::STATUS_OK;
-		$this->message = sprintf('%s producers was updated and %s was inserted.', $updated, $inserted);
+		$this->message = sprintf('%s producers was updated and %s was inserted. (%f2)', $updated, $inserted, $time);
 	}
 
-	private function actualizeProducts()
+	private function actualizeProducts($insertCountMax = 0, $updateCountMax = 0)
 	{
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
 		$producerRepo = $this->em->getRepository(Producer::getClassName());
@@ -81,16 +87,16 @@ class MigrationPresenter extends BasePresenter
 				/* @var $dbStock Stock */
 				$dbStock = $stockRepo->findOneByPohodaCode($pohodaCode);
 				if (!$dbStock) {
-//					$dbStock = new Stock();
-//					$dbStock->pohodaCode = $pohodaCode;
-//					$inserted++;
-					continue;
+					if ($inserted >= $insertCountMax) {
+						continue;
+					}
+					$dbStock = new Stock();
+					$dbStock->pohodaCode = $pohodaCode;
 				} else {
-					$updated++;
+					if ($updated >= $updateCountMax) {
+						continue;
+					}
 				}
-
-				Debugger::barDump($pohodaCode);
-				Debugger::barDump($product);
 
 				$productTranslation = $dbStock->product->translateAdd($this->locale);
 				$productTranslation->name = $product->name;
@@ -115,38 +121,40 @@ class MigrationPresenter extends BasePresenter
 				$dbStock->vat = $vat;
 				$dbStock->purchasePrice = $product->purchasePrice;
 				$dbStock->oldPrice = $product->oldPrice;
-				foreach ($product->priceLevelsVatNot as $levelId => $priceLevel) {
-					switch ($levelId) {
-						case 7:
-							$groupId = 1;
-							break;
-						case 8:
-							$groupId = 2;
-							break;
-					}
-					$fixed = array_key_exists(0, $priceLevel) ? $priceLevel[0] : NULL;
-					$percentage = array_key_exists(1, $priceLevel) ? $priceLevel[1] : NULL;
-					if ($percentage) {
-						$discount = new Discount(100 - $percentage, Discount::PERCENTAGE);
-					} elseif ($fixed) {
-						$discount = new Discount($fixed, Discount::FIXED_PRICE);
-					}
-					if (isset($discount) && isset($groupId)) {
-						$group = $groupRepo->find($groupId);
-						if ($group) {
-							$dbStock->addDiscount($discount, $group);
+				if ($dbStock->isNew()) {
+					foreach ($product->priceLevelsVatNot as $levelId => $priceLevel) {
+						switch ($levelId) {
+							case 7:
+								$groupId = 1;
+								break;
+							case 8:
+								$groupId = 2;
+								break;
+						}
+						$fixed = array_key_exists(0, $priceLevel) ? $priceLevel[0] : NULL;
+						$percentage = array_key_exists(1, $priceLevel) ? $priceLevel[1] : NULL;
+						if ($percentage) {
+							$discount = new Discount(100 - $percentage, Discount::PERCENTAGE);
+						} elseif ($fixed) {
+							$discount = new Discount($fixed, Discount::FIXED_PRICE);
+						}
+						if (isset($discount) && isset($groupId)) {
+							$group = $groupRepo->find($groupId);
+							if ($group) {
+								$dbStock->addDiscount($discount, $group);
+							}
 						}
 					}
+					$dbStock->setDefaltPrice($product->price, (bool) $product->vatIncluded);
 				}
-				$dbStock->setDefaltPrice($product->price, (bool) $product->vatIncluded);
 
 				$producers = $this->getProducersNames();
 				if ($product->producerId && array_key_exists($product->producerId, $producers)) {
 					$producerName = $producers[$product->producerId];
 					$dbStock->product->producer = $producerRepo->findOneByName($producerName);
 				}
+
 				$categories = $this->getCategoriesNames();
-				$dbStock->product->clearCategories();
 				if ($product->mainCategoryId && array_key_exists($product->mainCategoryId, $categories)) {
 					$categoryName = $categories[$product->mainCategoryId];
 					$mainCategory = $categoryRepo->findOneByName($categoryName, $this->locale);
@@ -158,24 +166,37 @@ class MigrationPresenter extends BasePresenter
 					Debugger::log('Missing mainCategory for CODE: ' . $pohodaCode . '; ID: ' . $product->id);
 					continue;
 				}
-				foreach ($product->otherCategoriesIds as $otherCategoryId) {
-					if (array_key_exists($otherCategoryId, $categories)) {
-						$categoryName = $categories[$otherCategoryId];
-						$category = $categoryRepo->findOneByName($producerName, $this->locale);
-						if ($category) {
-							$dbStock->product->addCategory($category);
+				if ($dbStock->isNew() && count($product->otherCategoriesIds)) {
+					$dbStock->product->clearCategories();
+					foreach ($product->otherCategoriesIds as $otherCategoryId) {
+						if (array_key_exists($otherCategoryId, $categories)) {
+							$categoryName = $categories[$otherCategoryId];
+							$category = $categoryRepo->findOneByName($producerName, $this->locale);
+							if ($category) {
+								$dbStock->product->addCategory($category);
+							}
 						}
 					}
 				}
 
-				if ($product->image) {
+				if ($product->image && !$dbStock->product->image) {
 					$file = $this->downloadImage($product->image);
+					$dbStock->product->image = $file;
 				}
-				foreach ($product->otherImages as $otherImage) {
-					$file = $this->downloadImage($otherImage);
+				if ($dbStock->isNew() && count($product->otherImages) && !count($dbStock->product->images)) {
+					foreach ($product->otherImages as $otherImage) {
+						$file = $this->downloadImage($otherImage);
+						$dbStock->product->otherImage = $file;
+					}
 				}
-
+				
+				if ($dbStock->isNew()) {
+					$inserted++;
+				} else {
+					$updated++;
+				}
 				$this->em->persist($dbStock);
+
 				if (($inserted + $updated) % 500 === 0) {
 					$this->em->flush();
 				}
@@ -184,12 +205,11 @@ class MigrationPresenter extends BasePresenter
 		$this->em->flush();
 		return [$inserted, $updated];
 	}
-	
+
 	private function downloadImage($url)
 	{
-//		Debugger::barDump($url);
-		$file = file_get_contents($url);
-		return;
+		$content = file_get_contents($url);
+		return Image::fromString($content);
 	}
 
 	public function actionUpdateProducers()

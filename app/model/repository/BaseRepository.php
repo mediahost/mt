@@ -2,11 +2,14 @@
 
 namespace App\Model\Repository;
 
+use Doctrine\Common\Cache\Cache;
 use Kdyby\Doctrine\EntityRepository;
 use LogicException;
 
 abstract class BaseRepository extends EntityRepository implements IRepository
 {
+
+	const CACHE_LIFETIME = 1209600; // 14 days
 
 	public function save($entity)
 	{
@@ -22,6 +25,27 @@ abstract class BaseRepository extends EntityRepository implements IRepository
 		return $entity;
 	}
 
+	/**
+	 * Gets the cache driver implementation that is used for query result caching.
+	 * @return Cache|null
+	 */
+	public function getResultCacheDriver()
+	{
+		return $this->_em->getConfiguration()->getResultCacheImpl();
+	}
+
+	public function clearResultCache($id = NULL)
+	{
+		$resultCacheDriver = $this->getResultCacheDriver();
+		if ($resultCacheDriver) {
+			if ($id) {
+				$resultCacheDriver->delete($id);
+			} else {
+				$resultCacheDriver->deleteAll();
+			}
+		}
+	}
+
 }
 
 interface IRepository
@@ -34,5 +58,5 @@ interface IRepository
 
 class RepositoryException extends LogicException
 {
-
+	
 }

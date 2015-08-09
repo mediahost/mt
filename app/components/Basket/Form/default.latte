@@ -1,0 +1,27 @@
+{snippet AddToCart}
+	{form form}	
+		{? $form->render('begin')}
+
+		<div class="alert alert-warning" n:if="$form->errors">
+			{foreach $form->errors as $error}
+				<span>{$error}</span><br n:if="!$iterator->last"/>
+			{/foreach}
+		</div>
+
+		<div class="form-body">
+			<div class="product-quantity">
+				{input quantity}
+			</div>
+			<div class="quantity-button">
+				{input add}
+			</div>
+			<div n:if="$alreadyInBasket" class="already-in-basket">
+				<i class="fa fa-shopping-cart"></i>
+				{$alreadyInBasket}x
+			</div>
+			<div class="clearfix"></div>
+		</div>
+
+		{? $form->render('end');}
+	{/form}
+{/snippet}

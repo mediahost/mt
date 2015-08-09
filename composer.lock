@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8c8387a3d322fc12de9e53a3eee63185",
+    "hash": "b54cd0ac9cea26f18a37cf935c7d4ab8",
     "packages": [
         {
             "name": "dg/adminer-custom",
@@ -4403,6 +4403,7 @@
         "kdyby/translation": 20,
         "drahak/restful": 20,
         "kdyby/forms-replicator": 20,
+        "kdyby/doctrine-cache": 20,
         "nette/tester": 20,
         "kdyby/tester-extras": 20
     },

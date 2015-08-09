@@ -3,13 +3,12 @@
 namespace App\Listeners\Model\Entity;
 
 use App\Extensions\Foto;
-use App\Extensions\FotoHelpers;
 use App\Helpers;
 use App\Model\Entity\Image;
-use Nette\Utils\Image as ImageUtils;
 use Doctrine\ORM\Events;
 use Kdyby\Events\Subscriber;
 use Nette\Object;
+use Nette\Utils\Image as ImageUtils;
 
 class ImageListener extends Object implements Subscriber
 {

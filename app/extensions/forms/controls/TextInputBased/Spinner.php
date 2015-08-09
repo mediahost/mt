@@ -7,15 +7,19 @@ use Nette\Utils\Html;
 class Spinner extends MetronicTextInputBase
 {
 
+	const TYPE_LEFT_RIGHT = 'left-right';
+	const TYPE_UP_DOWN = 'up-down';
+
 	private $attributes = array();
 	private $size = self::SIZE_FLUID;
+	private $type = self::TYPE_LEFT_RIGHT;
 	private $readonly = TRUE;
-	private $leftButtUp = FALSE;
-	private $leftButtIcon = 'minus';
-	private $leftButtColor = 'red';
-	private $rightButtUp = TRUE;
-	private $rightButtIcon = 'plus';
-	private $rightButtColor = 'green';
+	private $minusButtUp = FALSE;
+	private $minusButtIcon = 'minus';
+	private $minusButtColor = 'red';
+	private $plusButtUp = TRUE;
+	private $plusButtIcon = 'plus';
+	private $plusButtColor = 'green';
 
 	public function __construct($label = NULL)
 	{
@@ -32,6 +36,17 @@ class Spinner extends MetronicTextInputBase
 	public function setSize($size = self::SIZE_FLUID)
 	{
 		$this->size = $this->getStandardedSize($size);
+		return $this;
+	}
+
+	/**
+	 * Set type of button printing
+	 * @param string $type
+	 * @return self
+	 */
+	public function setType($type = self::TYPE_LEFT_RIGHT)
+	{
+		$this->type = $type;
 		return $this;
 	}
 
@@ -110,11 +125,11 @@ class Spinner extends MetronicTextInputBase
 	public function setInverse($inverse = TRUE)
 	{
 		if ($inverse) {
-			$this->leftButtUp = TRUE;
+			$this->minusButtUp = TRUE;
 		} else {
-			$this->leftButtUp = FALSE;
+			$this->minusButtUp = FALSE;
 		}
-		$this->rightButtUp = !$this->leftButtUp;
+		$this->plusButtUp = !$this->minusButtUp;
 		return $this;
 	}
 
@@ -124,13 +139,13 @@ class Spinner extends MetronicTextInputBase
 	 * @param type $faIcon
 	 * @return self
 	 */
-	public function setLeftButton($color = NULL, $faIcon = NULL)
+	public function setMinusButton($color = NULL, $faIcon = NULL)
 	{
 		if ($color) {
-			$this->leftButtColor = $color;
+			$this->minusButtColor = $color;
 		}
 		if ($faIcon) {
-			$this->leftButtIcon = $faIcon;
+			$this->minusButtIcon = $faIcon;
 		}
 		return $this;
 	}
@@ -141,13 +156,13 @@ class Spinner extends MetronicTextInputBase
 	 * @param type $faIcon
 	 * @return self
 	 */
-	public function setRightButton($color = NULL, $faIcon = NULL)
+	public function setPlusButton($color = NULL, $faIcon = NULL)
 	{
 		if ($color) {
-			$this->rightButtColor = $color;
+			$this->plusButtColor = $color;
 		}
 		if ($faIcon) {
-			$this->rightButtIcon = $faIcon;
+			$this->plusButtIcon = $faIcon;
 		}
 		return $this;
 	}
@@ -159,12 +174,27 @@ class Spinner extends MetronicTextInputBase
 	 */
 	public function getControl()
 	{
+		$vertical = Html::el('div')
+				->class('spinner-buttons input-group-btn btn-group-vertical', TRUE)
+				->class($this->readonly ? 'disabled' : '', TRUE)
+				->add($this->getUpButton(FALSE))
+				->add($this->getDownButton(FALSE));
 		$block = Html::el('div')
 				->class('input-group', TRUE)
-				->class($this->size, TRUE)
-				->add($this->getLeftButton())
-				->add($this->getInput())
-				->add($this->getRightButton());
+				->class($this->size, TRUE);
+		switch ($this->type) {
+			case self::TYPE_LEFT_RIGHT:
+				$block
+						->add($this->getDownButton())
+						->add($this->getInput())
+						->add($this->getUpButton());
+				break;
+			case self::TYPE_UP_DOWN:
+				$block
+						->add($this->getInput())
+						->add($vertical);
+				break;
+		}
 		return Html::el('div class="form-spinner"')
 						->add($block)
 						->addAttributes($this->attributes);
@@ -184,32 +214,32 @@ class Spinner extends MetronicTextInputBase
 		return $input;
 	}
 
-	private function getLeftButton()
+	private function getDownButton($withWrap = TRUE)
 	{
 		$icon = Html::el('i')->class('fa');
-		if ($this->leftButtIcon) {
-			$icon->class('fa-' . $this->leftButtIcon, TRUE);
+		if ($this->minusButtIcon) {
+			$icon->class('fa-' . $this->minusButtIcon, TRUE);
 		}
 		$button = Html::el('button type="button"')
-				->class('btn ' . $this->leftButtColor)
-				->class('spinner-' . ($this->leftButtUp ? 'up' : 'down'), TRUE)
+				->class('btn ' . $this->minusButtColor)
+				->class('spinner-' . ($this->minusButtUp ? 'up' : 'down'), TRUE)
 				->add($icon);
-		return Html::el('div class="spinner-buttons input-group-btn"')
-						->add($button);
+		return $withWrap ? Html::el('div class="spinner-buttons input-group-btn"')
+						->add($button) : $button;
 	}
 
-	private function getRightButton()
+	private function getUpButton($withWrap = TRUE)
 	{
 		$icon = Html::el('i')->class('fa');
-		if ($this->rightButtIcon) {
-			$icon->class('fa-' . $this->rightButtIcon, TRUE);
+		if ($this->plusButtIcon) {
+			$icon->class('fa-' . $this->plusButtIcon, TRUE);
 		}
 		$button = Html::el('button type="button"')
-				->class('btn ' . $this->rightButtColor)
-				->class('spinner-' . ($this->rightButtUp ? 'up' : 'down'), TRUE)
+				->class('btn ' . $this->plusButtColor)
+				->class('spinner-' . ($this->plusButtUp ? 'up' : 'down'), TRUE)
 				->add($icon);
-		return Html::el('div class="spinner-buttons input-group-btn"')
-						->add($button);
+		return $withWrap ? Html::el('div class="spinner-buttons input-group-btn"')
+						->add($button) : $button;
 	}
 
 	// </editor-fold>

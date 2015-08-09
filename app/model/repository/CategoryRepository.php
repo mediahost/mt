@@ -3,10 +3,13 @@
 namespace App\Model\Repository;
 
 use App\Model\Entity\Category;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\NoResultException;
 
 class CategoryRepository extends BaseRepository
 {
+
+	const ALL_CATEGORIES_CACHE_ID = 'all-categories';
 
 	/**
 	 * @param string|array $url
@@ -68,6 +71,18 @@ class CategoryRepository extends BaseRepository
 		} catch (NoResultException $e) {
 			return NULL;
 		}
+	}
+
+	public function findAll()
+	{
+		$qb = $this->createQueryBuilder('c')
+				->select('c, ch, t')
+				->leftJoin('c.children', 'ch')
+				->join('c.translations', 't');
+
+		return $qb->getQuery()
+						->useResultCache(TRUE, self::CACHE_LIFETIME, self::ALL_CATEGORIES_CACHE_ID)
+						->getResult();
 	}
 
 	public function delete($entity, $deleteRecursive = TRUE)

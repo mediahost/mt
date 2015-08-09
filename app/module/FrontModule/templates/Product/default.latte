@@ -41,7 +41,13 @@
 						</div>
 					</div>
 					<div class="col-md-6 col-sm-6">
-						<h1><a n:tag-if="$user->isAllowed('products')" n:href=":App:Products:edit $stock->id">{$product}</a></h1>
+						<h1>
+							<a n:tag-if="$user->isAllowed('products')" 
+							   n:href=":App:Products:edit $stock->id"
+							   target="_blank">
+								{$product}
+							</a>
+						</h1>
 						<div class="price-availability-block clearfix">
 							<div class="price">
 								<strong>{$stock->getPrice($priceLevel)|currencyVat}</strong>
@@ -61,38 +67,24 @@
 							</div>
 						</div>
 						<div class="description" n:if="$product->perex">
-							<p>{$product->perex}</p>
-						</div>
-						<div class="product-page-options">
-							<div class="pull-left">
-								<label class="control-label">Size:</label>
-								<select class="form-control input-sm">
-									<option>L</option>
-									<option>M</option>
-									<option>XL</option>
-								</select>
-							</div>
-							<div class="pull-left">
-								<label class="control-label">Color:</label>
-								<select class="form-control input-sm">
-									<option>Red</option>
-									<option>Blue</option>
-									<option>Black</option>
-								</select>
-							</div>
+							<p>{$product->perex|noescape}</p>
 						</div>
 						<div class="product-page-cart">
-							<div class="product-quantity">
-								<input id="product-quantity" type="text" value="1" readonly class="form-control input-sm">
-							</div>
-							<button class="btn btn-primary" type="submit">{_'Add to cart'}</button>
+							{control addToCart}
 						</div>
 						<ul class="social-icons">
-							<li><a class="facebook" data-original-title="facebook" n:href="this"></a></li>
-							<li><a class="twitter" data-original-title="twitter" n:href="this"></a></li>
-							<li><a class="googleplus" data-original-title="googleplus" n:href="this"></a></li>
-							<li><a class="evernote" data-original-title="evernote" n:href="this"></a></li>
-							<li><a class="tumblr" data-original-title="tumblr" n:href="this"></a></li>
+							<li>
+								<a class="facebook" data-original-title="facebook" target="_blank"
+								   href="https://www.facebook.com/sharer/sharer.php?u={link //this}"></a>
+							</li>
+							<li>
+								<a class="twitter" data-original-title="twitter" target="_blank"
+								   href="https://twitter.com/home?status={link //this}"></a>
+							</li>
+							<li>
+								<a class="googleplus" data-original-title="googleplus" target="_blank"
+								   href="https://plus.google.com/share?url={link //this}"></a>
+							</li>
 						</ul>
 					</div>
 
@@ -104,7 +96,7 @@
 						</ul>
 						<div id="myTabContent" class="tab-content">
 							<div class="tab-pane fade" id="Description">
-								<p>{$product->description}</p>
+								<p>{$product->description|noescape}</p>
 							</div>
 							<div class="tab-pane fade" id="Parameters">
 								<table class="datasheet">

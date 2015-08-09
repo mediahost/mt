@@ -888,8 +888,7 @@ Header and header elements
 }
 .product-page-options {
 	border-top: 1px solid #f4f4f4;
-	border-bottom: 1px solid #f4f4f4;
-	padding: 20px 0;
+	padding-bottom: 20px;
 	margin-bottom: 20px;
 	width: 100%;
 	overflow: hidden;
@@ -916,8 +915,9 @@ Header and header elements
 }
 
 .product-page-cart {
+	border-top: 1px solid #f4f4f4;
 	border-bottom: 1px solid #f4f4f4;
-	padding-bottom: 20px;
+	padding: 20px 0;
 	margin-bottom: 18px;
 }
 .product-quantity,
@@ -927,22 +927,29 @@ Header and header elements
 	margin-right: 20px;
 	position: relative;
 }
-table .product-quantity,
-table .product-quantity .input-group {
-	margin-right: 0;
-}
 .product-page-cart .btn {
 	padding: 7px 20px;
 	font-size: 13px;
 	height: 38px;
 }
+.product-page-cart .already-in-basket {
+	float: left;
+	margin-left: 10px;
+	font: 300 15px 'Open Sans', sans-serif;
+	padding: 9px;
+}
+.product-page-cart .quantity-button {
+	float: left;
+}
+.product-page-cart .already-in-basket, .product-page-cart .already-in-basket i {
+	font-size: 15px;
+}
 .product-quantity input.form-control {
 	border: none;
 	background: #edeff1 !important;
-	font: 300 23px 'Open Sans', sans-serif;;
+	font: 300 23px 'Open Sans', sans-serif;
 	color: #647484;
 	height: 38px;
-	width: 50px;
 	text-align: center;
 	padding: 5px;
 }
@@ -953,20 +960,20 @@ table .product-quantity .input-group {
 .product-quantity .input-group-btn {
 	position: static;
 }
+.product-quantity .input-group-btn.disabled {
+	cursor: not-allowed;
+}
 .product-quantity .btn {
-	text-align: center;
-	height: 18px !important;
-	width: 18px;
-	padding: 0 2px 0 1px !important;
-	text-align: center;
-	background: #edeff1;
-	border-radius: 0 !important;
-	font-size: 18px !important;
-	line-height: 1 !important;
 	color: #616b76;
-	margin: 0 !important;
-	position: absolute;
-	right: 0;
+	background: #edeff1;
+	height: 19px !important;
+	width: 22px !important;
+	font-size: 15px !important;
+	text-align: center;
+}
+.product-quantity .btn:hover, .product-quantity .btn:focus {
+	color: #616b76;
+	background: #edeff1;
 }
 .product-quantity .quantity-up {
 	top: 0;

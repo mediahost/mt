@@ -1149,3 +1149,21 @@ msgstr "Not Available"
 
 msgid "Range:"
 msgstr "Range:"
+
+msgid "Sort by"
+msgstr "Sort by"
+
+msgid "Show"
+msgstr "Show"
+
+msgid "Price (Low > High)"
+msgstr "Price (Low > High)"
+
+msgid "Price (High > Low)"
+msgstr "Price (High > Low)"
+
+msgid "Name (A - Z)"
+msgstr "Name (A - Z)"
+
+msgid "Name (Z - A)"
+msgstr "Name (Z - A)"

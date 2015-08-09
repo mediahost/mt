@@ -68,7 +68,7 @@ class CategoriesPresenter extends BasePresenter
 			if ($addNext) {
 				$this->redirect('add');
 			} else {
-				$this->redirect('default', ['id' => $savedCategory->id]);
+				$this->redirect('default', ['categoryId' => $savedCategory->id]);
 			}
 		};
 		return $control;

@@ -195,7 +195,7 @@ class ProducersPresenter extends BasePresenter
 			if ($addNext) {
 				$this->redirect('add');
 			} else {
-				$this->redirect('default', ['id' => $type . Producer::SEPARATOR . $saved->id]);
+				$this->redirect('default', ['producerId' => $type . Producer::SEPARATOR . $saved->id]);
 			}
 		};
 		return $control;

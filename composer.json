@@ -68,6 +68,7 @@
 		"kdyby/translation": "dev-master",
 		"drahak/restful": "@dev",
 		"kdyby/forms-replicator": "dev-master"
+		"kdyby/doctrine-cache": "@dev"
 	},
 	"require-dev": {
 		"nette/tester": "1.3.*@dev",

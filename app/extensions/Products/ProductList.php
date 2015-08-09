@@ -176,6 +176,9 @@ class ProductList extends Control
 			$column = $matches[1];
 			$dir = $matches[2];
 		}
+		if (!$column) {
+			return $this;
+		}
 		$this->checkSortDirection($column, $dir);
 
 		if ($asFirst) {
@@ -524,6 +527,9 @@ class ProductList extends Control
 				case 'fulltext':
 					$this->filterByFulltext($value);
 					break;
+				case 'updatedFrom':
+					$this->filterByUpdatedFrom($value);
+					break;
 			}
 		}
 
@@ -550,6 +556,16 @@ class ProductList extends Control
 		$this->qb
 				->andWhere('p.active = :active')
 				->setParameter('active', TRUE);
+
+		return $this;
+	}
+
+	protected function filterByUpdatedFrom($time)
+	{
+		$dateTime = $time instanceof DateTime ? $time : DateTime::from($time);
+		$this->qb
+				->andWhere('s.updatedAt >= :time OR p.updatedAt >= :time')
+				->setParameter('time', $dateTime);
 
 		return $this;
 	}
@@ -677,12 +693,11 @@ class ProductList extends Control
 
 	protected function applySorting()
 	{
-		try {
+//		try {
 			$this->addSorting($this->sort);
-		} catch (InvalidArgumentException $exc) {
-			$message = $this->translator->translate('This sorting method isn\'t supported.');
-			$this->flashMessage($message, 'warning');
-		}
+//		} catch (InvalidArgumentException $exc) {
+//			throw new ProductListException('This sorting method isn\'t supported.');
+//		}
 
 		$orderBy = new OrderBy();
 		foreach ($this->sorting as $key => $value) {
