@@ -280,7 +280,7 @@ var UITree = function () {
 						return links['Producers:getProducers'];
 					},
 					'data': function (node) {
-						return {'parent': node.id, 'lang': lang};
+						return {'parent': node.id};
 					},
 					'dataType': 'jsonp'
 				}
@@ -433,12 +433,103 @@ var UITree = function () {
 
 	};
 
+	var handleProducerQuestionTree = function ()
+	{
+		var stateKey = 'producersQuestion';
+		var treeBlockId = '#producers-question-tree';
+		var editBlockId = '#snippet--producerPortlet';
+		var treeBlock = $(treeBlockId);
+		var selectedId = treeBlock.attr('data-selected-id');
+		if (selectedId) {
+			var vakataStorage = $.vakata.storage.get(stateKey);
+			if (!!vakataStorage) {
+				try {
+					var stateSettings = JSON.parse(vakataStorage);
+					if (stateSettings.state && stateSettings.state.core) {
+						stateSettings.state.core.selected = [selectedId];
+						$.vakata.storage.set(stateKey, JSON.stringify(stateSettings));
+					}
+				}
+				catch (ex) {
+				}
+			}
+		}
+		var treeID = '#producer_question_tree';
+		var jstree = $(treeID).jstree({
+			'core': {
+				'themes': {
+					'responsive': true,
+					'dots': false
+				},
+				'check_callback': function (operation, node, node_parent, node_position, more) {
+					// operation can be 'create_node', 'rename_node', 'delete_node', 'move_node' or 'copy_node'
+					switch (operation) {
+						case 'create_node':
+						case 'rename_node':
+						case 'delete_node':
+						case 'move_node':
+						case 'copy_node':
+						default:
+							return false;
+					}
+				},
+				'data': {
+					'url': function (node) {
+						return links['Producers:getProducers'];
+					},
+					'data': function (node) {
+						return {'parent': node.id};
+					},
+					'dataType': 'jsonp'
+				}
+			},
+			'types': {
+				'producer': {
+					'icon': 'fa fa-building-o icon-lg icon-state-info'
+				},
+				'line': {
+					'icon': 'fa fa-cubes icon-lg icon-state-success'
+				},
+				'model': {
+					'icon': 'fa fa-cube icon-lg'
+				}
+			},
+			'state': {'key': stateKey},
+			'plugins': ['state', 'types']
+		});
+		jstree.on('changed.jstree', function (e, data) {
+			if (data.action === 'select_node' && data.event && data.node.id.charAt(0) === 'm') {
+				Metronic.blockUI({
+					target: $(editBlockId),
+					animate: true
+				});
+
+				$.nette.ajax({
+					url: links['Buyout:default'],
+					data: 'modelId=' + data.node.id.substring(2),
+					beforeSend: function () { 
+
+					},
+					success: function (payload, status, xhr) {
+						Metronic.unblockUI($(editBlockId));
+						GlobalCustomInit.onChangeJSTree();
+					},
+					complete: function (jqXHR, textStatus) {
+
+					}
+				});
+			}
+		});
+
+	};
+
 	return {
 		//main function to initiate the module
 		init: function () {
 
 			handleCategoryTree();
 			handleProducerTree();
+			handleProducerQuestionTree();
 
 		}
 
