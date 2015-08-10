@@ -215,6 +215,7 @@ class Installer extends Object
 		if ($this->installDoctrine) {
 			$name = $lockPrefix . $this->getLockName(__METHOD__);
 			if ($this->lock($name)) {
+				$this->model->clearTempDir($this->tempDir);
 				$this->model->installDoctrine();
 				$this->onSuccessInstall($this, $name);
 				$this->messages[$name] = [self::INSTALL_SUCCESS];
