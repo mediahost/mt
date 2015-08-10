@@ -4,7 +4,6 @@ namespace App\AppModule\Presenters;
 
 use App\Components\Buyout\IModelQuestionControlFactory;
 use App\Components\Buyout\ModelQuestionControl;
-use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerModel;
 
 class BuyoutPresenter extends BasePresenter
@@ -24,7 +23,7 @@ class BuyoutPresenter extends BasePresenter
 	public function actionDefault($modelId = NULL)
 	{
 		if ($modelId !== NULL) {
-			$model = $this->em->getRepository(ProducerModel::class)->find($modelId);
+			$model = $this->em->getRepository(ProducerModel::getClassName())->find($modelId);
 
 			if (!$model) {
 				$message = $this->translator->translate('wasntFound', NULL, ['name' => 'Model TODO']);
