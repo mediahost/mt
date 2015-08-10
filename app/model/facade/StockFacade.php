@@ -77,8 +77,7 @@ class StockFacade extends Object
 				->innerJoin('s.product', 'p')
 				->innerJoin('p.signs', 'signs')
 				->where('signs = :sign')
-				->andWhere('s.active = :active')
-				->andWhere('p.active = :active')
+				->andWhere('s.active = :active AND p.active = :active')
 				->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
 				->setParameter('active', TRUE)
 				->setParameter('sign', $newSign)
@@ -185,7 +184,7 @@ class StockFacade extends Object
 	{
 		$localeUrls = [];
 		$this->categoryRepo->findAll(); // only for optimalization - doctrine use intern cache for objects
-		$products = $this->productRepo->findAllWithTranslation();
+		$products = $this->productRepo->findAllWithTranslation(['active' => TRUE]);
 		foreach ($products as $product) {
 			$product->setCurrentLocale($locale);
 			$localeUrls[$product->id] = $product->url;
