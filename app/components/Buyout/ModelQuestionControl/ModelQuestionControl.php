@@ -88,7 +88,7 @@ class ModelQuestionControl extends BaseControl
 					$this->em->persist($question);
 					$modelQuestion = NULL;
 				} else {
-					$modelQuestion = $this->em->getRepository(ModelQuestion::class)->findOneBy([
+					$modelQuestion = $this->em->getRepository(ModelQuestion::getClassName())->findOneBy([
 						'question' => $question,
 						'model' => $this->model,
 					]);
