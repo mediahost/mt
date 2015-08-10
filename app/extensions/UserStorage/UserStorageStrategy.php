@@ -34,8 +34,8 @@ class UserStorageStrategy extends Object implements IUserStorage
 	public function __construct(EntityManager $em)
 	{
 		$this->em = $em;
-		$this->visitedRepo = $em->getRepository(VisitedProduct::class);
-		$this->stockRepo = $em->getRepository(Stock::class);
+		$this->visitedRepo = $em->getRepository(VisitedProduct::getClassName());
+		$this->stockRepo = $em->getRepository(Stock::getClassName());
 	}
 
 	public function getIdentity()
