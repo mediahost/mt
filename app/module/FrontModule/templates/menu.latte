@@ -91,12 +91,13 @@
 								{var product => $stock->product}
 								<div class="product-item">
 									<div class="pi-img-wrapper">
-										<a n:href="Product: 'url' => $product->url">
-											<img src="{$basePath}/foto/{$product->image|size:'300'}" class="img-responsive" alt="{$product}" />
+										<a n:href="Product: $product->id">
+											<img src="{$basePath}/foto/{$product->image|size:'300'}" 
+												 class="img-responsive" alt="{$product}" />
 										</a>
 									</div>
 									<h3>
-										<a n:href="Product: 'url' => $product->url">
+										<a n:href="Product: $product->id">
 											{$product}
 										</a>
 									</h3>
@@ -119,5 +120,5 @@
 
 {define pageLink}
 {? $page->setCurrentLocale($lang)}
-<a {if $page->isInterLink()}href="{link $page->link}"{else}href="{link Page: $page->slug}"{/if}>{$page}</a>
+<a {if $page->isInterLink()}href="{link $page->link}"{else}href="{link Page: $page->id}"{/if}>{$page}</a>
 {/define}
