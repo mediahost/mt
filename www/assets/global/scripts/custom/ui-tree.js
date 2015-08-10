@@ -437,7 +437,7 @@ var UITree = function () {
 	{
 		var stateKey = 'producersQuestion';
 		var treeBlockId = '#producers-question-tree';
-		var editBlockId = '#snippet--producerPortlet';
+		var editBlockId = '#snippet--modelPortlet';
 		var treeBlock = $(treeBlockId);
 		var selectedId = treeBlock.attr('data-selected-id');
 		if (selectedId) {
