@@ -8,6 +8,7 @@ use Knp\DoctrineBehaviors\Model;
 
 /**
  * @ORM\Entity(repositoryClass="App\Model\Repository\ProductRepository")
+ * @ORM\EntityListeners({"App\Listeners\Model\Entity\ProductListener"})
  *
  * @property string $name
  * @property string $slug

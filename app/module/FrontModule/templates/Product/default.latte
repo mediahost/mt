@@ -2,7 +2,7 @@
 
 {block breadcrumbItems}
 <li n:foreach="$product->mainCategory->pathWithThis as $category">
-	<a n:href="Category: url => $category->url">{$category}</a>
+	<a n:href="Category: $category->id">{$category}</a>
 </li>
 <li class="active">{$product}</li>
 {/block}
@@ -186,14 +186,14 @@
 			   class="btn btn-default fancybox-button">
 				{_'Zoom'}
 			</a>
-			<a n:href="Product: 'url' => $product->url" 
+			<a n:href="Product: $product->id" 
 			   class="btn btn-default fancybox-fast-view">
 				{_'View'}
 			</a>
 		</div>
 	</div>
 	<h3>
-		<a n:href="Product: 'url' => $product->url">{$product}</a>
+		<a n:href="Product: $product->id">{$product}</a>
 	</h3>
 	<div class="pi-price">{$stock->price|currencyVat}</div>
 	<a n:href="this" class="btn btn-default add2cart">{_'Add to cart'}</a>

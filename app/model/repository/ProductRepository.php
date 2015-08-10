@@ -69,7 +69,7 @@ class ProductRepository extends BaseRepository
 			}
 			$qb->andWhere($orExpr);
 		}
-		
+
 		if ($limit) {
 			$paginator = new Paginator($qb);
 			$totalCount = $paginator->count();
@@ -79,6 +79,17 @@ class ProductRepository extends BaseRepository
 						->getQuery()
 						->setMaxResults($limit)
 						->setFirstResult($offset)
+						->getResult();
+	}
+
+	public function findAllWithTranslation()
+	{
+		$qb = $this->createQueryBuilder('p')
+				->select('p, t, s')
+				->join('p.translations', 't')
+				->leftJoin('t.seo', 's');
+
+		return $qb->getQuery()
 						->getResult();
 	}
 

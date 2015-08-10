@@ -3,7 +3,7 @@
 {block breadcrumbItems}
 {ifset $category}
 	<li n:foreach="$category->path as $parent">
-		<a n:href="Category: url => $parent->url">{$parent}</a>
+		<a n:href="Category: $parent->id">{$parent}</a>
 	</li>
 	<li class="active">{$category}</li>
 	{elseifset $searched}

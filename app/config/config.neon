@@ -44,8 +44,8 @@ nette:
 		email: 'pupe.dupe@gmail.com'
 
 services:
-	- App\RouterFactory
-	router: @App\RouterFactory::createRouter
+	- {class: App\Router\RouterFactory, inject: yes}
+	router: @App\Router\RouterFactory::createRouter
 
 	urlScript:
 		factory: @httpRequest::getUrl()

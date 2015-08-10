@@ -3,25 +3,49 @@
 namespace App\Model\Facade;
 
 use App\Extensions\Settings\SettingsStorage;
+use App\Model\Entity\Category;
+use App\Model\Entity\Product;
 use App\Model\Entity\Sign;
 use App\Model\Entity\Stock;
+use App\Model\Repository\CategoryRepository;
+use App\Model\Repository\ProductRepository;
 use App\Model\Repository\SignRepository;
 use App\Model\Repository\StockRepository;
+use App\Router\RouterFactory;
 use Kdyby\Doctrine\EntityManager;
+use Kdyby\Translation\Translator;
+use Nette\Application\Request;
+use Nette\Caching\Cache;
+use Nette\Caching\IStorage;
 use Nette\Object;
 use Nette\Utils\DateTime;
 
 class StockFacade extends Object
 {
+	
+	const KEY_ALL_PRODUCTS_URLS = 'product-urls';
+	const TAG_ALL_PRODUCTS = 'all-products';
 
 	/** @var EntityManager @inject */
 	public $em;
+	
+	/** @var Translator @inject */
+	public $translator;
 
 	/** @var SettingsStorage @inject */
 	public $settings;
 
+	/** @var IStorage @inject */
+	public $cacheStorage;
+
 	/** @var StockRepository */
 	private $stockRepo;
+
+	/** @var ProductRepository */
+	private $productRepo;
+
+	/** @var CategoryRepository */
+	private $categoryRepo;
 
 	/** @var SignRepository */
 	private $signRepo;
@@ -30,6 +54,8 @@ class StockFacade extends Object
 	{
 		$this->em = $em;
 		$this->stockRepo = $this->em->getRepository(Stock::getClassName());
+		$this->productRepo = $this->em->getRepository(Product::getClassName());
+		$this->categoryRepo = $this->em->getRepository(Category::getClassName());
 		$this->signRepo = $this->em->getRepository(Sign::getClassName());
 	}
 
@@ -112,6 +138,66 @@ class StockFacade extends Object
 	public function getLastVisited()
 	{
 		return $this->getDemoProducts();
+	}
+
+	public function urlToId($uri, Request $request)
+	{
+		$locale = $request->getParameter(RouterFactory::LOCALE_PARAM_NAME);
+		$slugs = $this->getUrls($locale);
+		$slug = array_search($uri, $slugs);
+		if ($slug) {
+			return $slug;
+		}
+		return NULL;
+	}
+
+	public function idToUrl($id, Request $request)
+	{
+		$locale = $request->getParameter(RouterFactory::LOCALE_PARAM_NAME);
+		$slugs = $this->getUrls($locale);
+		if (array_key_exists($id, $slugs)) {
+			return $slugs[$id];
+		}
+		return NULL;
+	}
+
+	/** @return array */
+	private function getUrls($locale = NULL)
+	{
+		if ($locale === NULL) {
+			$locale = $this->translator->getDefaultLocale();
+		}
+		
+		$cache = $this->getCache();
+		$cacheKey = self::KEY_ALL_PRODUCTS_URLS . '_' . $locale;
+
+		$urls[$locale] = $cache->load($cacheKey);
+		if (!$urls[$locale]) {
+			$urls[$locale] = $this->getLocaleUrlsArray($locale);
+			$cache->save($cacheKey, $urls[$locale], [Cache::TAGS => [self::TAG_ALL_PRODUCTS]]);
+		}
+
+		return $urls[$locale];
+	}
+
+	/** @return array */
+	private function getLocaleUrlsArray($locale)
+	{
+		$localeUrls = [];
+		$this->categoryRepo->findAll(); // only for optimalization - doctrine use intern cache for objects
+		$products = $this->productRepo->findAllWithTranslation();
+		foreach ($products as $product) {
+			$product->setCurrentLocale($locale);
+			$localeUrls[$product->id] = $product->url;
+		}
+		return $localeUrls;
+	}
+	
+	/** @return Cache */
+	public function getCache()
+	{
+		$cache = new Cache($this->cacheStorage, get_class($this));
+		return $cache;
 	}
 
 }
