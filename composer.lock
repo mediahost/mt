@@ -877,12 +877,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/janmarek/WebLoader.git",
-                "reference": "fc0384c4965cdd2245a078e5658461bbc90f05f4"
+                "reference": "4e7aa94264bab489d09829058fc1a75bcb760b09"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/janmarek/WebLoader/zipball/4e7aa94264bab489d09829058fc1a75bcb760b09",
-                "reference": "fc0384c4965cdd2245a078e5658461bbc90f05f4",
+                "reference": "4e7aa94264bab489d09829058fc1a75bcb760b09",
                 "shasum": ""
             },
             "require": {
@@ -952,7 +952,7 @@
                 "nette",
                 "webloader"
             ],
-            "time": "2015-03-15 20:30:51"
+            "time": "2015-08-03 11:56:57"
         },
         {
             "name": "joseki/webloader-filters",
@@ -1242,16 +1242,16 @@
         },
         {
             "name": "kdyby/curl-ca-bundle",
-            "version": "v1.0.7",
+            "version": "v1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Kdyby/CurlCaBundle.git",
-                "reference": "61f388f60e8b2cb5d6a6dd87acb8875abf059409"
+                "reference": "53485351586dec0854cfd6adc286935351a4e523"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kdyby/CurlCaBundle/zipball/61f388f60e8b2cb5d6a6dd87acb8875abf059409",
-                "reference": "61f388f60e8b2cb5d6a6dd87acb8875abf059409",
+                "url": "https://api.github.com/repos/Kdyby/CurlCaBundle/zipball/53485351586dec0854cfd6adc286935351a4e523",
+                "reference": "53485351586dec0854cfd6adc286935351a4e523",
                 "shasum": ""
             },
             "require": {
@@ -1289,7 +1289,7 @@
                 "https",
                 "ssl"
             ],
-            "time": "2015-04-22 23:00:12"
+            "time": "2015-08-04 23:00:12"
         },
         {
             "name": "kdyby/doctrine",
@@ -1904,12 +1904,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mediahost/DoctrineBehaviors.git",
-                "reference": "10d2dca149b722065ca75597edd19ccea41bf46a"
+                "reference": "336eca419db3860cfef00147196c9429c4bcf39f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mediahost/DoctrineBehaviors/zipball/10d2dca149b722065ca75597edd19ccea41bf46a",
-                "reference": "10d2dca149b722065ca75597edd19ccea41bf46a",
+                "url": "https://api.github.com/repos/mediahost/DoctrineBehaviors/zipball/336eca419db3860cfef00147196c9429c4bcf39f",
+                "reference": "336eca419db3860cfef00147196c9429c4bcf39f",
                 "shasum": ""
             },
             "require": {
@@ -1958,7 +1958,7 @@
             "support": {
                 "source": "https://github.com/mediahost/DoctrineBehaviors/tree/master"
             },
-            "time": "2015-07-29 09:06:13"
+            "time": "2015-08-10 07:31:49"
         },
         {
             "name": "latte/latte",
