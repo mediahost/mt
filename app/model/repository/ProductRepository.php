@@ -75,8 +75,7 @@ class ProductRepository extends BaseRepository
 			$totalCount = $paginator->count();
 		}
 
-		return $qb
-						->getQuery()
+		return $qb->getQuery()
 						->setMaxResults($limit)
 						->setFirstResult($offset)
 						->getResult();

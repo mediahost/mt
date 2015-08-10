@@ -9,8 +9,9 @@ jQuery(document).ready(function () {
 	// components
 	UIToastr.init();
 	Fullscreen.init();
-
 	AppContent.init();
+	
+	Buyout.init('[data-typeahead-url]');
 });
 
 $('.modal.ajax').on('loaded.bs.modal', function (e) {

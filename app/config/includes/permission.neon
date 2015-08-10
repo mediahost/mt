@@ -13,23 +13,23 @@ services:
 			# Resources
 			- addResource('myAccount')
 
-			- addResource('dashboard')
-			- addResource('settings')
-			- addResource('profile')
-
-			- addResource('orders')
-			- addResource('products')
+			- addResource('buyout')
 			- addResource('categories')
-			- addResource('producers')
-			- addResource('users')
-			- addResource('groups')
+			- addResource('dashboard')
 			- addResource('discounts')
-			- addResource('parameters')
-			- addResource('signs')
-			- addResource('pages')
-
 			- addResource('examples')
+			- addResource('groups')
+			- addResource('orders')
+			- addResource('pages')
+			- addResource('parameters')
+			- addResource('producers')
+			- addResource('products')
+			- addResource('profile')
+			- addResource('question')
+			- addResource('signs')
 			- addResource('service')
+			- addResource('settings')
+			- addResource('users')
 
 			# Privilegies
 			- deny('guest')
@@ -38,18 +38,21 @@ services:
 
 			- allow('user', 'myAccount')
 
-			- allow('admin', 'dashboard')
-			- allow('admin', 'orders')
-			- allow('admin', 'products')
+			- allow('admin', 'buyout')
 			- allow('admin', 'categories')
-			- allow('admin', 'producers')
-			- allow('admin', 'users')
-			- allow('admin', 'groups')
+			- allow('admin', 'dashboard')
 			- allow('admin', 'discounts')
-			- allow('admin', 'settings')
-			- allow('admin', 'parameters')
-			- allow('admin', 'signs')
+			- allow('admin', 'groups')
+			- allow('admin', 'orders')
 			- allow('admin', 'pages')
+			- allow('admin', 'parameters')
+			- allow('admin', 'producers')
+			- allow('admin', 'products')
+			- allow('admin', 'question')
+			- allow('admin', 'settings')
+			- allow('admin', 'signs')
+			- allow('admin', 'users')
+
 			- deny('admin', 'pages', 'delete') # pages can be link to template, only superadmin can delete
 
 			- allow('superadmin') # Full access for superadmin
