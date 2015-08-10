@@ -72,9 +72,11 @@ class PageEdit extends BaseControl
 		$this->page->translateAdd($lang)->name = $values->name;
 		$this->page->translateAdd($lang)->html = $values->html;
 		$this->page->comment = $values->comment;
-		$realLink = @$this->presenter->link($values->link);
-		if (preg_match('@^#error@', $realLink)) {
-			throw new InvalidLinkException();
+		if ($values->link) {
+			$realLink = @$this->presenter->link($values->link);
+			if (preg_match('@^#error@', $realLink)) {
+				throw new InvalidLinkException();
+			}
 		}
 		$this->page->link = $values->link;
 		$this->page->mergeNewTranslations();
