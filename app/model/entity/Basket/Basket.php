@@ -17,8 +17,26 @@ class Basket extends BaseEntity
 
 	use Identifier;
 	use Model\Timestampable\Timestampable;
-	
+
+	public function __construct(User $user = NULL)
+	{
+		if ($user) {
+			$this->setUser($user);
+		}
+		parent::__construct();
+	}
+
+	/** @ORM\OneToOne(targetEntity="User", inversedBy="basket") */
+	protected $user;
+
 	/** @ORM\OneToMany(targetEntity="BasketItem", mappedBy="basket") */
 	protected $items;
+	
+	public function setUser(User $user)
+	{
+		$this->user = $user;
+		$user->basket = $this;
+		return $this;
+	}
 
 }
