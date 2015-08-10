@@ -107,7 +107,6 @@ abstract class ProductTestBase extends DbTestCase
 			$this->em->getClassMetadata(Entity\Product::getClassName()),
 			$this->em->getClassMetadata(Entity\ProductTranslation::getClassName()),
 			$this->em->getClassMetadata(Entity\Stock::getClassName()),
-			$this->em->getClassMetadata(Entity\ProductSeo::getClassName()),
 			$this->em->getClassMetadata(Entity\Vat::getClassName()),
 			$this->em->getClassMetadata(Entity\Discount::getClassName()),
 			$this->em->getClassMetadata(Entity\Category::getClassName()),

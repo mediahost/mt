@@ -82,35 +82,6 @@ class ProductTest extends ProductTestBase
 		Assert::same(self::NAME, $this->product->name);
 	}
 
-	public function testTranslationSeo()
-	{
-		$defaultLanguage = BaseTranslatable::DEFAULT_LOCALE;
-
-		$this->product = new Product($defaultLanguage);
-		$this->product->name = self::NAME;
-		$this->product->seo->name = self::PEREX;
-		$this->product->seo->description = self::DESC;
-
-		$secondLanguage = 'cs';
-		$this->product->setCurrentLocale($secondLanguage);
-		$this->product->name = 'jméno';
-		$this->product->seo->name = 'krátký popisek';
-		$this->product->seo->description = 'dlouhý popisek';
-
-		$this->product->mergeNewTranslations();
-
-		$this->saveProduct();
-
-		Assert::same(self::NAME, $this->product->name);
-		Assert::same(self::PEREX, $this->product->seo->name);
-		Assert::same(self::DESC, $this->product->seo->description);
-
-		$this->product->setCurrentLocale($secondLanguage);
-		Assert::same('jméno', $this->product->name);
-		Assert::same('krátký popisek', $this->product->seo->name);
-		Assert::same('dlouhý popisek', $this->product->seo->description);
-	}
-
 	public function testProducer()
 	{
 		$producer = new Producer('My Producer');

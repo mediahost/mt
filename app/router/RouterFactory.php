@@ -15,7 +15,8 @@ class RouterFactory
 {
 
 	const LOCALE_PARAM_NAME = 'locale';
-	const LOCALE_PARAM = '[<' . self::LOCALE_PARAM_NAME . '=sk cs|sk|en>/]';
+	const LOCALE_DEFAULT_LANG = 'sk';
+	const LOCALE_PARAM = '[<' . self::LOCALE_PARAM_NAME . '=' . self::LOCALE_DEFAULT_LANG . ' cs|sk|en>/]';
 
 	/** @var StockFacade @inject */
 	public $stockFacade;
@@ -102,6 +103,11 @@ class RouterFactory
 
 		// </editor-fold>
 		// <editor-fold desc="Front">
+
+		$frontRouter[] = new Route('install', [
+			'presenter' => 'Install',
+			'action' => 'default',
+		]);
 
 		$frontRouter[] = new Route(self::LOCALE_PARAM . 'search[/<text>]', [
 			'presenter' => 'Category',
