@@ -48,7 +48,7 @@ class QuestionPresenter extends BasePresenter
 	 */
 	public function actionEdit($id)
 	{
-		$question = $this->em->getRepository(Question::class)->find($id);
+		$question = $this->em->getRepository(Question::getClassName())->find($id);
 
 		$this['form']->setEntity($question);
 	}
@@ -63,7 +63,7 @@ class QuestionPresenter extends BasePresenter
 		$repository = $this->em->getRepository(Question::class);
 		$entity = $repository->find($id);
 		$name = $this->translator->translate('Question');
-		
+
 		if (!$entity) {
 			$message = $this->translator->translate('wasntFound', NULL, ['name' => $name]);
 			$this->flashMessage($message, 'danger');
