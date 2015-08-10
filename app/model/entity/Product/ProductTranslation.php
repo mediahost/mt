@@ -14,7 +14,7 @@ use Knp\DoctrineBehaviors\Model;
  * @property string $slug
  * @property string $description
  * @property string $perex
- * @property ProductSeo $seo
+ * @property Seo $seo
  */
 class ProductTranslation extends BaseEntity
 {
@@ -31,16 +31,37 @@ class ProductTranslation extends BaseEntity
 	/** @ORM\Column(type="text", nullable=true) */
 	protected $perex;
 
-	/** @ORM\OneToOne(targetEntity="ProductSeo", mappedBy="product", cascade={"persist", "remove"}) * */
-	protected $seo;
+	/** @var Seo */
+	private $seo; // must be here, because BaseTranslatable search getters by properties
+
+	/** @ORM\Column(type="string", length=55, nullable=true) */
+	private $seoName;
+
+	/** @ORM\Column(type="text", nullable=true) */
+	private $seoKeywords;
+
+	/** @ORM\Column(type="text", nullable=true) */
+	private $seoDescription;
 
 	public function getSeo()
 	{
 		if (!$this->seo) {
-			$this->seo = new ProductSeo();
-			$this->seo->product = $this;
+			$this->seo = new Seo();
 		}
+		$this->seo->name = $this->seoName;
+		$this->seo->keywords = $this->seoKeywords;
+		$this->seo->description = $this->seoDescription;
+
 		return $this->seo;
+	}
+
+	public function setSeo(Seo $seo)
+	{
+		$this->seoName = $seo->name;
+		$this->seoKeywords = $seo->keywords;
+		$this->seoDescription = $seo->description;
+
+		return $this;
 	}
 
 	protected function getSluggableFields()

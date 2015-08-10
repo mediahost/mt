@@ -85,9 +85,8 @@ class ProductRepository extends BaseRepository
 	public function findAllWithTranslation()
 	{
 		$qb = $this->createQueryBuilder('p')
-				->select('p, t, s')
-				->join('p.translations', 't')
-				->leftJoin('t.seo', 's');
+				->select('p, t')
+				->join('p.translations', 't');
 
 		return $qb->getQuery()
 						->getResult();

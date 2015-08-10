@@ -17,7 +17,7 @@ use Nette\Utils\DateTime;
  * @property string $slug
  * @property string $description
  * @property string $perex
- * @property ProductSeo $seo
+ * @property Seo $seo
  * @property mixed $createdBy
  * @property mixed $updatedBy
  * @property mixed $deletedBy
