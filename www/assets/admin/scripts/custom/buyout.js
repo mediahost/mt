@@ -15,7 +15,7 @@ Buyout.init = function (element) {
 
 		$this.typeahead({
 			hint: true,
-			minLength: 3,
+			minLength: 1,
 			highlight: true
 		},
 		{
