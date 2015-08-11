@@ -88,11 +88,15 @@ class RequestControl extends BaseControl
 				$price = 0;
 
 				if ($question === 'y') {
-					$price = $qm->priceA;
+					$price = (int) $qm->priceA;
 				} else if ($question === 'n') {
-					$price = $qm->priceB;
+					$price = (int) $qm->priceB;
 				}
 				$this->summary += $price;
+				
+				if ($this->summary < 0) {
+					$this->summary = 0;
+				}
 			}
 		} elseif ($form['send']->isSubmittedBy()) {
 			$our = $this->iBuyoutOurMessageFactory->create();
@@ -118,7 +122,6 @@ class RequestControl extends BaseControl
 	public function render()
 	{
 		$this->template->model = $this->model;
-//		$this->template->_form = $this['form'];
 		$this->template->summary = $this->summary;
 		parent::render();
 	}
