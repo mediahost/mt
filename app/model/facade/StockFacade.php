@@ -35,6 +35,8 @@ class StockFacade extends Object
 	/** @var SettingsStorage @inject */
 	public $settings;
 
+	/** @var \Nette\Security\IUserStorage @inject */
+	public $userStorage;
 	/** @var IStorage @inject */
 	public $cacheStorage;
 
@@ -130,11 +132,6 @@ class StockFacade extends Object
 	}
 
 	public function getBestSellers()
-	{
-		return $this->getDemoProducts();
-	}
-
-	public function getLastVisited()
 	{
 		return $this->getDemoProducts();
 	}

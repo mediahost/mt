@@ -1,0 +1,46 @@
+{ifset $model}
+	Výkupní cena: {$model->buyoutPrice|currency}
+
+	{form form, class => 'form-horizontal'}
+		{formContainer questions}
+			{foreach $_form->getComponents(FALSE, '\Nette\Forms\IControl') as $i}
+				<div class="form-group">
+					{label $i class => 'col-sm-4 control-label' /}
+					<div class="col-sm-8">
+						<div class="radio-list">
+						{var $name = $i->name}
+						{foreach $form[questions][$name]->items as $key => $label}
+							<div class="row">
+								{label $name:$key}
+									{input $name:$key} {$label}
+								{/label}
+							</div>
+						{/foreach}
+						</div>
+					</div>
+				</div>
+			{/foreach}
+		{/formContainer}
+
+		<div class="form-group">
+			{label email, class => 'control-label col-md-4' /}
+			<div class="col-md-8">
+				{input email}
+			</div>
+		</div>
+
+		<div class="form-group">
+			{label fullname, class => 'control-label col-md-4' /}
+			<div class="col-md-8">
+				{input fullname}
+			</div>
+		</div>
+
+		{input send}
+		{input recalculate}
+
+		<div>
+			Celkem: {$summary|currency}
+		</div>
+	{/form}
+{/ifset}

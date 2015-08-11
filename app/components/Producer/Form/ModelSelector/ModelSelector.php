@@ -22,9 +22,12 @@ class ModelSelector extends BaseControl
 
 	/** @var ProducerModel */
 	private $model;
-	
+
 	/** @var ProducerFacade @inject */
 	public $producerFacade;
+
+	/** @var boolean */
+	private $buyout;
 
 	// <editor-fold desc="events">
 
@@ -44,13 +47,14 @@ class ModelSelector extends BaseControl
 
 		$allProducers = $this->producerFacade->getProducersList();
 		$allLines = $this->producerFacade->getLinesList();
-		$allModels = $this->producerFacade->getModelsList();
+		$allModels = $this->producerFacade->getModelsList(NULL, FALSE, $this->buyout);
 
 		$form->addSelect2('producer', 'Producer', $allProducers)
 				->setPrompt('Select some producer');
 
 		$selectLine = $form->addSelect2('line', 'Line', $allLines)
 				->setPrompt('Select some line');
+
 		if ($this->producer) {
 			$filteredLines = $this->producerFacade->getLinesList($this->producer);
 			$selectLine->setItems($filteredLines);
@@ -60,6 +64,7 @@ class ModelSelector extends BaseControl
 
 		$selectModel = $form->addSelect2('model', 'Model', $allModels)
 				->setPrompt('Select some model');
+
 		if ($this->line) {
 			$filteredModels = $this->producerFacade->getModelsList($this->line);
 			$selectModel->setItems($filteredModels);
@@ -79,7 +84,7 @@ class ModelSelector extends BaseControl
 	{
 		$values->line = $form['line']->getRawValue();
 		$values->model = $form['model']->getRawValue();
-		
+
 		$this->load($values);
 		$this->onAfterSelect($this->producer, $this->line, $this->model);
 	}
@@ -93,9 +98,12 @@ class ModelSelector extends BaseControl
 			foreach ($producer->lines as $line) {
 				$models = [];
 				foreach ($line->models as $model) {
-					$models[$model->id] = [
-						'name' => (string) $model,
-					];
+
+					if (!($this->buyout && $model->buyoutPrice <= 0)) {
+						$models[$model->id] = [
+							'name' => (string) $model,
+						];
+					}
 				}
 				$lines[$line->id] = [
 					'name' => (string) $line,
@@ -152,6 +160,12 @@ class ModelSelector extends BaseControl
 	public function setProducer(Producer $producer)
 	{
 		$this->producer = $producer;
+		return $this;
+	}
+
+	public function setBuyout($buyout = TRUE)
+	{
+		$this->buyout = $buyout;
 		return $this;
 	}
 

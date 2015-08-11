@@ -13,16 +13,16 @@ twitter:
 	consumerSecretKey: 'secret_key'
 
 installer:
-	lock: TRUE # při TRUE zamyká instalaci po spuštění, pak je potřeba odmazat temp/install pro novou instalaci
-	doctrine: FALSE # aktualizuje DB podle entit
+	lock: on # při TRUE zamyká instalaci po spuštění, pak je potřeba odmazat temp/install pro novou instalaci
+	doctrine: off # aktualizuje DB podle entit
 	initUsers: 
 		user_mail: ['password', 'name_of_role']
-#	adminer: FALSE # instaluje potřebná nastavení pro adminer - na SERVERU je potřeba ověřit funkčnost (používá chmod)
-#	composer: FALSE # spouští composer - NEPOUŽÍVAT na serveru (spouští shell_exec)
+#	adminer: off # instaluje potřebná nastavení pro adminer - na SERVERU je potřeba ověřit funkčnost (používá chmod)
+#	composer: off # spouští composer - NEPOUŽÍVAT na serveru (spouští shell_exec)
 
 nette:
 	mailer:
-		smtp: FALSE # při FALSE využívá mail(); při TRUE je potřeba nastavit údaje
+		smtp: off # při FALSE využívá mail(); při TRUE je potřeba nastavit údaje
 #		host: smtp.gmail.com
 #		secure: ssl
 #		username: user@gmail.com
@@ -39,21 +39,24 @@ nette:
 settings:
 	modules:
 		cron:
-			enabled: TRUE
+			enabled: on
 			allowedIps: ['127.0.0.1']
 		categories:
-			enabled: TRUE
-			expandOnlyActiveCategories: TRUE
+			enabled: on
+			expandOnlyActiveCategories: on
 			maxDeep: 4
 		signs:
-			enabled: TRUE
+			enabled: on
 			values:
 				new: 1
 				sale: 2
 				top: 3
 		service:
-			enabled: TRUE
+			enabled: on
 			pageId: 3
+		buyout:
+			enabled: on
+			pageId: 4
 	pageInfo:
 		projectName: My Project
 		author: author
@@ -66,7 +69,7 @@ settings:
 		notRemember: 30 minutes
 	design:
 		color: default
-		headerFixed: TRUE
-		containerBgSolid: TRUE
+		headerFixed: on
+		containerBgSolid: on
 	passwords:
 		minLength: 5

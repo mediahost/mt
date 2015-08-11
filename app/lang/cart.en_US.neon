@@ -3,3 +3,4 @@ product:
 	alreadyInBasket: 'You have already %count% pc in basket.|You have already %count% pcs in basket.'
 	youCanAddOnly: 'You can add only %count% pc to basket.|You can add only %count% pcs to basket.'
 	youCannotAdd: 'You cannot add next.'
+	reachedMaxCount: 'You have all available products in your basket.'

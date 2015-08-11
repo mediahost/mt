@@ -15,7 +15,7 @@ Buyout.init = function (element) {
 
 		$this.typeahead({
 			hint: true,
-			minLength: 3,
+			minLength: 1,
 			highlight: true
 		},
 		{
@@ -41,5 +41,4 @@ $.nette.ext('typeahead', {
 		Buyout.init('[data-typeahead-url]');
 	}
 }, {
-	// ... shared context (this) of all callbacks
 });
