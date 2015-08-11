@@ -38,6 +38,9 @@ nette:
 
 settings:
 	modules:
+		buyout:
+			enabled: yes
+			pageId: 4
 		cron:
 			enabled: TRUE
 			allowedIps: ['127.0.0.1']

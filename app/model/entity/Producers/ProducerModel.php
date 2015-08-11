@@ -46,7 +46,7 @@ use Model\Sluggable\Sluggable;
 	/** @ORM\Column(type="float") */
 	protected $buyoutPrice;
 
-	/** @ORM\OneToMany(targetEntity="App\Model\Entity\Buyout\ModelQuestion", mappedBy="model") */
+	/** @ORM\OneToMany(targetEntity="App\Model\Entity\Buyout\ModelQuestion", mappedBy="model", indexBy="id") */
 	protected $questions;
 
 	public function __construct($name, $currentLocale = NULL)

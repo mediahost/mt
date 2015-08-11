@@ -57,18 +57,32 @@ class ProducerFacade extends Object
 		return $lines;
 	}
 
-	public function getModelsList(ProducerLine $line = NULL, $fullPath = FALSE)
+	public function getModelsList(ProducerLine $line = NULL, $fullPath = FALSE, $onlyBuyout = FALSE)
 	{
-		$models = [];
+		$filter = NULL;
+
+		if ($onlyBuyout !== FALSE) {
+			$filter['buyoutPrice >'] = '0';
+		}
+
 		if ($line) {
-			$finded = $this->modelRepo->findBy(['line' => $line]);
+			$filter['line'] = $line;
+		}
+
+		if ($filter !== NULL) {
+			$finded = $this->modelRepo->findBy($filter);
 		} else {
 			$finded = $this->modelRepo->findAll();
 		}
+
+		$models = [];
+		
 		foreach ($finded as $model) {
 			$models[$model->id] = $fullPath ? $model->getFullName() : (string) $model;
 		}
+		
 		@uasort($models, 'strcoll');
+		
 		return $models;
 	}
 
