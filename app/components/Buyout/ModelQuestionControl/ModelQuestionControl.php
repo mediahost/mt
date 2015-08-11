@@ -10,6 +10,7 @@ use App\Model\Entity\Buyout\Question;
 use App\Model\Entity\ProducerModel;
 use App\Model\Facade\QuestionFacade;
 use Nette\Forms\Container;
+use Nette\Forms\Controls\SubmitButton;
 use Nette\Utils\ArrayHash;
 
 class ModelQuestionControl extends BaseControl
@@ -32,20 +33,28 @@ class ModelQuestionControl extends BaseControl
 		$form = new Form();
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
-		$form->getElementPrototype()->class = 'ajax';
+//		$form->getElementPrototype()->class = 'ajax'; // @Todo: formulář si sám nastavuje hodnoty a nevíme odkud je bere!
 
 		$form->addText('buyoutPrice', 'Buyout price')
-				->setRequired('Base buyout price is required.');
+						->setRequired('Base buyout price is required.')
+						->getControlPrototype()->class[] = 'mask_currency form-control input-small';
 
-		$form->addDynamic('questions', function (Container $question) {
+		$questions = $form->addDynamic('questions', function (Container $question) {
 			$question->addTypeahead('text', 'Question', function ($query) {
 						return $this->questionFacade->suggestByText($query, $this->translator->getLocale());
 					})
 					->setAttribute('autocomplete', 'off');
 
-			$question->addText('yes', 'Yes');
-			$question->addText('no', 'No');
+			$question->addText('yes', 'Yes')
+							->getControlPrototype()->class[] = 'mask_currency form-control input-small';
+			
+			$question->addText('no', 'No')
+							->getControlPrototype()->class[] = 'mask_currency form-control input-small';
 		}, 5);
+
+		$questions->addSubmit('add', 'Add next question')
+						->setValidationScope(FALSE)
+				->onClick[] = $this->addQuestionClicked;
 
 		$form->addSubmit('save', 'Save')
 						->getControlPrototype()->class[] = 'btn-primary';
@@ -56,21 +65,59 @@ class ModelQuestionControl extends BaseControl
 
 	public function formSucceeded(Form $form, $values)
 	{
-		$this->load($form, $values);
-
-		if ($this->presenter->isAjax()) {
-			$this->redrawControl();
-		} else {
+		if ($form['save']->isSubmittedBy()) {
+			$this->processData($form, $values);
 			$message = $this->translator->translate('successfullySaved', NULL, [
-				'type' => $this->translator->translate('Parameter'), 'name' => 'ToDo'
+				'type' => $this->translator->translate('Parameter'), 'name' => 'Question'
 			]);
 			$this->presenter->flashMessage($message, 'success');
-			$this->presenter->redirect('default');
+			$this->redirect('this');
 		}
+
+//		if ($this->presenter->isAjax()) {
+//			$this->presenter->redrawControl();
+//		}
 	}
 
-	private function load(Form $form, ArrayHash $values)
+	public function addQuestionClicked(SubmitButton $button)
 	{
+		$button->parent->createOne();
+	}
+
+	/**
+	 * @param ProducerModel $model
+	 * @return ModelQuestionControl
+	 */
+	public function setModel(ProducerModel $model)
+	{
+		$this->model = $model;
+		$this->model->setCurrentLocale($this->translator->getLocale());
+
+		if (!$this['form']->isSubmitted()) {
+			$i = 0;
+
+			foreach ($this->model->questions as $mq) {
+				$this['form']['questions'][$i]->setValues([
+					'text' => $mq->question->text,
+					'yes' => $mq->priceA,
+					'no' => $mq->priceB,
+				]);
+				$i++;
+			}
+		}
+
+		$this['form']->setDefaults([
+			'buyoutPrice' => $model->buyoutPrice,
+		]);
+
+		return $this;
+	}
+
+	private function processData(Form $form, ArrayHash $values)
+	{
+		$old = $this->model->questions;
+		$keep = [];
+
 		foreach ($form['questions']->values as $container) {
 			if ($container['text'] != NULL) {
 				$question = $this->questionFacade->findOneByText($container['text'], $this->translator->getLocale());
@@ -94,58 +141,29 @@ class ModelQuestionControl extends BaseControl
 					]);
 				}
 
-				if (!$modelQuestion) {
+				if ($modelQuestion) {
+					$keep[$question->id] = $modelQuestion;
+				} else {
 					$modelQuestion = new ModelQuestion();
 					$modelQuestion->setQuestion($question)
 							->setModel($this->model);
 				}
 
 				$modelQuestion->setPrice($container['yes'], $container['no']);
-
 				$this->em->persist($modelQuestion);
 			}
 		}
 
 		$this->model->buyoutPrice = $values->buyoutPrice;
 		$this->em->persist($this->model);
-		$this->em->flush();
 
-		return $this;
-	}
-
-	/**
-	 * @param ProducerModel $model
-	 * @return ModelQuestionControl
-	 */
-	public function setModel(ProducerModel $model)
-	{
-		$this->model = $model;
-
-		if (!$this['form']->isSubmitted()) {
-			$questions = $this->questionFacade->findByModel($model, $this->translator->getLocale(), self::QUESTION_LIMIT);
-			$i = 0;
-
-			foreach ($questions as $modelQuestion) {
-				$this['form']['questions'][$i]->setValues([
-					'text' => $modelQuestion->question->text,
-					'yes' => $modelQuestion->priceA,
-					'no' => $modelQuestion->priceB,
-				]);
-				$i++;
+		foreach ($old as $mq) {
+			if (!isset($keep[$mq->question->id])) {
+				$this->em->remove($mq);
 			}
 		}
 
-		$this['form']->setDefaults([
-			'buyoutPrice' => $model->buyoutPrice,
-		]);
-
-		return $this;
-	}
-
-	public function handleRemoveQuestion($mqId)
-	{
-		
-		
+		$this->em->flush();
 	}
 
 }

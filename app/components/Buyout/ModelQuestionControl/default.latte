@@ -1,11 +1,33 @@
-{form form}
-	{label buyoutPrice /}{input buyoutPrice}
-	{foreach $form['questions']->containers as $question}
-		<div class="row">
-			<div class="col-lg-6">{$question['text']->label} {$question['text']->control}</div>
-			<div class="col-lg-3">{$question['yes']->label} {$question['yes']->control}</div>
-			<div class="col-lg-3">{$question['no']->label} {$question['no']->control}</div>
+{form form, class => "form-horizontal"}
+	<div class="form-body">
+		<div class="form-group">
+			{label buyoutPrice, class => 'control-label col-md-3' /}
+			<div class="col-md-9">
+				{input buyoutPrice}
+			</div>
 		</div>
-	{/foreach}
-	{input save}
+		{foreach $form['questions']->containers as $question}
+			<div class="form-group">
+				{label $question['text'], class => 'control-label col-md-3' /}
+				<div class="col-md-9">
+					{input $question['text']}
+				</div>
+			</div>
+			<div class="form-group">
+				{label $question['yes'], class => 'control-label col-md-3'  /}
+				<div class="col-md-9">
+					{input $question['yes']}
+				</div>
+			</div>
+			<div class="form-group">
+				{label $question['no'], class => 'control-label col-md-3'  /}
+				<div class="col-md-9">
+					{input $question['no']}
+				</div>
+			</div>
+
+		{/foreach}
+		{input $form['questions']['add'] class => 'ajax btn'}
+		{input save, class => 'btn btn-primary'}
+	</div>
 {/form}

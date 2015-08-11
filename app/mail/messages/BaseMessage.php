@@ -66,6 +66,7 @@ abstract class BaseMessage extends Message
 	public function addParameter($paramName, $value)
 	{
 		$this->params[$paramName] = $value;
+		return $this;
 	}
 	
 	public function send()

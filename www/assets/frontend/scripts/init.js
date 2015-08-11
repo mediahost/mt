@@ -12,6 +12,8 @@ jQuery(document).ready(function () {
 	Layout.initOWL();
 	Layout.initImageZoom();
 	LayersliderInit.initLayerSlider();
+	
+	Buyout.init();
 
 	// special for pages
 	Login.init();

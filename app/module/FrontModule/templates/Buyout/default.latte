@@ -1,0 +1,44 @@
+{includeblock '../categories.latte'}
+
+{block breadcrumb}{/block}
+
+{block content}
+<div class="container">
+	<!-- BEGIN SIDEBAR & CONTENT -->
+	<div class="row">
+
+		<!-- BEGIN SIDEBAR -->
+		<div class="sidebar col-md-3 col-sm-5">
+			{include categories}
+		</div>
+		<!-- END SIDEBAR -->
+
+		<!-- BEGIN CONTENT -->
+		<div class="col-md-9 col-sm-7" id="buyout">
+
+			<div class="margin-bottom-20">
+				<h1>{$page->name}</h1>
+				<div class="content-page">
+					<div class="page-html-content">
+						{$page->html|noescape}
+					</div>
+				</div>
+			</div>
+
+			<div id="loaded-content" class="loadingNoOverlay">
+				<div class="clearfix model-selector margin-bottom-20">
+					{control modelSelector}
+				</div>
+
+				<div class="panel" id="request-form-loading">
+					<div class="panel-body">
+						{snippet request}
+							{control requestForm}
+						{/snippet}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{/block}

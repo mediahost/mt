@@ -9,11 +9,17 @@ use App\Forms\Controls\TextInputBased\Spinner;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Stock;
+use App\Model\Facade\BasketFacade;
+use App\Model\Facade\Exception\InsufficientQuantityException;
 
 class AddToCart extends BaseControl
 {
 
 	const MAX = 100;
+	const MIN = 1;
+
+	/** @var BasketFacade @inject */
+	public $basketFacade;
 
 	// <editor-fold desc="events">
 
@@ -47,10 +53,10 @@ class AddToCart extends BaseControl
 		}
 
 		$form->addSpinner('quantity')
-				->setDisabled($this->isDisabled(1))
+				->setDisabled($this->isDisabled())
 				->setPlusButton('default', 'fa fa-angle-up')
 				->setMinusButton('default', 'fa fa-angle-down')
-				->setMin(1)
+				->setMin(self::MIN)
 				->setMax($this->max)
 				->setType(Spinner::TYPE_UP_DOWN)
 				->setSize(MetronicTextInputBase::SIZE_XS);
@@ -66,11 +72,18 @@ class AddToCart extends BaseControl
 	public function formSucceeded(Form $form, $values)
 	{
 		try {
-			// TODO: add to cart
-//			$basket->add($this->stock, $values->quantity);
-			throw new \Exception;
-			$this->onAfterAdd($values->quantity);
-		} catch (\Exception $ex) {
+			$quantity = isset($values->quantity) ? $values->quantity : 0;
+			$newQuantity = $this->basketFacade->add($this->stock, $quantity);
+			$this->alreadyInBasket = $newQuantity;
+			if ($this->alreadyInBasket === $this->stock->inStore) {
+				$form['add']->setDisabled();
+				$form->addError($this->translator->translate('cart.product.reachedMaxCount'));
+			}
+			if ($this->presenter->ajax) {
+				$this->redrawControl();
+			}
+			$this->onAfterAdd($this->stock, $newQuantity);
+		} catch (InsufficientQuantityException $e) {
 			$message1 = $this->translator->translate('cart.product.onlyCountOnStore', $this->stock->inStore);
 			$message2 = $this->translator->translate('cart.product.alreadyInBasket', $this->alreadyInBasket);
 			$message3 = $this->canAddToBasket ?
@@ -108,16 +121,15 @@ class AddToCart extends BaseControl
 	public function setStock(Stock $stock)
 	{
 		$this->stock = $stock;
-		$this->alreadyInBasket = 6; // TODO: load from basket
-		$free = $this->stock->inStore - $this->alreadyInBasket;
-		$this->canAddToBasket = $free > 0 ? $free : 0;
+		$this->alreadyInBasket = $this->basketFacade->getCountInBasket($this->stock);
+		$this->canAddToBasket = $this->basketFacade->getCountAllowedToAdd($this->stock);
 		$this->max = $this->canAddToBasket > self::MAX ? self::MAX : $this->canAddToBasket;
 		return $this;
 	}
 
-	public function isDisabled($disabledValue = 0)
+	public function isDisabled()
 	{
-		return $this->canAddToBasket <= $disabledValue;
+		return $this->canAddToBasket <= 0;
 	}
 
 	// </editor-fold>
