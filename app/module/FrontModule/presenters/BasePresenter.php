@@ -5,6 +5,7 @@ namespace App\FrontModule\Presenters;
 use App\BaseModule\Presenters\BasePresenter as BaseBasePresenter;
 use App\Components\Producer\Form\IModelSelectorFactory;
 use App\Components\Producer\Form\ModelSelector;
+use App\Extensions\Products\IProductListFactory;
 use App\Extensions\Products\ProductList;
 use App\Forms\Form;
 use App\Model\Entity\Category;
@@ -24,6 +25,9 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	/** @var IModelSelectorFactory @inject */
 	public $iModelSelectorFactory;
+
+	/** @var IProductListFactory @inject */
+	public $iProductListFactory;
 
 	/** @var CategoryRepository */
 	protected $categoryRepo;
@@ -64,8 +68,6 @@ abstract class BasePresenter extends BaseBasePresenter
 	protected function beforeRender()
 	{
 		parent::beforeRender();
-//		\Tracy\Debugger::barDump($this->basketFacade->getBasket());
-//		\Tracy\Debugger::barDump($this->basketFacade->getBasket()->items);
 		$this->template->categories = $this->categories;
 		$this->template->activeCategory = $this->activeCategory;
 		$this->template->showSlider = $this->showSlider;
@@ -142,7 +144,7 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	public function createComponentProducts()
 	{
-		$list = new ProductList();
+		$list = $this->iProductListFactory->create();
 		$list->setTranslator($this->translator);
 		$list->setExchange($this->exchange, $this->exchange->getWeb());
 		$list->setItemsPerPage($this->settings->pageConfig->rowsPerPage, $this->settings->pageConfig->itemsPerRow);
