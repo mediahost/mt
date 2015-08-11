@@ -95,6 +95,11 @@ class AddToCart extends BaseControl
 		}
 		$this->redrawControl();
 	}
+	
+	public function handleAddToCart($stockId)
+	{
+		
+	}
 
 	/** @return array */
 	protected function getDefaults()
@@ -113,6 +118,13 @@ class AddToCart extends BaseControl
 	public function render()
 	{
 		$this->template->alreadyInBasket = $this->alreadyInBasket;
+		parent::render();
+	}
+
+	public function renderLink()
+	{
+		$this->template->stock = $this->stock;
+		$this->setTemplateFile('link');
 		parent::render();
 	}
 

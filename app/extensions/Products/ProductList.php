@@ -2,6 +2,8 @@
 
 namespace App\Extensions\Products;
 
+use App\Components\Basket\Form\AddToCart;
+use App\Components\Basket\Form\IAddToCartFactory;
 use App\Extensions\Products\Components\Paginator;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
@@ -17,9 +19,11 @@ use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Exception;
 use h4kuna\Exchange\Exchange;
 use InvalidArgumentException;
+use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\QueryBuilder;
 use Kdyby\Translation\Translator;
 use Nette\Application\UI\Control;
+use Nette\Application\UI\Multiplier;
 use Nette\Localization\ITranslator;
 use Nette\Templating\FileTemplate;
 use Nette\Utils\ArrayHash;
@@ -32,6 +36,12 @@ class ProductList extends Control
 	const ORDER_ASC = 'ASC';
 	const ORDER_DESC = 'DESC';
 	const DEFAULT_PRICE_LEVEL = 'defaultPrice';
+
+	/** @var IAddToCartFactory @inject */
+	public $iAddToCartFactory;
+
+	/** @var EntityManager @inject */
+	public $em;
 
 	/** @var int @persistent */
 	public $page = 1;
@@ -694,7 +704,7 @@ class ProductList extends Control
 	protected function applySorting()
 	{
 //		try {
-			$this->addSorting($this->sort);
+		$this->addSorting($this->sort);
 //		} catch (InvalidArgumentException $exc) {
 //			throw new ProductListException('This sorting method isn\'t supported.');
 //		}
@@ -940,4 +950,28 @@ class ProductList extends Control
 	}
 
 	// </editor-fold>
+	// <editor-fold desc="controls">
+
+	/** @return AddToCart */
+	protected function createComponentAddToCart()
+	{
+		return new Multiplier(function ($itemId) {
+			$stockRepo = $this->em->getRepository(Stock::getClassName());
+			$stock = $stockRepo->find($itemId);
+			$control = $this->iAddToCartFactory->create();
+			if ($stock) {
+				$control->setStock($stock);
+			}
+			return $control;
+		});
+	}
+
+	// </editor-fold>
+}
+
+interface IProductListFactory
+{
+
+	/** @return ProductList */
+	function create();
 }
