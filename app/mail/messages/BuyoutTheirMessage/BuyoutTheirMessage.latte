@@ -8,13 +8,29 @@
 				<tr>
 					<td class="wrapper last">
 						<h4 style="font-size: 22px;display: block;margin: 5px 0 15px 0;">
-							Buyout!
-							{*_'Thank you for joining the %name%', NULL, $pageInfo->projectName*}
+							Požadavek na výkup telefonu
 						</h4>
 						<p>
-							{_'Your registration was successfull.'}
+							Děkujeme Vám za zájem o výkup telefonu. V nejbližší době Vás kontaktuje
+							naše výkní oddělení. Pak si plácneme a bude to cajk!
 						</p>
-						<br/>
+						
+						<h5>Osobní údaje</h5>
+						<p>E-mail: {$formData['email']}</p>
+						<p>Jméno a příjmení: {$formData['fullname']}</p>
+						
+						<h5>{$model->name}</h5>
+						<p>Výkupní cena: {$model->buyoutPrice}</p>
+
+						<h6>Odpovědi</h6>
+						<div>
+							{foreach $formData['questions'] as $id => $answer}
+								<p>Otázka: {$model->questions[$id]->question->text}</p>
+								<p>Odpověď: {$answer}</p>
+							{/foreach}
+						</div>
+						<h6>Celkem:</h6>
+						{$summary}
 					</td>
 				</tr>
 			</table>
