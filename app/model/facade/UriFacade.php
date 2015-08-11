@@ -13,12 +13,12 @@ class UriFacade extends Object
 	/** @var array */
 	private $presenters = [
 		'cs' => [
-			'Page' => 'strana',
-			'Service' => 'servis',
+			'Page' => 'Strana',
+			'Service' => 'Servis',
 		],
 		'sk' => [
-			'Page' => 'strana',
-			'Service' => 'servis',
+			'Page' => 'Strana',
+			'Service' => 'Servis',
 		],
 	];
 
