@@ -63,7 +63,9 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	protected function beforeRender()
 	{
-		parent::beforeRender();		
+		parent::beforeRender();
+//		\Tracy\Debugger::barDump($this->basketFacade->getBasket());
+//		\Tracy\Debugger::barDump($this->basketFacade->getBasket()->items);
 		$this->template->categories = $this->categories;
 		$this->template->activeCategory = $this->activeCategory;
 		$this->template->showSlider = $this->showSlider;
