@@ -10,6 +10,10 @@ class SettingsExtension extends CompilerExtension
 	/** @var array */
 	public $defaults = [
 		'modules' => [
+			'buyout' => [
+				'enabled' => FALSE,
+				'pageId' => 1,
+			],
 			'cron' => [ // access to cron scripts
 				'enabled' => FALSE,
 				'allowedIps' => ['127.0.0.1'],
