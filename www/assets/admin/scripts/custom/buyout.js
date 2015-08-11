@@ -41,5 +41,4 @@ $.nette.ext('typeahead', {
 		Buyout.init('[data-typeahead-url]');
 	}
 }, {
-	// ... shared context (this) of all callbacks
 });

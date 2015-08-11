@@ -47,6 +47,7 @@ class ModelQuestionControl extends BaseControl
 
 			$question->addText('yes', 'Yes')
 							->getControlPrototype()->class[] = 'mask_currency form-control input-small';
+			
 			$question->addText('no', 'No')
 							->getControlPrototype()->class[] = 'mask_currency form-control input-small';
 		}, 5);

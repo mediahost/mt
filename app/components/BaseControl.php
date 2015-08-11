@@ -27,7 +27,7 @@ abstract class BaseControl extends UI\Control
 	public $exchange;
 	
 	/** @var string */
-	private $templateFile = self::DEFAULT_TEMPLATE;
+	protected $templateFile = self::DEFAULT_TEMPLATE;
 	
 	/** @var bool */
 	protected $isAjax = FALSE;

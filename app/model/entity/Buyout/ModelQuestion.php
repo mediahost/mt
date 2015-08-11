@@ -27,7 +27,7 @@ class ModelQuestion extends BaseEntity
 	protected $model;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Question")
+	 * @ORM\ManyToOne(targetEntity="Question", fetch="EAGER")
 	 * @ORM\JoinColumn(name="question_id", referencedColumnName="id")
 	 */
 	protected $question;
