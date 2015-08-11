@@ -1,37 +1,35 @@
 {define categories}
-{cache 'categories'}
-	<div class="categories-menu">
-		<ul class="list-group margin-bottom-25">
-			{foreach $categories as $category}
-				{continueIf $category->parent !== NULL}
+<div class="categories-menu">
+	<ul class="list-group margin-bottom-25">
+		{foreach $categories as $category}
+			{continueIf $category->parent !== NULL}
 
-				{var isActive => $activeCategory && $activeCategory->isInPath($category)}
-				{var isAllowedExpandThisCategory => ($expandOnlyActiveCategories && $isActive) || !$expandOnlyActiveCategories}
-				{var isExpandable => $isAllowedExpandThisCategory && $category->hasChildren}
-				{var showSubmenu => $isExpandable}
-				{var showMegamenu => $category->hasChildren}
+			{var isActive => $activeCategory && $activeCategory->isInPath($category)}
+			{var isAllowedExpandThisCategory => ($expandOnlyActiveCategories && $isActive) || !$expandOnlyActiveCategories}
+			{var isExpandable => $isAllowedExpandThisCategory && $category->hasChildren}
+			{var showSubmenu => $isExpandable}
+			{var showMegamenu => $category->hasChildren}
 
-				<li n:class="list-group-item, $isActive ? active, $showSubmenu ? has-submenu">
-					{include categoryName, category => $category, arrowInLink => TRUE}
-					<div n:if="$showMegamenu" class="mega-menu-item">
-						{include megamenu, category => $category}
-					</div>
-				</li>
-				<li n:if="$showSubmenu"
-					n:class="list-group-item, submenu">
-					<ul n:class="submenu">
-						<li n:foreach="$category->children as $child"
-							{var isActiveChild => $activeCategory && $activeCategory->isInPath($child)}
-							n:class="list-group-item, $isActiveChild ? active">
-							{include submenu, category => $child, deep => 2, isActive => $isActiveChild, arrowInLink => FALSE}
-						</li>
-					</ul>
-				</li>
+			<li n:class="list-group-item, $isActive ? active, $showSubmenu ? has-submenu">
+				{include categoryName, category => $category, arrowInLink => TRUE}
+				<div n:if="$showMegamenu" class="mega-menu-item">
+					{include megamenu, category => $category}
+				</div>
+			</li>
+			<li n:if="$showSubmenu"
+				n:class="list-group-item, submenu">
+				<ul n:class="submenu">
+					<li n:foreach="$category->children as $child"
+						{var isActiveChild => $activeCategory && $activeCategory->isInPath($child)}
+						n:class="list-group-item, $isActiveChild ? active">
+						{include submenu, category => $child, deep => 2, isActive => $isActiveChild, arrowInLink => FALSE}
+					</li>
+				</ul>
+			</li>
 
-			{/foreach}
-		</ul>
-	</div>
-{/cache}
+		{/foreach}
+	</ul>
+</div>
 <div class="margin-bottom-20">
 	<a n:href=":Front:Service:">
 		<img src="{$basePath}/images/banners/service_banner.png" class="img-responsive" width="285" alt="{_'Service'}"/>
@@ -41,7 +39,7 @@
 
 {define categoryName}
 <i n:if="!$arrowInLink" class="fa fa-angle-right"></i>
-<a n:href="Category: url => $category->url">
+<a n:href="Category: id => $category->id">
 	<i n:if="$arrowInLink" class="fa fa-angle-right"></i>
 	{$category}
 	{if $showProductsCount}
@@ -72,7 +70,7 @@
 		{foreach $category->children as $child}
 			<div class="col-md-4 header-navigation-col">
 				<h4>
-					<a n:href="Category: url => $child->url">{$child}</a>
+					<a n:href="Category: id => $child->id">{$child}</a>
 				</h4>
 				{include megamenuSub, category => $child}
 			</div>
@@ -84,7 +82,7 @@
 {define megamenuSub}
 <ul>
 	<li n:foreach="$category->children as $child">
-		<a n:href="Category: url => $child->url">{$child}</a>
+		<a n:href="Category: id => $child->id">{$child}</a>
 	</li>
 </ul>
 {/define}
@@ -93,11 +91,11 @@
 <h2>{_'Bestsellers'}</h2>
 <div n:foreach="$bestsellerStocks as $stock" class="item">
 	{var product => $stock->product}
-	<a n:href="Product: 'url' => $product->url">
+	<a n:href="Product: $product->id">
 		<img src="{$basePath}/foto/{$product->image|size:'65'}" alt="{$product}">
 	</a>
 	<h3>
-		<a n:href="Product: 'url' => $product->url">
+		<a n:href="Product: $product->id">
 			{$product}
 		</a>
 	</h3>

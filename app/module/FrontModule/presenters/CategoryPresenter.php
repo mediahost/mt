@@ -13,17 +13,13 @@ use Nette\Utils\Strings;
 class CategoryPresenter extends BasePresenter
 {
 
-	public function actionDefault($url)
+	public function actionDefault($id)
 	{
-		$category = $this->categoryRepo->findOneByUrl($url);
+		$category = $this->categoryRepo->find($id);
 		if (!$category) {
 			$message = $this->translator->translate('Requested category doesn\'t exist. Try to choose another from list.');
 			$this->flashMessage($message, 'warning');
 			$this->redirect('Homepage:');
-		}
-		$category->setCurrentLocale($this->locale);
-		if ($category->url !== $url) {
-			$this->redirect('this', ['url' => $category->url]);
 		}
 		$this->activeCategory = $category;
 		$this->template->category = $category;

@@ -3,3 +3,4 @@ product:
 	alreadyInBasket: 'V košíku je již %count% kus.|V košíku jsou již %count% kusy.|V košíku je již %count% kusů.'
 	youCanAddOnly: 'Můžete přidat pouze %count% kus.|Můžete přidat pouze %count% kusy.|Můžete přidat pouze %count% kusů.'
 	youCannotAdd: 'Nelze přidat další.'
+	reachedMaxCount: 'Všechny dostupné kusy jsou již v košíku.'

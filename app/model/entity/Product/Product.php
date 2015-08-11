@@ -11,12 +11,13 @@ use Nette\Utils\DateTime;
 
 /**
  * @ORM\Entity(repositoryClass="App\Model\Repository\ProductRepository")
+ * @ORM\EntityListeners({"App\Listeners\Model\Entity\ProductListener"})
  *
  * @property string $name
  * @property string $slug
  * @property string $description
  * @property string $perex
- * @property ProductSeo $seo
+ * @property Seo $seo
  * @property mixed $createdBy
  * @property mixed $updatedBy
  * @property mixed $deletedBy

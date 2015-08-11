@@ -2,8 +2,8 @@
 
 namespace App\Model\Facade;
 
+use App\Model\Entity\Buyout\ModelQuestion;
 use App\Model\Entity\Buyout\Question;
-use App\Model\Entity\ProducerModel;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -23,7 +23,7 @@ class QuestionFacade extends Object
 	 */
 	public function suggestByText($text, $lang = NULL)
 	{
-		$qb = $this->em->getRepository(Question::class)
+		$qb = $this->em->getRepository(Question::getClassName())
 				->createQueryBuilder('q')
 				->select('q.id', 't.text')
 				->join('q.translations', 't')
@@ -57,7 +57,7 @@ class QuestionFacade extends Object
 	 */
 	public function findOneByText($text, $lang = NULL)
 	{
-		$qb = $this->em->getRepository(Question::class)
+		$qb = $this->em->getRepository(Question::getClassName())
 				->createQueryBuilder('q')
 				->join('q.translations', 't')
 				->where('t.text = :text')
@@ -83,7 +83,7 @@ class QuestionFacade extends Object
 
 	public function findByModel($model, $lang = NULL, $limit = NULL, $offset = 0, &$totalCount = NULL)
 	{
-		$qb = $this->em->getRepository(\App\Model\Entity\Buyout\ModelQuestion::class)
+		$qb = $this->em->getRepository(ModelQuestion::getClassName())
 				->createQueryBuilder('mq')
 				->join('mq.model', 'm')
 				->join('mq.question', 'q')

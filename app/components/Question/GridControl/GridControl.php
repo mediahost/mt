@@ -19,7 +19,7 @@ class GridControl extends BaseControl
 		$grid->setTranslator($this->translator);
 		$grid->setTheme(BaseGrid::THEME_METRONIC);
 
-		$repo = $this->em->getRepository(Question::class);
+		$repo = $this->em->getRepository(Question::getClassName());
 		$qb = $repo->createQueryBuilder('q')
 				->leftJoin('q.translations', 't')
 				->where('t.locale = :lang OR t.locale = :defaultLang')

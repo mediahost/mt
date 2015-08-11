@@ -4,6 +4,7 @@ namespace App\Components\Product\Form;
 
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
+use App\Model\Entity\Seo;
 use App\Model\Entity\Stock;
 use Nette\Utils\ArrayHash;
 use Nette\Utils\Strings;
@@ -18,7 +19,7 @@ class StockSeo extends StockBase
 
 		$form = new Form();
 		$form->setTranslator($this->translator)
-			->setRenderer(new MetronicFormRenderer());
+				->setRenderer(new MetronicFormRenderer());
 		$form->getElementPrototype()->class('ajax');
 
 		$product = $this->stock->product;
@@ -54,12 +55,16 @@ class StockSeo extends StockBase
 	{
 		$this->stock->product->setCurrentLocale($this->translator->getLocale());
 		$expectedSlug = Strings::webalize($this->stock->product->name);
+		$productTranslate = $this->stock->product->translateAdd($this->translator->getLocale());
+
 		if ($values->url && $values->url !== $expectedSlug) {
-			$this->stock->product->translateAdd($this->translator->getLocale())->slug = $values->url;
+			$productTranslate->slug = $values->url;
 		}
-		$this->stock->product->translateAdd($this->translator->getLocale())->seo->name = $values->title;
-		$this->stock->product->translateAdd($this->translator->getLocale())->seo->keywords = $values->keywords;
-		$this->stock->product->translateAdd($this->translator->getLocale())->seo->description = $values->description;
+		$seo = (new Seo())
+				->setName($values->title)
+				->setKeywords($values->keywords)
+				->setDescription($values->description);
+		$productTranslate->seo = $seo;
 		$this->stock->product->mergeNewTranslations();
 
 		return $this;

@@ -4,6 +4,7 @@ namespace App\BaseModule\Presenters;
 
 use App\Extensions\Settings\SettingsStorage;
 use App\Model\Entity\Rate;
+use App\Model\Facade\BasketFacade;
 use App\Model\Facade\GroupFacade;
 use App\Model\Facade\ParameterFacade;
 use App\Model\Facade\ProducerFacade;
@@ -61,6 +62,9 @@ abstract class BasePresenter extends Presenter
 
 	/** @var ProducerFacade @inject */
 	public $producerFacade;
+
+	/** @var BasketFacade @inject */
+	public $basketFacade;
 
 	/** @var int */
 	protected $priceLevel = NULL;

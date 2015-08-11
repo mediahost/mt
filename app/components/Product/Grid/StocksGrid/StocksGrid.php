@@ -169,7 +169,7 @@ class StocksGrid extends BaseControl
 				->setFilterSelect([1 => 'YES', 0 => 'NO']);
 		$grid->getColumn('active')->headerPrototype->style = 'width:95px';
 
-		$grid->addActionHref('view', 'View on web', ':Front:Product:viewById')
+		$grid->addActionHref('view', 'View on web', ':Front:Product:')
 				->setIcon('fa fa-eye');
 
 		$grid->addActionHref('edit', 'Edit')

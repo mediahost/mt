@@ -19,6 +19,7 @@ use Nette\Security\IIdentity;
  * @property string $mail
  * @property string $locale
  * @property string $currency
+ * @property Basket $basket
  * @method User setMail(string $mail)
  * @method User setLocale(string $locale)
  * @method User setCurrency(string $code)
@@ -46,6 +47,9 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 
 	/** @ORM\OneToMany(targetEntity="VisitedProduct", mappedBy="user", fetch="EXTRA_LAZY") */
 	protected $visitedProducts;
+	
+	/** @ORM\OneToOne(targetEntity="Basket", mappedBy="user") */
+	protected $basket;
 
 	public function __construct($mail = NULL)
 	{

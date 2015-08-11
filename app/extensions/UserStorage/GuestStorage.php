@@ -66,6 +66,16 @@ class GuestStorage extends Object implements IUserStorage
 		unset($this->section->visitedProducts[$stock->id]);
 		return $this;
 	}
+	
+	public function setBasketId($id)
+	{
+		$this->section->basketId = $id;
+	}
+	
+	public function getBasketId()
+	{
+		return $this->section->basketId;
+	}
 
 	public function getLogoutReason()
 	{
@@ -99,6 +109,7 @@ class GuestStorage extends Object implements IUserStorage
 		$user->addRole($role);
 		$this->section->identity = $user;
 		$this->section->visitedProducts = [];
+		$this->section->basketId = NULL;
 		return $this;
 	}
 

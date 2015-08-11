@@ -8,7 +8,7 @@ extensions:
 	translatable: Zenify\DoctrineBehaviors\DI\TranslatableExtension
 
 events:
-    debugger: on
+    debugger: off
 
 doctrine:
 	resultCache: Kdyby\DoctrineCache\Cache
