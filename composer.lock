@@ -1981,12 +1981,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mediahost/DoctrineBehaviors.git",
-                "reference": "10d2dca149b722065ca75597edd19ccea41bf46a"
+                "reference": "336eca419db3860cfef00147196c9429c4bcf39f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mediahost/DoctrineBehaviors/zipball/10d2dca149b722065ca75597edd19ccea41bf46a",
-                "reference": "10d2dca149b722065ca75597edd19ccea41bf46a",
+                "url": "https://api.github.com/repos/mediahost/DoctrineBehaviors/zipball/336eca419db3860cfef00147196c9429c4bcf39f",
+                "reference": "336eca419db3860cfef00147196c9429c4bcf39f",
                 "shasum": ""
             },
             "require": {
@@ -2035,7 +2035,7 @@
             "support": {
                 "source": "https://github.com/mediahost/DoctrineBehaviors/tree/master"
             },
-            "time": "2015-07-29 09:06:13"
+            "time": "2015-08-10 07:31:49"
         },
         {
             "name": "latte/latte",
@@ -4245,7 +4245,7 @@
             ],
             "authors": [
                 {
-                    "name": "Pádraic Brady",
+                    "name": "Padraic Brady",
                     "email": "padraic.brady@gmail.com",
                     "homepage": "http://blog.astrumfutura.com"
                 },

@@ -3,10 +3,13 @@
 namespace App\Listeners\Model\Entity;
 
 use App\Model\Entity\Category;
+use App\Model\Facade\CategoryFacade;
+use App\Model\Facade\StockFacade;
 use App\Model\Repository\CategoryRepository;
 use Doctrine\ORM\Events;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Events\Subscriber;
+use Nette\Caching\Cache;
 use Nette\Object;
 
 class CategoryListener extends Object implements Subscriber
@@ -14,6 +17,12 @@ class CategoryListener extends Object implements Subscriber
 
 	/** @var EntityManager @inject */
 	public $em;
+
+	/** @var CategoryFacade @inject */
+	public $categoryFacade;
+
+	/** @var StockFacade @inject */
+	public $stockFacade;
 
 	/** @var CategoryRepository */
 	private $categoryRepo;
@@ -48,7 +57,13 @@ class CategoryListener extends Object implements Subscriber
 
 	private function clearCache()
 	{
-		return $this->getRepository()->clearResultCache(CategoryRepository::ALL_CATEGORIES_CACHE_ID);
+		$this->categoryFacade->getCache()->clean([
+			Cache::TAGS => [CategoryFacade::TAG_ALL_CATEGORIES],
+		]);
+		$this->stockFacade->getCache()->clean([
+			Cache::TAGS => [StockFacade::TAG_ALL_PRODUCTS],
+		]);
+		$this->getRepository()->clearResultCache(CategoryRepository::ALL_CATEGORIES_CACHE_ID);
 	}
 
 	/** @return CategoryRepository */

@@ -1,0 +1,25 @@
+doctrine:
+	host: localhost
+	user: user
+	password: user
+	dbname: mt
+
+facebook:
+	appId: '842365949188917'
+	appSecret: '3af671f94c5a079c7fd2a6080f71d3a7'
+
+twitter:
+	consumerKey: 'consumer_key'
+	consumerSecretKey: 'secret_key'
+
+installer:
+	lock: off
+	doctrine: on
+	adminer: on
+	composer: on
+	initUsers: 
+		admin: ['admin', 'admin']
+
+nette:
+	mailer:
+		smtp: off

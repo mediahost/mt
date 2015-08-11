@@ -2,8 +2,11 @@
 
 namespace App\Extensions\UserStorage;
 
+use App\Model\Entity\Basket;
 use App\Model\Entity\Stock;
+use App\Model\Entity\User;
 use App\Model\Entity\VisitedProduct;
+use App\Model\Repository\BasketRepository;
 use App\Model\Repository\StockRepository;
 use App\Model\Repository\VisitedProductRepository;
 use DateTime;
@@ -28,19 +31,23 @@ class UserStorageStrategy extends Object implements IUserStorage
 	/** @var StockRepository */
 	private $stockRepo;
 
+	/** @var BasketRepository */
+	private $basketRepo;
+
 	/** @var EntityManager */
 	private $em;
 
 	public function __construct(EntityManager $em)
 	{
 		$this->em = $em;
-		$this->visitedRepo = $em->getRepository(VisitedProduct::class);
-		$this->stockRepo = $em->getRepository(Stock::class);
+		$this->visitedRepo = $em->getRepository(VisitedProduct::getClassName());
+		$this->stockRepo = $em->getRepository(Stock::getClassName());
+		$this->basketRepo = $em->getRepository(Basket::getClassName());
 	}
 
 	public function getIdentity()
 	{
-		if ($this->userStorage->isAuthenticated()) {
+		if ($this->isAuthenticated()) {
 			return $this->userStorage->getIdentity();
 		} else {
 			return $this->guestStorage->getIdentity();
@@ -84,9 +91,39 @@ class UserStorageStrategy extends Object implements IUserStorage
 		return $this;
 	}
 
-	public function addVisited(Stock $stock)
+	public function getBasket()
 	{
 		if ($this->userStorage->isAuthenticated()) {
+			$basket = $this->userStorage->identity->basket;
+			if (!$basket) {
+				$basket = $this->createBasket($this->userStorage->identity);
+			}
+			return $basket;
+		} else {
+			$basket = NULL;
+			$basketId = $this->guestStorage->getBasketId();
+			if ($basketId) {
+				$basket = $this->basketRepo->find($basketId);
+			}
+			if (!$basket) {
+				$basket = $this->createBasket();
+				$this->guestStorage->setBasketId($basket->id);
+			}
+			return $basket;
+		}
+	}
+
+	private function createBasket(User $user = NULL)
+	{
+		$basket = new Basket($user);
+		$basketRepo = $this->em->getRepository(Basket::getClassName());
+		$basketRepo->save($basket);
+		return $basket;
+	}
+
+	public function addVisited(Stock $stock)
+	{
+		if ($this->isAuthenticated()) {
 			$visited = $this->visitedRepo->findOneByUserAndStock($this->userStorage->identity, $stock);
 
 			if ($visited === NULL) {
@@ -117,7 +154,7 @@ class UserStorageStrategy extends Object implements IUserStorage
 	{
 		$ids = [];
 
-		if ($this->userStorage->isAuthenticated()) {
+		if ($this->isAuthenticated()) {
 			$visited = $this->visitedRepo->findBy([
 				'user' => $this->userStorage->identity,
 					], ['visited' => 'ASC'], $limit, 0);
@@ -139,7 +176,7 @@ class UserStorageStrategy extends Object implements IUserStorage
 	 */
 	public function setLocale($locale)
 	{
-		if ($this->userStorage->isAuthenticated()) {
+		if ($this->isAuthenticated()) {
 			$this->userStorage->identity->locale = $locale;
 			$this->em->persist($this->userStorage->identity)
 					->flush();
@@ -156,7 +193,7 @@ class UserStorageStrategy extends Object implements IUserStorage
 	 */
 	public function setCurrency($currency)
 	{
-		if ($this->userStorage->isAuthenticated()) {
+		if ($this->isAuthenticated()) {
 			$this->userStorage->identity->currency = $currency->getCode();
 			$this->em->persist($this->userStorage->identity)
 					->flush();

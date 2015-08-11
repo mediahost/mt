@@ -1,7 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Router;
 
+use App\Model\Facade\CategoryFacade;
+use App\Model\Facade\PageFacade;
+use App\Model\Facade\StockFacade;
+use App\Model\Facade\UriFacade;
 use Drahak\Restful\Application\Routes\ResourceRoute;
 use Nette\Application\IRouter;
 use Nette\Application\Routers\Route;
@@ -10,7 +14,23 @@ use Nette\Application\Routers\RouteList;
 class RouterFactory
 {
 
-	const LOCALE_PARAM = '[<locale=sk cs|sk|en>/]';
+	const LOCALE_PARAM_NAME = 'locale';
+	const LOCALE_DEFAULT_LANG = 'sk';
+	const LOCALE_PARAM = '[<locale=sk cs|sk|en>/]'; // TODO: remove on PHP 5.6
+	// TODO: PHP 5.6 can concat strings
+//	const LOCALE_PARAM = '[<' . self::LOCALE_PARAM_NAME . '=' . self::LOCALE_DEFAULT_LANG . ' cs|sk|en>/]';
+
+	/** @var StockFacade @inject */
+	public $stockFacade;
+
+	/** @var CategoryFacade @inject */
+	public $categoryFacade;
+
+	/** @var PageFacade @inject */
+	public $pageFacade;
+
+	/** @var UriFacade @inject */
+	public $uriFacade;
 
 	/**
 	 * @return IRouter
@@ -18,8 +38,6 @@ class RouterFactory
 	public function createRouter()
 	{
 		$router = new RouteList();
-
-		$router[] = new Route('index.php', 'Front:Default:default', Route::ONE_WAY);
 
 		$router[] = $fotoRouter = new RouteList('Foto');
 		$router[] = $apiRouter = new RouteList('Api');
@@ -88,6 +106,11 @@ class RouterFactory
 		// </editor-fold>
 		// <editor-fold desc="Front">
 
+		$frontRouter[] = new Route('install', [
+			'presenter' => 'Install',
+			'action' => 'default',
+		]);
+
 		$frontRouter[] = new Route(self::LOCALE_PARAM . 'search[/<text>]', [
 			'presenter' => 'Category',
 			'action' => 'search',
@@ -109,25 +132,28 @@ class RouterFactory
 		]);
 
 		$slugs = '[0-9a-z/-]+';
-		$sluggablePresenters = [ // alias => Presenter
-			'c' => 'Category',
-			'p' => 'Product',
-			'page' => 'Page',
-		];
-		foreach ($sluggablePresenters as $alias => $presenter) {
-			$frontRouter[] = new Route(self::LOCALE_PARAM . $alias . '/<url ' . $slugs . '>', [
-				'presenter' => $presenter,
-				'action' => 'default',
-				'url' => NULL,
-			]);
-		}
-
-		$frontRouter[] = new Route(self::LOCALE_PARAM . '<presenter>/<action>[/<id>]', [
+		$frontRouter[] = $routeProduct = new FilterRoute(self::LOCALE_PARAM . '<id ' . $slugs . '>', [
+			'presenter' => 'Product',
+			'action' => 'default',
+		]);
+		$frontRouter[] = $routeCategory = new FilterRoute(self::LOCALE_PARAM . '<id ' . $slugs . '>', [
+			'presenter' => 'Category',
+			'action' => 'default',
+		]);
+		$frontRouter[] = $routePage = new FilterRoute(self::LOCALE_PARAM . '<id ' . $slugs . '>', [
+			'presenter' => 'Page',
+			'action' => 'default',
+		]);
+		$frontRouter[] = $routeMain = new FilterRoute(self::LOCALE_PARAM . '<presenter>[/<action>[/<id>]]', [
 			'presenter' => 'Homepage',
 			'action' => 'default',
 			'id' => NULL,
 		]);
-
+		$routeProduct->addFilter('id', [$this->stockFacade, 'urlToId'], [$this->stockFacade, 'idToUrl']);
+		$routeCategory->addFilter('id', [$this->categoryFacade, 'urlToId'], [$this->categoryFacade, 'idToUrl']);
+		$routePage->addFilter('id', [$this->pageFacade, 'slugToId'], [$this->pageFacade, 'idToSlug']);
+		$routeMain->addFilter('presenter', [$this->uriFacade, 'nameToPresenter'], [$this->uriFacade, 'presenterToName']);
+		$routeMain->addFilter('action', [$this->uriFacade, 'nameToAction'], [$this->uriFacade, 'actionToName']);
 		// </editor-fold>
 
 		return $router;

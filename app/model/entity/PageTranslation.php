@@ -8,6 +8,7 @@ use Knp\DoctrineBehaviors\Model;
 
 /**
  * @ORM\Entity
+ * @ORM\EntityListeners({"App\Listeners\Model\Entity\PageListener"})
  *
  * @property string $name
  * @property string $html

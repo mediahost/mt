@@ -2,6 +2,7 @@
 
 namespace App\Extensions\Installer\Model;
 
+use App\Helpers;
 use App\Model\Entity\Unit;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
@@ -9,6 +10,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use Nette\InvalidArgumentException;
 use Nette\Object;
+use Nette\Utils\FileSystem;
 
 class InstallerModel extends Object
 {
@@ -78,6 +80,23 @@ class InstallerModel extends Object
 				throw new InvalidArgumentException('Invalid name of role. Check if exists role with name \'' . $role . '\'.');
 			}
 			$this->userFacade->create($initUserMail, $pass, $roleEntity);
+		}
+		return TRUE;
+	}
+
+	/**
+	 * Clear folders in temp dir
+	 * @param string $tempDir
+	 * @return boolean
+	 */
+	public function clearTempDir($tempDir)
+	{
+		$folders = [
+			'proxies',
+		];
+		foreach ($folders as $folder) {
+			$path = Helpers::getPath($tempDir, $folder);
+			FileSystem::delete($path);
 		}
 		return TRUE;
 	}

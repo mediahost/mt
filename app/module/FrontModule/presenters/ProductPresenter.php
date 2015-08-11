@@ -19,10 +19,9 @@ class ProductPresenter extends BasePresenter
 	/** @var Stock */
 	public $stock;
 
-	public function actionDefault($url)
+	public function actionDefault($id)
 	{
-		$product = $this->productRepo->findOneByUrl($url);
-		
+		$product = $this->productRepo->find($id);
 		if (!$product) {
 			$message = $this->translator->translate('Requested product doesn\'t exist. Try to choose another from list.');
 			$this->flashMessage($message, 'warning');
@@ -30,10 +29,6 @@ class ProductPresenter extends BasePresenter
 		}
 		
 		$product->setCurrentLocale($this->locale);
-		
-		if ($product->url !== $url) {
-			$this->redirect('Product:', ['url' => $product->url]);
-		}
 		
 		$this->stock = $product->stock;
 		
@@ -43,18 +38,6 @@ class ProductPresenter extends BasePresenter
 		
 		// Last visited
 		$this->user->storage->addVisited($this->stock);
-	}
-
-	public function actionViewById($id)
-	{
-		$product = $this->productRepo->find($id);
-		if (!$product) {
-			$message = $this->translator->translate('Requested product doesn\'t exist. Try to choose another from list.');
-			$this->flashMessage($message, 'warning');
-			throw new BadRequestException;
-		}
-		$product->setCurrentLocale($this->locale);
-		$this->redirect('Product:', ['url' => $product->url]);
 	}
 	
 	public function actionSearchJson($text, $page = 1, $perPage = 10)

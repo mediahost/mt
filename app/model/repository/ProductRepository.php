@@ -81,4 +81,16 @@ class ProductRepository extends BaseRepository
 						->getResult();
 	}
 
+	public function findAllWithTranslation(array $criteria = [])
+	{
+		parent::findBy($criteria);
+		$qb = $this->createQueryBuilder('p')
+				->whereCriteria($criteria)
+				->select('p, t')
+				->join('p.translations', 't');
+
+		return $qb->getQuery()
+						->getResult();
+	}
+
 }
