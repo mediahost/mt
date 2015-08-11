@@ -932,6 +932,9 @@ Header and header elements
 	font-size: 13px;
 	height: 38px;
 }
+.product-page-cart .btn[disabled] {
+	background-color: rgba(66, 139, 202, 0.39);
+}
 .product-page-cart .already-in-basket {
 	float: left;
 	margin-left: 10px;
