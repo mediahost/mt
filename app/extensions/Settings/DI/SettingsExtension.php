@@ -13,6 +13,7 @@ class SettingsExtension extends CompilerExtension
 			'buyout' => [
 				'enabled' => FALSE,
 				'pageId' => 1,
+				'email' => 'buyout@mt.sk',
 			],
 			'cron' => [ // access to cron scripts
 				'enabled' => FALSE,

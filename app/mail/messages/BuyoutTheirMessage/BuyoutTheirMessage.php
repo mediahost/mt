@@ -5,13 +5,12 @@ namespace App\Mail\Messages;
 class BuyoutTheirMessage extends BaseMessage
 {
 
-	public function __construct()
+	protected function build()
 	{
-		parent::__construct();
-		$this->setFrom('buyout@mt.sk');
+		$this->setFrom($this->settings->modules->buyout->email);
 		$this->setSubject('Buyout request');
+		return parent::build();
 	}
-
 }
 
 interface IBuyoutTheirMessageFactory
