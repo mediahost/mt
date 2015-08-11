@@ -29,10 +29,10 @@ class RequestControl extends BaseControl
 
 	/** @var IBuyoutOurMessageFactory @inject */
 	public $iBuyoutOurMessageFactory;
-	
+
 	/** @var IBuyoutTheirMessageFactory @inject */
 	public $iBuyoutTheirMessageFactory;
-	
+
 	/** @var array */
 	public $onSend = [];
 
@@ -79,38 +79,43 @@ class RequestControl extends BaseControl
 
 	public function formSucceeded(Form $form, ArrayHash $values)
 	{
-		if ($form['recalculate']->isSubmittedBy()) {
-			$this->summary = (int) $this->model->buyoutPrice;
 
-			foreach ($values['questions'] as $id => $question) {
-				$qm = $this->model->questions[$id];
+		$this->summary = (int) $this->model->buyoutPrice;
 
-				$price = 0;
+		foreach ($values['questions'] as $id => $question) {
+			$qm = $this->model->questions[$id];
 
-				if ($question === 'y') {
-					$price = (int) $qm->priceA;
-				} else if ($question === 'n') {
-					$price = (int) $qm->priceB;
-				}
-				$this->summary += $price;
-				
-				if ($this->summary < 0) {
-					$this->summary = 0;
-				}
+			$price = 0;
+
+			if ($question === 'y') {
+				$price = (int) $qm->priceA;
+			} else if ($question === 'n') {
+				$price = (int) $qm->priceB;
 			}
-		} elseif ($form['send']->isSubmittedBy()) {
+			$this->summary += $price;
+
+			if ($this->summary < 0) {
+				$this->summary = 0;
+			}
+		}
+
+		if ($form['send']->isSubmittedBy()) {
 			$our = $this->iBuyoutOurMessageFactory->create();
 			$our->addParameter('model', $this->model)
-					->addParameter('formData', $values);
+					->addParameter('formData', $values)
+					->addParameter('summary', $this->summary);
+
 			$our->setFrom($values->email);
 			$our->send();
-			
+
 			$their = $this->iBuyoutTheirMessageFactory->create();
 			$their->addParameter('model', $this->model)
-					->addParameter('formData', $values);
+					->addParameter('formData', $values)
+					->addParameter('summary', $this->summary);
+
 			$their->addTo($values->email);
 			$their->send();
-			
+
 			$this->onSend();
 		}
 
