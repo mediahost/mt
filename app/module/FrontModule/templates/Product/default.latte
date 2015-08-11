@@ -66,7 +66,7 @@
 								{/if}
 							</div>
 						</div>
-						<div class="description" n:if="$product->perex">
+						<div class="product-page-perex" n:if="$product->perex">
 							<p>{$product->perex|noescape}</p>
 						</div>
 						<div class="product-page-cart">
@@ -151,8 +151,8 @@
 						</div>
 					</div>
 
-					<div class="sticker sticker-new" n:if="$product->hasSign($newSign)"></div>
-					<div class="sticker sticker-sale" n:if="$product->hasSign($saleSign)"></div>
+					<div class="sticker sticker-new" n:if="isset($newSign) && $product->hasSign($newSign)"></div>
+					<div class="sticker sticker-sale" n:if="isset($saleSign) && $product->hasSign($saleSign)"></div>
 				</div>
             </div>
 

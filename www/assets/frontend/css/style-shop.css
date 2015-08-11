@@ -914,10 +914,13 @@ Header and header elements
 	height: 26px;
 }
 
-.product-page-cart {
-	border-top: 1px solid #f4f4f4;
+.product-page-perex {
 	border-bottom: 1px solid #f4f4f4;
-	padding: 20px 0;
+	margin-bottom: 20px;
+}
+.product-page-cart {
+	border-bottom: 1px solid #f4f4f4;
+	padding-bottom: 20px;
 	margin-bottom: 18px;
 }
 .product-quantity,
