@@ -1,2 +1,4 @@
 signOutSuccess: 'You have been successfuly signed out.'
 signedInRequired: 'You should be logged in!'
+cart:
+	stockNotFound: 'Requested stock was not found'

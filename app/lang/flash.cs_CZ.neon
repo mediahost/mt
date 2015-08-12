@@ -1,2 +1,4 @@
 signOutSuccess: 'Byli jste úspěšně odhlášeni.'
 signedInRequired: 'Měl byste být přihlášen!'
+cart:
+	stockNotFound: 'Požadovaný produkt nebyl nalezen'

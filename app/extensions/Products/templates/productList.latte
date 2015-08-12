@@ -30,7 +30,7 @@
 {/snippet}
 
 {define product}
-<div class="product-item">
+<div class="product-item" id="add-to-cart-{$stock->id}">
 	<div class="pi-img-wrapper">
 		<img src="{$basePath}/foto/{$product->image|size:'238'}" class="img-responsive" alt="{$product}">
 		<div>
@@ -42,6 +42,8 @@
 		<a href="{plink Product: $product->id}">{$product}</a>
 	</h3>
 	<div class="pi-price">{$stock->getPrice($priceLevel)|currencyVat}</div>
-	<a href="{control addToCart-$stock->id:link}" class="btn btn-default add2cart">{_'Add to cart'}</a>
+	<a n:href="addToCart! $stock->id"
+	   n:class="btn, btn-default, add2cart, ajax, !$basket->getCountAllowedToAdd($stock) ? disabled"
+	   data-target-loading="#add-to-cart-{$stock->id}">{_'Add to cart'}</a>
 </div>
 {/define}
