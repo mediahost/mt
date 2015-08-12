@@ -38,7 +38,7 @@
 					}
 				}
 			}
-                        &.active + .submenu, &:hover + .submenu, .submenu:hover {
+                        &.active + .submenu, &:hover + .submenu, & > .submenu:hover {
                                 border-left: 5px @blue solid;
                                 li {
                                     margin-left: -5px;
@@ -336,10 +336,13 @@
         }
     }
 }
-@media (min-width: 1200px) {
+@media (min-width: 925px) {
     .ecommerce .header-navigation > ul > li > a {
         padding: 15px 15px;
         border-right: 2px #ECECEC solid;
+    }
+    .ecommerce .header-navigation > ul > li > a:last-child {
+        border-right: none;
     }
 }
 .header-navigation-content h4, .ecommerce .header-navigation-content h4 {
