@@ -19,18 +19,16 @@
 				display: block;
 				text-decoration: none;
 				padding: 8px 15px;
-				border-bottom: @menuLineThickness #fff solid;
                 		color: white;
-                                .gradientBackground(@blue, @blueDark, 0, 100);
+                                .gradientBackground(@blueDark, @blue, 0, 100);
 				&.has-submenu {
 					border-bottom: none;
 				}
 			}
 			&.active, &:hover {
 				& > a {
-                                        .gradientBackground(@blue, @blueDark, 0, 100);
+                                        .gradientBackground(@blue + #111, @blueDark + #111, 0, 100);
 					color: white;
-        				border-bottom: @menuLineThickness @blueMenuLine solid;
                                         border-left: 5px @blue solid;
                                         padding-left: 10px;
 				}
