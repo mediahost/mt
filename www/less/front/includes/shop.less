@@ -10,7 +10,7 @@
 .categories-menu {
 	position: static;
 	& > ul.list-group {
-		border-left: 5px @blue solid;
+		border-left: none;
 		& > li.list-group-item {
 			padding: 0px;
 			background: #FFF;
@@ -19,22 +19,18 @@
 				display: block;
 				text-decoration: none;
 				padding: 8px 15px;
-				border-bottom: @menuLineThickness #fff solid;
                 		color: white;
-                                .gradientBackground(@blue, @blueDark, 0, 100);
-				&:hover {
-                                       .gradientBackground(@blueInvert, @blueInvertDark, 0, 100);
-        				border-bottom: @menuLineThickness @blueMenuLine solid;
-				}
+                                .gradientBackground(@blueDark, @blue, 0, 100);
 				&.has-submenu {
 					border-bottom: none;
 				}
 			}
-			&.active {
+			&.active, &:hover {
 				& > a {
-                                        .gradientBackground(@blue, @blueDark, 0, 100);
+                                        .gradientBackground(@blue + #111, @blueDark + #111, 0, 100);
 					color: white;
-        				border-bottom: @menuLineThickness @blueMenuLine solid;
+                                        border-left: 5px @blue solid;
+                                        padding-left: 10px;
 				}
 				.mega-menu-item {
 					h4 {
@@ -42,6 +38,16 @@
 					}
 				}
 			}
+                        &.active + .submenu, &:hover + .submenu, .submenu:hover {
+                                border-left: 5px @blue solid;
+                                li {
+                                    margin-left: -5px;
+                                }
+                        }
+                        &.active + .submenu:hover {
+                            border-left: none;
+                            margin-left: 0;
+                        }
 			&:first-child > a {
 				border-top: 0px;
 			}
@@ -92,7 +98,7 @@
 		text-transform: none;
 		& > li.list-group-item {
 			padding: 0px;
-			border: none;
+			border: none;  
 			a {
 				color: @blue;
 			}
@@ -292,14 +298,20 @@
     background: @blue;   
 }
 
-.header-navigation .dropdown-menu > li:first-child {
+.header-navigation .dropdown-menu > li:first-child, .top-cart-content {
     border-top: 2px @blue solid;
 }
-.header-navigation > ul > li.dropdown:hover > a:after {
+.header-navigation > ul > li.dropdown:hover > a:after, .top-cart-content:after {
     border-bottom: 8px @blue solid;
 }
-.shop-currencies a.current {
+.shop-currencies a.current, .breadcrumb > .active {
     color: @blue;
+}
+.nav-tabs {
+    border-color: @blue;
+}
+.product-item .add2cart:hover {
+    border-color: transparent;
 }
 
 .ecommerce .header-navigation ul > li.open > a, .ecommerce .header-navigation ul > li.open > a:hover, .ecommerce .header-navigation ul > li.open > a:focus {
@@ -316,11 +328,18 @@
     width: 100%;
     & > ul > li > a {
         color: #3E4D5C;
+        border-radius: 10px;
     }
     & ul > li > a {
         &:hover {
             color: #3E4D5C;
         }
+    }
+}
+@media (min-width: 1200px) {
+    .ecommerce .header-navigation > ul > li > a {
+        padding: 15px 15px;
+        border-right: 2px #ECECEC solid;
     }
 }
 .header-navigation-content h4, .ecommerce .header-navigation-content h4 {
