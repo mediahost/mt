@@ -60,7 +60,9 @@ use Model\Timestampable\Timestampable;
 				} else {
 					$this->items->removeElement($item);
 				}
+				return FALSE;
 			}
+			return TRUE;
 		};
 
 		if ($this->items->exists($isInItems)) {

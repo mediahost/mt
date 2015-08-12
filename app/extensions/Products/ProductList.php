@@ -2,8 +2,6 @@
 
 namespace App\Extensions\Products;
 
-use App\Components\Basket\Form\AddToCart;
-use App\Components\Basket\Form\IAddToCartFactory;
 use App\Extensions\Products\Components\Paginator;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
@@ -13,6 +11,8 @@ use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
 use App\Model\Entity\Stock;
+use App\Model\Facade\BasketFacade;
+use App\Model\Facade\Exception\InsufficientQuantityException;
 use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\Query\Expr\OrderBy;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
@@ -23,7 +23,6 @@ use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\QueryBuilder;
 use Kdyby\Translation\Translator;
 use Nette\Application\UI\Control;
-use Nette\Application\UI\Multiplier;
 use Nette\Localization\ITranslator;
 use Nette\Templating\FileTemplate;
 use Nette\Utils\ArrayHash;
@@ -37,8 +36,8 @@ class ProductList extends Control
 	const ORDER_DESC = 'DESC';
 	const DEFAULT_PRICE_LEVEL = 'defaultPrice';
 
-	/** @var IAddToCartFactory @inject */
-	public $iAddToCartFactory;
+	/** @var BasketFacade @inject */
+	public $basketFacade;
 
 	/** @var EntityManager @inject */
 	public $em;
@@ -761,6 +760,28 @@ class ProductList extends Control
 	}
 
 	/**
+	 * @param int $stockId
+	 * @internal
+	 */
+	public function handleAddToCart($stockId, $quantity = 1)
+	{
+		if ($stockId) {
+			$stockRepo = $this->em->getRepository(Stock::getClassName());
+			$stock = $stockRepo->find($stockId);
+			if ($stock) {
+				try {
+					$this->basketFacade->add($stock, $quantity);
+				} catch (InsufficientQuantityException $ex) {
+					$message = $this->translator->translate('cart.product.youCannotAdd');
+					$this->presenter->flashMessage($message, 'warning');
+				}
+			}
+		}
+
+		$this->reload();
+	}
+
+	/**
 	 * Refresh wrapper.
 	 * @return void
 	 * @internal
@@ -769,6 +790,7 @@ class ProductList extends Control
 	{
 		if ($this->presenter->isAjax()) {
 			$this->redrawControl();
+			$this->presenter->redrawControl();
 		} else {
 			$this->redirect('this');
 		}
@@ -815,6 +837,7 @@ class ProductList extends Control
 
 	public function renderList()
 	{
+		$this->template->basket = $this->basketFacade;
 		$this->template->setFile(__DIR__ . '/templates/productList.latte');
 		$this->templateRender();
 	}
@@ -947,23 +970,6 @@ class ProductList extends Control
 		}
 
 		$this->reload();
-	}
-
-	// </editor-fold>
-	// <editor-fold desc="controls">
-
-	/** @return AddToCart */
-	protected function createComponentAddToCart()
-	{
-		return new Multiplier(function ($itemId) {
-			$stockRepo = $this->em->getRepository(Stock::getClassName());
-			$stock = $stockRepo->find($itemId);
-			$control = $this->iAddToCartFactory->create();
-			if ($stock) {
-				$control->setStock($stock);
-			}
-			return $control;
-		});
 	}
 
 	// </editor-fold>

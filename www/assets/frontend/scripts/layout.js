@@ -448,7 +448,9 @@ var Layout = function () {
 					ammountEl.val(prefix + ui.values[ 0 ] + suffix + glue + prefix + ui.values[ 1 ] + suffix);
 				},
 				change: function (event, ui) {
-					ammountEl.closest('form.sendOnChange').submit();
+					if (event.originalEvent) { // for product list a.ajax (cycle without this condition)
+						ammountEl.closest('form.sendOnChange').submit();
+					}	
 				}
 			});
 			ammountEl.val(prefix + $(id).slider('values', 0) + suffix +
