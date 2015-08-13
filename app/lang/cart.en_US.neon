@@ -4,3 +4,23 @@ product:
 	youCanAddOnly: 'You can add only %count% pc to basket.|You can add only %count% pcs to basket.'
 	youCannotAdd: 'You cannot add next.'
 	reachedMaxCount: 'You have all available products in your basket.'
+
+continueShopping: 'Continue shopping'
+shoppingCart: 'Shopping cart'
+cart: 'Cart'
+shippingPayment: 'Shipping & Payment'
+address: 'Address'
+summary: 'Summary'
+
+continue: 'Continue'
+
+name: 'Name'
+quantity: 'Quantity'
+unitPrice: 'Unit price'
+total: 'Total'
+unitPriceVat: 'Unit price with VAT'
+totalVat: 'Total with VAT'
+totalWithoutVat: 'Total without VAT'
+withoutVat: 'Without VAT'
+vat: 'VAT'
+inStore: 'In Store'

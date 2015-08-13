@@ -1,0 +1,53 @@
+@import "../definitions.less";
+
+.cart-steps {
+	.steps {
+		& > li {
+			& > a {
+				&.step {
+					font-size: 18px;
+					color: #969798;
+					&:hover {
+						background: none;
+					}
+					&.past {
+						color: #3E4D5C;
+					}
+					&.active {
+						color: #3E4D5C;
+						& > .number {
+							background-color: @blue;
+							color: white;
+						}
+					}
+					& > .number {
+						background-color: white;
+						display: inline-block;
+						text-align: center !important;
+						font-size: 16px;
+						font-weight: 300;
+						padding: 11px 15px 13px 15px;
+						margin-right: 10px;
+						height: 40px;
+						width: 40px;
+						-webkit-border-radius: 50% !important;
+						-moz-border-radius: 50% !important;
+						border-radius: 50% !important;
+					}
+				}
+			}
+		}
+	}
+}
+
+.goods-page {
+	.goods-data {
+		.goods-page-price {
+			strong {
+				font-weight: normal;
+				font-size: 15px;
+				line-height: 28px;
+			}
+		}
+	}
+}

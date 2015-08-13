@@ -6,6 +6,7 @@ use App\Model\Facade\Exception\InsufficientQuantityException;
 use App\Model\Facade\Exception\MissingItemException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
 use Knp\DoctrineBehaviors\Model;
@@ -14,13 +15,13 @@ use Knp\DoctrineBehaviors\Model;
  * @ORM\Entity(repositoryClass="App\Model\Repository\BasketRepository")
  *
  * @property ArrayCollection $items
+ * @property int $itemsCount
  */
 class Basket extends BaseEntity
 {
 
 	use Identifier;
-
-use Model\Timestampable\Timestampable;
+	use Model\Timestampable\Timestampable;
 
 	public function __construct(User $user = NULL)
 	{
@@ -76,7 +77,7 @@ use Model\Timestampable\Timestampable;
 		}
 		return $this;
 	}
-	
+
 	public function getItemCount(Stock $stock)
 	{
 		foreach ($this->items as $item) {
@@ -85,6 +86,20 @@ use Model\Timestampable\Timestampable;
 			}
 		}
 		throw new MissingItemException();
+	}
+
+	public function getItemsCount()
+	{
+		return count($this->items);
+	}
+
+	public function getItemsTotalPrice(Exchange $exchange, $level = NULL, $withVat = TRUE)
+	{
+		$totalPrice = 0;
+		foreach ($this->items as $item) {
+			$totalPrice += $item->getTotalPrice($exchange, $level, $withVat);
+		}
+		return $totalPrice;
 	}
 
 }

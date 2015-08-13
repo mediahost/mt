@@ -13,10 +13,12 @@ class UriFacade extends Object
 	/** @var array */
 	private $presenters = [
 		'cs' => [
+			'Cart' => 'Kosik',
 			'Page' => 'Strana',
 			'Service' => 'Servis',
 		],
 		'sk' => [
+			'Cart' => 'Kosik',
 			'Page' => 'Strana',
 			'Service' => 'Servis',
 		],
@@ -25,8 +27,10 @@ class UriFacade extends Object
 	/** @var array */
 	private $actions = [
 		'cs' => [
+			'payments' => 'platby',
 		],
 		'sk' => [
+			'payments' => 'platby',
 		],
 	];
 
