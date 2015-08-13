@@ -92,8 +92,10 @@ class AddToCart extends BaseControl
 			$form->addError($message1);
 			$form->addError($message2);
 			$form->addError($message3);
+			if ($this->presenter->ajax) {
+				$this->redrawControl();
+			}
 		}
-		$this->redrawControl();
 	}
 
 	/** @return array */
