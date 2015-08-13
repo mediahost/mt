@@ -4,3 +4,25 @@ product:
 	youCanAddOnly: 'Můžete přidat pouze %count% kus.|Můžete přidat pouze %count% kusy.|Můžete přidat pouze %count% kusů.'
 	youCannotAdd: 'Nelze přidat další.'
 	reachedMaxCount: 'Všechny dostupné kusy jsou již v košíku.'
+
+shoppingCart: 'Nákupní košík'
+cart: 'Košík'
+shippingPayment: 'Doprava a platba'
+address: 'Dodací údaje'
+summary: 'Souhrn'
+
+continue: 'Pokračovat'
+
+name: 'Zboží'
+quantity: 'Množství'
+unitPrice: 'Jedn. cena'
+total: 'Celkem'
+unitPriceVat: 'Jedn. cena s DPH'
+totalVat: 'Celkem s DPH'
+totalWithoutVat: 'Celkem bez DPH'
+withoutVat: 'Bez DPH'
+vat: 'DPH'
+inStore: 'Skladem'
+
+yourCartIsEmpty: 'Nákupní košík je zcela prázdný'
+continueShopping: 'Pokračovat v nákupu'

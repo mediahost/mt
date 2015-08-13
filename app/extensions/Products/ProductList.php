@@ -11,12 +11,15 @@ use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
 use App\Model\Entity\Stock;
+use App\Model\Facade\BasketFacade;
+use App\Model\Facade\Exception\InsufficientQuantityException;
 use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\Query\Expr\OrderBy;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Exception;
 use h4kuna\Exchange\Exchange;
 use InvalidArgumentException;
+use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\QueryBuilder;
 use Kdyby\Translation\Translator;
 use Nette\Application\UI\Control;
@@ -32,6 +35,12 @@ class ProductList extends Control
 	const ORDER_ASC = 'ASC';
 	const ORDER_DESC = 'DESC';
 	const DEFAULT_PRICE_LEVEL = 'defaultPrice';
+
+	/** @var BasketFacade @inject */
+	public $basketFacade;
+
+	/** @var EntityManager @inject */
+	public $em;
 
 	/** @var int @persistent */
 	public $page = 1;
@@ -694,7 +703,7 @@ class ProductList extends Control
 	protected function applySorting()
 	{
 //		try {
-			$this->addSorting($this->sort);
+		$this->addSorting($this->sort);
 //		} catch (InvalidArgumentException $exc) {
 //			throw new ProductListException('This sorting method isn\'t supported.');
 //		}
@@ -751,6 +760,28 @@ class ProductList extends Control
 	}
 
 	/**
+	 * @param int $stockId
+	 * @internal
+	 */
+	public function handleAddToCart($stockId, $quantity = 1)
+	{
+		if ($stockId) {
+			$stockRepo = $this->em->getRepository(Stock::getClassName());
+			$stock = $stockRepo->find($stockId);
+			if ($stock) {
+				try {
+					$this->basketFacade->add($stock, $quantity);
+				} catch (InsufficientQuantityException $ex) {
+					$message = $this->translator->translate('cart.product.youCannotAdd');
+					$this->presenter->flashMessage($message, 'warning');
+				}
+			}
+		}
+
+		$this->reload();
+	}
+
+	/**
 	 * Refresh wrapper.
 	 * @return void
 	 * @internal
@@ -759,6 +790,7 @@ class ProductList extends Control
 	{
 		if ($this->presenter->isAjax()) {
 			$this->redrawControl();
+			$this->presenter->redrawControl();
 		} else {
 			$this->redirect('this');
 		}
@@ -805,6 +837,7 @@ class ProductList extends Control
 
 	public function renderList()
 	{
+		$this->template->basket = $this->basketFacade;
 		$this->template->setFile(__DIR__ . '/templates/productList.latte');
 		$this->templateRender();
 	}
@@ -940,4 +973,11 @@ class ProductList extends Control
 	}
 
 	// </editor-fold>
+}
+
+interface IProductListFactory
+{
+
+	/** @return ProductList */
+	function create();
 }

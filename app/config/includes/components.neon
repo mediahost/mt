@@ -4,6 +4,7 @@
 services:
 	# Other extensions
 	- {implement: App\Extensions\Csv\IParserFactory, inject: yes}
+	- {implement: App\Extensions\Products\IProductListFactory, inject: yes}
 
 	# Auth
 	- {create: App\Components\Auth\ConnectManager, implement: App\Components\Auth\IConnectManagerFactory, inject: yes}
