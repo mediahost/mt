@@ -221,12 +221,9 @@ Header and header elements
 .top-cart-block:hover .top-cart-content {
 	display: block;
 }
-.top-cart-content p {
-	margin: 7px 0 5px;
-}
 .top-cart-content ul {
 	margin: 0;
-	padding: 0 8px;
+	padding: 0;
 }
 .top-cart-content .scroller {
 	overflow: hidden;
@@ -235,6 +232,7 @@ Header and header elements
 	list-style: none;
 	margin: 0;
 	padding: 9px 0;
+	padding-left: 7px;
 	border-bottom: solid 1px #f2f2f2;
 	width: 100%;
 	overflow: hidden;
@@ -256,7 +254,7 @@ Header and header elements
 .top-cart-content span,
 .top-cart-content strong,
 .top-cart-content em {
-	margin-right: 10px;
+	margin-right: 5px;
 	overflow: hidden;
 	padding-top: 10px;
 }
@@ -271,7 +269,7 @@ Header and header elements
 	color: #717880;
 }
 .top-cart-content em {
-	width: 55px;
+	width: 75px;
 	font-style: normal;
 	text-align: right;
 }

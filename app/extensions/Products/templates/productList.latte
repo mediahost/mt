@@ -30,7 +30,8 @@
 {/snippet}
 
 {define product}
-<div class="product-item" id="add-to-cart-{$stock->id}">
+{var divId => 'add-to-cart-' . rand(99, 1000) . '-' . $stock->id}
+<div class="product-item" id="{$divId}">
 	<div class="pi-img-wrapper">
 		<img src="{$basePath}/foto/{$product->image|size:'238'}" class="img-responsive" alt="{$product}">
 		<div>
@@ -44,6 +45,6 @@
 	<div class="pi-price">{$stock->getPrice($priceLevel)|currencyVat}</div>
 	<a n:href="addToCart! $stock->id"
 	   n:class="btn, btn-default, add2cart, ajax, !$basket->getCountAllowedToAdd($stock) ? disabled"
-	   data-target-loading="#add-to-cart-{$stock->id}">{_'Add to cart'}</a>
+	   data-target-loading="#{$divId}">{_'Add to cart'}</a>
 </div>
 {/define}

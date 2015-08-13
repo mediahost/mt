@@ -80,6 +80,8 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->template->topStocks = $this->stockFacade->getTops();
 		$this->template->bestsellerStocks = $this->stockFacade->getBestSellers();
 		$this->template->visitedStocks = $this->user->storage->getVisited();
+		
+		$this->template->basket = $this->basketFacade;
 
 		$this->loadTemplateMenu();
 		$this->loadTemplateCategoriesSettings();
@@ -90,8 +92,40 @@ abstract class BasePresenter extends BaseBasePresenter
 	public function handleSignOut()
 	{
 		$this->user->logout();
-		$this->presenter->flashMessage($this->translator->translate('flash.signOutSuccess'), 'success');
-		$this->presenter->redirect('this');
+		$this->flashMessage($this->translator->translate('flash.signOutSuccess'), 'success');
+		$this->redirect('this');
+	}
+	
+	public function handleAddToCart($stockId)
+	{
+		if ($stockId) {
+			$stockRepo = $this->em->getRepository(Stock::getClassName());
+			$stock = $stockRepo->find($stockId);
+			if ($stock) {
+				$this->basketFacade->add($stock);
+			}
+		}
+		if ($this->isAjax()) {
+			$this->redrawControl();
+		} else {
+			$this->redirect('this');
+		}
+	}
+	
+	public function handleRemoveFromCart($stockId)
+	{
+		if ($stockId) {
+			$stockRepo = $this->em->getRepository(Stock::getClassName());
+			$stock = $stockRepo->find($stockId);
+			if ($stock) {
+				$this->basketFacade->remove($stock);
+			}
+		}
+		if ($this->isAjax()) {
+			$this->redrawControl();
+		} else {
+			$this->redirect('this');
+		}
 	}
 
 	protected function loadTemplateMenu()

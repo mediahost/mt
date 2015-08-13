@@ -1,0 +1,20 @@
+{includeblock 'blocks.latte'}
+
+{block breadcrumb}{/block}
+
+{block content}
+
+<div class="container">
+	{include steps}
+
+	<!-- BEGIN CONTENT -->
+	<div class="row margin-bottom-40">
+		<div class="col-md-12 col-sm-12">
+		</div>
+	</div>
+	<!-- END CONTENT -->
+
+	{snippet lastVisited}
+		{include lastVisited}
+	{/snippet}
+</div>
