@@ -23,5 +23,6 @@ jQuery(document).ready(function () {
 $.nette.ext('netteAjax', {
 	complete: function () {
 		GlobalCustomInit.onReloadProductList();
+		Layout.initOWL();
 	}
 });

@@ -27,19 +27,19 @@ class ProductPresenter extends BasePresenter
 			$this->flashMessage($message, 'warning');
 			throw new BadRequestException;
 		}
-		
+
 		$product->setCurrentLocale($this->locale);
-		
+
 		$this->stock = $product->stock;
-		
+
 		$this->activeCategory = $product->mainCategory;
 		$this->template->product = $product;
 		$this->template->stock = $this->stock;
-		
+
 		// Last visited
 		$this->user->storage->addVisited($this->stock);
 	}
-	
+
 	public function actionSearchJson($text, $page = 1, $perPage = 10)
 	{
 		/* @var $list ProductList */
@@ -82,6 +82,7 @@ class ProductPresenter extends BasePresenter
 		$response = new JsonResponse($payload, 'application/json; charset=utf-8');
 		$this->sendResponse($response);
 	}
+
 	// <editor-fold desc="forms">
 
 	/** @return AddToCart */
@@ -91,10 +92,12 @@ class ProductPresenter extends BasePresenter
 		$control->setStock($this->stock);
 		$control->setAjax(TRUE);
 		$control->onAfterAdd = function ($quantity) {
+			if ($this->isAjax()) {
+				$this->redrawControl();
+			}
 		};
 		return $control;
 	}
 
 	// </editor-fold>
-
 }

@@ -504,23 +504,8 @@ msgstr "Chyba serveru"
 msgid "Error"
 msgstr "Chyba"
 
-msgid "FreeShipping"
-msgstr "Zdarma"
-
 msgid "Free shipping"
 msgstr "Doprava zdarma"
-
-msgid "when buying over"
-msgstr "při nákupu nad"
-
-msgid "Extra Gifts"
-msgstr "Extra dárky"
-
-msgid "Free gifts for selected products"
-msgstr "Dárky zdarma k vybraným výrobkům"
-
-msgid "Order by phone"
-msgstr "Objednat po telefonu"
 
 msgid "Open hours"
 msgstr "Otevírací doba"

@@ -91,8 +91,10 @@ class CategoryPresenter extends BasePresenter
 	public function actionAccessories($model)
 	{
 		$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
-		$modelEntity = $modelRepo->find($model);
-		if ($modelEntity) {
+		if ($model) {
+			$modelEntity = $modelRepo->find($model);
+		}
+		if (isset($modelEntity)) {
 			/* @var $products ProductList */
 			$products = $this['products'];
 			$products->filter = [
