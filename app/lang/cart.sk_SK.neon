@@ -5,7 +5,6 @@ product:
 	youCannotAdd: 'Nelze přidat další.'
 	reachedMaxCount: 'Všechny dostupné kusy jsou již v košíku.'
 
-continueShopping: 'Pokračovat v nákupu'
 shoppingCart: 'Nákupní košík'
 cart: 'Košík'
 shippingPayment: 'Doprava a platba'
@@ -24,3 +23,6 @@ totalWithoutVat: 'Celkem bez DPH'
 withoutVat: 'Bez DPH'
 vat: 'DPH'
 inStore: 'Skladem'
+
+yourCartIsEmpty: 'Nákupní košík je zcela prázdný'
+continueShopping: 'Pokračovat v nákupu'

@@ -5,7 +5,6 @@ product:
 	youCannotAdd: 'You cannot add next.'
 	reachedMaxCount: 'You have all available products in your basket.'
 
-continueShopping: 'Continue shopping'
 shoppingCart: 'Shopping cart'
 cart: 'Cart'
 shippingPayment: 'Shipping & Payment'
@@ -24,3 +23,6 @@ totalWithoutVat: 'Total without VAT'
 withoutVat: 'Without VAT'
 vat: 'VAT'
 inStore: 'In Store'
+
+yourCartIsEmpty: 'Your shopping cart is empty'
+continueShopping: 'Continue shopping'
