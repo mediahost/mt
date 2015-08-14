@@ -20,6 +20,7 @@ services:
 	# Basket
 	- {implement: App\Components\Basket\Form\IAddToCartFactory, inject: yes}
 	- {implement: App\Components\Basket\Form\IPaymentsFactory, inject: yes}
+	- {implement: App\Components\Basket\Form\IPersonalFactory, inject: yes}
 
 	# User
 	- {implement: App\Components\User\Form\IUserBasicFactory, inject: yes}

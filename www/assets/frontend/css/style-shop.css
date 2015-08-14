@@ -439,13 +439,6 @@ Header and header elements
 }
 
 /* shopping cart page */
-.goods-data {
-	background: #fff;
-	padding: 20px;
-	margin-bottom: 20px;
-	overflow-x: auto;
-	margin-right: 10px;
-}
 .goods-data table,
 .checkout-page table {
 	width: 100%;
@@ -511,20 +504,6 @@ Header and header elements
 .checkout-description em {
 	display: block;
 	font-style: normal;
-}
-.goods-page .btn-default {
-	float: left;
-	border: 1px solid #5ea8dc;
-	background: #5ea8dc;
-	color: #fff;
-}
-.goods-page .btn-default:hover {
-	border: 1px solid #408cc2;
-	background: #408cc2;
-}
-.goods-page .btn-primary {
-	float: right;
-	margin-right: 10px;
 }
 
 .goods-data .del-goods,
@@ -705,27 +684,6 @@ Header and header elements
 	padding: 8px 20px 0;
 	margin: 0;
 	font-weight: bold;
-}
-
-.goods-page .compare-item .btn-primary {
-	color: #fff;
-	float: none;
-}
-.goods-page .compare-item .btn-default {
-	border: 1px solid #EDEDED;
-	color: #A8AEB3;
-	background: transparent;
-	padding: 6px 13px;
-	float: none;
-	margin-top: 10px;
-}
-.goods-page .compare-item .btn-default:hover,
-.goods-page .compare-item .btn-default:focus,
-.goods-page .compare-item .btn-default:active {
-	border: 1px solid #A8AEB3;
-	color: #fff;
-	background: #A8AEB3;
-	padding: 6px 13px; 
 }
 
 .ecommerce .sidebar {

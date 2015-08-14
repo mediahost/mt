@@ -27,7 +27,7 @@ class Payments extends BaseControl
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
 		if ($this->isAjax) {
-			$form->getElementPrototype()->class('ajax loadingNoOverlay');
+			$form->getElementPrototype()->class('ajax loadingNoOverlay sendOnChange');
 		}
 
 		$shippings = [
@@ -45,8 +45,6 @@ class Payments extends BaseControl
 		$form->addRadioList('shipping', 'cart.shipping', $shippings);
 		$form->addRadioList('payment', 'cart.payment', $payments);
 
-		$form->addSubmit('save', 'cart.continue');
-
 		$form->setDefaults($this->getDefaults());
 		$form->onSuccess[] = $this->formSucceeded;
 		return $form;
@@ -54,6 +52,9 @@ class Payments extends BaseControl
 
 	public function formSucceeded(Form $form, $values)
 	{
+		if ($this->presenter->isAjax()) {
+			$this->redrawControl();
+		}
 		$this->onAfterSave();
 	}
 
