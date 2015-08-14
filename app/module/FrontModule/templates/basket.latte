@@ -16,12 +16,12 @@
 				{var stock => $item->stock}
 				{var product => $stock->product}
 				{? $product->setCurrentLocale($lang)}
-				<a n:href="Product: $stock->id">
+				<a n:href="Product: $product->id">
 					<img src="{$basePath}/foto/{$product->image|size:'37','34'}" alt="{$product->name}" />
 				</a>
 				<span class="cart-content-count">x {$item->quantity}</span>
 				<strong>
-					<a n:href="Product: $stock->id">{$product->name}</a>
+					<a n:href="Product: $product->id">{$product->name}</a>
 				</strong>
 				<em>{$item->getTotalPrice($exchange, $priceLevel)|asCurrency:TRUE}</em>
 				<a n:href="removeFromCart! $stock->id" class="del-goods ajax" data-target-loading=".top-cart-info">&nbsp;</a>

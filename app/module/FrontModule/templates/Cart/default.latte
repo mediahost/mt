@@ -28,12 +28,12 @@
 									{var stock => $item->stock}
 									{var product => $stock->product}
 									<td class="goods-page-image">
-										<a n:href="Product: $stock->id">
+										<a n:href="Product: $product->id">
 											<img src="{$basePath}/foto/{$product->image|size:'55','55'}" alt="{$product->name}" />
 										</a>
 									</td>
 									<td class="goods-page-description">
-										<h3><a n:href="Product: $stock->id">{$product->name}</a></h3>
+										<h3><a n:href="Product: $product->id">{$product->name}</a></h3>
 										<p>
 											<strong>{_'cart.inStore'}:</strong> {$stock->inStore} {$product->unit}
 										</p>

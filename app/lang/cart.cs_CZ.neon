@@ -8,6 +8,8 @@ product:
 shoppingCart: 'Nákupní košík'
 cart: 'Košík'
 shippingPayment: 'Doprava a platba'
+shipping: 'Doprava'
+payment: 'Platba'
 address: 'Dodací údaje'
 summary: 'Souhrn'
 
