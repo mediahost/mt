@@ -2,26 +2,37 @@
 <div class="cart-steps row margin-bottom-10">
 	<div class="col-md-12 col-sm-12">
 		<ul class="nav nav-justified steps">
-			<li class="active">
-				<a n:href="Cart:" class="step past">
+			{var isActive => $presenter->isLinkCurrent('Cart:')}
+			{var isPast => $presenter->isLinkCurrent('Cart:payments') || 
+							$presenter->isLinkCurrent('Cart:address') || 
+							$presenter->isLinkCurrent('Cart:summary')}
+			<li n:class="$isActive ? active">
+				<a n:href="Cart:" n:class="step, $isPast ? past, $isActive ? active">
 					<span class="number">1</span>
 					<span class="desc">{_'cart.cart'}</span>
 				</a>
 			</li>
-			<li>
-				<a n:href="Cart:payments" class="step active">
+			{var isActive => $presenter->isLinkCurrent('Cart:payments')}
+			{var isPast => $presenter->isLinkCurrent('Cart:address') || 
+							$presenter->isLinkCurrent('Cart:summary')}
+			<li n:class="$isActive ? active">
+				<a n:href="Cart:payments" n:class="step, $isPast ? past, $isActive ? active">
 					<span class="number">2</span>
 					<span class="desc">{_'cart.shippingPayment'}</span>
 				</a>
 			</li>
-			<li>
-				<a n:href="Cart:address" class="step">
+			{var isActive => $presenter->isLinkCurrent('Cart:address')}
+			{var isPast => $presenter->isLinkCurrent('Cart:summary')}
+			<li n:class="$isActive ? active">
+				<a n:href="Cart:address" n:class="step, $isPast ? past, $isActive ? active">
 					<span class="number">3</span>
 					<span class="desc">{_'cart.address'}</span>
 				</a>
 			</li>
-			<li>
-				<a n:href="Cart:summary" class="step">
+			{var isActive => $presenter->isLinkCurrent('Cart:summary')}
+			{var isPast => FALSE}
+			<li n:class="$isActive ? active">
+				<a n:href="Cart:summary" n:class="step, $isPast ? past, $isActive ? active">
 					<span class="number">4</span>
 					<span class="desc">{_'cart.summary'}</span>
 				</a>
