@@ -24,5 +24,7 @@ withoutVat: 'Without VAT'
 vat: 'VAT'
 inStore: 'In Store'
 
+isEmpty: 'Cart is empty'
+countItem: '%count% item|%count% items'
 yourCartIsEmpty: 'Your shopping cart is empty'
 continueShopping: 'Continue shopping'

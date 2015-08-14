@@ -5,7 +5,7 @@
 {block content}
 
 <div class="container">
-	{if $basket->getProductsCount()}
+	{if !$basket->isEmpty}
 		{include steps}
 	{/if}
 
@@ -13,7 +13,7 @@
 	<div class="row margin-bottom-40">
 		<div class="col-md-12 col-sm-12">
 			{snippet cartGoodsList}
-				<div class="goods-page" n:if="$basket->getProductsCount()">
+				<div class="goods-page" n:if="!$basket->isEmpty">
 					<div class="goods-data clearfix">
 						<div class="table-wrapper-responsive">
 							<table summary="Shopping cart">
@@ -86,7 +86,7 @@
 						<i class="fa fa-check"></i>
 					</a>
 				</div>
-				<div n:if="!$basket->getProductsCount()" class="note note-info">
+				<div n:if="$basket->isEmpty" class="note note-info">
 					<h4 class="block">{_'cart.yourCartIsEmpty'}</h4>
 					<p>
 						<a n:href="Homepage:">{_'cart.continueShopping'}</a>
