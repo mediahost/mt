@@ -7,7 +7,7 @@ use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Facade\BasketFacade;
 
-class Payments extends BaseControl
+class Personal extends BaseControl
 {
 
 	/** @var BasketFacade @inject */
@@ -27,23 +27,12 @@ class Payments extends BaseControl
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
 		if ($this->isAjax) {
-			$form->getElementPrototype()->class('ajax loadingNoOverlay sendOnChange');
+			$form->getElementPrototype()->class('ajax loadingNoOverlay');
 		}
 
-		$shippings = [
-			1 => 'Osobně',
-			2 => 'PPL',
-			3 => 'DPD',
-			4 => 'Česká Pošta',
-		];
-		$payments = [
-			1 => 'Hotově',
-			2 => 'Na dobírku',
-			3 => 'Platba předem',
-			4 => 'Kartou',
-		];
-		$form->addRadioList('shipping', 'cart.shipping', $shippings);
-		$form->addRadioList('payment', 'cart.payment', $payments);
+		$form->addText('name', 'cart.address.name');
+
+		$form->addSubmit('save', 'cart.continue');
 
 		$form->setDefaults($this->getDefaults());
 		$form->onSuccess[] = $this->formSucceeded;
@@ -52,9 +41,6 @@ class Payments extends BaseControl
 
 	public function formSucceeded(Form $form, $values)
 	{
-		if ($this->presenter->isAjax()) {
-			$this->redrawControl();
-		}
 		$this->onAfterSave();
 	}
 
@@ -67,9 +53,9 @@ class Payments extends BaseControl
 
 }
 
-interface IPaymentsFactory
+interface IPersonalFactory
 {
 
-	/** @return Payments */
+	/** @return Personal */
 	function create();
 }

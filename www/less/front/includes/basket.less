@@ -40,7 +40,12 @@
 	}
 }
 
-.goods-page {
+.cart-page {
+	.cart-content {
+		background: #fff;
+		padding: 20px;
+		overflow-x: auto;
+	}
 	.goods-data {
 		.goods-page-price {
 			strong {
@@ -49,5 +54,25 @@
 				line-height: 28px;
 			}
 		}
+	}
+	.btn-default {
+		float: left;
+		border: 1px solid #5ea8dc;
+		background: #5ea8dc;
+		color: #fff;
+		&:hover {
+			border: 1px solid #408cc2;
+			background: #408cc2;
+		}
+	}
+	.btn-primary {
+		float: right;
+		margin-right: 10px;
+	}
+	.cart-continue {
+		margin: 0px;
+		background-color: #fff; 
+		padding-top: 10px;
+		padding-bottom: 20px;
 	}
 }

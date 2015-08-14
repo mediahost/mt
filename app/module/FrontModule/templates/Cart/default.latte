@@ -13,8 +13,8 @@
 	<div class="row margin-bottom-40">
 		<div class="col-md-12 col-sm-12">
 			{snippet cartGoodsList}
-				<div class="goods-page" n:if="!$basket->isEmpty">
-					<div class="goods-data clearfix">
+				<div class="cart-page" n:if="!$basket->isEmpty">
+					<div class="cart-content goods-data clearfix">
 						<div class="table-wrapper-responsive">
 							<table summary="Shopping cart">
 								<tr>
@@ -81,10 +81,16 @@
 							</ul>
 						</div>
 					</div>
-					<a n:href="Cart:payments" class="btn btn-primary">
-						{_'cart.continue'}
-						<i class="fa fa-check"></i>
-					</a>
+					<div class="row cart-continue">
+						<div class="col-md-6 col-sm-6"></div>
+						<div class="col-md-6 col-sm-6">
+							<a n:href="payments" class="btn btn-primary">
+								{_'cart.continue'}
+								&nbsp;
+								<i class="fa fa-chevron-right"></i>
+							</a>
+						</div>
+					</div>
 				</div>
 				<div n:if="$basket->isEmpty" class="note note-info">
 					<h4 class="block">{_'cart.yourCartIsEmpty'}</h4>
