@@ -10,10 +10,10 @@ class HomepagePresenter extends BasePresenter
 	/** @var PohodaFacade @inject */
 	public $pohodaFacade;
 
-	public function actionDefault()
+	public function actionDefault($slider = TRUE, $brands = TRUE)
 	{
-		$this->showSlider = TRUE;
-		$this->showBrands = TRUE;
+		$this->showSlider = (bool) $slider;
+		$this->showBrands = (bool) $brands;
 //		$this->showSteps = FALSE;
 	}
 
