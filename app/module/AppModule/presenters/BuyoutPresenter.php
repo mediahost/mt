@@ -2,18 +2,15 @@
 
 namespace App\AppModule\Presenters;
 
-use App\Components\Buyout\IModelQuestionControlFactory;
-use App\Components\Buyout\ModelQuestionControl;
+use App\Components\Buyout\Form\IModelQuestionFactory;
+use App\Components\Buyout\Form\ModelQuestion;
 use App\Model\Entity\ProducerModel;
 
 class BuyoutPresenter extends BasePresenter
 {
 
-	/** @var string */
-	private $type;
-
-	/** @var IModelQuestionControlFactory @inject */
-	public $iModelQuestionControlFactory;
+	/** @var IModelQuestionFactory @inject */
+	public $iModelQuestionFactory;
 
 	/**
 	 * @secured
@@ -74,11 +71,11 @@ class BuyoutPresenter extends BasePresenter
 	}
 
 	/**
-	 * @return ModelQuestionControl
+	 * @return ModelQuestion
 	 */
 	protected function createComponentModelQuestion()
 	{
-		return $this->iModelQuestionControlFactory->create();
+		return $this->iModelQuestionFactory->create();
 	}
 
 }

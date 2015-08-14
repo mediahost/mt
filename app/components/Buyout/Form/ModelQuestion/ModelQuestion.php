@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\Buyout;
+namespace App\Components\Buyout\Form;
 
 use App\Components\BaseControl;
 use App\Forms\Form;
@@ -13,7 +13,7 @@ use Nette\Forms\Container;
 use Nette\Forms\Controls\SubmitButton;
 use Nette\Utils\ArrayHash;
 
-class ModelQuestionControl extends BaseControl
+class ModelQuestion extends BaseControl
 {
 
 	const QUESTION_LIMIT = 5;
@@ -33,7 +33,7 @@ class ModelQuestionControl extends BaseControl
 		$form = new Form();
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
-//		$form->getElementPrototype()->class = 'ajax'; // @Todo: formulář si sám nastavuje hodnoty a nevíme odkud je bere!
+//		$form->getElementPrototype()->class = 'ajax'; // TODO: formulář si sám nastavuje hodnoty a nevíme odkud je bere!
 
 		$form->addText('buyoutPrice', 'Buyout price')
 						->setRequired('Base buyout price is required.')
@@ -73,10 +73,6 @@ class ModelQuestionControl extends BaseControl
 			$this->presenter->flashMessage($message, 'success');
 			$this->redirect('this');
 		}
-
-//		if ($this->presenter->isAjax()) {
-//			$this->presenter->redrawControl();
-//		}
 	}
 
 	public function addQuestionClicked(SubmitButton $button)
@@ -86,7 +82,7 @@ class ModelQuestionControl extends BaseControl
 
 	/**
 	 * @param ProducerModel $model
-	 * @return ModelQuestionControl
+	 * @return ModelQuestion
 	 */
 	public function setModel(ProducerModel $model)
 	{
@@ -168,9 +164,9 @@ class ModelQuestionControl extends BaseControl
 
 }
 
-interface IModelQuestionControlFactory
+interface IModelQuestionFactory
 {
 
-	/** @return ModelQuestionControl */
+	/** @return ModelQuestion */
 	function create();
 }
