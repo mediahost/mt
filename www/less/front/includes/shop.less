@@ -1,13 +1,16 @@
+@import "../definitions.less";
+
 .main { 
 	.container {
 		position: relative;
 	}
 }
 
+@menuLineThickness: 5px;
 .categories-menu {
 	position: static;
 	& > ul.list-group {
-		border-left: 5px #64AED9 solid;
+		border-left: none;
 		& > li.list-group-item {
 			padding: 0px;
 			background: #FFF;
@@ -16,27 +19,35 @@
 				display: block;
 				text-decoration: none;
 				padding: 8px 15px;
-				border-top: 1px rgb(249, 249, 249) solid;
-				border-bottom: 1px rgb(249, 249, 249) solid;
-				&:hover {
-					background: #64AED9;
-					color: white;
-				}
+                		color: white;
+                                .gradientBackground(@blueDark, @blue, 0, 100);
 				&.has-submenu {
 					border-bottom: none;
 				}
 			}
-			&.active {
+			&.active, &:hover {
 				& > a {
-					background: #64AED9;
+                                        .gradientBackground(@blue + #111, @blueDark + #111, 0, 100);
 					color: white;
+                                        border-left: 5px @blue solid;
+                                        padding-left: 10px;
 				}
 				.mega-menu-item {
 					h4 {
-						color: rgb(62, 77, 92);
+						color: @blue;
 					}
 				}
 			}
+                        &.active + .submenu, &:hover + .submenu, & > .submenu:hover {
+                                border-left: 5px @blue solid;
+                                li {
+                                    margin-left: -5px;
+                                }
+                        }
+                        &.active + .submenu:hover {
+                            border-left: none;
+                            margin-left: 0;
+                        }
 			&:first-child > a {
 				border-top: 0px;
 			}
@@ -44,7 +55,7 @@
 				border-bottom-width: 0px;
 			}
 			& > ul.submenu {
-				border-bottom: 2px rgb(249, 249, 249) solid;
+				border-bottom: 2px @blue solid;
 				padding-left: 30px;
 				padding-bottom: 10px;
 				text-transform: uppercase;
@@ -65,14 +76,14 @@
 				z-index: 9999;
 				.header-navigation-content {
 					background: #fff;
-					border-left: 2px #64AED9 solid;
+					border-left: 2px @blue solid;
 					padding-top: 10px;
 					ul {
 						li {
 							a {
 								padding: 10px 15px;
 								font-weight: 400;
-								color: #767F88;
+								color: @blue;
 							}
 						}
 					}
@@ -87,26 +98,34 @@
 		text-transform: none;
 		& > li.list-group-item {
 			padding: 0px;
-			border: none;
+			border: none;  
 			a {
-				color: rgb(85, 85, 85);
+				color: @blue;
 			}
 			&.active {
 				background-color: white;
-				color: rgb(85, 85, 85);
+				color: @blue;
 				& > i, & > a {
-					color: #64AED9;
+					color: @blue;
 				}
 			}
 		}
 	}
 }
 
+.sidebar {
+    a {
+        color: @blue;
+        &:hover {
+            color: @blueDark;
+        }
+    }
+}
+
 .sidebar-menu {
 	.list-group-item {
 		&.active {
-			background-color: #64AED9;
-			border-color: #64AED9;
+			border-color: @blue;
 			a {
 				color: white;
 				&:hover {
@@ -153,7 +172,7 @@
 					}
 					.price {
 						text-align: right;
-						color: #45B6AF;
+						color: @blue;
 						padding-right: 30px;
 					}
 				}
@@ -169,7 +188,7 @@
 
 .container .homepage, .container .category {
 	.model-selector {
-		background-color: #A3D3FD;
+		background-color: @blue;
 		padding-top: 20px;
 		padding-bottom: 20px;
 		margin-bottom: 20px;
@@ -208,7 +227,7 @@
 		line-height: 54px;
 		padding: 0px 12px;
 		a {
-			color: rgb(62, 77, 92);
+			color: @blue;
 		}
 		.image {
 			width: 55px;
@@ -227,4 +246,152 @@
 		padding: 5px 12px;
 		font-style: italic;
 	}
+}
+
+.pi-price {
+    color: @blueDark;
+}
+.btn-primary, .top-cart-block .fa-shopping-cart, .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus, .product-item .btn, 
+.product-item btn,  {
+    background: @blue;
+    color: #fff;
+    &:active, &:hover {
+        background: @blueDark !important;
+    }
+}
+.price-availability-block .price strong {
+    color: @blueDark;
+}
+
+.steps-block-red {
+    background: @blueMenuLine;
+}
+
+.pre-footer a, a {
+    color: @blue;
+}
+
+.categories-menu ul.submenu {
+    clear: both;
+    padding-bottom: 50px !important;
+    & > li.list-group-item {
+        clear: both;
+        i, a {
+            float: left;
+        }
+        i {
+            width: 10%;
+            width: calc(20px);
+            position: relative;
+            top: 8px;
+        }
+        a {
+            line-height: 30px;
+            display: block;
+            width: 90%;
+            width: calc(100% - 20px);
+        } 
+    }
+} 
+
+.ecommerce .header-navigation .dropdown-menu > li > a:hover, .ecommerce .header-navigation .dropdown-menu > li.active > a, .ecommerce .header-navigation .header-navigation-content .header-navigation-col li > a:hover, .ecommerce .header-navigation .header-navigation-content .header-navigation-col li.active > a {
+    background: @blue;   
+}
+
+.header-navigation .dropdown-menu > li:first-child, .top-cart-content {
+    border-top: 2px @blue solid;
+}
+.header-navigation > ul > li.dropdown:hover > a:after, .top-cart-content:after {
+    border-bottom: 8px @blue solid;
+}
+.shop-currencies a.current, .breadcrumb > .active {
+    color: @blue;
+}
+.nav-tabs {
+    border-color: @blue;
+}
+.product-item {
+	h3 {
+		min-height: 48px;
+	}
+}
+.product-item .add2cart:hover {
+    border-color: transparent;
+}
+
+.ecommerce .header-navigation ul > li.open > a, .ecommerce .header-navigation ul > li.open > a:hover, .ecommerce .header-navigation ul > li.open > a:focus {
+    color: @blue;
+    &:hover {
+        color: @blueDark;
+    }
+}
+
+.ecommerce .header-navigation {
+    border-top: 2px #ECECEC solid;
+    color: #3E4D5C;
+    clear: both;
+    width: 100%;
+    & > ul > li > a {
+        color: #3E4D5C;
+        border-radius: 10px;
+    }
+    & ul > li > a {
+        &:hover {
+            color: #3E4D5C;
+        }
+    }
+}
+@media (min-width: 925px) {
+    .ecommerce .header-navigation > ul > li > a {
+        padding: 15px 15px;
+        border-right: 2px #ECECEC solid;
+    }
+    .ecommerce .header-navigation > ul > li:last-child > a {
+        border-right: none;
+    }
+}
+.header-navigation-content h4, .ecommerce .header-navigation-content h4 {
+    color: #3E4D5C;
+}
+
+.top-cart-info {
+    background: #fff;
+}
+@media (min-width: 1024px) {
+    .search-box {
+        margin-top: 20px;
+    }
+    .header .top-cart-block {
+        margin-top: 23px;
+    }
+    .ecommerce .site-logo {
+        padding: 5px 0 0 0;
+    }
+}
+@media (min-width: 1200px) {
+    .search-box {
+        margin-top: 37px;
+    }
+    .header .top-cart-block {
+        margin-top: 38px;
+    }
+    .site-logo img {
+        width: 300px;
+    }
+}
+
+/* background */
+.header {
+    background: transparent;
+}
+body {
+    background: #F7F8F8 !important;
+}
+.main {
+    background: #F7F8F8 url("@{pathImages}background.png") center -23px no-repeat !important;
+    margin-top: -23px;
+    padding-top: 23px;
+}
+.page-slider {
+    margin-bottom: 23px;
 }

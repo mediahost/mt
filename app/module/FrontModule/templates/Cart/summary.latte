@@ -1,0 +1,36 @@
+{includeblock 'blocks.latte'}
+
+{block breadcrumb}{/block}
+
+{block content}
+
+<div class="container">
+	{include steps}
+
+	<!-- BEGIN CONTENT -->
+	<div class="row margin-bottom-40">
+		<div class="col-md-12 col-sm-12">
+			<div class="cart-page">
+				<div class="cart-content summary-data">
+					Výpis adres, produktů a odsouhlasení podmínek
+				</div>
+				<div class="row cart-continue">
+					<div class="col-md-6 col-sm-6">
+						<a n:href="address" class="btn">
+							<i class="fa fa-chevron-left"></i>
+							&nbsp;
+							{_'cart.back'}
+						</a>
+					</div>
+					<div class="col-md-6 col-sm-6">
+						<a n:href="send!" class="btn btn-primary">
+							<i class="fa fa-check"></i>
+							{_'cart.send'}
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- END CONTENT -->
+</div>

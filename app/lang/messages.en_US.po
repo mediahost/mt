@@ -493,23 +493,8 @@ msgstr "Server Error"
 msgid "Error"
 msgstr "Error"
 
-msgid "FreeShipping"
-msgstr "Free shipping"
-
 msgid "Free shipping"
 msgstr "Free shipping"
-
-msgid "when buying over"
-msgstr "when buying over"
-
-msgid "Extra Gifts"
-msgstr "Extra Gifts"
-
-msgid "Free gifts for selected products"
-msgstr "Free gifts for selected products"
-
-msgid "Order by phone"
-msgstr "Order by phone"
 
 msgid "Open hours"
 msgstr "Open hours"

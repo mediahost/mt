@@ -4,6 +4,7 @@
 services:
 	# Other extensions
 	- {implement: App\Extensions\Csv\IParserFactory, inject: yes}
+	- {implement: App\Extensions\Products\IProductListFactory, inject: yes}
 
 	# Auth
 	- {create: App\Components\Auth\ConnectManager, implement: App\Components\Auth\IConnectManagerFactory, inject: yes}
@@ -18,6 +19,8 @@ services:
 
 	# Basket
 	- {implement: App\Components\Basket\Form\IAddToCartFactory, inject: yes}
+	- {implement: App\Components\Basket\Form\IPaymentsFactory, inject: yes}
+	- {implement: App\Components\Basket\Form\IPersonalFactory, inject: yes}
 
 	# User
 	- {implement: App\Components\User\Form\IUserBasicFactory, inject: yes}
@@ -26,8 +29,8 @@ services:
 	# Buyout
 	- {implement: App\Components\Question\IGridControlFactory, inject: yes}
 	- {implement: App\Components\Question\IEntityControlFactory, inject: yes}
-	- {implement: App\Components\Buyout\IModelQuestionControlFactory, inject: yes}
-	- {implement: App\Components\Buyout\IRequestControlFactory, inject: yes}
+	- {implement: App\Components\Buyout\Form\IModelQuestionFactory, inject: yes}
+	- {implement: App\Components\Buyout\Form\IRequestFactory, inject: yes}
 
 	# Stock
 	- {implement: App\Components\Product\Form\IStockAddFactory, inject: yes}
