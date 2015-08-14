@@ -3,6 +3,8 @@
 namespace App\FrontModule\Presenters;
 
 use App\BaseModule\Presenters\BasePresenter as BaseBasePresenter;
+use App\Components\Newsletter\ISubscribeControlFactory;
+use App\Components\Newsletter\SubscribeControl;
 use App\Components\Producer\Form\IModelSelectorFactory;
 use App\Components\Producer\Form\ModelSelector;
 use App\Extensions\Products\ProductList;
@@ -24,6 +26,9 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	/** @var IModelSelectorFactory @inject */
 	public $iModelSelectorFactory;
+
+	/** @var ISubscribeControlFactory @inject */
+	public $iSubscribeControlFactory;
 
 	/** @var CategoryRepository */
 	protected $categoryRepo;
@@ -63,7 +68,7 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	protected function beforeRender()
 	{
-		parent::beforeRender();		
+		parent::beforeRender();
 		$this->template->categories = $this->categories;
 		$this->template->activeCategory = $this->activeCategory;
 		$this->template->showSlider = $this->showSlider;
@@ -195,6 +200,12 @@ abstract class BasePresenter extends BaseBasePresenter
 			}
 		};
 		return $control;
+	}
+
+	/** @return SubscribeControl */
+	public function createComponentSubscribe()
+	{
+		return $this->iSubscribeControlFactory->create();
 	}
 
 	// </editor-fold>
