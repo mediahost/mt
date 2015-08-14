@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\Buyout;
+namespace App\Components\Buyout\Form;
 
 use App\Components\BaseControl;
 use App\Forms\Renderers\MetronicFormRenderer;
@@ -12,7 +12,7 @@ use App\Model\Facade\QuestionFacade;
 use Nette\Application\UI\Form;
 use Nette\Utils\ArrayHash;
 
-class RequestControl extends BaseControl
+class Request extends BaseControl
 {
 
 	/** @var ProducerModel */
@@ -141,9 +141,9 @@ class RequestControl extends BaseControl
 
 }
 
-interface IRequestControlFactory
+interface IRequestFactory
 {
 
-	/** @return RequestControl */
+	/** @return Request */
 	function create();
 }
