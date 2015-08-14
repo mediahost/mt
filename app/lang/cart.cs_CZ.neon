@@ -24,5 +24,7 @@ withoutVat: 'Bez DPH'
 vat: 'DPH'
 inStore: 'Skladem'
 
+isEmpty: 'Zatím prázdný'
+countItem: '%count% položka|%count% položky|%count% položek'
 yourCartIsEmpty: 'Nákupní košík je zcela prázdný'
 continueShopping: 'Pokračovat v nákupu'

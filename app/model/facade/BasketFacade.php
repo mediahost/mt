@@ -90,6 +90,12 @@ class BasketFacade extends Object
 		return $free > 0 ? $free : 0;
 	}
 
+	/** @var bool */
+	public function getIsEmpty()
+	{
+		return !$this->getProductsCount();
+	}
+
 	/** @var int */
 	public function getProductsCount()
 	{
