@@ -2,8 +2,8 @@
 
 namespace App\FrontModule\Presenters;
 
-use App\Components\Buyout\IRequestControlFactory;
-use App\Components\Buyout\RequestControl;
+use App\Components\Buyout\Form\IRequestFactory;
+use App\Components\Buyout\Form\Request;
 use App\Components\Producer\Form\IModelSelectorFactory;
 use App\Components\Producer\Form\ModelSelector;
 use App\Model\Entity\Page;
@@ -22,8 +22,8 @@ class BuyoutPresenter extends BasePresenter
 	/** @var IModelSelectorFactory @inject */
 	public $iModelSelectorFactory;
 
-	/** @var IRequestControlFactory @inject */
-	public $iRequestControlFactory;
+	/** @var IRequestFactory @inject */
+	public $iRequestFactory;
 
 	/** @var ProducerModel */
 	private $model;
@@ -81,10 +81,10 @@ class BuyoutPresenter extends BasePresenter
 		return $control;
 	}
 
-	/** @return RequestControl */
+	/** @return Request */
 	public function createComponentRequestForm()
 	{
-		$control = $this->iRequestControlFactory->create();
+		$control = $this->iRequestFactory->create();
 		$control->onSend = function () {
 			$this->session->getSection('buyout')->modelId = NULL;
 			$this->flashMessage($this->translator->translate('Your request has been sent.'), 'success');

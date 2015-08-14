@@ -7,6 +7,7 @@ use App\Components\Newsletter\ISubscribeControlFactory;
 use App\Components\Newsletter\SubscribeControl;
 use App\Components\Producer\Form\IModelSelectorFactory;
 use App\Components\Producer\Form\ModelSelector;
+use App\Extensions\Products\IProductListFactory;
 use App\Extensions\Products\ProductList;
 use App\Forms\Form;
 use App\Model\Entity\Category;
@@ -29,6 +30,8 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	/** @var ISubscribeControlFactory @inject */
 	public $iSubscribeControlFactory;
+	/** @var IProductListFactory @inject */
+	public $iProductListFactory;
 
 	/** @var CategoryRepository */
 	protected $categoryRepo;
@@ -81,6 +84,8 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->template->topStocks = $this->stockFacade->getTops();
 		$this->template->bestsellerStocks = $this->stockFacade->getBestSellers();
 		$this->template->visitedStocks = $this->user->storage->getVisited();
+		
+		$this->template->basket = $this->basketFacade;
 
 		$this->loadTemplateMenu();
 		$this->loadTemplateCategoriesSettings();
@@ -91,8 +96,40 @@ abstract class BasePresenter extends BaseBasePresenter
 	public function handleSignOut()
 	{
 		$this->user->logout();
-		$this->presenter->flashMessage($this->translator->translate('flash.signOutSuccess'), 'success');
-		$this->presenter->redirect('this');
+		$this->flashMessage($this->translator->translate('flash.signOutSuccess'), 'success');
+		$this->redirect('this');
+	}
+	
+	public function handleAddToCart($stockId)
+	{
+		if ($stockId) {
+			$stockRepo = $this->em->getRepository(Stock::getClassName());
+			$stock = $stockRepo->find($stockId);
+			if ($stock) {
+				$this->basketFacade->add($stock);
+			}
+		}
+		if ($this->isAjax()) {
+			$this->redrawControl();
+		} else {
+			$this->redirect('this');
+		}
+	}
+	
+	public function handleRemoveFromCart($stockId)
+	{
+		if ($stockId) {
+			$stockRepo = $this->em->getRepository(Stock::getClassName());
+			$stock = $stockRepo->find($stockId);
+			if ($stock) {
+				$this->basketFacade->remove($stock);
+			}
+		}
+		if ($this->isAjax()) {
+			$this->redrawControl();
+		} else {
+			$this->redirect('this');
+		}
 	}
 
 	protected function loadTemplateMenu()
@@ -145,7 +182,7 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	public function createComponentProducts()
 	{
-		$list = new ProductList();
+		$list = $this->iProductListFactory->create();
 		$list->setTranslator($this->translator);
 		$list->setExchange($this->exchange, $this->exchange->getWeb());
 		$list->setItemsPerPage($this->settings->pageConfig->rowsPerPage, $this->settings->pageConfig->itemsPerRow);

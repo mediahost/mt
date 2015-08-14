@@ -7,6 +7,7 @@ use App\Model\Entity\Stock;
 use App\Model\Facade\Exception\InsufficientQuantityException;
 use App\Model\Facade\Exception\MissingItemException;
 use App\Model\Repository\BasketRepository;
+use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Object;
 use Nette\Security\IUserStorage;
@@ -16,6 +17,9 @@ class BasketFacade extends Object
 
 	/** @var EntityManager @inject */
 	public $em;
+
+	/** @var Exchange @inject */
+	public $exchange;
 
 	/** @var IUserStorage @inject */
 	public $userStorage;
@@ -84,6 +88,42 @@ class BasketFacade extends Object
 	{
 		$free = $stock->inStore - $this->getCountInBasket($stock);
 		return $free > 0 ? $free : 0;
+	}
+
+	/** @var bool */
+	public function getIsEmpty()
+	{
+		return !$this->getProductsCount();
+	}
+
+	/** @var int */
+	public function getProductsCount()
+	{
+		$basket = $this->getBasket();
+		return $basket->itemsCount;
+	}
+
+	/** @var float */
+	public function getProductsTotalPrice($level = NULL, $withVat = TRUE)
+	{
+		$basket = $this->getBasket();
+		return $basket->getItemsTotalPrice($this->exchange, $level, $withVat);
+	}
+
+	/** @var float */
+	public function getProductsVatSum($level = NULL)
+	{
+		$basket = $this->getBasket();
+		$withVat = $basket->getItemsTotalPrice($this->exchange, $level, TRUE);
+		$withoutVat = $basket->getItemsTotalPrice($this->exchange, $level, FALSE);
+		return $withVat - $withoutVat;
+	}
+
+	/** @var array */
+	public function getItems()
+	{
+		$basket = $this->getBasket();
+		return $basket->items;
 	}
 
 }

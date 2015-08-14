@@ -1,39 +1,34 @@
 {block basket}
 <div class="top-cart-info">
-	<a n:href="this" class="top-cart-info-count">3 items</a>
-	<a n:href="this" class="top-cart-info-value">{1230|currency}</a>
+	{if $basket->isEmpty}
+		{_'cart.isEmpty'}
+	{else}
+	<a n:href="Cart:" class="top-cart-info-count">{_'cart.countItem', $basket->getProductsCount()}</a>
+	<a n:href="Cart:" class="top-cart-info-value">{$basket->getProductsTotalPrice($priceLevel)|asCurrency:TRUE}</a>
+	{/if}
 </div>
 <i class="fa fa-shopping-cart"></i>
 
-<div class="top-cart-content-wrapper">
+<div class="top-cart-content-wrapper" n:if="!$basket->isEmpty">
 	<div class="top-cart-content">
-		<ul class="scroller" style="height: 250px;">
-			<li>
-				<a n:href="this">
-					<img src="{$basePath}/foto/37-34/default.png" alt="Rolex Classic Watch" width="37" height="34">
+		<ul class="scroller" style="height: 230px;">
+			<li n:foreach="$basket->items as $item">
+				{var stock => $item->stock}
+				{var product => $stock->product}
+				{? $product->setCurrentLocale($lang)}
+				<a n:href="Product: $product->id">
+					<img src="{$basePath}/foto/{$product->image|size:'37','34'}" alt="{$product->name}" />
 				</a>
-				<span class="cart-content-count">x 1</span>
+				<span class="cart-content-count">x {$item->quantity}</span>
 				<strong>
-					<a n:href="this">Rolex Classic Watch</a>
+					<a n:href="Product: $product->id">{$product->name}</a>
 				</strong>
-				<em>{1230|currency}</em>
-				<a n:href="this" class="del-goods">&nbsp;</a>
-			</li>
-			<li>
-				<a n:href="this">
-					<img src="{$basePath}/foto/37-34/default.png" alt="Rolex Classic Watch" width="37" height="34">
-				</a>
-				<span class="cart-content-count">x 1</span>
-				<strong>
-					<a n:href="this">Rolex Classic Watch</a>
-				</strong>
-				<em>{1230|currency}</em>
-				<a n:href="this" class="del-goods">&nbsp;</a>
+				<em>{$item->getTotalPrice($exchange, $priceLevel)|asCurrency:TRUE}</em>
+				<a n:href="removeFromCart! $stock->id" class="del-goods ajax" data-target-loading=".top-cart-info">&nbsp;</a>
 			</li>
 		</ul>
 		<div class="text-right">
-			<a n:href="this" class="btn btn-default">{_'View Cart'}</a>
-			<a n:href="this" class="btn btn-primary">{_'Checkout'}</a>
+			<a n:href="Cart:" class="btn btn-primary">{_'View Cart'}</a>
 		</div>
 	</div>
-</div>            
+</div>

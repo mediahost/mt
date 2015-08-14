@@ -6,25 +6,36 @@
 
 <div class="container">
 	<div class="homepage">
-		
+
 		<div class="row margin-bottom-40">
 			<div class="sidebar col-md-3 col-sm-4">
 				{include categories}
 			</div>
 			<div class="col-md-9 col-sm-8">
 				{include accessories}
-				{include topProducts}
+				
+				{snippet topProducts}
+					{include topProducts}
+				{/snippet}
 			</div>
 		</div>
 
 		<div class="row margin-bottom-40">
-			{include sales}
+			{snippet sales}
+				{include sales}
+			{/snippet}
+			
 			{include promo}
 		</div>
 
-		{include news}
-		{include lastVisited}
+		{snippet news}
+			{include news}
+		{/snippet}
 		
+		{snippet lastVisited}
+			{include lastVisited}
+		{/snippet}
+
 	</div>
 </div>
 {/block}
@@ -79,6 +90,7 @@
 <div class="row margin-bottom-35">
 	<div class="col-md-12 sale-product">
 		<h2>{_'Last visited'}</h2>
+
 		<div class="owl-carousel owl-carousel5">
 			<div n:foreach="$visitedStocks as $stock">
 				{include product, stock => $stock, product => $stock->product}
@@ -89,7 +101,8 @@
 {/define}
 
 {define product}
-<div class="product-item">
+{var divId => 'add-to-cart-' . rand(99, 1000) . '-' . $stock->id}
+<div class="product-item" id="{$divId}">
 	<div class="pi-img-wrapper">
 		<img src="{$basePath}/foto/{$product->image|size:'250'}" class="img-responsive" alt="{$product}" />
 		<div>
@@ -107,7 +120,9 @@
 		<a n:href="Product: $product->id">{$product}</a>
 	</h3>
 	<div class="pi-price">{$stock->price|currencyVat}</div>
-	<a n:href="this" class="btn btn-default add2cart">{_'Add to cart'}</a>
+	<a n:href="addToCart! $stock->id" 
+	   n:class="btn, btn-default, add2cart, ajax, !$basket->getCountAllowedToAdd($stock) ? disabled"
+	   data-target-loading="#{$divId}">{_'Add to cart'}</a>
 	<div n:if="$product->hasSign($newSign)" class="sticker sticker-new"></div>
 	<div n:if="$product->hasSign($saleSign)" class="sticker sticker-sale"></div>
 </div>

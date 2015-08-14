@@ -14,7 +14,7 @@ use Nette\Object;
 
 class PageFacade extends Object
 {
-	
+
 	const KEY_ALL_SLUGS = 'page-slugs';
 	const TAG_ALL_PAGES = 'all-pages';
 
@@ -63,7 +63,7 @@ class PageFacade extends Object
 		if ($locale === NULL) {
 			$locale = $this->translator->getDefaultLocale();
 		}
-		
+
 		$cache = $this->getCache();
 		$cacheKey = self::KEY_ALL_SLUGS . '_' . $locale;
 
@@ -82,12 +82,14 @@ class PageFacade extends Object
 		$localeSlugs = [];
 		$pages = $this->pageRepo->findAll();
 		foreach ($pages as $page) {
-			$page->setCurrentLocale($locale);
-			$localeSlugs[$page->id] = $page->slug;
+			if (!$page->isInterLink()) {
+				$page->setCurrentLocale($locale);
+				$localeSlugs[$page->id] = $page->slug;
+			}
 		}
 		return $localeSlugs;
 	}
-	
+
 	/** @return Cache */
 	public function getCache()
 	{

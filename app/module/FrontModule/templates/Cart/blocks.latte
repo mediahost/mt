@@ -1,0 +1,84 @@
+{define steps}
+<div class="cart-steps row margin-bottom-10">
+	<div class="col-md-12 col-sm-12">
+		<ul class="nav nav-justified steps">
+			{var isActive => $presenter->isLinkCurrent('Cart:')}
+			{var isPast => $presenter->isLinkCurrent('Cart:payments') || 
+							$presenter->isLinkCurrent('Cart:address') || 
+							$presenter->isLinkCurrent('Cart:summary')}
+			<li n:class="$isActive ? active">
+				<a n:href="Cart:" n:class="step, $isPast ? past, $isActive ? active">
+					<span class="number">1</span>
+					<span class="desc">{_'cart.cart'}</span>
+				</a>
+			</li>
+			{var isActive => $presenter->isLinkCurrent('Cart:payments')}
+			{var isPast => $presenter->isLinkCurrent('Cart:address') || 
+							$presenter->isLinkCurrent('Cart:summary')}
+			<li n:class="$isActive ? active">
+				<a n:href="Cart:payments" n:class="step, $isPast ? past, $isActive ? active">
+					<span class="number">2</span>
+					<span class="desc">{_'cart.shippingPayment'}</span>
+				</a>
+			</li>
+			{var isActive => $presenter->isLinkCurrent('Cart:address')}
+			{var isPast => $presenter->isLinkCurrent('Cart:summary')}
+			<li n:class="$isActive ? active">
+				<a n:href="Cart:address" n:class="step, $isPast ? past, $isActive ? active">
+					<span class="number">3</span>
+					<span class="desc">{_'cart.address'}</span>
+				</a>
+			</li>
+			{var isActive => $presenter->isLinkCurrent('Cart:summary')}
+			{var isPast => FALSE}
+			<li n:class="$isActive ? active">
+				<a n:href="Cart:summary" n:class="step, $isPast ? past, $isActive ? active">
+					<span class="number">4</span>
+					<span class="desc">{_'cart.summary'}</span>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+{/define}
+
+{define lastVisited}
+<div class="row margin-bottom-35" n:if="count($visitedStocks)">
+	<div class="col-md-12 sale-product">
+		<h2>{_'Last visited'}</h2>
+		<div class="owl-carousel owl-carousel5">
+			<div n:foreach="$visitedStocks as $stock">
+				{include product, stock => $stock, product => $stock->product}
+			</div>
+		</div>
+	</div>
+</div>
+{/define}
+
+{define product}
+{var divId => 'add-to-cart-' . rand(99, 1000) . '-' . $stock->id}
+<div class="product-item" id="{$divId}">
+	<div class="pi-img-wrapper">
+		<img src="{$basePath}/foto/{$product->image|size:'250'}" class="img-responsive" alt="{$product}" />
+		<div>
+			<a href="{$basePath}/foto/{$product->image|size}" 
+			   class="btn btn-default fancybox-button">
+				{_'Zoom'}
+			</a>
+			<a n:href="Product: $product->id" 
+			   class="btn btn-default fancybox-fast-view">
+				{_'View'}
+			</a>
+		</div>
+	</div>
+	<h3>
+		<a n:href="Product: $product->id">{$product}</a>
+	</h3>
+	<div class="pi-price">{$stock->price|currencyVat}</div>
+	<a n:href="addToCart! $stock->id" 
+	   n:class="btn, btn-default, add2cart, ajax, !$basket->getCountAllowedToAdd($stock) ? disabled"
+	   data-target-loading="#{$divId}">{_'Add to cart'}</a>
+	<div n:if="$product->hasSign($newSign)" class="sticker sticker-new"></div>
+	<div n:if="$product->hasSign($saleSign)" class="sticker sticker-sale"></div>
+</div>
+{/define}

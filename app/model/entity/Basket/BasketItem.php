@@ -3,6 +3,7 @@
 namespace App\Model\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
 
@@ -25,5 +26,13 @@ class BasketItem extends BaseEntity
 	
 	/** @ORM\Column(type="integer") */
 	protected $quantity;
+	
+	public function getTotalPrice(Exchange $exchange, $level = NULL, $withVat = TRUE)
+	{
+		$price = $this->stock->getPrice($level);
+		$priceValue = $withVat ? $price->withVat : $price->withoutVat;
+		$exchangedValue = $exchange->change($priceValue, NULL, NULL, Price::PRECISION);
+		return $exchangedValue * $this->quantity;
+	}
 
 }
