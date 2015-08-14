@@ -8,6 +8,8 @@ product:
 shoppingCart: 'Shopping cart'
 cart: 'Cart'
 shippingPayment: 'Shipping & Payment'
+shipping: 'Shipping'
+payment: 'Payment'
 address: 'Address'
 summary: 'Summary'
 
