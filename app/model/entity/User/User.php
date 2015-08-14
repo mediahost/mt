@@ -2,6 +2,7 @@
 
 namespace App\Model\Entity;
 
+use App\Model\Entity\Newsletter\Subscriber;
 use App\Model\Entity\Traits\IUserSocials;
 use App\Model\Entity\Traits\UserGroups;
 use App\Model\Entity\Traits\UserPassword;
@@ -20,6 +21,7 @@ use Nette\Security\IIdentity;
  * @property string $locale
  * @property string $currency
  * @property Basket $basket
+ * @property Subscriber $newsletter
  * @method User setMail(string $mail)
  * @method User setLocale(string $locale)
  * @method User setCurrency(string $code)
@@ -50,6 +52,12 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	
 	/** @ORM\OneToOne(targetEntity="Basket", mappedBy="user") */
 	protected $basket;
+	
+    /**
+	 * @ORM\OneToOne(targetEntity="App\Model\Entity\Newsletter\Subscriber", inversedBy="user")
+	 * @ORM\JoinColumn(name="subscriber_id", referencedColumnName="id", nullable=true)
+	 */
+    protected $newsletter;
 
 	public function __construct($mail = NULL)
 	{
@@ -86,6 +94,11 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	public function import(User $user)
 	{
 		
+	}
+	
+	public function setSubscriber($subscriber) {
+		$this->newsletter = $subscriber;
+		return $this;
 	}
 
 }

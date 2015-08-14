@@ -47,6 +47,9 @@ services:
 	- {implement: App\Components\Group\Form\IGroupEditFactory, inject: yes}
 	- {implement: App\Components\Group\Grid\IGroupsGridFactory, inject: yes}
 
+	# Newsletter
+	- {implement: App\Components\Newsletter\ISubscribeControlFactory, inject: yes}
+
 	# Producers
 	- {implement: App\Components\Producer\Form\IProducerEditFactory, inject: yes}
 	- {implement: App\Components\Producer\Form\IModelParameterEditFactory, inject: yes}
