@@ -6,7 +6,7 @@ use App\Components\BaseControl;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Mail\Messages\IBuyoutOurMessageFactory;
 use App\Mail\Messages\IBuyoutTheirMessageFactory;
-use App\Model\Entity\Buyout\ModelQuestion;
+use App\Model\Entity\Buyout\ModelQuestion as ModelQuestionEntity;
 use App\Model\Entity\ProducerModel;
 use App\Model\Facade\QuestionFacade;
 use Nette\Application\UI\Form;
@@ -24,7 +24,7 @@ class Request extends BaseControl
 	/** @var int */
 	private $summary;
 
-	/** @var ModelQuestion[] */
+	/** @var ModelQuestionEntity[] */
 	private $modelQuestions;
 
 	/** @var IBuyoutOurMessageFactory @inject */

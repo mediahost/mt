@@ -5,7 +5,7 @@ namespace App\Components\Buyout\Form;
 use App\Components\BaseControl;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
-use App\Model\Entity\Buyout\ModelQuestion;
+use App\Model\Entity\Buyout\ModelQuestion as ModelQuestionEntity;
 use App\Model\Entity\Buyout\Question;
 use App\Model\Entity\ProducerModel;
 use App\Model\Facade\QuestionFacade;
@@ -131,7 +131,7 @@ class ModelQuestion extends BaseControl
 					$this->em->persist($question);
 					$modelQuestion = NULL;
 				} else {
-					$modelQuestion = $this->em->getRepository(ModelQuestion::getClassName())->findOneBy([
+					$modelQuestion = $this->em->getRepository(ModelQuestionEntity::getClassName())->findOneBy([
 						'question' => $question,
 						'model' => $this->model,
 					]);
@@ -140,7 +140,7 @@ class ModelQuestion extends BaseControl
 				if ($modelQuestion) {
 					$keep[$question->id] = $modelQuestion;
 				} else {
-					$modelQuestion = new ModelQuestion();
+					$modelQuestion = new ModelQuestionEntity();
 					$modelQuestion->setQuestion($question)
 							->setModel($this->model);
 				}
