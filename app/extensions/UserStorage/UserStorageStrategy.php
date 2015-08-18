@@ -93,7 +93,7 @@ class UserStorageStrategy extends Object implements IUserStorage
 
 	public function getBasket()
 	{
-		if ($this->userStorage->isAuthenticated()) {
+		if ($this->isAuthenticated()) {
 			$basket = $this->userStorage->identity->basket;
 			if (!$basket) {
 				$basket = $this->createBasket($this->userStorage->identity);
@@ -113,6 +113,26 @@ class UserStorageStrategy extends Object implements IUserStorage
 		}
 	}
 
+	public function removeBasket()
+	{
+		if ($this->isAuthenticated()) {
+			$basket = $this->userStorage->identity->basket;
+		} else {
+			$basket = NULL;
+			$basketId = $this->guestStorage->getBasketId();
+			$this->guestStorage->setBasketId(NULL);
+			if ($basketId) {
+				$basket = $this->basketRepo->find($basketId);
+			}
+		}
+
+		if ($basket) {
+			$this->basketRepo->delete($basket);
+		}
+
+		return $this;
+	}
+
 	private function createBasket(User $user = NULL)
 	{
 		$basket = new Basket($user);
@@ -120,7 +140,7 @@ class UserStorageStrategy extends Object implements IUserStorage
 		$this->em->flush();
 		return $basket;
 	}
-	
+
 	private function saveUser(User $user)
 	{
 		$basket = $user->basket;
@@ -219,8 +239,9 @@ class UserStorageStrategy extends Object implements IUserStorage
 	{
 		$user = $this->userStorage->identity;
 		$guest = $this->guestStorage->identity;
-		
+
 		$basketId = $this->guestStorage->getBasketId();
+		$this->guestStorage->setBasketId(NULL);
 		if ($basketId) {
 			$basket = $this->basketRepo->find($basketId);
 			$user->import($guest, $basket);
@@ -230,9 +251,9 @@ class UserStorageStrategy extends Object implements IUserStorage
 		} else {
 			$user->import($guest);
 		}
-		
+
 		$this->saveUser($user);
-		
+
 		return $this;
 	}
 
