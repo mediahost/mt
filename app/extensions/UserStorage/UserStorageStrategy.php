@@ -116,9 +116,20 @@ class UserStorageStrategy extends Object implements IUserStorage
 	private function createBasket(User $user = NULL)
 	{
 		$basket = new Basket($user);
-		$basketRepo = $this->em->getRepository(Basket::getClassName());
-		$basketRepo->save($basket);
+		$this->em->persist($basket);
+		$this->em->flush();
 		return $basket;
+	}
+	
+	private function saveUser(User $user)
+	{
+		$basket = $user->basket;
+		if ($basket) {
+			$this->em->persist($basket);
+		}
+		$this->em->persist($user);
+		$this->em->flush();
+		return $user;
 	}
 
 	public function addVisited(Stock $stock)
@@ -206,7 +217,22 @@ class UserStorageStrategy extends Object implements IUserStorage
 
 	public function fromGuestToUser()
 	{
-		$this->userStorage->identity->import($this->guestStorage->identity);
+		$user = $this->userStorage->identity;
+		$guest = $this->guestStorage->identity;
+		
+		$basketId = $this->guestStorage->getBasketId();
+		if ($basketId) {
+			$basket = $this->basketRepo->find($basketId);
+			$user->import($guest, $basket);
+			if ($basket) {
+				$this->basketRepo->delete($basket);
+			}
+		} else {
+			$user->import($guest);
+		}
+		
+		$this->saveUser($user);
+		
 		return $this;
 	}
 
