@@ -47,7 +47,7 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 
 	/** @ORM\OneToMany(targetEntity="VisitedProduct", mappedBy="user", fetch="EXTRA_LAZY") */
 	protected $visitedProducts;
-	
+
 	/** @ORM\OneToOne(targetEntity="Basket", mappedBy="user") */
 	protected $basket;
 
@@ -83,9 +83,17 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 		return $this->id === NULL;
 	}
 
-	public function import(User $user)
+	public function import(User $user, Basket $basket = NULL)
 	{
-		
+		if (!$this->basket) {
+			$this->basket = new Basket($this);
+		}
+		if ($user->basket) {
+			$this->basket->import($user->basket);
+		} else if ($basket) {
+			$this->basket->import($basket);
+		}
+		return $this;
 	}
 
 }

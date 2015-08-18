@@ -102,4 +102,15 @@ class Basket extends BaseEntity
 		return $totalPrice;
 	}
 
+	public function import(Basket $basket)
+	{
+		if ($basket->itemsCount) {
+			$this->items->clear();
+		}
+		foreach ($basket->items as $item) {
+			$this->setItem($item->stock, $item->quantity);
+		}
+		return $this;
+	}
+
 }
