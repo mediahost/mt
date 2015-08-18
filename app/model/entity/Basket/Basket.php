@@ -23,6 +23,12 @@ class Basket extends BaseEntity
 	use Identifier;
 	use Model\Timestampable\Timestampable;
 
+	/** @ORM\OneToOne(targetEntity="User", inversedBy="basket") */
+	protected $user;
+
+	/** @ORM\OneToMany(targetEntity="BasketItem", mappedBy="basket", cascade={"persist", "remove"}, orphanRemoval=true) */
+	protected $items;
+
 	public function __construct(User $user = NULL)
 	{
 		if ($user) {
@@ -31,12 +37,6 @@ class Basket extends BaseEntity
 		$this->items = new ArrayCollection();
 		parent::__construct();
 	}
-
-	/** @ORM\OneToOne(targetEntity="User", inversedBy="basket") */
-	protected $user;
-
-	/** @ORM\OneToMany(targetEntity="BasketItem", mappedBy="basket", cascade={"persist", "remove"}, orphanRemoval=true) */
-	protected $items;
 
 	public function setUser(User $user)
 	{
@@ -78,6 +78,7 @@ class Basket extends BaseEntity
 		return $this;
 	}
 
+	/** @return int */
 	public function getItemCount(Stock $stock)
 	{
 		foreach ($this->items as $item) {
@@ -88,11 +89,13 @@ class Basket extends BaseEntity
 		throw new MissingItemException();
 	}
 
+	/** @return int */
 	public function getItemsCount()
 	{
 		return count($this->items);
 	}
 
+	/** @return float */
 	public function getItemsTotalPrice(Exchange $exchange, $level = NULL, $withVat = TRUE)
 	{
 		$totalPrice = 0;
@@ -108,6 +111,7 @@ class Basket extends BaseEntity
 			$this->items->clear();
 		}
 		foreach ($basket->items as $item) {
+			/* @var $item BasketItem */
 			$this->setItem($item->stock, $item->quantity);
 		}
 		return $this;

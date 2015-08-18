@@ -18,6 +18,7 @@ services:
 	- {class: App\Model\Facade\UriFacade, inject: yes}
 	- {class: App\Model\Facade\QuestionFacade, inject: yes}
 	- {class: App\Model\Facade\BasketFacade, inject: yes}
+	- {class: App\Model\Facade\OrderFacade, inject: yes}
 
 	# Storages
 	- {class: App\Model\Storage\SignUpStorage, inject: yes}
