@@ -1,0 +1,15 @@
+
+{snippet form}
+	{ifset $hideForm}
+		{_'You have subscribed our newsletter!'}
+	{else}
+		{form form}
+			<div class="input-group">
+				<input n:name="email" type="text" placeholder="youremail@mail.com" class="form-control">
+				<span class="input-group-btn">
+					<button n:name="subscribe" class="btn btn-primary" type="submit">Subscribe</button>
+				</span>
+			</div>
+		{/form}
+	{/ifset}
+{/snippet}
