@@ -26,6 +26,10 @@ class SettingsExtension extends CompilerExtension
 				'showOnlyNonEmpty' => TRUE, // TRUE -> fetch only categories with some products // not implemented yet
 				'showProductsCount' => FALSE, // TRUE -> show count of product after category name
 			],
+			'newsletter' => [
+				'enabled' => FALSE,
+				'email' => 'noreply@mt.sk',
+			],
 			'signs' => [ // fixed IDs for signs (příznaky)
 				'enabled' => FALSE,
 				'values' => [
