@@ -1,3 +1,16 @@
+admin:
+	sidebar:
+		newsletter: 'Newsletter'
+		subscribers: 'Odběratelé'
+
+	newsletter:
+		default:
+			title: 'Newsletter'
+
+	subscriber:
+		default:
+			title: 'Odběratelé'
+
 subscribeControl:
 	label: 'E-mail'
 	placeholder: 'Zadejte váš e-mail'

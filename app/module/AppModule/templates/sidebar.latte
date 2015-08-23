@@ -95,6 +95,14 @@
 						<span class="title">{_'Pages'}</span><span class="selected"></span>
 					</a>
 				</li>
+				<li n:if="$user->isAllowed('newsletter', 'default')"
+					n:class="$presenter->isLinkCurrent('Newsletter:*') ? active">
+					<a n:href="Newsletter:">
+						<i class="fa fa-newspaper-o"></i>
+						<span class="title">{_'newsletter.admin.sidebar.newsletter'}</span>
+						<span class="selected"></span>
+					</a>
+				</li>
 			{/if}
 			<!-- END ADMIN -->
 
@@ -217,6 +225,15 @@
 				</ul>
 			</li>
 
+			<li n:if="$user->isAllowed('subscriber', 'default')"
+				n:class="$presenter->isLinkCurrent('Subscriber:*') ? active">
+				<a n:href="Subscriber:">
+					<i class="fa fa-rss"></i>
+					<span class="title">{_'newsletter.admin.sidebar.subscribers'}</span>
+					<span class="selected"></span>
+				</a>
+			</li>
+			
 			<li class="heading">
 				<h3 class="uppercase"></h3>
 			</li>

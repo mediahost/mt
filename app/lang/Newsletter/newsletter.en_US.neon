@@ -1,3 +1,16 @@
+admin:
+	sidebar:
+		newsletter: 'Newsletter'
+		subscribers: 'Subscribers'
+
+	newsletter:
+		default:
+			title: 'Newsletter'
+
+	subscriber:
+		default:
+			title: 'Subscribers'
+
 subscribeControl:
 	label: 'E-mail'
 	placeholder: 'Enter your e-mail'
