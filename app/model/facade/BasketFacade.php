@@ -43,6 +43,12 @@ class BasketFacade extends Object
 		}
 		return $this->basket;
 	}
+	
+	public function clearBasket()
+	{
+		$this->userStorage->removeBasket();
+		return $this;
+	}
 
 	/** @var int */
 	public function add(Stock $stock, $quantity = 1)

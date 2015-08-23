@@ -45,17 +45,20 @@ class CartPresenter extends BasePresenter
 		$this->checkSelectedPayments();
 		$this->checkFilledAddress();
 		
+		$basket = $this->basketFacade->getBasket();
+		$user = $this->user->id ? $this->user->identity : NULL;
+		$order = $this->orderFacade->createFromBasket($basket, $user);
 		// TODO
-		// vytvoří objednávku
-		// uloží ID do session
+		// uloží ID objednávky do session
 		
+		$this->basketFacade->clearBasket();
 		$this->redirect('send');
 	}
 
 	public function actionSend()
 	{
 		// TODO
-		// odstraní ID ze session
+		// odstraní ID objednávky ze session
 		// načte objednávku podle ID
 	}
 	
