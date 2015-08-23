@@ -13,9 +13,9 @@ use App\Model\Facade\UserFacade;
 use h4kuna\Exchange\Exchange;
 use h4kuna\Exchange\ExchangeException;
 use Kdyby\Doctrine\EntityManager;
+use Kdyby\Translation\Translator;
 use Nette\Application\ForbiddenRequestException;
 use Nette\Application\UI\Presenter;
-use Symfony\Component\Translation\Translator;
 use WebLoader\Nette\CssLoader;
 use WebLoader\Nette\LoaderFactory;
 

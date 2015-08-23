@@ -38,8 +38,9 @@ abstract class BaseMessage extends Message
 	 */
 	protected function getPath()
 	{
+		$dir = dirname($this->getReflection()->getFileName());
 		$name = $this->reflection->getShortName();
-		return __DIR__ . '/' . $name . '/' . $name . '.latte';
+		return $dir . DIRECTORY_SEPARATOR . $name . '.latte';
 	}
 
 	protected function build()

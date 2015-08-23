@@ -1,0 +1,21 @@
+{layout '../../@layout.latte'}
+
+{block content}
+<table class="container content" align="center">
+	<tr>
+		<td>
+			<table class="row note">
+				<tr>
+					<td class="wrapper last">
+						{if $subscriber}
+							If you really want to unsibscribe our newsletter, click the link bellow!
+							<a href="{$link|noescape}">Link</a>
+						{else}
+							You do not subscribe our newsletter.
+						{/if}
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>

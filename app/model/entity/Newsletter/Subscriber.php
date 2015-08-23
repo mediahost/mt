@@ -14,7 +14,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  * @property string $mail
  * @property int $type
  * @property string $locale
- * @property string $unsubscribeToken
+ * @property string $token
  * @property User $user
  * @property string $ip
  * @property DateTime $subscribed
@@ -36,10 +36,10 @@ class Subscriber extends BaseEntity
 	/** @ORM\Column(type="string", length=2) */
 	protected $locale;
 
-	/** @ORM\Column(type="string", length=8, unique=true) */
-	protected $unsubscribeToken;
+	/** @ORM\Column(type="string", length=8, unique=true, nullable=true) */
+	protected $token;
 
-	/** @ORM\OneToOne(targetEntity="App\Model\Entity\User", mappedBy="newsletter") */
+	/** @ORM\OneToOne(targetEntity="App\Model\Entity\User", mappedBy="subscriber") */
 	protected $user;
 
 	/** @ORM\Column(type="string", length=39) */

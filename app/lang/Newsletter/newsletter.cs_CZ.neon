@@ -1,0 +1,20 @@
+subscribeControl:
+	label: 'E-mail'
+	placeholder: 'Zadejte váš e-mail'
+	submit: 'Přihlásit'
+	success: 'Odběr úspěšně přihlášen.'
+
+presenter:
+	success: 'Odhlášení z odběru proběhlo úspěšně!'
+	tokenNotMatch: 'Token pro odhlášení se neshoduje s e-mailem!'
+	template:
+		h1: 'Odhlásit odběr novinek'
+
+unsubscribeForm:
+	label: 'E-mail'
+	submit: 'Odhlásit odběr'
+	emailSent: 'Poslali jsme vám potvrzovací e-mail. Přejděte do schránky.'
+
+messages:
+	unsubscribe:
+		subject: 'Odhlášení odběru novinek'

@@ -1,0 +1,20 @@
+subscribeControl:
+	label: 'E-mail'
+	placeholder: 'Enter your e-mail'
+	submit: 'Subscribe'
+	success: 'Newsletter succesfully subscribed.'
+
+presenter:
+	success: 'Newsletter successfully unsubscribed!'
+	tokenNotMatch: 'Unsubscribtion token do not match to e-mail address!'
+	template:
+		h1: 'Unsubscribe newsletter'
+
+unsubscribeForm:
+	label: 'E-mail'
+	submit: 'Unsubscribe'
+	emailSent: 'We have sent you an confirmation e-mail.'
+
+messages:
+	unsubscribe:
+		subject: 'Unsubscribe newsletter'
