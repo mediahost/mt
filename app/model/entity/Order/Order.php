@@ -12,28 +12,33 @@ use Kdyby\Doctrine\Entities\BaseEntity;
 use Knp\DoctrineBehaviors\Model;
 
 /**
- * @ORM\Entity(repositoryClass="App\Model\Repository\BasketRepository")
+ * @ORM\Entity(repositoryClass="App\Model\Repository\OrderRepository")
+ * @ORM\Table(name="`order`")
  *
  * @property ArrayCollection $items
  * @property int $itemsCount
  */
-class Basket extends BaseEntity
+class Order extends BaseEntity
 {
 
 	use Identifier;
 	use Model\Timestampable\Timestampable;
 
-	/** @ORM\OneToOne(targetEntity="User", inversedBy="basket") */
+	/** @ORM\OneToOne(targetEntity="User") */
 	protected $user;
 
-	/** @ORM\OneToMany(targetEntity="BasketItem", mappedBy="basket", cascade={"persist", "remove"}, orphanRemoval=true) */
+	/** @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order", cascade={"persist", "remove"}, orphanRemoval=true) */
 	protected $items;
+	
+	/** @ORM\Column(type="string", length=5, nullable=true) */
+	protected $locale;
 
-	public function __construct(User $user = NULL)
+	public function __construct($locale, User $user = NULL)
 	{
 		if ($user) {
 			$this->setUser($user);
 		}
+		$this->locale = $locale;
 		$this->items = new ArrayCollection();
 		parent::__construct();
 	}
@@ -41,23 +46,23 @@ class Basket extends BaseEntity
 	public function setUser(User $user)
 	{
 		$this->user = $user;
-		$user->basket = $this;
 		return $this;
 	}
 
-	public function setItem(Stock $stock, $quantity)
+	public function setItem(Stock $stock, Price $price, $quantity, $locale)
 	{
 		if ($quantity > $stock->inStore) {
 			throw new InsufficientQuantityException();
 		}
 
-		$isInItems = function ($key, BasketItem $item) use ($stock) {
+		$isInItems = function ($key, OrderItem $item) use ($stock) {
 			return $stock->id === $item->stock->id;
 		};
-		$changeQuantity = function ($key, BasketItem $item) use ($stock, $quantity) {
+		$changeQuantity = function ($key, OrderItem $item) use ($stock, $price, $quantity) {
 			if ($stock->id === $item->stock->id) {
 				if ($quantity > 0) {
 					$item->quantity = $quantity;
+					$item->price = $price;
 				} else {
 					$this->items->removeElement($item);
 				}
@@ -69,9 +74,12 @@ class Basket extends BaseEntity
 		if ($this->items->exists($isInItems)) {
 			$this->items->forAll($changeQuantity);
 		} else {
-			$item = new BasketItem();
-			$item->basket = $this;
+			$stock->product->setCurrentLocale($locale);
+			$item = new OrderItem();
+			$item->order = $this;
 			$item->stock = $stock;
+			$item->name = $stock->product->name;
+			$item->price = $price;
 			$item->quantity = $quantity;
 			$this->items->add($item);
 		}
@@ -95,6 +103,17 @@ class Basket extends BaseEntity
 		return count($this->items);
 	}
 
+	/** @return Price */
+	public function getItemPrice(Stock $stock)
+	{
+		foreach ($this->items as $item) {
+			if ($item->stock->id === $stock->id) {
+				return $item->price;
+			}
+		}
+		throw new MissingItemException();
+	}
+
 	/** @return float */
 	public function getItemsTotalPrice(Exchange $exchange, $level = NULL, $withVat = TRUE)
 	{
@@ -105,14 +124,13 @@ class Basket extends BaseEntity
 		return $totalPrice;
 	}
 
-	public function import(Basket $basket)
+	public function import(Basket $basket, $level = NULL)
 	{
-		if ($basket->itemsCount) {
-			$this->items->clear();
-		}
+		$this->items->clear();
 		foreach ($basket->items as $item) {
 			/* @var $item BasketItem */
-			$this->setItem($item->stock, $item->quantity);
+			$price = $item->stock->getPrice($level);
+			$this->setItem($item->stock, $price, $item->quantity, $this->locale);
 		}
 		return $this;
 	}

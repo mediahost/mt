@@ -145,9 +145,15 @@ class Foto extends Object
 		if ($source instanceof Image) { // image
 			$img = $source;
 		} else if ($source instanceof FileUpload) { // uploaded
-			$img = Image::fromString($source->contents, $format);
+			$format = FotoHelpers::getFormatFromString($source->contents);
+			$img = Image::fromString($source->contents);
 		} else if (is_string($source)) { // filename or string
-			$img = file_exists($source) ? Image::fromFile($source, $format) : Image::fromString($source, $format);
+			if (file_exists($source)) {
+				$img = Image::fromFile($source, $format);
+		} else {
+				$format = FotoHelpers::getFormatFromString($source->contents);
+				$img = Image::fromString($source);
+			}
 		} else {
 			throw new FotoException('This source format isn\'t supported');
 		}
@@ -218,6 +224,17 @@ class FotoHelpers extends Object
 			return Helpers::getPath($splited);
 		}
 		return NULL;
+	}
+
+	public static function getFormatFromString($s)
+	{
+		$types = [
+			'image/jpeg' => Image::JPEG,
+			'image/gif' => Image::GIF,
+			'image/png' => Image::PNG
+		];
+		$type = finfo_buffer(finfo_open(FILEINFO_MIME_TYPE), $s);
+		return isset($types[$type]) ? $types[$type] : NULL;
 	}
 
 	public static function recognizeTypeFromFileExtension($filename)
