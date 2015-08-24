@@ -105,7 +105,7 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	}
 	
 	public function setSubscriber($subscriber) {
-		$this->newsletter = $subscriber;
+		$this->subscriber = $subscriber;
 		return $this;
 	}
 

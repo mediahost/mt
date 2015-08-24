@@ -11,6 +11,22 @@ admin:
 		default:
 			title: 'Odběratelé'
 
+		grid:
+			all: 'vše'
+			addSubscriber: 'Přidat odběratele'
+			title: 'Přehled odběratelů'
+			header:
+				id: 'ID #'
+				email: 'E-mail'
+				subscribed: 'Přihlášeno'
+				ip: 'IP'
+				type: 'Typ'
+				locale: 'Jazyk'
+			types:
+				user: 'uživatel'
+				dealer: 'dealer'
+				unknown: 'neznámý'
+
 subscribeControl:
 	label: 'E-mail'
 	placeholder: 'Zadejte váš e-mail'
@@ -31,3 +47,6 @@ unsubscribeForm:
 messages:
 	unsubscribe:
 		subject: 'Odhlášení odběru novinek'
+	handleDelete:
+		notFound: 'Odběratel s ID %id% nebyl nalezen.'
+		success: 'Odběratel "%email%" byl úspěšně smazán.'

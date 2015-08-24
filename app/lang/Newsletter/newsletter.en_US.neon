@@ -11,6 +11,22 @@ admin:
 		default:
 			title: 'Subscribers'
 
+		grid:
+			all: 'all'
+			addSubscriber: 'Add subscriber'
+			title: 'List of subscribers'
+			header:
+				id: 'ID #'
+				email: 'E-mail'
+				subscribed: 'Subscribed'
+				ip: 'IP'
+				type: 'Type'
+				locale: 'Locale'
+			types:
+				user: 'user'
+				dealer: 'dealer'
+				unknown: 'unknown'
+
 subscribeControl:
 	label: 'E-mail'
 	placeholder: 'Enter your e-mail'
@@ -31,3 +47,6 @@ unsubscribeForm:
 messages:
 	unsubscribe:
 		subject: 'Unsubscribe newsletter'
+	handleDelete:
+		notFound: 'Subscriber with ID %id% was not found.'
+		success: 'Subscriber "%email%" was succesfully deleted.'
