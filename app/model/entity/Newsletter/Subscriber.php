@@ -48,4 +48,9 @@ class Subscriber extends BaseEntity
 	/** @ORM\Column(type="datetime") */
 	protected $subscribed;
 
+	
+	public function __toString()
+	{
+		return $this->mail;
+	}
 }
