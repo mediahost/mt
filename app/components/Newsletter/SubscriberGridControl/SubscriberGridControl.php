@@ -3,7 +3,6 @@
 namespace App\Components\Newsletter;
 
 use App\Components\BaseControl;
-use App\Components\Newsletter\SubscriberGridControl;
 use App\Extensions\Grido\BaseGrid;
 use App\Model\Entity\Newsletter\Subscriber;
 use Grido\DataSources\Doctrine;
