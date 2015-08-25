@@ -9,7 +9,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="newsletter_subscriber",  uniqueConstraints={@ORM\UniqueConstraint(name="subscriber_unique", columns={"mail", "type"})})
+ * @ORM\Table(name="newsletter_subscriber", uniqueConstraints={@ORM\UniqueConstraint(name="subscriber_unique", columns={"mail", "type"})})
  * 
  * @property string $mail
  * @property int $type
