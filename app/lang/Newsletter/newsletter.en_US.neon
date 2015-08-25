@@ -10,7 +10,8 @@ admin:
 	subscriber:
 		default:
 			title: 'Subscribers'
-
+		add:
+			title: 'Add subscriber'
 		grid:
 			all: 'all'
 			addSubscriber: 'Add subscriber'
@@ -50,3 +51,6 @@ messages:
 	handleDelete:
 		notFound: 'Subscriber with ID %id% was not found.'
 		success: 'Subscriber "%email%" was succesfully deleted.'
+	addSubscriber:
+		success: 'New subscriber has been saved successfully.'
+		alreadyExists: 'Subscriber of this type and e-mail "%email%" already exists.'

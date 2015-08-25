@@ -10,7 +10,8 @@ admin:
 	subscriber:
 		default:
 			title: 'Odběratelé'
-
+		add:
+			title: 'Přidat odběratele'
 		grid:
 			all: 'vše'
 			addSubscriber: 'Přidat odběratele'
@@ -50,3 +51,6 @@ messages:
 	handleDelete:
 		notFound: 'Odběratel s ID %id% nebyl nalezen.'
 		success: 'Odběratel "%email%" byl úspěšně smazán.'
+	addSubscriber:
+		success: 'Nový odběratel byl úspěšně uložen.'
+		alreadyExists: 'Odběratel tohoto typu s e-mailem "%email%" již existuje.'
