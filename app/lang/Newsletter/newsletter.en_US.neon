@@ -1,0 +1,52 @@
+admin:
+	sidebar:
+		newsletter: 'Newsletter'
+		subscribers: 'Subscribers'
+
+	newsletter:
+		default:
+			title: 'Newsletter'
+
+	subscriber:
+		default:
+			title: 'Subscribers'
+
+		grid:
+			all: 'all'
+			addSubscriber: 'Add subscriber'
+			title: 'List of subscribers'
+			header:
+				id: 'ID #'
+				email: 'E-mail'
+				subscribed: 'Subscribed'
+				ip: 'IP'
+				type: 'Type'
+				locale: 'Locale'
+			types:
+				user: 'user'
+				dealer: 'dealer'
+				unknown: 'unknown'
+
+subscribeControl:
+	label: 'E-mail'
+	placeholder: 'Enter your e-mail'
+	submit: 'Subscribe'
+	success: 'Newsletter succesfully subscribed.'
+
+presenter:
+	success: 'Newsletter successfully unsubscribed!'
+	tokenNotMatch: 'Unsubscribtion token do not match to e-mail address!'
+	template:
+		h1: 'Unsubscribe newsletter'
+
+unsubscribeForm:
+	label: 'E-mail'
+	submit: 'Unsubscribe'
+	emailSent: 'We have sent you an confirmation e-mail.'
+
+messages:
+	unsubscribe:
+		subject: 'Unsubscribe newsletter'
+	handleDelete:
+		notFound: 'Subscriber with ID %id% was not found.'
+		success: 'Subscriber "%email%" was succesfully deleted.'

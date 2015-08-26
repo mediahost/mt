@@ -1,15 +1,15 @@
 
-{snippet form}
-	{ifset $hideForm}
-		{_'You have subscribed our newsletter!'}
+<div n:snippet="form" class="form-snippet">
+	{ifset $success}
+		<p>{_'newsletter.subscribeControl.success'}</p>
 	{else}
 		{form form}
-			<div class="input-group">
-				<input n:name="email" type="text" placeholder="youremail@mail.com" class="form-control">
+			<div class="input-group" data-target-loading="request-form-loading">
+				<input n:name="email" class="form-control no-live-validation">
 				<span class="input-group-btn">
-					<button n:name="subscribe" class="btn btn-primary" type="submit">Subscribe</button>
+					{button subscribe, class=> "btn btn-primary"}{caption}{/button}
 				</span>
 			</div>
 		{/form}
 	{/ifset}
-{/snippet}
+</div>
