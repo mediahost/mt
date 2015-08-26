@@ -18,6 +18,7 @@ use Nette\Security\IIdentity;
  * @ORM\Entity(repositoryClass="App\Model\Repository\UserRepository")
  *
  * @property string $mail
+ * @property Group $group
  * @property string $locale
  * @property string $currency
  * @property Basket $basket

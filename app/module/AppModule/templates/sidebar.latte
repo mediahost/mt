@@ -48,8 +48,9 @@
 				<li class="heading">
 					<h3 class="uppercase">{_'Administration'}</h3>
 				</li>
-				<li>
-					<a n:href="this">
+				<li n:if="$user->isAllowed('orders', 'default')"
+					n:class="$presenter->isLinkCurrent('Orders:*') ? active">
+					<a n:href="Orders:">
 						<i class="fa fa-inbox"></i>
 						<span class="title">{_'Orders'}</span><span class="selected"></span>
 					</a>

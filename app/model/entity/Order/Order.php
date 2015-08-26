@@ -19,6 +19,7 @@ use Knp\DoctrineBehaviors\Model;
  * @property-read int $itemsCount
  * @property User $user
  * @property string $currency
+ * @property string $locale
  */
 class Order extends BaseEntity
 {
@@ -29,7 +30,7 @@ class Order extends BaseEntity
 	/** @ORM\ManyToOne(targetEntity="User", inversedBy="orders") */
 	protected $user;
 
-	/** @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order", cascade={"persist", "remove"}, orphanRemoval=true) */
+	/** @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order", cascade={"all"}, orphanRemoval=true) */
 	protected $items;
 
 	/** @ORM\Column(type="string", length=8, nullable=true) */
@@ -151,6 +152,11 @@ class Order extends BaseEntity
 			$this->setItem($item->stock, $price, $item->quantity, $this->locale);
 		}
 		return $this;
+	}
+	
+	public function __toString()
+	{
+		return (string) $this->id;
 	}
 
 }
