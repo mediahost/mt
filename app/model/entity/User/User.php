@@ -21,7 +21,7 @@ use Nette\Security\IIdentity;
  * @property string $locale
  * @property string $currency
  * @property Basket $basket
- * @property Subscriber $newsletter
+ * @property Subscriber $subscriber
  * @method User setMail(string $mail)
  * @method User setLocale(string $locale)
  * @method User setCurrency(string $code)
@@ -57,10 +57,10 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	protected $visitedProducts;
 	
     /**
-	 * @ORM\OneToOne(targetEntity="App\Model\Entity\Newsletter\Subscriber", inversedBy="user")
-	 * @ORM\JoinColumn(name="subscriber_id", referencedColumnName="id", nullable=true)
+	 * @ORM\OneToOne(targetEntity="App\Model\Entity\Newsletter\Subscriber", inversedBy="user", fetch="LAZY")
+	 * @ORM\JoinColumn(nullable=true)
 	 */
-    protected $newsletter;
+    protected $subscriber;
 
 	public function __construct($mail = NULL)
 	{
@@ -109,7 +109,7 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	}
 	
 	public function setSubscriber($subscriber) {
-		$this->newsletter = $subscriber;
+		$this->subscriber = $subscriber;
 		return $this;
 	}
 

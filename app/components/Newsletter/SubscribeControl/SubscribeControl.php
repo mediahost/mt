@@ -6,8 +6,8 @@ use App\Components\BaseControl;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Newsletter\Subscriber;
 use App\Model\Entity\User;
+use App\Model\Facade\NewsletterFacade;
 use DateTime;
-use Kdyby\Doctrine\DuplicateEntryException;
 use Nette\Application\UI\Form;
 use Nette\Http\Request;
 use Nette\Utils\ArrayHash;
@@ -18,20 +18,22 @@ class SubscribeControl extends BaseControl
 	/** @var Request @inject */
 	public $request;
 
+	/** @var NewsletterFacade @inject */
+	public $newsletterFacade;
+
 	/** @return Form */
 	protected function createComponentForm()
 	{
 		$form = new Form;
-		$form->setTranslator($this->translator);
-		$form->setRenderer(new MetronicFormRenderer());
-//		$form->getElementPrototype()->class[] = 'ajax';
-//		$form->getElementPrototype()->addAttributes(['data-target-loading' => '#request-form-loading']);
+		$form->setTranslator($this->translator->domain('newsletter.subscribeControl'))
+				->setRenderer(new MetronicFormRenderer())
+				->getElementPrototype()->class[] = 'ajax';
 
-		$form->addText('email', 'E-mail')
-				->setRequired()
-				->addRule(Form::EMAIL);
+		$form->addText('email', 'label')
+				->addRule(Form::EMAIL)
+				->setAttribute('placeholder', $this->translator->translate('placeholder'));
 
-		$form->addSubmit('subscribe', 'Subscribe');
+		$form->addSubmit('subscribe', 'submit');
 
 		$form->onSuccess[] = $this->formSucceeded;
 		return $form;
@@ -39,51 +41,9 @@ class SubscribeControl extends BaseControl
 
 	public function formSucceeded(Form $form, ArrayHash $values)
 	{
-		$this->template->hideForm = TRUE;
-
-		$subscriber = $this->em->getRepository(Subscriber::getClassName())->findOneBy([
-			'mail' => $values->email,
-			'type' => Subscriber::TYPE_USER,
-		]);
-
-		if ($subscriber === NULL) {
-			$subscriber = new Subscriber();
-		}
-
-		\Nette\Diagnostics\Debugger::barDump($subscriber);
-
-		$subscriber->mail = $values->email;
-		$subscriber->ip = $this->request->getRemoteAddress();
-		$subscriber->subscribed = new DateTime;
-		$subscriber->locale = $this->translator->getLocale();
-		$subscriber->type = Subscriber::TYPE_USER;
-		$subscriber->unsubscribeToken = 'token'; //Random::generate('8', 'a-z0-9');
-
-		$user = $this->em->getRepository(User::getClassName())->findOneBy(['mail' => $values->email]);
-
-		if ($user !== NULL) {
-			$user->setSubscriber($subscriber);
-			$subscriber->setUser($user);
-			$this->em->persist($user);
-		}
-
-		$this->em->persist($subscriber);
-
-		$this->em->beginTransaction();
+		$this->newsletterFacade->subscribe($values->email);
 		
-		while (true) {
-			try {
-				$this->em->flush();
-				$this->em->commit();
-				break;
-			} catch (DuplicateEntryException $e) {
-				$this->em->rollback();
-				$subscriber->unsubscribeToken = 'token-new'; //Random::generate('8', 'a-z0-9');
-//				$this->em->persist($subscriber);
-			}
-		}
-
-		
+		$this->template->success = TRUE;
 
 		if ($this->presenter->isAjax()) {
 			$this->redrawControl();

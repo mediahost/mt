@@ -1,0 +1,12 @@
+        {if $item->type == App\Model\Entity\Newsletter\Subscriber::TYPE_USER}
+            {var $color = 'label-success'}
+			{var $name = $localeDomain . '.types.user'}
+        {elseif $item->type == App\Model\Entity\Newsletter\Subscriber::TYPE_DEALER}
+            {var $color = 'label-danger'}
+			{var $name = $localeDomain . '.types.dealer'}
+        {else}
+            {var $color = 'label-default'}
+			{var $name = $localeDomain . '.types.unknown'}
+        {/if}
+
+        <span class="label {$color}">{_$name}</span>

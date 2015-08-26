@@ -105,8 +105,8 @@ class PohodaFacade extends Object
 			$newCodeLenght = $this->settings->modules->pohoda->newCodeLenght;
 			$newCodeCharlist = $this->settings->modules->pohoda->newCodeCharlist;
 			$newCode = Random::generate($newCodeLenght, $newCodeCharlist);
-			$finded = $pohodaRepo->findBy(['code' => $newCode]);
-			if (!$finded) {
+			$found = $pohodaRepo->findBy(['code' => $newCode]);
+			if (!$found) {
 				return $newCode;
 			}
 		}

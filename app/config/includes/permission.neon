@@ -19,6 +19,7 @@ services:
 			- addResource('discounts')
 			- addResource('examples')
 			- addResource('groups')
+			- addResource('newsletter')
 			- addResource('orders')
 			- addResource('pages')
 			- addResource('parameters')
@@ -28,6 +29,7 @@ services:
 			- addResource('question')
 			- addResource('signs')
 			- addResource('service')
+			- addResource('subscriber')
 			- addResource('settings')
 			- addResource('users')
 
@@ -43,6 +45,7 @@ services:
 			- allow('admin', 'dashboard')
 			- allow('admin', 'discounts')
 			- allow('admin', 'groups')
+			- allow('admin', 'newsletter')
 			- allow('admin', 'orders')
 			- allow('admin', 'pages')
 			- allow('admin', 'parameters')
@@ -51,6 +54,7 @@ services:
 			- allow('admin', 'question')
 			- allow('admin', 'settings')
 			- allow('admin', 'signs')
+			- allow('admin', 'subscriber')
 			- allow('admin', 'users')
 
 			- deny('admin', 'pages', 'delete') # pages can be link to template, only superadmin can delete
