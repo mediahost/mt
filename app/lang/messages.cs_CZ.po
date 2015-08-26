@@ -342,8 +342,14 @@ msgstr "Upravit jednotky"
 msgid "Administration"
 msgstr "Správa"
 
+msgid "Order"
+msgstr "Objednávka"
+
 msgid "Orders"
 msgstr "Objednávky"
+
+msgid "Edit Order Items"
+msgstr "Upravit položky objednávky"
 
 msgid "Users"
 msgstr "Uživatelé"
@@ -717,23 +723,44 @@ msgstr "Chyba při ukládání výrobce."
 msgid "wasntFound"
 msgstr "%name% nebyl nalezen."
 
+msgid "wasntFoundShe"
+msgstr "%name% nebyla nalezena."
+
 msgid "cantBeEmpty"
 msgstr "%name% nemůže být prázdný"
+
+msgid "cantBeEmptyShe"
+msgstr "%name% nemůže být prázdná"
+
+msgid "cantBeEmptyIt"
+msgstr "%name% nemůže být prázdné"
 
 msgid "cannotDelete"
 msgstr "%name% nemůže být smazán"
 
+msgid "cannotDeleteShe"
+msgstr "%name% nemůže být smazána"
+
 msgid "successfullyDeleted"
 msgstr "%name% byl úspěšně smazán"
+
+msgid "successfullyDeletedShe"
+msgstr "%name% byla úspěšně smazána"
 
 msgid "successfullySaved"
 msgstr "%type% '%name%' byl úspěšně uložen"
 
+msgid "successfullySavedShe"
+msgstr "%type% '%name%' byla úspěšně uložena"
+
 msgid "successfullyUpdated"
 msgstr "%type% '%name%' byl úspěšně aktualizován"
 
+msgid "successfullyUpdated"
+msgstr "%type% '%name%' byla úspěšně aktualizována"
+
 msgid "%count% product was successfully updated."
-msgstr "%count% zboží bylo úspěšně aktualizováno.|%count% zboží bylo úspěšně aktualizováno."
+msgstr "%count% položka byla úspěšně aktualizována.|%count% položky byly úspěšně aktualizovány.|%count% položek bylo úspěšně aktualizováno."
 
 msgid "Group"
 msgstr "Skupina"

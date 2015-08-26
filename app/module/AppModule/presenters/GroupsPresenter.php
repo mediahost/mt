@@ -72,7 +72,7 @@ class GroupsPresenter extends BasePresenter
 	{
 		$this->groupEntity = $this->groupRepo->find($id);
 		if (!$this->groupEntity) {
-			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Group')]);
+			$message = $this->translator->translate('wasntFoundShe', NULL, ['name' => $this->translator->translate('Group')]);
 			$this->flashMessage($message, 'warning');
 			$this->redirect('default');
 		} else {
@@ -94,15 +94,15 @@ class GroupsPresenter extends BasePresenter
 	{
 		$group = $this->groupRepo->find($id);
 		if (!$group) {
-			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Group')]);
+			$message = $this->translator->translate('wasntFoundShe', NULL, ['name' => $this->translator->translate('Group')]);
 			$this->flashMessage($message, 'danger');
 		} else {
 			try {
 				$this->groupRepo->delete($group);
-				$message = $this->translator->translate('successfullyDeleted', NULL, ['name' => $this->translator->translate('Group')]);
+				$message = $this->translator->translate('successfullyDeletedShe', NULL, ['name' => $this->translator->translate('Group')]);
 				$this->flashMessage($message, 'success');
 			} catch (Exception $e) {
-				$message = $this->translator->translate('cannotDelete', NULL, ['name' => $this->translator->translate('Group')]);
+				$message = $this->translator->translate('cannotDeleteShe', NULL, ['name' => $this->translator->translate('Group')]);
 				$this->flashMessage($message, 'danger');
 			}
 		}
@@ -116,7 +116,7 @@ class GroupsPresenter extends BasePresenter
 	{
 		$control = $this->iGroupEditFactory->create();
 		$control->onAfterSave = function (Group $savedGroup) {
-			$message = $this->translator->translate('successfullySaved', NULL, [
+			$message = $this->translator->translate('successfullySavedShe', NULL, [
 				'type' => $this->translator->translate('Group'), 'name' => (string) $savedGroup
 			]);
 			$this->flashMessage($message, 'success');

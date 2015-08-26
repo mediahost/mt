@@ -26,7 +26,7 @@ class CategoriesPresenter extends BasePresenter
 			$categoryRepo = $this->em->getRepository(Category::getClassName());
 			$this->category = $categoryRepo->find($categoryId);
 			if (!$this->category) {
-				$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Category')]);
+				$message = $this->translator->translate('wasntFoundShe', NULL, ['name' => $this->translator->translate('Category')]);
 				$this->flashMessage($message, 'warning');
 				$this->redirect('default');
 			}
@@ -61,7 +61,7 @@ class CategoriesPresenter extends BasePresenter
 	{
 		$control = $this->iCategoryEditFactory->create();
 		$control->onAfterSave = function (Category $savedCategory, $addNext) {
-			$message = $this->translator->translate('successfullySaved', NULL, [
+			$message = $this->translator->translate('successfullySavedShe', NULL, [
 				'type' => $this->translator->translate('Category'), 'name' => (string) $savedCategory
 			]);
 			$this->flashMessage($message, 'success');

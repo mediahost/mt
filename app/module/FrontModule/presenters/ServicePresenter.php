@@ -37,7 +37,7 @@ class ServicePresenter extends BasePresenter
 		$this->page = $pageRepo->find($service->pageId);
 
 		if (!$this->page) {
-			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Page')]);
+			$message = $this->translator->translate('wasntFoundShe', NULL, ['name' => $this->translator->translate('Page')]);
 			$this->flashMessage($message, 'warning');
 			$this->redirect('Homepage:');
 		}
