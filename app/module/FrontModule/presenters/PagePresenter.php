@@ -13,7 +13,7 @@ class PagePresenter extends BasePresenter
 		$page = $pageRepo->find($id);
 		
 		if (!$page) {
-			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Page')]);
+			$message = $this->translator->translate('wasntFoundShe', NULL, ['name' => $this->translator->translate('Page')]);
 			$this->flashMessage($message, 'warning');
 			$this->redirect('Homepage:');
 		}
