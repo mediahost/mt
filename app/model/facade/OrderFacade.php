@@ -42,8 +42,11 @@ class OrderFacade extends Object
 	{
 		$priceLevel = $user && $user->group ? $user->group->level : NULL;
 		$locale = $this->translator->getLocale();
+		$currency = $this->exchange->getWeb();
+		$rate = (round($currency->getRate()) === (float) 1) ? NULL : $currency->getRate();
 		
 		$order = new Order($locale, $user);
+		$order->setCurrency($currency->getCode(), $rate);
 		$order->import($basket, $priceLevel);
 		$this->orderRepo->save($order);
 		$this->onOrderCreate($order);

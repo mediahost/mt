@@ -16,7 +16,9 @@ use Knp\DoctrineBehaviors\Model;
  * @ORM\Table(name="`order`")
  *
  * @property ArrayCollection $items
- * @property int $itemsCount
+ * @property-read int $itemsCount
+ * @property User $user
+ * @property string $currency
  */
 class Order extends BaseEntity
 {
@@ -24,14 +26,20 @@ class Order extends BaseEntity
 	use Identifier;
 	use Model\Timestampable\Timestampable;
 
-	/** @ORM\OneToOne(targetEntity="User") */
+	/** @ORM\ManyToOne(targetEntity="User", inversedBy="orders") */
 	protected $user;
 
 	/** @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order", cascade={"persist", "remove"}, orphanRemoval=true) */
 	protected $items;
-	
-	/** @ORM\Column(type="string", length=5, nullable=true) */
+
+	/** @ORM\Column(type="string", length=8, nullable=true) */
 	protected $locale;
+
+	/** @ORM\Column(type="string", length=8, nullable=true) */
+	protected $currency;
+
+	/** @ORM\Column(type="float", nullable=true) */
+	private $rate;
 
 	public function __construct($locale, User $user = NULL)
 	{
@@ -46,6 +54,13 @@ class Order extends BaseEntity
 	public function setUser(User $user)
 	{
 		$this->user = $user;
+		return $this;
+	}
+
+	public function setCurrency($currency, $rate = NULL)
+	{
+		$this->currency = $currency;
+		$this->rate = $rate;
 		return $this;
 	}
 
@@ -117,6 +132,9 @@ class Order extends BaseEntity
 	/** @return float */
 	public function getItemsTotalPrice(Exchange $exchange, $level = NULL, $withVat = TRUE)
 	{
+		if ($this->rate) {
+			$exchange->addRate($this->currency, $this->rate);
+		}
 		$totalPrice = 0;
 		foreach ($this->items as $item) {
 			$totalPrice += $item->getTotalPrice($exchange, $level, $withVat);

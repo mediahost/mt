@@ -6,6 +6,8 @@ use App\Components\Basket\Form\IPaymentsFactory;
 use App\Components\Basket\Form\IPersonalFactory;
 use App\Components\Basket\Form\Payments;
 use App\Components\Basket\Form\Personal;
+use App\Model\Entity\Order;
+use Doctrine\ORM\NoResultException;
 
 class CartPresenter extends BasePresenter
 {
@@ -44,39 +46,65 @@ class CartPresenter extends BasePresenter
 		$this->checkEmptyCart();
 		$this->checkSelectedPayments();
 		$this->checkFilledAddress();
-		
+
 		$basket = $this->basketFacade->getBasket();
 		$user = $this->user->id ? $this->user->identity : NULL;
 		$order = $this->orderFacade->createFromBasket($basket, $user);
-		// TODO
-		// uloží ID objednávky do session
-		
+
+		$this->getSessionSection()->orderId = $order->id;
+
 		$this->basketFacade->clearBasket();
-		$this->redirect('send');
+		$this->redirect('done');
 	}
 
-	public function actionSend()
+	public function actionDone()
 	{
-		// TODO
-		// odstraní ID objednávky ze session
-		// načte objednávku podle ID
+		$orderId = $this->getSessionSection()->orderId;
+		$orderRepo = $this->em->getRepository(Order::getClassName());
+
+		try {
+			if ($orderId) {
+				$order = $orderRepo->find($orderId);
+				if (!$order) {
+					throw new NoResultException();
+				}
+			} else {
+				throw new NoResultException();
+			}
+		} catch (NoResultException $e) {
+			$this->flashMessage($this->translator->translate('cart.order.wasntFoundWasExecuted'), 'info');
+			$this->redirect('Homepage:');
+		}
+
+		$this->getSessionSection()->orderId = NULL;
+
+		$this->template->order = $order;
 	}
-	
+
 	private function checkEmptyCart()
 	{
 		if ($this->basketFacade->getIsEmpty()) {
 			$this->redirect('default');
 		}
 	}
-	
+
 	private function checkSelectedPayments()
 	{
 		// TODO
 	}
-	
+
 	private function checkFilledAddress()
 	{
 		// TODO
+	}
+
+	private function getSessionSection()
+	{
+		$section = $this->getSession(get_class($this));
+		if (!$section->orderId) {
+			$section->orderId = NULL;
+		}
+		return $section;
 	}
 
 	/** @return Payments */
