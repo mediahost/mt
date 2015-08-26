@@ -32,3 +32,6 @@ isEmpty: 'Zatím prázdný'
 countItem: '%count% položka|%count% položky|%count% položek'
 yourCartIsEmpty: 'Nákupní košík je zcela prázdný'
 continueShopping: 'Pokračovat v nákupu'
+
+order:
+	wasntFoundWasExecuted: 'Požadovaná objednávka již byla vyřízena.'

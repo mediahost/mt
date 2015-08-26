@@ -32,3 +32,6 @@ isEmpty: 'Cart is empty'
 countItem: '%count% item|%count% items'
 yourCartIsEmpty: 'Your shopping cart is empty'
 continueShopping: 'Continue shopping'
+
+order:
+	wasntFoundWasExecuted: 'Requested order was already executed'
