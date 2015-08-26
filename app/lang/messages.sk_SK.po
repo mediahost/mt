@@ -1137,3 +1137,30 @@ msgstr "Názvu (A - Z)"
 
 msgid "Name (Z - A)"
 msgstr "Názvu (Z - A)"
+
+msgid "Created At"
+msgstr "Vytvořeno"
+
+msgid "Language"
+msgstr "Jazyk"
+
+msgid "Edit Items"
+msgstr "Upravit položky"
+
+msgid "Items"
+msgstr "Položky"
+
+msgid "Edit Order #%number%"
+msgstr "Úprava objednávky č. %number%"
+
+msgid "Order #%number%"
+msgstr "Objednávka č. %number%"
+
+msgid "Add new items"
+msgstr "Přidat nové položky"
+
+msgid "Insufficient quantity of this product on stock."
+msgstr "Nedostatečný počet kusů skladem."
+
+msgid "No free product with ID '%number%'."
+msgstr "Nelze přidat produkt s ID '%number%'."

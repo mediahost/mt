@@ -1179,3 +1179,30 @@ msgstr "Name (A - Z)"
 
 msgid "Name (Z - A)"
 msgstr "Name (Z - A)"
+
+msgid "Created At"
+msgstr "Created At"
+
+msgid "Language"
+msgstr "Language"
+
+msgid "Edit Items"
+msgstr "Edit Items"
+
+msgid "Items"
+msgstr "Items"
+
+msgid "Edit Order #%number%"
+msgstr "Edit Order #%number%"
+
+msgid "Order #%number%"
+msgstr "Order #%number%"
+
+msgid "Add new items"
+msgstr "Add new items"
+
+msgid "Insufficient quantity of this product on stock."
+msgstr "Insufficient quantity of this product on stock."
+
+msgid "No free product with ID '%number%'."
+msgstr "No free product with ID '%number%'."
