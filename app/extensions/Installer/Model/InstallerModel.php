@@ -3,6 +3,10 @@
 namespace App\Extensions\Installer\Model;
 
 use App\Helpers;
+use App\Model\Entity\OrderState;
+use App\Model\Entity\OrderStateType;
+use App\Model\Entity\Page;
+use App\Model\Entity\Sign;
 use App\Model\Entity\Unit;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
@@ -80,6 +84,74 @@ class InstallerModel extends Object
 				throw new InvalidArgumentException('Invalid name of role. Check if exists role with name \'' . $role . '\'.');
 			}
 			$this->userFacade->create($initUserMail, $pass, $roleEntity);
+		}
+		return TRUE;
+	}
+
+	/**
+	 * Create default signs
+	 * @return boolean
+	 * @throws InvalidArgumentException
+	 */
+	public function installSigns(array $signs)
+	{
+		foreach ($signs as $signName => $signId) {
+			$signRepo = $this->em->getRepository(Sign::getClassName());
+			$signEntity = $signRepo->find($signId);
+			if (!$signEntity) {
+				$signEntity = new Sign($signName, NULL, $signId);
+				$signRepo->save($signEntity);
+			}
+		}
+		return TRUE;
+	}
+
+	/**
+	 * Create default pages
+	 * @return boolean
+	 * @throws InvalidArgumentException
+	 */
+	public function installPages($maxId)
+	{
+		for ($id = 1; $id <= $maxId; $id++) {
+			$pageRepo = $this->em->getRepository(Page::getClassName());
+			$pageEntity = $pageRepo->find($id);
+			if (!$pageEntity) {
+				$pageEntity = new Page(NULL, $id);
+				$pageEntity->name = 'example page ' . $id;
+				$pageRepo->save($pageEntity);
+			}
+		}
+		return TRUE;
+	}
+
+	/**
+	 * Create default order states
+	 * @return boolean
+	 * @throws InvalidArgumentException
+	 */
+	public function installOrders(array $states, array $types)
+	{
+		$typeRepo = $this->em->getRepository(OrderStateType::getClassName());
+		$stateRepo = $this->em->getRepository(OrderState::getClassName());
+		foreach ($types as $name => $isOk) {
+			$type = $typeRepo->findOneByName($name);
+			if (!$type) {
+				$type = new OrderStateType();
+				$type->name = $name;
+			}
+			$type->isOk = $isOk;
+			$typeRepo->save($type);
+		}
+		foreach ($states as $name => $typeName) {
+			$state = $stateRepo->findOneByName($name);
+			$type = $typeRepo->findOneByName($typeName);
+			if (!$state) {
+				$state = new OrderState();
+				$state->name = $name;
+			}
+			$state->type = $type;
+			$stateRepo->save($state);
 		}
 		return TRUE;
 	}
