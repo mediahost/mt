@@ -19,11 +19,19 @@ class Page extends BaseTranslatable
 	
 	use Model\Translatable\Translatable;
 
-	/** @ORM\Column(type="string", length=100) */
+	/** @ORM\Column(type="string", length=100, nullable=true) */
 	protected $comment;
 
-	/** @ORM\Column(type="string", length=256) */
+	/** @ORM\Column(type="string", length=256, nullable=true) */
 	protected $link;
+	
+	public function __construct($currentLocale = NULL, $id = NULL)
+	{
+		if ($id) {
+			$this->setId($id);
+		}
+		parent::__construct($currentLocale);
+	}
 	
 	public function isInterLink()
 	{
@@ -39,6 +47,12 @@ class Page extends BaseTranslatable
 	public function isNew()
 	{
 		return $this->id === NULL;
+	}
+	
+	protected function setId($id)
+	{
+		$this->id = $id;
+		return $this;
 	}
 
 }

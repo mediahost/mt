@@ -9,6 +9,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
 /**
  * @ORM\Entity
  *
+ * @property OrderStateType $type
  * @property string $name
  */
 class OrderState extends BaseEntity
