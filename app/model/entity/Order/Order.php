@@ -30,6 +30,9 @@ class Order extends BaseEntity
 	/** @ORM\ManyToOne(targetEntity="User", inversedBy="orders") */
 	protected $user;
 
+	/** @ORM\ManyToOne(targetEntity="OrderState") */
+	protected $state;
+
 	/** @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order", cascade={"all"}, orphanRemoval=true) */
 	protected $items;
 
