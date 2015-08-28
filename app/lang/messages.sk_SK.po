@@ -1164,3 +1164,30 @@ msgstr "Nedostatečný počet kusů skladem."
 
 msgid "No free product with ID '%number%'."
 msgstr "Nelze přidat produkt s ID '%number%'."
+
+msgid "State"
+msgstr "Stav"
+
+msgid "Change State"
+msgstr "Změna stavu"
+
+msgid "order in system"
+msgstr "Objednáno v systému"
+
+msgid "in proceedings"
+msgstr "Připravujeme"
+
+msgid "sent shippers"
+msgstr "Odesláno přepravci"
+
+msgid "ready to take"
+msgstr "Připraveno k převzetí"
+
+msgid "ok - recieved"
+msgstr "Ok - Přijato"
+
+msgid "ok - taken"
+msgstr "Ok - Převzato"
+
+msgid "canceled"
+msgstr "Zrušeno"

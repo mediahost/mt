@@ -14,6 +14,11 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  */
 class OrderStateType extends BaseEntity
 {
+	
+	const ORDERED = 1;
+	const EXPEDED = 2;
+	const DONE = 3;
+	const STORNO = 4;
 
 	use Identifier;
 

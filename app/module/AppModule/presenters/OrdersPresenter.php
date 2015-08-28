@@ -2,6 +2,8 @@
 
 namespace App\AppModule\Presenters;
 
+use App\Components\Order\Form\ChangeState;
+use App\Components\Order\Form\IChangeStateFactory;
 use App\Components\Order\Form\IOrderProductsEditFactory;
 use App\Components\Order\Form\OrderProductsEdit;
 use App\Components\Order\Grid\IOrdersGridFactory;
@@ -23,6 +25,9 @@ class OrdersPresenter extends BasePresenter
 
 	/** @var IOrderProductsEditFactory @inject */
 	public $iOrderProductsEditFactory;
+
+	/** @var IChangeStateFactory @inject */
+	public $iChangeStateFactory;
 
 	/** @var IOrdersGridFactory @inject */
 	public $iOrdersGridFactory;
@@ -59,6 +64,7 @@ class OrdersPresenter extends BasePresenter
 			$this->redirect('default');
 		} else {
 			$this['orderProductsForm']->setOrder($this->orderEntity);
+			$this['changeStateForm']->setOrder($this->orderEntity);
 		}
 		$this->template->order = $this->orderEntity;
 	}
@@ -70,13 +76,13 @@ class OrdersPresenter extends BasePresenter
 	 */
 	public function actionDelete($id)
 	{
-		$order = $this->orderRepo->find($id);
-		if (!$order) {
+		$this->orderEntity = $this->orderRepo->find($id);
+		if (!$this->orderEntity || !$this->canDelete($this->orderEntity)) {
 			$message = $this->translator->translate('wasntFoundShe', NULL, ['name' => $this->translator->translate('Order')]);
 			$this->flashMessage($message, 'danger');
 		} else {
 			try {
-				$this->orderRepo->delete($order);
+				$this->orderRepo->delete($this->orderEntity);
 				$message = $this->translator->translate('successfullyDeletedShe', NULL, ['name' => $this->translator->translate('Order')]);
 				$this->flashMessage($message, 'success');
 			} catch (Exception $e) {
@@ -87,10 +93,14 @@ class OrdersPresenter extends BasePresenter
 		$this->redirect('default');
 	}
 
+	public function canEdit(Order $order)
+	{
+		return $this->user->isAllowed('orders', 'edit') && $order->isEditable;
+	}
+
 	public function canDelete(Order $order)
 	{
-		// TODO: musí zohlednit stav objednávky
-		return $this->user->isAllowed('orders', 'delete');
+		return $this->canEdit($order);
 	}
 
 	// <editor-fold desc="forms">
@@ -99,6 +109,20 @@ class OrdersPresenter extends BasePresenter
 	public function createComponentOrderProductsForm()
 	{
 		$control = $this->iOrderProductsEditFactory->create();
+		$control->onAfterSave = function (Order $savedOrder) {
+			$message = $this->translator->translate('successfullySavedShe', NULL, [
+				'type' => $this->translator->translate('Order'), 'name' => (string) $savedOrder
+			]);
+			$this->flashMessage($message, 'success');
+			$this->redirect('this');
+		};
+		return $control;
+	}
+
+	/** @return ChangeState */
+	public function createComponentChangeStateForm()
+	{
+		$control = $this->iChangeStateFactory->create();
 		$control->onAfterSave = function (Order $savedOrder) {
 			$message = $this->translator->translate('successfullySavedShe', NULL, [
 				'type' => $this->translator->translate('Order'), 'name' => (string) $savedOrder

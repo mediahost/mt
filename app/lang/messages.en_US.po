@@ -1206,3 +1206,30 @@ msgstr "Insufficient quantity of this product on stock."
 
 msgid "No free product with ID '%number%'."
 msgstr "No free product with ID '%number%'."
+
+msgid "State"
+msgstr "State"
+
+msgid "Change State"
+msgstr "Change State"
+
+msgid "order in system"
+msgstr "Order in system"
+
+msgid "in proceedings"
+msgstr "In proceedings"
+
+msgid "sent shippers"
+msgstr "Sent shippers"
+
+msgid "ready to take"
+msgstr "Ready to take"
+
+msgid "ok - recieved"
+msgstr "Ok - Recieved"
+
+msgid "ok - taken"
+msgstr "Ok - Taken"
+
+msgid "canceled"
+msgstr "Canceled"
