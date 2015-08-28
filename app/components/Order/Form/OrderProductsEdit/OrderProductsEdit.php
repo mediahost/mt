@@ -36,10 +36,13 @@ class OrderProductsEdit extends BaseControl
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
 
+		$disabled = !$this->order->isEditable;
+
 		$quantities = $form->addContainer('quantities');
 		foreach ($this->order->items as $item) {
 			$item->stock->product->setCurrentLocale($this->lang);
 			$quantities->addSpinner($item->stock->id, $item->stock->product)
+					->setDisabled($disabled)
 					->setDefaultValue($item->quantity)
 					->setPlusButton('default', 'fa fa-angle-up')
 					->setMinusButton('default', 'fa fa-angle-down')
@@ -49,10 +52,13 @@ class OrderProductsEdit extends BaseControl
 					->setSize(MetronicTextInputBase::SIZE_XS);
 		}
 
-		$form->addMultiSelect2('new', 'Add new items')
-				->setAutocomplete('autocompleteProducts');
+		if (!$disabled) {
+			$form->addMultiSelect2('new', 'Add new items')
+					->setAutocomplete('autocompleteProducts');
+		}
 
-		$form->addSubmit('save', 'Save');
+		$form->addSubmit('save', 'Save')
+				->setDisabled($disabled);
 
 		$form->setDefaults($this->getDefaults());
 		$form->onSuccess[] = $this->formSucceeded;
@@ -85,7 +91,7 @@ class OrderProductsEdit extends BaseControl
 				$form['new']->addError($message);
 			}
 		}
-		
+
 		return $this;
 	}
 

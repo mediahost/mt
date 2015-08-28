@@ -18,8 +18,10 @@ use Knp\DoctrineBehaviors\Model;
  * @property ArrayCollection $items
  * @property-read int $itemsCount
  * @property User $user
+ * @property OrderState $state
  * @property string $currency
  * @property string $locale
+ * @property bool $isEditable
  */
 class Order extends BaseEntity
 {
@@ -144,6 +146,12 @@ class Order extends BaseEntity
 			$totalPrice += $item->getTotalPrice($exchange, $level, $withVat);
 		}
 		return $totalPrice;
+	}
+
+	/** @return bool */
+	public function getIsEditable()
+	{
+		return ($this->state->type->id === OrderStateType::ORDERED);
 	}
 
 	public function import(Basket $basket, $level = NULL)

@@ -30,6 +30,12 @@ class OrdersGrid extends BaseControl
 				->setSortable()
 				->setFilterText()
 				->setSuggestion();
+		
+		$stateRepo = $this->em->getRepository(\App\Model\Entity\OrderState::getClassName());
+		$grid->addColumnText('state', 'State')
+				->setSortable()
+				->setCustomRender(__DIR__ . '/tag.latte')
+				->setFilterSelect($stateRepo->findPairs('name'));
 
 		$grid->addColumnDate('createdAt', 'Created At', 'd.m.Y H:i:s')
 				->setSortable()
