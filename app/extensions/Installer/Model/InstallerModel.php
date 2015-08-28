@@ -134,13 +134,13 @@ class InstallerModel extends Object
 	{
 		$typeRepo = $this->em->getRepository(OrderStateType::getClassName());
 		$stateRepo = $this->em->getRepository(OrderState::getClassName());
-		foreach ($types as $name => $isOk) {
+		foreach ($types as $name => $locking) {
 			$type = $typeRepo->findOneByName($name);
 			if (!$type) {
 				$type = new OrderStateType();
 				$type->name = $name;
 			}
-			$type->isOk = $isOk;
+			$type->locking = $locking;
 			$typeRepo->save($type);
 		}
 		foreach ($states as $name => $typeName) {

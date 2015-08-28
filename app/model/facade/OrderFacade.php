@@ -4,7 +4,10 @@ namespace App\Model\Facade;
 
 use App\Model\Entity\Basket;
 use App\Model\Entity\Order;
+use App\Model\Entity\OrderItem;
 use App\Model\Entity\OrderState;
+use App\Model\Entity\OrderStateType;
+use App\Model\Entity\Stock;
 use App\Model\Entity\User;
 use App\Model\Repository\OrderRepository;
 use h4kuna\Exchange\Exchange;
@@ -46,15 +49,15 @@ class OrderFacade extends Object
 		$currency = $this->exchange->getWeb();
 		$rate = (round($currency->getRate()) === (float) 1) ? NULL : $currency->getRate();
 		$stateRepo = $this->em->getRepository(OrderState::getClassName());
-		
+
 		$order = new Order($locale, $user);
 		$order->state = $stateRepo->find(OrderState::ORDERED_IN_SYSTEM);
 		$order->setCurrency($currency->getCode(), $rate);
 		$order->import($basket, $priceLevel);
 		$this->orderRepo->save($order);
-		
+
 		$this->onOrderCreate($order);
-		
+
 		return $order;
 	}
 
@@ -72,10 +75,70 @@ class OrderFacade extends Object
 		}
 		$order->state = $newState;
 		$this->orderRepo->save($order);
-		
-		$this->onOrderChangeState($order, $oldState, $newState);
-		
+
+		$this->onOrderChangeState($order, $oldState);
+
 		return $order;
+	}
+
+	public function relockProducts(Order $order, OrderState $oldState = NULL)
+	{
+		if (!$oldState) {
+			$stateRepo = $this->em->getRepository(OrderState::getClassName());
+			$oldState = $stateRepo->find(OrderState::NO_STATE);
+		}
+		$newState = $order->state;
+
+		// Order -> Done => unlock + decrease
+		// Order -> Storno => unlock
+		// Done -> Order => increase + lock
+		// Done -> Storno => increase
+		// Storno -> Order => lock
+		// Storno -> Done => decrease
+
+		$increase = NULL;
+		$lock = NULL;
+		if ($oldState->type->isLocking(OrderStateType::LOCK_ORDER)) {
+			if ($newState->type->isLocking(OrderStateType::LOCK_DONE)) { // Order -> Done => unlock + decrease
+				$lock = FALSE;
+				$increase = FALSE;
+			} else if ($newState->type->isLocking(OrderStateType::LOCK_STORNO)) { // Order -> Storno => unlock
+				$lock = FALSE;
+			}
+		} else if ($oldState->type->isLocking(OrderStateType::LOCK_DONE)) {
+			if ($newState->type->isLocking(OrderStateType::LOCK_ORDER)) { // Done -> Order => increase + lock
+				$lock = TRUE;
+				$increase = TRUE;
+			} else if ($newState->type->isLocking(OrderStateType::LOCK_STORNO)) { // Done -> Storno => increase
+				$increase = TRUE;
+			}
+		} else if ($oldState->type->isLocking(OrderStateType::LOCK_STORNO)) {
+			if ($newState->type->isLocking(OrderStateType::LOCK_ORDER)) { // Storno -> Order => lock
+				$lock = TRUE;
+			} else if ($newState->type->isLocking(OrderStateType::LOCK_DONE)) { // Storno -> Done => decrease
+				$increase = FALSE;
+			}
+		}
+		$this->solveOrderItemsLocking($order->items, $lock, $increase);
+	}
+
+	private function solveOrderItemsLocking($items, $lock = NULL, $increase = NULL)
+	{
+		$stockRepo = $this->em->getRepository(Stock::getClassName());
+		/* @var $item OrderItem */
+		foreach ($items as $item) {
+			if ($lock === TRUE) {
+				$item->stock->addLock($item->quantity);
+			} else if ($lock === FALSE) {
+				$item->stock->removeLock($item->quantity);
+			}
+			if ($increase === TRUE) {
+				$item->stock->increaseQuantity($item->quantity);
+			} else if ($increase === FALSE) {
+				$item->stock->decreaseQuantity($item->quantity);
+			}
+			$stockRepo->save($item->stock);
+		}
 	}
 
 }

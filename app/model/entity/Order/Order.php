@@ -22,6 +22,7 @@ use Knp\DoctrineBehaviors\Model;
  * @property string $currency
  * @property string $locale
  * @property bool $isEditable
+ * @property bool $isDeletable
  */
 class Order extends BaseEntity
 {
@@ -152,6 +153,12 @@ class Order extends BaseEntity
 	public function getIsEditable()
 	{
 		return ($this->state->type->id === OrderStateType::ORDERED);
+	}
+
+	/** @return bool */
+	public function getIsDeletable()
+	{
+		return ($this->state->type->id === OrderStateType::STORNO);
 	}
 
 	public function import(Basket $basket, $level = NULL)

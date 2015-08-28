@@ -22,6 +22,7 @@ class OrderState extends BaseEntity
 	const OK_RECIEVED = 5;
 	const OK_TAKEN = 5;
 	const CANCELED = 7;
+	const NO_STATE = self::CANCELED;
 
 	use Identifier;
 

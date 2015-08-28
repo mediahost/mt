@@ -4,11 +4,15 @@ namespace App\Listeners\Model\Facade;
 
 use App\Model\Entity\Order;
 use App\Model\Entity\OrderState;
+use App\Model\Facade\OrderFacade;
 use Kdyby\Events\Subscriber;
 use Nette\Object;
 
 class OrderListener extends Object implements Subscriber
 {
+
+	/** @var OrderFacade @inject */
+	public $orderFacade;
 
 	const CHANGE_STATE_OK_TO_NOK = 1;
 	const CHANGE_STATE_NOK_TO_OK = 2;
@@ -25,12 +29,13 @@ class OrderListener extends Object implements Subscriber
 	public function onCreate(Order $order)
 	{
 		// SEND MAIL
+		$this->orderFacade->relockProducts($order);
 	}
 
-	public function onChangeState(Order $order, OrderState $oldState, OrderState $newState)
+	public function onChangeState(Order $order, OrderState $oldState)
 	{
 		// SEND MAIL
-		// relock products
+		$this->orderFacade->relockProducts($order, $oldState);
 	}
 
 }

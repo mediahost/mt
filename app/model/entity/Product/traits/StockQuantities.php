@@ -28,6 +28,16 @@ trait StockQuantities
 		return $this;
 	}
 
+	public function increaseQuantity($count = 1)
+	{
+		return $this->setQuantity($this->quantity + $count);
+	}
+
+	public function decreaseQuantity($count = 1)
+	{
+		return $this->setQuantity($this->quantity - $count);
+	}
+
 	public function setLock($lock)
 	{
 		$this->locked = $lock > 0 ? $lock : 0;

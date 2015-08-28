@@ -2,6 +2,7 @@
 
 namespace App\Extensions\Settings\DI;
 
+use App\Model\Entity\OrderStateType;
 use Nette\DI\CompilerExtension;
 
 class SettingsExtension extends CompilerExtension
@@ -26,10 +27,10 @@ class SettingsExtension extends CompilerExtension
 					'canceled' => 'storno',
 				],
 				'types' => [
-					'ordered' => FALSE,
-					'expeded' => TRUE,
-					'done' => TRUE,
-					'storno' => FALSE,
+					'ordered' => OrderStateType::LOCK_ORDER,
+					'expeded' => OrderStateType::LOCK_DONE,
+					'done' => OrderStateType::LOCK_DONE,
+					'storno' => OrderStateType::LOCK_STORNO,
 				],
 			],
 			'categories' => [ // product categories

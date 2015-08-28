@@ -100,7 +100,7 @@ class OrdersPresenter extends BasePresenter
 
 	public function canDelete(Order $order)
 	{
-		return $this->canEdit($order);
+		return $this->user->isAllowed('orders', 'delete') && $order->isDeletable;
 	}
 
 	// <editor-fold desc="forms">
