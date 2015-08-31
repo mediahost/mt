@@ -40,7 +40,7 @@ class ProductPresenter extends BasePresenter
 		$this->user->storage->addVisited($this->stock);
 	}
 
-	public function actionSearchJson($text, $page = 1, $perPage = 10)
+	public function actionSearchJson($text, $getProductId = TRUE, $page = 1, $perPage = 10)
 	{
 		/* @var $list ProductList */
 		$list = $this['products'];
@@ -61,7 +61,7 @@ class ProductPresenter extends BasePresenter
 			$product = $stock->product;
 			$price = $stock->getPrice($this->priceLevel);
 			$item = [];
-			$item['id'] = $product->id;
+			$item['id'] = $getProductId ? $product->id : $stock->id;
 			$item['text'] = (string) $product;
 			$item['shortText'] = Strings::truncate($item['text'], 30);
 			$item['description'] = $product->description;
