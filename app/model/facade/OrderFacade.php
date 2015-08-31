@@ -24,6 +24,9 @@ class OrderFacade extends Object
 	/** @var array */
 	public $onOrderChangeState = [];
 
+	/** @var array */
+	public $onOrderChangeProducts = [];
+
 	/** @var EntityManager @inject */
 	public $em;
 
@@ -80,8 +83,24 @@ class OrderFacade extends Object
 
 		return $order;
 	}
+	
+	/**
+	 * Změní pouze locky produktů. Nelze provést při změně stavu
+	 * @param Order $order
+	 * @param array $oldOrderItems
+	 */
+	public function relockProducts(Order $order, array $oldOrderItems)
+	{
+		$this->solveOrderItemsLocking($oldOrderItems, FALSE); // unlock
+		$this->solveOrderItemsLocking($order->items, TRUE); // lock
+	}
 
-	public function relockProducts(Order $order, OrderState $oldState = NULL)
+	/**
+	 * Změní locky i počet kusů produktů. Očekává změnu stavu, beze změny nic neprovede
+	 * @param Order $order
+	 * @param OrderState $oldState
+	 */
+	public function relockAndRequantityProducts(Order $order, OrderState $oldState = NULL)
 	{
 		if (!$oldState) {
 			$stateRepo = $this->em->getRepository(OrderState::getClassName());

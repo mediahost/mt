@@ -12,6 +12,7 @@ use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Order;
 use App\Model\Entity\Stock;
 use App\Model\Facade\Exception\InsufficientQuantityException;
+use App\Model\Facade\OrderFacade;
 use Nette\Utils\ArrayHash;
 
 class OrderProductsEdit extends BaseControl
@@ -19,6 +20,9 @@ class OrderProductsEdit extends BaseControl
 
 	/** @var Order */
 	private $order;
+
+	/** @var OrderFacade @inject */
+	public $orderFacade;
 
 	// <editor-fold desc="events">
 
@@ -54,7 +58,7 @@ class OrderProductsEdit extends BaseControl
 
 		if (!$disabled) {
 			$form->addMultiSelect2('new', 'Add new items')
-					->setAutocomplete('autocompleteProducts');
+					->setAutocomplete('autocompleteStocks');
 		}
 
 		$form->addSubmit('save', 'Save')
@@ -67,9 +71,14 @@ class OrderProductsEdit extends BaseControl
 
 	public function formSucceeded(Form $form, $values)
 	{
+		$oldOrderItems = [];
+		foreach ($this->order->items as $key => $item) {
+			$oldOrderItems[$key] = clone $item;
+		}
 		$this->load($form, $values);
 		if (!$form->hasErrors()) {
 			$this->save();
+			$this->orderFacade->onOrderChangeProducts($this->order, $oldOrderItems);
 			$this->onAfterSave($this->order);
 		}
 	}
@@ -78,14 +87,14 @@ class OrderProductsEdit extends BaseControl
 	{
 		foreach ($values->quantities as $stockId => $quantity) {
 			try {
-				$this->addOrderItem($stockId, $quantity);
+				$this->setOrderItem($stockId, $quantity);
 			} catch (InsufficientQuantityException $e) {
 				$form['quantities'][$stockId]->addError('Insufficient quantity of this product on stock.');
 			}
 		}
 		foreach ($values->new as $stockId) {
 			try {
-				$this->addOrderItem($stockId, 1);
+				$this->setOrderItem($stockId, 1, TRUE);
 			} catch (InsufficientQuantityException $e) {
 				$message = $this->translator->translate('No free product with ID \'%number%\'.', ['number' => $stockId]);
 				$form['new']->addError($message);
@@ -95,7 +104,7 @@ class OrderProductsEdit extends BaseControl
 		return $this;
 	}
 
-	private function addOrderItem($stockId, $quantity)
+	private function setOrderItem($stockId, $quantity, $add = FALSE)
 	{
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
 		/* @var $stock Stock */
@@ -105,7 +114,9 @@ class OrderProductsEdit extends BaseControl
 			$priceLevel = ($this->order->user && $this->order->user->group) ? $this->order->user->group->level : NULL;
 			$price = $stock->getPrice($priceLevel);
 			$locale = $this->order->locale;
-			$this->order->setItem($stock, $price, $quantity, $locale);
+			$oldQuantity = $this->order->getItemCount($stock, FALSE);
+			$newQuantity = $add ? ($quantity + $oldQuantity) : $quantity;
+			$this->order->setItem($stock, $price, $newQuantity, $locale);
 		}
 	}
 
@@ -128,6 +139,19 @@ class OrderProductsEdit extends BaseControl
 		if (!$this->order) {
 			throw new BaseControlException('Use setOrder(\App\Model\Entity\Order) before render');
 		}
+	}
+	
+	public function render()
+	{
+		if ($this->order->currency) {
+			$this->exchange->setWeb($this->order->currency);
+			if ($this->order->rate) {
+				$this->exchange->addRate($this->order->currency, $this->order->rate);
+			}
+		}
+		$this->template->exchange = $this->exchange;
+		$this->template->items = $this->order->items;
+		parent::render();
 	}
 
 	// <editor-fold desc="setters & getters">

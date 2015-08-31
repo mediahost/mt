@@ -23,19 +23,26 @@ class OrderListener extends Object implements Subscriber
 		return [
 			'App\Model\Facade\OrderFacade::onOrderCreate' => 'onCreate',
 			'App\Model\Facade\OrderFacade::onOrderChangeState' => 'onChangeState',
+			'App\Model\Facade\OrderFacade::onOrderChangeProducts' => 'onChangeProducts',
 		];
 	}
 
 	public function onCreate(Order $order)
 	{
 		// SEND MAIL
-		$this->orderFacade->relockProducts($order);
+		$this->orderFacade->relockAndRequantityProducts($order);
 	}
 
 	public function onChangeState(Order $order, OrderState $oldState)
 	{
 		// SEND MAIL
-		$this->orderFacade->relockProducts($order, $oldState);
+		$this->orderFacade->relockAndRequantityProducts($order, $oldState);
+	}
+
+	public function onChangeProducts(Order $order, array $oldOrderItems)
+	{
+		// SEND MAIL
+		$this->orderFacade->relockProducts($order, $oldOrderItems);
 	}
 
 }

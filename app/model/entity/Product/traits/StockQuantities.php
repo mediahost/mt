@@ -64,7 +64,7 @@ trait StockQuantities
 	protected function actualizeInStore()
 	{
 		$inStore = $this->quantity - $this->locked;
-		$this->inStore = $inStore > 1 ? $inStore : 0;
+		$this->inStore = $inStore > 0 ? $inStore : 0;
 	}
 
 	public function getInStore()

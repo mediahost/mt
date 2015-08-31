@@ -20,6 +20,7 @@ use Knp\DoctrineBehaviors\Model;
  * @property User $user
  * @property OrderState $state
  * @property string $currency
+ * @property-read float $rate
  * @property string $locale
  * @property bool $isEditable
  * @property bool $isDeletable
@@ -78,7 +79,8 @@ class Order extends BaseEntity
 
 	public function setItem(Stock $stock, Price $price, $quantity, $locale)
 	{
-		if ($quantity > $stock->inStore) {
+		$oldQuantity = $this->getItemCount($stock, FALSE);
+		if (($quantity - $oldQuantity) > $stock->inStore) {
 			throw new InsufficientQuantityException();
 		}
 
@@ -114,14 +116,18 @@ class Order extends BaseEntity
 	}
 
 	/** @return int */
-	public function getItemCount(Stock $stock)
+	public function getItemCount(Stock $stock, $throwException = TRUE)
 	{
 		foreach ($this->items as $item) {
 			if ($item->stock->id === $stock->id) {
 				return $item->quantity;
 			}
 		}
-		throw new MissingItemException();
+		if ($throwException) {
+			throw new MissingItemException();
+		} else {
+			return 0;
+		}
 	}
 
 	/** @return int */
@@ -194,7 +200,7 @@ class Order extends BaseEntity
 		}
 		return $this;
 	}
-	
+
 	public function __toString()
 	{
 		return (string) $this->id;
