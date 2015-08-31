@@ -1191,3 +1191,9 @@ msgstr "Ok - Převzato"
 
 msgid "canceled"
 msgstr "Zrušeno"
+
+msgid "Currency"
+msgstr "Měna"
+
+msgid "--- anyone ---"
+msgstr "--- všechny ---"

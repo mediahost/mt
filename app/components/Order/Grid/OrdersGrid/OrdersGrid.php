@@ -30,22 +30,50 @@ class OrdersGrid extends BaseControl
 				->setSortable()
 				->setFilterText()
 				->setSuggestion();
+		$grid->getColumn('id')->headerPrototype->width = '7%';
 		
 		$stateRepo = $this->em->getRepository(\App\Model\Entity\OrderState::getClassName());
 		$grid->addColumnText('state', 'State')
 				->setSortable()
 				->setCustomRender(__DIR__ . '/tag.latte')
-				->setFilterSelect($stateRepo->findPairs('name'));
+				->setFilterSelect([NULL => '--- anyone ---'] + $stateRepo->findPairs('name'));
+
+		$grid->addColumnText('totalPrice', 'Total price')
+				->setCustomRender(function ($item) {
+					$toCurrency = $item->currency;
+					$totalPrice = $item->getTotalPrice($this->exchange);
+					return $this->exchange->formatTo($totalPrice, $toCurrency);
+				})
+				->setFilterNumber();
+		$grid->getColumn('totalPrice')->headerPrototype->width = '10%';
+		$grid->getColumn('totalPrice')->cellPrototype->style = 'text-align: right';
 
 		$grid->addColumnDate('createdAt', 'Created At', 'd.m.Y H:i:s')
 				->setSortable()
 				->setFilterText()
 				->setSuggestion();
+		$grid->getColumn('createdAt')->headerPrototype->width = '10%';
+		$grid->getColumn('createdAt')->cellPrototype->style = 'text-align: center';
 
 		$grid->addColumnText('locale', 'Language')
 				->setSortable()
 				->setFilterText()
 				->setSuggestion();
+		$grid->getColumn('locale')->headerPrototype->width = '4%';
+		$grid->getColumn('locale')->cellPrototype->style = 'text-align: center';
+
+		$grid->addColumnText('currency', 'Currency')
+				->setCustomRender(function ($item) {
+					return $item->currency . ($item->rate ? ' (' . $item->rate . ')' : '');
+				})
+				->setSortable()
+				->setFilterSelect([
+					NULL => '--- anyone ---',
+					'CZK' => 'CZK',
+					'EUR' => 'EUR',
+				]);
+		$grid->getColumn('currency')->headerPrototype->width = '7%';
+		$grid->getColumn('locale')->cellPrototype->style = 'text-align: center';
 
 		$grid->addActionHref('edit', 'Edit')
 				->setIcon('fa fa-edit');
@@ -61,7 +89,7 @@ class OrdersGrid extends BaseControl
 						})
 				->elementPrototype->class[] = 'red';
 
-		$grid->setActionWidth("20%");
+		$grid->setActionWidth("10%");
 
 		return $grid;
 	}

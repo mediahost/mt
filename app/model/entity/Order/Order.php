@@ -71,6 +71,11 @@ class Order extends BaseEntity
 		return $this;
 	}
 
+	public function getRate()
+	{
+		return $this->rate;
+	}
+
 	public function setItem(Stock $stock, Price $price, $quantity, $locale)
 	{
 		if ($quantity > $stock->inStore) {
@@ -137,16 +142,34 @@ class Order extends BaseEntity
 	}
 
 	/** @return float */
-	public function getItemsTotalPrice(Exchange $exchange, $level = NULL, $withVat = TRUE)
+	public function getItemsTotalPrice(Exchange $exchange = NULL, $withVat = TRUE)
 	{
-		if ($this->rate) {
+		if ($exchange && $this->rate) {
 			$exchange->addRate($this->currency, $this->rate);
 		}
 		$totalPrice = 0;
 		foreach ($this->items as $item) {
-			$totalPrice += $item->getTotalPrice($exchange, $level, $withVat);
+			$totalPrice += $item->getTotalPrice($exchange, $withVat);
 		}
 		return $totalPrice;
+	}
+
+	/** @return float */
+	public function getPaymentsTotalPrice(Exchange $exchange = NULL, $withVat = TRUE)
+	{
+		if ($exchange && $this->rate) {
+			$exchange->addRate($this->currency, $this->rate);
+		}
+		$totalPrice = 0;
+		return $totalPrice;
+	}
+
+	/** @return float */
+	public function getTotalPrice(Exchange $exchange = NULL, $withVat = TRUE)
+	{
+		$itemsTotal = $this->getItemsTotalPrice($exchange, $withVat);
+		$paymentsTotal = $this->getPaymentsTotalPrice($exchange, $withVat);
+		return $itemsTotal + $paymentsTotal;
 	}
 
 	/** @return bool */
