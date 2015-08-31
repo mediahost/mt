@@ -1233,3 +1233,9 @@ msgstr "Ok - Taken"
 
 msgid "canceled"
 msgstr "Canceled"
+
+msgid "Currency"
+msgstr "Currency"
+
+msgid "--- anyone ---"
+msgstr "--- anyone ---"

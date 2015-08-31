@@ -52,11 +52,11 @@ class OrderItem extends BaseEntity
 		return new Price($this->vat, $this->price);
 	}
 
-	public function getTotalPrice(Exchange $exchange, $withVat = TRUE)
+	public function getTotalPrice(Exchange $exchange = NULL, $withVat = TRUE)
 	{
 		$price = $this->getPrice();
 		$priceValue = $withVat ? $price->withVat : $price->withoutVat;
-		$exchangedValue = $exchange->change($priceValue, NULL, NULL, Price::PRECISION);
+		$exchangedValue = $exchange ? $exchange->change($priceValue, NULL, NULL, Price::PRECISION) : $priceValue;
 		return $exchangedValue * $this->quantity;
 	}
 
