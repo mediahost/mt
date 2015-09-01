@@ -30,7 +30,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					{foreach $items as $item}
+					{foreach $order->items as $item}
 						{var stock => $item->stock}
 						{var product => $stock->product}
 						<tr n:ifset="$form['quantities'][$stock->id]">
@@ -42,34 +42,46 @@
 							<td>
 								<a href="{plink Products:edit $stock->id}">{$item->name}</a>
 							</td>
-							<td>
+							<td class="text-right">
 								{$item->price|currencyVat}
 							</td>
 							<td>
 								{input $form['quantities'][$stock->id]}
+								{? $form['quantities'][$stock->id]->setOption('rendered', TRUE)}
 							</td>
-							<td>
+							<td class="text-right">
 								{$item->getTotalPrice($exchange)|asCurrency:TRUE}
 							</td>
 						</tr>
 					{/foreach}
 				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="3" rowspan="3"></td>
+						<td>{_'cart.withoutVat'}</td>
+						<td class="text-right">
+							{$order->getTotalPrice($exchange, FALSE)|asCurrency:TRUE}
+						</td>
+					</tr>
+					<tr>
+						<td>{_'cart.vat'}</td>
+						<td class="text-right">
+							{$order->getVatSum($exchange)|asCurrency:TRUE}
+						</td>
+					</tr>
+					<tr>
+						<th>{_'cart.total'}</th>
+						<td class="text-right">
+							{$order->getTotalPrice($exchange)|asCurrency:TRUE}
+						</td>
+					</tr>
+				</tfoot>
 			</table>
 
 			{foreach $form->getControls() as $control}
 				{continueIf $control->getOption('rendered') || $control instanceof Nette\Forms\Controls\HiddenField}
 				{if $control instanceof Nette\Forms\Controls\Button}
 					{? $buttons[] = $control}
-				{elseif $control instanceof App\Forms\Controls\TextInputBased\Spinner}
-				{elseif $control->name === 'quantities'}
-					<div class="row">
-						<div class="col-sm-6 col-md-6">
-							{!$form->renderer->renderPair($form['image'])}
-						</div>
-						<div class="col-sm-6 col-md-6">
-							{!$form->renderer->renderPair($form['next'])}
-						</div>
-					</div>
 				{else}
 					{!$form->renderer->renderPair($control)}
 				{/if}

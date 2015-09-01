@@ -120,9 +120,7 @@ class BasketFacade extends Object
 	public function getProductsVatSum($level = NULL)
 	{
 		$basket = $this->getBasket();
-		$withVat = $basket->getItemsTotalPrice($this->exchange, $level, TRUE);
-		$withoutVat = $basket->getItemsTotalPrice($this->exchange, $level, FALSE);
-		return $withVat - $withoutVat;
+		return $basket->getItemsVatSum($this->exchange, $level);
 	}
 
 	/** @var array */

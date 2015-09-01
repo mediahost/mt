@@ -178,6 +178,14 @@ class Order extends BaseEntity
 		return $itemsTotal + $paymentsTotal;
 	}
 
+	/** @return float */
+	public function getVatSum(Exchange $exchange)
+	{
+		$withVat = $this->getTotalPrice($exchange, TRUE);
+		$withoutVat = $this->getTotalPrice($exchange, FALSE);
+		return $withVat - $withoutVat;
+	}
+
 	/** @return bool */
 	public function getIsEditable()
 	{
