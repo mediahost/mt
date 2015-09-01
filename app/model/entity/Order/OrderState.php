@@ -34,7 +34,7 @@ class OrderState extends BaseEntity
 	
 	public function __toString()
 	{
-		return (string) $this->name;
+		return (string) $this->id;
 	}
 
 }

@@ -4,12 +4,19 @@ namespace App\Components\Order\Grid;
 
 use App\Components\BaseControl;
 use App\Extensions\Grido\BaseGrid;
+use App\Extensions\Grido\DataSources\Doctrine;
+use App\Forms\Controls\SelectBased\Select2;
 use App\Model\Entity\Order;
-use Grido\DataSources\Doctrine;
+use App\Model\Entity\OrderState;
+use App\Model\Facade\Exception\FacadeException;
+use App\Model\Facade\OrderFacade;
 use Grido\Grid;
 
 class OrdersGrid extends BaseControl
 {
+	
+	/** @var OrderFacade @inject */
+	public $orderFacade;
 
 	/** @return Grid */
 	protected function createComponentGrid()
@@ -20,7 +27,7 @@ class OrdersGrid extends BaseControl
 
 		$repo = $this->em->getRepository(Order::getClassName());
 		$qb = $repo->createQueryBuilder('o');
-		$grid->model = new Doctrine($qb, []);
+		$grid->setModel(new Doctrine($qb, []), TRUE);
 
 		$grid->setDefaultSort([
 			'createdAt' => 'DESC',
@@ -31,12 +38,29 @@ class OrdersGrid extends BaseControl
 				->setFilterText()
 				->setSuggestion();
 		$grid->getColumn('id')->headerPrototype->width = '7%';
-		
-		$stateRepo = $this->em->getRepository(\App\Model\Entity\OrderState::getClassName());
+
+		$stateRepo = $this->em->getRepository(OrderState::getClassName());
+		$stateList = $stateRepo->findPairs('name');
+		$stateSelector = new Select2(NULL, $stateList);
+		$stateSelector->getControlPrototype()->class[] = 'input-medium';
+		$stateRenderer = function ($item) {
+			return $this->templateColumnRenderer(__DIR__ . '/state.latte', $item);
+		};
 		$grid->addColumnText('state', 'State')
 				->setSortable()
-				->setCustomRender(__DIR__ . '/tag.latte')
-				->setFilterSelect([NULL => '--- anyone ---'] + $stateRepo->findPairs('name'));
+				->setCustomRender($stateRenderer)
+				->setFilterSelect([NULL => '--- anyone ---'] + $stateList);
+		$grid->getColumn('state')
+				->setEditableControl($stateSelector)
+				->setEditableCallback(function ($id, $newValue, $oldValue, $column) {
+					try {
+						$this->orderFacade->changeStateByOrderId($id, $newValue);
+						return TRUE;
+					} catch (FacadeException $e) {
+						return FALSE;
+					}					
+				});
+		$grid->getColumn('state')->cellPrototype->class[] = 'changeOnClick';
 
 		$grid->addColumnText('totalPrice', 'Total price')
 				->setCustomRender(function ($item) {
@@ -71,7 +95,7 @@ class OrdersGrid extends BaseControl
 					NULL => '--- anyone ---',
 					'CZK' => 'CZK',
 					'EUR' => 'EUR',
-				]);
+		]);
 		$grid->getColumn('currency')->headerPrototype->width = '7%';
 		$grid->getColumn('locale')->cellPrototype->style = 'text-align: center';
 
