@@ -20,14 +20,14 @@ class Status extends BaseEntity
 
 	/** @ORM\Column(type="string", length=255) */
 	protected $mail;
-	
+
 	/** @ORM\ManyToOne(targetEntity="Message") */
 	protected $message;
 
 	/** @ORM\Column(type="smallint", length=32, options={"unsigned"=true}) */
 	protected $status;
 
-	/** @ORM\Column(type="datetime") */
+	/** @ORM\Column(type="datetime", nullable=true) */
 	protected $sent;
 
 }

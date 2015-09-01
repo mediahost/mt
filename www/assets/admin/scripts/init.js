@@ -12,6 +12,7 @@ jQuery(document).ready(function () {
 	AppContent.init();
 	
 	Buyout.init('[data-typeahead-url]');
+	Newsletter.init();
 });
 
 $('.modal.ajax').on('loaded.bs.modal', function (e) {

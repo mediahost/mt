@@ -6,6 +6,24 @@ admin:
 	newsletter:
 		default:
 			title: 'Newsletter'
+		new:
+			title: 'Nová zpráva'
+		grid:
+			all: 'vše'
+			createMessage: 'Vytvořit zprávu'
+			title: 'Přehled zpráv'
+		form:
+			all: 'vše'
+			subject: 'Předmět'
+			content: 'Tělo'
+			recipients: 'Příjemci'
+			groups: 'Skupiny'
+			users: 'uživatelé'
+			dealers: 'dealeři'
+			locale: 'Jazyk'
+			testEmail: 'Testovací e-mail'
+			send: 'Odeslat'
+			sendTest: 'Odeslat testovací'
 
 	subscriber:
 		default:
