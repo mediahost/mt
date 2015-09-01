@@ -31,4 +31,20 @@ class MultiSelect2 extends \Nette\Forms\Controls\MultiSelectBox
 		}
 	}
 
+	/**
+	 * Set disabled
+	 * @param type $value
+	 * @return self
+	 */
+	public function setDisabled($value = TRUE)
+	{
+		if ($value) {
+			$attributes = [
+				'data-disabled' => 'true',
+			];
+			$this->control->addAttributes($attributes);
+		}
+		return parent::setDisabled($value);
+	}
+
 }

@@ -41,7 +41,8 @@ var ComponentsDropdowns = function () {
 					params[paramName] = $(this).attr(attr);
 				}
 			}
-			if ($(this).hasClass('autocompleteProducts')) {
+			if ($(this).hasClass('autocompleteProducts') || $(this).hasClass('autocompleteStocks')) {
+				var getProductId = $(this).hasClass('autocompleteProducts');
 				params.ajax = {
 					url: basePath + '/product/search-json',
 					dataType: 'json',
@@ -50,6 +51,7 @@ var ComponentsDropdowns = function () {
 						return {
 							locale: lang,
 							text: params.term,
+							getProductId: getProductId ? 1 : 0,
 							page: params.page,
 							perPage: 30
 						};

@@ -2,6 +2,7 @@
 
 namespace Test\Examples;
 
+use App\Model\Entity\Basket;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use App\Model\Entity\UserCallable;
@@ -222,6 +223,7 @@ class BlameableUseTest extends BaseUse
 			$this->em->getClassMetadata(Blameable::getClassName()),
 			$this->em->getClassMetadata(User::getClassName()),
 			$this->em->getClassMetadata(Role::getClassName()),
+			$this->em->getClassMetadata(Basket::getClassName()),
 		];
 	}
 

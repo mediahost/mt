@@ -1,0 +1,28 @@
+{if $item->state->type->id === App\Model\Entity\OrderStateType::ORDERED}
+	{var $color = 'label-info'}
+{elseif $item->state->type->id === App\Model\Entity\OrderStateType::EXPEDED}
+	{var $color = 'label-warning'}
+{elseif $item->state->type->id === App\Model\Entity\OrderStateType::DONE}
+	{var $color = 'label-success'}
+{elseif $item->state->type->id === App\Model\Entity\OrderStateType::STORNO}
+	{var $color = 'label-danger'}
+{else}
+	{var $color = 'label-default'}
+{/if}
+
+<span class="label {$color}">{_$item->state->name}</span>
+{*<select name="editstate" class="select2" id="frm-ordersGrid-grid-form-editstate">
+	<option n:foreach="$stateList as $stateKey => $stateItem"
+			{if $stateKey === $item->state->id}selected="selected"{/if}
+			value="{$stateKey}">{_$stateItem}</option>
+</select>*}
+
+<!--<select name="editstate" class="select2" id="frm-ordersGrid-grid-form-editstate">
+	<option value="1" selected="">Objednáno v systému</option>
+	<option value="2">Připravujeme</option>
+	<option value="3">Odesláno přepravci</option>
+	<option value="4">Připraveno k převzetí</option>
+	<option value="5">Ok - Přijato</option>
+	<option value="6">Ok - Převzato</option>
+	<option value="7">Zrušeno</option>
+</select>-->

@@ -2,6 +2,7 @@
 
 namespace App\Extensions\Settings\DI;
 
+use App\Model\Entity\OrderStateType;
 use Nette\DI\CompilerExtension;
 
 class SettingsExtension extends CompilerExtension
@@ -10,14 +11,27 @@ class SettingsExtension extends CompilerExtension
 	/** @var array */
 	public $defaults = [
 		'modules' => [
-			'buyout' => [
-				'enabled' => FALSE,
-				'pageId' => 1,
-				'email' => 'buyout@mt.sk',
-			],
 			'cron' => [ // access to cron scripts
 				'enabled' => FALSE,
 				'allowedIps' => ['127.0.0.1'],
+			],
+			'order' => [
+				'enabled' => TRUE,
+				'states' => [
+					'order in system' => 'ordered',
+					'in proceedings' => 'ordered',
+					'sent shippers' => 'expeded',
+					'ready to take' => 'expeded',
+					'ok - recieved' => 'done',
+					'ok - taken' => 'done',
+					'canceled' => 'storno',
+				],
+				'types' => [
+					'ordered' => OrderStateType::LOCK_ORDER,
+					'expeded' => OrderStateType::LOCK_DONE,
+					'done' => OrderStateType::LOCK_DONE,
+					'storno' => OrderStateType::LOCK_STORNO,
+				],
 			],
 			'categories' => [ // product categories
 				'enabled' => FALSE,
@@ -26,10 +40,6 @@ class SettingsExtension extends CompilerExtension
 				'showOnlyNonEmpty' => TRUE, // TRUE -> fetch only categories with some products // not implemented yet
 				'showProductsCount' => FALSE, // TRUE -> show count of product after category name
 			],
-			'newsletter' => [
-				'enabled' => FALSE,
-				'email' => 'noreply@mt.sk',
-			],
 			'signs' => [ // fixed IDs for signs (příznaky)
 				'enabled' => FALSE,
 				'values' => [
@@ -37,10 +47,6 @@ class SettingsExtension extends CompilerExtension
 					'sale' => 2,
 					'top' => 3,
 				],
-			],
-			'service' => [
-				'enabled' => FALSE,
-				'pageId' => 1, // ID of page in pages to show as basic info
 			],
 			'pohoda' => [
 				'enabled' => FALSE,
@@ -60,6 +66,19 @@ class SettingsExtension extends CompilerExtension
 					'low' => 15,
 					'none' => 0,
 				],
+			],
+			'newsletter' => [
+				'enabled' => FALSE,
+				'email' => 'noreply@example.sk',
+			],
+			'service' => [
+				'enabled' => FALSE,
+				'pageId' => 1, // ID of page in pages to show as basic info
+			],
+			'buyout' => [
+				'enabled' => FALSE,
+				'pageId' => 1, // ID of page in pages to show as basic info
+				'email' => 'buyout@example.sk',
 			],
 		],
 		'pageInfo' => [

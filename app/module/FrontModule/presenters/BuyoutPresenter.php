@@ -49,7 +49,7 @@ class BuyoutPresenter extends BasePresenter
 		$this->page = $pages->find($settings->pageId);
 
 		if (!$this->page) {
-			$this->flashMessage($this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Page')]), 'warning');
+			$this->flashMessage($this->translator->translate('wasntFoundShe', NULL, ['name' => $this->translator->translate('Page')]), 'warning');
 			$this->redirect('Homepage:');
 		}
 

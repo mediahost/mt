@@ -18,6 +18,7 @@ use Nette\Security\IIdentity;
  * @ORM\Entity(repositoryClass="App\Model\Repository\UserRepository")
  *
  * @property string $mail
+ * @property Group $group
  * @property string $locale
  * @property string $currency
  * @property Basket $basket
@@ -47,11 +48,14 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	/** @ORM\Column(type="boolean", nullable=true) */
 	protected $sidebarClosed;
 
-	/** @ORM\OneToMany(targetEntity="VisitedProduct", mappedBy="user", fetch="EXTRA_LAZY") */
-	protected $visitedProducts;
-
 	/** @ORM\OneToOne(targetEntity="Basket", mappedBy="user") */
 	protected $basket;
+
+	/** @ORM\OneToMany(targetEntity="Order", mappedBy="user", fetch="EXTRA_LAZY") */
+	protected $orders;
+
+	/** @ORM\OneToMany(targetEntity="VisitedProduct", mappedBy="user", fetch="EXTRA_LAZY") */
+	protected $visitedProducts;
 	
     /**
 	 * @ORM\OneToOne(targetEntity="App\Model\Entity\Newsletter\Subscriber", inversedBy="user", fetch="LAZY")
@@ -63,6 +67,7 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	{
 		$this->roles = new ArrayCollection;
 		$this->groups = new ArrayCollection();
+		$this->orders = new ArrayCollection();
 		$this->visitedProducts = new ArrayCollection();
 
 		if ($mail) {

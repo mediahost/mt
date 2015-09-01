@@ -331,8 +331,14 @@ msgstr "Edit units"
 msgid "Administration"
 msgstr "Administration"
 
+msgid "Order"
+msgstr "Order"
+
 msgid "Orders"
 msgstr "Orders"
+
+msgid "Edit Order Items"
+msgstr "Edit Order Items"
 
 msgid "Users"
 msgstr "Users"
@@ -706,19 +712,40 @@ msgstr "Error while saving producer."
 msgid "wasntFound"
 msgstr "%name% wasn't found."
 
+msgid "wasntFoundShe"
+msgstr "%name% wasn't found."
+
 msgid "cantBeEmpty"
+msgstr "%name% can't be empty."
+
+msgid "cantBeEmptyShe"
+msgstr "%name% can't be empty."
+
+msgid "cantBeEmptyIt"
 msgstr "%name% can't be empty."
 
 msgid "cannotDelete"
 msgstr "%name% can't be deleted."
 
+msgid "cannotDeleteShe"
+msgstr "%name% can't be deleted."
+
 msgid "successfullyDeleted"
+msgstr "%name% was successfully deleted."
+
+msgid "successfullyDeletedShe"
 msgstr "%name% was successfully deleted."
 
 msgid "successfullySaved"
 msgstr "%type% '%name%' was successfully saved."
 
+msgid "successfullySavedShe"
+msgstr "%type% '%name%' was successfully saved."
+
 msgid "successfullyUpdated"
+msgstr "%type% '%name%' was successfully updated."
+
+msgid "successfullyUpdatedShe"
 msgstr "%type% '%name%' was successfully updated."
 
 msgid "%count% product was successfully updated."
@@ -1152,3 +1179,63 @@ msgstr "Name (A - Z)"
 
 msgid "Name (Z - A)"
 msgstr "Name (Z - A)"
+
+msgid "Created At"
+msgstr "Created At"
+
+msgid "Language"
+msgstr "Language"
+
+msgid "Edit Items"
+msgstr "Edit Items"
+
+msgid "Items"
+msgstr "Items"
+
+msgid "Edit Order #%number%"
+msgstr "Edit Order #%number%"
+
+msgid "Order #%number%"
+msgstr "Order #%number%"
+
+msgid "Add new items"
+msgstr "Add new items"
+
+msgid "Insufficient quantity of this product on stock."
+msgstr "Insufficient quantity of this product on stock."
+
+msgid "No free product with ID '%number%'."
+msgstr "No free product with ID '%number%'."
+
+msgid "State"
+msgstr "State"
+
+msgid "Change State"
+msgstr "Change State"
+
+msgid "order in system"
+msgstr "Order in system"
+
+msgid "in proceedings"
+msgstr "In proceedings"
+
+msgid "sent shippers"
+msgstr "Sent shippers"
+
+msgid "ready to take"
+msgstr "Ready to take"
+
+msgid "ok - recieved"
+msgstr "Ok - Recieved"
+
+msgid "ok - taken"
+msgstr "Ok - Taken"
+
+msgid "canceled"
+msgstr "Canceled"
+
+msgid "Currency"
+msgstr "Currency"
+
+msgid "--- anyone ---"
+msgstr "--- anyone ---"

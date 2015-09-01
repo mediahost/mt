@@ -227,17 +227,17 @@ class ProducersPresenter extends BasePresenter
 		try {
 			$entity = $repo->find($itemId);
 			if (!$entity) {
-				$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Entity')]);
+				$message = $this->translator->translate('wasntFoundShe', NULL, ['name' => $this->translator->translate('Entity')]);
 				$this->setError($message);
 				return;
 			}
 			$repo->delete($entity);
 			$this->addData('id', $entity->id);
 		} catch (ORMException $e) {
-			$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('ID')]);
+			$message = $this->translator->translate('cantBeEmptyIt', NULL, ['name' => $this->translator->translate('ID')]);
 			$this->setError($message);
 		} catch (DBALException $e) {
-			$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('Entity')]);
+			$message = $this->translator->translate('cantBeEmptyShe', NULL, ['name' => $this->translator->translate('Entity')]);
 			$this->setError($message);
 		}
 	}

@@ -16,7 +16,14 @@ use Knp\DoctrineBehaviors\Model;
  * @ORM\Table(name="`order`")
  *
  * @property ArrayCollection $items
- * @property int $itemsCount
+ * @property-read int $itemsCount
+ * @property User $user
+ * @property OrderState $state
+ * @property string $currency
+ * @property-read float $rate
+ * @property string $locale
+ * @property bool $isEditable
+ * @property bool $isDeletable
  */
 class Order extends BaseEntity
 {
@@ -24,14 +31,23 @@ class Order extends BaseEntity
 	use Identifier;
 	use Model\Timestampable\Timestampable;
 
-	/** @ORM\OneToOne(targetEntity="User") */
+	/** @ORM\ManyToOne(targetEntity="User", inversedBy="orders") */
 	protected $user;
 
-	/** @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order", cascade={"persist", "remove"}, orphanRemoval=true) */
+	/** @ORM\ManyToOne(targetEntity="OrderState") */
+	protected $state;
+
+	/** @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order", cascade={"all"}, orphanRemoval=true) */
 	protected $items;
-	
-	/** @ORM\Column(type="string", length=5, nullable=true) */
+
+	/** @ORM\Column(type="string", length=8, nullable=true) */
 	protected $locale;
+
+	/** @ORM\Column(type="string", length=8, nullable=true) */
+	protected $currency;
+
+	/** @ORM\Column(type="float", nullable=true) */
+	private $rate;
 
 	public function __construct($locale, User $user = NULL)
 	{
@@ -49,9 +65,22 @@ class Order extends BaseEntity
 		return $this;
 	}
 
+	public function setCurrency($currency, $rate = NULL)
+	{
+		$this->currency = $currency;
+		$this->rate = $rate;
+		return $this;
+	}
+
+	public function getRate()
+	{
+		return $this->rate;
+	}
+
 	public function setItem(Stock $stock, Price $price, $quantity, $locale)
 	{
-		if ($quantity > $stock->inStore) {
+		$oldQuantity = $this->getItemCount($stock, FALSE);
+		if (($quantity - $oldQuantity) > $stock->inStore) {
 			throw new InsufficientQuantityException();
 		}
 
@@ -87,14 +116,18 @@ class Order extends BaseEntity
 	}
 
 	/** @return int */
-	public function getItemCount(Stock $stock)
+	public function getItemCount(Stock $stock, $throwException = TRUE)
 	{
 		foreach ($this->items as $item) {
 			if ($item->stock->id === $stock->id) {
 				return $item->quantity;
 			}
 		}
-		throw new MissingItemException();
+		if ($throwException) {
+			throw new MissingItemException();
+		} else {
+			return 0;
+		}
 	}
 
 	/** @return int */
@@ -115,13 +148,54 @@ class Order extends BaseEntity
 	}
 
 	/** @return float */
-	public function getItemsTotalPrice(Exchange $exchange, $level = NULL, $withVat = TRUE)
+	public function getItemsTotalPrice(Exchange $exchange = NULL, $withVat = TRUE)
 	{
+		if ($exchange && $this->rate) {
+			$exchange->addRate($this->currency, $this->rate);
+		}
 		$totalPrice = 0;
 		foreach ($this->items as $item) {
-			$totalPrice += $item->getTotalPrice($exchange, $level, $withVat);
+			$totalPrice += $item->getTotalPrice($exchange, $withVat);
 		}
 		return $totalPrice;
+	}
+
+	/** @return float */
+	public function getPaymentsTotalPrice(Exchange $exchange = NULL, $withVat = TRUE)
+	{
+		if ($exchange && $this->rate) {
+			$exchange->addRate($this->currency, $this->rate);
+		}
+		$totalPrice = 0;
+		return $totalPrice;
+	}
+
+	/** @return float */
+	public function getTotalPrice(Exchange $exchange = NULL, $withVat = TRUE)
+	{
+		$itemsTotal = $this->getItemsTotalPrice($exchange, $withVat);
+		$paymentsTotal = $this->getPaymentsTotalPrice($exchange, $withVat);
+		return $itemsTotal + $paymentsTotal;
+	}
+
+	/** @return float */
+	public function getVatSum(Exchange $exchange)
+	{
+		$withVat = $this->getTotalPrice($exchange, TRUE);
+		$withoutVat = $this->getTotalPrice($exchange, FALSE);
+		return $withVat - $withoutVat;
+	}
+
+	/** @return bool */
+	public function getIsEditable()
+	{
+		return ($this->state->type->id === OrderStateType::ORDERED);
+	}
+
+	/** @return bool */
+	public function getIsDeletable()
+	{
+		return ($this->state->type->id === OrderStateType::STORNO);
 	}
 
 	public function import(Basket $basket, $level = NULL)
@@ -133,6 +207,11 @@ class Order extends BaseEntity
 			$this->setItem($item->stock, $price, $item->quantity, $this->locale);
 		}
 		return $this;
+	}
+
+	public function __toString()
+	{
+		return (string) $this->id;
 	}
 
 }

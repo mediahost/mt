@@ -65,15 +65,15 @@ class QuestionPresenter extends BasePresenter
 		$name = $this->translator->translate('Question');
 
 		if (!$entity) {
-			$message = $this->translator->translate('wasntFound', NULL, ['name' => $name]);
+			$message = $this->translator->translate('wasntFoundShe', NULL, ['name' => $name]);
 			$this->flashMessage($message, 'danger');
 		} else {
 			try {
 				$repository->delete($entity);
-				$message = $this->translator->translate('successfullyDeleted', NULL, ['name' => $name]);
+				$message = $this->translator->translate('successfullyDeletedShe', NULL, ['name' => $name]);
 				$this->flashMessage($message, 'success');
 			} catch (DBALException $e) {
-				$message = $this->translator->translate('cannotDelete', NULL, ['name' => $name]);
+				$message = $this->translator->translate('cannotDeleteShe', NULL, ['name' => $name]);
 				$this->flashMessage($message, 'danger');
 			}
 		}

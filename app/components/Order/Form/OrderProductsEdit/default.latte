@@ -1,0 +1,96 @@
+{snippet orderProductsEdit}
+	{form form}	
+		{? $form->render('begin')}
+
+		<div class="alert alert-danger" n:if="$form->errors">
+			<button class="close" data-close="alert"></button>
+			{foreach $form->errors as $error}
+				<span>{$error}</span><br n:if="!$iterator->last"/>
+			{/foreach}
+		</div>
+
+		<div class="form-body">
+			{var buttons = []}
+			<table class="table table-striped table-bordered table-hover" n:ifset="$form['quantities']">
+				<thead>
+					<tr>
+						<th class="hidden-xs"></th>
+						<th>
+							{_'cart.name'}
+						</th>
+						<th>
+							{_'cart.unitPrice'}
+						</th>
+						<th>
+							{_'cart.quantity'}
+						</th>
+						<th>
+							{_'cart.total'}
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{foreach $order->items as $item}
+						{var stock => $item->stock}
+						{var product => $stock->product}
+						<tr n:ifset="$form['quantities'][$stock->id]">
+							<td class="hidden-xs">
+								<a href="{plink Products:edit $stock->id}">
+									<img src="{$basePath}/foto/{$product->image|size:20,20}" alt="{$product}" />
+								</a>
+							</td>
+							<td>
+								<a href="{plink Products:edit $stock->id}">{$item->name}</a>
+							</td>
+							<td class="text-right">
+								{$item->price|currencyVat}
+							</td>
+							<td>
+								{input $form['quantities'][$stock->id]}
+								{? $form['quantities'][$stock->id]->setOption('rendered', TRUE)}
+							</td>
+							<td class="text-right">
+								{$item->getTotalPrice($exchange)|asCurrency:TRUE}
+							</td>
+						</tr>
+					{/foreach}
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="3" rowspan="3"></td>
+						<td>{_'cart.withoutVat'}</td>
+						<td class="text-right">
+							{$order->getTotalPrice($exchange, FALSE)|asCurrency:TRUE}
+						</td>
+					</tr>
+					<tr>
+						<td>{_'cart.vat'}</td>
+						<td class="text-right">
+							{$order->getVatSum($exchange)|asCurrency:TRUE}
+						</td>
+					</tr>
+					<tr>
+						<th>{_'cart.total'}</th>
+						<td class="text-right">
+							{$order->getTotalPrice($exchange)|asCurrency:TRUE}
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+
+			{foreach $form->getControls() as $control}
+				{continueIf $control->getOption('rendered') || $control instanceof Nette\Forms\Controls\HiddenField}
+				{if $control instanceof Nette\Forms\Controls\Button}
+					{? $buttons[] = $control}
+				{else}
+					{!$form->renderer->renderPair($control)}
+				{/if}
+			{/foreach}
+			{if count($buttons)}
+				{!$form->renderer->renderPairMulti($buttons)}
+			{/if}
+		</div>
+
+		{? $form->render('end');}
+	{/form}
+{/snippet}
