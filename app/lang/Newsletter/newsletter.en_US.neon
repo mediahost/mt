@@ -6,6 +6,25 @@ admin:
 	newsletter:
 		default:
 			title: 'Newsletter'
+		new:
+			title: 'Compose message'
+		grid:
+			all: 'all'
+			createMessage: 'Create message'
+			title: 'List of messages'
+		form:
+			all: 'all'
+			subject: 'Subject'
+			content: 'Body'
+			recipients: 'Recipients'
+			groups: 'Groups'
+			users: 'users'
+			dealers: 'dealers'
+			locale: 'Locale'
+			testEmail: 'E-mail for test'
+			send: 'Send'
+			sendTest: 'Send test'
+
 
 	subscriber:
 		default:

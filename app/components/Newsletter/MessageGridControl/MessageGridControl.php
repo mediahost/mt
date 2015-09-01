@@ -4,18 +4,18 @@ namespace App\Components\Newsletter;
 
 use App\Components\BaseControl;
 use App\Extensions\Grido\BaseGrid;
-use App\Model\Entity\Newsletter\Subscriber;
+use App\Model\Entity\Newsletter\Message;
 use App\Model\Facade\LocaleFacade;
 use Grido\DataSources\Doctrine;
 
-class SubscriberGridControl extends BaseControl
+class MessageGridControl extends BaseControl
 {
 
-	const LOCALE_DOMAIN = 'newsletter.admin.subscriber.grid';
-
+	const LOCALE_DOMAIN = 'newsletter.admin.newsletter.grid';
+	
 	/** @var LocaleFacade @inject */
 	public $localeFacade;
-	
+
 	/** @return BaseGrid */
 	protected function createComponentGrid()
 	{
@@ -23,12 +23,13 @@ class SubscriberGridControl extends BaseControl
 		$grid->setTranslator($this->translator);
 		$grid->setTheme(BaseGrid::THEME_METRONIC);
 
-		$repo = $this->em->getRepository(Subscriber::getClassName());
-		$qb = $repo->createQueryBuilder('s');
+		$repo = $this->em->getRepository(Message::getClassName());
+		$qb = $repo->createQueryBuilder('m')
+				->leftJoin('m.group', 'g');
 		$grid->model = new Doctrine($qb, []);
 
 		$grid->setDefaultSort([
-			'subscribed' => 'DESC',
+			'created' => 'DESC',
 		]);
 
 		////////// ID //////////
@@ -37,30 +38,25 @@ class SubscriberGridControl extends BaseControl
 				->setFilterNumber();
 		$grid->getColumn('id')->headerPrototype->width = '5%';
 
-		////////// E-mail //////////
-		$grid->addColumnText('mail', self::LOCALE_DOMAIN . '.header.email')
+		////////// Subject //////////
+		$grid->addColumnText('subject', self::LOCALE_DOMAIN . '.header.subject')
 				->setSortable()
 				->setFilterText()
 				->setSuggestion();
 
-		////////// Subscribed //////////
-		$grid->addColumnDate('subscribed', self::LOCALE_DOMAIN . '.header.subscribed', 'j.n.Y G:i')
+		////////// Created //////////
+		$grid->addColumnDate('created', self::LOCALE_DOMAIN . '.header.created', 'j.n.Y G:i')
 				->setSortable()
 				->setFilterDate();
-		$grid->getColumn('subscribed')->headerPrototype->width = '15%';
-
-		////////// IP //////////
-		$grid->addColumnText('ip', self::LOCALE_DOMAIN . '.header.ip')
-				->setFilterText();
-		$grid->getColumn('ip')->headerPrototype->width = '15%';
+		$grid->getColumn('created')->headerPrototype->width = '15%';
 
 		////////// Type //////////
 		$grid->addColumnNumber('type', self::LOCALE_DOMAIN . '.header.type')
 				->setCustomRender(__DIR__ . DIRECTORY_SEPARATOR . 'type.latte', ['localeDomain' => self::LOCALE_DOMAIN])
 				->setFilterSelect([
 					NULL => self::LOCALE_DOMAIN . '.all',
-					Subscriber::TYPE_USER => self::LOCALE_DOMAIN . '.types.user',
-					Subscriber::TYPE_DEALER => self::LOCALE_DOMAIN . '.types.dealer',
+					Message::TYPE_USER => self::LOCALE_DOMAIN . '.types.users',
+					Message::TYPE_DEALER => self::LOCALE_DOMAIN . '.types.dealers',
 		]);
 		$grid->getColumn('type')->headerPrototype->width = '10%';
 
@@ -70,25 +66,18 @@ class SubscriberGridControl extends BaseControl
 		$grid->getColumn('locale')->headerPrototype->width = '10%';
 
 		////////// Actions //////////
-		$grid->addActionHref('delete', 'Delete', 'delete!')
-				->setIcon('fa fa-trash-o')
-				->setConfirm(function($item) {
-					return $this->translator->translate('Are you sure you want to delete \'%name%\'?', NULL, ['name' => (string) $item]);
-				})
-				->setDisable(function($item) {
-					return !$this->presenter->user->isAllowed('question', 'delete');
-				});
-
 		$grid->setActionWidth("15%");
+		
+		$grid->addActionHref('status', 'run/pause');
 
 		return $grid;
 	}
 
 }
 
-interface ISubscriberGridControlFactory
+interface IMessageGridControlFactory
 {
 
-	/** @return SubscriberGridControl */
+	/** @return MessageGridControl */
 	function create();
 }

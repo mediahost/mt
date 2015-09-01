@@ -24,16 +24,29 @@ class Message extends BaseEntity
 	/** @ORM\Column(type="text") */
 	protected $content;
 
-	/** @ORM\Column(type="string", length=2) */
+	/** @ORM\Column(type="string", length=2, nullable=true) */
 	protected $locale;
 
 	/** @ORM\Column(type="smallint", length=32, options={"unsigned"=true}) */
 	protected $type;
+
+	/** @ORM\Column(type="smallint", length=32, options={"unsigned"=true}) */
+	protected $status;
+	
+	/** @ORM\Column(type="datetime") */
+	protected $created;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="App\Model\Entity\Group")
 	 * @ORM\JoinColumn(nullable=true)
 	 */
 	protected $group;
-
+	
+	/** @ORM\Column(type="boolean") */
+	protected $unsubscribable = TRUE;
+	
+	public function __toString()
+	{
+		return $this->subject;
+	}
 }

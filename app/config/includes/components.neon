@@ -53,6 +53,7 @@ services:
 	# Newsletter
 	- {implement: App\Components\Newsletter\ISubscribeControlFactory, inject: yes}
 	- {implement: App\Components\Newsletter\ISubscriberGridControlFactory, inject: yes}
+	- {implement: App\Components\Newsletter\IMessageGridControlFactory, inject: yes}
 
 	# Producers
 	- {implement: App\Components\Producer\Form\IProducerEditFactory, inject: yes}
