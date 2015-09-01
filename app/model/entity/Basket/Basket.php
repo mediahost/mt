@@ -105,6 +105,14 @@ class Basket extends BaseEntity
 		return $totalPrice;
 	}
 
+	/** @return float */
+	public function getItemsVatSum(Exchange $exchange, $level = NULL)
+	{
+		$withVat = $this->getItemsTotalPrice($exchange, $level, TRUE);
+		$withoutVat = $this->getItemsTotalPrice($exchange, $level, FALSE);
+		return $withVat - $withoutVat;
+	}
+
 	public function import(Basket $basket)
 	{
 		if ($basket->itemsCount) {

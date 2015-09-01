@@ -150,7 +150,7 @@ class OrderProductsEdit extends BaseControl
 			}
 		}
 		$this->template->exchange = $this->exchange;
-		$this->template->items = $this->order->items;
+		$this->template->order = $this->order;
 		parent::render();
 	}
 
