@@ -30,6 +30,7 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	/** @var ISubscribeControlFactory @inject */
 	public $iSubscribeControlFactory;
+
 	/** @var IProductListFactory @inject */
 	public $iProductListFactory;
 
@@ -84,7 +85,7 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->template->topStocks = $this->stockFacade->getTops();
 		$this->template->bestsellerStocks = $this->stockFacade->getBestSellers();
 		$this->template->visitedStocks = $this->user->storage->getVisited();
-		
+
 		$this->template->basket = $this->basketFacade;
 
 		$this->loadTemplateMenu();
@@ -99,7 +100,7 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->flashMessage($this->translator->translate('flash.signOutSuccess'), 'success');
 		$this->redirect('this');
 	}
-	
+
 	public function handleAddToCart($stockId)
 	{
 		if ($stockId) {
@@ -115,7 +116,7 @@ abstract class BasePresenter extends BaseBasePresenter
 			$this->redirect('this');
 		}
 	}
-	
+
 	public function handleRemoveFromCart($stockId)
 	{
 		if ($stockId) {

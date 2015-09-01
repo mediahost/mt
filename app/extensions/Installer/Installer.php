@@ -3,6 +3,7 @@
 namespace App\Extensions;
 
 use App\Extensions\Installer\Model\InstallerModel;
+use App\Extensions\Settings\SettingsStorage;
 use App\Helpers;
 use App\Model\Entity\Unit;
 use Nette\Object;
@@ -56,6 +57,9 @@ class Installer extends Object
 
 	/** @var IAuthorizator @inject */
 	public $permissions;
+
+	/** @var SettingsStorage @inject */
+	public $settings;
 
 	// </editor-fold>
 	// <editor-fold desc="events">
@@ -206,8 +210,11 @@ class Installer extends Object
 		$prefix = 'DB_';
 		$this->installDoctrine($prefix);
 		$this->installRoles($prefix);
-		$this->installUnits($prefix);
 		$this->installUsers($prefix);
+		$this->installUnits($prefix);
+		$this->installSigns($prefix);
+		$this->installPages($prefix);
+		$this->installOrders($prefix);
 	}
 
 	private function installDoctrine($lockPrefix = NULL)
@@ -269,6 +276,77 @@ class Installer extends Object
 		$name = $lockPrefix . $this->getLockName(__METHOD__);
 		if ($this->lock($name)) {
 			$this->model->installUsers($this->initUsers);
+			$this->onSuccessInstall($this, $name);
+			$this->messages[$name] = [self::INSTALL_SUCCESS];
+		} else {
+			$this->onLockedInstall($this, $name);
+			$this->messages[$name] = [self::INSTALL_LOCKED];
+		}
+	}
+
+	/**
+	 * Instal signs
+	 * @param string $lockPrefix
+	 */
+	private function installSigns($lockPrefix = NULL)
+	{
+		$name = $lockPrefix . $this->getLockName(__METHOD__);
+		if ($this->lock($name)) {
+			$signs = [];
+			$signSettings = $this->settings->modules->signs;
+			if ($signSettings->enabled) {
+				$signs = (array) $signSettings->values;
+			}
+			$this->model->installSigns($signs);
+			$this->onSuccessInstall($this, $name);
+			$this->messages[$name] = [self::INSTALL_SUCCESS];
+		} else {
+			$this->onLockedInstall($this, $name);
+			$this->messages[$name] = [self::INSTALL_LOCKED];
+		}
+	}
+
+	/**
+	 * Instal pages
+	 * @param string $lockPrefix
+	 */
+	private function installPages($lockPrefix = NULL)
+	{
+		$name = $lockPrefix . $this->getLockName(__METHOD__);
+		if ($this->lock($name)) {
+			$maxPageId = 1;
+			$moduleSettings = $this->settings->modules;
+			if ($moduleSettings->buyout->enabled) {
+				$maxPageId = $moduleSettings->buyout->pageId > $maxPageId ? $moduleSettings->buyout->pageId : $maxPageId;
+			}
+			if ($moduleSettings->service->enabled) {
+				$maxPageId = $moduleSettings->service->pageId > $maxPageId ? $moduleSettings->service->pageId : $maxPageId;
+			}
+			$this->model->installPages($maxPageId);
+			$this->onSuccessInstall($this, $name);
+			$this->messages[$name] = [self::INSTALL_SUCCESS];
+		} else {
+			$this->onLockedInstall($this, $name);
+			$this->messages[$name] = [self::INSTALL_LOCKED];
+		}
+	}
+
+	/**
+	 * Instal orders
+	 * @param string $lockPrefix
+	 */
+	private function installOrders($lockPrefix = NULL)
+	{
+		$name = $lockPrefix . $this->getLockName(__METHOD__);
+		if ($this->lock($name)) {
+			$states = [];
+			$types = [];
+			$orderSettings = $this->settings->modules->order;
+			if ($orderSettings->enabled) {
+				$states = (array) $orderSettings->states;
+				$types = (array) $orderSettings->types;
+			}
+			$this->model->installOrders($states, $types);
 			$this->onSuccessInstall($this, $name);
 			$this->messages[$name] = [self::INSTALL_SUCCESS];
 		} else {

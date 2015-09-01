@@ -22,6 +22,11 @@ services:
 	- {implement: App\Components\Basket\Form\IPaymentsFactory, inject: yes}
 	- {implement: App\Components\Basket\Form\IPersonalFactory, inject: yes}
 
+	# Orders
+	- {implement: App\Components\Order\Form\IOrderProductsEditFactory, inject: yes}
+	- {implement: App\Components\Order\Form\IChangeStateFactory, inject: yes}
+	- {implement: App\Components\Order\Grid\IOrdersGridFactory, inject: yes}
+
 	# User
 	- {implement: App\Components\User\Form\IUserBasicFactory, inject: yes}
 	- {implement: App\Components\User\Grid\IUsersGridFactory, inject: yes}

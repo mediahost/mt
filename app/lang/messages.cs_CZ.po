@@ -342,8 +342,14 @@ msgstr "Upravit jednotky"
 msgid "Administration"
 msgstr "Správa"
 
+msgid "Order"
+msgstr "Objednávka"
+
 msgid "Orders"
 msgstr "Objednávky"
+
+msgid "Edit Order Items"
+msgstr "Upravit položky objednávky"
 
 msgid "Users"
 msgstr "Uživatelé"
@@ -717,23 +723,44 @@ msgstr "Chyba při ukládání výrobce."
 msgid "wasntFound"
 msgstr "%name% nebyl nalezen."
 
+msgid "wasntFoundShe"
+msgstr "%name% nebyla nalezena."
+
 msgid "cantBeEmpty"
 msgstr "%name% nemůže být prázdný"
+
+msgid "cantBeEmptyShe"
+msgstr "%name% nemůže být prázdná"
+
+msgid "cantBeEmptyIt"
+msgstr "%name% nemůže být prázdné"
 
 msgid "cannotDelete"
 msgstr "%name% nemůže být smazán"
 
+msgid "cannotDeleteShe"
+msgstr "%name% nemůže být smazána"
+
 msgid "successfullyDeleted"
 msgstr "%name% byl úspěšně smazán"
+
+msgid "successfullyDeletedShe"
+msgstr "%name% byla úspěšně smazána"
 
 msgid "successfullySaved"
 msgstr "%type% '%name%' byl úspěšně uložen"
 
+msgid "successfullySavedShe"
+msgstr "%type% '%name%' byla úspěšně uložena"
+
 msgid "successfullyUpdated"
 msgstr "%type% '%name%' byl úspěšně aktualizován"
 
+msgid "successfullyUpdated"
+msgstr "%type% '%name%' byla úspěšně aktualizována"
+
 msgid "%count% product was successfully updated."
-msgstr "%count% zboží bylo úspěšně aktualizováno.|%count% zboží bylo úspěšně aktualizováno."
+msgstr "%count% položka byla úspěšně aktualizována.|%count% položky byly úspěšně aktualizovány.|%count% položek bylo úspěšně aktualizováno."
 
 msgid "Group"
 msgstr "Skupina"
@@ -1110,3 +1137,63 @@ msgstr "Názvu (A - Z)"
 
 msgid "Name (Z - A)"
 msgstr "Názvu (Z - A)"
+
+msgid "Created At"
+msgstr "Vytvořeno"
+
+msgid "Language"
+msgstr "Jazyk"
+
+msgid "Edit Items"
+msgstr "Upravit položky"
+
+msgid "Items"
+msgstr "Položky"
+
+msgid "Edit Order #%number%"
+msgstr "Úprava objednávky č. %number%"
+
+msgid "Order #%number%"
+msgstr "Objednávka č. %number%"
+
+msgid "Add new items"
+msgstr "Přidat nové položky"
+
+msgid "Insufficient quantity of this product on stock."
+msgstr "Nedostatečný počet kusů skladem."
+
+msgid "No free product with ID '%number%'."
+msgstr "Nelze přidat produkt s ID '%number%'."
+
+msgid "State"
+msgstr "State"
+
+msgid "Change State"
+msgstr "Změna stavu"
+
+msgid "order in system"
+msgstr "Objednáno v systému"
+
+msgid "in proceedings"
+msgstr "Připravujeme"
+
+msgid "sent shippers"
+msgstr "Odesláno přepravci"
+
+msgid "ready to take"
+msgstr "Připraveno k převzetí"
+
+msgid "ok - recieved"
+msgstr "Ok - Přijato"
+
+msgid "ok - taken"
+msgstr "Ok - Převzato"
+
+msgid "canceled"
+msgstr "Zrušeno"
+
+msgid "Currency"
+msgstr "Měna"
+
+msgid "--- anyone ---"
+msgstr "--- všechny ---"

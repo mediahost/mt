@@ -1,0 +1,28 @@
+{block pageTitle}
+	{_'Orders'}
+{/block}
+
+{block breadcrumbItems}
+<li><span>{_'Orders'}</span></li>
+{/block}
+
+{block content}
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-inbox"></i>
+					<span class="caption-subject bold uppercase">{_'Orders'}</span>
+				</div>
+				<div class="actions">
+					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body">
+				{control ordersGrid}
+			</div>
+		</div>
+	</div>
+</div>

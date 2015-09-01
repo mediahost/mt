@@ -158,6 +158,14 @@
                         this.editable = new Grido.Editable(that).init($(this));
                     }
             });
+            $('td[class*="grid-cell-"].changeOnClick', this.$element)
+                .off('click.grido')
+                .on('click.grido', function(event) {
+                    if (!$(this).hasClass('edit')) {
+                        this.editable = new Grido.Editable(that).init($(this));
+						$('select.select2').select2();
+                    }
+            });
         },
 
         /**
@@ -867,6 +875,21 @@
                     return false;
                 }
             };
+            var change = function(event)
+            {
+                if (that.value === that.oldValue) { // no change
+                    that.revertChanges(that.td);
+                    that.td.removeClass('edit');
+
+                    event.preventDefault();
+                    return false;
+                } else {
+                    saveData(this);
+
+                    event.preventDefault();
+                    return false;
+                }
+            };
             var saveData = function(element)
             {
                 if (typeof window.Nette === 'object' && !window.Nette.validateControl(element)) {
@@ -881,7 +904,9 @@
                 .off('keypress.grido')
                  .on('keypress.grido', keypress)
                 .off('keydown.grido')
-                 .on('keydown.grido',  keydown);
+                 .on('keydown.grido',  keydown)
+                .off('change.grido')
+                 .on('change.grido', change);
         }
     };
 

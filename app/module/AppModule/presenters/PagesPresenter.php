@@ -66,7 +66,7 @@ class PagesPresenter extends BasePresenter
 	{
 		$this->pageEntity = $this->pageRepo->find($id);
 		if (!$this->pageEntity) {
-			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Page')]);
+			$message = $this->translator->translate('wasntFoundShe', NULL, ['name' => $this->translator->translate('Page')]);
 			$this->flashMessage($message, 'warning');
 			$this->redirect('default');
 		} else {
@@ -88,15 +88,15 @@ class PagesPresenter extends BasePresenter
 	{
 		$page = $this->pageRepo->find($id);
 		if (!$page) {
-			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Page')]);
+			$message = $this->translator->translate('wasntFoundShe', NULL, ['name' => $this->translator->translate('Page')]);
 			$this->flashMessage($message, 'danger');
 		} else {
 			try {
 				$this->pageRepo->delete($page);
-				$message = $this->translator->translate('successfullyDeleted', NULL, ['name' => $this->translator->translate('Page')]);
+				$message = $this->translator->translate('successfullyDeletedShe', NULL, ['name' => $this->translator->translate('Page')]);
 				$this->flashMessage($message, 'success');
 			} catch (Exception $e) {
-				$message = $this->translator->translate('cannotDelete', NULL, ['name' => $this->translator->translate('Page')]);
+				$message = $this->translator->translate('cannotDeleteShe', NULL, ['name' => $this->translator->translate('Page')]);
 				$this->flashMessage($message, 'danger');
 			}
 		}
@@ -115,7 +115,7 @@ class PagesPresenter extends BasePresenter
 	{
 		$control = $this->iPageEditFactory->create();
 		$control->onAfterSave = function (Page $savedPage) {
-			$message = $this->translator->translate('successfullySaved', NULL, [
+			$message = $this->translator->translate('successfullySavedShe', NULL, [
 				'type' => $this->translator->translate('Page'), 'name' => (string) $savedPage
 			]);
 			$this->flashMessage($message, 'success');

@@ -18,8 +18,11 @@ class Sign extends BaseTranslatable
 	/** @ORM\OneToMany(targetEntity="Product", mappedBy="signs") */
 	protected $products;
 
-	public function __construct($name = NULL, $currentLocale = NULL)
+	public function __construct($name = NULL, $currentLocale = NULL, $id = NULL)
 	{
+		if ($id) {
+			$this->setId($id);
+		}
 		parent::__construct($currentLocale);
 		if ($name) {
 			$this->name = $name;
@@ -34,6 +37,12 @@ class Sign extends BaseTranslatable
 	public function isNew()
 	{
 		return $this->id === NULL;
+	}
+	
+	protected function setId($id)
+	{
+		$this->id = $id;
+		return $this;
 	}
 
 }
