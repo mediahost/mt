@@ -1,8 +1,11 @@
 var GridoStart = function () {
 
 	var handleStart = function () {
-//		$('.grido').grido({ajax: false});
-//		$('.grido').grido();
+
+		$('.edit .sendOnChange').on('change', function () {
+			$(this).closest('form').submit();
+		});
+
 	};
 
 	return {

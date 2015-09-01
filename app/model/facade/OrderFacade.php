@@ -9,6 +9,7 @@ use App\Model\Entity\OrderState;
 use App\Model\Entity\OrderStateType;
 use App\Model\Entity\Stock;
 use App\Model\Entity\User;
+use App\Model\Facade\Exception\FacadeException;
 use App\Model\Repository\OrderRepository;
 use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\EntityManager;
@@ -76,12 +77,31 @@ class OrderFacade extends Object
 			$stateRepo = $this->em->getRepository(OrderState::getClassName());
 			$newState = $stateRepo->find($newState);
 		}
+		if (!$newState) {
+			throw new FacadeException('State does not exists.');
+		}
+		
 		$order->state = $newState;
 		$this->orderRepo->save($order);
 
 		$this->onOrderChangeState($order, $oldState);
 
 		return $order;
+	}
+
+	/** @return Order */
+	public function changeStateByOrderId($orderId, $newStateId)
+	{
+		if ($orderId) {
+			$orderRepo = $this->em->getRepository(Order::getClassName());
+			$order = $orderRepo->find($orderId);
+		}
+		
+		if (!isset($order) || !$order) {
+			throw new FacadeException('Order does not exists.');
+		}
+
+		return $this->changeState($order, $newStateId);
 	}
 	
 	/**
