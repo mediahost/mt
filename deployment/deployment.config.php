@@ -24,7 +24,7 @@ return array(
 			www/webtemp/*
 			!www/webtemp/.htaccess
 			www/foto/*
-			!www/foto/
+			!www/foto/original/default.png
 			*.local.neon
 			*.server.neon
 			*.server_dev.neon
