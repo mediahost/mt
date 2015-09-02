@@ -1213,6 +1213,12 @@ msgstr "Only %count% free product.|Only %count% free products."
 msgid "%count% item was already inserted."
 msgstr "%count% item was already inserted.|%count% items was already inserted."
 
+msgid "No free product '%name%'."
+msgstr "No free product '%name%'."
+
+msgid "No free product with ID '%number%'."
+msgstr "No free product with ID '%number%'."
+
 msgid "State"
 msgstr "State"
 

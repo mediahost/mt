@@ -39,5 +39,10 @@ class UnitFacade extends Object
 		}
 		return $vats;
 	}
+	
+	public function __toString()
+	{
+		return $this->name;
+	}
 
 }

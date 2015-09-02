@@ -1171,6 +1171,12 @@ msgstr "Pouze %count% volný.|Pouze %count% volné.|Pouze %count% volných."
 msgid "%count% item was already inserted."
 msgstr "%count% položka je vložena.|%count% položky jsou vloženy.|%count% položek je vloženo."
 
+msgid "No free product '%name%'."
+msgstr "Produkt '%name%' není skladem."
+
+msgid "No free product with ID '%number%'."
+msgstr "Další produkt s ID '%number%' není skladem."
+
 msgid "State"
 msgstr "Stav"
 

@@ -67,7 +67,7 @@ class ProductPresenter extends BasePresenter
 			$item['description'] = $product->description;
 			$item['perex'] = $product->perex;
 			$item['inStore'] = $stock->inStore;
-			$item['unit'] = $stock->product->unit->name;
+			$item['unit'] = $stock->product->unit ? (string) $stock->product->unit : '';
 			$item['priceNoVat'] = $price->withoutVat;
 			$item['priceNoVatFormated'] = $this->exchange->format($price->withoutVat);
 			$item['priceWithVat'] = $price->withVat;
