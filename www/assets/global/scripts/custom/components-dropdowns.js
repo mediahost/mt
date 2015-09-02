@@ -13,6 +13,7 @@ var ComponentsDropdowns = function () {
 						'<div class="clearfix">' +
 							'<div class="col-sm-10">' + result.text + '</div>' +
 							'<div class="col-sm-2"><b>' + result.priceWithVatFormated + '</b></div>' +
+							'<div class="col-sm-2">' + result.inStore + ' ' + result.unit + '</div>' +
 						'</div>' +
 					'</div>';
 			markup += '</div>';

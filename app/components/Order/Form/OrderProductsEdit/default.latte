@@ -2,13 +2,6 @@
 	{form form}	
 		{? $form->render('begin')}
 
-		<div class="alert alert-danger" n:if="$form->errors">
-			<button class="close" data-close="alert"></button>
-			{foreach $form->errors as $error}
-				<span>{$error}</span><br n:if="!$iterator->last"/>
-			{/foreach}
-		</div>
-
 		<div class="form-body">
 			{var buttons = []}
 			<table class="table table-striped table-bordered table-hover" n:ifset="$form['quantities']">
@@ -51,6 +44,13 @@
 							</td>
 							<td class="text-right">
 								{$item->getTotalPrice($exchange)|asCurrency:TRUE}
+							</td>
+						</tr>
+						<tr n:if="isset($form['quantities'][$stock->id]) && $form['quantities'][$stock->id]->hasErrors()">
+							<td colspan="5" class="alert alert-danger">
+								{foreach $form['quantities'][$stock->id]->getErrors() as $error}
+									<span>{$error}</span><br n:if="!$iterator->last"/>
+								{/foreach}
 							</td>
 						</tr>
 					{/foreach}
