@@ -1201,11 +1201,17 @@ msgstr "Order #%number%"
 msgid "Add new items"
 msgstr "Add new items"
 
-msgid "Insufficient quantity of this product on stock."
-msgstr "Insufficient quantity of this product on stock."
+msgid "Insufficient quantity on stock."
+msgstr "Insufficient quantity on stock."
 
-msgid "No free product with ID '%number%'."
-msgstr "No free product with ID '%number%'."
+msgid "No more free product."
+msgstr "No more free product."
+
+msgid "Only %count% free product."
+msgstr "Only %count% free product.|Only %count% free products."
+
+msgid "%count% item was already inserted."
+msgstr "%count% item was already inserted.|%count% items was already inserted."
 
 msgid "State"
 msgstr "State"

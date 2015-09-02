@@ -89,14 +89,36 @@ class OrderProductsEdit extends BaseControl
 			try {
 				$this->setOrderItem($stockId, $quantity);
 			} catch (InsufficientQuantityException $e) {
-				$form['quantities'][$stockId]->addError('Insufficient quantity of this product on stock.');
+				$stockRepo = $this->em->getRepository(Stock::getClassName());
+				$stock = $stockRepo->find($stockId);
+				if ($stock) {
+					$quantityInOrder = $this->order->getItemCount($stock);
+					$repairedQuantity = $quantityInOrder + $stock->inStore;
+					if ($stock->inStore) {
+						$message = $this->translator->translate('Only %count% free product.', $stock->inStore);
+						$message .= ' ';
+						$message .= $this->translator->translate('%count% item was already inserted.', $quantityInOrder);
+					} else {
+						$message = $this->translator->translate('No more free product.');
+					}
+					$form['quantities'][$stockId]->setValue($repairedQuantity);
+				} else {
+					$message = $this->translator->translate('Insufficient quantity on stock.');
+				}
+				$form['quantities'][$stockId]->addError($message);
 			}
 		}
 		foreach ($values->new as $stockId) {
 			try {
 				$this->setOrderItem($stockId, 1, TRUE);
 			} catch (InsufficientQuantityException $e) {
-				$message = $this->translator->translate('No free product with ID \'%number%\'.', ['number' => $stockId]);
+				$stockRepo = $this->em->getRepository(Stock::getClassName());
+				$stock = $stockRepo->find($stockId);
+				if ($stock) {
+					$message = $this->translator->translate('No free product \'%name%\'.', ['name' => $stock->product]);
+				} else {
+					$message = $this->translator->translate('No free product with ID \'%number%\'.', ['number' => $stockId]);
+				}
 				$form['new']->addError($message);
 			}
 		}
@@ -140,7 +162,7 @@ class OrderProductsEdit extends BaseControl
 			throw new BaseControlException('Use setOrder(\App\Model\Entity\Order) before render');
 		}
 	}
-	
+
 	public function render()
 	{
 		if ($this->order->currency) {

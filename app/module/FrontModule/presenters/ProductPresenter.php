@@ -66,6 +66,8 @@ class ProductPresenter extends BasePresenter
 			$item['shortText'] = Strings::truncate($item['text'], 30);
 			$item['description'] = $product->description;
 			$item['perex'] = $product->perex;
+			$item['inStore'] = $stock->inStore;
+			$item['unit'] = $stock->product->unit->name;
 			$item['priceNoVat'] = $price->withoutVat;
 			$item['priceNoVatFormated'] = $this->exchange->format($price->withoutVat);
 			$item['priceWithVat'] = $price->withVat;

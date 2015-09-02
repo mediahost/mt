@@ -1159,11 +1159,17 @@ msgstr "Objednávka č. %number%"
 msgid "Add new items"
 msgstr "Přidat nové položky"
 
-msgid "Insufficient quantity of this product on stock."
+msgid "Insufficient quantity on stock."
 msgstr "Nedostatečný počet kusů skladem."
 
-msgid "No free product with ID '%number%'."
-msgstr "Nelze přidat produkt s ID '%number%'."
+msgid "No more free product."
+msgstr "Skladem nejsou žádné další produkty."
+
+msgid "Only %count% free product."
+msgstr "Pouze %count% volný.|Pouze %count% volné.|Pouze %count% volných."
+
+msgid "%count% item was already inserted."
+msgstr "%count% položka je vložena.|%count% položky jsou vloženy.|%count% položek je vloženo."
 
 msgid "State"
 msgstr "State"
