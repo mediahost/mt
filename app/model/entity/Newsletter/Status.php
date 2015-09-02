@@ -12,10 +12,6 @@ use Kdyby\Doctrine\Entities\BaseEntity;
 class Status extends BaseEntity
 {
 
-	const STATUS_PAUSED = 0;
-	const STATUS_RUNNIG = 1;
-	const STATUS_SENT = 2;
-
 	use \Kdyby\Doctrine\Entities\Attributes\Identifier;
 
 	/** @ORM\Column(type="string", length=255) */

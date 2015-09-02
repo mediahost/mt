@@ -2,6 +2,8 @@
 
 namespace App\Model\Facade;
 
+use App\Model\Entity\Newsletter\Message;
+use App\Model\Entity\Newsletter\Status;
 use App\Model\Entity\Newsletter\Subscriber;
 use App\Model\Entity\User;
 use DateTime;
@@ -134,6 +136,66 @@ class NewsletterFacade extends Object
 		}
 
 		return $generated;
+	}
+
+	/**
+	 * @param Message $message
+	 */
+	public function pause(Message $message)
+	{
+		$this->em->beginTransaction();
+		
+		$message->status = Message::STATUS_PAUSED;
+		$this->em->flush($message);
+		
+		$qb = $this->em->createQueryBuilder();
+
+		$qb->update(Status::getClassName(), 's')
+				->set('s.status', Message::STATUS_PAUSED)
+				->where($qb->expr()->andX(
+								$qb->expr()->eq('s.message', ':message'), $qb->expr()->eq('s.status', ':status')
+						)
+				)
+				->setParameters([
+					'message' => $message,
+					'status' => Message::STATUS_RUNNING,
+				]);
+		
+		$query = $qb->getQuery();
+		
+		$query->execute();
+		
+		$this->em->commit();
+	}
+
+	/**
+	 * @param Message $message
+	 */
+	public function run(Message $message)
+	{
+		$this->em->beginTransaction();
+		
+		$message->status = Message::STATUS_RUNNING;
+		$this->em->flush($message);
+		
+		$qb = $this->em->createQueryBuilder();
+
+		$qb->update(Status::getClassName(), 's')
+				->set('s.status', Message::STATUS_RUNNING)
+				->where($qb->expr()->andX(
+								$qb->expr()->eq('s.message', ':message'), $qb->expr()->eq('s.status', ':status')
+						)
+				)
+				->setParameters([
+					'message' => $message,
+					'status' => Message::STATUS_PAUSED,
+				]);
+		
+		$query = $qb->getQuery();
+		
+		$query->execute();
+		
+		$this->em->commit();
 	}
 
 }
