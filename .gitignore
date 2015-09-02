@@ -77,4 +77,4 @@
 ## Foto
 ################
 /www/foto/*
-!/www/foto/
+!/www/foto/original/default.*
