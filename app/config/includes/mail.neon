@@ -5,3 +5,4 @@ services:
 	- {implement: App\Mail\Messages\IBuyoutOurMessageFactory, inject: yes}
 	- {implement: App\Mail\Messages\IBuyoutTheirMessageFactory, inject: yes}
 	- {implement: App\Mail\Messages\Newsletter\IUnsubscribeMessageFactory, inject: yes}
+	- {implement: App\Mail\Messages\Newsletter\INewsletterMessageFactory, inject: yes}

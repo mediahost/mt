@@ -42,3 +42,6 @@ msgstr "Vyhledat"
 
 msgid "Items"
 msgstr "Zobrazeno %begin% až %end% z celkových %count%"
+
+msgid "id"
+msgstr "ID #"

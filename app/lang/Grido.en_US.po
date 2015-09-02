@@ -42,3 +42,6 @@ msgstr "Search"
 
 msgid "Items"
 msgstr "Items %begin% to %end% of %count% total"
+
+msgid "id"
+msgstr "ID #"

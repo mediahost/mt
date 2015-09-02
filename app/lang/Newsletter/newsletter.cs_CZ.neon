@@ -6,11 +6,38 @@ admin:
 	newsletter:
 		default:
 			title: 'Newsletter'
+		new:
+			title: 'Nová zpráva'
+		grid:
+			all: 'vše'
+			createMessage: 'Vytvořit zprávu'
+			title: 'Přehled zpráv'
+			header:
+				subject: 'Předmět'
+				created: 'Vytvořeno'
+				type: 'Příjemci'
+				locale: 'Jazyk'
+			types:
+				users: 'uživatelé'
+				dealers: 'dealeři'
+		form:
+			all: 'vše'
+			subject: 'Předmět'
+			content: 'Tělo'
+			recipients: 'Příjemci'
+			groups: 'Skupiny'
+			users: 'uživatelé'
+			dealers: 'dealeři'
+			locale: 'Jazyk'
+			testEmail: 'Testovací e-mail'
+			send: 'Odeslat'
+			sendTest: 'Odeslat testovací'
 
 	subscriber:
 		default:
 			title: 'Odběratelé'
-
+		add:
+			title: 'Přidat odběratele'
 		grid:
 			all: 'vše'
 			addSubscriber: 'Přidat odběratele'
@@ -50,3 +77,9 @@ messages:
 	handleDelete:
 		notFound: 'Odběratel s ID %id% nebyl nalezen.'
 		success: 'Odběratel "%email%" byl úspěšně smazán.'
+	addSubscriber:
+		success: 'Nový odběratel byl úspěšně uložen.'
+		alreadyExists: 'Odběratel tohoto typu s e-mailem "%email%" již existuje.'
+	newMessage:
+		testSuccess: 'Testovací e-mail byl úspěšně odeslán na adresu %recipient%!'
+		queue: 'Odeslání zpráv bylo úspěšně zařazeno do fronty.'

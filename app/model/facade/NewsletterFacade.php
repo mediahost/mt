@@ -135,5 +135,5 @@ class NewsletterFacade extends Object
 
 		return $generated;
 	}
-	
+
 }

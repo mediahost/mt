@@ -6,11 +6,31 @@ admin:
 	newsletter:
 		default:
 			title: 'Newsletter'
+		new:
+			title: 'Compose message'
+		grid:
+			all: 'all'
+			createMessage: 'Create message'
+			title: 'List of messages'
+		form:
+			all: 'all'
+			subject: 'Subject'
+			content: 'Body'
+			recipients: 'Recipients'
+			groups: 'Groups'
+			users: 'users'
+			dealers: 'dealers'
+			locale: 'Locale'
+			testEmail: 'E-mail for test'
+			send: 'Send'
+			sendTest: 'Send test'
+
 
 	subscriber:
 		default:
 			title: 'Subscribers'
-
+		add:
+			title: 'Add subscriber'
 		grid:
 			all: 'all'
 			addSubscriber: 'Add subscriber'
@@ -50,3 +70,6 @@ messages:
 	handleDelete:
 		notFound: 'Subscriber with ID %id% was not found.'
 		success: 'Subscriber "%email%" was succesfully deleted.'
+	addSubscriber:
+		success: 'New subscriber has been saved successfully.'
+		alreadyExists: 'Subscriber of this type and e-mail "%email%" already exists.'

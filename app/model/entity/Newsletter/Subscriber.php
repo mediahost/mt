@@ -9,7 +9,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="newsletter_subscriber",  uniqueConstraints={@ORM\UniqueConstraint(name="subscriber_unique", columns={"mail", "type"})})
+ * @ORM\Table(name="newsletter_subscriber", uniqueConstraints={@ORM\UniqueConstraint(name="subscriber_unique", columns={"mail", "type"})})
  * 
  * @property string $mail
  * @property int $type
@@ -42,7 +42,7 @@ class Subscriber extends BaseEntity
 	/** @ORM\OneToOne(targetEntity="App\Model\Entity\User", mappedBy="subscriber") */
 	protected $user;
 
-	/** @ORM\Column(type="string", length=39) */
+	/** @ORM\Column(type="string", length=39, nullable=true) */
 	protected $ip;
 
 	/** @ORM\Column(type="datetime") */
