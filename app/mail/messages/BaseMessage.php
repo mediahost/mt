@@ -50,26 +50,26 @@ abstract class BaseMessage extends Message
 		$this->params['pageInfo'] = $this->settings->pageInfo;
 		$this->params['isNewsletter'] = $this->isNewsletter;
 		$this->params['unsubscribeLink'] = $this->unsubscribeLink ? $this->unsubscribeLink : $this->params['hostUrl'];
-		
+
 		$engine = new Engine;
 		$engine->addFilter('translate', $this->translator->translate);
 		$this->setHtmlBody($engine->renderToString($this->getPath(), $this->params));
-		
+
 		return parent::build();
 	}
-	
+
 	public function setNewsletter($unsubscribeLink = NULL)
 	{
 		$this->isNewsletter = TRUE;
 		$this->unsubscribeLink = $unsubscribeLink;
 	}
-	
+
 	public function addParameter($paramName, $value)
 	{
 		$this->params[$paramName] = $value;
 		return $this;
 	}
-	
+
 	public function send()
 	{
 		$this->mailer->send($this);

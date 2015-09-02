@@ -1,5 +1,5 @@
 {block pageTitle}
-{_newsletter.admin.newsletter.default.title}
+	{_newsletter.admin.newsletter.default.title}
 {/block}
 
 {block breadcrumbItems}
@@ -9,3 +9,25 @@
 {/block}
 
 {block content}
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-files-o"></i>
+					<span class="caption-subject bold uppercase">{_'newsletter.admin.newsletter.grid.title'}</span>
+				</div>
+				<div class="actions">
+					<a n:href="Newsletter:new" class="btn btn-circle green-sharp">
+						<i class="fa fa-plus"></i> {_'newsletter.admin.newsletter.grid.createMessage'}
+					</a>
+					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body">
+				{control grid}
+			</div>
+		</div>
+	</div>
+</div>

@@ -3,9 +3,9 @@
 namespace App\Components\Newsletter;
 
 use App\Components\BaseControl;
-use App\Components\Newsletter\SubscriberGridControl;
 use App\Extensions\Grido\BaseGrid;
 use App\Model\Entity\Newsletter\Subscriber;
+use App\Model\Facade\LocaleFacade;
 use Grido\DataSources\Doctrine;
 
 class SubscriberGridControl extends BaseControl
@@ -13,6 +13,9 @@ class SubscriberGridControl extends BaseControl
 
 	const LOCALE_DOMAIN = 'newsletter.admin.subscriber.grid';
 
+	/** @var LocaleFacade @inject */
+	public $localeFacade;
+	
 	/** @return BaseGrid */
 	protected function createComponentGrid()
 	{
@@ -29,7 +32,7 @@ class SubscriberGridControl extends BaseControl
 		]);
 
 		////////// ID //////////
-		$grid->addColumnNumber('id', self::LOCALE_DOMAIN . '.header.id')
+		$grid->addColumnNumber('id', 'Grido.id')
 				->setSortable()
 				->setFilterNumber();
 		$grid->getColumn('id')->headerPrototype->width = '5%';
@@ -62,13 +65,8 @@ class SubscriberGridControl extends BaseControl
 		$grid->getColumn('type')->headerPrototype->width = '10%';
 
 		////////// Locale //////////
-		$locales = [NULL => self::LOCALE_DOMAIN . '.all'];
-		foreach ($this->translator->getAvailableLocales() as $locale) {
-			$locales[substr($locale, 0, 2)] = 'default.locales.' . $locale;
-		}
-
 		$grid->addColumnText('locale', self::LOCALE_DOMAIN . '.header.locale')
-				->setFilterSelect($locales);
+				->setFilterSelect($this->localeFacade->getLocalesToSelect());
 		$grid->getColumn('locale')->headerPrototype->width = '10%';
 
 		////////// Actions //////////

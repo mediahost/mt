@@ -1,0 +1,35 @@
+{block pageTitle}
+	{_newsletter.admin.subscriber.default.title}
+{/block}
+
+{block breadcrumbItems}
+<li>
+	<a n:href="Subscriber:">{_newsletter.admin.subscriber.default.title}</a>
+</li>
+<li>
+	<span>{_newsletter.admin.subscriber.add.title}</span>
+</li>
+{/block}
+
+{block content}
+<div class="row">
+	<div class="col-md-4">
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption font-green-sharp">
+					<i class="fa fa-edit font-green-sharp"></i>
+					<span class="caption-subject bold uppercase">
+						{_newsletter.admin.subscriber.add.title}
+					</span>
+				</div>
+				<div class="actions">
+					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				{control form}
+			</div>
+		</div>
+	</div>
+</div>
