@@ -6,11 +6,16 @@ use App\Helpers;
 use App\Model\Entity\OrderState;
 use App\Model\Entity\OrderStateType;
 use App\Model\Entity\Page;
+use App\Model\Entity\Payment;
+use App\Model\Entity\Shipping;
 use App\Model\Entity\Sign;
 use App\Model\Entity\Unit;
+use App\Model\Entity\Vat;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Id\AssignedGenerator;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Tools\SchemaTool;
 use Nette\InvalidArgumentException;
 use Nette\Object;
@@ -44,6 +49,26 @@ class InstallerModel extends Object
 		foreach ($roles as $roleName) {
 			$this->roleFacade->create($roleName);
 		}
+		return TRUE;
+	}
+
+	/**
+	 * Create all nested vats
+	 * @return boolean
+	 */
+	public function installVats(array $vats)
+	{
+		$this->allowChangeEntityId(Vat::getClassName());
+		$vatRepo = $this->em->getRepository(Vat::getClassName());
+		foreach ($vats as $id => $value) {
+			$vat = $vatRepo->find($id);
+			if (!$vat) {
+				$vat = new Vat($id, $value);
+			}
+			$vat->value = $value;
+			$this->em->persist($vat);
+		}
+		$this->em->flush();
 		return TRUE;
 	}
 
@@ -95,6 +120,7 @@ class InstallerModel extends Object
 	 */
 	public function installSigns(array $signs)
 	{
+		$this->allowChangeEntityId(Sign::getClassName());
 		foreach ($signs as $signName => $signId) {
 			$signRepo = $this->em->getRepository(Sign::getClassName());
 			$signEntity = $signRepo->find($signId);
@@ -119,9 +145,10 @@ class InstallerModel extends Object
 			if (!$pageEntity) {
 				$pageEntity = new Page(NULL, $id);
 				$pageEntity->name = 'example page ' . $id;
-				$pageRepo->save($pageEntity);
+				$this->em->persist($pageEntity);
 			}
 		}
+		$this->em->flush();
 		return TRUE;
 	}
 
@@ -152,6 +179,57 @@ class InstallerModel extends Object
 			}
 			$state->type = $type;
 			$stateRepo->save($state);
+		}
+		$this->installShippingsAndPayments();
+		return TRUE;
+	}
+
+	/**
+	 * Create default shippings and payments
+	 * @return boolean
+	 * @throws InvalidArgumentException
+	 */
+	public function installShippingsAndPayments()
+	{
+		$shippingsRepo = $this->em->getRepository(Shipping::getClassName());
+		$shippings = [
+			Shipping::PERSONAL => 'payments.shipping.personal',
+			Shipping::CZECH_POST => 'payments.shipping.czech_post',
+			Shipping::SLOVAK_POST => 'payments.shipping.slovak_post',
+			Shipping::PPL => 'payments.shipping.ppl',
+		];
+
+		$paymentsRepo = $this->em->getRepository(Payment::getClassName());
+		$payments = [
+			Payment::PERSONAL => 'payments.payment.personal',
+			Payment::ON_DELIVERY => 'payments.payment.on_delivery',
+			Payment::BANK_ACCOUNT => 'payments.payment.bank_account',
+		];
+
+		$vatRepo = $this->em->getRepository(Vat::getClassName());
+		$defaultVat = $vatRepo->find(Vat::HIGH);
+
+		foreach ($shippings as $id => $name) {
+			$shipping = $shippingsRepo->find($id);
+			if (!$shipping) {
+				$shipping = new Shipping();
+			}
+			if (!$shipping->vat) {
+				$shipping->vat = $defaultVat;
+			}
+			$shipping->name = $name;
+			$shippingsRepo->save($shipping);
+		}
+		foreach ($payments as $id => $name) {
+			$payment = $paymentsRepo->find($id);
+			if (!$payment) {
+				$payment = new Payment();
+			}
+			if (!$payment->vat) {
+				$payment->vat = $defaultVat;
+			}
+			$payment->name = $name;
+			$paymentsRepo->save($payment);
 		}
 		return TRUE;
 	}
@@ -225,4 +303,12 @@ class InstallerModel extends Object
 	}
 
 	// </editor-fold>
+
+	private function allowChangeEntityId($className)
+	{
+		$metadata = $this->em->getClassMetaData($className);
+		$metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+		$metadata->setIdGenerator(new AssignedGenerator());
+	}
+
 }

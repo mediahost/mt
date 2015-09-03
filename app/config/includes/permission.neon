@@ -27,10 +27,11 @@ services:
 			- addResource('products')
 			- addResource('profile')
 			- addResource('question')
-			- addResource('signs')
 			- addResource('service')
-			- addResource('subscriber')
 			- addResource('settings')
+			- addResource('shippings')
+			- addResource('signs')
+			- addResource('subscriber')
 			- addResource('users')
 
 			# Privilegies
@@ -53,6 +54,7 @@ services:
 			- allow('admin', 'products')
 			- allow('admin', 'question')
 			- allow('admin', 'settings')
+			- allow('admin', 'shippings')
 			- allow('admin', 'signs')
 			- allow('admin', 'subscriber')
 			- allow('admin', 'users')

@@ -61,8 +61,9 @@ class InstallerTest extends DbTestCase
 				->setInstallDoctrine(FALSE)
 				->setInitUsers([])
 				->install();
-		Assert::count(6, $messages1);
+		Assert::count(7, $messages1);
 		Assert::true($messages1['DB_Roles'][0]);
+		Assert::true($messages1['DB_Vats'][0]);
 		Assert::true($messages1['DB_Units'][0]);
 		Assert::true($messages1['DB_Users'][0]);
 		Assert::true($messages1['DB_Signs'][0]);
@@ -81,8 +82,9 @@ class InstallerTest extends DbTestCase
 				->setInstallDoctrine(TRUE)
 				->setInitUsers([])
 				->install();
-		Assert::count(9, $messages2);
+		Assert::count(10, $messages2);
 		Assert::true($messages2['DB_Roles'][0]);
+		Assert::true($messages2['DB_Vats'][0]);
 		Assert::true($messages2['DB_Units'][0]);
 		Assert::true($messages2['DB_Users'][0]);
 		Assert::true($messages2['DB_Signs'][0]);
@@ -100,8 +102,9 @@ class InstallerTest extends DbTestCase
 				->setInstallDoctrine(TRUE)
 				->setInitUsers([])
 				->install();
-		Assert::count(9, $messages3);
+		Assert::count(10, $messages3);
 		Assert::false($messages3['DB_Roles'][0]);
+		Assert::false($messages3['DB_Vats'][0]);
 		Assert::false($messages3['DB_Units'][0]);
 		Assert::false($messages3['DB_Users'][0]);
 		Assert::false($messages3['DB_Signs'][0]);
@@ -124,8 +127,9 @@ class InstallerTest extends DbTestCase
 					'user2' => ['password', 'guest'],
 				])
 				->install();
-		Assert::count(9, $messages4);
+		Assert::count(10, $messages4);
 		Assert::true($messages4['DB_Roles'][0]);
+		Assert::true($messages4['DB_Vats'][0]);
 		Assert::true($messages4['DB_Units'][0]);
 		Assert::true($messages4['DB_Users'][0]);
 		Assert::true($messages4['DB_Signs'][0]);
