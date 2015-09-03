@@ -1,0 +1,15 @@
+{if $item->status == App\Model\Entity\Newsletter\Message::STATUS_RUNNING}
+	{var $color = 'label-info'}
+	{var $name = $localeDomain . '.status.running'}
+{elseif $item->status == App\Model\Entity\Newsletter\Message::STATUS_PAUSED}
+	{var $color = 'label-warning'}
+	{var $name = $localeDomain . '.status.paused'}
+{elseif $item->status == App\Model\Entity\Newsletter\Message::STATUS_SENT}
+	{var $color = 'label-success'}
+	{var $name = $localeDomain . '.status.sent'}
+{else}
+	{var $color = 'label-default'}
+	{var $name = $localeDomain . '.status.unknown'}
+{/if}
+
+<span class="label label-default {$color}">{_$name}</span>

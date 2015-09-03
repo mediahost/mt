@@ -12,6 +12,23 @@ admin:
 			all: 'all'
 			createMessage: 'Create message'
 			title: 'List of messages'
+			header:
+				subject: 'Subject'
+				created: 'Created'
+				type: 'Recipients'
+				locale: 'Language'
+				status: 'Status'
+			types:
+				users: 'users'
+				dealers: 'dealers'
+			status:
+				running: 'running'
+				paused: 'paused'
+				sent: 'sent'
+				unknown: 'unknown'
+			action:
+				pause: 'Pause'
+				run: 'Run'
 		form:
 			all: 'all'
 			subject: 'Subject'
@@ -24,7 +41,6 @@ admin:
 			testEmail: 'E-mail for test'
 			send: 'Send'
 			sendTest: 'Send test'
-
 
 	subscriber:
 		default:
@@ -73,3 +89,6 @@ messages:
 	addSubscriber:
 		success: 'New subscriber has been saved successfully.'
 		alreadyExists: 'Subscriber of this type and e-mail "%email%" already exists.'
+	newMessage:
+		testSuccess: 'Test e-mail has benn sent to address %recipient%!'
+		queue: 'Messages has been put to a queue to be send.'
