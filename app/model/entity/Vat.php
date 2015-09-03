@@ -17,14 +17,19 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  */
 class Vat extends BaseEntity
 {
-
+	
+	const HIGH = 1;
+	const LOW = 2;
+	const NONE = 3;
+	
 	use Identifier;
 
 	/** @ORM\Column(type="float") */
 	protected $value;
 
-	public function __construct($value)
+	public function __construct($id, $value)
 	{
+		$this->setId($id);
 		$this->setValue($value);
 		parent::__construct();
 	}
@@ -36,6 +41,12 @@ class Vat extends BaseEntity
 		}
 		$this->value = $value;
 
+		return $this;
+	}
+
+	protected function setId($id)
+	{
+		$this->id = $id;
 		return $this;
 	}
 
