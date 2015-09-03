@@ -12,6 +12,23 @@ admin:
 			all: 'vše'
 			createMessage: 'Vytvořit zprávu'
 			title: 'Přehled zpráv'
+			header:
+				subject: 'Předmět'
+				created: 'Vytvořeno'
+				type: 'Příjemci'
+				locale: 'Jazyk'
+				status: 'Stav'
+			types:
+				users: 'uživatelé'
+				dealers: 'dealeři'
+			status:
+				running: 'spuštěný'
+				paused: 'pozastavený'
+				sent: 'odeslaný'
+				unknown: 'neznámý'
+			action:
+				pause: 'Pozastavit'
+				run: 'Spustit'
 		form:
 			all: 'vše'
 			subject: 'Předmět'
@@ -72,3 +89,6 @@ messages:
 	addSubscriber:
 		success: 'Nový odběratel byl úspěšně uložen.'
 		alreadyExists: 'Odběratel tohoto typu s e-mailem "%email%" již existuje.'
+	newMessage:
+		testSuccess: 'Testovací e-mail byl úspěšně odeslán na adresu %recipient%!'
+		queue: 'Odeslání zpráv bylo úspěšně zařazeno do fronty.'

@@ -17,9 +17,18 @@ admin:
 				created: 'Vytvořeno'
 				type: 'Příjemci'
 				locale: 'Jazyk'
+				status: 'Stav'
 			types:
 				users: 'uživatelé'
 				dealers: 'dealeři'
+			status:
+				running: 'spuštěný'
+				paused: 'pozastavený'
+				sent: 'odeslaný'
+				unknown: 'neznámý'
+			action:
+				pause: 'Pozastavit'
+				run: 'Spustit'
 		form:
 			all: 'vše'
 			subject: 'Předmět'

@@ -123,7 +123,7 @@ class NewsletterPresenter extends BasePresenter
 
 		if ($form['validate']->isSubmittedBy()) {
 			if ($values->recipients === self::RECIPIENT_USER) {
-				$locale = isset($values->locale) ? $values->locale : NULL;
+				$locale = $values->locale;
 			} elseif ($values->recipients === self::RECIPIENT_DEALER) {
 				$locale = self::DEFAULT_LOCALE_DEALER;
 			} elseif (is_numeric($values->recipients)) {
