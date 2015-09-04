@@ -16,6 +16,8 @@ use Knp\DoctrineBehaviors\Model;
  *
  * @property ArrayCollection $items
  * @property int $itemsCount
+ * @property Shipping $shipping
+ * @property Payment $payment
  */
 class Basket extends BaseEntity
 {
@@ -28,6 +30,12 @@ class Basket extends BaseEntity
 
 	/** @ORM\OneToMany(targetEntity="BasketItem", mappedBy="basket", cascade={"persist", "remove"}, orphanRemoval=true) */
 	protected $items;
+	
+    /** @ORM\ManyToOne(targetEntity="Shipping") */
+    protected $shipping;
+	
+    /** @ORM\ManyToOne(targetEntity="Payment") */
+    protected $payment;
 
 	public function __construct(User $user = NULL)
 	{
@@ -113,6 +121,22 @@ class Basket extends BaseEntity
 		return $withVat - $withoutVat;
 	}
 
+	/** @return float */
+	public function getPaymentsPrice($withVat = TRUE)
+	{
+		$totalPrice = 0;
+		if ($this->shipping) {
+			$shippingPrice = $this->shipping->getPrice($this);
+			$totalPrice += $withVat ? $shippingPrice->withVat : $shippingPrice->withoutVat;
+		}
+		if ($this->payment) {
+			$paymentPrice = $this->payment->getPrice($this);
+			$totalPrice += $withVat ? $paymentPrice->withVat : $paymentPrice->withoutVat;
+		}
+		
+		return $totalPrice;
+	}
+
 	public function import(Basket $basket)
 	{
 		if ($basket->itemsCount) {
@@ -123,6 +147,11 @@ class Basket extends BaseEntity
 			$this->setItem($item->stock, $item->quantity);
 		}
 		return $this;
+	}
+	
+	public function __toString()
+	{
+		return (string) $this->id;
 	}
 
 }

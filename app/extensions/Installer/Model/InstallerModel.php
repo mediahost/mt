@@ -213,6 +213,7 @@ class InstallerModel extends Object
 			$shipping = $shippingsRepo->find($id);
 			if (!$shipping) {
 				$shipping = new Shipping();
+				$shipping->active = FALSE;
 			}
 			if (!$shipping->vat) {
 				$shipping->vat = $defaultVat;
@@ -224,6 +225,7 @@ class InstallerModel extends Object
 			$payment = $paymentsRepo->find($id);
 			if (!$payment) {
 				$payment = new Payment();
+				$payment->active = FALSE;
 			}
 			if (!$payment->vat) {
 				$payment->vat = $defaultVat;

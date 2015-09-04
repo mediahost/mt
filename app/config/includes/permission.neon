@@ -22,6 +22,7 @@ services:
 			- addResource('newsletter')
 			- addResource('orders')
 			- addResource('pages')
+			- addResource('payments')
 			- addResource('parameters')
 			- addResource('producers')
 			- addResource('products')
@@ -49,6 +50,7 @@ services:
 			- allow('admin', 'newsletter')
 			- allow('admin', 'orders')
 			- allow('admin', 'pages')
+			- allow('admin', 'payments')
 			- allow('admin', 'parameters')
 			- allow('admin', 'producers')
 			- allow('admin', 'products')
@@ -60,5 +62,8 @@ services:
 			- allow('admin', 'users')
 
 			- deny('admin', 'pages', 'delete') # pages can be link to template, only superadmin can delete
+			- deny('admin', 'payments', 'editAll')
 
 			- allow('superadmin') # Full access for superadmin
+			- allow('superadmin', 'pages', 'delete')
+			- allow('superadmin', 'payments', 'editAll')

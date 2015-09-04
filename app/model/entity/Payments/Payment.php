@@ -10,7 +10,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
 /**
  * @ORM\Entity(repositoryClass="App\Model\Repository\PaymentRepository")
  *
- * @property bool $ctive
+ * @property bool $active
  * @property string $name
  * @property Price $price
  * @property ArrayCollection $shippings
@@ -25,7 +25,7 @@ class Payment extends BaseEntity
 	use Identifier;
 
 	/** @ORM\Column(type="boolean") */
-	protected $active = TRUE;
+	protected $active;
 
 	/** @ORM\Column(type="string", nullable=true) */
 	protected $name;
@@ -44,10 +44,16 @@ class Payment extends BaseEntity
 		$this->shippings = new ArrayCollection();
 		parent::__construct();
 	}
-	
-	public function getPrice()
+
+	public function getPrice(Basket $basket = NULL)
 	{
-		return new Price($this->vat, $this->price);
+		$price = $basket ? $this->getPriceByBasket($basket) : $this->price;
+		return new Price($this->vat, $price);
+	}
+
+	public function getPriceByBasket(Basket $basket)
+	{
+		return $this->price;
 	}
 
 	public function setPrice($value, $withVat = FALSE)

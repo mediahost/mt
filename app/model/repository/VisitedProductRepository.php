@@ -4,6 +4,7 @@ namespace App\Model\Repository;
 
 use App\Model\Entity\Stock;
 use App\Model\Entity\User;
+use Doctrine\Common\Collections\Criteria;
 
 class VisitedProductRepository extends BaseRepository
 {
@@ -15,7 +16,7 @@ class VisitedProductRepository extends BaseRepository
 
 	public function findLatest(User $user)
 	{
-		return $this->findOneBy(['user' => $user], ['visited' => 'DESC']);
+		return $this->findOneBy(['user' => $user], ['visited' => Criteria::DESC]);
 	}
 
 }

@@ -1,6 +1,6 @@
 {block basket}
 <div class="top-cart-info">
-	{if $basket->isEmpty}
+	{if $basket->isEmpty()}
 		{_'cart.isEmpty'}
 	{else}
 	<a n:href="Cart:" class="top-cart-info-count">{_'cart.countItem', $basket->getProductsCount()}</a>
@@ -9,7 +9,7 @@
 </div>
 <i class="fa fa-shopping-cart"></i>
 
-<div class="top-cart-content-wrapper" n:if="!$basket->isEmpty">
+<div class="top-cart-content-wrapper" n:if="!$basket->isEmpty()">
 	<div class="top-cart-content">
 		<ul class="scroller" style="height: 230px;">
 			<li n:foreach="$basket->items as $item">
