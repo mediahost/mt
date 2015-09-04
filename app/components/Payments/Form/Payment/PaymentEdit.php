@@ -11,19 +11,23 @@ use App\Model\Entity\Payment;
 use App\Model\Entity\Shipping;
 use App\Model\Entity\Vat;
 use App\Model\Facade\VatFacade;
+use Nette\Security\User;
 use Nette\Utils\ArrayHash;
 
 class PaymentEdit extends BaseControl
 {
+
+	/** @var User @inject */
+	public $user;
+
+	/** @var VatFacade @inject */
+	public $vatFacade;
 
 	/** @var Payment */
 	private $payment;
 
 	/** @var bool */
 	private $defaultWithVat = TRUE;
-
-	/** @var VatFacade @inject */
-	public $vatFacade;
 
 	// <editor-fold desc="events">
 
@@ -43,14 +47,18 @@ class PaymentEdit extends BaseControl
 
 		$shippingRepo = $this->em->getRepository(Shipping::getClassName());
 		$shippings = $shippingRepo->findPairs('name');
-		
+
+		if ($this->user->isAllowed('payments', 'editAll')) {
+			$form->addCheckSwitch('active', 'Active', 'YES', 'NO');
+		}
+
 		$form->addText('price', 'Price')
 				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
 				->setRequired();
 
 		$form->addSelect2('vat', 'Vat', $this->vatFacade->getValues())
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
-		
+
 		$form->addCheckSwitch('with_vat', 'With VAT', 'YES', 'NO')
 				->setDefaultValue($this->defaultWithVat);
 
@@ -74,7 +82,7 @@ class PaymentEdit extends BaseControl
 	{
 		$shippingRepo = $this->em->getRepository(Shipping::getClassName());
 		$vatRepo = $this->em->getRepository(Vat::getClassName());
-		
+
 		$this->payment->clearShippings();
 		foreach ($values->shippings as $shippingId) {
 			$shipping = $shippingRepo->find($shippingId);
@@ -86,7 +94,10 @@ class PaymentEdit extends BaseControl
 		$vat = $vatRepo->find($values->vat);
 		$this->payment->vat = $vat;
 		$this->payment->setPrice($values->price, $values->with_vat);
-		
+		if (isset($values->active)) {
+			$this->payment->active = $values->active;
+		}
+
 		return $this;
 	}
 
@@ -100,7 +111,9 @@ class PaymentEdit extends BaseControl
 	/** @return array */
 	protected function getDefaults()
 	{
-		$values = [];
+		$values = [
+			'active' => $this->payment->active,
+		];
 		foreach ($this->payment->shippings as $shipping) {
 			$values['shippings'][] = $shipping->id;
 		}

@@ -3,6 +3,8 @@
 namespace App\Model\Facade;
 
 use App\Model\Entity\Basket;
+use App\Model\Entity\Payment;
+use App\Model\Entity\Shipping;
 use App\Model\Entity\Stock;
 use App\Model\Facade\Exception\InsufficientQuantityException;
 use App\Model\Facade\Exception\MissingItemException;
@@ -78,6 +80,29 @@ class BasketFacade extends Object
 		return $quantity;
 	}
 
+	/** @var BasketFacade */
+	public function setShipping(Shipping $shipping, $clearPayment = FALSE)
+	{
+		$basket = $this->getBasket();
+		$basket->shipping = $shipping;
+		if ($clearPayment) {
+			$basket->payment = NULL;
+		}
+		$this->basketRepo->save($basket);
+
+		return $this;
+	}
+
+	/** @var BasketFacade */
+	public function setPayment(Payment $payment)
+	{
+		$basket = $this->getBasket();
+		$basket->payment = $payment;
+		$this->basketRepo->save($basket);
+
+		return $this;
+	}
+
 	/** @var int */
 	public function getCountInBasket(Stock $stock)
 	{
@@ -97,9 +122,16 @@ class BasketFacade extends Object
 	}
 
 	/** @var bool */
-	public function getIsEmpty()
+	public function isEmpty()
 	{
 		return !$this->getProductsCount();
+	}
+
+	/** @var bool */
+	public function hasPayments()
+	{
+		$basket = $this->getBasket();
+		return $basket->shipping && $basket->payment;
 	}
 
 	/** @var int */

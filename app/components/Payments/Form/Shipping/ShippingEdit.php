@@ -8,22 +8,25 @@ use App\Forms\Controls\TextInputBased\MetronicTextInputBase;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Shipping;
-use App\Model\Entity\Sign;
 use App\Model\Entity\Vat;
 use App\Model\Facade\VatFacade;
+use Nette\Security\User;
 use Nette\Utils\ArrayHash;
 
 class ShippingEdit extends BaseControl
 {
 
-	/** @var Sign */
+	/** @var User @inject */
+	public $user;
+
+	/** @var VatFacade @inject */
+	public $vatFacade;
+
+	/** @var Shipping */
 	private $shipping;
 
 	/** @var bool */
 	private $defaultWithVat = TRUE;
-
-	/** @var VatFacade @inject */
-	public $vatFacade;
 
 	// <editor-fold desc="events">
 
@@ -40,14 +43,18 @@ class ShippingEdit extends BaseControl
 		$form = new Form();
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
-		
+
+		if ($this->user->isAllowed('payments', 'editAll')) {
+			$form->addCheckSwitch('active', 'Active', 'YES', 'NO');
+		}
+
 		$form->addText('price', 'Price')
 				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
 				->setRequired();
 
 		$form->addSelect2('vat', 'Vat', $this->vatFacade->getValues())
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
-		
+
 		$form->addCheckSwitch('with_vat', 'With VAT', 'YES', 'NO')
 				->setDefaultValue($this->defaultWithVat);
 
@@ -71,7 +78,10 @@ class ShippingEdit extends BaseControl
 		$vat = $vatRepo->find($values->vat);
 		$this->shipping->vat = $vat;
 		$this->shipping->setPrice($values->price, $values->with_vat);
-		
+		if (isset($values->active)) {
+			$this->shipping->active = $values->active;
+		}
+
 		return $this;
 	}
 
@@ -85,7 +95,9 @@ class ShippingEdit extends BaseControl
 	/** @return array */
 	protected function getDefaults()
 	{
-		$values = [];
+		$values = [
+			'active' => $this->shipping->active,
+		];
 		if ($this->shipping->price) {
 			$values += [
 				'price' => $this->defaultWithVat ? $this->shipping->price->withVat : $this->shipping->price->withoutVat,

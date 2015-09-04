@@ -83,14 +83,16 @@ class CartPresenter extends BasePresenter
 
 	private function checkEmptyCart()
 	{
-		if ($this->basketFacade->getIsEmpty()) {
+		if ($this->basketFacade->isEmpty()) {
 			$this->redirect('default');
 		}
 	}
 
 	private function checkSelectedPayments()
 	{
-		// TODO
+		if (!$this->basketFacade->hasPayments()) {
+			$this->redirect('payments');
+		}
 	}
 
 	private function checkFilledAddress()
@@ -112,12 +114,8 @@ class CartPresenter extends BasePresenter
 	{
 		$control = $this->iPaymentsFactory->create();
 		$control->setAjax(TRUE);
-		$control->onAfterSave = function () {
-			if ($this->isAjax()) {
-				$this->redrawControl();
-			} else {
-				$this->redirect('address');
-			}
+		$control->onSend = function () {
+			$this->redirect('address');
 		};
 		return $control;
 	}
