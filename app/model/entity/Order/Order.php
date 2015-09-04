@@ -40,6 +40,12 @@ class Order extends BaseEntity
 	/** @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order", cascade={"all"}, orphanRemoval=true) */
 	protected $items;
 
+	/** @ORM\OneToOne(targetEntity="OrderShipping", inversedBy="order", cascade={"all"}) */
+	protected $shipping;
+
+	/** @ORM\OneToOne(targetEntity="OrderPayment", inversedBy="order", cascade={"all"}) */
+	protected $payment;
+
 	/** @ORM\Column(type="string", length=8, nullable=true) */
 	protected $locale;
 
@@ -112,6 +118,26 @@ class Order extends BaseEntity
 			$item->quantity = $quantity;
 			$this->items->add($item);
 		}
+		return $this;
+	}
+	
+	public function setShipping(Shipping $shipping)
+	{
+		if (!$this->shipping) {
+			$this->shipping = new OrderShipping();
+			$this->shipping->order = $this;
+		}
+		$this->shipping->import($shipping);
+		return $this;
+	}
+	
+	public function setPayment(Payment $payment)
+	{
+		if (!$this->payment) {
+			$this->payment = new OrderPayment();
+			$this->payment->order = $this;
+		}
+		$this->payment->import($payment);
 		return $this;
 	}
 
@@ -205,6 +231,12 @@ class Order extends BaseEntity
 			/* @var $item BasketItem */
 			$price = $item->stock->getPrice($level);
 			$this->setItem($item->stock, $price, $item->quantity, $this->locale);
+		}
+		if ($basket->shipping) {
+			$this->setShipping($basket->shipping);
+		}
+		if ($basket->payment) {
+			$this->setPayment($basket->payment);
 		}
 		return $this;
 	}
