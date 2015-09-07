@@ -46,6 +46,7 @@ class ShippingEdit extends BaseControl
 
 		if ($this->user->isAllowed('payments', 'editAll')) {
 			$form->addCheckSwitch('active', 'Active', 'YES', 'NO');
+			$form->addCheckSwitch('needAddress', 'Need Address', 'YES', 'NO');
 		}
 
 		$form->addText('price', 'Price')
@@ -81,6 +82,9 @@ class ShippingEdit extends BaseControl
 		if (isset($values->active)) {
 			$this->shipping->active = $values->active;
 		}
+		if (isset($values->needAddress)) {
+			$this->shipping->needAddress = $values->needAddress;
+		}
 
 		return $this;
 	}
@@ -97,6 +101,7 @@ class ShippingEdit extends BaseControl
 	{
 		$values = [
 			'active' => $this->shipping->active,
+			'needAddress' => $this->shipping->needAddress,
 		];
 		if ($this->shipping->price) {
 			$values += [

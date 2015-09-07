@@ -11,6 +11,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  * @ORM\Entity(repositoryClass="App\Model\Repository\ShippingRepository")
  *
  * @property bool $active
+ * @property bool $needAddress
  * @property string $name
  * @property Price $price
  * @property ArrayCollection $payments
@@ -27,6 +28,9 @@ class Shipping extends BaseEntity
 
 	/** @ORM\Column(type="boolean") */
 	protected $active;
+
+	/** @ORM\Column(type="boolean") */
+	protected $needAddress;
 
 	/** @ORM\Column(type="string", nullable=true) */
 	protected $name;

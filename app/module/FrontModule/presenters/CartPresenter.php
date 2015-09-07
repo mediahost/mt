@@ -50,11 +50,11 @@ class CartPresenter extends BasePresenter
 		$basket = $this->basketFacade->getBasket();
 		$user = $this->user->id ? $this->user->identity : NULL;
 		$order = $this->orderFacade->createFromBasket($basket, $user);
-//		$this->basketFacade->clearBasket();
-//
-//		$this->getSessionSection()->orderId = $order->id;
-//
-//		$this->redirect('done');
+		$this->basketFacade->clearBasket();
+
+		$this->getSessionSection()->orderId = $order->id;
+
+		$this->redirect('done');
 	}
 
 	public function actionDone()
