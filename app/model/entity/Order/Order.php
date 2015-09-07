@@ -25,6 +25,9 @@ use Knp\DoctrineBehaviors\Model;
  * @property string $locale
  * @property bool $isEditable
  * @property bool $isDeletable
+ * @property string $mail
+ * @property Address $billingAddress
+ * @property Address $shippingAddress
  */
 class Order extends BaseEntity
 {
@@ -46,6 +49,15 @@ class Order extends BaseEntity
 
 	/** @ORM\OneToOne(targetEntity="OrderPayment", inversedBy="order", cascade={"all"}) */
 	protected $payment;
+
+	/** @ORM\Column(type="string", nullable=true) */
+	protected $mail;
+
+	/** @ORM\OneToOne(targetEntity="Address") */
+	protected $shippingAddress;
+
+	/** @ORM\OneToOne(targetEntity="Address") */
+	protected $billingAddress;
 
 	/** @ORM\Column(type="string", length=8, nullable=true) */
 	protected $locale;
@@ -82,6 +94,11 @@ class Order extends BaseEntity
 	public function getRate()
 	{
 		return $this->rate;
+	}
+	
+	public function getIsCompany()
+	{
+		return $this->shippingAddress && $this->shippingAddress->isCompany();
 	}
 
 	public function setItem(Stock $stock, Price $price, $quantity, $locale)

@@ -943,6 +943,9 @@ msgstr "Slider"
 msgid "Save & Add next"
 msgstr "Save & Add next"
 
+msgid "Save"
+msgstr "Save"
+
 msgid "Phone"
 msgstr "Phone"
 
@@ -1299,3 +1302,6 @@ msgstr "For Shippings"
 
 msgid "Need Address"
 msgstr "Need Address"
+
+msgid "Your personal data was saved."
+msgstr "Your personal data was saved."

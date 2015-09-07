@@ -18,13 +18,16 @@ use Knp\DoctrineBehaviors\Model;
  * @property int $itemsCount
  * @property Shipping $shipping
  * @property Payment $payment
+ * @property string $mail
+ * @property Address $billingAddress
+ * @property Address $shippingAddress
+ * @property bool $isCompany
  */
 class Basket extends BaseEntity
 {
 
 	use Identifier;
-
-use Model\Timestampable\Timestampable;
+	use Model\Timestampable\Timestampable;
 
 	/** @ORM\OneToOne(targetEntity="User", inversedBy="basket") */
 	protected $user;
@@ -37,6 +40,15 @@ use Model\Timestampable\Timestampable;
 
 	/** @ORM\ManyToOne(targetEntity="Payment") */
 	protected $payment;
+
+	/** @ORM\Column(type="string", nullable=true) */
+	protected $mail;
+
+	/** @ORM\OneToOne(targetEntity="Address") */
+	protected $billingAddress;
+
+	/** @ORM\OneToOne(targetEntity="Address") */
+	protected $shippingAddress;
 
 	public function __construct(User $user = NULL)
 	{
@@ -86,6 +98,30 @@ use Model\Timestampable\Timestampable;
 		}
 		return $this;
 	}
+	
+	public function hasPayments()
+	{
+		return $this->shipping && $this->payment;
+	}
+	
+	public function hasAddress()
+	{
+		if (!$this->hasPayments()) {
+			return FALSE;
+		}
+		if (!$this->mail) {
+			return FALSE;
+		}
+		if ($this->shipping->needAddress && $this->shippingAddress->isComplete()) {
+			return FALSE;
+		}
+		return TRUE;
+	}
+	
+	public function getIsCompany()
+	{
+		return $this->shippingAddress && $this->shippingAddress->isCompany();
+	}
 
 	/** @return int */
 	public function getItemCount(Stock $stock)
@@ -123,19 +159,39 @@ use Model\Timestampable\Timestampable;
 	}
 
 	/** @return float */
-	public function getPaymentsPrice($withVat = TRUE)
+	public function getPaymentsPrice(Exchange $exchange = NULL, $withVat = TRUE)
 	{
 		$totalPrice = 0;
 		if ($this->shipping) {
 			$shippingPrice = $this->shipping->getPrice($this);
-			$totalPrice += $withVat ? $shippingPrice->withVat : $shippingPrice->withoutVat;
+			$priceValue = $withVat ? $shippingPrice->withVat : $shippingPrice->withoutVat;
+			$exchangedValue = $exchange ? $exchange->change($priceValue, NULL, NULL, Price::PRECISION) : $priceValue;			
+			$totalPrice += $exchangedValue;
 		}
 		if ($this->payment) {
 			$paymentPrice = $this->payment->getPrice($this);
-			$totalPrice += $withVat ? $paymentPrice->withVat : $paymentPrice->withoutVat;
+			$priceValue = $withVat ? $paymentPrice->withVat : $paymentPrice->withoutVat;
+			$exchangedValue = $exchange ? $exchange->change($priceValue, NULL, NULL, Price::PRECISION) : $priceValue;			
+			$totalPrice += $exchangedValue;
 		}
 
 		return $totalPrice;
+	}
+
+	/** @return float */
+	public function getTotalPrice(Exchange $exchange = NULL, $level = NULL, $withVat = TRUE)
+	{
+		$itemsTotal = $this->getItemsTotalPrice($exchange, $level, $withVat);
+		$paymentsTotal = $this->getPaymentsPrice($exchange, $withVat);
+		return $itemsTotal + $paymentsTotal;
+	}
+
+	/** @return float */
+	public function getVatSum(Exchange $exchange, $level = NULL)
+	{
+		$withVat = $this->getTotalPrice($exchange, $level, TRUE);
+		$withoutVat = $this->getTotalPrice($exchange, $level, FALSE);
+		return $withVat - $withoutVat;
 	}
 
 	public function import(Basket $basket, $skipException = FALSE)

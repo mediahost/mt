@@ -22,6 +22,8 @@ use Nette\Security\IIdentity;
  * @property string $locale
  * @property string $currency
  * @property Basket $basket
+ * @property Address $billingAddress
+ * @property Address $shippingAddress
  * @property Subscriber $subscriber
  * @method User setMail(string $mail)
  * @method User setLocale(string $locale)
@@ -53,6 +55,12 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 
 	/** @ORM\OneToMany(targetEntity="Order", mappedBy="user", fetch="EXTRA_LAZY") */
 	protected $orders;
+
+	/** @ORM\OneToOne(targetEntity="Address") */
+	protected $shippingAddress;
+
+	/** @ORM\OneToOne(targetEntity="Address") */
+	protected $billingAddress;
 
 	/** @ORM\OneToMany(targetEntity="VisitedProduct", mappedBy="user", fetch="EXTRA_LAZY") */
 	protected $visitedProducts;

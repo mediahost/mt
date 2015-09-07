@@ -286,12 +286,12 @@ a:hover {
 }
 
 .btn-primary {
-  background: #64aed9;
+  background-color: #3379b5;
 }
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:active {
-  background: #64aed9;
+  background-color: #3379b5;
 }
 
 .header-navigation .dropdown-menu > li:first-child {

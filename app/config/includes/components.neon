@@ -29,6 +29,7 @@ services:
 
 	# User
 	- {implement: App\Components\User\Form\IUserBasicFactory, inject: yes}
+	- {implement: App\Components\User\Form\IPersonalFactory, inject: yes}
 	- {implement: App\Components\User\Grid\IUsersGridFactory, inject: yes}
 
 	# Buyout

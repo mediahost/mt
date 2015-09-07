@@ -164,7 +164,7 @@ var Layout = function () {
         if (!jQuery().uniform) {
             return;
         }
-        var test = $("input[type=checkbox]:not(.toggle), input[type=radio]:not(.toggle, .star)");
+        var test = $("input[type=checkbox]:not(.toggle, .make-switch, .icheck), input[type=radio]:not(.toggle, .star, .make-switch, .icheck)");
         if (test.size() > 0) {
             test.each(function () {
                     if ($(this).parents(".checker").size() == 0) {
