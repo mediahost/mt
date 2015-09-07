@@ -36,7 +36,7 @@ class Vat extends BaseEntity
 
 	public function setValue($value)
 	{
-		if (!is_numeric($value) || $value < 0 || 100 <= $value) {
+		if (!is_numeric($value) || $value < 0 || 100 < $value) {
 			throw new InvalidArgumentException($value . ' $value must be a number and greater or equal then 0 and lower than 100.');
 		}
 		$this->value = $value;

@@ -5,11 +5,14 @@ namespace App\Components\Order\Form;
 use App\Components\BaseControl;
 use App\Components\BaseControlException;
 use App\Components\Basket\Form\AddToCart;
+use App\ExchangeHelper;
 use App\Forms\Controls\TextInputBased\MetronicTextInputBase;
 use App\Forms\Controls\TextInputBased\Spinner;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Order;
+use App\Model\Entity\Payment;
+use App\Model\Entity\Shipping;
 use App\Model\Entity\Stock;
 use App\Model\Facade\Exception\InsufficientQuantityException;
 use App\Model\Facade\OrderFacade;
@@ -55,6 +58,20 @@ class OrderProductsEdit extends BaseControl
 					->setType(Spinner::TYPE_UP_DOWN)
 					->setSize(MetronicTextInputBase::SIZE_XS);
 		}
+
+		$shippings = [NULL => 'payments.form.select'];
+		$shippingRepo = $this->em->getRepository(Shipping::getClassName());
+		$shippings += $shippingRepo->findPairs(['active' => TRUE], 'name');
+		$form->addSelect2('shipping', 'Shipping', $shippings)
+						->setDisabled($disabled)
+						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_M;
+
+		$payments = [NULL => 'payments.form.select'];
+		$paymentRepo = $this->em->getRepository(Payment::getClassName());
+		$payments += $paymentRepo->findPairs(['active' => TRUE], 'name');
+		$form->addSelect2('payment', 'Payment', $payments)
+						->setDisabled($disabled)
+						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_M;
 
 		if (!$disabled) {
 			$form->addMultiSelect2('new', 'Add new items')
@@ -122,6 +139,20 @@ class OrderProductsEdit extends BaseControl
 				$form['new']->addError($message);
 			}
 		}
+		if ($values->shipping) {
+			$shippingRepo = $this->em->getRepository(Shipping::getClassName());
+			$shipping = $shippingRepo->find($values->shipping);
+			if ($shipping) {
+				$this->order->shipping = $shipping;
+			}
+		}
+		if ($values->payment) {
+			$paymentRepo = $this->em->getRepository(Payment::getClassName());
+			$payment = $paymentRepo->find($values->payment);
+			if ($payment) {
+				$this->order->payment = $payment;
+			}
+		}
 
 		return $this;
 	}
@@ -165,10 +196,14 @@ class OrderProductsEdit extends BaseControl
 
 	public function render()
 	{
-		if ($this->order->currency) {
-			$this->exchange->setWeb($this->order->currency);
-			if ($this->order->rate) {
-				$this->exchange->addRate($this->order->currency, $this->order->rate);
+		$defaultCurrency = $this->exchange->getDefault();
+		$webCurrency = $this->order->currency;
+		if ($webCurrency && $webCurrency !== $defaultCurrency->getCode()) {
+			$this->exchange->setWeb($webCurrency);
+			if ($this->order->rate && array_key_exists($webCurrency, $this->exchange)) {
+				$currency = $this->exchange[$webCurrency];
+				$rateRelated = ExchangeHelper::getRelatedRate($this->order->rate, $currency);
+				$this->exchange->addRate($webCurrency, $rateRelated);
 			}
 		}
 		$this->template->exchange = $this->exchange;
