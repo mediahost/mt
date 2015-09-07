@@ -6,13 +6,12 @@ use App\Components\Auth\ConnectManager;
 use App\Components\Auth\IConnectManagerFactory;
 use App\Components\Auth\ISetPasswordFactory;
 use App\Components\Auth\SetPassword;
-use App\Forms\Renderers\MetronicHorizontalFormRenderer;
+use App\Components\User\Form\IPersonalFactory;
+use App\Components\User\Form\Personal;
 use App\Model\Entity;
+use App\Model\Entity\User;
 use App\Model\Facade\CantDeleteUserException;
-use App\Model\Facade\NewsletterFacade;
 use App\Model\Facade\UserFacade;
-use Nette\Application\UI\Form;
-use Nette\Utils\ArrayHash;
 
 class MyAccountPresenter extends BasePresenter
 {
@@ -26,8 +25,8 @@ class MyAccountPresenter extends BasePresenter
 	/** @var IConnectManagerFactory @inject */
 	public $iConnectManagerFactory;
 
-	/** @var NewsletterFacade @inject */
-	public $newsletterFacade;
+	/** @var IPersonalFactory @inject */
+	public $iPersonalFactory;
 
 	/**
 	 * @secured
@@ -169,30 +168,15 @@ class MyAccountPresenter extends BasePresenter
 		return $control;
 	}
 
-	protected function createComponentInfoForm()
+	/** @return Personal */
+	protected function createComponentPersonalInfo()
 	{
-		$form = new Form;
-		$form->setTranslator($this->translator)
-				->setRenderer(new MetronicHorizontalFormRenderer);
-
-		$form->addCheckbox('newsletter', 'Newsletter')
-				->setDefaultValue($this->user->identity->subscriber ? TRUE : FALSE);
-
-		$form->addSubmit('save', 'Save');
-
-		$form->onSuccess[] = [$this, 'infoFormSucceeded'];
-		return $form;
-	}
-
-	public function infoFormSucceeded(Form $form, ArrayHash $values)
-	{
-		if ($values->newsletter === TRUE) {
-			$this->newsletterFacade->subscribe($this->user->identity);
-		} else {
-			$this->newsletterFacade->unsubscribe($this->user->identity);
-		}
-
-		$this->redirect('this');
+		$control = $this->iPersonalFactory->create();
+		$control->onAfterSave[] = function (User $user) {
+			$this->flashMessage('Your personal data was saved.');
+			$this->redirect('this');
+		};
+		return $control;
 	}
 
 	// </editor-fold>

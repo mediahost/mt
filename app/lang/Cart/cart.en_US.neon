@@ -8,6 +8,27 @@ product:
 order:
 	wasntFoundWasExecuted: 'Requested order was already executed'
 
+form:
+	name: 'Name and surname'
+	street: 'Street'
+	city: 'City'
+	country: 'Country'
+	zipcode: 'zipcode'
+	mail: 'E-mail'
+	phone: 'Phone'
+	ico: 'Company ID'
+	icoVat: 'IČO DPH'
+	dic: 'Taxpayer ID'
+	billing: 'Invoice address'
+	shipping: 'Delivery address'
+	company: 'Company'
+	sameDelivery: "Delivery address isn't same as invoice address"
+	isCompany: 'I want insert company data (VAT ID, etc.)'
+	newsletter: 'I want to receive special discounts and newsletters'
+	validator:
+		filled: 'This field is required'
+		mail: 'Fill the right format'
+
 flash:
 	noPayments: 'Select your shipping and payment.'
 

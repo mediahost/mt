@@ -131,7 +131,14 @@ class BasketFacade extends Object
 	public function hasPayments()
 	{
 		$basket = $this->getBasket();
-		return $basket->shipping && $basket->payment;
+		return $basket->hasPayments();
+	}
+
+	/** @var bool */
+	public function hasAddress()
+	{
+		$basket = $this->getBasket();
+		return $basket->hasAddress();
 	}
 
 	/** @var int */

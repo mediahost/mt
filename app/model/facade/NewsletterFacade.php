@@ -144,10 +144,10 @@ class NewsletterFacade extends Object
 	public function pause(Message $message)
 	{
 		$this->em->beginTransaction();
-		
+
 		$message->status = Message::STATUS_PAUSED;
 		$this->em->flush($message);
-		
+
 		$qb = $this->em->createQueryBuilder();
 
 		$qb->update(Status::getClassName(), 's')
@@ -159,12 +159,12 @@ class NewsletterFacade extends Object
 				->setParameters([
 					'message' => $message,
 					'status' => Message::STATUS_RUNNING,
-				]);
-		
+		]);
+
 		$query = $qb->getQuery();
-		
+
 		$query->execute();
-		
+
 		$this->em->commit();
 	}
 
@@ -174,10 +174,10 @@ class NewsletterFacade extends Object
 	public function run(Message $message)
 	{
 		$this->em->beginTransaction();
-		
+
 		$message->status = Message::STATUS_RUNNING;
 		$this->em->flush($message);
-		
+
 		$qb = $this->em->createQueryBuilder();
 
 		$qb->update(Status::getClassName(), 's')
@@ -189,12 +189,12 @@ class NewsletterFacade extends Object
 				->setParameters([
 					'message' => $message,
 					'status' => Message::STATUS_PAUSED,
-				]);
-		
+		]);
+
 		$query = $qb->getQuery();
-		
+
 		$query->execute();
-		
+
 		$this->em->commit();
 	}
 

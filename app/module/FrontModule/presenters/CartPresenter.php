@@ -97,7 +97,9 @@ class CartPresenter extends BasePresenter
 
 	private function checkFilledAddress()
 	{
-		// TODO
+		if (!$this->basketFacade->hasAddress()) {
+			$this->redirect('address');
+		}
 	}
 
 	private function getSessionSection()

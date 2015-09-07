@@ -8,6 +8,27 @@ product:
 order:
 	wasntFoundWasExecuted: 'Požadovaná objednávka již byla vyřízena.'
 
+form:
+	name: 'Jméno a příjmení'
+	street: 'Ulice a č.p.'
+	city: 'Město'
+	country: 'Země'
+	zipcode: 'PSČ'
+	mail: 'E-mail'
+	phone: 'Telefon'
+	ico: 'IČO'
+	icoVat: 'IČO DPH'
+	dic: 'DIČ'
+	billing: 'Fakturační údaje'
+	shipping: 'Dodací údaje'
+	company: 'Firemní údaje'
+	sameDelivery: 'Doručit na jinou adresu, než fakturační'
+	isCompany: 'Chci zadat firemní údaje (IČO a DIČ)'
+	newsletter: 'Mám zájem o akční nabídky a novinky na e-mail'
+	validator:
+		filled: 'Povinné pole'
+		mail: 'Zadejte správný formát'
+
 flash:
 	noPayments: 'Zvolte si vaši dopravu i platbu.'
 
