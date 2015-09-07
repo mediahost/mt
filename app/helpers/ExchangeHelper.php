@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Model\Entity\Price;
+use h4kuna\Exchange\Currency\Property;
 use h4kuna\Exchange\Exchange;
 
 class ExchangeHelper
@@ -51,7 +52,7 @@ class ExchangeHelper
 	{
 		return $this->change($price, NULL, NULL, NULL, TRUE);
 	}
-	
+
 	public function formatNumber($number, $withSymbol = FALSE)
 	{
 		$format = clone $this->exchange->getWeb()->getFormat();
@@ -59,6 +60,14 @@ class ExchangeHelper
 			$format->symbol = NULL;
 		}
 		return $format->render($number);
+	}
+
+	public static function getRelatedRate($newRate, Property $originCurrency)
+	{
+		$dbRate = (float) $newRate;
+		$originRate = (float) $originCurrency->getForeing();
+		$rateRelated = $originRate / $dbRate;
+		return $rateRelated;
 	}
 
 }

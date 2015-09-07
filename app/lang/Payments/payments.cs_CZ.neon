@@ -7,3 +7,6 @@ payment:
 	personal: 'Osobně'
 	on_delivery: 'Dobírkou'
 	bank_account: 'Převodem na účet předem'
+
+form:
+	select: '--- beze změny ---'

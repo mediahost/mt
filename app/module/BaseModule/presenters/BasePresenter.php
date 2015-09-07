@@ -2,6 +2,7 @@
 
 namespace App\BaseModule\Presenters;
 
+use App\ExchangeHelper;
 use App\Extensions\Settings\SettingsStorage;
 use App\Model\Entity\Rate;
 use App\Model\Facade\BasketFacade;
@@ -32,7 +33,7 @@ abstract class BasePresenter extends Presenter
 	/** @persistent */
 	public $backlink = '';
 
-// <editor-fold desc="injects">
+	// <editor-fold desc="injects">
 
 	/** @var LoaderFactory @inject */
 	public $webLoader;
@@ -73,7 +74,7 @@ abstract class BasePresenter extends Presenter
 	/** @var int */
 	protected $priceLevel = NULL;
 
-// </editor-fold>
+	// </editor-fold>
 
 	protected function startup()
 	{
@@ -97,7 +98,7 @@ abstract class BasePresenter extends Presenter
 		$this->template->currencySymbol = $currency->getFormat()->getSymbol();
 	}
 
-// <editor-fold desc="requirments">
+	// <editor-fold desc="requirments">
 
 	public function checkRequirements($element)
 	{
@@ -115,8 +116,9 @@ abstract class BasePresenter extends Presenter
 		}
 	}
 
-// </editor-fold>
-// <editor-fold desc="currency">
+	// </editor-fold>
+	// <editor-fold desc="currency">
+
 	private function loadCurrencyRates()
 	{
 		$rateRepo = $this->em->getRepository(Rate::getClassName());
@@ -127,9 +129,7 @@ abstract class BasePresenter extends Presenter
 			$isDefault = strtolower($code) === strtolower($defaultCode);
 			$isInDb = array_key_exists($code, $rates);
 			if (!$isDefault && $isInDb) {
-				$dbRate = (float) $rates[$code];
-				$originRate = (float) $currency->getForeing();
-				$rateRelated = $originRate / $dbRate;
+				$rateRelated = ExchangeHelper::getRelatedRate($rates[$code], $currency);
 				$this->exchange->addRate($code, $rateRelated);
 			}
 		}
@@ -145,7 +145,8 @@ abstract class BasePresenter extends Presenter
 		}
 	}
 
-// </editor-fold>
+	// </editor-fold>
+
 	private function setLocale()
 	{
 		if ($this->user->isLoggedIn()) {
@@ -155,7 +156,7 @@ abstract class BasePresenter extends Presenter
 				if ($overwrite == 'yes' || $this->user->identity->locale === NULL) {
 					$this->user->storage->setLocale($this->locale);
 				}
-				
+
 				$this->redirect('this', ['locale' => $this->user->identity->locale]);
 			}
 		} else {
@@ -163,7 +164,7 @@ abstract class BasePresenter extends Presenter
 		}
 	}
 
-// <editor-fold desc="handlers">
+	// <editor-fold desc="handlers">
 
 	public function handleSetCurrency($currency)
 	{
@@ -177,10 +178,10 @@ abstract class BasePresenter extends Presenter
 		$this->redirect('this');
 	}
 
-// </editor-fold>
-// <editor-fold desc="components">
-// </editor-fold>
-// <editor-fold desc="css webloader">
+	// </editor-fold>
+	// <editor-fold desc="components">
+	// </editor-fold>
+	// <editor-fold desc="css webloader">
 
 	/** @return CssLoader */
 	protected function createComponentCssFront()
@@ -206,5 +207,5 @@ abstract class BasePresenter extends Presenter
 		return $css;
 	}
 
-// </editor-fold>
+	// </editor-fold>
 }
