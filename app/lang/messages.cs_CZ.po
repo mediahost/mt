@@ -1254,3 +1254,6 @@ msgstr "Úprava poštovného '%name%'"
 
 msgid "For Shippings"
 msgstr "Pro dopravy"
+
+msgid "Need Address"
+msgstr "Vyžaduje adresu"

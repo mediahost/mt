@@ -1296,3 +1296,6 @@ msgstr "Edit Shipping '%name%'"
 
 msgid "For Shippings"
 msgstr "For Shippings"
+
+msgid "Need Address"
+msgstr "Need Address"
