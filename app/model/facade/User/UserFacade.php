@@ -3,6 +3,7 @@
 namespace App\Model\Facade;
 
 use App\Extensions\Settings\SettingsStorage;
+use App\Model\Entity\Address;
 use App\Model\Entity\Registration;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
@@ -17,7 +18,9 @@ use App\Model\Repository\UserRepository;
 use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\EntityDao;
 use Kdyby\Doctrine\EntityManager;
+use Kdyby\Doctrine\EntityRepository;
 use Kdyby\Translation\Translator;
+use LogicException;
 use Nette\Object;
 
 class UserFacade extends Object
@@ -45,6 +48,9 @@ class UserFacade extends Object
 	/** @var UserRepository */
 	private $userRepo;
 
+	/** @var EntityRepository */
+	private $addressRepo;
+
 	/** @var RegistrationRepository */
 	private $registrationRepo;
 
@@ -55,6 +61,7 @@ class UserFacade extends Object
 	{
 		$this->em = $em;
 		$this->userRepo = $this->em->getRepository(User::getClassName());
+		$this->addressRepo = $this->em->getRepository(Address::getClassName());
 		$this->registrationRepo = $this->em->getRepository(Registration::getClassName());
 		$this->roleDao = $this->em->getDao(Role::getClassName());
 	}
@@ -63,5 +70,10 @@ class UserFacade extends Object
 	{
 		return $this->findByMail($mail) === NULL;
 	}
+
+}
+
+class CantDeleteUserException extends LogicException
+{
 
 }

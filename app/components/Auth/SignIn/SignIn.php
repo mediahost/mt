@@ -35,6 +35,9 @@ class SignIn extends BaseControl
 	/** @var User */
 	private $user;
 
+	/** @var string */
+	private $backlink;
+
 	/** @return Form */
 	protected function createComponentForm()
 	{
@@ -122,18 +125,31 @@ class SignIn extends BaseControl
 		parent::render();
 	}
 
+	// <editor-fold desc="setters">
+	
+	public function setBacklink($backlink)
+	{
+		$this->backlink = $backlink;
+		return $this;
+	}
+
+	// </editor-fold>
 	// <editor-fold desc="controls">
 
 	/** @return FacebookConnect */
 	protected function createComponentFacebook()
 	{
-		return $this->iFacebookConnectFactory->create();
+		$control = $this->iFacebookConnectFactory->create();
+		$control->setBacklink($this->backlink);
+		return $control;
 	}
 
 	/** @return TwitterConnect */
 	protected function createComponentTwitter()
 	{
-		return $this->iTwitterConnectFactory->create();
+		$control = $this->iTwitterConnectFactory->create();
+		$control->setBacklink($this->backlink);
+		return $control;
 	}
 
 	// </editor-fold>

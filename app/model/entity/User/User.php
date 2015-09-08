@@ -62,7 +62,7 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	/** @ORM\OneToOne(targetEntity="Address") */
 	protected $billingAddress;
 
-	/** @ORM\OneToMany(targetEntity="VisitedProduct", mappedBy="user", fetch="EXTRA_LAZY") */
+	/** @ORM\OneToMany(targetEntity="VisitedProduct", mappedBy="user", fetch="EXTRA_LAZY", cascade={"remove"}, orphanRemoval=true) */
 	protected $visitedProducts;
 	
     /**

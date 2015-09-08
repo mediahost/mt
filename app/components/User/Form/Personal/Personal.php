@@ -10,6 +10,7 @@ use App\Model\Entity\Address;
 use App\Model\Entity\User as EntityUser;
 use App\Model\Facade\BasketFacade;
 use App\Model\Facade\NewsletterFacade;
+use App\Model\Facade\UserFacade;
 use Nette\Security\User;
 use Nette\Utils\ArrayHash;
 use Nette\Utils\Html;
@@ -22,6 +23,9 @@ class Personal extends BaseControl
 
 	/** @var NewsletterFacade @inject */
 	public $newsletterFacade;
+
+	/** @var UserFacade @inject */
+	public $userFacade;
 
 	/** @var User @inject */
 	public $user;
@@ -77,11 +81,11 @@ class Personal extends BaseControl
 				->addCondition(Form::EQUAL, TRUE)
 				->toggle($shippingBoxId);
 
-		$fieldsetShipping = Html::el('div', ['class' => 'fieldset'])->id($shippingBoxId);
+		$fieldsetShipping = Html::el('div', ['class' => 'fieldset', 'style' => 'display:none'])->id($shippingBoxId);
 		$form->addGroup('cart.form.shipping')
 				->setOption('container', $fieldsetShipping);
 
-		$form->addText('s_name', 'cart.form.name', NULL, 100)
+		$form->addText('s_name', 'cart.form.nameOnly', NULL, 100)
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
 		$form->addText('s_street', 'cart.form.street', NULL, 100)
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
@@ -101,7 +105,7 @@ class Personal extends BaseControl
 				->addCondition(Form::EQUAL, TRUE)
 				->toggle($companyBoxId);
 
-		$fieldsetCompany = Html::el('div', ['class' => 'fieldset'])->id($companyBoxId);
+		$fieldsetCompany = Html::el('div', ['class' => 'fieldset', 'style' => 'display:none'])->id($companyBoxId);
 		$form->addGroup('cart.form.company')
 				->setOption('container', $fieldsetCompany);
 
@@ -123,8 +127,9 @@ class Personal extends BaseControl
 	public function formSucceeded(Form $form, ArrayHash $values)
 	{
 		if ($this->user->isLoggedIn() && $this->user->identity) {
-			$this->loadBillingAddress($values);
-			$this->loadShippingAddress($values);
+			$billingAddress = $this->loadBillingAddress($values);
+			$shippingAddress = $this->loadShippingAddress($values);
+			$this->userFacade->setAddress($this->user->identity, $billingAddress, $shippingAddress);
 			
 			if ($values->newsletter) {
 				$this->newsletterFacade->subscribe($this->user->identity);
@@ -132,22 +137,13 @@ class Personal extends BaseControl
 				$this->newsletterFacade->unsubscribe($this->user->identity);
 			}
 
-			$userRepo = $this->em->getRepository(EntityUser::getClassName());
-			$userRepo->save($this->user->identity);
-
 			$this->onAfterSave($this->user->identity);
 		}
 	}
 
 	private function loadBillingAddress(ArrayHash $values)
 	{
-		$addressRepo = $this->em->getRepository(Address::getClassName());
-		/* @var $identity EntityUser */
-		$identity = $this->user->identity;
-		if (!$identity->billingAddress) {
-			$identity->billingAddress = new Address();
-		}
-		$address = $identity->billingAddress;
+		$address = new Address();
 		$address->name = $values->name;
 		$address->street = $values->street;
 		$address->city = $values->city;
@@ -158,33 +154,23 @@ class Personal extends BaseControl
 			$address->ico = $values->ico;
 			$address->icoVat = $values->icoVat;
 			$address->dic = $values->dic;
-		} else {
-			$address->clearCompany();
 		}
-		$addressRepo->save($address);
+		return $address;
 	}
 
 	private function loadShippingAddress(ArrayHash $values)
 	{
-		$addressRepo = $this->em->getRepository(Address::getClassName());
-		/* @var $identity EntityUser */
-		$identity = $this->user->identity;
 		if ($values->other_delivery) {
-			if (!$identity->shippingAddress) {
-				$identity->shippingAddress = new Address();
-			}
-			$address = $identity->shippingAddress;
+			$address = new Address();
 			$address->name = $values->s_name;
 			$address->street = $values->s_street;
 			$address->city = $values->s_city;
 			$address->zipcode = $values->s_zipcode;
 			$address->country = $values->s_country;
 			$address->phone = $values->s_phone;
-			$addressRepo->save($address);
-		} else if ($identity->shippingAddress) {
-			$identity->shippingAddress = NULL;
-			$addressRepo->delete($identity->shippingAddress);
+			return $address;
 		}
+		return NULL;
 	}
 
 	/** @return array */

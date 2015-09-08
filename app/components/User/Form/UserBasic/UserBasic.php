@@ -74,7 +74,8 @@ class UserBasic extends BaseControl
 		$role = $form->addMultiSelectBoxes('roles', 'Roles', $this->getRoles())
 				->setRequired('Select any role');
 
-		$defaultRole = $this->roleFacade->findByName(Role::USER);
+		$roleRepo = $this->em->getRepository(Role::getClassName());
+		$defaultRole = $roleRepo->findOneByName(Entity\Role::USER);
 		if ($defaultRole && in_array($defaultRole->getId(), $this->getRoles())) {
 			$role->setDefaultValue($defaultRole->getId());
 		}

@@ -173,7 +173,7 @@ class MyAccountPresenter extends BasePresenter
 	{
 		$control = $this->iPersonalFactory->create();
 		$control->onAfterSave[] = function (User $user) {
-			$this->flashMessage('Your personal data was saved.');
+			$this->flashMessage($this->translator->translate('Your personal data was saved.'));
 			$this->redirect('this');
 		};
 		return $control;

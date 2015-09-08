@@ -18,7 +18,7 @@ class UserFacadeSettersTest extends UserFacade
 
 	public function testAddRole()
 	{
-		$role = $this->roleFacade->findByName(Role::DEALER);
+		$role = $this->em->getRepository(Role::getClassName())->findOneByName(Role::DEALER);
 
 		$user = $this->userRepo->find(self::ID_NEW);
 

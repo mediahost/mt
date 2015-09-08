@@ -60,28 +60,6 @@ class SignUpStorage extends Object
 		return $this->section->user;
 	}
 
-	public function setRole($role)
-	{
-		$this->section->role = $role;
-		return $this;
-	}
-
-	public function getRole($formatForEntity = FALSE)
-	{
-		if (!isset($this->section->role)) {
-			return NULL;
-		}
-		if ($formatForEntity) {
-			switch ($this->section->role) {
-				case Role::USER:
-					break;
-				default:
-					return Role::USER;
-			}
-		}
-		return $this->section->role;
-	}
-
 	public function setVerification($bool)
 	{
 		$this->section->verification = $bool;

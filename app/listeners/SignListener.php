@@ -60,6 +60,9 @@ class SignListener extends Object implements Subscriber
 	/** @var Exchange @inject */
 	public $exchange;
 
+	/** @var string */
+	private $backlink;
+
 	// </editor-fold>
 
 	public function __construct(Application $application)
@@ -87,9 +90,11 @@ class SignListener extends Object implements Subscriber
 	 * @param Control $control
 	 * @param User $user
 	 * @param bool $rememberMe
+	 * @param string $backlink
 	 */
-	public function onStartup(Control $control, User $user, $rememberMe = FALSE)
-	{
+	public function onStartup(Control $control, User $user, $rememberMe = FALSE, $backlink = NULL)
+	{	
+		$this->backlink = $backlink;
 		if ($user->id) {
 			$this->onSuccess($control->presenter, $user, $rememberMe);
 		} else {
@@ -106,7 +111,7 @@ class SignListener extends Object implements Subscriber
 	public function checkRequire(Control $control, User $user)
 	{
 		if (!$user->mail) {
-			$control->presenter->redirect(self::REDIRECT_SIGN_UP_REQUIRED);
+			$control->presenter->redirect(self::REDIRECT_SIGN_UP_REQUIRED, ['backlink' => $this->backlink]);
 		} else {
 			$this->onRequiredSuccess($control, $user);
 		}
@@ -139,9 +144,9 @@ class SignListener extends Object implements Subscriber
 	private function verify(Control $control, User $user)
 	{
 		if ($this->session->isVerified()) { // verifikovaná metoda
-			$userRole = $this->roleFacade->findByName(Role::USER);
+			$userRole = $this->em->getRepository(Role::getClassName())->findOneByName(Role::USER);
 			$user->addRole($userRole);
-			$savedUser = $this->em->getDao(User::getClassName())->save($user);
+			$savedUser = $this->em->getRepository(User::getClassName())->save($user);
 			$this->onCreate($control->presenter, $savedUser);
 		} else {
 			$registration = $this->userFacade->createRegistration($user);
@@ -211,6 +216,8 @@ class SignListener extends Object implements Subscriber
 
 		$presenter->user->login($user);
 		$presenter->flashMessage($this->translator->translate('You are logged in.'), 'success');
+		
+		$presenter->restoreRequest($this->backlink);
 		$presenter->restoreRequest($presenter->backlink);
 
 		$params = [

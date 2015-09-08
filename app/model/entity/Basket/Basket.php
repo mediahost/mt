@@ -112,10 +112,15 @@ class Basket extends BaseEntity
 		if (!$this->mail) {
 			return FALSE;
 		}
-		if ($this->shipping->needAddress && $this->shippingAddress->isComplete()) {
+		if ($this->needAddress() && (!$this->billingAddress || !$this->billingAddress->isComplete())) {
 			return FALSE;
 		}
 		return TRUE;
+	}
+	
+	public function needAddress()
+	{
+		return $this->shipping && $this->shipping->needAddress;
 	}
 	
 	public function getIsCompany()

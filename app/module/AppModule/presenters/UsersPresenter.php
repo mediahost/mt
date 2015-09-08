@@ -2,11 +2,12 @@
 
 namespace App\AppModule\Presenters;
 
-use App\Components\User\Grid\IUsersGridFactory;
-use App\Components\User\Grid\UsersGrid;
 use App\Components\User\Form\IUserBasicFactory;
 use App\Components\User\Form\UserBasic;
+use App\Components\User\Grid\IUsersGridFactory;
+use App\Components\User\Grid\UsersGrid;
 use App\Model\Entity\User;
+use App\Model\Facade\CantDeleteUserException;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
 use Kdyby\Doctrine\EntityRepository;
@@ -122,9 +123,14 @@ class UsersPresenter extends BasePresenter
 			$message = $this->translator->translate('cannotDelete', NULL, ['name' => $this->translator->translate('User')]);
 			$this->flashMessage($message, 'danger');
 		} else {
-			$this->userFacade->delete($user);
-			$message = $this->translator->translate('successfullyDeleted', NULL, ['name' => $this->translator->translate('User')]);
-			$this->flashMessage($message, 'success');
+			try {
+				$this->userFacade->delete($user);
+				$message = $this->translator->translate('successfullyDeleted', NULL, ['name' => $this->translator->translate('User')]);
+				$this->flashMessage($message, 'success');
+			} catch (CantDeleteUserException $exc) {
+				$message = $this->translator->translate('cannotDelete', NULL, ['name' => $this->translator->translate('User')]);
+				$this->flashMessage($message, 'danger');
+			}
 		}
 		$this->redirect('default');
 	}

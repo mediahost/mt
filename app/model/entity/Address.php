@@ -50,6 +50,37 @@ class Address extends BaseEntity
 
 	/** @ORM\Column(type="string", length=50, nullable=true) */
 	protected $dic;
+	
+	public function import(Address $address, $force = FALSE)
+	{
+		if ($force || $address->name) {
+			$this->name = $address->name;
+		}
+		if ($force || $address->street) {
+			$this->street = $address->street;
+		}
+		if ($force || $address->city) {
+			$this->city = $address->city;
+		}
+		if ($force || $address->zipcode) {
+			$this->zipcode = $address->zipcode;
+		}
+		if ($force || $address->country) {
+			$this->country = $address->country;
+		}
+		if ($force || $address->phone) {
+			$this->phone = $address->phone;
+		}
+		if ($force || $address->ico) {
+			$this->ico = $address->ico;
+		}
+		if ($force || $address->dic) {
+			$this->dic = $address->dic;
+		}
+		if ($force || $address->icoVat) {
+			$this->icoVat = $address->icoVat;
+		}
+	}
 
 	public function isComplete()
 	{
@@ -78,7 +109,7 @@ class Address extends BaseEntity
 
 	public function isFilled()
 	{
-		return (bool) $this->name;
+		return $this->name || $this->street || $this->city || $this->zipcode;
 	}
 
 	public function __toString()
