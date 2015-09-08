@@ -9,7 +9,8 @@ order:
 	wasntFoundWasExecuted: 'Requested order was already executed'
 
 form:
-	name: 'Name and surname'
+	name: 'Name and surname (Company name)'
+	nameOnly: 'Name and surname'
 	street: 'Street'
 	city: 'City'
 	country: 'Country'
@@ -22,6 +23,7 @@ form:
 	billing: 'Invoice address'
 	shipping: 'Delivery address'
 	company: 'Company'
+	inputInvoice: 'I want to fill invoice address'
 	sameDelivery: "Delivery address isn't same as invoice address"
 	isCompany: 'I want insert company data (VAT ID, etc.)'
 	newsletter: 'I want to receive special discounts and newsletters'
@@ -31,6 +33,8 @@ form:
 
 flash:
 	noPayments: 'Select your shipping and payment.'
+
+youCanSign: 'You can <a data-toggle="modal" href="%link%">sign in</a> for better filling data.'
 
 shoppingCart: 'Shopping cart'
 cart: 'Cart'

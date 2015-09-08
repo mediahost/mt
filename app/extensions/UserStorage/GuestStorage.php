@@ -5,8 +5,8 @@ namespace App\Extensions\UserStorage;
 use App\Model\Entity\Role;
 use App\Model\Entity\Stock;
 use App\Model\Entity\User;
-use App\Model\Facade\RoleFacade;
 use DateTime;
+use Doctrine\ORM\EntityManager;
 use Nette\Http\Session;
 use Nette\Http\SessionSection;
 use Nette\Object;
@@ -20,16 +20,15 @@ use SplStack;
 class GuestStorage extends Object implements IUserStorage
 {
 
+	/** @var EntityManager @inject */
+	public $em;
+
 	/** @var SessionSection */
 	private $section;
 
-	/** @var RoleFacade */
-	private $roles;
-
-	public function __construct(Session $session, RoleFacade $roles)
+	public function __construct(Session $session)
 	{
 		$this->section = $session->getSection(get_class($this));
-		$this->roles = $roles;
 	}
 
 	public function getIdentity()
@@ -105,7 +104,8 @@ class GuestStorage extends Object implements IUserStorage
 	public function setDefault()
 	{
 		$user = new User();
-		$role = $this->roles->findByName(Role::GUEST);
+		$roleRepo = $this->em->getRepository(Role::getClassName());
+		$role = $roleRepo->findOneByName(Role::GUEST);
 		$user->addRole($role);
 		$this->section->identity = $user;
 		$this->section->visitedProducts = [];

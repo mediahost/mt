@@ -44,7 +44,7 @@ class UserFacadeFindTest extends UserFacade
 	{
 		Assert::count(0, $this->registrationRepo->findAll());
 
-		$role = $this->roleFacade->findByName(Role::DEALER);
+		$role = $this->em->getRepository(Role::getClassName())->findOneByName(Role::DEALER);
 
 		$registration1 = (new Registration())
 				->setMail('user1@mail.com')

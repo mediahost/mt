@@ -22,6 +22,9 @@ class FacebookConnect extends BaseControl
 	/** @var array */
 	public $onConnect = [];
 
+	/** @var string @persistent */
+	public $backlink;
+
 	/** @var bool */
 	private $onlyConnect = FALSE;
 
@@ -72,7 +75,7 @@ class FacebookConnect extends BaseControl
 					} else {
 						$user = $this->createUser($me);
 					}
-					$this->onSuccess($this, $user, $this->remember);
+					$this->onSuccess($this, $user, $this->remember, $this->backlink);
 				}
 			} catch (FacebookApiException $e) {
 				Debugger::log($e->getMessage(), 'facebook');
@@ -102,7 +105,8 @@ class FacebookConnect extends BaseControl
 		$user = new Entity\User();
 		$user->setLocale($this->translator->getLocale())
 				->setCurrency($this->exchange->getDefault()->getCode());
-		$user->requiredRole = $this->roleFacade->findByName($this->session->getRole(TRUE));
+		$roleRepo = $this->em->getRepository(Entity\Role::getClassName());
+		$user->requiredRole = $roleRepo->findOneByName(Entity\Role::USER);
 
 		if (isset($me->email)) {
 			$user->mail = $me->email;
@@ -173,6 +177,12 @@ class FacebookConnect extends BaseControl
 		$this->onlyConnect = $onlyConnect;
 		return $this;
 	}
+	
+	public function setBacklink($backlink)
+	{
+		$this->backlink = $backlink;
+		return $this;
+	}
 
 	// </editor-fold>
 	// <editor-fold desc="getters">
@@ -183,7 +193,7 @@ class FacebookConnect extends BaseControl
 	 */
 	public function getLink()
 	{
-		return $this->link('//dialog-open!');
+		return $this->link('//dialog-open!', ['backlink' => $this->backlink]);
 	}
 
 	// </editor-fold>

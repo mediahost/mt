@@ -38,11 +38,6 @@ class RoleFacade extends Object
 		return NULL;
 	}
 
-	public function findByName($name)
-	{
-		return $this->roleDao->findOneBy(['name' => $name]);
-	}
-
 	public function findLowerRoles(array $roles, $includeMax = FALSE)
 	{
 		$allRoles = $this->roleDao->findPairs('name'); // expect roles by priority (first is the lowest)

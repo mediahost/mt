@@ -7,6 +7,7 @@ use App\Model\Entity\OrderState;
 use App\Model\Entity\OrderStateType;
 use App\Model\Entity\Page;
 use App\Model\Entity\Payment;
+use App\Model\Entity\Role;
 use App\Model\Entity\Shipping;
 use App\Model\Entity\Sign;
 use App\Model\Entity\Unit;
@@ -104,7 +105,8 @@ class InstallerModel extends Object
 			}
 			$pass = $initUserData[0];
 			$role = $initUserData[1];
-			$roleEntity = $this->roleFacade->findByName($role);
+			$roleRepo = $this->em->getRepository(Role::getClassName());
+			$roleEntity =$roleRepo->findOneByName($role);
 			if (!$roleEntity) {
 				throw new InvalidArgumentException('Invalid name of role. Check if exists role with name \'' . $role . '\'.');
 			}

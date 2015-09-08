@@ -5,6 +5,7 @@ namespace App\Components\Auth;
 use App\Components\BaseControl;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
+use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
@@ -30,9 +31,6 @@ class SignUp extends BaseControl
 
 	/** @var UserFacade @inject */
 	public $userFacade;
-
-	/** @var RoleFacade @inject */
-	public $roleFacade;
 
 	/** @var SignUpStorage @inject */
 	public $session;
@@ -87,7 +85,8 @@ class SignUp extends BaseControl
 				->setLocale($this->translator->getLocale())
 				->setCurrency($this->exchange->getDefault()->getCode())
 				->setPassword($values->password);
-		$entity->requiredRole = $this->roleFacade->findByName($this->session->getRole(TRUE));
+		$roleRepo = $this->em->getRepository(Role::getClassName());
+		$entity->requiredRole = $roleRepo->findOneByName(Role::USER);
 
 		$this->session->verification = FALSE;
 

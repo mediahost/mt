@@ -3,6 +3,8 @@
 namespace App\FrontModule\Presenters;
 
 use App\BaseModule\Presenters\BasePresenter as BaseBasePresenter;
+use App\Components\Auth\ISignInFactory;
+use App\Components\Auth\SignIn;
 use App\Components\Newsletter\ISubscribeControlFactory;
 use App\Components\Newsletter\SubscribeControl;
 use App\Components\Producer\Form\IModelSelectorFactory;
@@ -34,6 +36,9 @@ abstract class BasePresenter extends BaseBasePresenter
 	/** @var IProductListFactory @inject */
 	public $iProductListFactory;
 
+	/** @var ISignInFactory @inject */
+	public $iSignInFactory;
+
 	/** @var CategoryRepository */
 	protected $categoryRepo;
 
@@ -42,6 +47,9 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	/** @var StockRepository */
 	protected $stockRepo;
+
+	/** @var string */
+	protected $currentBacklink;
 
 	/** @var array */
 	protected $categories;
@@ -68,11 +76,13 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->productRepo = $this->em->getRepository(Product::getClassName());
 		$this->categoryRepo = $this->em->getRepository(Category::getClassName());
 		$this->categories = $this->categoryRepo->findAll();
+		$this->currentBacklink = $this->storeRequest();
 	}
 
 	protected function beforeRender()
 	{
 		parent::beforeRender();
+		$this->template->backlink = $this->currentBacklink;
 		$this->template->categories = $this->categories;
 		$this->template->activeCategory = $this->activeCategory;
 		$this->template->showSlider = $this->showSlider;
@@ -244,6 +254,14 @@ abstract class BasePresenter extends BaseBasePresenter
 	public function createComponentSubscribe()
 	{
 		return $this->iSubscribeControlFactory->create();
+	}
+
+	/** @return SignIn */
+	protected function createComponentSignInModal()
+	{
+		$control = $this->iSignInFactory->create();
+		$control->setBacklink($this->currentBacklink);
+		return $control;
 	}
 
 	// </editor-fold>

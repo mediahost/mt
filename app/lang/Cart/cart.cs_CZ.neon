@@ -9,7 +9,8 @@ order:
 	wasntFoundWasExecuted: 'Požadovaná objednávka již byla vyřízena.'
 
 form:
-	name: 'Jméno a příjmení'
+	name: 'Jméno a příjmení (název firmy)'
+	nameOnly: 'Jméno a příjmení'
 	street: 'Ulice a č.p.'
 	city: 'Město'
 	country: 'Země'
@@ -22,6 +23,7 @@ form:
 	billing: 'Fakturační údaje'
 	shipping: 'Dodací údaje'
 	company: 'Firemní údaje'
+	inputInvoice: 'Chci doplnit fakturační údaje'
 	sameDelivery: 'Doručit na jinou adresu, než fakturační'
 	isCompany: 'Chci zadat firemní údaje (IČO a DIČ)'
 	newsletter: 'Mám zájem o akční nabídky a novinky na e-mail'
@@ -31,6 +33,8 @@ form:
 
 flash:
 	noPayments: 'Zvolte si vaši dopravu i platbu.'
+
+youCanSign: 'Můžete se <a data-toggle="modal" href="%link%">přihlásit</a>, urychlíte si vyplnění údajů.'
 
 shoppingCart: 'Nákupní košík'
 cart: 'Košík'
