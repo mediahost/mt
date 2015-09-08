@@ -102,9 +102,9 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 			$this->basket = new Basket($this);
 		}
 		if ($user->basket) {
-			$this->basket->import($user->basket);
+			$this->basket->import($user->basket, TRUE);
 		} else if ($basket) {
-			$this->basket->import($basket);
+			$this->basket->import($basket, TRUE);
 		}
 		return $this;
 	}

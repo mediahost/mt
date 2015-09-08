@@ -16,18 +16,27 @@ use Knp\DoctrineBehaviors\Model;
  *
  * @property ArrayCollection $items
  * @property int $itemsCount
+ * @property Shipping $shipping
+ * @property Payment $payment
  */
 class Basket extends BaseEntity
 {
 
 	use Identifier;
-	use Model\Timestampable\Timestampable;
+
+use Model\Timestampable\Timestampable;
 
 	/** @ORM\OneToOne(targetEntity="User", inversedBy="basket") */
 	protected $user;
 
 	/** @ORM\OneToMany(targetEntity="BasketItem", mappedBy="basket", cascade={"persist", "remove"}, orphanRemoval=true) */
 	protected $items;
+
+	/** @ORM\ManyToOne(targetEntity="Shipping") */
+	protected $shipping;
+
+	/** @ORM\ManyToOne(targetEntity="Payment") */
+	protected $payment;
 
 	public function __construct(User $user = NULL)
 	{
@@ -113,16 +122,43 @@ class Basket extends BaseEntity
 		return $withVat - $withoutVat;
 	}
 
-	public function import(Basket $basket)
+	/** @return float */
+	public function getPaymentsPrice($withVat = TRUE)
+	{
+		$totalPrice = 0;
+		if ($this->shipping) {
+			$shippingPrice = $this->shipping->getPrice($this);
+			$totalPrice += $withVat ? $shippingPrice->withVat : $shippingPrice->withoutVat;
+		}
+		if ($this->payment) {
+			$paymentPrice = $this->payment->getPrice($this);
+			$totalPrice += $withVat ? $paymentPrice->withVat : $paymentPrice->withoutVat;
+		}
+
+		return $totalPrice;
+	}
+
+	public function import(Basket $basket, $skipException = FALSE)
 	{
 		if ($basket->itemsCount) {
 			$this->items->clear();
 		}
+		/* @var $item BasketItem */
 		foreach ($basket->items as $item) {
-			/* @var $item BasketItem */
-			$this->setItem($item->stock, $item->quantity);
+			try {
+				$this->setItem($item->stock, $item->quantity);
+			} catch (InsufficientQuantityException $exc) {
+				if (!$skipException) {
+					throw $exc;
+				}
+			}
 		}
 		return $this;
+	}
+
+	public function __toString()
+	{
+		return (string) $this->id;
 	}
 
 }

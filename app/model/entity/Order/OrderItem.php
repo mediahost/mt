@@ -32,7 +32,7 @@ class OrderItem extends BaseEntity
 	/** @ORM\Column(type="float", nullable=true) */
 	private $price;
 
-	/** @ORM\ManyToOne(targetEntity="Vat") */
+	/** @ORM\Column(type="float", nullable=true) */
 	private $vat;
 
 	/** @ORM\Column(type="integer") */
@@ -42,14 +42,15 @@ class OrderItem extends BaseEntity
 	public function setPrice(Price $price)
 	{
 		$this->price = $price->withoutVat;
-		$this->vat = $price->vat;
+		$this->vat = $price->vat->value;
 		return $this;
 	}
 
 	/** @return Price */
 	public function getPrice()
 	{
-		return new Price($this->vat, $this->price);
+		$vat = new Vat(NULL, $this->vat ? $this->vat : 0);
+		return new Price($vat, $this->price);
 	}
 
 	public function getTotalPrice(Exchange $exchange = NULL, $withVat = TRUE)

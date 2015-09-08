@@ -245,14 +245,15 @@ class UserStorageStrategy extends Object implements IUserStorage
 		if ($basketId) {
 			$basket = $this->basketRepo->find($basketId);
 			$user->import($guest, $basket);
-			if ($basket) {
-				$this->basketRepo->delete($basket);
-			}
 		} else {
 			$user->import($guest);
 		}
 
 		$this->saveUser($user);
+		
+		if (isset($basket)) {
+			$this->basketRepo->delete($basket);
+		}
 
 		return $this;
 	}

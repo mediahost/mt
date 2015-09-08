@@ -87,5 +87,9 @@ services:
 	- {implement: App\Components\Page\Form\IPageEditFactory, inject: yes}
 	- {implement: App\Components\Page\Grid\IPagesGridFactory, inject: yes}
 
+	# Payments
+	- {implement: App\Components\Payments\Form\IShippingEditFactory, inject: yes}
+	- {implement: App\Components\Payments\Form\IPaymentEditFactory, inject: yes}
+
 	# Example
 	- {implement: App\Components\Example\Form\IExampleFormFactory, inject: yes}

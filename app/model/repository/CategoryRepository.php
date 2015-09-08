@@ -3,7 +3,6 @@
 namespace App\Model\Repository;
 
 use App\Model\Entity\Category;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\NoResultException;
 
 class CategoryRepository extends BaseRepository

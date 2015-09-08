@@ -726,6 +726,9 @@ msgstr "%name% nebyl nalezen."
 msgid "wasntFoundShe"
 msgstr "%name% nebyla nalezena."
 
+msgid "wasntFoundIt"
+msgstr "%name% nebyla nalezena."
+
 msgid "cantBeEmpty"
 msgstr "%name% nemůže být prázdný"
 
@@ -741,11 +744,17 @@ msgstr "%name% nemůže být smazán"
 msgid "cannotDeleteShe"
 msgstr "%name% nemůže být smazána"
 
+msgid "cannotDeleteIt"
+msgstr "%name% nemůže být smazáno"
+
 msgid "successfullyDeleted"
 msgstr "%name% byl úspěšně smazán"
 
 msgid "successfullyDeletedShe"
 msgstr "%name% byla úspěšně smazána"
+
+msgid "successfullyDeletedIt"
+msgstr "%name% bylo úspěšně smazáno"
 
 msgid "successfullySaved"
 msgstr "%type% '%name%' byl úspěšně uložen"
@@ -753,11 +762,17 @@ msgstr "%type% '%name%' byl úspěšně uložen"
 msgid "successfullySavedShe"
 msgstr "%type% '%name%' byla úspěšně uložena"
 
+msgid "successfullySavedIt"
+msgstr "%type% '%name%' bylo úspěšně uloženo"
+
 msgid "successfullyUpdated"
 msgstr "%type% '%name%' byl úspěšně aktualizován"
 
-msgid "successfullyUpdated"
+msgid "successfullyUpdatedShe"
 msgstr "%type% '%name%' byla úspěšně aktualizována"
+
+msgid "successfullyUpdatedIt"
+msgstr "%type% '%name%' bylo úspěšně aktualizováno"
 
 msgid "%count% product was successfully updated."
 msgstr "%count% položka byla úspěšně aktualizována.|%count% položky byly úspěšně aktualizovány.|%count% položek bylo úspěšně aktualizováno."
@@ -1209,3 +1224,36 @@ msgstr "Měna"
 
 msgid "--- anyone ---"
 msgstr "--- všechny ---"
+
+msgid "Buyout"
+msgstr "Výkup"
+
+msgid "Buyout questions"
+msgstr "Výkupní otázky"
+
+msgid "Shippings & Payments"
+msgstr "Dopravné a platby"
+
+msgid "Shipping"
+msgstr "Dopravné"
+
+msgid "Shippings"
+msgstr "Dopravné"
+
+msgid "Payment"
+msgstr "Platba"
+
+msgid "Payments"
+msgstr "Platby"
+
+msgid "Edit Payment '%name%'"
+msgstr "Úprava platby '%name%'"
+
+msgid "Edit Shipping '%name%'"
+msgstr "Úprava poštovného '%name%'"
+
+msgid "For Shippings"
+msgstr "Pro dopravy"
+
+msgid "Need Address"
+msgstr "Vyžaduje adresu"

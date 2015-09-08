@@ -1,0 +1,12 @@
+shipping:
+	personal: 'Personal'
+	czech_post: 'Czech Post'
+	slovak_post: 'Slovak Post'
+	ppl: 'PPL'
+payment:
+	personal: 'Personal'
+	on_delivery: 'On Delivery'
+	bank_account: 'Bank Account'
+
+form:
+	select: '--- Select for change ---'

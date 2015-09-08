@@ -22,15 +22,17 @@ services:
 			- addResource('newsletter')
 			- addResource('orders')
 			- addResource('pages')
+			- addResource('payments')
 			- addResource('parameters')
 			- addResource('producers')
 			- addResource('products')
 			- addResource('profile')
 			- addResource('question')
-			- addResource('signs')
 			- addResource('service')
-			- addResource('subscriber')
 			- addResource('settings')
+			- addResource('shippings')
+			- addResource('signs')
+			- addResource('subscriber')
 			- addResource('users')
 
 			# Privilegies
@@ -48,15 +50,20 @@ services:
 			- allow('admin', 'newsletter')
 			- allow('admin', 'orders')
 			- allow('admin', 'pages')
+			- allow('admin', 'payments')
 			- allow('admin', 'parameters')
 			- allow('admin', 'producers')
 			- allow('admin', 'products')
 			- allow('admin', 'question')
 			- allow('admin', 'settings')
+			- allow('admin', 'shippings')
 			- allow('admin', 'signs')
 			- allow('admin', 'subscriber')
 			- allow('admin', 'users')
 
 			- deny('admin', 'pages', 'delete') # pages can be link to template, only superadmin can delete
+			- deny('admin', 'payments', 'editAll')
 
 			- allow('superadmin') # Full access for superadmin
+			- allow('superadmin', 'pages', 'delete')
+			- allow('superadmin', 'payments', 'editAll')
