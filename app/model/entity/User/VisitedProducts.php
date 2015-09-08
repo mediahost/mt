@@ -32,12 +32,7 @@ class VisitedProduct extends BaseEntity
 
 	public function __toString()
 	{
-		return (string) 'ToDo';
-	}
-
-	public function toArray()
-	{
-		return ['ToDo'];
+		return (string) $stock;
 	}
 
 }
