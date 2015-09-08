@@ -198,4 +198,11 @@ class NewsletterFacade extends Object
 		$this->em->commit();
 	}
 
+	/**
+	 * @param int $quantity
+	 */
+	public function send($quantity)
+	{
+		
+	}
 }

@@ -145,7 +145,7 @@ class NewsletterPresenter extends BasePresenter
 			$message = new Message;
 			$message->setSubject($values->subject)
 					->setContent($values->content)
-					->setStatus(Status::STATUS_RUNNIG)
+					->setStatus(Message::STATUS_RUNNING)
 					->setCreated(new DateTime)
 					->setLocale($values->locale);
 
@@ -175,7 +175,7 @@ class NewsletterPresenter extends BasePresenter
 				$status = new Status;
 				$status->setMail($recipient->mail)
 						->setMessage($message)
-						->setStatus(Status::STATUS_RUNNIG);
+						->setStatus(Message::STATUS_RUNNING);
 				$this->em->persist($status);
 			}
 
