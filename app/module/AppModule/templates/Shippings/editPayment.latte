@@ -1,0 +1,35 @@
+{block pageTitle}
+	{_'Payments'}
+{/block}
+
+{block breadcrumbItems}
+<li>
+	<a n:href="Shippings:">{_'Payments'}</a>
+</li>
+<li>
+	<span>{_"Edit Payment '%name%'", ['name' => $paymentName]}</span>
+</li>
+{/block}
+
+{block content}
+<div class="row">
+	<div class="col-md-5">
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption font-green-sharp">
+					<i class="fa fa-edit font-green-sharp"></i>
+					<span class="caption-subject bold">
+						{_"Edit Payment '%name%'", ['name' => $paymentName]}
+					</span>
+				</div>
+				<div class="actions">
+					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				{control paymentForm}
+			</div>
+		</div>
+	</div>
+</div>

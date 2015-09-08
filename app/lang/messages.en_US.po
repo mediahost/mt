@@ -715,6 +715,9 @@ msgstr "%name% wasn't found."
 msgid "wasntFoundShe"
 msgstr "%name% wasn't found."
 
+msgid "wasntFoundIt"
+msgstr "%name% wasn't found."
+
 msgid "cantBeEmpty"
 msgstr "%name% can't be empty."
 
@@ -730,10 +733,16 @@ msgstr "%name% can't be deleted."
 msgid "cannotDeleteShe"
 msgstr "%name% can't be deleted."
 
+msgid "cannotDeleteIt"
+msgstr "%name% can't be deleted."
+
 msgid "successfullyDeleted"
 msgstr "%name% was successfully deleted."
 
 msgid "successfullyDeletedShe"
+msgstr "%name% was successfully deleted."
+
+msgid "successfullyDeletedIt"
 msgstr "%name% was successfully deleted."
 
 msgid "successfullySaved"
@@ -742,10 +751,16 @@ msgstr "%type% '%name%' was successfully saved."
 msgid "successfullySavedShe"
 msgstr "%type% '%name%' was successfully saved."
 
+msgid "successfullySavedIt"
+msgstr "%type% '%name%' was successfully saved."
+
 msgid "successfullyUpdated"
 msgstr "%type% '%name%' was successfully updated."
 
 msgid "successfullyUpdatedShe"
+msgstr "%type% '%name%' was successfully updated."
+
+msgid "successfullyUpdatedIt"
 msgstr "%type% '%name%' was successfully updated."
 
 msgid "%count% product was successfully updated."
@@ -1251,3 +1266,36 @@ msgstr "Currency"
 
 msgid "--- anyone ---"
 msgstr "--- anyone ---"
+
+msgid "Buyout"
+msgstr "Buyout"
+
+msgid "Buyout questions"
+msgstr "Buyout questions"
+
+msgid "Shippings & Payments"
+msgstr "Shippings & Payments"
+
+msgid "Shipping"
+msgstr "Shipping"
+
+msgid "Shippings"
+msgstr "Shippings"
+
+msgid "Payment"
+msgstr "Payment"
+
+msgid "Payments"
+msgstr "Payments"
+
+msgid "Edit Payment '%name%'"
+msgstr "Edit Payment '%name%'"
+
+msgid "Edit Shipping '%name%'"
+msgstr "Edit Shipping '%name%'"
+
+msgid "For Shippings"
+msgstr "For Shippings"
+
+msgid "Need Address"
+msgstr "Need Address"

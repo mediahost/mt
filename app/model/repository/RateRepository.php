@@ -3,7 +3,9 @@
 namespace App\Model\Repository;
 
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query\QueryException as DoctrineQueryException;
 use Exception;
+use Kdyby\Doctrine\QueryException;
 
 class RateRepository extends BaseRepository
 {
@@ -28,7 +30,10 @@ class RateRepository extends BaseRepository
 				return reset($row);
 			}, $query->getResult(AbstractQuery::HYDRATE_ARRAY));
 		} catch (Exception $e) {
-			throw $this->handleException($e, $query);
+			if ($e instanceof DoctrineQueryException) {
+				throw new QueryException($e, $query);
+			}
+			throw $e;
 		}
 	}
 

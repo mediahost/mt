@@ -3,6 +3,7 @@
 namespace App\Extensions\Settings\DI;
 
 use App\Model\Entity\OrderStateType;
+use App\Model\Entity\Vat;
 use Nette\DI\CompilerExtension;
 
 class SettingsExtension extends CompilerExtension
@@ -14,6 +15,11 @@ class SettingsExtension extends CompilerExtension
 			'cron' => [ // access to cron scripts
 				'enabled' => FALSE,
 				'allowedIps' => ['127.0.0.1'],
+			],
+			'vats' => [ // vat levels
+				Vat::HIGH => 20,
+				Vat::LOW => 15,
+				Vat::NONE => 0,
 			],
 			'order' => [
 				'enabled' => TRUE,

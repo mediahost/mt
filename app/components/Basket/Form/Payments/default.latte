@@ -1,1 +1,73 @@
-{control form}
+{snippet shippingAndPayments}
+	{form form}	
+		{? $form->render('begin')}
+		<div class="cart-content payments-data" style="padding-bottom: 5px">
+
+			<div class="row">
+				<div class="col-md-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">{label shipping /}</h3>
+						</div>
+						<div class="panel-body">
+							{input shipping}
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">{label payment /}</h3>
+						</div>
+						<div class="panel-body">
+							{input payment}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="alert alert-danger margin-bottom-20" n:if="$form->errors">
+				{foreach $form->errors as $error}
+					<span>{$error}</span><br n:if="!$iterator->last"/>
+				{/foreach}
+			</div>
+			<div class="row" n:if="!$form->errors">
+				<div class="col-md-12">
+					<div class="well" style="padding-bottom: 10px">
+						<div class="row static-info align-reverse">
+							<div class="col-md-10 name">
+								{_'cart.paymentsTotal'}: 
+							</div>
+							<div class="col-md-2 value">
+								{if $price > 0}
+									{$price|currency}
+								{else}
+									{_'cart.free'}
+								{/if}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="row cart-continue">
+			<div class="col-md-6 col-sm-6">
+				<a href="{plink Cart:default}" class="btn">
+					<i class="fa fa-chevron-left"></i>
+					&nbsp;
+					{_'cart.back'}
+				</a>
+			</div>
+			<div class="col-md-6 col-sm-6">
+				{button send, class=>'btn btn-primary'}
+				{_'cart.continue'}
+				&nbsp;
+				<i class="fa fa-chevron-right"></i>
+				{/button}
+			</div>
+		</div>
+		{? $form->render('end')}
+	{/form}
+{/snippet}

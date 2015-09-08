@@ -2,6 +2,7 @@
 
 namespace App\Model\Entity;
 
+use App\ExchangeHelper;
 use App\Model\Facade\Exception\InsufficientQuantityException;
 use App\Model\Facade\Exception\MissingItemException;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -39,6 +40,12 @@ class Order extends BaseEntity
 
 	/** @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order", cascade={"all"}, orphanRemoval=true) */
 	protected $items;
+
+	/** @ORM\OneToOne(targetEntity="OrderShipping", inversedBy="order", cascade={"all"}) */
+	protected $shipping;
+
+	/** @ORM\OneToOne(targetEntity="OrderPayment", inversedBy="order", cascade={"all"}) */
+	protected $payment;
 
 	/** @ORM\Column(type="string", length=8, nullable=true) */
 	protected $locale;
@@ -115,6 +122,26 @@ class Order extends BaseEntity
 		return $this;
 	}
 
+	public function setShipping(Shipping $shipping)
+	{
+		if (!$this->shipping) {
+			$this->shipping = new OrderShipping();
+			$this->shipping->order = $this;
+		}
+		$this->shipping->import($shipping);
+		return $this;
+	}
+
+	public function setPayment(Payment $payment)
+	{
+		if (!$this->payment) {
+			$this->payment = new OrderPayment();
+			$this->payment->order = $this;
+		}
+		$this->payment->import($payment);
+		return $this;
+	}
+
 	/** @return int */
 	public function getItemCount(Stock $stock, $throwException = TRUE)
 	{
@@ -150,8 +177,8 @@ class Order extends BaseEntity
 	/** @return float */
 	public function getItemsTotalPrice(Exchange $exchange = NULL, $withVat = TRUE)
 	{
-		if ($exchange && $this->rate) {
-			$exchange->addRate($this->currency, $this->rate);
+		if ($exchange) {
+			$this->setExchangeRate($exchange);
 		}
 		$totalPrice = 0;
 		foreach ($this->items as $item) {
@@ -163,10 +190,21 @@ class Order extends BaseEntity
 	/** @return float */
 	public function getPaymentsTotalPrice(Exchange $exchange = NULL, $withVat = TRUE)
 	{
-		if ($exchange && $this->rate) {
-			$exchange->addRate($this->currency, $this->rate);
+		if ($exchange) {
+			$this->setExchangeRate($exchange);
 		}
 		$totalPrice = 0;
+		if ($this->shipping && $this->shipping->price) {
+			$priceValue = $withVat ? $this->shipping->price->withVat : $this->shipping->price->withoutVat;
+			$exchangedValue = $exchange ? $exchange->change($priceValue, NULL, NULL, Price::PRECISION) : $priceValue;
+			$totalPrice += $exchangedValue;
+		}
+		if ($this->payment && $this->payment->price) {
+			$priceValue = $withVat ? $this->payment->price->withVat : $this->payment->price->withoutVat;
+			$exchangedValue = $exchange ? $exchange->change($priceValue, NULL, NULL, Price::PRECISION) : $priceValue;
+			$totalPrice += $exchangedValue;
+		}
+		
 		return $totalPrice;
 	}
 
@@ -206,12 +244,27 @@ class Order extends BaseEntity
 			$price = $item->stock->getPrice($level);
 			$this->setItem($item->stock, $price, $item->quantity, $this->locale);
 		}
+		if ($basket->shipping) {
+			$this->setShipping($basket->shipping);
+		}
+		if ($basket->payment) {
+			$this->setPayment($basket->payment);
+		}
 		return $this;
 	}
 
 	public function __toString()
 	{
 		return (string) $this->id;
+	}
+
+	private function setExchangeRate(Exchange $exchange)
+	{
+		if ($this->rate && $this->currency && array_key_exists($this->currency, $exchange)) {
+			$currency = $exchange[$this->currency];
+			$rateRelated = ExchangeHelper::getRelatedRate($this->rate, $currency);
+			$exchange->addRate($this->currency, $rateRelated);
+		}
 	}
 
 }
