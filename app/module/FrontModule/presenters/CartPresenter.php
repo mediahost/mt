@@ -7,6 +7,7 @@ use App\Components\Basket\Form\IPersonalFactory;
 use App\Components\Basket\Form\Payments;
 use App\Components\Basket\Form\Personal;
 use App\Model\Entity\Order;
+use App\Model\Facade\Exception\ItemsIsntOnStockException;
 use Doctrine\ORM\NoResultException;
 
 class CartPresenter extends BasePresenter
@@ -39,6 +40,10 @@ class CartPresenter extends BasePresenter
 		$this->checkEmptyCart();
 		$this->checkSelectedPayments();
 		$this->checkFilledAddress();
+		
+		if (!$this->basketFacade->isAllItemsInStore()) {
+			$this->redirect('default');
+		}
 	}
 
 	public function handleSend()
@@ -47,14 +52,18 @@ class CartPresenter extends BasePresenter
 		$this->checkSelectedPayments();
 		$this->checkFilledAddress();
 
-		$basket = $this->basketFacade->getBasket();
-		$user = $this->user->id ? $this->user->identity : NULL;
-		$order = $this->orderFacade->createFromBasket($basket, $user);
-		$this->basketFacade->clearBasket();
+		try {
+			$basket = $this->basketFacade->getBasket();
+			$user = $this->user->id ? $this->user->identity : NULL;
+			$order = $this->orderFacade->createFromBasket($basket, $user);
+			$this->basketFacade->clearBasket();
 
-		$this->getSessionSection()->orderId = $order->id;
+			$this->getSessionSection()->orderId = $order->id;
 
-		$this->redirect('done');
+			$this->redirect('done');
+		} catch (ItemsIsntOnStockException $ex) {
+			$this->redirect('default');
+		}
 	}
 
 	public function actionDone()

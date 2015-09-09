@@ -63,6 +63,11 @@ totalWithoutVat: 'Total without VAT'
 withoutVat: 'Without VAT'
 vat: 'VAT'
 inStore: 'In Store'
+inStoreOnly: 'In Store only'
+notInStore: "Product isn't in store. You cannot finish order with this product."
+mustChangeInStore: 'Decrease product count in basket.'
+queueBeforeYou: 'In the queue for your goods was somebody in front of you!'
+queueBeforeYouSorry: 'Sorry, but while you are buying someone else bought the goods for which you were interested.'
 
 isEmpty: 'Cart is empty'
 countItem: '%count% item|%count% items'
