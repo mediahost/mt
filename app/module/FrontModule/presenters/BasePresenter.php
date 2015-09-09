@@ -136,7 +136,7 @@ abstract class BasePresenter extends BaseBasePresenter
 				$this->basketFacade->remove($stock);
 			}
 		}
-		if ($this->isAjax()) {
+		if ($this->ajax) {
 			$this->redrawControl();
 		} else {
 			$this->redirect('this');

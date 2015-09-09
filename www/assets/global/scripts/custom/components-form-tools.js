@@ -376,7 +376,9 @@ var ComponentsFormTools = function () {
 	var handleSpinners = function () {
 		$(".form-spinner").each(function () {
 			var size = null;
-			var params = {};
+			var params = {
+				hold: false
+			};
 			for (var i = 0, attrs = this.attributes, l = attrs.length; i < l; i++) {
 				var attr = attrs.item(i).nodeName;
 				if (attr.substring(0, 5) === "data-") {
@@ -394,7 +396,11 @@ var ComponentsFormTools = function () {
 					}
 				}
 			}
-			$(this).spinner(params);
+			var $this = $(this);
+			$this.spinner(params);
+			$this.on("click", function () {
+				$this.change();
+			});
 			if (size) {
 				$(this).closest('.input-group').addClass(size);
 			}
@@ -463,17 +469,17 @@ var ComponentsFormTools = function () {
 		});
 
 		$('.mask_currency').inputmask('numeric', {
-            rightAlign: 0,
+			rightAlign: 0,
 			prefix: '',
 			suffix: ' ' + currencySymbol,
-            radixPoint: ",",
-            groupSeparator: ' ',
-            autoGroup: !0,
-            digits: 2
+			radixPoint: ",",
+			groupSeparator: ' ',
+			autoGroup: !0,
+			digits: 2
 		});
 
 		$('.mask_percentage').inputmask('decimal', {
-            rightAlign: 0,
+			rightAlign: 0,
 			suffix: '%'
 		});
 
