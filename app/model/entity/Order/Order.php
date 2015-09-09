@@ -11,6 +11,7 @@ use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
 use Knp\DoctrineBehaviors\Model;
+use Nette\Utils\Random;
 
 /**
  * @ORM\Entity(repositoryClass="App\Model\Repository\OrderRepository")
@@ -25,7 +26,9 @@ use Knp\DoctrineBehaviors\Model;
  * @property string $locale
  * @property bool $isEditable
  * @property bool $isDeletable
+ * @property string $pin
  * @property string $mail
+ * @property string $phone
  * @property Address $billingAddress
  * @property Address $shippingAddress
  */
@@ -34,6 +37,9 @@ class Order extends BaseEntity
 
 	use Identifier;
 	use Model\Timestampable\Timestampable;
+
+	/** @ORM\Column(type="string", nullable=true) */
+	protected $pin;
 
 	/** @ORM\ManyToOne(targetEntity="User", inversedBy="orders") */
 	protected $user;
@@ -54,10 +60,10 @@ class Order extends BaseEntity
 	protected $mail;
 
 	/** @ORM\OneToOne(targetEntity="Address", cascade={"persist", "remove"}) */
-	protected $shippingAddress;
+	protected $billingAddress;
 
 	/** @ORM\OneToOne(targetEntity="Address", cascade={"persist", "remove"}) */
-	protected $billingAddress;
+	protected $shippingAddress;
 
 	/** @ORM\Column(type="string", length=8, nullable=true) */
 	protected $locale;
@@ -73,6 +79,7 @@ class Order extends BaseEntity
 		if ($user) {
 			$this->setUser($user);
 		}
+		$this->pin = Random::generate(4, '0-9');
 		$this->locale = $locale;
 		$this->items = new ArrayCollection();
 		parent::__construct();
@@ -98,7 +105,15 @@ class Order extends BaseEntity
 	
 	public function getIsCompany()
 	{
-		return $this->shippingAddress && $this->shippingAddress->isCompany();
+		return $this->billingAddress && $this->billingAddress->isCompany();
+	}
+	
+	public function getPhone()
+	{
+		if ($this->billingAddress) {
+			return $this->billingAddress->phone;
+		}
+		return NULL;
 	}
 
 	public function setItem(Stock $stock, Price $price, $quantity, $locale)
