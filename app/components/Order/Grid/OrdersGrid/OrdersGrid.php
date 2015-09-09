@@ -26,8 +26,12 @@ class OrdersGrid extends BaseControl
 		$grid->setTheme(BaseGrid::THEME_METRONIC);
 
 		$repo = $this->em->getRepository(Order::getClassName());
-		$qb = $repo->createQueryBuilder('o');
-		$grid->setModel(new Doctrine($qb, []), TRUE);
+		$qb = $repo->createQueryBuilder('o')
+				->leftJoin('o.billingAddress', 'a');
+		$grid->setModel(new Doctrine($qb, [
+			'billingAddress' => 'a',
+			'billingAddress.name' => 'a.name',
+		]), TRUE);
 
 		$grid->setDefaultSort([
 			'createdAt' => 'DESC',
@@ -61,6 +65,16 @@ class OrdersGrid extends BaseControl
 					}					
 				});
 		$grid->getColumn('state')->cellPrototype->class[] = 'changeOnClick';
+		
+		$grid->addColumnText('address', 'Address')
+				->setColumn('billingAddress.name')
+				->setCustomRender(function ($item) {
+					$address = (string) $item->billingAddress;
+					return $item->billingAddress && $item->billingAddress->isFilled() ? $address : $item->mail;
+				})
+				->setSortable()
+				->setFilterText()
+				->setSuggestion();
 
 		$grid->addColumnText('totalPrice', 'Total price')
 				->setCustomRender(function ($item) {

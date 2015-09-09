@@ -1261,6 +1261,9 @@ msgstr "Pro dopravy"
 msgid "Need Address"
 msgstr "Vyžaduje adresu"
 
+msgid "Address"
+msgstr "Adresa"
+
 msgid "Your personal data was saved."
 msgstr "Vaše osobní údaje byly uloženy."
 

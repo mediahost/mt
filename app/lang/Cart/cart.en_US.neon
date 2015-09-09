@@ -7,6 +7,8 @@ product:
 
 order:
 	wasntFoundWasExecuted: 'Requested order was already executed'
+	invoiceAddress: 'Invoice Address'
+	shippingAddress: 'Shipping Address'
 
 form:
 	name: 'Name and surname (Company name)'

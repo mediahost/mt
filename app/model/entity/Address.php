@@ -2,9 +2,11 @@
 
 namespace App\Model\Entity;
 
+use App\Helpers;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
+use Nette\Utils\Html;
 
 /**
  * @ORM\Entity
@@ -115,6 +117,28 @@ class Address extends BaseEntity
 	public function __toString()
 	{
 		return (string) $this->name;
+	}
+	
+	public function getCountry($formated = FALSE)
+	{
+		if ($formated) {
+			$countries = self::getCountries();
+			if (array_key_exists($this->country, $countries)) {
+				return $countries[$this->country];
+			}
+		}
+		return $this->country;
+	}
+	
+	public function format()
+	{
+		$lineSeparator = Html::el('br');
+		$name = $this->name;
+		$street = $this->street;
+		$city = Helpers::concatStrings(' ', $this->zipcode, $this->city);
+		$country = $this->getCountry(TRUE);
+		$address = Helpers::concatStrings($lineSeparator, $name, $street, $city, $country);
+		return $address;
 	}
 
 	public static function getCountries()

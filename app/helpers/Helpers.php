@@ -59,7 +59,7 @@ class Helpers
 			foreach ($args as $item) {
 				if ($string === NULL) {
 					$string = $item;
-				} else if ($item !== NULL) {
+				} else if ($item !== NULL && $item != '') {
 					$string .= $separator . $item;
 				}
 			}

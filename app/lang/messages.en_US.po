@@ -1303,6 +1303,9 @@ msgstr "For Shippings"
 msgid "Need Address"
 msgstr "Need Address"
 
+msgid "Address"
+msgstr "Address"
+
 msgid "Your personal data was saved."
 msgstr "Your personal data was saved."
 
