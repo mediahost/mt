@@ -123,6 +123,14 @@ class Basket extends BaseEntity
 		return $this->shipping && $this->shipping->needAddress;
 	}
 	
+	public function isAllItemsInStore()
+	{
+		$isOnStock = function ($key, BasketItem $item) {
+			return $item->stock->inStore >= $item->quantity;
+		};
+		return $this->items->forAll($isOnStock);
+	}
+	
 	public function getIsCompany()
 	{
 		return $this->shippingAddress && $this->shippingAddress->isCompany();

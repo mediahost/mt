@@ -169,6 +169,13 @@ class BasketFacade extends Object
 	{
 		return !$this->getProductsCount();
 	}
+	
+	/** @var bool */
+	public function isAllItemsInStore()
+	{
+		$basket = $this->getBasket();
+		return $basket->isAllItemsInStore();
+	}
 
 	/** @var bool */
 	public function hasPayments()

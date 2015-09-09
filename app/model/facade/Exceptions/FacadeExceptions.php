@@ -39,3 +39,21 @@ class MissingItemException extends BasketFacadeException
 	}
 
 }
+
+class OrderFacadeException extends FacadeException
+{
+	
+}
+
+class ItemsIsntOnStockException extends OrderFacadeException
+{
+
+	public function __construct($message = NULL, $code = NULL, $previous = NULL)
+	{
+		if (!$message) {
+			$message = 'Some item in basket isn\'t in stock';
+		}
+		parent::__construct($message, $code, $previous);
+	}
+
+}
