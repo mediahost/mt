@@ -26,6 +26,7 @@ services:
 	# Orders
 	- {implement: App\Components\Order\Form\IOrderProductsEditFactory, inject: yes}
 	- {implement: App\Components\Order\Form\IChangeStateFactory, inject: yes}
+	- {implement: App\Components\Order\Form\IChangeAddressFactory, inject: yes}
 	- {implement: App\Components\Order\Grid\IOrdersGridFactory, inject: yes}
 
 	# User
