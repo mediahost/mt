@@ -53,10 +53,10 @@ class Order extends BaseEntity
 	/** @ORM\Column(type="string", nullable=true) */
 	protected $mail;
 
-	/** @ORM\OneToOne(targetEntity="Address") */
+	/** @ORM\OneToOne(targetEntity="Address", cascade={"persist", "remove"}) */
 	protected $shippingAddress;
 
-	/** @ORM\OneToOne(targetEntity="Address") */
+	/** @ORM\OneToOne(targetEntity="Address", cascade={"persist", "remove"}) */
 	protected $billingAddress;
 
 	/** @ORM\Column(type="string", length=8, nullable=true) */
@@ -267,6 +267,10 @@ class Order extends BaseEntity
 		if ($basket->payment) {
 			$this->setPayment($basket->payment);
 		}
+		$this->mail = $basket->mail;
+		$this->billingAddress = $basket->billingAddress;
+		$this->shippingAddress = $basket->shippingAddress;
+		
 		return $this;
 	}
 
