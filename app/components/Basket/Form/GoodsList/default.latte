@@ -1,0 +1,108 @@
+<div class="cart-page" n:if="!$basket->isEmpty()">
+	{form form}
+		{? $form->render('begin')}
+		<div class="cart-content goods-data clearfix">
+			<div class="note note-danger" n:if="!$basket->isAllItemsInStore()">
+				<h4 class="block">{_'cart.queueBeforeYou'}</h4>
+				<p>
+					{_'cart.queueBeforeYouSorry'}
+				</p>
+			</div>
+			<div class="table-wrapper-responsive">
+				<table summary="Shopping cart">
+					<tr>
+						<th class="goods-page-image"></th>
+						<th class="goods-page-description">{_'cart.name'}</th>
+						<th class="goods-page-quantity">{_'cart.quantity'}</th>
+						<th class="goods-page-price">{_'cart.unitPrice'}</th>
+						<th class="goods-page-total" colspan="2">{_'cart.total'}</th>
+					</tr>
+					{foreach $basket->items as $item}
+						{var stock => $item->stock}
+						{var product => $stock->product}
+						<tr n:class="!$stock->inStore ? alert-danger, $stock->inStore && $stock->inStore < $item->quantity ? alert-warning">
+							<td class="goods-page-image">
+								<a href="{plink Product: $product->id}">
+									<img src="{$basePath}/foto/{$product->image|size:55,55}" alt="{$product}" />
+								</a>
+							</td>
+							<td class="goods-page-description">
+								<h3><a href="{plink Product: $product->id}">{$product->name}</a></h3>
+								<p>
+									{if $stock->inStore >= $item->quantity}
+										<strong>{_'cart.inStore'}:</strong> {$stock->inStore} {$product->unit}
+									{elseif $stock->inStore}
+										<strong>{_'cart.inStoreOnly'}:</strong> {$stock->inStore} {$product->unit}<br />
+										<strong>{_'cart.mustChangeInStore'}</strong>
+									{else}
+										<strong>{_'cart.notInStore'}</strong>
+									{/if}
+								</p>
+							</td>
+							<td class="goods-page-quantity">
+								<div n:class="product-quantity, $form['quantity'][$stock->id]->hasErrors() ? has-error">
+									{ifset $form['quantity'][$stock->id]}
+										{input $form['quantity'][$stock->id]}
+									{else}
+										<strong>{$item->quantity}x</strong>
+									{/ifset}
+								</div>
+							</td>
+							<td class="goods-page-price">
+								<strong>{$stock->getPrice($priceLevel)|currencyVat}</strong>
+							</td>
+							<td class="goods-page-total">
+								<strong>{$item->getTotalPrice($exchange, $priceLevel)|asCurrency:TRUE}</strong>
+							</td>
+							<td class="del-goods-col">
+								<a class="del-goods ajax" 
+								   href="{plink removeFromCart! $stock->id}" 
+								   data-target-loading="#snippet--goodsList">&nbsp;</a>
+							</td>
+						</tr>
+					{/foreach}
+				</table>
+			</div>
+
+			<div class="shopping-total">
+				<ul>
+					<li>
+						<em>{_'cart.withoutVat'}</em>
+						<strong class="price">
+							{$basket->getProductsTotalPrice($priceLevel, FALSE)|asCurrency:TRUE}
+						</strong>
+					</li>
+					<li>
+						<em>{_'cart.vat'}</em>
+						<strong class="price">
+							{$basket->getProductsVatSum($priceLevel)|asCurrency:TRUE}
+						</strong>
+					</li>
+					<li class="shopping-total-price">
+						<em>{_'cart.total'}</em>
+						<strong class="price">
+							{$basket->getProductsTotalPrice($priceLevel)|asCurrency:TRUE}
+						</strong>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="row cart-continue">
+			<div class="col-md-6 col-sm-6"></div>
+			<div class="col-md-6 col-sm-6">
+				{button send, class=>'btn btn-primary'}
+				{_'cart.continue'}
+				&nbsp;
+				<i class="fa fa-chevron-right"></i>
+				{/button}
+			</div>
+		</div>
+		{? $form->render('end')}
+	{/form}
+</div>
+<div n:if="$basket->isEmpty()" class="note note-info">
+	<h4 class="block">{_'cart.yourCartIsEmpty'}</h4>
+	<p>
+		<a href="{plink Homepage:}">{_'cart.continueShopping'}</a>
+	</p>
+</div>

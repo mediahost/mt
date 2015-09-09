@@ -2,6 +2,8 @@
 
 namespace App\FrontModule\Presenters;
 
+use App\Components\Basket\Form\GoodsList;
+use App\Components\Basket\Form\IGoodsListFactory;
 use App\Components\Basket\Form\IPaymentsFactory;
 use App\Components\Basket\Form\IPersonalFactory;
 use App\Components\Basket\Form\Payments;
@@ -12,6 +14,9 @@ use Doctrine\ORM\NoResultException;
 
 class CartPresenter extends BasePresenter
 {
+
+	/** @var IGoodsListFactory @inject */
+	public $iGoodsListFactory;
 
 	/** @var IPaymentsFactory @inject */
 	public $iPaymentsFactory;
@@ -120,11 +125,23 @@ class CartPresenter extends BasePresenter
 		return $section;
 	}
 
+	/** @return GoodsList */
+	public function createComponentGoodsList()
+	{
+		$control = $this->iGoodsListFactory->create();
+		$control->setPriceLevel($this->priceLevel);
+		$control->setAjax();
+		$control->onSend = function () {
+			$this->redirect('payments');
+		};
+		return $control;
+	}
+
 	/** @return Payments */
 	public function createComponentPayments()
 	{
 		$control = $this->iPaymentsFactory->create();
-		$control->setAjax(TRUE);
+		$control->setAjax();
 		$control->onSend = function () {
 			$this->redirect('address');
 		};

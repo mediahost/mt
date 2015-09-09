@@ -33,7 +33,7 @@ class Payments extends BaseControl
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
 		if ($this->isAjax) {
-			$form->getElementPrototype()->class('ajax loadingNoOverlay sendOnChange');
+			$form->getElementPrototype()->class('ajax loadingNoOverlay' . $this->isSendOnChange ? ' sendOnChange' : '');
 		}
 
 		$basket = $this->basketFacade->getBasket();
