@@ -1305,3 +1305,6 @@ msgstr "Need Address"
 
 msgid "Your personal data was saved."
 msgstr "Your personal data was saved."
+
+msgid "There are %count% products locked"
+msgstr "There are %count% product locked|There are %count% products locked"

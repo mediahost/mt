@@ -1263,3 +1263,6 @@ msgstr "Vyžaduje adresu"
 
 msgid "Your personal data was saved."
 msgstr "Vaše osobní údaje byly uloženy."
+
+msgid "There are %count% products locked"
+msgstr "%count% produkt je zamčen|%count% produkty jsou zamčeny|%count% produktů je zamčeno"
