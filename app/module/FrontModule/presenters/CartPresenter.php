@@ -2,15 +2,21 @@
 
 namespace App\FrontModule\Presenters;
 
+use App\Components\Basket\Form\GoodsList;
+use App\Components\Basket\Form\IGoodsListFactory;
 use App\Components\Basket\Form\IPaymentsFactory;
 use App\Components\Basket\Form\IPersonalFactory;
 use App\Components\Basket\Form\Payments;
 use App\Components\Basket\Form\Personal;
 use App\Model\Entity\Order;
+use App\Model\Facade\Exception\ItemsIsntOnStockException;
 use Doctrine\ORM\NoResultException;
 
 class CartPresenter extends BasePresenter
 {
+
+	/** @var IGoodsListFactory @inject */
+	public $iGoodsListFactory;
 
 	/** @var IPaymentsFactory @inject */
 	public $iPaymentsFactory;
@@ -39,6 +45,10 @@ class CartPresenter extends BasePresenter
 		$this->checkEmptyCart();
 		$this->checkSelectedPayments();
 		$this->checkFilledAddress();
+		
+		if (!$this->basketFacade->isAllItemsInStore()) {
+			$this->redirect('default');
+		}
 	}
 
 	public function handleSend()
@@ -47,14 +57,18 @@ class CartPresenter extends BasePresenter
 		$this->checkSelectedPayments();
 		$this->checkFilledAddress();
 
-		$basket = $this->basketFacade->getBasket();
-		$user = $this->user->id ? $this->user->identity : NULL;
-		$order = $this->orderFacade->createFromBasket($basket, $user);
-		$this->basketFacade->clearBasket();
+		try {
+			$basket = $this->basketFacade->getBasket();
+			$user = $this->user->id ? $this->user->identity : NULL;
+			$order = $this->orderFacade->createFromBasket($basket, $user);
+			$this->basketFacade->clearBasket();
 
-		$this->getSessionSection()->orderId = $order->id;
+			$this->getSessionSection()->orderId = $order->id;
 
-		$this->redirect('done');
+			$this->redirect('done');
+		} catch (ItemsIsntOnStockException $ex) {
+			$this->redirect('default');
+		}
 	}
 
 	public function actionDone()
@@ -97,7 +111,9 @@ class CartPresenter extends BasePresenter
 
 	private function checkFilledAddress()
 	{
-		// TODO
+		if (!$this->basketFacade->hasAddress()) {
+			$this->redirect('address');
+		}
 	}
 
 	private function getSessionSection()
@@ -109,11 +125,23 @@ class CartPresenter extends BasePresenter
 		return $section;
 	}
 
+	/** @return GoodsList */
+	public function createComponentGoodsList()
+	{
+		$control = $this->iGoodsListFactory->create();
+		$control->setPriceLevel($this->priceLevel);
+		$control->setAjax();
+		$control->onSend = function () {
+			$this->redirect('payments');
+		};
+		return $control;
+	}
+
 	/** @return Payments */
 	public function createComponentPayments()
 	{
 		$control = $this->iPaymentsFactory->create();
-		$control->setAjax(TRUE);
+		$control->setAjax();
 		$control->onSend = function () {
 			$this->redirect('address');
 		};

@@ -71,7 +71,6 @@ class SignPresenter extends BasePresenter
 	public function actionIn()
 	{
 		$this->session->wipe();
-		$this->session->role = Role::USER;
 	}
 
 	/**
@@ -80,12 +79,6 @@ class SignPresenter extends BasePresenter
 	public function actionUp()
 	{
 		$this->session->wipe();
-		$this->session->role = Role::USER;
-	}
-
-	public function renderUpRequired()
-	{
-		$this->template->role = $this->session->role;
 	}
 
 	/** @param string $token */
@@ -93,7 +86,7 @@ class SignPresenter extends BasePresenter
 	{
 		$registration = $this->userFacade->findByVerificationToken($token);
 		if ($registration) {
-			$userRole = $this->roleFacade->findByName(Role::USER);
+			$userRole = $this->em->getRepository(Role::getClassName())->findOneByName(Role::USER);
 			$user = $this->userFacade->createFromRegistration($registration, $userRole);
 			$message = $this->translator->translate('Your e-mail has been seccessfully verified!');
 			$this->flashMessage($message, 'success');

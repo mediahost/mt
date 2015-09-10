@@ -967,6 +967,9 @@ msgstr "Slider"
 msgid "Save & Add next"
 msgstr "Uložit a přidat další"
 
+msgid "Save"
+msgstr "Uložit"
+
 msgid "Text"
 msgstr "Text"
 
@@ -1257,3 +1260,12 @@ msgstr "Pro dopravy"
 
 msgid "Need Address"
 msgstr "Vyžaduje adresu"
+
+msgid "Address"
+msgstr "Adresa"
+
+msgid "Your personal data was saved."
+msgstr "Vaše osobní údaje byly uloženy."
+
+msgid "There are %count% products locked"
+msgstr "%count% produkt je zamčen|%count% produkty jsou zamčeny|%count% produktů je zamčeno"

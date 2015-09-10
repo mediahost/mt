@@ -39,9 +39,6 @@ class RoleFacadeTest extends BaseFacade
 	{
 		$this->createAllRoles();
 
-		$role = $this->roleFacade->findByName(Role::USER);
-		Assert::same(Role::USER, $role->name);
-
 		$roles = [Role::USER, Role::DEALER, Role::ADMIN];
 		$lowers = [1 => Role::GUEST, Role::SIGNED, Role::USER, Role::DEALER];
 		Assert::same($lowers, $this->roleFacade->findLowerRoles($roles));

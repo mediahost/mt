@@ -12,6 +12,11 @@
 		<div class="col-md-12 col-sm-12">
 			<div class="cart-page">
 				<div class="cart-content personal-data">
+					<div class="note note-info" n:if="!$user->loggedIn">
+						<p>
+							{!_cart.youCanSign, [link => $presenter->link('this#signInModal')]}
+						</p>
+					</div>
 					{control personal}
 				</div>
 				<div class="row cart-continue">
@@ -23,7 +28,7 @@
 						</a>
 					</div>
 					<div class="col-md-6 col-sm-6">
-						<a n:href="summary" class="btn btn-primary">
+						<a n:href="summary" class="btn btn-primary send-button">
 							{_'cart.continue'}
 							&nbsp;
 							<i class="fa fa-chevron-right"></i>

@@ -54,6 +54,9 @@ class OrderFacade extends Object
 		$rate = (round($currency->getRate()) === (float) 1) ? NULL : $currency->getRate();
 		$stateRepo = $this->em->getRepository(OrderState::getClassName());
 
+		if (!$basket->isAllItemsInStore()) {
+			throw new Exception\ItemsIsntOnStockException();
+		}
 		$order = new Order($locale, $user);
 		$order->state = $stateRepo->find(OrderState::ORDERED_IN_SYSTEM);
 		$order->setCurrency($currency->getCode(), $rate);

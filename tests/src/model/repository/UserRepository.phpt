@@ -30,7 +30,7 @@ class UserRepositoryTest extends BaseRepository
 	function __construct(Container $container = NULL)
 	{
 		parent::__construct($container);
-		$this->repository = $this->em->getDao(User::getClassName());
+		$this->repository = $this->em->getRepository(User::getClassName());
 	}
 
 	protected function setUp()
@@ -41,11 +41,12 @@ class UserRepositoryTest extends BaseRepository
 
 	public function testFindPairsByRoleId()
 	{
-		$roleSigned = $this->roleFacade->findByName(Role::SIGNED);
-		$roleUser = $this->roleFacade->findByName(Role::USER);
-		$roleDealer = $this->roleFacade->findByName(Role::DEALER);
-		$roleAdmin = $this->roleFacade->findByName(Role::ADMIN);
-		$roleSuperadmin = $this->roleFacade->findByName(Role::SUPERADMIN);
+		$roleRepo = $this->em->getRepository(Role::getClassName());
+		$roleSigned = $roleRepo->findOneByName(Role::SIGNED);
+		$roleUser = $roleRepo->findOneByName(Role::USER);
+		$roleDealer = $roleRepo->findOneByName(Role::DEALER);
+		$roleAdmin = $roleRepo->findOneByName(Role::ADMIN);
+		$roleSuperadmin = $roleRepo->findOneByName(Role::SUPERADMIN);
 
 		$signedMails = $this->repository->findPairsByRoleId($roleSigned->id, 'mail');
 		$usersMails = $this->repository->findPairsByRoleId($roleUser->id, 'mail');

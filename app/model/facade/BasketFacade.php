@@ -2,6 +2,7 @@
 
 namespace App\Model\Facade;
 
+use App\Model\Entity\Address;
 use App\Model\Entity\Basket;
 use App\Model\Entity\Payment;
 use App\Model\Entity\Shipping;
@@ -45,7 +46,7 @@ class BasketFacade extends Object
 		}
 		return $this->basket;
 	}
-	
+
 	public function clearBasket()
 	{
 		$this->userStorage->removeBasket();
@@ -88,8 +89,8 @@ class BasketFacade extends Object
 		if ($clearPayment) {
 			$basket->payment = NULL;
 		}
-		$this->basketRepo->save($basket);
 
+		$this->basketRepo->save($basket);
 		return $this;
 	}
 
@@ -98,8 +99,50 @@ class BasketFacade extends Object
 	{
 		$basket = $this->getBasket();
 		$basket->payment = $payment;
-		$this->basketRepo->save($basket);
 
+		$this->basketRepo->save($basket);
+		return $this;
+	}
+
+	public function setAddress($mail, Address $billing = NULL, Address $shipping = NULL, $removeNull = TRUE)
+	{
+		$addressRepo = $this->em->getRepository(Address::getClassName());
+		$basket = $this->getBasket();
+		
+		$basket->mail = $mail;
+
+		if ($billing) {
+			if (!$basket->billingAddress) {
+				$basket->billingAddress = new Address();
+			}
+			$basket->billingAddress->import($billing, TRUE);
+			$addressRepo->save($basket->billingAddress);
+		} else if ($removeNull && $basket->billingAddress) {
+			$toDeleteBilling = $basket->billingAddress;
+			$basket->billingAddress = NULL;
+		}
+
+		if ($shipping) {
+			if (!$basket->shippingAddress) {
+				$basket->shippingAddress = new Address();
+			}
+			$basket->shippingAddress->import($shipping, TRUE);
+			$addressRepo->save($basket->shippingAddress);
+		} else if ($removeNull && $basket->shippingAddress) {
+			$toDeleteShipping = $basket->shippingAddress;
+			$basket->shippingAddress = NULL;
+		}
+
+		$this->basketRepo->save($basket);
+		if ($removeNull) {
+			if (isset($toDeleteBilling)) {
+				$addressRepo->delete($toDeleteBilling);
+			}
+			if (isset($toDeleteShipping)) {
+				$addressRepo->delete($toDeleteShipping);
+			}
+		}
+		
 		return $this;
 	}
 
@@ -126,12 +169,33 @@ class BasketFacade extends Object
 	{
 		return !$this->getProductsCount();
 	}
+	
+	/** @var bool */
+	public function isAllItemsInStore()
+	{
+		$basket = $this->getBasket();
+		return $basket->isAllItemsInStore();
+	}
 
 	/** @var bool */
 	public function hasPayments()
 	{
 		$basket = $this->getBasket();
-		return $basket->shipping && $basket->payment;
+		return $basket->hasPayments();
+	}
+
+	/** @var bool */
+	public function hasAddress()
+	{
+		$basket = $this->getBasket();
+		return $basket->hasAddress();
+	}
+
+	/** @var bool */
+	public function needAddress()
+	{
+		$basket = $this->getBasket();
+		return $basket->needAddress();
 	}
 
 	/** @var int */

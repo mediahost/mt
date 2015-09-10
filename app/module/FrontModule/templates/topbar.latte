@@ -43,7 +43,7 @@
 <!-- BEGIN TOP BAR MENU -->
 <div class="col-md-6 col-sm-6 col-xs-6 additional-nav">
 	<ul n:if="!$user->loggedIn" class="list-unstyled list-inline pull-right">
-		<li><a n:href="Sign:in">{_'Sign In'}</a></li>
+		<li><a n:href="this#signInModal" data-toggle="modal">{_'Sign In'}</a></li>
 		<li><a n:href="Sign:up">{_'Registration'}</a></li>
 	</ul>
 	<ul n:if="$user->loggedIn" class="list-unstyled list-inline pull-right">
@@ -57,4 +57,44 @@
 		</li>
 	</ul>
 </div>
-<!-- END TOP BAR MENU -->       
+<!-- END TOP BAR MENU -->
+<div class="modal fade" id="signInModal" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h4 class="modal-title">{_'Sign In'}</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-7 col-sm-7">				
+
+						{control signInModal:login}	
+
+						<div class="row">
+							<div class="col-lg-8 col-md-offset-4 padding-left-10 padding-top-10">
+								<a n:href="Sign:lostPassword backlink => $backlink">{_'Forget Password?'}</a>
+							</div>
+						</div>
+
+					</div>
+					<div class="col-md-5 col-sm-5">
+						<div class="form-info">
+							<h2>{_"Don't you have"} <em>{_'your account'}</em>?</h2>
+							<p>{_'Create account and gain an advantage in bonus program.'}</p>
+
+							<a n:href="Sign:up backlink => $backlink" class="btn btn-default">
+								{_'Create an account'}
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				{control signInModal:social}
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
