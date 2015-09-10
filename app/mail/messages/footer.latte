@@ -1,0 +1,44 @@
+{block footer}
+<table width="99%" align="center">
+    <colgroup>
+        <col width="33%">
+        <col width="33%">
+        <col width="33%">
+    </colgroup>
+    <tbody>
+        <tr>
+            <td width="27%" style="font-family:Verdana,Tahoma,Arial,Helvetica,Chicago,Sans-serif;font-size:12px;border-right:#ecece9 1px solid;margin-left:10px">
+                <img src="{$baseUrl}/images/mail/ico_home.png" alt="{_"Address"}" style="float:left" align="left" width="54" height="80"><br>
+                <div style="min-width:200px;">
+					<font color="#00275A"><b>{$settings->template->footer->address->company}</b></font><br>
+					{$settings->template->footer->address->street}<br>
+					{$settings->template->footer->address->zip} {$settings->template->footer->address->city}<br>
+				</div>
+            </td>
+
+            <td width="38%" style="font-family:Verdana,Tahoma,Arial,Helvetica,Chicago,Sans-serif;font-size:12px;border-right:#ecece9 1px solid">
+                <img src="{$baseUrl}/images/mail/ico_phone.png" alt="{_"Contact"}" style="float:left" align="left" width="54" height="80"><br>
+                <div style="min-width:230px;">
+					{_"Need help?"}<br>
+					<font color="#00275A"><b>{$settings->template->footer->contact->phone}</b></font><br>
+					<a href="mailto:{$settings->template->footer->contact->email}" style="text-decoration:none!important" target="_blank">
+						<font color="#00275A"><b>{$settings->template->footer->contact->email}</b></font><br>
+					</a>
+				</div>
+            </td>
+
+            <td width="35%" style="font-family:Verdana,Tahoma,Arial,Helvetica,Chicago,Sans-serif;font-size:12px">
+                <img src="{$baseUrl}/images/mail/ico_info.png" alt="{_"Info"}" style="float:left" align="left" width="54" height="80"><br>
+				<div style="min-width:250px;">
+					{_"Bank Connection"} {_'for SK'}<br>
+					<font color="#00275A" style="font-size:11px;"><b>{$settings->template->footer->bank->sk}</b></font>
+					<br>
+					{_"Bank Connection"} {_'for CZ'}<br>
+					<font color="#00275A" style="font-size:11px;"><b>{$settings->template->footer->bank->cz}</b></font><br>
+				</div>
+            </td>
+
+        </tr>
+    </tbody>
+</table>
+{/block}

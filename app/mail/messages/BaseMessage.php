@@ -4,7 +4,9 @@ namespace App\Mail\Messages;
 
 use App\Extensions\Settings\SettingsStorage;
 use Kdyby\Translation\Translator;
-use Latte\Engine;
+use Nette\Application\LinkGenerator;
+use Nette\Application\UI\ITemplate;
+use Nette\Application\UI\ITemplateFactory;
 use Nette\Http\Request;
 use Nette\Mail\IMailer;
 use Nette\Mail\Message;
@@ -14,6 +16,12 @@ abstract class BaseMessage extends Message
 
 	/** @var IMailer @inject */
 	public $mailer;
+
+	/** @var ITemplateFactory @inject */
+	public $templateFactory;
+
+	/** @var LinkGenerator @inject */
+	public $linkGenerator;
 
 	/** @var SettingsStorage @inject */
 	public $settings;
@@ -33,6 +41,9 @@ abstract class BaseMessage extends Message
 	/** @var string */
 	protected $unsubscribeLink;
 
+	/** @var ITemplate */
+	protected $template;
+
 	/**
 	 * @return string
 	 */
@@ -45,15 +56,19 @@ abstract class BaseMessage extends Message
 
 	protected function build()
 	{
-		$this->params['hostUrl'] = $this->httpRequest->url->hostUrl;
-		$this->params['basePath'] = $this->httpRequest->url->basePath;
-		$this->params['pageInfo'] = $this->settings->pageInfo;
-		$this->params['isNewsletter'] = $this->isNewsletter;
-		$this->params['unsubscribeLink'] = $this->unsubscribeLink ? $this->unsubscribeLink : $this->params['hostUrl'];
+		$this->params += [
+			'settings' => $this->settings->modules->newsletter,
+			'pageInfo' => $this->settings->pageInfo,
+			'mail' => $this,
+		];
 
-		$engine = new Engine;
-		$engine->addFilter('translate', $this->translator->translate);
-		$this->setHtmlBody($engine->renderToString($this->getPath(), $this->params));
+		$template = $this->templateFactory->createTemplate();
+		$template->setTranslator($this->translator)
+				->setFile($this->getPath())
+				->setParameters($this->params)
+				->_control = $this->linkGenerator;
+
+		$this->setHtmlBody($template);
 
 		return parent::build();
 	}

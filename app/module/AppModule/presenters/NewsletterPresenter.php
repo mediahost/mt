@@ -173,9 +173,14 @@ class NewsletterPresenter extends BasePresenter
 
 			foreach ($recipients as $recipient) {
 				$status = new Status;
-				$status->setMail($recipient->mail)
+				$status->setEmail($recipient->mail)
 						->setMessage($message)
 						->setStatus(Message::STATUS_RUNNING);
+				
+				if ($values->recipients === self::RECIPIENT_USER) {
+					$status->subscriber = $recipient;
+				}
+				
 				$this->em->persist($status);
 			}
 

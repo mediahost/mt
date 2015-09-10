@@ -7,7 +7,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="newsletter_status",  uniqueConstraints={@ORM\UniqueConstraint(name="status_unique", columns={"message_id", "mail"})})
+ * @ORM\Table(name="newsletter_status",  uniqueConstraints={@ORM\UniqueConstraint(name="status_unique", columns={"message_id", "email"})})
  */
 class Status extends BaseEntity
 {
@@ -15,7 +15,7 @@ class Status extends BaseEntity
 	use \Kdyby\Doctrine\Entities\Attributes\Identifier;
 
 	/** @ORM\Column(type="string", length=255) */
-	protected $mail;
+	protected $email;
 
 	/** @ORM\ManyToOne(targetEntity="Message") */
 	protected $message;
@@ -26,4 +26,9 @@ class Status extends BaseEntity
 	/** @ORM\Column(type="datetime", nullable=true) */
 	protected $sent;
 
+	/**
+	 * @ORM\ManyToOne(targetEntity="Subscriber", fetch="EAGER")
+	 * @ORM\JoinColumn(nullable=true)
+	 */
+	protected $subscriber;
 }
