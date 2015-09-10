@@ -2,6 +2,7 @@
 
 namespace App\Forms\Controls\ChoiseBased;
 
+use App\Helpers as AppHelpers;
 use Nette\Forms\Controls\ChoiceControl;
 use Nette\Forms\Controls\RadioList as RadioListParent;
 use Nette\Forms\Helpers;
@@ -38,8 +39,12 @@ class RadioList extends RadioListParent
 
 		$input = ChoiceControl::getControl();
 		$ids = array();
+		$labelClass = array();
 		foreach ($this->getItems() as $value => $label) {
 			$ids[$value] = $input->id . '-' . $value;
+			$activeClass = $this->value === $value ? 'active' : NULL;
+			$disabledClass = is_array($this->disabled) && array_key_exists($value, $this->disabled) && $this->disabled[$value] ? 'disabled' : NULL;
+			$labelClass[$value] = AppHelpers::concatStrings(' ', $this->labelParsClass, $activeClass, $disabledClass);
 		}
 		
 		return $this->container->setHtml(
@@ -51,7 +56,7 @@ class RadioList extends RadioListParent
 					'disabled:' => $this->disabled,
 					'data-nette-rules:' => array(key($ids) => $input->attrs['data-nette-rules']),
 				)),
-				array('for:' => $ids, 'class' => $this->labelParsClass),
+				array('for:' => $ids, 'class:' => $labelClass),
 				$this->separator
 			)
 		);

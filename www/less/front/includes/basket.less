@@ -45,6 +45,29 @@
 		background: #fff;
 		padding: 20px;
 		overflow-x: auto;
+		&.payments-data {
+			.radio-list {
+				label {
+					padding: 10px;
+					margin: 0px;
+					&:hover {
+						background-color: #f8f8f8;
+						cursor: pointer;
+					}
+					&.active {
+						background-color: #ECF4FF;
+						border: 1px #CAE3F0 solid;
+					}
+					&.disabled {
+						color: #E2E2E2;
+						cursor: not-allowed;
+					}
+					& > div.radio {
+						margin: 2px 10px 0px 0px;
+					}
+				}
+			}
+		}
 	}
 	.goods-data {
 		.goods-page-quantity {
