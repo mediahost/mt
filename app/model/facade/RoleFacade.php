@@ -59,7 +59,7 @@ class RoleFacade extends Object
 
 	public function isUnique($name)
 	{
-		return $this->findByName($name) === NULL;
+		return $this->roleDao->findOneByName($name) === NULL;
 	}
 
 }
