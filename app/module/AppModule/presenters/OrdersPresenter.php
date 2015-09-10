@@ -2,7 +2,9 @@
 
 namespace App\AppModule\Presenters;
 
+use App\Components\Order\Form\ChangeAddress;
 use App\Components\Order\Form\ChangeState;
+use App\Components\Order\Form\IChangeAddressFactory;
 use App\Components\Order\Form\IChangeStateFactory;
 use App\Components\Order\Form\IOrderProductsEditFactory;
 use App\Components\Order\Form\OrderProductsEdit;
@@ -28,6 +30,9 @@ class OrdersPresenter extends BasePresenter
 
 	/** @var IChangeStateFactory @inject */
 	public $iChangeStateFactory;
+
+	/** @var IChangeAddressFactory @inject */
+	public $iChangeAddressFactory;
 
 	/** @var IOrdersGridFactory @inject */
 	public $iOrdersGridFactory;
@@ -65,6 +70,7 @@ class OrdersPresenter extends BasePresenter
 		} else {
 			$this['orderProductsForm']->setOrder($this->orderEntity);
 			$this['changeStateForm']->setOrder($this->orderEntity);
+			$this['changeAddressForm']->setOrder($this->orderEntity);
 		}
 		$this->template->order = $this->orderEntity;
 	}
@@ -123,6 +129,20 @@ class OrdersPresenter extends BasePresenter
 	public function createComponentChangeStateForm()
 	{
 		$control = $this->iChangeStateFactory->create();
+		$control->onAfterSave = function (Order $savedOrder) {
+			$message = $this->translator->translate('successfullySavedShe', NULL, [
+				'type' => $this->translator->translate('Order'), 'name' => (string) $savedOrder
+			]);
+			$this->flashMessage($message, 'success');
+			$this->redirect('this');
+		};
+		return $control;
+	}
+
+	/** @return ChangeAddress */
+	public function createComponentChangeAddressForm()
+	{
+		$control = $this->iChangeAddressFactory->create();
 		$control->onAfterSave = function (Order $savedOrder) {
 			$message = $this->translator->translate('successfullySavedShe', NULL, [
 				'type' => $this->translator->translate('Order'), 'name' => (string) $savedOrder

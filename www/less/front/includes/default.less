@@ -1,1 +1,35 @@
 @import "../definitions.less";
+
+.form-horizontal {
+	input.text.form-control {
+		display: inline;
+	}
+	span.help-block {
+		display: inline;
+		padding-left: 5px;
+	}
+}
+
+#signInModal {
+	.modal-body {
+		#frm-signInModal-form {
+			button {
+				margin-left: 15px;
+			}
+		}
+	}
+	.modal-footer {
+		text-align: center;
+		.login-socio {
+			.social-icons {
+				margin: 0 auto;
+				width: 80px;
+				li {
+					padding-left: 5px;
+					padding-right: 0px;
+					border-right: none;
+				}
+			}
+		}
+	}
+}

@@ -195,9 +195,11 @@ class Spinner extends MetronicTextInputBase
 						->add($vertical);
 				break;
 		}
-		return Html::el('div class="form-spinner"')
+		$formSpinner = Html::el('div class="form-spinner"')
 						->add($block)
 						->addAttributes($this->attributes);
+		$errorBlock = Html::el('span class="help-block"')->setText($this->getError());
+		return $formSpinner . ($this->hasErrors() ? $errorBlock : NULL);
 	}
 
 	// <editor-fold desc="controls for buttons">

@@ -24,7 +24,7 @@ class UserFacadeCreateTest extends UserFacade
 	{
 		$mail = 'second.user@domain.com';
 		$password = 'password654321';
-		$role = $this->roleFacade->findByName(Role::USER);
+		$role = $this->em->getRepository(Role::getClassName())->findOneByName(Role::USER);
 
 		Assert::count(3, $this->userRepo->findAll());
 
@@ -46,7 +46,7 @@ class UserFacadeCreateTest extends UserFacade
 	{
 		$mail = 'second.user@domain.com';
 		$password = 'password654321';
-		$role = $this->roleFacade->findByName(Role::USER);
+		$role = $this->em->getRepository(Role::getClassName())->findOneByName(Role::USER);
 
 		$user = new User($mail);
 		$user->password = $password;
@@ -78,18 +78,19 @@ class UserFacadeCreateTest extends UserFacade
 
 	public function testCreateUserFromRegistration()
 	{
+		$userRole = $this->em->getRepository(Role::getClassName())->findOneByName(Role::USER);
 		$password = 'password';
 		$user = new User('new@user.com');
 		$user->setPassword($password)
 				->setFacebook(new Facebook('facebookID'))
 				->setTwitter(new Twitter('twitterID'))
-				->setRequiredRole($this->roleFacade->findByName(Role::USER));
+				->setRequiredRole($userRole);
 		$registration = $this->userFacade->createRegistration($user);
 		$this->registrationRepo->clear();
 		Assert::count(1, $this->registrationRepo->findAll());
 		Assert::count(3, $this->userRepo->findAll());
 
-		$initRole = $this->roleFacade->findByName(Role::USER);
+		$initRole = $userRole;
 		$findedRegistration = $this->registrationRepo->find($registration->id);
 		$this->userFacade->createFromRegistration($findedRegistration, $initRole);
 		$this->userRepo->clear();

@@ -3,7 +3,8 @@
 namespace App\Model\Facade\Traits;
 
 use App\Model\Entity\User;
-use LogicException;
+use App\Model\Facade\CantDeleteUserException;
+use Kdyby\Doctrine\DBALException;
 
 trait UserFacadeDelete
 {
@@ -28,21 +29,23 @@ trait UserFacadeDelete
 	public function delete(User $user)
 	{
 		if ($this->isDeletable($user)) {
-			$this->em->remove($user);
-			$this->em->flush();
-			return $user;
+			try {
+				if ($user->basket) {
+					$this->em->remove($user->basket);
+				}
+				$this->em->remove($user);
+				$this->em->flush();
+				return $user;
+			} catch (DBALException $ex) {
+				
+			}
 		}
-//		throw new CantDeleteUserException('You\'re only one admin');
+		throw new CantDeleteUserException('This user can\'t be deleted');
 	}
 
 	public function isDeletable(User $user)
 	{
 		return TRUE;
 	}
-
-}
-
-class CantDeleteUserException extends LogicException
-{
 
 }

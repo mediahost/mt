@@ -26,7 +26,7 @@ class StockQuantity extends StockBase
 
 		$form = new Form();
 		$form->setTranslator($this->translator)
-			->setRenderer(new MetronicHorizontalFormRenderer());
+				->setRenderer(new MetronicHorizontalFormRenderer());
 		$form->getElementPrototype()->class('ajax');
 
 		$unitRepo = $this->em->getRepository(Unit::getClassName());
@@ -49,20 +49,29 @@ class StockQuantity extends StockBase
 		return $form;
 	}
 
-	public function formSucceeded(Form $form, $values)
+	public function formSucceeded(Form $form, ArrayHash $values)
 	{
-		$this->load($values);
-		$this->save();
-		$this->onAfterSave($this->stock);
+		$this->load($form, $values);
+		if (!$form->hasErrors()) {
+			$this->save();
+			$this->onAfterSave($this->stock);
+		} else {
+			$this->redrawControl();
+		}
 	}
 
-	private function load(ArrayHash $values)
+	private function load(Form &$form, ArrayHash $values)
 	{
-		$this->stock->quantity = $values->quantity > 1 ? $values->quantity : 0;
-		
-		$unitRepo = $this->em->getRepository(Unit::getClassName());
-		$unit = $unitRepo->find($values->unit);
-		$this->stock->product->unit = $unit;
+		if ($values->quantity < $this->stock->lock) {
+			$form['quantity']->addError($this->translator->translate('There are %count% products locked', $this->stock->lock));
+			$form['quantity']->setValue($this->stock->lock);
+		} else {
+			$this->stock->quantity = $values->quantity > 1 ? $values->quantity : 0;
+
+			$unitRepo = $this->em->getRepository(Unit::getClassName());
+			$unit = $unitRepo->find($values->unit);
+			$this->stock->product->unit = $unit;
+		}
 
 		return $this;
 	}

@@ -7,9 +7,36 @@ product:
 
 order:
 	wasntFoundWasExecuted: 'Požadovaná objednávka již byla vyřízena.'
+	invoiceAddress: 'Fakturační adresa'
+	shippingAddress: 'Dodací adresa'
+
+form:
+	name: 'Jméno a příjmení (název firmy)'
+	nameOnly: 'Jméno a příjmení'
+	street: 'Ulice a č.p.'
+	city: 'Město'
+	country: 'Země'
+	zipcode: 'PSČ'
+	mail: 'E-mail'
+	phone: 'Telefon'
+	ico: 'IČO'
+	icoVat: 'IČO DPH'
+	dic: 'DIČ'
+	billing: 'Fakturační údaje'
+	shipping: 'Dodací údaje'
+	company: 'Firemní údaje'
+	inputInvoice: 'Chci doplnit fakturační údaje'
+	sameDelivery: 'Doručit na jinou adresu, než fakturační'
+	isCompany: 'Chci zadat firemní údaje (IČO a DIČ)'
+	newsletter: 'Mám zájem o akční nabídky a novinky na e-mail'
+	validator:
+		filled: 'Povinné pole'
+		mail: 'Zadejte správný formát'
 
 flash:
 	noPayments: 'Zvolte si vaši dopravu i platbu.'
+
+youCanSign: 'Můžete se <a data-toggle="modal" href="%link%">přihlásit</a>, urychlíte si vyplnění údajů.'
 
 shoppingCart: 'Nákupní košík'
 cart: 'Košík'
@@ -38,6 +65,12 @@ totalWithoutVat: 'Celkem bez DPH'
 withoutVat: 'Bez DPH'
 vat: 'DPH'
 inStore: 'Skladem'
+inStoreOnly: 'Skladem pouze'
+countInStore: '%count% %unit% skladem'
+notInStore: 'Produkt již není skladem. S tímto produktem nelze dokončit objednávku.'
+mustChangeInStore: 'Snižte počet kusů v košíku.'
+queueBeforeYou: 'Ve frontě na vaše zboží byl někdo před vámi!'
+queueBeforeYouSorry: 'Omlouváme se, ale během vašeho nákupu někdo jiný koupil zboží, o které jste měli zájem.'
 
 isEmpty: 'Zatím prázdný'
 countItem: '%count% položka|%count% položky|%count% položek'

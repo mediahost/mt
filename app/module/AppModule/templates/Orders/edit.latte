@@ -1,5 +1,5 @@
 {block pageTitle}
-	{_'Order #%number%', ['number' => $order->id]}
+{_'Order #%number%', ['number' => $order->id]}
 {/block}
 
 {block breadcrumbItems}
@@ -32,7 +32,50 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-md-4">
+	<div class="col-md-6">
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption font-green-sharp">
+					<i class="fa fa-building font-green-sharp"></i>
+					<span class="caption-subject bold uppercase">
+						{_'Contact'}
+					</span>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<div class="row static-info">
+					<div class="col-md-3 value">
+						{_'PIN'}: {$order->pin}
+					</div>
+					<div class="col-md-3 value">
+						{_'Tel'}: {$order->phone}
+					</div>
+					<div class="col-md-6 value">
+						<a href="mailto:{$order->mail}">{$order->mail}</a>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6" n:if="$order->billingAddress">
+						<h4 class="block">{_'cart.order.invoiceAddress'}</h4>
+						<div class="row static-info">
+							<div class="col-md-12 value">
+								{$order->billingAddress->format()|noescape}
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6" n:if="$order->shippingAddress">
+						<h4 class="block">{_'cart.order.shippingAddress'}</h4>
+						<div class="row static-info">
+							<div class="col-md-12 value">
+								{$order->shippingAddress->format()|noescape}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6">
 		<div class="portlet light">
 			<div class="portlet-title">
 				<div class="caption font-green-sharp">
@@ -41,13 +84,30 @@
 						{_'Change State'}
 					</span>
 				</div>
+			</div>
+			<div class="portlet-body form">
+				{control changeStateForm}
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6">
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption font-green-sharp">
+					<i class="fa fa-edit font-green-sharp"></i>
+					<span class="caption-subject bold uppercase">
+						{_'Edit Address'}
+					</span>
+				</div>
 				<div class="actions">
 					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
 					</a>
 				</div>
 			</div>
 			<div class="portlet-body form">
-				{control changeStateForm}
+				{control changeAddressForm}
 			</div>
 		</div>
 	</div>
