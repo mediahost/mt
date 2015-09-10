@@ -76,6 +76,24 @@ class SettingsExtension extends CompilerExtension
 			'newsletter' => [
 				'enabled' => FALSE,
 				'email' => 'noreply@example.sk',
+				'template' => [
+					'footer' => [
+						'address' => [
+							'company' => 'Grifin s.r.o.',
+							'street' => 'Hviezdoslavova 10',
+							'zip' => '01001',
+							'city' => 'Žilina',							
+						],
+						'contact' => [
+							'phone' => '+421 908 848 484',
+							'email' => 'obchod@mobilnetelefony.sk',
+						],
+						'bank' => [
+							'cz' => 'CZ3108000000003627894339',
+							'sk' => 'SK0475000000004020234814',
+						],
+					],
+				],
 			],
 			'service' => [
 				'enabled' => FALSE,

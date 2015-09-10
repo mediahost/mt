@@ -9,7 +9,7 @@ class NewsletterMessage extends BaseMessage
 
 	protected function build()
 	{
-		$this->setFrom($this->settings->modules->newsletter->email);
+		$this->setFrom($this->settings->modules->newsletter->email);	
 		return parent::build();
 	}
 

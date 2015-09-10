@@ -92,3 +92,7 @@ messages:
 	newMessage:
 		testSuccess: 'Testovací e-mail byl úspěšně odeslán na adresu %recipient%!'
 		queue: 'Odeslání zpráv bylo úspěšně zařazeno do fronty.'
+
+message:
+	base:
+		footer:

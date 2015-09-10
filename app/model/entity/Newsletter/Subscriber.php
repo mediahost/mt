@@ -39,7 +39,10 @@ class Subscriber extends BaseEntity
 	/** @ORM\Column(type="string", length=8, unique=true, nullable=true) */
 	protected $token;
 
-	/** @ORM\OneToOne(targetEntity="App\Model\Entity\User", mappedBy="subscriber") */
+	/**
+	 * @ORM\OneToOne(targetEntity="App\Model\Entity\User", inversedBy="subscriber")
+	 * @ORM\JoinColumn(nullable=true)
+	 */
 	protected $user;
 
 	/** @ORM\Column(type="string", length=39, nullable=true) */
@@ -48,9 +51,17 @@ class Subscriber extends BaseEntity
 	/** @ORM\Column(type="datetime") */
 	protected $subscribed;
 
-	
+	/** @ORM\OneToMany(targetEntity="Status", mappedBy="subscriber") */
+	protected $statuses;
+
+	public function __construct()
+	{
+		$this->statuses = new ArrayCollection();
+	}
+
 	public function __toString()
 	{
 		return $this->mail;
 	}
+
 }
