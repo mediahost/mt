@@ -2,12 +2,19 @@
 
 namespace App\Model\Entity\Newsletter;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\BaseEntity;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="newsletter_status",  uniqueConstraints={@ORM\UniqueConstraint(name="status_unique", columns={"message_id", "email"})})
+ * 
+ * @property string $email
+ * @property Message $message
+ * @property int $status
+ * @property DateTime $sent
+ * @property Subscriber $subscriber
  */
 class Status extends BaseEntity
 {
