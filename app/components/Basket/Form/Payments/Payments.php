@@ -33,7 +33,7 @@ class Payments extends BaseControl
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
 		if ($this->isAjax) {
-			$form->getElementPrototype()->class('ajax loadingNoOverlay' . $this->isSendOnChange ? ' sendOnChange' : '');
+			$form->getElementPrototype()->class('ajax loadingNoOverlay' . ($this->isSendOnChange ? ' sendOnChange' : ''));
 		}
 
 		$basket = $this->basketFacade->getBasket();
@@ -53,10 +53,6 @@ class Payments extends BaseControl
 
 	public function formSucceeded(Form $form, $values)
 	{
-		if (!$form->hasErrors() && $form['send']->submittedBy) {
-			$this->onSend();
-		}
-		
 		$shippingRepo = $this->em->getRepository(Shipping::getClassName());
 		$paymentRepo = $this->em->getRepository(Payment::getClassName());
 
@@ -67,16 +63,26 @@ class Payments extends BaseControl
 			}
 		}
 		$allowedPayments = $this->allowPayments($form);
-		
+
 		if ($values->payment && in_array($values->payment, array_keys($allowedPayments))) {
 			$payment = $paymentRepo->find($values->payment);
 			if ($payment) {
 				$this->basketFacade->setPayment($payment);
 			}
 		}
-		
-		if (!$this->basketFacade->hasPayments()) {
+
+		if (!$this->basketFacade->hasPayments() && $form['send']->submittedBy) {
 			$form->addError($this->translator->translate('cart.shippingAndPaymentRequired'));
+		}
+
+
+		if ($form['send']->submittedBy) {
+			if (!$this->basketFacade->hasPayments()) {
+				$form->addError($this->translator->translate('cart.shippingAndPaymentRequired'));
+			}
+			if (!$form->hasErrors()) {
+				$this->onSend();
+			}
 		}
 
 		if ($this->presenter->isAjax()) {
@@ -98,7 +104,7 @@ class Payments extends BaseControl
 		$denyedPayments = array_diff_key($allPayments, $allowedPayments);
 
 		$form['payment']->setDisabled(array_keys($denyedPayments));
-		
+
 		return $allowedPayments;
 	}
 
