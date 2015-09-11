@@ -4,6 +4,7 @@ namespace App\Model\Entity\Newsletter;
 
 use App\Model\Entity\User;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\BaseEntity;
 
@@ -51,7 +52,7 @@ class Subscriber extends BaseEntity
 	/** @ORM\Column(type="datetime") */
 	protected $subscribed;
 
-	/** @ORM\OneToMany(targetEntity="Status", mappedBy="subscriber") */
+	/** @ORM\OneToMany(targetEntity=Statuss", mappedBy="subscriber") */
 	protected $statuses;
 
 	public function __construct()
