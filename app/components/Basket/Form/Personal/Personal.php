@@ -53,8 +53,12 @@ class Personal extends BaseControl
 		}
 
 		$fieldsetHide = Html::el('div', ['class' => 'fieldset', 'style' => 'display:none']);
-		$form->addGroup()
-				->setOption('container', $fieldsetHide);
+		
+		$form->addGroup('cart.form.note');
+		$form->addTextArea('note', 'cart.form.noteDescript', NULL, 3)
+						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
+		
+		$form->addGroup()->setOption('container', $fieldsetHide);
 		$form->addSubmit('save', 'cart.continue')
 						->getControlPrototype()->class[] = 'send-button';
 
@@ -153,6 +157,7 @@ class Personal extends BaseControl
 		$billingAddress->city = $values->city;
 		$billingAddress->zipcode = $values->zipcode;
 		$billingAddress->country = $values->country;
+		$billingAddress->note = $values->note;
 		if ($values->isCompany) {
 			$billingAddress->ico = $values->ico;
 			$billingAddress->dic = $values->dic;
@@ -231,6 +236,7 @@ class Personal extends BaseControl
 	{
 		$address = new Address();
 		$address->phone = $values->phone;
+		$address->note = $values->note;
 		if ($values->invoice) {
 			$address->name = $values->name;
 			$address->street = $values->street;
@@ -277,6 +283,7 @@ class Personal extends BaseControl
 			$values['country'] = $billingAddress->country;
 			$values['zipcode'] = $billingAddress->zipcode;
 			$values['phone'] = $billingAddress->phone;
+			$values['note'] = $billingAddress->note;
 			$values['isCompany'] = $billingAddress->isCompany();
 			$values['ico'] = $billingAddress->ico;
 			$values['dic'] = $billingAddress->dic;

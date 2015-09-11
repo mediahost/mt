@@ -22,6 +22,8 @@ form:
 	ico: 'Company ID'
 	icoVat: 'IČO DPH'
 	dic: 'Taxpayer ID'
+	note: 'Note'
+	noteDescript: 'Place for additional information'
 	billing: 'Invoice address'
 	shipping: 'Delivery address'
 	company: 'Company'
