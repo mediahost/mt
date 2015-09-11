@@ -134,10 +134,13 @@ class NewsletterPresenter extends BasePresenter
 
 			$form->setValues(['locale' => $locale]);
 		} elseif ($form['sendTest']->isSubmittedBy()) {
-			$message = $this->iNewsletterMessage->create();
-			$message->addTo($values->testEmail)
+			$message = new Message;
+			$message->setContent($values->content);
+
+			$mail = $this->iNewsletterMessage->create();
+			$mail->addTo($values->testEmail)
 					->setSubject($values->subject)
-					->addParameter('content', $values->content)
+					->addParameter('message', $message)
 					->send();
 
 			$this->flashMessage($this->translator->translate('newsletter.messages.newMessage.testSuccess', ['recipient' => $values->testEmail]), 'success');
@@ -176,11 +179,11 @@ class NewsletterPresenter extends BasePresenter
 				$status->setEmail($recipient->mail)
 						->setMessage($message)
 						->setStatus(Message::STATUS_RUNNING);
-				
+
 				if ($values->recipients === self::RECIPIENT_USER) {
 					$status->subscriber = $recipient;
 				}
-				
+
 				$this->em->persist($status);
 			}
 
