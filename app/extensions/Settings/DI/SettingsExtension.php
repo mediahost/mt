@@ -73,16 +73,25 @@ class SettingsExtension extends CompilerExtension
 					'none' => 0,
 				],
 			],
+			'service' => [
+				'enabled' => FALSE,
+				'pageId' => 1, // ID of page in pages to show as basic info
+			],
+			'buyout' => [
+				'enabled' => FALSE,
+				'pageId' => 1, // ID of page in pages to show as basic info
+				'email' => 'buyout@example.sk',
+			],
 			'newsletter' => [
 				'enabled' => FALSE,
-				'email' => 'noreply@example.sk',
+				'email' => 'newsletter@example.sk',
 				'template' => [
 					'footer' => [
 						'address' => [
 							'company' => 'Grifin s.r.o.',
 							'street' => 'Hviezdoslavova 10',
 							'zip' => '01001',
-							'city' => 'Žilina',							
+							'city' => 'Žilina',
 						],
 						'contact' => [
 							'phone' => '+421 908 848 484',
@@ -95,20 +104,12 @@ class SettingsExtension extends CompilerExtension
 					],
 				],
 			],
-			'service' => [
-				'enabled' => FALSE,
-				'pageId' => 1, // ID of page in pages to show as basic info
-			],
-			'buyout' => [
-				'enabled' => FALSE,
-				'pageId' => 1, // ID of page in pages to show as basic info
-				'email' => 'buyout@example.sk',
-			],
 		],
 		'pageInfo' => [
 			'projectName' => 'projectName',
 			'author' => 'author',
 			'description' => 'description',
+			'termPageId' => 1,
 		],
 		'pageConfig' => [
 			'itemsPerRow' => 3,

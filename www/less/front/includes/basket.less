@@ -7,7 +7,7 @@
 				&.step {
 					font-size: 18px;
 					color: #969798;
-					&:hover {
+					&:hover, &:focus {
 						background: none;
 					}
 					&.past {
@@ -45,6 +45,37 @@
 		background: #fff;
 		padding: 20px;
 		overflow-x: auto;
+		&.goods-data {
+			.goods-page-quantity {
+				width: 120px;
+				.product-quantity {
+					margin-right: 0px;
+					.help-block {
+						margin-top: 42px;
+						width: 100px;
+					}
+				}
+				strong {
+					font-weight: normal;
+					font-size: 15px;
+					line-height: 28px;
+				}
+			}
+			.goods-page-price {
+				width: 15%;
+				strong {
+					font-weight: normal;
+					font-size: 15px;
+					line-height: 28px;
+				}
+			}
+			.goods-page-total {
+				width: 15%;
+			}
+			.del-goods-col {
+				width: 5%;
+			}
+		}
 		&.payments-data {
 			.radio-list {
 				label {
@@ -68,35 +99,29 @@
 				}
 			}
 		}
-	}
-	.goods-data {
-		.goods-page-quantity {
-			width: 120px;
-			.product-quantity {
-				margin-right: 0px;
-				.help-block {
-					margin-top: 42px;
-					width: 100px;
+		&.summary-data {
+			th.goods-page-description {
+				padding-left: 15px;
+			}
+			.adresses {
+				margin-bottom: 10px;
+				padding-bottom: 20px;
+				border-bottom: 1px solid #e5e5e5;
+				.block {
+					margin-bottom: 20px;
+					padding-right: 30px;
+					padding-left: 30px;
+					h5 {
+						font-size: 14px;
+						font-weight: bold;
+					}
+					p {
+						font-size: 14px;
+						line-height: 22px;
+					}
 				}
+
 			}
-			strong {
-				font-weight: normal;
-				font-size: 20px;
-			}
-		}
-		.goods-page-price {
-			width: 15%;
-			strong {
-				font-weight: normal;
-				font-size: 15px;
-				line-height: 28px;
-			}
-		}
-		.goods-page-total {
-			width: 15%;
-		}
-		.del-goods-col {
-			width: 5%;
 		}
 	}
 	.btn-default {
@@ -118,5 +143,46 @@
 		background-color: #fff; 
 		padding-top: 10px;
 		padding-bottom: 20px;
+		.agreement {
+			text-align: right;
+			padding-bottom: 25px;
+			padding-right: 25px;
+		}
+	}
+}
+
+@media (min-width: 993px) {
+    .cart-page {
+		.cart-content {
+			&.summary-data {
+				.adresses {
+					.block {
+						&:not(:last-child) {
+							border-right: 1px solid #e5e5e5;
+						}
+					}
+
+				}
+			}
+		}
+	}
+}
+@media (min-width: 768px) {
+    .cart-page {
+		.cart-content {
+			&.summary-data {
+				.adresses {
+					.block {
+						&:last-child {
+							margin-bottom: 0px;
+						}
+						&:first-child {
+							border-right: 1px solid #e5e5e5;
+						}
+					}
+
+				}
+			}
+		}
 	}
 }

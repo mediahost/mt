@@ -49,6 +49,8 @@ class CartPresenter extends BasePresenter
 		if (!$this->basketFacade->isAllItemsInStore()) {
 			$this->redirect('default');
 		}
+		
+		$this->template->termsLink = $this->link('Page:terms');
 	}
 
 	public function handleSend()

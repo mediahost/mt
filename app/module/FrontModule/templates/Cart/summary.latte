@@ -11,10 +11,134 @@
 	<div class="row margin-bottom-40">
 		<div class="col-md-12 col-sm-12">
 			<div class="cart-page">
-				<div class="cart-content summary-data">
-					Výpis adres, produktů a odsouhlasení podmínek
+				<div class="cart-content summary-data goods-data">
+					<fieldset class="adresses">
+						<legend>{_'cart.headline.summary'}</legend>
+						<div class="row">
+							<div class="col-md-4 col-sm-6 block" n:if="$basket->needAddress() && $basket->billingAddress">
+								<h5>{_'cart.order.invoiceAddress'}</h5>
+								<p>
+									{$basket->billingAddress->format()|noescape}
+								</p>
+							</div>
+							<div class="col-md-4 col-sm-6 block" n:if="$basket->needAddress() && $basket->shippingAddress">
+								<h5>{_'cart.order.shippingAddress'}</h5>
+								<p>
+									{$basket->shippingAddress->format()|noescape}
+								</p>
+							</div>
+							<div class="col-md-4 col-sm-6 block">
+								<h5>{_'cart.order.contact'}</h5>
+								<p>
+									{_'Phone'}: {$basket->basket->phone}<br />
+									{_'Mail'}: {$basket->basket->mail}
+								</p>
+							</div>
+						</div>
+					</fieldset>
+
+					<div class="table-wrapper-responsive">
+						<table summary="Shopping cart">
+							<tr>
+								<th class="goods-page-description" colspan="2">{_'cart.name'}</th>
+								<th class="goods-page-quantity">{_'cart.quantity'}</th>
+								<th class="goods-page-price">{_'cart.unitPrice'}</th>
+								<th class="goods-page-total">{_'cart.total'}</th>
+							</tr>
+							{foreach $basket->items as $item}
+								{var stock => $item->stock}
+								{var product => $stock->product}
+								<tr>
+									<td class="goods-page-image">
+										<a href="{plink Product: $product->id}">
+											<img src="{$basePath}/foto/{$product->image|size:55,55}" alt="{$product}" />
+										</a>
+									</td>
+									<td class="goods-page-description">
+										<h3><a href="{plink Product: $product->id}">{$product->name}</a></h3>
+										<p>
+											<strong>{_'cart.inStore'}:</strong> {$stock->inStore} {$product->unit}
+										</p>
+									</td>
+									<td class="goods-page-quantity">
+										<div class="product-quantity">
+											<strong>{$item->quantity}x</strong>
+										</div>
+									</td>
+									<td class="goods-page-price">
+										<strong>{$stock->getPrice($priceLevel)|currencyVat}</strong>
+									</td>
+									<td class="goods-page-total">
+										<strong>{$item->getTotalPrice($exchange, $priceLevel)|asCurrency:TRUE}</strong>
+									</td>
+								</tr>
+							{/foreach}
+							<tr>
+								<td class="goods-page-image">
+								</td>
+								<td class="goods-page-description">
+									<h3>{_'Shipping'}: {_$basket->shipping}</h3>
+								</td>
+								<td class="goods-page-quantity">
+									<div class="product-quantity">
+										<strong>1x</strong>
+									</div>
+								</td>
+								<td class="goods-page-price">
+									<strong>{$basket->shipping->price|currencyVat}</strong>
+								</td>
+								<td class="goods-page-total">
+									<strong>{$basket->shipping->price|currencyVat}</strong>
+								</td>
+							</tr>
+							<tr>
+								<td class="goods-page-image">
+								</td>
+								<td class="goods-page-description">
+									<h3>{_'Payment'}: {_$basket->payment}</h3>
+								</td>
+								<td class="goods-page-quantity">
+									<div class="product-quantity">
+										<strong>1x</strong>
+									</div>
+								</td>
+								<td class="goods-page-price">
+									<strong>{$basket->payment->price|currencyVat}</strong>
+								</td>
+								<td class="goods-page-total">
+									<strong>{$basket->payment->price|currencyVat}</strong>
+								</td>
+							</tr>
+						</table>
+					</div>
+
+					<div class="shopping-total">
+						<ul>
+							<li>
+								<em>{_'cart.withoutVat'}</em>
+								<strong class="price">
+									{$basket->getTotalPrice($priceLevel, FALSE)|asCurrency:TRUE}
+								</strong>
+							</li>
+							<li>
+								<em>{_'cart.vat'}</em>
+								<strong class="price">
+									{$basket->getVatSum($priceLevel)|asCurrency:TRUE}
+								</strong>
+							</li>
+							<li class="shopping-total-price">
+								<em>{_'cart.total'}</em>
+								<strong class="price">
+									{$basket->getTotalPrice($priceLevel)|asCurrency:TRUE}
+								</strong>
+							</li>
+						</ul>
+					</div>
 				</div>
 				<div class="row cart-continue">
+					<div class="col-sm-12 agreement">
+						{_'cart.agreement', ['link' => $termsLink]|noescape}
+					</div>
 					<div class="col-md-6 col-sm-6">
 						<a n:href="address" class="btn">
 							<i class="fa fa-chevron-left"></i>
@@ -25,7 +149,7 @@
 					<div class="col-md-6 col-sm-6">
 						<a n:href="send!" class="btn btn-primary">
 							<i class="fa fa-check"></i>
-							{_'cart.send'}
+							{_'cart.finish'}
 						</a>
 					</div>
 				</div>

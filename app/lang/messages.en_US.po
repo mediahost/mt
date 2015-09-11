@@ -512,7 +512,10 @@ msgid "Phone"
 msgstr "Phone"
 
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
+
+msgid "Mail"
+msgstr "E-mail"
 
 msgid "Latest Tweets"
 msgstr "Latest Tweets"
