@@ -4,9 +4,11 @@ namespace App\FrontModule\Presenters;
 
 use App\Forms\Renderers\MetronicHorizontalFormRenderer;
 use App\Mail\Messages\Newsletter\IUnsubscribeMessageFactory;
+use App\Model\Entity\Newsletter\Message;
 use App\Model\Entity\Newsletter\Subscriber;
 use App\Model\Facade\NewsletterFacade;
 use Kdyby\Doctrine\EntityManager;
+use Nette\Application\BadRequestException;
 use Nette\Application\UI\Form;
 use Nette\Utils\ArrayHash;
 
@@ -22,6 +24,10 @@ class NewsletterPresenter extends BasePresenter
 	/** @var IUnsubscribeMessageFactory @inject */
 	public $iUnsubscribeMessageFactory;
 
+	/**
+	 * @param string $email
+	 * @param string $token
+	 */
 	public function actionUnsubscribe($email = NULL, $token = NULL)
 	{
 		if ($email !== NULL) {
@@ -46,6 +52,27 @@ class NewsletterPresenter extends BasePresenter
 				]);
 			}
 		}
+	}
+
+	/**
+	 * @param int $id Message identifier
+	 */
+	public function actionShow($id)
+	{
+		$message = $this->em->getRepository(Message::getClassName())->find($id);
+
+		if (!$message) {
+			throw new BadRequestException;
+		}
+
+		$path = [__DIR__, '..', '..', '..' , 'mail', 'messages', 'Newsletter', 'NewsletterMessage', 'NewsletterMessage.latte'];
+		$this->template->setFile(implode(DIRECTORY_SEPARATOR, $path));
+		
+		$this->template->settings = $this->settings->modules->newsletter;
+		$this->template->pageInfo = $this->settings->pageInfo;
+		$this->template->mail = $message;
+		$this->template->message = $message;
+		$this->template->colon = ':';
 	}
 
 	protected function createComponentUnsubscribeForm()
