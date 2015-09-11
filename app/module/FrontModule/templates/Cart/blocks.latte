@@ -1,6 +1,6 @@
 {define steps}
 <div class="cart-steps row margin-bottom-10">
-	<div class="col-md-12 col-sm-12">
+	<div class="col-md-12 col-sm-12 visible-md">
 		<ul class="nav nav-justified steps">
 			{var isActive => $presenter->isLinkCurrent('Cart:')}
 			{var isPast => $presenter->isLinkCurrent('Cart:payments') || 
@@ -9,7 +9,7 @@
 			<li n:class="$isActive ? active">
 				<a n:href="Cart:" n:class="step, $isPast ? past, $isActive ? active">
 					<span class="number">1</span>
-					<span class="desc">{_'cart.cart'}</span>
+					<span class="desc">{_'cart.navigation.cart'}</span>
 				</a>
 			</li>
 			{var isActive => $presenter->isLinkCurrent('Cart:payments')}
@@ -18,7 +18,7 @@
 			<li n:class="$isActive ? active">
 				<a n:href="Cart:payments" n:class="step, $isPast ? past, $isActive ? active">
 					<span class="number">2</span>
-					<span class="desc">{_'cart.shippingPayment'}</span>
+					<span class="desc">{_'cart.navigation.payments'}</span>
 				</a>
 			</li>
 			{var isActive => $presenter->isLinkCurrent('Cart:address')}
@@ -26,7 +26,7 @@
 			<li n:class="$isActive ? active">
 				<a n:href="Cart:address" n:class="step, $isPast ? past, $isActive ? active">
 					<span class="number">3</span>
-					<span class="desc">{_'cart.address'}</span>
+					<span class="desc">{_'cart.navigation.address'}</span>
 				</a>
 			</li>
 			{var isActive => $presenter->isLinkCurrent('Cart:summary')}
@@ -34,7 +34,7 @@
 			<li n:class="$isActive ? active">
 				<a n:href="Cart:summary" n:class="step, $isPast ? past, $isActive ? active">
 					<span class="number">4</span>
-					<span class="desc">{_'cart.summary'}</span>
+					<span class="desc">{_'cart.navigation.summary'}</span>
 				</a>
 			</li>
 		</ul>

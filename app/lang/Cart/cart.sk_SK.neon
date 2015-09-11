@@ -9,6 +9,7 @@ order:
 	wasntFoundWasExecuted: 'Požadovaná objednávka již byla vyřízena.'
 	invoiceAddress: 'Fakturační adresa'
 	shippingAddress: 'Dodací adresa'
+	contact: 'Kontaktní údaje'
 
 form:
 	name: 'Jméno a příjmení (název firmy)'
@@ -22,6 +23,8 @@ form:
 	ico: 'IČO'
 	icoVat: 'IČO DPH'
 	dic: 'DIČ'
+	note: 'Poznámka'
+	noteDescript: 'Místo pro doplňující informace'
 	billing: 'Fakturační údaje'
 	shipping: 'Dodací údaje'
 	company: 'Firemní údaje'
@@ -32,28 +35,31 @@ form:
 	validator:
 		filled: 'Povinné pole'
 		mail: 'Zadejte správný formát'
+		shippingAndPaymentRequired: 'Zvolte způsob dopravy a platby'
 
-flash:
-	noPayments: 'Zvolte si vaši dopravu i platbu.'
+navigation:
+	cart: 'Košík'
+	payments: 'Doprava a platba'
+	address: 'Dodací údaje'
+	summary: 'Souhrn'
+
+headline:
+	summary: 'Souhrn objednávky'
+	selectShipping: 'Zvolte dopravu'
+	selectPayment: 'Zvolte platbu'
 
 youCanSign: 'Můžete se <a data-toggle="modal" href="%link%">přihlásit</a>, urychlíte si vyplnění údajů.'
+agreement: 'Při pokračování v nákupu souhlasíte s <a href="%link%" target="_blank">obchodními podmínkami</a>.'
 
-shoppingCart: 'Nákupní košík'
-cart: 'Košík'
-shippingPayment: 'Doprava a platba'
 shipping: 'Doprava'
 payment: 'Platba'
-selectShipping: 'Zvolte dopravu'
-selectPayment: 'Zvolte platbu'
-shippingAndPaymentRequired: 'Zvolte způsob dopravy a platby'
 paymentsTotal: 'Cena dopravy a platby'
-address: 'Dodací údaje'
-summary: 'Souhrn'
 free: 'Zdarma'
 
 continue: 'Pokračovat'
 back: 'Zpět'
 send: 'Odeslat'
+finish: 'Dokončit objednávku'
 
 name: 'Zboží'
 quantity: 'Množství'
@@ -76,3 +82,5 @@ isEmpty: 'Zatím prázdný'
 countItem: '%count% položka|%count% položky|%count% položek'
 yourCartIsEmpty: 'Nákupní košík je zcela prázdný'
 continueShopping: 'Pokračovat v nákupu'
+orderWasSend: 'Vaše objednávka byla právě odeslána.'
+moreInfoInMail: 'Další informace očekávejte v e-mailu.'
