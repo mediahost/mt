@@ -29,7 +29,7 @@ class Basket extends BaseEntity
 	use Identifier;
 	use Model\Timestampable\Timestampable;
 
-	/** @ORM\OneToOne(targetEntity="User", inversedBy="basket") */
+	/** @ORM\OneToOne(targetEntity="User", inversedBy="basket", fetch="LAZY") */
 	protected $user;
 
 	/** @ORM\OneToMany(targetEntity="BasketItem", mappedBy="basket", cascade={"persist", "remove"}, orphanRemoval=true) */

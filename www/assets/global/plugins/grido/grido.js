@@ -158,6 +158,14 @@
                         this.editable = new Grido.Editable(that).init($(this));
                     }
             });
+            $('td[class*="grid-cell-"].changeOnDblClick', this.$element)
+                .off('dblclick.grido')
+                .on('dblclick.grido', function(event) {
+                    if (!$(this).hasClass('edit')) {
+                        this.editable = new Grido.Editable(that).init($(this));
+						$('select.select2').select2();
+                    }
+            });
             $('td[class*="grid-cell-"].changeOnClick', this.$element)
                 .off('click.grido')
                 .on('click.grido', function(event) {

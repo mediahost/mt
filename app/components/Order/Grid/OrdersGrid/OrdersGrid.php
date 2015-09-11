@@ -11,10 +11,11 @@ use App\Model\Entity\OrderState;
 use App\Model\Facade\Exception\FacadeException;
 use App\Model\Facade\OrderFacade;
 use Grido\Grid;
+use Nette\Utils\Html;
 
 class OrdersGrid extends BaseControl
 {
-	
+
 	/** @var OrderFacade @inject */
 	public $orderFacade;
 
@@ -31,13 +32,17 @@ class OrdersGrid extends BaseControl
 		$grid->setModel(new Doctrine($qb, [
 			'billingAddress' => 'a',
 			'billingAddress.name' => 'a.name',
-		]), TRUE);
+				]), TRUE);
 
 		$grid->setDefaultSort([
 			'createdAt' => 'DESC',
 		]);
 
 		$grid->addColumnText('id', 'Number')
+				->setCustomRender(function ($item) {
+					$link = $this->presenter->link('edit', ['id' => $item->id]);
+					return Html::el('a')->href($link)->setText($item->id);
+				})
 				->setSortable()
 				->setFilterText()
 				->setSuggestion();
@@ -62,10 +67,10 @@ class OrdersGrid extends BaseControl
 						return TRUE;
 					} catch (FacadeException $e) {
 						return FALSE;
-					}					
+					}
 				});
 		$grid->getColumn('state')->cellPrototype->class[] = 'changeOnClick';
-		
+
 		$grid->addColumnText('address', 'Address')
 				->setColumn('billingAddress.name')
 				->setCustomRender(function ($item) {
@@ -75,6 +80,21 @@ class OrdersGrid extends BaseControl
 				->setSortable()
 				->setFilterText()
 				->setSuggestion();
+
+		$grid->addColumnText('note', 'Note')
+				->setEditableCallback(function ($id, $newValue, $oldValue, $column) {
+					$orderRepo = $this->em->getRepository(Order::getClassName());
+					$order = $orderRepo->find($id);
+					if ($order) {
+						$order->note = $newValue;
+						$orderRepo->save($order);
+						return TRUE;
+					}
+					return FALSE;
+				})
+				->setFilterText()
+				->setSuggestion();
+		$grid->getColumn('note')->cellPrototype->class[] = 'changeOnDblClick';
 
 		$grid->addColumnText('totalPrice', 'Total price')
 				->setCustomRender(function ($item) {

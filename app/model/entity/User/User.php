@@ -33,14 +33,10 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 {
 
 	use Identifier;
-
-use UserRoles;
-
-use UserGroups;
-
-use UserPassword;
-
-use UserSocials;
+	use UserRoles;
+	use UserGroups;
+	use UserPassword;
+	use UserSocials;
 
 	/** @ORM\Column(type="string", nullable=false, unique=true) */
 	protected $mail;
