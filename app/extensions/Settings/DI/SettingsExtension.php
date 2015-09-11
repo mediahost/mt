@@ -77,6 +77,10 @@ class SettingsExtension extends CompilerExtension
 				'enabled' => FALSE,
 				'pageId' => 1, // ID of page in pages to show as basic info
 			],
+			'heureka' => [
+				'enabled' => FALSE,
+				'key' => NULL, // mereni konverzí
+			],
 			'buyout' => [
 				'enabled' => FALSE,
 				'pageId' => 1, // ID of page in pages to show as basic info
