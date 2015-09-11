@@ -52,7 +52,7 @@ class Subscriber extends BaseEntity
 	/** @ORM\Column(type="datetime") */
 	protected $subscribed;
 
-	/** @ORM\OneToMany(targetEntity=Statuss", mappedBy="subscriber") */
+	/** @ORM\OneToMany(targetEntity="Status", mappedBy="subscriber") */
 	protected $statuses;
 
 	public function __construct()
