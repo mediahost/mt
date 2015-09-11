@@ -40,8 +40,8 @@ class Payments extends BaseControl
 		$shippings = $this->paymentFacade->getShippingsList($basket);
 		$payments = $this->paymentFacade->getPaymentsList($basket);
 
-		$form->addRadioList('shipping', 'cart.selectShipping', $shippings);
-		$form->addRadioList('payment', 'cart.selectPayment', $payments);
+		$form->addRadioList('shipping', 'cart.headline.selectShipping', $shippings);
+		$form->addRadioList('payment', 'cart.headline.selectPayment', $payments);
 		$this->allowPayments($form);
 
 		$form->addSubmit('send', 'Send');
@@ -72,13 +72,13 @@ class Payments extends BaseControl
 		}
 
 		if (!$this->basketFacade->hasPayments() && $form['send']->submittedBy) {
-			$form->addError($this->translator->translate('cart.shippingAndPaymentRequired'));
+			$form->addError($this->translator->translate('cart.form.validator.shippingAndPaymentRequired'));
 		}
 
 
 		if ($form['send']->submittedBy) {
 			if (!$this->basketFacade->hasPayments()) {
-				$form->addError($this->translator->translate('cart.shippingAndPaymentRequired'));
+				$form->addError($this->translator->translate('cart.form.validator.shippingAndPaymentRequired'));
 			}
 			if (!$form->hasErrors()) {
 				$this->onSend();

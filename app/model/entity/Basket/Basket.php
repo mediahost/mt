@@ -19,6 +19,7 @@ use Knp\DoctrineBehaviors\Model;
  * @property Shipping $shipping
  * @property Payment $payment
  * @property string $mail
+ * @property string $phone
  * @property Address $billingAddress
  * @property Address $shippingAddress
  * @property bool $isCompany
@@ -121,6 +122,24 @@ class Basket extends BaseEntity
 	public function needAddress()
 	{
 		return $this->shipping && $this->shipping->needAddress;
+	}
+	
+	public function getShippingAddress($realShipping = FALSE)
+	{
+		if ($realShipping) {
+			if ($this->shippingAddress && $this->shippingAddress->isComplete()) {
+				return $this->shippingAddress;
+			} else {
+				return $this->billingAddress;
+			}
+		} else {
+			return $this->shippingAddress;
+		}
+	}
+	
+	public function getPhone()
+	{
+		return $this->billingAddress ? $this->billingAddress->phone : NULL;
 	}
 	
 	public function isAllItemsInStore()
