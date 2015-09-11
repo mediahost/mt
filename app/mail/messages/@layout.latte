@@ -23,51 +23,56 @@
                                                 <tbody>
                                                     <tr>
                                                         <td align="left">
-                                                            <a n:href="Front:Newsletter:" target="_blank">
+                                                            <a n:href="{$colon}Front:Newsletter:default" target="_blank">
                                                                 <img src="{$baseUrl}/images/mail/logo-order.png" alt="{*$shop->name*}">
                                                             </a>
                                                         </td>
                                                         <td align="right">
-														{ifset #subtitle}{include #subtitle}{/ifset}
-													</td>
-												</tr>
-											</tbody>
-										</table>
+															{ifset #subtitle}
+																{include #subtitle}
+															{/ifset}
+														</td>
+													</tr>
+												</tbody>
+											</table>
 
-										<br>
-										<br>
+											<br>
+											<br>
 
-										<div id="email-content" contenteditable="true">
-										{ifset #content}{include #content}{/ifset}
-									</div>
+											<div id="email-content" contenteditable="true">
+												{ifset #content}
+													{include #content}
+												{/ifset}
+											</div>
 
-									<br>
-									<br>
-									<br>
-									<br>
+											<br>
+											<br>
+											<br>
+											<br>
 
-									{include 'footer.latte'}
-									{ifset $subscriber}
-										<br>
-										<table width="100%" cellpadding="0" cellspacing="0">
-											<tbody>
-												<tr>
-													<td align="center" style="font-size:11px;">
-														{_"If you don't want these updates anymore, you can"} <a n:href="Front:Newsletter:unsubscribe, email => $subscriber->mail, token => $subscriber->token">{_'unsubscribe here'}</a>.<br>
-														<a href="{*$browserLink*}">{_"View email in browser"}.</a>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									{/ifset}
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-</div>
-</body>
+											{include 'footer.latte'}
+											{ifset $subscriber}
+												<br>
+												<table width="100%" cellpadding="0" cellspacing="0">
+													<tbody>
+														<tr>
+															<td align="center" style="font-size:11px;">
+																{capture $ahref}<a n:href="{$colon}Front:Newsletter:unsubscribe, email => $subscriber->mail, token => $subscriber->token">{/capture}
+																	{_newsletter.message.base.layout.unsubscribe, [ahref => $ahref]|noescape}<br>
+																	<a n:href="{$colon}Front:Newsletter:show $message->id, locale => $locale">{_newsletter.message.base.layout.webview}</a>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											{/ifset}
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</body>
 </html>

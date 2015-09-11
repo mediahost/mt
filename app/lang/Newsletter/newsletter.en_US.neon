@@ -92,3 +92,20 @@ messages:
 	newMessage:
 		testSuccess: 'Test e-mail has benn sent to address %recipient%!'
 		queue: 'Messages has been put to a queue to be send.'
+
+message:
+	base:
+		layout:
+			unsubscribe: 'If you do not want get these e-mail, you can %ahref%unsubscribe</a>.'
+			webview: 'View in browser'
+		footer:
+			address:
+				alt: 'Address'
+			contact:
+				alt: 'Contact'
+				label: 'Need help?'
+			bank:
+				alt: 'Info'
+				label:
+					sk: 'Bank connection for SK'
+					cz: 'Bank connection for CZ'

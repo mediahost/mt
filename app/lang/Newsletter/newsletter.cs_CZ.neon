@@ -95,4 +95,17 @@ messages:
 
 message:
 	base:
+		layout:
+			unsubscribe: 'Pokud si již nepřejete dostávat další zprávy, můžete se %ahref%odhlásit</a> z odběru.'
+			webview: 'Zobrazit v prohlížeči'
 		footer:
+			address:
+				alt: 'Adresa'
+			contact:
+				alt: 'Kontakt'
+				label: 'Potřebujete poradit?'
+			bank:
+				alt: 'Info'
+				label:
+					sk: 'Bankovní spojení v SR'
+					cz: 'Bavnkovní spojení v ČR'

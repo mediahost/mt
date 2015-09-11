@@ -3,7 +3,7 @@ extensions:
 
 translation:
 	default: sk
-	fallback: [sk_SK, sk]
-	whitelist: [en, sk, cs]
+	fallback: [sk, sk_SK]
+	whitelist: [sk, cs, en]
 	resolvers:
 		header: off

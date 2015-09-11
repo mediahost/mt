@@ -92,3 +92,20 @@ messages:
 	newMessage:
 		testSuccess: 'Testovací e-mail byl úspěšně odeslán na adresu %recipient%!'
 		queue: 'Odeslání zpráv bylo úspěšně zařazeno do fronty.'
+
+message:
+	base:
+		layout:
+			unsubscribe: 'Pokial si již nepřejete dostávat další zprávy, můžete se %ahref%odhlásit</a> z odběru.'
+			webview: 'Zobrazit v prehliedači'
+		footer:
+			address:
+				alt: 'Adresa'
+			contact:
+				alt: 'Kontakt'
+				label: 'Potrebujete poradit?'
+			bank:
+				alt: 'Info'
+				label:
+					sk: 'Bankové spojenie v SR'
+					cz: 'Bavnkové spojenie v ČR'

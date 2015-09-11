@@ -44,9 +44,7 @@ abstract class BaseMessage extends Message
 	/** @var ITemplate */
 	protected $template;
 
-	/**
-	 * @return string
-	 */
+	/** @return string */
 	protected function getPath()
 	{
 		$dir = dirname($this->getReflection()->getFileName());
@@ -60,12 +58,14 @@ abstract class BaseMessage extends Message
 			'settings' => $this->settings->modules->newsletter,
 			'pageInfo' => $this->settings->pageInfo,
 			'mail' => $this,
+			'colon' => '',
+			'locale' => $this->translator->locale,
 		];
 
 		$template = $this->templateFactory->createTemplate();
 		$template->setTranslator($this->translator)
-				->setFile($this->getPath())
-				->setParameters($this->params)
+						->setFile($this->getPath())
+						->setParameters($this->params)
 				->_control = $this->linkGenerator;
 
 		$this->setHtmlBody($template);
