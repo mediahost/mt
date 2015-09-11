@@ -19,6 +19,7 @@ use Knp\DoctrineBehaviors\Model;
  * @property Shipping $shipping
  * @property Payment $payment
  * @property string $mail
+ * @property string $phone
  * @property Address $billingAddress
  * @property Address $shippingAddress
  * @property bool $isCompany
@@ -29,7 +30,7 @@ class Basket extends BaseEntity
 	use Identifier;
 	use Model\Timestampable\Timestampable;
 
-	/** @ORM\OneToOne(targetEntity="User", inversedBy="basket") */
+	/** @ORM\OneToOne(targetEntity="User", inversedBy="basket", fetch="LAZY") */
 	protected $user;
 
 	/** @ORM\OneToMany(targetEntity="BasketItem", mappedBy="basket", cascade={"persist", "remove"}, orphanRemoval=true) */
@@ -121,6 +122,24 @@ class Basket extends BaseEntity
 	public function needAddress()
 	{
 		return $this->shipping && $this->shipping->needAddress;
+	}
+	
+	public function getShippingAddress($realShipping = FALSE)
+	{
+		if ($realShipping) {
+			if ($this->shippingAddress && $this->shippingAddress->isComplete()) {
+				return $this->shippingAddress;
+			} else {
+				return $this->billingAddress;
+			}
+		} else {
+			return $this->shippingAddress;
+		}
+	}
+	
+	public function getPhone()
+	{
+		return $this->billingAddress ? $this->billingAddress->phone : NULL;
 	}
 	
 	public function isAllItemsInStore()

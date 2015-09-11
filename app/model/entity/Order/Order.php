@@ -74,6 +74,9 @@ class Order extends BaseEntity
 	/** @ORM\Column(type="float", nullable=true) */
 	private $rate;
 
+	/** @ORM\Column(type="string", length=100, nullable=true) */
+	protected $note;
+
 	public function __construct($locale, User $user = NULL)
 	{
 		if ($user) {

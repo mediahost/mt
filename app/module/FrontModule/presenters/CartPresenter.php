@@ -49,6 +49,8 @@ class CartPresenter extends BasePresenter
 		if (!$this->basketFacade->isAllItemsInStore()) {
 			$this->redirect('default');
 		}
+		
+		$this->template->termsLink = $this->link('Page:terms');
 	}
 
 	public function handleSend()
@@ -92,6 +94,10 @@ class CartPresenter extends BasePresenter
 
 		$this->getSessionSection()->orderId = NULL;
 
+		$heurekaSettings = $this->settings->modules->heureka;
+		if ($heurekaSettings->enabled) {
+			$this->template->heurekaKey = $heurekaSettings->key;
+		}
 		$this->template->order = $order;
 	}
 

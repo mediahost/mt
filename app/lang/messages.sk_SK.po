@@ -523,7 +523,10 @@ msgid "Phone"
 msgstr "Telefon"
 
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
+
+msgid "Mail"
+msgstr "E-mail"
 
 msgid "Latest Tweets"
 msgstr "Naše Tweety"

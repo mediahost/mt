@@ -3,17 +3,51 @@
 {block breadcrumb}{/block}
 
 {block content}
-
 <div class="container">
 	<!-- BEGIN CONTENT -->
-	<div class="row margin-bottom-40">
+	<div class="row margin-bottom-20">
 		<div class="col-md-12 col-sm-12">
 			<div class="cart-page">
-				<div class="cart-content summary-data">
-					Výpis objednávky a instrukcí (objednávka: {$order->id})
+				<div class="note note-success">
+					<h4 class="block">{_'cart.orderWasSend'}</h4>
+					<p>
+						{_'cart.moreInfoInMail'}
+					</p>
+					<p>
+						<a n:href="Homepage:">{_'cart.continueShopping'}</a>
+					</p>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- END CONTENT -->
+	<!-- END CONTENT -->	
+
+	{snippet lastVisited}
+		{include lastVisited}
+	{/snippet}
 </div>
+
+{include heurekaScript}
+{/block}
+
+{define heurekaScript}
+<script type="text/javascript" n:if="isset($heurekaKey)" n:syntax="double">
+	var _hrq = _hrq || [];
+	_hrq.push(['setKey', {{$heurekaKey}}]);
+	_hrq.push(['setOrderId', {{$order->id}}]);
+	{{foreach $order->items as $item}}
+	_hrq.push(['addProduct', {{$item->name}}, {{$item->price->withVat}}, {{$item->quantity}}]);
+    {{/foreach}}
+
+	_hrq.push(['trackOrder']);
+
+	(function () {
+		var ho = document.createElement('script');
+		ho.type = 'text/javascript';
+		ho.async = true;
+		ho.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.heureka.sk/direct/js/cache/2-roi-async.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ho, s);
+	})();
+</script>
+{/define}

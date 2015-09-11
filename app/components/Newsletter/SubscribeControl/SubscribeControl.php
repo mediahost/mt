@@ -4,10 +4,7 @@ namespace App\Components\Newsletter;
 
 use App\Components\BaseControl;
 use App\Forms\Renderers\MetronicFormRenderer;
-use App\Model\Entity\Newsletter\Subscriber;
-use App\Model\Entity\User;
 use App\Model\Facade\NewsletterFacade;
-use DateTime;
 use Nette\Application\UI\Form;
 use Nette\Http\Request;
 use Nette\Utils\ArrayHash;

@@ -52,6 +52,9 @@ class Address extends BaseEntity
 
 	/** @ORM\Column(type="string", length=50, nullable=true) */
 	protected $dic;
+
+	/** @ORM\Column(type="string", length=512, nullable=true) */
+	protected $note;
 	
 	public function import(Address $address, $force = FALSE)
 	{
@@ -81,6 +84,9 @@ class Address extends BaseEntity
 		}
 		if ($force || $address->icoVat) {
 			$this->icoVat = $address->icoVat;
+		}
+		if ($force || $address->note) {
+			$this->note = $address->note;
 		}
 	}
 

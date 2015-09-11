@@ -14,6 +14,7 @@ jQuery(document).ready(function () {
 	LayersliderInit.initLayerSlider();
 	
 	Buyout.init();
+	Cart.init();
 
 	// special for pages
 	Login.init();

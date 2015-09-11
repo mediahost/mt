@@ -9,6 +9,7 @@ order:
 	wasntFoundWasExecuted: 'Requested order was already executed'
 	invoiceAddress: 'Invoice Address'
 	shippingAddress: 'Shipping Address'
+	contact: 'Contact'
 
 form:
 	name: 'Name and surname (Company name)'
@@ -22,6 +23,8 @@ form:
 	ico: 'Company ID'
 	icoVat: 'IČO DPH'
 	dic: 'Taxpayer ID'
+	note: 'Note'
+	noteDescript: 'Place for additional information'
 	billing: 'Invoice address'
 	shipping: 'Delivery address'
 	company: 'Company'
@@ -32,28 +35,31 @@ form:
 	validator:
 		filled: 'This field is required'
 		mail: 'Fill the right format'
+		shippingAndPaymentRequired: 'Select shipping and payment options'
 
-flash:
-	noPayments: 'Select your shipping and payment.'
+navigation:
+	cart: 'Cart'
+	payments: 'Shipping & Payment'
+	address: 'Address'
+	summary: 'Summary'
+
+headline:
+	summary: 'Order Summary'
+	selectShipping: 'Select Shipping Option'
+	selectPayment: 'Select Payment Option'
 
 youCanSign: 'You can <a data-toggle="modal" href="%link%">sign in</a> for better filling data.'
+agreement: 'By clicking Complete Order you agree with our <a href="%link%" target="_blank">Terms & Conditions</a>.'
 
-shoppingCart: 'Shopping cart'
-cart: 'Cart'
-shippingPayment: 'Shipping & Payment'
 shipping: 'Shipping'
 payment: 'Payment'
-selectShipping: 'Select Shipping Option'
-selectPayment: 'Select Payment Option'
-shippingAndPaymentRequired: 'Select shipping and payment options'
 paymentsTotal: 'Shipping and Payment Price'
-address: 'Address'
-summary: 'Summary'
 free: 'Free'
 
 continue: 'Continue'
 back: 'Back'
 send: 'Send'
+finish: 'Complete Order'
 
 name: 'Name'
 quantity: 'Quantity'
@@ -76,3 +82,5 @@ isEmpty: 'Cart is empty'
 countItem: '%count% item|%count% items'
 yourCartIsEmpty: 'Your shopping cart is empty'
 continueShopping: 'Continue shopping'
+orderWasSend: 'Your order has just been sent.'
+moreInfoInMail: 'You can expect more information in an e-mail.'

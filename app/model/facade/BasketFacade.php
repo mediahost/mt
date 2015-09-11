@@ -94,6 +94,13 @@ class BasketFacade extends Object
 		return $this;
 	}
 
+	/** @var Shipping */
+	public function getShipping()
+	{
+		$basket = $this->getBasket();
+		return $basket->shipping;
+	}
+
 	/** @var BasketFacade */
 	public function setPayment(Payment $payment)
 	{
@@ -102,6 +109,13 @@ class BasketFacade extends Object
 
 		$this->basketRepo->save($basket);
 		return $this;
+	}
+
+	/** @var Payment */
+	public function getPayment()
+	{
+		$basket = $this->getBasket();
+		return $basket->payment;
 	}
 
 	public function setAddress($mail, Address $billing = NULL, Address $shipping = NULL, $removeNull = TRUE)
@@ -198,6 +212,20 @@ class BasketFacade extends Object
 		return $basket->needAddress();
 	}
 
+	/** @var Address|NULL */
+	public function getBillingAddress()
+	{
+		$basket = $this->getBasket();
+		return $basket->billingAddress;
+	}
+
+	/** @var Address|NULL */
+	public function getShippingAddress()
+	{
+		$basket = $this->getBasket();
+		return $basket->getShippingAddress(TRUE);
+	}
+
 	/** @var int */
 	public function getProductsCount()
 	{
@@ -217,6 +245,20 @@ class BasketFacade extends Object
 	{
 		$basket = $this->getBasket();
 		return $basket->getItemsVatSum($this->exchange, $level);
+	}
+
+	/** @var float */
+	public function getTotalPrice($level = NULL, $withVat = TRUE)
+	{
+		$basket = $this->getBasket();
+		return $basket->getTotalPrice($this->exchange, $level, $withVat);
+	}
+
+	/** @var float */
+	public function getVatSum($level = NULL)
+	{
+		$basket = $this->getBasket();
+		return $basket->getVatSum($this->exchange, $level);
 	}
 
 	/** @var array */

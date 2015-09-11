@@ -86,7 +86,7 @@ msgid "View"
 msgstr "View"
 
 msgid "Add to cart"
-msgstr "Add to cart"
+msgstr "Buy now"
 
 msgid "This ia a system generated email and reply is not required."
 msgstr "This ia a system generated email and reply is not required."
@@ -512,7 +512,10 @@ msgid "Phone"
 msgstr "Phone"
 
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
+
+msgid "Mail"
+msgstr "E-mail"
 
 msgid "Latest Tweets"
 msgstr "Latest Tweets"
