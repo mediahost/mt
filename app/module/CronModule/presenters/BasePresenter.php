@@ -31,7 +31,7 @@ abstract class BasePresenter extends BaseBasePresenter
 			throw new ForbiddenRequestException('Cron module is not allowed.');
 		}
 		if (!in_array($this->request->getRemoteAddress(), (array) $this->settings->modules->cron->allowedIps)) {
-			throw new AuthenticationException('Your IP (' . $ip . ') is not allowed.');
+			throw new ForbiddenRequestException('Your IP (' . $ip . ') is not allowed.');
 		}
 	}
 
