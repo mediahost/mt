@@ -29,33 +29,41 @@ class NewsletterPresenter extends BasePresenter
 		/* @var $statuses Status[] */
 		$statuses = $this->em->getRepository(Status::getClassName())->findBy(['status' => Message::STATUS_RUNNING], [], $quantity);
 
-		foreach ($statuses as $status) {
-			if ($status->message->locale === NULL) {
-				$this->translator->setLocale($status->subscriber->locale);
-			} else {
-				$this->translator->setLocale($status->message->locale);
+		if (count($statuses) > 0) {
+			foreach ($statuses as $status) {
+				if ($status->message->locale === NULL) {
+					$this->translator->setLocale($status->subscriber->locale);
+				} else {
+					$this->translator->setLocale($status->message->locale);
+				}
+
+				$message = $this->iNewsletterMessageFactory->create();
+				$message->addTo($status->email)
+						->setSubject($status->message->subject)
+						->addParameter('message', $status->message);
+
+				if ($status->subscriber) {
+					$message->addParameter('subscriber', $status->subscriber);
+				}
+
+				try {
+					$message->send();
+				} catch (SendException $e) {
+					$this->status = parent::STATUS_ERROR;
+					$this->message = 'One or more messages has not been sent, see log.';
+					Debugger::log($e, ILogger::EXCEPTION);
+				}
+
+				$status->setSent(new DateTime)
+						->setStatus(Message::STATUS_SENT);
+				$this->em->flush($status);
 			}
 
-			$message = $this->iNewsletterMessageFactory->create();
-			$message->addTo($status->email)
-					->setSubject($status->message->subject)
-					->addParameter('message', $status->message);
-
-			if ($status->subscriber) {
-				$message->addParameter('subscriber', $status->subscriber);
+			if ($this->status !== parent::STATUS_ERROR) {
+				$this->message = 'All messages has been succesfully sent!';
 			}
-
-			try {
-				$message->send();
-			} catch (SendException $e) {
-				$this->status = parent::STATUS_ERROR;
-				$this->message = 'One or more messages has not been sent, see log.';
-				Debugger::log($e, ILogger::EXCEPTION);
-			}
-
-			$status->setSent(new DateTime)
-					->setStatus(Message::STATUS_SENT);
-			$this->em->flush($status);
+		} else {
+			$this->message = 'There\'s nothing to send!';
 		}
 	}
 

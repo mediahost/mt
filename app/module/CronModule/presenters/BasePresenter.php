@@ -4,6 +4,7 @@ namespace App\CronModule\Presenters;
 
 use App\BaseModule\Presenters\BasePresenter as BaseBasePresenter;
 use Nette\Application\ForbiddenRequestException;
+use Nette\Application\Responses\TextResponse;
 use Nette\Http\Request;
 use Nette\Security\AuthenticationException;
 
@@ -21,7 +22,7 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	/** @var string */
 	protected $message;
-	
+
 	protected function startup()
 	{
 		parent::startup();
@@ -41,9 +42,14 @@ abstract class BasePresenter extends BaseBasePresenter
 			$this->status = self::STATUS_ERROR;
 			$this->message = 'No action';
 		}
-		$this->template->status = $this->status;
-		$this->template->message = $this->message;
-		$this->setView('../status');
+
+		$response = $this->status;
+
+		if ($this->message) {
+			$response .= ': ' . $this->message;
+		}
+
+		$this->sendResponse(new TextResponse($response));
 	}
 
 }
