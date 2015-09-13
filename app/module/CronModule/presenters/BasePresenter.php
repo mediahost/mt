@@ -6,7 +6,6 @@ use App\BaseModule\Presenters\BasePresenter as BaseBasePresenter;
 use Nette\Application\ForbiddenRequestException;
 use Nette\Application\Responses\TextResponse;
 use Nette\Http\Request;
-use Nette\Security\AuthenticationException;
 
 abstract class BasePresenter extends BaseBasePresenter
 {
