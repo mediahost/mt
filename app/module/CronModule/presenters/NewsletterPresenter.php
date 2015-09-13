@@ -67,4 +67,25 @@ class NewsletterPresenter extends BasePresenter
 		}
 	}
 
+	public function actionCheckMessageStatus()
+	{
+		$this->status = parent::STATUS_OK;
+
+		$messages = $this->em->getRepository(Message::getClassName())->findBy([
+			'status' => Message::STATUS_RUNNING,
+		]);
+
+		foreach ($messages as $message) {
+			$statuses = $this->em->getRepository(Status::getClassName())->findBy([
+				'message' => $message,
+				'status' => Message::STATUS_RUNNING,
+			]);
+
+			if (count($statuses) === 0) {
+				$message->status = Message::STATUS_SENT;
+				$this->em->flush();
+			}
+		}
+	}
+
 }
