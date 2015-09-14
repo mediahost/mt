@@ -47,9 +47,12 @@ headline:
 	summary: 'Souhrn objednávky'
 	selectShipping: 'Zvolte dopravu'
 	selectPayment: 'Zvolte platbu'
+	freeShipping: 'Možnost dopravy zdarma'
 
 youCanSign: 'Můžete se <a data-toggle="modal" href="%link%">přihlásit</a>, urychlíte si vyplnění údajů.'
 agreement: 'Při pokračování v nákupu souhlasíte s <a href="%link%" target="_blank">obchodními podmínkami</a>.'
+buyMore: 'Nakupte ještě za %value% a dopravné bude zdarma.'
+buySpecialMore: 'Nebo nakupte ještě za %value% v těchto kategoriích: %categories% a dopravné bude také zadarmo.'
 
 shipping: 'Doprava'
 payment: 'Platba'
