@@ -83,11 +83,16 @@ class NewsletterFacade extends Object
 			$subscriber = $user->subscriber;
 		} elseif (is_string($identifier)) {
 			$subscriber = $this->findSubscriber($identifier);
+
+			if ($subscriber === NULL) {
+				return;
+			}
+			
 			$user = $subscriber->user;
 		} else {
 			throw new InvalidArgumentException('Argument must be Subscriber, User or e-mail');
 		}
-		
+
 		foreach ($subscriber->statuses as $status) {
 			$status->subscriber = NULL;
 		}
