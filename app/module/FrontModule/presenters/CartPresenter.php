@@ -8,9 +8,14 @@ use App\Components\Basket\Form\IPaymentsFactory;
 use App\Components\Basket\Form\IPersonalFactory;
 use App\Components\Basket\Form\Payments;
 use App\Components\Basket\Form\Personal;
+use App\Helpers;
+use App\Model\Entity\Category;
 use App\Model\Entity\Order;
+use App\Model\Entity\Price;
+use App\Model\Entity\Shipping;
 use App\Model\Facade\Exception\ItemsIsntOnStockException;
 use Doctrine\ORM\NoResultException;
+use Nette\Utils\Html;
 
 class CartPresenter extends BasePresenter
 {
@@ -24,9 +29,37 @@ class CartPresenter extends BasePresenter
 	/** @var IPersonalFactory @inject */
 	public $iPersonalFactory;
 
-	public function actionDefault()
+	public function renderDefault()
 	{
-		
+		$categoryRepo = $this->em->getRepository(Category::getClassName());
+		$specialCategoriesIds = Category::getSpecialCategories();
+		$specialCategoriesLinks = NULL;
+		foreach ($specialCategoriesIds as $specialCategoryId) {
+			$specialCategory = $categoryRepo->find($specialCategoryId);
+			if ($specialCategory) {
+				$specialCategory->setCurrentLocale($this->locale);
+				$link = $this->link('Category:', $specialCategory->id);
+				$specialCategoryLink = Html::el('a')->href($link)->setText($specialCategory->name);
+				$specialCategoriesLinks = Helpers::concatStrings(', ', $specialCategoriesLinks, $specialCategoryLink);
+			}
+		}
+
+		$basket = $this->basketFacade->basket;
+		$shippingRepo = $this->em->getRepository(Shipping::getClassName());
+		$shipping = $shippingRepo->find(Shipping::DPD);
+
+		$freeShippingPrice = $shipping->freePrice->withoutVat;
+		$productsTotal = $basket->getItemsTotalPrice(NULL, $this->priceLevel, FALSE);
+		$specialTotal = $basket->getSumOfItemsInSpecialCategory($this->priceLevel, FALSE);
+
+		$buyMore = $freeShippingPrice - $productsTotal;
+		$buySpecialMore = $freeShippingPrice - $specialTotal;
+
+		if ($buyMore > 0) {
+			$this->template->buyMore = $this->exchange->format($buyMore);
+			$this->template->buySpecialMore = $this->exchange->format($buySpecialMore);
+			$this->template->specialCategoriesLinks = $specialCategoriesLinks;
+		}
 	}
 
 	public function actionPayments()
@@ -45,11 +78,11 @@ class CartPresenter extends BasePresenter
 		$this->checkEmptyCart();
 		$this->checkSelectedPayments();
 		$this->checkFilledAddress();
-		
+
 		if (!$this->basketFacade->isAllItemsInStore()) {
 			$this->redirect('default');
 		}
-		
+
 		$this->template->termsLink = $this->link('Page:terms');
 	}
 
@@ -147,6 +180,7 @@ class CartPresenter extends BasePresenter
 	public function createComponentPayments()
 	{
 		$control = $this->iPaymentsFactory->create();
+		$control->setPriceLevel($this->priceLevel);
 		$control->setAjax();
 		$control->onSend = function () {
 			$this->redirect('address');

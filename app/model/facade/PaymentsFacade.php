@@ -22,37 +22,37 @@ class PaymentsFacade extends Object
 	/** @var ExchangeHelper @inject */
 	public $exchange;
 
-	public function getPaymentsList(Basket $basket)
+	public function getPaymentsList(Basket $basket, $level = NULL, $withVat = TRUE)
 	{
 		$paymentsList = [];
 		$paymentsRepo = $this->em->getRepository(Payment::getClassName());
 		$payments = $paymentsRepo->findAll();
 		foreach ($payments as $payment) {
 			if ($payment->active) {
-				$paymentsList[$payment->id] = $this->getPaymentShippingFormat($payment, $basket);
+				$paymentsList[$payment->id] = $this->getPaymentShippingFormat($payment, $basket, $level, $withVat);
 			}
 		}
 		return $paymentsList;
 	}
 
-	public function getShippingsList(Basket $basket)
+	public function getShippingsList(Basket $basket, $level = NULL, $withVat = TRUE)
 	{
 		$shippingsList = [];
 		$shippingsRepo = $this->em->getRepository(Shipping::getClassName());
 		$shippings = $shippingsRepo->findAll();
 		foreach ($shippings as $shipping) {
 			if ($shipping->active) {
-				$shippingsList[$shipping->id] = $this->getPaymentShippingFormat($shipping, $basket);
+				$shippingsList[$shipping->id] = $this->getPaymentShippingFormat($shipping, $basket, $level, $withVat);
 			}
 		}
 		return $shippingsList;
 	}
-	
-	private function getPaymentShippingFormat($paymentOrShipping, Basket $basket, $withVat = TRUE)
+
+	private function getPaymentShippingFormat($paymentOrShipping, Basket $basket, $level = NULL, $withVat = TRUE)
 	{
 		$name = $this->translator->translate($paymentOrShipping);
 		$freeName = $this->translator->translate('cart.free');
-		$value = $paymentOrShipping->getPrice($basket);
+		$value = $paymentOrShipping->getPrice($basket, $level);
 		$price = $value->withVat > 0 ? $this->exchange->format($value, NULL, NULL, $withVat) : $freeName;
 		return "{$name} ({$price})";
 	}
