@@ -45,13 +45,13 @@ class Payment extends BaseEntity
 		parent::__construct();
 	}
 
-	public function getPrice(Basket $basket = NULL)
+	public function getPrice(Basket $basket = NULL, $level = NULL)
 	{
-		$price = $basket ? $this->getPriceByBasket($basket) : $this->price;
+		$price = $basket ? $this->getPriceByBasket($basket, $level) : $this->price;
 		return new Price($this->vat, $price);
 	}
 
-	private function getPriceByBasket(Basket $basket)
+	private function getPriceByBasket(Basket $basket, $level = NULL)
 	{
 		return $this->price;
 	}

@@ -147,6 +147,7 @@ class CartPresenter extends BasePresenter
 	public function createComponentPayments()
 	{
 		$control = $this->iPaymentsFactory->create();
+		$control->setPriceLevel($this->priceLevel);
 		$control->setAjax();
 		$control->onSend = function () {
 			$this->redirect('address');
