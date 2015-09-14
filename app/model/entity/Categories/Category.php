@@ -95,5 +95,20 @@ class Category extends BaseTranslatable
 	{
 		return $this->id === NULL;
 	}
+	
+	public static function getSpecialCategories()
+	{
+		// TODO: fill by right IDS
+		$idNahradneDiely = 2;
+		$idPrislusenstvi = 3;
+		$idUsbKluce = 4;
+		$idPreServis = 5;
+		return [
+			$idNahradneDiely,
+			$idPrislusenstvi,
+			$idUsbKluce,
+			$idPreServis,
+		];
+	}
 
 }

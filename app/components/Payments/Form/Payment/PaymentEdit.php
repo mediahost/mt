@@ -49,7 +49,13 @@ class PaymentEdit extends BaseControl
 		$shippings = $shippingRepo->findPairs('name');
 
 		if ($this->user->isAllowed('payments', 'editAll')) {
+			$form->addGroup('Superadmin part');
 			$form->addCheckSwitch('active', 'Active', 'YES', 'NO');
+//			$form->addCheckSwitch('cond1', 'Apply condition #1', 'YES', 'NO');
+//			$form->addCheckSwitch('cond2', 'Apply condition #2', 'YES', 'NO');
+			$form->addText('free', 'Free price')
+				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
+			$form->addGroup('Admin part');
 		}
 
 		$form->addText('price', 'Price')
@@ -97,6 +103,15 @@ class PaymentEdit extends BaseControl
 		if (isset($values->active)) {
 			$this->payment->active = $values->active;
 		}
+		if (isset($values->cond1)) {
+			$this->payment->useCond1 = $values->cond1;
+		}
+		if (isset($values->cond2)) {
+			$this->payment->useCond2 = $values->cond2;
+		}
+		if (isset($values->free)) {
+			$this->payment->setFreePrice($values->free, $values->with_vat);
+		}
 
 		return $this;
 	}
@@ -113,6 +128,8 @@ class PaymentEdit extends BaseControl
 	{
 		$values = [
 			'active' => $this->payment->active,
+			'cond1' => $this->payment->useCond1,
+			'cond2' => $this->payment->useCond2,
 		];
 		foreach ($this->payment->shippings as $shipping) {
 			$values['shippings'][] = $shipping->id;
@@ -122,6 +139,11 @@ class PaymentEdit extends BaseControl
 				'price' => $this->defaultWithVat ? $this->payment->price->withVat : $this->payment->price->withoutVat,
 				'with_vat' => $this->defaultWithVat,
 				'vat' => $this->payment->vat->id,
+			];
+		}
+		if ($this->payment->freePrice) {
+			$values += [
+				'free' => $this->defaultWithVat ? $this->payment->freePrice->withVat : $this->payment->freePrice->withoutVat,
 			];
 		}
 		return $values;

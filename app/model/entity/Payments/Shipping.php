@@ -11,9 +11,12 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  * @ORM\Entity(repositoryClass="App\Model\Repository\ShippingRepository")
  *
  * @property bool $active
+ * @property bool $useCond1
+ * @property bool $useCond2
  * @property bool $needAddress
  * @property string $name
  * @property Price $price
+ * @property Price $freePrice
  * @property ArrayCollection $payments
  */
 class Shipping extends BaseEntity
@@ -23,11 +26,20 @@ class Shipping extends BaseEntity
 	const CZECH_POST = 2;
 	const SLOVAK_POST = 3;
 	const PPL = 4;
+	
+	const SPECIAL_LIMIT = 50; // with VAT
+	const SPECIAL_PRICE = 1.9; // with VAT
 
 	use Identifier;
 
 	/** @ORM\Column(type="boolean") */
 	protected $active;
+
+	/** @ORM\Column(type="boolean") */
+	protected $useCond1;
+
+	/** @ORM\Column(type="boolean") */
+	protected $useCond2;
 
 	/** @ORM\Column(type="boolean") */
 	protected $needAddress;
@@ -44,6 +56,9 @@ class Shipping extends BaseEntity
 	/** @ORM\Column(type="float", nullable=true) */
 	private $price;
 
+	/** @ORM\Column(type="float", nullable=true) */
+	private $freePrice;
+
 	public function __construct()
 	{
 		$this->payments = new ArrayCollection();
@@ -58,13 +73,81 @@ class Shipping extends BaseEntity
 
 	private function getPriceByBasket(Basket $basket, $level = NULL)
 	{
-		return $this->price;
+		$price = $this->price;
+		if ($this->useCond1) {
+			$price = $this->applyCond1($price, $basket, $level);
+		}
+		if ($this->useCond2) {
+			$price = $this->applyCond2($price, $basket, $level);
+		}
+		return $this->applyFree($price, $basket, $level);
+	}
+
+	/**
+	 * Pokud je suma produktů ze speciální kategorie nižší než speciální limit,
+	 * pak bude mít poštovné speciální cenu
+	 * @param type $price
+	 * @param Basket $basket
+	 * @param type $level
+	 * @return type
+	 */
+	private function applyCond1($price, Basket $basket, $level = NULL)
+	{
+		$specialLimit = new Price($this->vat, self::SPECIAL_LIMIT, FALSE);
+		$specialPrice = new Price($this->vat, self::SPECIAL_PRICE, FALSE);
+		if ($basket->hasItemInSpecialCategory()) {
+			$specialSum = $basket->getSumOfItemsInSpecialCategory($level, FALSE);
+			if ($specialSum <= $specialLimit->withoutVat && $this->price > $specialPrice->withoutVat) {
+				$price = $specialPrice->withoutVat;
+			}
+		}
+		return $price;
+	}
+
+	/**
+	 * Pokud je suma produktů ze speciální kategorie vyšší než speciální limit,
+	 * pak bude poštovné zdarma
+	 * @param type $price
+	 * @param Basket $basket
+	 * @param type $level
+	 * @return type
+	 */
+	private function applyCond2($price, Basket $basket, $level = NULL)
+	{
+		$specialLimit = new Price($this->vat, self::SPECIAL_LIMIT, FALSE);
+		if ($basket->hasItemInSpecialCategory()) {
+			$specialSum = $basket->getSumOfItemsInSpecialCategory($level, FALSE);
+			if ($specialSum > $specialLimit->withoutVat) {
+				$price = 0;
+			}
+		}
+		return $price;
+	}
+
+	private function applyFree($price, Basket $basket, $level = NULL)
+	{
+		if ($this->freePrice > 0 && $basket->getItemsTotalPrice(NULL, $level, FALSE) > $this->freePrice) {
+			$price = 0;
+		}
+		return $price;
 	}
 
 	public function setPrice($value, $withVat = FALSE)
 	{
 		$price = new Price($this->vat, $value, !$withVat);
 		$this->price = $price->withoutVat;
+		return $this;
+	}
+
+	public function getFreePrice()
+	{
+		return new Price($this->vat, $this->freePrice);
+	}
+
+	public function setFreePrice($value, $withVat = FALSE)
+	{
+		$price = new Price($this->vat, $value, !$withVat);
+		$this->freePrice = $price->withoutVat;
 		return $this;
 	}
 

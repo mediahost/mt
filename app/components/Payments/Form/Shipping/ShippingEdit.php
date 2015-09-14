@@ -45,8 +45,16 @@ class ShippingEdit extends BaseControl
 		$form->setRenderer(new MetronicFormRenderer());
 
 		if ($this->user->isAllowed('payments', 'editAll')) {
+			$form->addGroup('Superadmin part');
 			$form->addCheckSwitch('active', 'Active', 'YES', 'NO');
 			$form->addCheckSwitch('needAddress', 'Need Address', 'YES', 'NO');
+			$form->addCheckSwitch('cond1', 'Apply condition #1', 'YES', 'NO')
+					->setOption('description', 'If sum of products in special category is lower then special limit, then price has special value.');
+			$form->addCheckSwitch('cond2', 'Apply condition #2', 'YES', 'NO')
+					->setOption('description', 'If sum of products in special category is bigger then special limit, then price has zero value.');
+			$form->addText('free', 'Free price')
+				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
+			$form->addGroup('Admin part');
 		}
 
 		$form->addText('price', 'Price')
@@ -85,6 +93,15 @@ class ShippingEdit extends BaseControl
 		if (isset($values->needAddress)) {
 			$this->shipping->needAddress = $values->needAddress;
 		}
+		if (isset($values->cond1)) {
+			$this->shipping->useCond1 = $values->cond1;
+		}
+		if (isset($values->cond2)) {
+			$this->shipping->useCond2 = $values->cond2;
+		}
+		if (isset($values->free)) {
+			$this->shipping->setFreePrice($values->free, $values->with_vat);
+		}
 
 		return $this;
 	}
@@ -102,12 +119,19 @@ class ShippingEdit extends BaseControl
 		$values = [
 			'active' => $this->shipping->active,
 			'needAddress' => $this->shipping->needAddress,
+			'cond1' => $this->shipping->useCond1,
+			'cond2' => $this->shipping->useCond2,
 		];
 		if ($this->shipping->price) {
 			$values += [
 				'price' => $this->defaultWithVat ? $this->shipping->price->withVat : $this->shipping->price->withoutVat,
 				'with_vat' => $this->defaultWithVat,
 				'vat' => $this->shipping->vat->id,
+			];
+		}
+		if ($this->shipping->freePrice) {
+			$values += [
+				'free' => $this->defaultWithVat ? $this->shipping->freePrice->withVat : $this->shipping->freePrice->withoutVat,
 			];
 		}
 		return $values;
