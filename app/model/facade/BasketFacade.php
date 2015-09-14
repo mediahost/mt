@@ -5,6 +5,7 @@ namespace App\Model\Facade;
 use App\Model\Entity\Address;
 use App\Model\Entity\Basket;
 use App\Model\Entity\Payment;
+use App\Model\Entity\Price;
 use App\Model\Entity\Shipping;
 use App\Model\Entity\Stock;
 use App\Model\Facade\Exception\InsufficientQuantityException;
@@ -101,6 +102,13 @@ class BasketFacade extends Object
 		return $basket->shipping;
 	}
 
+	/** @var Price */
+	public function getShippingPrice()
+	{
+		$basket = $this->getBasket();
+		return $basket->shipping->getPrice($basket);
+	}
+
 	/** @var BasketFacade */
 	public function setPayment(Payment $payment)
 	{
@@ -116,6 +124,13 @@ class BasketFacade extends Object
 	{
 		$basket = $this->getBasket();
 		return $basket->payment;
+	}
+
+	/** @var Price */
+	public function getPaymentPrice()
+	{
+		$basket = $this->getBasket();
+		return $basket->payment->getPrice($basket);
 	}
 
 	public function setAddress($mail, Address $billing = NULL, Address $shipping = NULL, $removeNull = TRUE)
