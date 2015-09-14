@@ -25,7 +25,8 @@ class Shipping extends BaseEntity
 	const PERSONAL = 1;
 	const CZECH_POST = 2;
 	const SLOVAK_POST = 3;
-	const PPL = 4;
+	const DPD = 4;
+	const PPL = 5;
 	
 	const SPECIAL_LIMIT = 50; // with VAT
 	const SPECIAL_PRICE = 1.9; // with VAT

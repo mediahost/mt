@@ -47,9 +47,12 @@ headline:
 	summary: 'Order Summary'
 	selectShipping: 'Select Shipping Option'
 	selectPayment: 'Select Payment Option'
+	freeShipping: 'The possibility of free shipping'
 
 youCanSign: 'You can <a data-toggle="modal" href="%link%">sign in</a> for better filling data.'
 agreement: 'By clicking Complete Order you agree with our <a href="%link%" target="_blank">Terms & Conditions</a>.'
+buyMore: 'Buy more for %value% and shipping will be free.'
+buySpecialMore: 'Or buy more for %value% in the following categories: %categories% and shipping will also be free.'
 
 shipping: 'Shipping'
 payment: 'Payment'

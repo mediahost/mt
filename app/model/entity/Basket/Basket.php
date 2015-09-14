@@ -201,6 +201,7 @@ class Basket extends BaseEntity
 	{
 		$totalPrice = 0;
 		foreach ($this->items as $item) {
+			/* @var $item BasketItem */
 			$totalPrice += $item->getTotalPrice($exchange, $level, $withVat);
 		}
 		return $totalPrice;
