@@ -19,6 +19,9 @@ class Payments extends BaseControl
 	/** @var PaymentsFacade @inject */
 	public $paymentFacade;
 
+	/** @var int */
+	private $priceLevel = NULL;
+
 	// <editor-fold desc="events">
 
 	/** @var array */
@@ -37,8 +40,8 @@ class Payments extends BaseControl
 		}
 
 		$basket = $this->basketFacade->getBasket();
-		$shippings = $this->paymentFacade->getShippingsList($basket);
-		$payments = $this->paymentFacade->getPaymentsList($basket);
+		$shippings = $this->paymentFacade->getShippingsList($basket, $this->priceLevel);
+		$payments = $this->paymentFacade->getPaymentsList($basket, $this->priceLevel);
 
 		$form->addRadioList('shipping', 'cart.headline.selectShipping', $shippings);
 		$form->addRadioList('payment', 'cart.headline.selectPayment', $payments);
@@ -122,7 +125,7 @@ class Payments extends BaseControl
 	protected function getPaymentsPrice()
 	{
 		$basket = $this->basketFacade->getBasket();
-		return $basket->getPaymentsPrice();
+		return $basket->getPaymentsPrice(NULL, $this->priceLevel);
 	}
 
 	public function render()
@@ -130,6 +133,16 @@ class Payments extends BaseControl
 		$this->template->price = $this->getPaymentsPrice();
 		parent::render();
 	}
+
+	// <editor-fold desc="setters & getters">
+
+	public function setPriceLevel($level)
+	{
+		$this->priceLevel = $level;
+		return $this;
+	}
+
+	// </editor-fold>
 
 }
 

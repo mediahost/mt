@@ -103,10 +103,10 @@ class BasketFacade extends Object
 	}
 
 	/** @var Price */
-	public function getShippingPrice()
+	public function getShippingPrice($level = NULL)
 	{
 		$basket = $this->getBasket();
-		return $basket->shipping->getPrice($basket);
+		return $basket->shipping->getPrice($basket, $level);
 	}
 
 	/** @var BasketFacade */
@@ -127,10 +127,10 @@ class BasketFacade extends Object
 	}
 
 	/** @var Price */
-	public function getPaymentPrice()
+	public function getPaymentPrice($level = NULL)
 	{
 		$basket = $this->getBasket();
-		return $basket->payment->getPrice($basket);
+		return $basket->payment->getPrice($basket, $level);
 	}
 
 	public function setAddress($mail, Address $billing = NULL, Address $shipping = NULL, $removeNull = TRUE)
