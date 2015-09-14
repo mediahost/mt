@@ -11,8 +11,11 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  * @ORM\Entity(repositoryClass="App\Model\Repository\PaymentRepository")
  *
  * @property bool $active
+ * @property bool $useCond1
+ * @property bool $useCond2
  * @property string $name
  * @property Price $price
+ * @property Price $freePrice
  * @property ArrayCollection $shippings
  */
 class Payment extends BaseEntity
@@ -27,6 +30,12 @@ class Payment extends BaseEntity
 	/** @ORM\Column(type="boolean") */
 	protected $active;
 
+	/** @ORM\Column(type="boolean") */
+	protected $useCond1;
+
+	/** @ORM\Column(type="boolean") */
+	protected $useCond2;
+
 	/** @ORM\Column(type="string", nullable=true) */
 	protected $name;
 
@@ -38,6 +47,9 @@ class Payment extends BaseEntity
 
 	/** @ORM\Column(type="float", nullable=true) */
 	private $price;
+
+	/** @ORM\Column(type="float", nullable=true) */
+	private $freePrice;
 
 	public function __construct()
 	{
@@ -53,13 +65,50 @@ class Payment extends BaseEntity
 
 	private function getPriceByBasket(Basket $basket, $level = NULL)
 	{
-		return $this->price;
+		$price = $this->price;
+		if ($this->useCond1) {
+			$price = $this->applyCond1($price, $basket, $level);
+		}
+		if ($this->useCond2) {
+			$price = $this->applyCond2($price, $basket, $level);
+		}		
+		return $this->applyFree($price, $basket, $level);
+	}
+	
+	private function applyCond1($price, Basket $basket, $level = NULL)
+	{
+		return $price;
+	}
+	
+	private function applyCond2($price, Basket $basket, $level = NULL)
+	{
+		return $price;
+	}
+	
+	private function applyFree($price, Basket $basket, $level = NULL)
+	{
+		if ($this->freePrice > 0 && $basket->getItemsTotalPrice(NULL, $level, FALSE) > $this->freePrice) {
+			$price = 0;
+		}
+		return $price;
 	}
 
 	public function setPrice($value, $withVat = FALSE)
 	{
 		$price = new Price($this->vat, $value, !$withVat);
 		$this->price = $price->withoutVat;
+		return $this;
+	}
+
+	public function getFreePrice()
+	{
+		return new Price($this->vat, $this->freePrice);
+	}
+
+	public function setFreePrice($value, $withVat = FALSE)
+	{
+		$price = new Price($this->vat, $value, !$withVat);
+		$this->freePrice = $price->withoutVat;
 		return $this;
 	}
 	

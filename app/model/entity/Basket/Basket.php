@@ -119,6 +119,30 @@ class Basket extends BaseEntity
 		return TRUE;
 	}
 	
+	public function hasItemInSpecialCategory()
+	{
+		$specialCategories = Category::getSpecialCategories();
+		$isInSpecialCategory = function ($key, BasketItem $item) use ($specialCategories) {
+			return $item->stock->product->isInCategories($specialCategories);
+		};
+		return $this->items->exists($isInSpecialCategory);
+	}
+	
+	public function getSumOfItemsInSpecialCategory($level = NULL, $withVat = FALSE)
+	{
+		$sum = 0;
+		$specialCategories = Category::getSpecialCategories();
+		$isInSpecialCategory = function ($key, BasketItem $item) use ($specialCategories, &$sum, $level, $withVat) {
+			if ($item->stock->product->isInCategories($specialCategories)) {
+				$price = $item->stock->getPrice($level);
+				$sum += $withVat ? $price->withVat : $price->withoutVat;
+			}
+			return TRUE;
+		};
+		$this->items->forAll($isInSpecialCategory);
+		return $sum;
+	}
+	
 	public function needAddress()
 	{
 		return $this->shipping && $this->shipping->needAddress;
