@@ -13,6 +13,11 @@
 	<div class="row margin-bottom-20">
 		<div class="col-md-12 col-sm-12">
 			{snippet goodsList}
+				<div class="note note-info" n:if="isset($buyMore) && isset($buySpecialMore) && isset($specialCategoriesLinks)">
+					<h4 class="block">{_'cart.headline.freeShipping'}</h4>
+					<p>{_'cart.buyMore', ['value' => $buyMore]}</p>
+					<p>{_'cart.buySpecialMore', ['value' => $buySpecialMore, 'categories' => $specialCategoriesLinks]|noescape}</p>
+				</div>
 				{control goodsList}
 			{/snippet}
 		</div>

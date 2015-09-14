@@ -40,13 +40,13 @@
 								</p>
 							</td>
 							<td class="goods-page-quantity">
-								<div n:class="product-quantity, $form['quantity'][$stock->id]->hasErrors() ? has-error">
-									{ifset $form['quantity'][$stock->id]}
+								{ifset $form['quantity'][$stock->id]}
+									<div n:class="product-quantity, $form['quantity'][$stock->id]->hasErrors() ? has-error">
 										{input $form['quantity'][$stock->id]}
-									{else}
-										<strong>{$item->quantity}x</strong>
-									{/ifset}
-								</div>
+									</div>
+								{else}
+									<strong>{$item->quantity}x</strong>
+								{/ifset}
 							</td>
 							<td class="goods-page-price">
 								<strong>{$stock->getPrice($priceLevel)|currencyVat}</strong>

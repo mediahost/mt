@@ -4,6 +4,7 @@ namespace App\Model\Entity\Traits;
 
 use App\Model\Entity\Category;
 use App\Model\Entity\Producer;
+use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
 
 /**
@@ -123,6 +124,31 @@ trait ProductCategories
 	public function removeAccessoryModel(ProducerModel $model)
 	{
 		return $this->accessoriesFor->removeElement($model);
+	}
+
+	public function isInCategory($category)
+	{
+		if ($category instanceof Category) {
+			$categoryId = $category->id;
+		} else {
+			$categoryId = $category;
+		}
+		foreach ($this->categories as $category) {
+			if ($category->id == $categoryId) {
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
+
+	public function isInCategories(array $categories)
+	{
+		foreach ($categories as $category) {
+			if ($this->isInCategory($category)) {
+				return TRUE;
+			}
+		}
+		return FALSE;
 	}
 
 }

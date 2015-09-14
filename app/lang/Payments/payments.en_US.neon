@@ -2,6 +2,7 @@ shipping:
 	personal: 'Personal'
 	czech_post: 'Czech Post'
 	slovak_post: 'Slovak Post'
+	dpd: 'DPD'
 	ppl: 'PPL'
 payment:
 	personal: 'Personal'

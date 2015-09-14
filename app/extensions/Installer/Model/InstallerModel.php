@@ -198,6 +198,7 @@ class InstallerModel extends Object
 			Shipping::PERSONAL => 'payments.shipping.personal',
 			Shipping::CZECH_POST => 'payments.shipping.czech_post',
 			Shipping::SLOVAK_POST => 'payments.shipping.slovak_post',
+			Shipping::DPD => 'payments.shipping.dpd',
 			Shipping::PPL => 'payments.shipping.ppl',
 		];
 

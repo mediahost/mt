@@ -119,6 +119,30 @@ class Basket extends BaseEntity
 		return TRUE;
 	}
 	
+	public function hasItemInSpecialCategory()
+	{
+		$specialCategories = Category::getSpecialCategories();
+		$isInSpecialCategory = function ($key, BasketItem $item) use ($specialCategories) {
+			return $item->stock->product->isInCategories($specialCategories);
+		};
+		return $this->items->exists($isInSpecialCategory);
+	}
+	
+	public function getSumOfItemsInSpecialCategory($level = NULL, $withVat = FALSE)
+	{
+		$sum = 0;
+		$specialCategories = Category::getSpecialCategories();
+		$isInSpecialCategory = function ($key, BasketItem $item) use ($specialCategories, &$sum, $level, $withVat) {
+			if ($item->stock->product->isInCategories($specialCategories)) {
+				$price = $item->stock->getPrice($level);
+				$sum += $withVat ? $price->withVat : $price->withoutVat;
+			}
+			return TRUE;
+		};
+		$this->items->forAll($isInSpecialCategory);
+		return $sum;
+	}
+	
 	public function needAddress()
 	{
 		return $this->shipping && $this->shipping->needAddress;
@@ -173,10 +197,11 @@ class Basket extends BaseEntity
 	}
 
 	/** @return float */
-	public function getItemsTotalPrice(Exchange $exchange, $level = NULL, $withVat = TRUE)
+	public function getItemsTotalPrice(Exchange $exchange = NULL, $level = NULL, $withVat = TRUE)
 	{
 		$totalPrice = 0;
 		foreach ($this->items as $item) {
+			/* @var $item BasketItem */
 			$totalPrice += $item->getTotalPrice($exchange, $level, $withVat);
 		}
 		return $totalPrice;
@@ -191,17 +216,17 @@ class Basket extends BaseEntity
 	}
 
 	/** @return float */
-	public function getPaymentsPrice(Exchange $exchange = NULL, $withVat = TRUE)
+	public function getPaymentsPrice(Exchange $exchange = NULL, $level = NULL, $withVat = TRUE)
 	{
 		$totalPrice = 0;
 		if ($this->shipping) {
-			$shippingPrice = $this->shipping->getPrice($this);
+			$shippingPrice = $this->shipping->getPrice($this, $level);
 			$priceValue = $withVat ? $shippingPrice->withVat : $shippingPrice->withoutVat;
 			$exchangedValue = $exchange ? $exchange->change($priceValue, NULL, NULL, Price::PRECISION) : $priceValue;			
 			$totalPrice += $exchangedValue;
 		}
 		if ($this->payment) {
-			$paymentPrice = $this->payment->getPrice($this);
+			$paymentPrice = $this->payment->getPrice($this, $level);
 			$priceValue = $withVat ? $paymentPrice->withVat : $paymentPrice->withoutVat;
 			$exchangedValue = $exchange ? $exchange->change($priceValue, NULL, NULL, Price::PRECISION) : $priceValue;			
 			$totalPrice += $exchangedValue;
@@ -214,7 +239,7 @@ class Basket extends BaseEntity
 	public function getTotalPrice(Exchange $exchange = NULL, $level = NULL, $withVat = TRUE)
 	{
 		$itemsTotal = $this->getItemsTotalPrice($exchange, $level, $withVat);
-		$paymentsTotal = $this->getPaymentsPrice($exchange, $withVat);
+		$paymentsTotal = $this->getPaymentsPrice($exchange, $level, $withVat);
 		return $itemsTotal + $paymentsTotal;
 	}
 
