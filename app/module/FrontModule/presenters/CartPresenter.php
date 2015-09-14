@@ -29,7 +29,7 @@ class CartPresenter extends BasePresenter
 	/** @var IPersonalFactory @inject */
 	public $iPersonalFactory;
 
-	public function actionDefault()
+	public function renderDefault()
 	{
 		$categoryRepo = $this->em->getRepository(Category::getClassName());
 		$specialCategoriesIds = Category::getSpecialCategories();
@@ -43,21 +43,23 @@ class CartPresenter extends BasePresenter
 				$specialCategoriesLinks = Helpers::concatStrings(', ', $specialCategoriesLinks, $specialCategoryLink);
 			}
 		}
-		
+
 		$basket = $this->basketFacade->basket;
 		$shippingRepo = $this->em->getRepository(Shipping::getClassName());
 		$shipping = $shippingRepo->find(Shipping::DPD);
-		
+
 		$freeShippingPrice = $shipping->freePrice->withoutVat;
 		$productsTotal = $basket->getItemsTotalPrice(NULL, $this->priceLevel, FALSE);
 		$specialTotal = $basket->getSumOfItemsInSpecialCategory($this->priceLevel, FALSE);
-		
+
 		$buyMore = $freeShippingPrice - $productsTotal;
 		$buySpecialMore = $freeShippingPrice - $specialTotal;
-		
-		$this->template->buyMore = $this->exchange->format($buyMore);
-		$this->template->buySpecialMore = $this->exchange->format($buySpecialMore);
-		$this->template->specialCategoriesLinks = $specialCategoriesLinks;
+
+		if ($buyMore > 0) {
+			$this->template->buyMore = $this->exchange->format($buyMore);
+			$this->template->buySpecialMore = $this->exchange->format($buySpecialMore);
+			$this->template->specialCategoriesLinks = $specialCategoriesLinks;
+		}
 	}
 
 	public function actionPayments()
@@ -76,11 +78,11 @@ class CartPresenter extends BasePresenter
 		$this->checkEmptyCart();
 		$this->checkSelectedPayments();
 		$this->checkFilledAddress();
-		
+
 		if (!$this->basketFacade->isAllItemsInStore()) {
 			$this->redirect('default');
 		}
-		
+
 		$this->template->termsLink = $this->link('Page:terms');
 	}
 
