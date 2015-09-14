@@ -51,7 +51,7 @@ class Payment extends BaseEntity
 		return new Price($this->vat, $price);
 	}
 
-	public function getPriceByBasket(Basket $basket)
+	private function getPriceByBasket(Basket $basket)
 	{
 		return $this->price;
 	}
