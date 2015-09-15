@@ -9,7 +9,7 @@ class NewsletterMessage extends BaseMessage
 
 	protected function beforeSend()
 	{
-		$this->setFrom($this->settings->modules->newsletter->email);
+		$this->setFrom($this->settings->mails->automatFrom, $this->settings->pageInfo->projectName);
 		parent::beforeSend();
 	}
 

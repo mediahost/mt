@@ -9,7 +9,7 @@ class TheirMessage extends BaseMessage
 
 	protected function beforeSend()
 	{
-		$this->setFrom($this->settings->modules->buyout->email);
+		$this->setFrom($this->settings->mails->automatFrom, $this->settings->pageInfo->projectName);
 		$this->setSubject($this->translator->translate('buyout.email.their.subject'));
 		parent::beforeSend();
 	}
