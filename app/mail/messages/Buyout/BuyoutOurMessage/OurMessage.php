@@ -5,11 +5,11 @@ namespace App\Mail\Messages\Buyout;
 class OurMessage extends BaseMessage
 {
 
-	protected function build()
+	protected function beforeSend()
 	{
 		$this->addTo($this->settings->modules->buyout->email);
-		$this->setSubject('Buyout request');
-		return parent::build();
+		$this->setSubject($this->translator->translate('buyout.email.our.subject'));
+		parent::beforeSend();
 	}
 
 }

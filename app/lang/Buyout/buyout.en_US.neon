@@ -1,0 +1,5 @@
+email:
+	their:
+		subject: 'Buyout request'
+	our:
+		subject: 'Buyout request'
