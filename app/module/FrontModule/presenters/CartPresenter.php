@@ -11,7 +11,6 @@ use App\Components\Basket\Form\Personal;
 use App\Helpers;
 use App\Model\Entity\Category;
 use App\Model\Entity\Order;
-use App\Model\Entity\Price;
 use App\Model\Entity\Shipping;
 use App\Model\Facade\Exception\ItemsIsntOnStockException;
 use Doctrine\ORM\NoResultException;
@@ -49,16 +48,21 @@ class CartPresenter extends BasePresenter
 		$shipping = $shippingRepo->find(Shipping::DPD);
 
 		$freeShippingPrice = $shipping->freePrice->withoutVat;
+		$specialFreeShippingPrice = Shipping::SPECIAL_LIMIT;
 		$productsTotal = $basket->getItemsTotalPrice(NULL, $this->priceLevel, FALSE);
 		$specialTotal = $basket->getSumOfItemsInSpecialCategory($this->priceLevel, FALSE);
 
 		$buyMore = $freeShippingPrice - $productsTotal;
-		$buySpecialMore = $freeShippingPrice - $specialTotal;
+		$buySpecialMore = $specialFreeShippingPrice - $specialTotal;
 
-		if ($buyMore > 0) {
-			$this->template->buyMore = $this->exchange->format($buyMore);
-			$this->template->buySpecialMore = $this->exchange->format($buySpecialMore);
-			$this->template->specialCategoriesLinks = $specialCategoriesLinks;
+		if (!$this->basketFacade->isEmpty()) {
+			if ($buyMore > 0) {
+				$this->template->buyMore = $this->exchange->format($buyMore);
+			}
+			if ($buySpecialMore > 0) {
+				$this->template->buySpecialMore = $this->exchange->format($buySpecialMore);
+				$this->template->specialCategoriesLinks = $specialCategoriesLinks;
+			}
 		}
 	}
 

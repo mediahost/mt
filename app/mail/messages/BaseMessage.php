@@ -50,6 +50,9 @@ abstract class BaseMessage extends Message
 	/** @var string */
 	protected $unsubscribeLink;
 
+	/** @var string */
+	protected $oldLocale;
+
 	/** @var ITemplate */
 	protected $template;
 
@@ -82,17 +85,20 @@ abstract class BaseMessage extends Message
 
 		return parent::build();
 	}
-
-	public function setNewsletter($unsubscribeLink = NULL)
+	
+	protected function changeLocale($locale)
 	{
-		$this->isNewsletter = TRUE;
-		$this->unsubscribeLink = $unsubscribeLink;
+		$this->oldLocale = $this->translator->getLocale();
+		$this->translator->setLocale($locale);
 	}
-
-	public function addParameter($paramName, $value)
+	
+	protected function changeCurrency($currency, $rate = NULL)
 	{
-		$this->params[$paramName] = $value;
-		return $this;
+		$this->exchange->setWeb($currency);
+		if ($rate) {
+			$rateRelated = ExchangeHelper::getRelatedRate($rate, $this->exchange[$currency]);
+			$this->exchange->addRate($currency, $rateRelated);
+		}
 	}
 
 	protected function beforeSend()
@@ -100,24 +106,44 @@ abstract class BaseMessage extends Message
 		
 	}
 
+	protected function afterSend()
+	{
+		if ($this->oldLocale) {
+			$this->translator->setLocale($this->oldLocale);
+		}
+	}
+
 	public function send()
 	{
 		$this->beforeSend();
 		$this->mailer->send($this);
+		$this->afterSend();
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="setters">
+
+	public function addParameter($paramName, $value)
+	{
+		$this->params[$paramName] = $value;
+		return $this;
+	}
+
+	public function setNewsletter($unsubscribeLink = NULL)
+	{
+		$this->isNewsletter = TRUE;
+		$this->unsubscribeLink = $unsubscribeLink;
+		
+		return $this;
+	}
 
 	public function setOrder(Order $order)
 	{
 		$this->order = $order;
 		$this->addParameter('order', $order);
-		$this->translator->setLocale($order->locale);
-		$this->exchange->setWeb($order->currency);
-		if ($order->rate) {
-			$rateRelated = ExchangeHelper::getRelatedRate($order->rate, $this->exchange[$order->currency]);
-			$this->exchange->addRate($order->currency, $rateRelated);
-		}
+		$this->changeLocale($order->locale);
+		$this->changeCurrency($order->currency, $order->rate);
+		
+		return $this;
 	}
 
 	// </editor-fold>
