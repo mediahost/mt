@@ -16,6 +16,7 @@ use Nette\Utils\Html;
  * @property string $city
  * @property string $zipcode
  * @property string $country
+ * @property string $countryFormat
  * @property string $phone
  * @property string $ico
  * @property string $icoVat
@@ -125,6 +126,16 @@ class Address extends BaseEntity
 		return (string) $this->name;
 	}
 	
+	public function getCityFormat()
+	{
+		return Helpers::concatStrings(' ', $this->zipcode, $this->city);
+	}
+	
+	public function getCountryFormat()
+	{
+		return $this->getCountry(TRUE);
+	}
+	
 	public function getCountry($formated = FALSE)
 	{
 		if ($formated) {
@@ -141,8 +152,8 @@ class Address extends BaseEntity
 		$lineSeparator = Html::el('br');
 		$name = $this->name;
 		$street = $this->street;
-		$city = Helpers::concatStrings(' ', $this->zipcode, $this->city);
-		$country = $this->getCountry(TRUE);
+		$city = $this->getCityFormat();
+		$country = $this->getCountryFormat();
 		$address = Helpers::concatStrings($lineSeparator, $name, $street, $city, $country);
 		return $address;
 	}

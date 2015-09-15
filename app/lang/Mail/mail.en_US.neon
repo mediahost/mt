@@ -1,0 +1,23 @@
+subject:
+	forgotten: 'Lost password'
+	createRegistration: 'Your registration'
+	verify: 'Verify your e-mail'
+	changeStateOrder: 'Your order #%id%'
+	createOrder: 'Your order #%id%'
+	createOrderShop: 'New order #%id%'
+order:
+	salutation: 'Dear customer'
+	headline: 'Order #%number%'
+	weWillInformYou: 'About the process you will be informed by e-mail.'
+	shopNotice: 'You have new order on your web %name%.'
+	change:
+		done:
+			successfullyCompleted: 'Your order has been successfully completed.'
+			lookingForward: 'We are looking forward to your next purchase.'
+		storno:
+			wasCanceled: 'Your order has been canceled.'
+			contactUs: 'In case of any discrepancy, please contact us.'
+		expeded:
+			hasBeenExpeded: 'Your order has been expeded.'
+	new:
+		recieved: 'thank you for your purchase, we have received your order correctly.'

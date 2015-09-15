@@ -12,6 +12,7 @@ use App\Model\Entity\Vat;
 use App\Model\Facade\VatFacade;
 use Nette\Security\User;
 use Nette\Utils\ArrayHash;
+use Nette\Utils\Html;
 
 class ShippingEdit extends BaseControl
 {
@@ -53,7 +54,7 @@ class ShippingEdit extends BaseControl
 			$form->addCheckSwitch('cond2', 'Apply condition #2', 'YES', 'NO')
 					->setOption('description', 'If sum of products in special category is bigger then special limit, then price has zero value.');
 			$form->addText('free', 'Free price')
-				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
+					->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
 			$form->addGroup('Admin part');
 		}
 
@@ -66,6 +67,16 @@ class ShippingEdit extends BaseControl
 
 		$form->addCheckSwitch('with_vat', 'With VAT', 'YES', 'NO')
 				->setDefaultValue($this->defaultWithVat);
+
+		$allowedTags = Html::el()->setText($this->translator->translate('Allowed tags') . ':');
+		$tagOrderNumber = Html::el()->setText('%order_number% - ' . $this->translator->translate('Order number'));
+		$separator = Html::el('br');
+		$description = $allowedTags
+				->add($separator)
+				->add($tagOrderNumber);
+		$form->addWysiHtml('html', 'Text', 10)
+						->setOption('description', $description)
+						->getControlPrototype()->class[] = 'page-html-content';
 
 		$form->addSubmit('save', 'Save');
 
@@ -103,6 +114,9 @@ class ShippingEdit extends BaseControl
 			$this->shipping->setFreePrice($values->free, $values->with_vat);
 		}
 
+		$this->shipping->translateAdd($this->translator->getLocale())->html = $values->html;
+		$this->shipping->mergeNewTranslations();
+
 		return $this;
 	}
 
@@ -116,11 +130,13 @@ class ShippingEdit extends BaseControl
 	/** @return array */
 	protected function getDefaults()
 	{
+		$this->shipping->setCurrentLocale($this->translator->getLocale());
 		$values = [
 			'active' => $this->shipping->active,
 			'needAddress' => $this->shipping->needAddress,
 			'cond1' => $this->shipping->useCond1,
 			'cond2' => $this->shipping->useCond2,
+			'html' => $this->shipping->html,
 		];
 		if ($this->shipping->price) {
 			$values += [
