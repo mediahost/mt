@@ -1,5 +1,17 @@
 email:
 	their:
 		subject: 'Buyout request'
+		template:
+			subtitle: 'Buyout from e-shop'
+			from: 'Your details'
 	our:
 		subject: 'Buyout request'
+		template:
+			subtitle: 'Buyout from e-shop'
+			from: 'Customer'
+	template:
+		model: 'Model' 
+		summary: 'Buyout price'
+		answer:
+			y: 'Yes'
+			n: 'No'

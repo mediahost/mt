@@ -1,5 +1,17 @@
 email:
 	their:
 		subject: 'Požadavek na výkup telefonu'
+		template:
+			subtitle: 'Výkup z e-shopu'
+			from: 'Vaše údaje'
 	our:
 		subject: 'Požadavek na výkup telefonu'
+		template:
+			subtitle: 'Výkup z e-shopu'
+			from: 'Zákazník'
+	template:
+		model: 'Model' 
+		summary: 'Výkupní cena'
+		answer:
+			y: 'Ano'
+			n: 'Ne'

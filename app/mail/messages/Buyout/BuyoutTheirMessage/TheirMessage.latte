@@ -1,39 +1,32 @@
-{layout '../@layout.latte'}
+{layout '../../@layout.latte'}
 
-{block content}
-<table class="container content" align="center">
-	<tr>
-		<td>
-			<table class="row note">
-				<tr>
-					<td class="wrapper last">
-						<h4 style="font-size: 22px;display: block;margin: 5px 0 15px 0;">
-							Požadavek na výkup telefonu
-						</h4>
-						<p>
-							Děkujeme Vám za zájem o výkup telefonu. V nejbližší době Vás kontaktuje
-							naše výkní oddělení. Pak si plácneme a bude to cajk!
-						</p>
-						
-						<h5>Osobní údaje</h5>
-						<p>E-mail: {$formData['email']}</p>
-						<p>Jméno a příjmení: {$formData['fullname']}</p>
-						
-						<h5>{$model->name}</h5>
-						<p>Výkupní cena: {$model->buyoutPrice}</p>
+{block subtitle}
+<font size="+1" color="#00285A">{_buyout.email.their.template.subtitle}</font>
+{/block}
 
-						<h6>Odpovědi</h6>
-						<div>
-							{foreach $formData['questions'] as $id => $answer}
-								<p>Otázka: {$model->questions[$id]->question->text}</p>
-								<p>Odpověď: {$answer}</p>
-							{/foreach}
-						</div>
-						<h6>Celkem:</h6>
-						{$summary}
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
+{block content}      
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+    <tbody>
+        <tr>
+            <td>
+                <p>{_buyout.email.their.template.from}: {$formData['fullname']} <a href="mailto:{$formData['email']}">{$formData['email']}</a></p>
+            </td>
+        </tr>
+    </tbody>
 </table>
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+    <tbody>
+        <tr>
+            <td>
+                <p>{_buyout.email.template.model}: <strong>{$model->name}</strong></p>
+                <p>{_buyout.email.template.summary}: <strong>{$summary|currency}</strong></p>
+                <ul>
+					{foreach $formData['questions'] as $id => $answer}
+						<li>{$model->questions[$id]->question->text} <i>{_'buyout.email.template.answer.' . $answer}</i></li>
+					{/foreach}
+                </ul>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{/block}

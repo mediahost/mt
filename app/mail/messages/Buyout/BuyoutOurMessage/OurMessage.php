@@ -2,6 +2,8 @@
 
 namespace App\Mail\Messages\Buyout;
 
+use App\Mail\Messages\BaseMessage;
+
 class OurMessage extends BaseMessage
 {
 
