@@ -75,7 +75,7 @@ class UserBasic extends BaseControl
 				->setRequired('Select any role');
 
 		$roleRepo = $this->em->getRepository(Role::getClassName());
-		$defaultRole = $roleRepo->findOneByName(Entity\Role::USER);
+		$defaultRole = $roleRepo->findOneByName(Role::USER);
 		if ($defaultRole && in_array($defaultRole->getId(), $this->getRoles())) {
 			$role->setDefaultValue($defaultRole->getId());
 		}
