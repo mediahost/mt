@@ -4,8 +4,7 @@ namespace App\Model\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
-use Kdyby\Doctrine\Entities\BaseEntity;
+use Knp\DoctrineBehaviors\Model;
 
 /**
  * @ORM\Entity(repositoryClass="App\Model\Repository\PaymentRepository")
@@ -14,27 +13,28 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  * @property bool $useCond1
  * @property bool $useCond2
  * @property string $name
+ * @property string $html
  * @property Price $price
  * @property Price $freePrice
  * @property ArrayCollection $shippings
  */
-class Payment extends BaseEntity
+class Payment extends BaseTranslatable
 {
 	
 	const PERSONAL = 1;
 	const ON_DELIVERY = 2;
 	const BANK_ACCOUNT = 3;
-
-	use Identifier;
+	
+	use Model\Translatable\Translatable;
 
 	/** @ORM\Column(type="boolean") */
 	protected $active;
 
 	/** @ORM\Column(type="boolean") */
-	protected $useCond1;
+	protected $useCond1 = FALSE;
 
 	/** @ORM\Column(type="boolean") */
-	protected $useCond2;
+	protected $useCond2 = FALSE;
 
 	/** @ORM\Column(type="string", nullable=true) */
 	protected $name;
@@ -51,10 +51,10 @@ class Payment extends BaseEntity
 	/** @ORM\Column(type="float", nullable=true) */
 	private $freePrice;
 
-	public function __construct()
+	public function __construct($currentLocale = NULL)
 	{
 		$this->shippings = new ArrayCollection();
-		parent::__construct();
+		parent::__construct($currentLocale);
 	}
 
 	public function getPrice(Basket $basket = NULL, $level = NULL)

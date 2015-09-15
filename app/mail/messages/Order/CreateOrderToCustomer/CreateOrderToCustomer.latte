@@ -1,0 +1,45 @@
+{layout '../../@layout.latte'}
+
+{includeblock '../orderSummary.latte'}
+
+{block content}
+<table class="container content" align="left" width="100%">
+	<tr>
+		<td>
+			<table class="row note">
+				<tr>
+					<td class="wrapper last">
+						<h4 style="font-size: 22px;display: block;margin: 5px 0 15px 0;">
+							{_'mail.order.headline', NULL, ['number' => $order->id]}
+						</h4>
+						<p>
+							{_'mail.order.salutation'},<br>
+							<br>
+							{_'mail.order.new.recieved'}<br>
+							{_'mail.order.weWillInformYou'}
+						</p>
+						
+						{var shipping => $order->shipping->origin}
+						{ifset $shipping}
+							{? $shipping->setCurrentLocale($locale)}
+							<p n:if="!empty((string) $shipping->html)">
+								{_$shipping->html, NULL, ['order_number' => $order->id]|noescape}
+							</p>
+						{/ifset}
+						
+						{var payment => $order->payment->origin}
+						{ifset $payment}
+							{? $payment->setCurrentLocale($locale)}
+							<p n:if="!empty((string) $payment->html)">
+								{_$payment->html, NULL, ['order_number' => $order->id]|noescape}
+							</p>
+						{/ifset}
+					</td>
+				</tr>
+			</table>
+
+			{include orderSummary}
+			<p>&nbsp;</p>
+		</td>
+	</tr>
+</table>

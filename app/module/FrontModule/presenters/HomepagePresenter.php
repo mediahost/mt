@@ -2,13 +2,8 @@
 
 namespace App\FrontModule\Presenters;
 
-use App\Model\Facade\PohodaFacade;
-
 class HomepagePresenter extends BasePresenter
 {
-	
-	/** @var PohodaFacade @inject */
-	public $pohodaFacade;
 
 	public function actionDefault($slider = TRUE, $brands = TRUE)
 	{
