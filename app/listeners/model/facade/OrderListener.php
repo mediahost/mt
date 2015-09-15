@@ -2,8 +2,15 @@
 
 namespace App\Listeners\Model\Facade;
 
+use App\Extensions\Settings\SettingsStorage;
+use App\Mail\Messages\Order\ChangeState\IDoneFactory;
+use App\Mail\Messages\Order\ChangeState\IExpededFactory;
+use App\Mail\Messages\Order\ChangeState\IStornoFactory;
+use App\Mail\Messages\Order\ICreateOrderToCustomerFactory;
+use App\Mail\Messages\Order\ICreateOrderToShopFactory;
 use App\Model\Entity\Order;
 use App\Model\Entity\OrderState;
+use App\Model\Entity\OrderStateType;
 use App\Model\Facade\OrderFacade;
 use Kdyby\Events\Subscriber;
 use Nette\Object;
@@ -14,9 +21,23 @@ class OrderListener extends Object implements Subscriber
 	/** @var OrderFacade @inject */
 	public $orderFacade;
 
-	const CHANGE_STATE_OK_TO_NOK = 1;
-	const CHANGE_STATE_NOK_TO_OK = 2;
-	const CHANGE_STATE_NO_CHANGE = 3;
+	/** @var SettingsStorage @inject */
+	public $settings;
+
+	/** @var ICreateOrderToCustomerFactory @inject */
+	public $createOrderToCustomerMessage;
+
+	/** @var ICreateOrderToShopFactory @inject */
+	public $createOrderToShopMessage;
+
+	/** @var IExpededFactory @inject */
+	public $changeStateOrderExpededMessage;
+
+	/** @var IDoneFactory @inject */
+	public $changeStateOrderDoneMessage;
+
+	/** @var IStornoFactory @inject */
+	public $changeStateOrderStornoMessage;
 
 	public function getSubscribedEvents()
 	{
@@ -29,19 +50,50 @@ class OrderListener extends Object implements Subscriber
 
 	public function onCreate(Order $order)
 	{
-		// SEND MAIL
+		$messageForCustomer = $this->createOrderToCustomerMessage->create();
+		$messageForCustomer->setOrder($order);
+		$messageForCustomer->addTo($order->mail);
+		$messageForCustomer->send();
+
+		if ($this->settings->mails->createOrder) {
+			$messageForShop = $this->createOrderToShopMessage->create();
+			$messageForShop->setOrder($order);
+			$messageForShop->addTo($this->settings->mails->createOrder);
+			$messageForShop->send();
+		}
+
 		$this->orderFacade->relockAndRequantityProducts($order);
 	}
 
 	public function onChangeState(Order $order, OrderState $oldState)
 	{
-		// SEND MAIL
+		if ($oldState->type !== $order->state->type) {
+			switch ($order->state->type->id) {
+				case OrderStateType::EXPEDED:
+					$messageForCustomer = $this->changeStateOrderExpededMessage->create();
+					break;
+				case OrderStateType::DONE:
+					$messageForCustomer = $this->changeStateOrderDoneMessage->create();
+					break;
+				case OrderStateType::STORNO:
+					$messageForCustomer = $this->changeStateOrderStornoMessage->create();
+					break;
+				default:
+					$messageForCustomer = NULL;
+					break;
+			}
+			if ($messageForCustomer) {
+				$messageForCustomer->setOrder($order);
+				$messageForCustomer->addTo($order->mail);
+				$messageForCustomer->send();
+			}
+		}
+
 		$this->orderFacade->relockAndRequantityProducts($order, $oldState);
 	}
 
 	public function onChangeProducts(Order $order, array $oldOrderItems)
 	{
-		// SEND MAIL
 		$this->orderFacade->relockProducts($order, $oldOrderItems);
 	}
 

@@ -141,6 +141,10 @@ class SettingsExtension extends CompilerExtension
 			'sidebarMenuHover' => FALSE,
 			'sidebarMenuLight' => FALSE,
 		],
+		'mails' => [ // default value is NULL - doesnt send mail
+			'automatFrom' => 'info@example.sk',
+			'createOrder' => NULL,
+		],
 	];
 
 	public function loadConfiguration()
@@ -152,6 +156,7 @@ class SettingsExtension extends CompilerExtension
 				->setClass('App\Extensions\Settings\SettingsStorage')
 				->addSetup('setPageInfo', [$config['pageInfo']])
 				->addSetup('setPageConfig', [$config['pageConfig']])
+				->addSetup('setMails', [$config['mails']])
 				->addSetup('setExpiration', [$config['expiration']])
 				->addSetup('setPasswords', [$config['passwords']])
 				->addSetup('setDesign', [$config['design']])

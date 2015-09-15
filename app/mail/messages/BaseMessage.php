@@ -2,7 +2,10 @@
 
 namespace App\Mail\Messages;
 
+use App\ExchangeHelper;
 use App\Extensions\Settings\SettingsStorage;
+use App\Model\Entity\Order;
+use h4kuna\Exchange\Exchange;
 use Kdyby\Translation\Translator;
 use Nette\Application\LinkGenerator;
 use Nette\Application\UI\ITemplate;
@@ -32,8 +35,14 @@ abstract class BaseMessage extends Message
 	/** @var Translator @inject */
 	public $translator;
 
+	/** @var Exchange @inject */
+	public $exchange;
+
 	/** @var array */
 	protected $params = [];
+
+	/** @var Order */
+	protected $order;
 
 	/** @var bool */
 	protected $isNewsletter = FALSE;
@@ -60,6 +69,7 @@ abstract class BaseMessage extends Message
 			'mail' => $this,
 			'colon' => '',
 			'locale' => $this->translator->locale,
+			'exchange' => $this->exchange,
 		];
 
 		$template = $this->templateFactory->createTemplate();
@@ -85,9 +95,30 @@ abstract class BaseMessage extends Message
 		return $this;
 	}
 
+	protected function beforeSend()
+	{
+		
+	}
+
 	public function send()
 	{
+		$this->beforeSend();
 		$this->mailer->send($this);
 	}
 
+	// <editor-fold defaultstate="collapsed" desc="setters">
+
+	public function setOrder(Order $order)
+	{
+		$this->order = $order;
+		$this->addParameter('order', $order);
+		$this->translator->setLocale($order->locale);
+		$this->exchange->setWeb($order->currency);
+		if ($order->rate) {
+			$rateRelated = ExchangeHelper::getRelatedRate($order->rate, $this->exchange[$order->currency]);
+			$this->exchange->addRate($order->currency, $rateRelated);
+		}
+	}
+
+	// </editor-fold>
 }

@@ -28,6 +28,9 @@ class SettingsStorage extends Object
 	private $pageInfo;
 
 	/** @var ArrayHash */
+	private $mails;
+
+	/** @var ArrayHash */
 	private $modules;
 
 	public function __construct(User $user)
@@ -127,6 +130,24 @@ class SettingsStorage extends Object
 	public function getPageInfo()
 	{
 		return $this->pageInfo;
+	}
+
+	/**
+	 * @param array $values
+	 * @return SettingsStorage
+	 */
+	public function setMails(array $values)
+	{
+		$this->mails = ArrayHash::from($values);
+		return $this;
+	}
+
+	/**
+	 * @return ArrayHash
+	 */
+	public function getMails()
+	{
+		return $this->mails;
 	}
 
 	/**

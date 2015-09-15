@@ -13,6 +13,7 @@ use App\Model\Entity\Vat;
 use App\Model\Facade\VatFacade;
 use Nette\Security\User;
 use Nette\Utils\ArrayHash;
+use Nette\Utils\Html;
 
 class PaymentEdit extends BaseControl
 {
@@ -68,6 +69,16 @@ class PaymentEdit extends BaseControl
 		$form->addCheckSwitch('with_vat', 'With VAT', 'YES', 'NO')
 				->setDefaultValue($this->defaultWithVat);
 
+		$allowedTags = Html::el()->setText($this->translator->translate('Allowed tags') . ':');
+		$tagOrderNumber = Html::el()->setText('%order_number% - ' . $this->translator->translate('Order number'));
+		$separator = Html::el('br');
+		$description = $allowedTags
+				->add($separator)
+				->add($tagOrderNumber);
+		$form->addWysiHtml('html', 'Text', 10)
+						->setOption('description', $description)
+						->getControlPrototype()->class[] = 'page-html-content';
+
 		$form->addMultiSelect2('shippings', 'For Shippings', $shippings);
 
 		$form->addSubmit('save', 'Save');
@@ -112,6 +123,9 @@ class PaymentEdit extends BaseControl
 		if (isset($values->free)) {
 			$this->payment->setFreePrice($values->free, $values->with_vat);
 		}
+		
+		$this->payment->translateAdd($this->translator->getLocale())->html = $values->html;
+		$this->payment->mergeNewTranslations();
 
 		return $this;
 	}
@@ -126,10 +140,12 @@ class PaymentEdit extends BaseControl
 	/** @return array */
 	protected function getDefaults()
 	{
+		$this->payment->setCurrentLocale($this->translator->getLocale());
 		$values = [
 			'active' => $this->payment->active,
 			'cond1' => $this->payment->useCond1,
 			'cond2' => $this->payment->useCond2,
+			'html' => $this->payment->html,
 		];
 		foreach ($this->payment->shippings as $shipping) {
 			$values['shippings'][] = $shipping->id;

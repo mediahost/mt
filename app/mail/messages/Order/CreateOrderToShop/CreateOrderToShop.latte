@@ -1,0 +1,26 @@
+{layout '../../@layout.latte'}
+
+{includeblock '../orderSummary.latte'}
+
+{block content}
+<table class="container content" align="left" width="100%">
+	<tr>
+		<td>
+			<table class="row note">
+				<tr>
+					<td class="wrapper last">
+						<h4 style="font-size: 22px;display: block;margin: 5px 0 15px 0;">
+							{_'mail.order.headline', NULL, ['number' => $order->id]}
+						</h4>
+						<p>
+							{_'mail.order.shopNotice', NULL, ['name' => $pageInfo->projectName]}
+						</p>
+					</td>
+				</tr>
+			</table>
+
+			{include orderSummary}
+			<p>&nbsp;</p>
+		</td>
+	</tr>
+</table>
