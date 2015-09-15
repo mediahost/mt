@@ -4,8 +4,8 @@ namespace App\Components\Buyout\Form;
 
 use App\Components\BaseControl;
 use App\Forms\Renderers\MetronicFormRenderer;
-use App\Mail\Messages\IBuyoutOurMessageFactory;
-use App\Mail\Messages\IBuyoutTheirMessageFactory;
+use App\Mail\Messages\Buyout\IOurMessageFactory;
+use App\Mail\Messages\Buyout\ITheirMessageFactory;
 use App\Model\Entity\Buyout\ModelQuestion as ModelQuestionEntity;
 use App\Model\Entity\ProducerModel;
 use App\Model\Facade\QuestionFacade;
@@ -27,11 +27,11 @@ class Request extends BaseControl
 	/** @var ModelQuestionEntity[] */
 	private $modelQuestions;
 
-	/** @var IBuyoutOurMessageFactory @inject */
-	public $iBuyoutOurMessageFactory;
+	/** @var IOurMessageFactory @inject */
+	public $iOurMessageFactory;
 
-	/** @var IBuyoutTheirMessageFactory @inject */
-	public $iBuyoutTheirMessageFactory;
+	/** @var ITheirMessageFactory @inject */
+	public $iTheirMessageFactory;
 
 	/** @var array */
 	public $onSend = [];
@@ -100,7 +100,7 @@ class Request extends BaseControl
 		}
 
 		if ($form['send']->isSubmittedBy()) {
-			$our = $this->iBuyoutOurMessageFactory->create();
+			$our = $this->iOurMessageFactory->create();
 			$our->addParameter('model', $this->model)
 					->addParameter('formData', $values)
 					->addParameter('summary', $this->summary);
@@ -108,7 +108,7 @@ class Request extends BaseControl
 			$our->setFrom($values->email);
 			$our->send();
 
-			$their = $this->iBuyoutTheirMessageFactory->create();
+			$their = $this->iTheirMessageFactory->create();
 			$their->addParameter('model', $this->model)
 					->addParameter('formData', $values)
 					->addParameter('summary', $this->summary);
