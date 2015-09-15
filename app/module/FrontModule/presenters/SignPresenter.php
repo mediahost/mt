@@ -3,7 +3,7 @@
 namespace App\FrontModule\Presenters;
 
 use App\Components\Auth;
-use App\Mail\Messages\IForgottenMessageFactory;
+use App\Mail\Messages\Auth\IForgottenMessageFactory;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use App\Model\Facade;

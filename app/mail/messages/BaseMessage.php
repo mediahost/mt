@@ -2,7 +2,10 @@
 
 namespace App\Mail\Messages;
 
+use App\ExchangeHelper;
 use App\Extensions\Settings\SettingsStorage;
+use App\Model\Entity\Order;
+use h4kuna\Exchange\Exchange;
 use Kdyby\Translation\Translator;
 use Nette\Application\LinkGenerator;
 use Nette\Application\UI\ITemplate;
@@ -32,14 +35,23 @@ abstract class BaseMessage extends Message
 	/** @var Translator @inject */
 	public $translator;
 
+	/** @var Exchange @inject */
+	public $exchange;
+
 	/** @var array */
 	protected $params = [];
+
+	/** @var Order */
+	protected $order;
 
 	/** @var bool */
 	protected $isNewsletter = FALSE;
 
 	/** @var string */
 	protected $unsubscribeLink;
+
+	/** @var string */
+	protected $oldLocale;
 
 	/** @var ITemplate */
 	protected $template;
@@ -60,6 +72,7 @@ abstract class BaseMessage extends Message
 			'mail' => $this,
 			'colon' => '',
 			'locale' => $this->translator->locale,
+			'exchange' => $this->exchange,
 		];
 
 		$template = $this->templateFactory->createTemplate();
@@ -72,12 +85,42 @@ abstract class BaseMessage extends Message
 
 		return parent::build();
 	}
-
-	public function setNewsletter($unsubscribeLink = NULL)
+	
+	protected function changeLocale($locale)
 	{
-		$this->isNewsletter = TRUE;
-		$this->unsubscribeLink = $unsubscribeLink;
+		$this->oldLocale = $this->translator->getLocale();
+		$this->translator->setLocale($locale);
 	}
+	
+	protected function changeCurrency($currency, $rate = NULL)
+	{
+		$this->exchange->setWeb($currency);
+		if ($rate) {
+			$rateRelated = ExchangeHelper::getRelatedRate($rate, $this->exchange[$currency]);
+			$this->exchange->addRate($currency, $rateRelated);
+		}
+	}
+
+	protected function beforeSend()
+	{
+		
+	}
+
+	protected function afterSend()
+	{
+		if ($this->oldLocale) {
+			$this->translator->setLocale($this->oldLocale);
+		}
+	}
+
+	public function send()
+	{
+		$this->beforeSend();
+		$this->mailer->send($this);
+		$this->afterSend();
+	}
+
+	// <editor-fold defaultstate="collapsed" desc="setters">
 
 	public function addParameter($paramName, $value)
 	{
@@ -85,9 +128,23 @@ abstract class BaseMessage extends Message
 		return $this;
 	}
 
-	public function send()
+	public function setNewsletter($unsubscribeLink = NULL)
 	{
-		$this->mailer->send($this);
+		$this->isNewsletter = TRUE;
+		$this->unsubscribeLink = $unsubscribeLink;
+		
+		return $this;
 	}
 
+	public function setOrder(Order $order)
+	{
+		$this->order = $order;
+		$this->addParameter('order', $order);
+		$this->changeLocale($order->locale);
+		$this->changeCurrency($order->currency, $order->rate);
+		
+		return $this;
+	}
+
+	// </editor-fold>
 }

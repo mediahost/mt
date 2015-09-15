@@ -1,0 +1,165 @@
+{define orderSummary}
+{var thStyle => 'text-align: right;font-weight: normal;font-style: italic'}
+{var tdStyle => 'padding-left: 10px'}
+
+<div style="border-bottom:1px #ececec solid; width: 100%; padding-bottom: 0; margin-bottom: 10px;">&nbsp;</div>
+
+<table class="row note">
+	<tr>
+		<td class="wrapper last">
+			{if $order->billingAddress->isFilled()}
+				<h5 style="font-size: 17px;display: block;margin: 5px 0 15px 0;">
+					{_'cart.order.invoiceAddress'}
+				</h5>
+				<table>
+					<tr n:if="$order->billingAddress->name">
+						<th style="{$thStyle|noescape}">{_'cart.form.name'}:</th>
+						<td style="{$tdStyle|noescape}">{$order->billingAddress->name}</td>
+					</tr>
+					<tr n:if="$order->billingAddress->street">
+						<th style="{$thStyle|noescape}">{_'cart.form.street'}:</th>
+						<td style="{$tdStyle|noescape}">{$order->billingAddress->street}</td>
+					</tr>
+					<tr n:if="$order->billingAddress->city">
+						<th style="{$thStyle|noescape}">{_'cart.form.city'}:</th>
+						<td style="{$tdStyle|noescape}">{$order->billingAddress->cityFormat}</td>
+					</tr>
+					<tr n:if="$order->billingAddress->country">
+						<th style="{$thStyle|noescape}">{_'cart.form.country'}:</th>
+						<td style="{$tdStyle|noescape}">{$order->billingAddress->countryFormat}</td>
+					</tr>
+					<tr n:if="$order->billingAddress->ico">
+						<th style="{$thStyle|noescape}">{_'cart.form.ico'}:</th>
+						<td style="{$tdStyle|noescape}">{$order->billingAddress->ico}</td>
+					</tr>
+					<tr n:if="$order->billingAddress->dic">
+						<th style="{$thStyle|noescape}">{_'cart.form.dic'}:</th>
+						<td style="{$tdStyle|noescape}">{$order->billingAddress->dic}</td>
+					</tr>
+					<tr n:if="$order->billingAddress->icoVat">
+						<th style="{$thStyle|noescape}">{_'cart.form.icoVat'}:</th>
+						<td style="{$tdStyle|noescape}">{$order->billingAddress->icoVat}</td>
+					</tr>
+				</table>
+				{if $order->shippingAddress && $order->shippingAddress->isFilled()}
+					<h5 style="font-size: 17px;display: block;margin: 5px 0 15px 0;">
+						{_'cart.order.shippingAddress'}
+					</h5>
+					<table>
+						<tr n:if="$order->shippingAddress->name">
+							<th style="{$thStyle|noescape}">{_'cart.form.name'}:</th>
+							<td style="{$tdStyle|noescape}">{$order->shippingAddress->name}</td>
+						</tr>
+						<tr n:if="$order->shippingAddress->street">
+							<th style="{$thStyle|noescape}">{_'cart.form.street'}:</th>
+							<td style="{$tdStyle|noescape}">{$order->shippingAddress->street}</td>
+						</tr>
+						<tr n:if="$order->shippingAddress->city">
+							<th style="{$thStyle|noescape}">{_'cart.form.city'}:</th>
+							<td style="{$tdStyle|noescape}">{$order->shippingAddress->cityFormat}</td>
+						</tr>
+						<tr n:if="$order->shippingAddress->country">
+							<th style="{$thStyle|noescape}">{_'cart.form.country'}:</th>
+							<td style="{$tdStyle|noescape}">{$order->shippingAddress->countryFormat}</td>
+						</tr>
+					</table>
+				{/if}
+				<h5 style="font-size: 17px;display: block;margin: 5px 0 15px 0;">
+					{_'cart.order.contact'}
+				</h5>
+				<table>
+					<tr>
+						<th style="{$thStyle|noescape}">{_'cart.form.mail'}:</th>
+						<td style="{$tdStyle|noescape}">{$order->mail}</td>
+					</tr>
+					<tr>
+						<th style="{$thStyle|noescape}">{_'cart.form.phone'}:</th>
+						<td style="{$tdStyle|noescape}">{$order->phone}</td>
+					</tr>
+				</table>
+			{else}
+				<h5 style="font-size: 17px;display: block;margin: 5px 0 15px 0;">
+					{_'mail.order.pinCode', NULL, ['pin' => $order->pin]}
+				</h5>
+				<table>
+					<tr>
+						<th style="{$thStyle}">{_'cart.form.mail'}:</th>
+						<td style="{$tdStyle}">{$order->mail}</td>
+					</tr>
+					<tr>
+						<th style="{$thStyle}">{_'cart.form.phone'}:</th>
+						<td style="{$tdStyle}">{$order->phone}</td>
+					</tr>
+				</table>
+			{/if}
+		</td>
+	</tr>
+</table>
+
+<div style="border-bottom:1px #ececec solid; width: 100%; padding-bottom: 0; margin-bottom: 10px;">&nbsp;</div>
+
+<h5 style="font-size: 17px;display: block;margin: 5px 0 15px 0;">
+	{_'cart.headline.summary'}
+</h5>
+<table width="100%" border="0" cellpadding="2" cellspacing="0">
+    <colgroup>
+        <col width="73%">
+        <col width="5%">
+        <col width="20%">
+    </colgroup>
+    <tbody>
+        <tr n:foreach="$order->items as $item">
+			{var product => $item->stock->product}
+			{var unit => $product->unit}
+			{? $product->setCurrentLocale($locale)}
+			{? $unit->setCurrentLocale($locale)}
+            <td style="border-bottom:1px #f2f3f5 solid;padding:5px 0px">
+				{$item->name}
+			</td>
+            <td style="border-bottom:1px #f2f3f5 solid;padding:5px 10px 5px 0px" valign="top" nowrap="">
+				{$item->quantity}{$unit}
+			</td>
+            <td style="border-bottom:1px #f2f3f5 solid;padding:5px 10px 0px 0px" valign="top" align="right">
+				<b><font color="#398000">{$item->getTotalPrice($exchange)|asCurrency:TRUE}</font></b>
+			</td>
+        </tr>
+        <tr>
+            <td style="border-bottom:1px #f2f3f5 solid;padding:5px 0px">
+				{_'Shipping'}: {_$order->shipping}
+			</td>
+            <td style="border-bottom:1px #f2f3f5 solid;padding:5px 10px 5px 0px" valign="top" nowrap="">
+				1x
+			</td>
+            <td style="border-bottom:1px #f2f3f5 solid;padding:5px 10px 0px 0px" valign="top" align="right">
+				<b><font color="#398000">{$order->shipping->price|currencyVat}</font></b>
+			</td>
+        </tr>
+        <tr>
+            <td style="border-bottom:1px #f2f3f5 solid;padding:5px 0px">
+				{_'Shipping'}: {_$order->payment}
+			</td>
+            <td style="border-bottom:1px #f2f3f5 solid;padding:5px 10px 5px 0px" valign="top" nowrap="">
+				1x
+			</td>
+            <td style="border-bottom:1px #f2f3f5 solid;padding:5px 10px 0px 0px" valign="top" align="right">
+				<b><font color="#398000">{$order->payment->price|currencyVat}</font></b>
+			</td>
+        </tr>
+
+        <tr>
+            <td colspan="3">&nbsp;</td>
+        </tr>
+
+        <tr>
+            <td style="padding:10px" align="right" colspan="2"><strong>{_"To pay"}</strong></td>
+            <td style="padding:10px" align="right"><strong>{$order->getTotalPrice($exchange)|asCurrency:TRUE}</strong></td>
+        </tr>
+
+        <tr>
+            <td>&nbsp;</td>
+            <td colspan="2" style="padding:10px" align="right"><i>{_"Prices are with VAT"}</i></td>
+        </tr>
+
+    </tbody>
+</table>
+{/define}

@@ -17,7 +17,7 @@ form:
 	street: 'Street'
 	city: 'City'
 	country: 'Country'
-	zipcode: 'zipcode'
+	zipcode: 'Zipcode'
 	mail: 'E-mail'
 	phone: 'Phone'
 	ico: 'Company ID'

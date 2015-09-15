@@ -3,8 +3,8 @@
 namespace App\Listeners;
 
 use App\Extensions\Settings\SettingsStorage;
-use App\Mail\Messages\ICreateRegistrationMessageFactory;
-use App\Mail\Messages\IVerificationMessageFactory;
+use App\Mail\Messages\Auth\ICreateRegistrationMessageFactory;
+use App\Mail\Messages\Auth\IVerificationMessageFactory;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use App\Model\Facade\RoleFacade;

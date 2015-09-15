@@ -1,0 +1,24 @@
+subject:
+	forgotten: 'Zapomenuté heslo'
+	createRegistration: 'Vaše registrace'
+	verify: 'Ověření e-mailu'
+	changeStateOrder: 'Vaše objednávka č.%id%'
+	createOrder: 'Vaše objednávka č.%id%'
+	createOrderShop: 'Nová objednávka č.%id%'
+order:
+	salutation: 'Vážený zákazníku'
+	headline: 'Objednávka č.%number%'
+	weWillInformYou: 'O dalším postupu vaší objednávky vás budeme informovat e-mailem.'
+	shopNotice: 'Na vašem webu %name% je nová objednávka.'
+	pinCode: 'Objednávce byl přidělen PIN: %pin%'
+	change:
+		done:
+			successfullyCompleted: 'Vaše objednávka byla úspěšně dokončena.'
+			lookingForward: 'Těšíme se na váš další nákup.'
+		storno:
+			wasCanceled: 'Vaše objednávka byla zrušena.'
+			contactUs: 'V případě jakékoli nesrovnalosti nás prosím ihned kontaktujte.'
+		expeded:
+			hasBeenExpeded: 'Vaše objednávka byla expedována.'
+	new:
+		recieved: 'děkujeme Vám za Váš nákup, právě jsme přijali vaši objednávku.'

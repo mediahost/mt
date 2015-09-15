@@ -1314,3 +1314,12 @@ msgstr "Your personal data was saved."
 
 msgid "There are %count% products locked"
 msgstr "There are %count% product locked|There are %count% products locked"
+
+msgid "Allowed tags"
+msgstr "Allowed tags"
+
+msgid "Order number"
+msgstr "Order number"
+
+msgid "To pay"
+msgstr "To pay"

@@ -1272,3 +1272,12 @@ msgstr "Vaše osobní údaje byly uloženy."
 
 msgid "There are %count% products locked"
 msgstr "%count% produkt je zamčen|%count% produkty jsou zamčeny|%count% produktů je zamčeno"
+
+msgid "Allowed tags"
+msgstr "Povolené tagy"
+
+msgid "Order number"
+msgstr "Číslo objednávky"
+
+msgid "To pay"
+msgstr "K úhradě"

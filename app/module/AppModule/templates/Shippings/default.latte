@@ -27,15 +27,15 @@
 				<table class="table table-bordered table-hover">
 					<thead>
 						<tr>
-							<th width="10%">#</th>
+							<th width="10%" n:if="$user->isAllowed('payments', 'viewAll')">#</th>
 							<th>{_'Shipping'}</th>
 							<th>{_'Price'}</th>
 							<th width="10%"></th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr n:foreach="$shippings as $shipping">
-							<td>
+						<tr n:foreach="$shippings as $shipping" n:if="$shipping->active || $user->isAllowed('payments', 'viewAll')">
+							<td n:if="$user->isAllowed('payments', 'viewAll')">
 								{$shipping->id}
 							</td>
 							<td>
@@ -74,15 +74,15 @@
 				<table class="table table-bordered table-hover">
 					<thead>
 						<tr>
-							<th width="10%">#</th>
+							<th width="10%" n:if="$user->isAllowed('payments', 'viewAll')">#</th>
 							<th>{_'Payment'}</th>
 							<th>{_'Price'}</th>
 							<th width="10%"></th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr n:foreach="$payments as $payment">
-							<td>
+						<tr n:foreach="$payments as $payment" n:if="$payment->active || $user->isAllowed('payments', 'viewAll')">
+							<td n:if="$user->isAllowed('payments', 'viewAll')">
 								{$payment->id}
 							</td>
 							<td>
