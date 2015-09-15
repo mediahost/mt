@@ -7,11 +7,11 @@ use App\Mail\Messages\BaseMessage;
 class UnsubscribeMessage extends BaseMessage
 {
 
-	protected function build()
+	protected function beforeSend()
 	{
 		$this->setFrom($this->settings->modules->newsletter->email);
 		$this->setSubject($this->translator->translate('newsletter.messages.unsubscribe.subject'));
-		return parent::build();
+		parent::beforeSend();
 	}
 
 }
@@ -19,8 +19,6 @@ class UnsubscribeMessage extends BaseMessage
 interface IUnsubscribeMessageFactory
 {
 
-	/**
-	 * @return UnsubscribeMessage
-	 */
+	/** @return UnsubscribeMessage */
 	public function create();
 }

@@ -7,10 +7,10 @@ use App\Mail\Messages\BaseMessage;
 class NewsletterMessage extends BaseMessage
 {
 
-	protected function build()
+	protected function beforeSend()
 	{
-		$this->setFrom($this->settings->modules->newsletter->email);	
-		return parent::build();
+		$this->setFrom($this->settings->modules->newsletter->email);
+		parent::beforeSend();
 	}
 
 }
