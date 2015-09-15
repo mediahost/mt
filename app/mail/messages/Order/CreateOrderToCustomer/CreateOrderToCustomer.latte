@@ -22,7 +22,8 @@
 						{var shipping => $order->shipping->origin}
 						{ifset $shipping}
 							{? $shipping->setCurrentLocale($locale)}
-							<p n:if="!empty((string) $shipping->html)">
+							{? $shippingString = (string) $shipping->html}
+							<p n:if="!empty($paymentString)">
 								{_$shipping->html, NULL, ['order_number' => $order->id]|noescape}
 							</p>
 						{/ifset}
@@ -30,7 +31,8 @@
 						{var payment => $order->payment->origin}
 						{ifset $payment}
 							{? $payment->setCurrentLocale($locale)}
-							<p n:if="!empty((string) $payment->html)">
+							{? $paymentString = (string) $payment->html}
+							<p n:if="!empty($paymentString)">
 								{_$payment->html, NULL, ['order_number' => $order->id]|noescape}
 							</p>
 						{/ifset}
