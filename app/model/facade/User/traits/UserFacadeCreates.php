@@ -13,6 +13,9 @@ use Nette\Utils\Random;
 trait UserFacadeCreates
 {
 
+	/** @var \App\Model\Facade\NewsletterFacade @inject */
+	public $newsletterFacade;
+
 	/**
 	 * @param string $mail
 	 * @param string $password
@@ -29,7 +32,15 @@ trait UserFacadeCreates
 					->setLocale($this->translator->getDefaultLocale())
 					->setCurrency($this->exchange->getDefault()->getCode());
 
-			return $this->userRepo->save($user);
+			$this->em->persist($user);
+
+			$subscriber = $this->newsletterFacade->findSubscriber($mail);
+
+			if ($subscriber) {
+				$user->subscriber = $subscriber;
+			}
+
+			return $this->em->flush();
 		}
 		return NULL;
 	}
@@ -49,18 +60,26 @@ trait UserFacadeCreates
 				->setLocale($this->translator->getLocale())
 				->setCurrency($this->exchange->getWeb()->getCode());
 
+		$this->em->persist($user);
+
 		if ($registration->facebookId) {
 			$user->facebook = new Facebook($registration->facebookId);
 			$user->facebook->setAccessToken($registration->facebookAccessToken);
 		}
+
 		if ($registration->twitterId) {
 			$user->twitter = new Twitter($registration->twitterId);
 			$user->twitter->setAccessToken($registration->twitterAccessToken);
 		}
 
-		$this->registrationRepo->delete($registration);
+		$subscriber = $this->newsletterFacade->findSubscriber($registration->mail);
 
-		return $this->userRepo->save($user);
+		if ($subscriber) {
+			$user->subscriber = $subscriber;
+		}
+
+		$this->registrationRepo->delete($registration);
+		return $this->em->flush();
 	}
 
 	/**
