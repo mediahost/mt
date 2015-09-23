@@ -1083,12 +1083,15 @@ class ProductList extends Control
 		$limitMaxPriceRaw = $this->getLimitPriceMax();
 		$limitMinPrice = floor($this->exchange->change($limitMinPriceRaw));
 		$limitMaxPrice = ceil($this->exchange->change($limitMaxPriceRaw));
+		
+		$fromValue = $this->minPrice ? floor($this->exchange->change($this->minPrice)) : NULL;
+		$toValue = $this->maxPrice ? ceil($this->exchange->change($this->maxPrice)) : NULL;
 
 		$form->addText('price', 'Range:')
 				->setAttribute('data-min', $limitMinPrice)
 				->setAttribute('data-max', $limitMaxPrice)
-				->setAttribute('data-from', $this->formatPriceToFormValue($this->minPrice, FALSE))
-				->setAttribute('data-to', $this->formatPriceToFormValue($this->maxPrice, TRUE))
+				->setAttribute('data-from', $fromValue)
+				->setAttribute('data-to', $toValue)
 				->setAttribute('data-type', 'double')
 				->setAttribute('data-step', '1')
 				->setAttribute('data-hasgrid', 'false')
@@ -1124,12 +1127,6 @@ class ProductList extends Control
 		}
 
 		$this->reload();
-	}
-
-	private function formatPriceToFormValue($value, $roundUp = TRUE)
-	{
-		$exchanged = $this->exchange->change($value);
-		return $value ? ($roundUp ? ceil($exchanged) : floor($exchanged)) : NULL;
 	}
 
 	// </editor-fold>
