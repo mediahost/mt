@@ -4,6 +4,9 @@ namespace App\Model\Facade;
 
 use App\Extensions\Settings\SettingsStorage;
 use App\Model\Entity\Category;
+use App\Model\Entity\Producer;
+use App\Model\Entity\ProducerLine;
+use App\Model\Entity\ProducerModel;
 use App\Model\Entity\Product;
 use App\Model\Entity\Sign;
 use App\Model\Entity\Stock;
@@ -22,21 +25,19 @@ use Nette\Utils\DateTime;
 
 class StockFacade extends Object
 {
-	
+
 	const KEY_ALL_PRODUCTS_URLS = 'product-urls';
 	const TAG_ALL_PRODUCTS = 'all-products';
 
 	/** @var EntityManager @inject */
 	public $em;
-	
+
 	/** @var Translator @inject */
 	public $translator;
 
 	/** @var SettingsStorage @inject */
 	public $settings;
 
-	/** @var \Nette\Security\IUserStorage @inject */
-	public $userStorage;
 	/** @var IStorage @inject */
 	public $cacheStorage;
 
@@ -59,6 +60,30 @@ class StockFacade extends Object
 		$this->productRepo = $this->em->getRepository(Product::getClassName());
 		$this->categoryRepo = $this->em->getRepository(Category::getClassName());
 		$this->signRepo = $this->em->getRepository(Sign::getClassName());
+	}
+
+	public function getLimitPrices($priceLevelName, Category $category = NULL, $producer = NULL)
+	{
+		$qb = $this->stockRepo->createQueryBuilder('s')
+				->select("MIN(s.{$priceLevelName}) AS minimum, MAX(s.{$priceLevelName}) AS maximum")
+				->innerJoin('s.product', 'p');
+
+		if ($category) {
+			$qb->innerJoin('p.categories', 'categories')
+					->andWhere('categories IN (:categories)')
+					->setParameter('categories', array_keys($category->childrenArray));
+		}
+		if ($producer instanceof Producer) {
+			
+		} else if ($producer instanceof ProducerLine) {
+			
+		} else if ($producer instanceof ProducerModel) {
+			
+		}
+		$result = $qb->getQuery()->getOneOrNullResult();
+
+		$limitPrices = [$result['minimum'], $result['maximum']];
+		return $limitPrices;
 	}
 
 	private function getSignedProducts($signId)
@@ -163,7 +188,7 @@ class StockFacade extends Object
 		if ($locale === NULL) {
 			$locale = $this->translator->getDefaultLocale();
 		}
-		
+
 		$cache = $this->getCache();
 		$cacheKey = self::KEY_ALL_PRODUCTS_URLS . '_' . $locale;
 
@@ -188,7 +213,7 @@ class StockFacade extends Object
 		}
 		return $localeUrls;
 	}
-	
+
 	/** @return Cache */
 	public function getCache()
 	{
