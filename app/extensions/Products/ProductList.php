@@ -7,12 +7,15 @@ use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Helpers;
 use App\Model\Entity\Category;
+use App\Model\Entity\Price;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
 use App\Model\Entity\Stock;
+use App\Model\Entity\Vat;
 use App\Model\Facade\BasketFacade;
 use App\Model\Facade\Exception\InsufficientQuantityException;
+use App\Model\Facade\StockFacade;
 use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\Query\Expr\OrderBy;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
@@ -39,8 +42,17 @@ class ProductList extends Control
 	/** @var BasketFacade @inject */
 	public $basketFacade;
 
+	/** @var StockFacade @inject */
+	public $stockFacade;
+
 	/** @var EntityManager @inject */
 	public $em;
+
+	/** @var Translator @inject */
+	public $translator;
+
+	/** @var Exchange @inject */
+	public $exchange;
 
 	/** @var int @persistent */
 	public $page = 1;
@@ -63,6 +75,18 @@ class ProductList extends Control
 	/** @var int @persistent */
 	public $maxPrice;
 
+	/** @var array @persistent */
+	public $limitPrices = array();
+
+	/** @var int @persistent */
+	public $priceLevel;
+
+	/** @var array @persistent */
+	public $filter = array();
+
+	/** @var array @persistent */
+	public $sorting = array();
+
 	/** @var array event on render */
 	public $onRender = [];
 
@@ -73,12 +97,6 @@ class ProductList extends Control
 	public $onEachItem = [];
 
 	// <editor-fold defaultstate="collapsed" desc="protected variables">
-
-	/** @var array */
-	protected $filter = array();
-
-	/** @var array */
-	protected $sorting = array();
 
 	/** @var array */
 	protected $perPageListMultiples = [1, 2, 3, 6];
@@ -96,7 +114,10 @@ class ProductList extends Control
 	protected $qb;
 
 	/** @var int */
-	protected $priceLevel;
+	protected $limitMinPrice = 0;
+
+	/** @var int */
+	protected $limitMaxPrice;
 
 	/** @var string */
 	protected $priceLevelName = self::DEFAULT_PRICE_LEVEL;
@@ -110,20 +131,97 @@ class ProductList extends Control
 	/** @var Paginator */
 	protected $paginator;
 
-	/** @var Translator */
-	protected $translator;
-
-	/** @var Exchange */
-	protected $exchange;
-
 	/** @var string */
-	protected $currencySymbol;
+	protected $currency;
 
 	/** @var bool */
 	protected $ajax;
 
-	/** @var array */
-	protected $limitPrices = [];
+	// </editor-fold>
+
+	/* 	 ADD FILTERS *************************************************************************************** */
+
+	// <editor-fold defaultstate="collapsed" desc="add filters">
+
+	public function addFilterCategory(Category $category)
+	{
+		$this->setFilter([
+			'category' => array_keys($category->childrenArray),
+		]);
+		if (!count($this->limitPrices)) {
+			$this->limitPrices = $this->stockFacade->getLimitPrices($this->getPriceLevelName(), $category);
+		}
+		return $this;
+	}
+
+	public function addFilterProducer(Producer $producer)
+	{
+		$this->setFilter([
+			'producer' => $producer->id,
+		]);
+		if (!count($this->limitPrices)) {
+			$this->limitPrices = $this->stockFacade->getLimitPrices($this->getPriceLevelName(), NULL, $producer);
+		}
+		return $this;
+	}
+
+	public function addFilterLine(ProducerLine $line)
+	{
+		$this->setFilter([
+			'line' => $line->id,
+		]);
+		if (!count($this->limitPrices)) {
+			$this->limitPrices = $this->stockFacade->getLimitPrices($this->getPriceLevelName(), NULL, $line);
+		}
+		return $this;
+	}
+
+	public function addFilterModel(ProducerModel $model)
+	{
+		$this->setFilter([
+			'model' => $model->id,
+		]);
+		if (!count($this->limitPrices)) {
+			$this->limitPrices = $this->stockFacade->getLimitPrices($this->getPriceLevelName(), NULL, $model);
+		}
+		return $this;
+	}
+
+	public function addFilterAccessoriesFor(ProducerModel $model)
+	{
+		$this->setFilter([
+			'accessoriesFor' => $model->id,
+		]);
+		if (!count($this->limitPrices)) {
+			$this->limitPrices = $this->stockFacade->getLimitPrices($this->getPriceLevelName(), NULL, $model);
+		}
+		return $this;
+	}
+
+	public function addFilterFulltext($text)
+	{
+		$this->setFilter([
+			'fulltext' => (string) $text,
+		]);
+		if (!count($this->limitPrices)) {
+			$this->limitPrices = $this->stockFacade->getLimitPrices($this->getPriceLevelName());
+		}
+		return $this;
+	}
+
+	public function addFilterUpdatedFrom($time)
+	{
+		$this->setFilter([
+			'updatedFrom' => (string) $time,
+		]);
+		return $this;
+	}
+
+	public function resetFilter()
+	{
+		$this->filter = [];
+		return $this;
+	}
 
 	// </editor-fold>
 
@@ -141,14 +239,6 @@ class ProductList extends Control
 	public function setPriceLevel($level)
 	{
 		$this->priceLevel = $level;
-
-		$allowedProperties = Stock::getPriceProperties();
-		if (array_key_exists($level, $allowedProperties)) {
-			$this->priceLevelName = $allowedProperties[$level];
-		} else {
-			$this->priceLevelName = self::DEFAULT_PRICE_LEVEL;
-		}
-
 		return $this;
 	}
 
@@ -229,7 +319,7 @@ class ProductList extends Control
 	public function setExchange(Exchange $exchange, $currency)
 	{
 		$this->exchange = $exchange;
-		$this->currencySymbol = $this->exchange[$currency]->getFormat()->getSymbol();
+		$this->currency = $currency;
 
 		return $this;
 	}
@@ -372,6 +462,7 @@ class ProductList extends Control
 
 		$data = $this->data;
 		if ($data === NULL || $useCache === FALSE) {
+
 			$this->applyFiltering();
 			$this->applySorting();
 
@@ -469,7 +560,7 @@ class ProductList extends Control
 	{
 		if (!count($this->limitPrices)) {
 			$qb = clone $this->qb;
-			$qb->select("MIN(s.{$this->priceLevelName}) AS minimum, MAX(s.{$this->priceLevelName}) AS maximum");
+			$qb->select("MIN(s.{$this->getPriceLevelName()}) AS minimum, MAX(s.{$this->getPriceLevelName()}) AS maximum");
 			$result = $qb->getQuery()->getOneOrNullResult();
 			$this->limitPrices = [$result['minimum'], $result['maximum']];
 		}
@@ -478,14 +569,39 @@ class ProductList extends Control
 
 	protected function getLimitPriceMin()
 	{
-		list($minPrice, $maxPrice) = $this->getLimitPrices();
-		return $minPrice;
+		if ($this->limitMinPrice === NULL) {
+			list($this->limitMinPrice, $maxPrice) = $this->getLimitPrices();
+		}
+		return $this->limitMinPrice;
 	}
 
 	protected function getLimitPriceMax()
 	{
-		list($minPrice, $maxPrice) = $this->getLimitPrices();
-		return $maxPrice;
+		if ($this->limitMaxPrice === NULL) {
+			list($minPrice, $this->limitMaxPrice) = $this->getLimitPrices();
+		}
+		return $this->limitMaxPrice;
+	}
+
+	protected function getPriceLevelName()
+	{
+		if (!$this->priceLevelName && $this->priceLevel) {
+			$allowedProperties = Stock::getPriceProperties();
+			if (array_key_exists($this->priceLevel, $allowedProperties)) {
+				$this->priceLevelName = $allowedProperties[$this->priceLevel];
+			} else {
+				$this->priceLevelName = self::DEFAULT_PRICE_LEVEL;
+			}
+		}
+		return $this->priceLevelName;
+	}
+
+	protected function getCurrencySymbol()
+	{
+		if ($this->currency) {
+			return $this->exchange[$this->currency]->getFormat()->getSymbol();
+		}
+		return NULL;
 	}
 
 	// </editor-fold>
@@ -545,7 +661,7 @@ class ProductList extends Control
 		// get limit prices before edit price part of query
 		$this->getLimitPrices();
 
-		if ($this->minPrice && $this->maxPrice) {
+		if ($this->maxPrice) {
 			$this->filterByPrice([$this->minPrice, $this->maxPrice]);
 		}
 	}
@@ -586,7 +702,7 @@ class ProductList extends Control
 			$this->qb
 					->andWhere('categories IN (:categories)')
 					->setParameter('categories', $category);
-		} else if ($category instanceof Category) {
+		} else {
 			$this->qb
 					->andWhere('categories = :category')
 					->setParameter('category', $category);
@@ -601,7 +717,7 @@ class ProductList extends Control
 			$this->qb
 					->andWhere('p.producer IN (:producers)')
 					->setParameter('producers', $producer);
-		} else if ($producer instanceof Producer) {
+		} else {
 			$this->qb
 					->andWhere('p.producer = :producer')
 					->setParameter('producer', $producer);
@@ -616,7 +732,7 @@ class ProductList extends Control
 			$this->qb
 					->andWhere('p.producerLine IN (:lines)')
 					->setParameter('lines', $line);
-		} else if ($line instanceof ProducerLine) {
+		} else {
 			$this->qb
 					->andWhere('p.producerLine = :line')
 					->setParameter('line', $line);
@@ -631,7 +747,7 @@ class ProductList extends Control
 			$this->qb
 					->andWhere('p.producerModel IN (:models)')
 					->setParameter('models', $model);
-		} else if ($model instanceof ProducerModel) {
+		} else {
 			$this->qb
 					->andWhere('p.producerModel = :model')
 					->setParameter('model', $model);
@@ -647,7 +763,7 @@ class ProductList extends Control
 			$this->qb
 					->andWhere('accessoriesFor IN (:models)')
 					->setParameter('models', $model);
-		} else if ($model instanceof ProducerModel) {
+		} else {
 			$this->qb
 					->andWhere('accessoriesFor = :model')
 					->setParameter('model', $model);
@@ -673,15 +789,45 @@ class ProductList extends Control
 
 	protected function filterByPrice(array $prices)
 	{
-		list($lowPrice, $highPrice) = $prices;
+		// prices are inserted with vat
+		list($lowPriceValue, $highPriceValue) = $prices;
 
-		if ($lowPrice >= 0) {
-			$this->qb->andWhere("s.{$this->priceLevelName} >= :lowPrice")
-					->setParameter('lowPrice', $lowPrice);
+		// recount price to price without vat
+		$vatRepo = $this->em->getRepository(Vat::getClassName());
+		$vatPricesLow = [];
+		$vatPricesHigh = [];
+		foreach ($vatRepo->findAll() as $vat) {
+			if ($lowPriceValue > 0) {
+				$vatPricesLow[$vat->id] = new Price($vat, $lowPriceValue, FALSE);
+			}
+			if ($highPriceValue > 0) {
+				$vatPricesHigh[$vat->id] = new Price($vat, $highPriceValue, FALSE);
+			}
 		}
-		if ($highPrice >= 0) {
-			$this->qb->andWhere("s.{$this->priceLevelName} <= :highPrice")
-					->setParameter('highPrice', $highPrice);
+
+		$vatParameterAdd = FALSE;
+		if (count($vatPricesLow)) {
+			$condition = NULL;
+			foreach ($vatPricesLow as $vatId => $price) {
+				$conditionAdd = "s.vat = :vat{$vatId} AND s.{$this->getPriceLevelName()} >= :lowPrice{$vatId}";
+				$condition = Helpers::concatStrings(') OR (', $condition, $conditionAdd);
+				$this->qb->setParameter("lowPrice{$vatId}", $price->withoutVat);
+				$this->qb->setParameter("vat{$vatId}", $vatId);
+				$vatParameterAdd = TRUE;
+			}
+			$this->qb->andWhere('(' . $condition . ')');
+		}
+		if (count($vatPricesHigh)) {
+			$condition = NULL;
+			foreach ($vatPricesHigh as $vatId => $price) {
+				$conditionAdd = "s.vat = :vat{$vatId} AND s.{$this->getPriceLevelName()} <= :highPrice{$vatId}";
+				$condition = Helpers::concatStrings(') OR (', $condition, $conditionAdd);
+				$this->qb->setParameter("highPrice{$vatId}", $price->withoutVat);
+				if (!$vatParameterAdd) {
+					$this->qb->setParameter("vat{$vatId}", $vatId);
+				}
+			}
+			$this->qb->andWhere('(' . $condition . ')');
 		}
 
 		return $this;
@@ -702,11 +848,11 @@ class ProductList extends Control
 
 	protected function applySorting()
 	{
-//		try {
-		$this->addSorting($this->sort);
-//		} catch (InvalidArgumentException $exc) {
-//			throw new ProductListException('This sorting method isn\'t supported.');
-//		}
+		try {
+			$this->addSorting($this->sort);
+		} catch (InvalidArgumentException $exc) {
+			throw new ProductListException('This sorting method isn\'t supported.');
+		}
 
 		$orderBy = new OrderBy();
 		foreach ($this->sorting as $key => $value) {
@@ -721,7 +867,7 @@ class ProductList extends Control
 					$orderBy->add('t.name', $value);
 					break;
 				case 'price':
-					$orderBy->add('s.' . $this->priceLevelName, $value);
+					$orderBy->add('s.' . $this->getPriceLevelName(), $value);
 					break;
 			}
 		}
@@ -919,8 +1065,8 @@ class ProductList extends Control
 		$form->getElementPrototype()->class = ['sendOnChange', 'loadingNoOverlay', !$this->ajax ? : 'ajax'];
 
 		$availabilities = [
-			1 => 'Not Available',
 			2 => 'In Stock',
+			1 => 'Not Available',
 		];
 		$defaultAvailablity = [];
 		if ($this->showNotAvailable) {
@@ -930,23 +1076,26 @@ class ProductList extends Control
 			$defaultAvailablity[] = 2;
 		}
 		$form->addCheckboxList('availability', NULL, $availabilities)
-				->setDefaultValue($defaultAvailablity);
+				->setDefaultValue($defaultAvailablity)
+				->setInline();
 
 		$limitMinPrice = floor($this->getLimitPriceMin());
 		$limitMaxPrice = ceil($this->getLimitPriceMax());
+
 		$form->addText('price', 'Range:')
-				->setAttribute('data-value-min', $this->minPrice)
-				->setAttribute('data-value-max', $this->maxPrice)
 				->setAttribute('data-min', $limitMinPrice)
 				->setAttribute('data-max', $limitMaxPrice)
-				->setAttribute('data-glue', ' - ')
-				->setAttribute('data-prefix', '')
-				->setAttribute('data-suffix', $this->currencySymbol);
+				->setAttribute('data-from', $this->minPrice)
+				->setAttribute('data-to', $this->maxPrice)
+				->setAttribute('data-type', 'double')
+				->setAttribute('data-step', '1')
+				->setAttribute('data-hasgrid', 'false')
+				->setAttribute('data-postfix', ' ' . $this->getCurrencySymbol());
 
 		$form->onSuccess[] = $this->processFilterForm;
 	}
 
-	public function processFilterForm(Form $param, ArrayHash $values)
+	public function processFilterForm(Form $form, ArrayHash $values)
 	{
 		$this->showAvailable = FALSE;
 		$this->showNotAvailable = FALSE;
@@ -961,12 +1110,13 @@ class ProductList extends Control
 			}
 		}
 
-		$prefix = preg_quote('');
-		$suffix = preg_quote($this->currencySymbol);
-		$glue = preg_quote(' - ');
-		if (preg_match('/^' . $prefix . '(\d+)' . $suffix . $glue . $prefix . '(\d+)' . $suffix . '$/', $values->price, $matches)) {
+		$glue = preg_quote(';');
+		if (preg_match('/^(\d+)' . $glue . '(\d+)$/', $values->price, $matches)) {
 			$this->minPrice = $matches[1];
 			$this->maxPrice = $matches[2];
+			$form['price']
+					->setAttribute('data-from', $this->minPrice)
+					->setAttribute('data-to', $this->maxPrice);
 		}
 
 		$this->reload();

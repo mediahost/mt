@@ -40,11 +40,6 @@
 		<!-- BEGIN SIDEBAR -->
 		<div class="sidebar col-md-3 col-sm-5">
 			{include categories}
-
-            <div class="sidebar-filter margin-bottom-25">
-				<h2>{_'Filter'}</h2>
-				{control products:filter}
-			</div>
 		</div>
 		<!-- END SIDEBAR -->
 
@@ -72,6 +67,10 @@
 					</h1>
 				</div>
 				<div class="col-lg-6">{control products:sorting}</div>
+			</div>
+			
+            <div class="sidebar-filter margin-bottom-25">
+				{control products:filter}
 			</div>
 
 			{control products:list}

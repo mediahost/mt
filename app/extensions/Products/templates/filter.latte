@@ -1,19 +1,20 @@
 {snippet productFilter}
 	{form filterForm}
 		{? $form->render('begin')}
-		<h3>{_'Availability'}</h3>
-		<div class="checkbox-list">
-			{input availability}
+		<div class="row">
+			<div class="col-md-8">
+				<h3>{_'Price'}</h3>
+				<p>
+					{input price}
+				</p>
+			</div>
+			<div class="col-md-4">
+				<h3>{_'Availability'}</h3>
+				<div class="checkbox-list">
+					{input availability}
+				</div>
+			</div>
 		</div>
-
-		<h3>{_'Price'}</h3>
-		<p>
-			{label price /}
-			{input price, class => '', style => 'border:0; color:#767F88;'}
-		</p>
-		<div id="slider-range" data-for="{$form['price']->getControlPrototype()->id}"></div>
-
 		{? $form->render('end')}
 	{/form}
-
 {/snippet}
