@@ -1079,14 +1079,16 @@ class ProductList extends Control
 				->setDefaultValue($defaultAvailablity)
 				->setInline();
 
-		$limitMinPrice = floor($this->getLimitPriceMin());
-		$limitMaxPrice = ceil($this->getLimitPriceMax());
+		$limitMinPriceRaw = $this->getLimitPriceMin();
+		$limitMaxPriceRaw = $this->getLimitPriceMax();
+		$limitMinPrice = floor($this->exchange->change($limitMinPriceRaw));
+		$limitMaxPrice = ceil($this->exchange->change($limitMaxPriceRaw));
 
 		$form->addText('price', 'Range:')
 				->setAttribute('data-min', $limitMinPrice)
 				->setAttribute('data-max', $limitMaxPrice)
-				->setAttribute('data-from', $this->minPrice)
-				->setAttribute('data-to', $this->maxPrice)
+				->setAttribute('data-from', $this->formatPriceToFormValue($this->minPrice, FALSE))
+				->setAttribute('data-to', $this->formatPriceToFormValue($this->maxPrice, TRUE))
 				->setAttribute('data-type', 'double')
 				->setAttribute('data-step', '1')
 				->setAttribute('data-hasgrid', 'false')
@@ -1112,14 +1114,22 @@ class ProductList extends Control
 
 		$glue = preg_quote(';');
 		if (preg_match('/^(\d+)' . $glue . '(\d+)$/', $values->price, $matches)) {
-			$this->minPrice = $matches[1];
-			$this->maxPrice = $matches[2];
+			$minPriceRaw = $matches[1];
+			$maxPriceRaw = $matches[2];
+			$this->minPrice = $this->exchange->change($minPriceRaw, $this->exchange->getWeb(), $this->exchange->getDefault());
+			$this->maxPrice = $this->exchange->change($maxPriceRaw, $this->exchange->getWeb(), $this->exchange->getDefault());
 			$form['price']
-					->setAttribute('data-from', $this->minPrice)
-					->setAttribute('data-to', $this->maxPrice);
+					->setAttribute('data-from', $minPriceRaw)
+					->setAttribute('data-to', $maxPriceRaw);
 		}
 
 		$this->reload();
+	}
+
+	private function formatPriceToFormValue($value, $roundUp = TRUE)
+	{
+		$exchanged = $this->exchange->change($value);
+		return $value ? ($roundUp ? ceil($exchanged) : floor($exchanged)) : NULL;
 	}
 
 	// </editor-fold>
