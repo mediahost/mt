@@ -70,6 +70,17 @@
 			</div>
 			
             <div class="sidebar-filter margin-bottom-25">
+				<div class="subcategories row" n:if="isset($subcategories) && count($subcategories)">
+					<div class="col-md-3" n:foreach="$subcategories as $subcategory">{dump $subcategory}
+						{? $subcategory->setCurrentLocale($lang)}
+						<a n:href="Category: $subcategory->id" class="subcategory">
+							<div class="pull-right" n:if="$subcategory->image">
+								<img src="{$basePath}/foto/{$subcategory->image|size:32:32}" alt="64x64" data-src="holder.js/32x32">
+							</div>
+							<div class="text">{$subcategory->name}</div>
+						</a>
+					</div>
+				</div>
 				{control products:filter}
 			</div>
 

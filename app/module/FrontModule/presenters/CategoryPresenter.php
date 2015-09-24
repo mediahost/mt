@@ -16,6 +16,9 @@ class CategoryPresenter extends BasePresenter
 	
 	/** @var Category */
 	private $category;
+	
+	/** @var array */
+	private $subcategories = [];
 
 	public function actionDefault($id)
 	{
@@ -26,7 +29,7 @@ class CategoryPresenter extends BasePresenter
 			$this->redirect('Homepage:');
 		}
 		$this->activeCategory = $this->category;
-		$this->template->category = $this->category;
+		$this->subcategories = $this->category->children;
 	}
 	
 	public function renderDefault()
@@ -36,6 +39,8 @@ class CategoryPresenter extends BasePresenter
 		
 		if ($this->category) {
 			$products->addFilterCategory($this->category);
+			$this->template->category = $this->category;
+			$this->template->subcategories = $this->subcategories;
 		}
 		if ($this->searched) {
 			$products->addFilterFulltext($this->searched);
