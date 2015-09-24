@@ -58,7 +58,11 @@ class PaymentNotificationParser extends Object
 			foreach ($paymentList as $payment) {
 				$this->onResolve($payment);
 			}
+			if (count($paymentList)) {
+			    return;
+			}
 		}
+		$this->onFailed($mailContent);
 	}
 
 	public function getTestMails()
