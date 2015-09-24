@@ -10,6 +10,31 @@
 	}
 }
 
+.subcategories {
+	& > div {
+		padding-bottom: 10px;
+	}
+	.subcategory {
+		line-height: 32px;
+		background-color: #4378C1;
+		display: block;
+		color: white;
+		padding: 5px;
+		text-decoration: none;
+		&:hover {
+			background-color: #3E6CAC;
+		}
+		img {
+			width: 32px;
+			height: 32px;
+		}
+		.text {
+			padding-left: 5px;
+			text-transform: uppercase;
+		}
+	}
+}
+
 @menuLineThickness: 5px;
 .categories-menu {
 	position: static;
