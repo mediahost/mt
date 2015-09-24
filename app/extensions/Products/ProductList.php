@@ -7,14 +7,17 @@ use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Helpers;
 use App\Model\Entity\Category;
+use App\Model\Entity\Parameter;
 use App\Model\Entity\Price;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
+use App\Model\Entity\Product;
 use App\Model\Entity\Stock;
 use App\Model\Entity\Vat;
 use App\Model\Facade\BasketFacade;
 use App\Model\Facade\Exception\InsufficientQuantityException;
+use App\Model\Facade\ProductFacade;
 use App\Model\Facade\StockFacade;
 use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\Query\Expr\OrderBy;
@@ -44,6 +47,9 @@ class ProductList extends Control
 
 	/** @var StockFacade @inject */
 	public $stockFacade;
+
+	/** @var ProductFacade @inject */
+	public $productFacade;
 
 	/** @var EntityManager @inject */
 	public $em;
@@ -214,6 +220,18 @@ class ProductList extends Control
 		$this->setFilter([
 			'updatedFrom' => (string) $time,
 		]);
+		return $this;
+	}
+
+	public function addFilterParameter($code, $value)
+	{
+		$this->filter['parameter'][$code] = $value;
+		return $this;
+	}
+
+	public function resetFilterParameter()
+	{
+		$this->filter['parameter'] = [];
 		return $this;
 	}
 
@@ -655,6 +673,9 @@ class ProductList extends Control
 				case 'updatedFrom':
 					$this->filterByUpdatedFrom($value);
 					break;
+				case 'parameter':
+					$this->filterByParameters($value);
+					break;
 			}
 		}
 
@@ -843,6 +864,20 @@ class ProductList extends Control
 					->setParameter('inStore', 0);
 		}
 
+		return $this;
+	}
+
+	protected function filterByParameters(array $parameters)
+	{
+		foreach ($parameters as $code => $value) {
+			$paramKey = 'param' . $code;
+			if (Parameter::checkCodeHasType($code, Parameter::STRING)) {
+				$this->qb->andWhere("p.parameter{$code} LIKE :{$paramKey}");
+			} else {
+				$this->qb->andWhere("p.parameter{$code} = :{$paramKey}");
+			}
+			$this->qb->setParameter($paramKey, $value);
+		}
 		return $this;
 	}
 
@@ -1083,7 +1118,7 @@ class ProductList extends Control
 		$limitMaxPriceRaw = $this->getLimitPriceMax();
 		$limitMinPrice = floor($this->exchange->change($limitMinPriceRaw));
 		$limitMaxPrice = ceil($this->exchange->change($limitMaxPriceRaw));
-		
+
 		$fromValue = $this->minPrice ? floor($this->exchange->change($this->minPrice)) : NULL;
 		$toValue = $this->maxPrice ? ceil($this->exchange->change($this->maxPrice)) : NULL;
 
@@ -1096,6 +1131,27 @@ class ProductList extends Control
 				->setAttribute('data-step', '1')
 				->setAttribute('data-hasgrid', 'false')
 				->setAttribute('data-postfix', ' ' . $this->getCurrencySymbol());
+
+		$paramRepo = $this->em->getRepository(Parameter::getClassName());
+		$allParams = $paramRepo->findAll();
+		$defaultValues = [];
+		foreach ($allParams as $parameter) {
+			$parameter->setCurrentLocale($this->translator->getLocale());
+			switch ($parameter->type) {
+				case Parameter::BOOLEAN:
+					$form->addCheckbox($parameter->code, $parameter->name);
+					break;
+				case Parameter::STRING:
+					$items = [NULL => ''];
+					$items += $this->productFacade->getParameterValues($parameter);
+					$form->addSelect2($parameter->code, $parameter->name, $items);
+					break;
+			}
+			if (isset($this->filter['parameter'][$parameter->code])) {
+				$defaultValues[$parameter->code] = $this->filter['parameter'][$parameter->code];
+			}
+		}
+		$form->setDefaults($defaultValues);
 
 		$form->onSuccess[] = $this->processFilterForm;
 	}
@@ -1124,6 +1180,13 @@ class ProductList extends Control
 			$form['price']
 					->setAttribute('data-from', $minPriceRaw)
 					->setAttribute('data-to', $maxPriceRaw);
+		}
+
+		$this->resetFilterParameter();
+		foreach (Product::getParameterProperties() as $parameterProperty) {
+			if (isset($values->{$parameterProperty->code}) && $values->{$parameterProperty->code}) {
+				$this->addFilterParameter($parameterProperty->code, $values->{$parameterProperty->code});
+			}
 		}
 
 		$this->reload();

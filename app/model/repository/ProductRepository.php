@@ -3,6 +3,7 @@
 namespace App\Model\Repository;
 
 use App\Model\Entity\Product;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -91,6 +92,23 @@ class ProductRepository extends BaseRepository
 
 		return $qb->getQuery()
 						->getResult();
+	}
+
+	public function getParameterValues($code)
+	{
+		$row = 'p.parameter' . $code;
+		$qb = $this->createQueryBuilder('p')
+				->select('p.parameter' . $code)
+				->distinct()
+				->where("{$row} IS NOT NULL");
+		$query = $qb->getQuery();
+		
+		$values = [];
+		foreach ($query->getResult(AbstractQuery::HYDRATE_ARRAY) as $item) {
+			$value = reset($item);
+			$values[$value] = $value;
+		}
+		return $values;
 	}
 
 }
