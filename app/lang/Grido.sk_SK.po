@@ -13,6 +13,12 @@ msgstr "Actions"
 msgid "SelectSomeRow"
 msgstr "Select Some Row"
 
+msgid "Selected"
+msgstr "Vybrané"
+
+msgid "Export"
+msgstr "Exportovat"
+
 msgid "First"
 msgstr "First"
 
