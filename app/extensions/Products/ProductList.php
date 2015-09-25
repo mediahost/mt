@@ -869,14 +869,19 @@ class ProductList extends Control
 
 	protected function filterByParameters(array $parameters)
 	{
+		$conditions = NULL;
 		foreach ($parameters as $code => $value) {
 			$paramKey = 'param' . $code;
 			if (Parameter::checkCodeHasType($code, Parameter::STRING)) {
-				$this->qb->andWhere("p.parameter{$code} LIKE :{$paramKey}");
+				$operator = 'LIKE';
 			} else {
-				$this->qb->andWhere("p.parameter{$code} = :{$paramKey}");
+				$operator = '=';
 			}
+			$conditions = Helpers::concatStrings(' OR ', $conditions, "p.parameter{$code} {$operator} :{$paramKey}");
 			$this->qb->setParameter($paramKey, $value);
+		}
+		if ($conditions) {
+			$this->qb->andWhere("({$conditions})");
 		}
 		return $this;
 	}
