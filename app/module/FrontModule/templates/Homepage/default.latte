@@ -3,7 +3,6 @@
 {block breadcrumb}{/block}
 
 {block content}
-
 <div class="container">
 	<div class="homepage">
 
@@ -44,7 +43,7 @@
 <h2>{_'Top products'}</h2>
 <div class="owl-carousel owl-carousel3">
 	<div n:foreach="$topStocks as $stock">
-		{include product, stock => $stock, product => $stock->product}
+		{control stock-$stock->id}
 	</div>
 </div>
 {/define}
@@ -61,7 +60,7 @@
 	<h2>{$saleSign}</h2>
 	<div class="owl-carousel owl-carousel2">
 		<div n:foreach="$saleStocks as $stock">
-			{include product, stock => $stock, product => $stock->product}
+			{control stock-$stock->id}
 		</div>
 	</div>
 </div>
@@ -79,7 +78,7 @@
 		<h2>{$newSign}</h2>
 		<div class="owl-carousel owl-carousel5">
 			<div n:foreach="$newStocks as $stock">
-				{include product, stock => $stock, product => $stock->product}
+				{control stock-$stock->id}
 			</div>
 		</div>
 	</div>
@@ -93,37 +92,9 @@
 
 		<div class="owl-carousel owl-carousel5">
 			<div n:foreach="$visitedStocks as $stock">
-				{include product, stock => $stock, product => $stock->product}
+				{control stock-$stock->id}
 			</div>
 		</div>
 	</div>
-</div>
-{/define}
-
-{define product}
-{var divId => 'add-to-cart-' . rand(99, 1000) . '-' . $stock->id}
-<div class="product-item" id="{$divId}">
-	<div class="pi-img-wrapper">
-		<img src="{$basePath}/foto/{$product->image|size:'250'}" class="img-responsive" alt="{$product}" />
-		<div>
-			<a href="{$basePath}/foto/{$product->image|size}" 
-			   class="btn btn-default fancybox-button">
-				{_'Zoom'}
-			</a>
-			<a n:href="Product: $product->id" 
-			   class="btn btn-default fancybox-fast-view">
-				{_'View'}
-			</a>
-		</div>
-	</div>
-	<h3>
-		<a n:href="Product: $product->id">{$product}</a>
-	</h3>
-	<div class="pi-price">{$stock->price|currencyVat}</div>
-	<a n:href="addToCart! $stock->id" 
-	   n:class="btn, btn-default, add2cart, ajax, !$basket->getCountAllowedToAdd($stock) ? disabled"
-	   data-target-loading="#{$divId}">{_'Add to cart'}</a>
-	<div n:if="$product->hasSign($newSign)" class="sticker sticker-new"></div>
-	<div n:if="$product->hasSign($saleSign)" class="sticker sticker-sale"></div>
 </div>
 {/define}
