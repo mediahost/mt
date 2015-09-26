@@ -41,6 +41,7 @@ services:
 	- {implement: App\Components\Buyout\Form\IRequestFactory, inject: yes}
 
 	# Stock
+	- {implement: App\Components\Product\Form\IPrintStockFactory, inject: yes}
 	- {implement: App\Components\Product\Form\IStockAddFactory, inject: yes}
 	- {implement: App\Components\Product\Form\IStockBasicFactory, inject: yes}
 	- {implement: App\Components\Product\Form\IStockPriceFactory, inject: yes}
