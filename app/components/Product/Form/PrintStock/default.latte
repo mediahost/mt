@@ -1,13 +1,12 @@
 {snippet stockPrint}
-		   
-		   
-		<div n:foreach="$flashes as $flash" class="alert alert-{$flash->type} alert-dismissable">
-			<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-			{$flash->message}
-		</div>
+	<div n:foreach="$flashes as $flash" class="alert alert-{$flash->type} alert-dismissable">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+		{$flash->message}
+	</div>
 		
 	{var blockId => 'stockPrint' . $stock->id}
 	{var product => $stock->product}
+	{var countInBasket => $basket->getCountInBasket($stock)}
 	<div class="product-item" id="{$id}">
 		<div class="pi-img-wrapper">
 			<img src="{$basePath}/foto/{$product->image|size:'250'}" class="img-responsive" alt="{$product}" />
@@ -23,7 +22,10 @@
 			</div>
 		</div>
 		<h3>
-			<a href="{plink Product: $product->id}">{$product}({$basket->getCountInBasket($stock)})</a>
+			<a href="{plink Product: $product->id}">
+				{$product}
+				{if $countInBasket}({$countInBasket}){/if}
+			</a>
 		</h3>
 		<div class="pi-price">{$stock->getPrice($priceLevel)|currencyVat}</div>
 		
