@@ -10,6 +10,10 @@
 	<div class="product-item" id="{$id}">
 		<div class="pi-img-wrapper">
 			<img src="{$basePath}/foto/{$product->image|size:'250'}" class="img-responsive" alt="{$product}" />
+                        <span class="pi-cart-count" n:if="$countInBasket">
+                            {$countInBasket}
+                            <img src="{$basePath}/assets/frontend/img/cart.svg">
+                        </span>
 			<div>
 				<a href="{$basePath}/foto/{$product->image|size}" 
 				   class="btn btn-default fancybox-button">
@@ -24,7 +28,6 @@
 		<h3>
 			<a href="{plink Product: $product->id}">
 				{$product}
-				{if $countInBasket}({$countInBasket}){/if}
 			</a>
 		</h3>
 		<div class="pi-price">{$stock->getPrice($priceLevel)|currencyVat}</div>
