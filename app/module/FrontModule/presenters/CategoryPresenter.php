@@ -3,6 +3,7 @@
 namespace App\FrontModule\Presenters;
 
 use App\Extensions\Products\ProductList;
+use App\Model\Entity\Category;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
@@ -12,36 +13,44 @@ use Nette\Utils\Strings;
 
 class CategoryPresenter extends BasePresenter
 {
+	
+	/** @var Category */
+	private $category;
+	
+	/** @var array */
+	private $subcategories = [];
 
 	public function actionDefault($id)
 	{
-		$category = $this->categoryRepo->find($id);
-		if (!$category) {
+		$this->category = $this->categoryRepo->find($id);
+		if (!$this->category) {
 			$message = $this->translator->translate('Requested category doesn\'t exist. Try to choose another from list.');
 			$this->flashMessage($message, 'warning');
 			$this->redirect('Homepage:');
 		}
-		$this->activeCategory = $category;
-		$this->template->category = $category;
-
+		$this->activeCategory = $this->category;
+		$this->subcategories = $this->category->children;
+	}
+	
+	public function renderDefault()
+	{
 		/* @var $products ProductList */
 		$products = $this['products'];
-		$products->filter = [
-			'category' => $category->childrenArray,
-		];
+		
+		if ($this->category) {
+			$products->addFilterCategory($this->category);
+			$this->template->category = $this->category;
+			$this->template->subcategories = $this->subcategories;
+		}
+		if ($this->searched) {
+			$products->addFilterFulltext($this->searched);
+			$this->template->searched = $this->searched;
+		}
 	}
 
 	public function actionSearch($text)
 	{
 		$this->searched = $text;
-
-		/* @var $products ProductList */
-		$products = $this['products'];
-		$products->filter = [
-			'fulltext' => $text,
-		];
-
-		$this->template->searched = $text;
 		$this->setView('default');
 	}
 
@@ -51,9 +60,7 @@ class CategoryPresenter extends BasePresenter
 		$list = $this['products'];
 		$list->setPage($page);
 		$list->setItemsPerPage($perPage);
-		$list->filter = [
-			'fulltext' => $text,
-		];
+		$list->addFilterFulltext($text);
 		$list->sorting = [
 			'name' => ProductList::ORDER_ASC,
 			'price' => ProductList::ORDER_DESC,
@@ -97,9 +104,7 @@ class CategoryPresenter extends BasePresenter
 		if (isset($modelEntity)) {
 			/* @var $products ProductList */
 			$products = $this['products'];
-			$products->filter = [
-				'accessoriesFor' => $modelEntity,
-			];
+			$products->addFilterAccessoriesFor($modelEntity);
 
 			$this['modelSelector']->setModel($modelEntity);
 			$this->template->accessoriesFor = $modelEntity;
@@ -130,17 +135,13 @@ class CategoryPresenter extends BasePresenter
 		if ($producer) {
 			/* @var $products ProductList */
 			$products = $this['products'];
-			$filters = [
-				'producer' => $producer,
-			];
+			$products->addFilterProducer($producer);
 			if ($line) {
-				$filters['line'] = $line;
+				$products->addFilterLine($line);
 			}
 			if ($model) {
-				$filters['model'] = $model;
+				$products->addFilterModel($model);
 			}
-
-			$products->filter = $filters;
 
 			$this->template->producer = $producer;
 			$this->template->line = $line;

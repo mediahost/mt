@@ -17,11 +17,13 @@ class CheckboxList extends CheckboxListParent
 	public function setInline()
 	{
 		$this->labelParsClass = 'checkbox-inline';
+		return $this;
 	}
 	
 	public function setLabelPartsClass($class)
 	{
 		$this->labelParsClass = $class;
+		return $this;
 	}
 
 	/**

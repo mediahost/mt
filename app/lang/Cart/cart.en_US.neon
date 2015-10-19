@@ -1,4 +1,5 @@
 product:
+	added: 'Added to cart'
 	onlyCountOnStore: 'We have only %count% pc on store.|We have only %count% pcs on store.'
 	alreadyInBasket: 'You have already %count% pc in basket.|You have already %count% pcs in basket.'
 	youCanAddOnly: 'You can add only %count% pc to basket.|You can add only %count% pcs to basket.'

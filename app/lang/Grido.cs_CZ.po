@@ -13,6 +13,12 @@ msgstr "Akce"
 msgid "SelectSomeRow"
 msgstr "Vyberte nějaký sloupec"
 
+msgid "Selected"
+msgstr "Vybrané"
+
+msgid "Export"
+msgstr "Exportovat"
+
 msgid "First"
 msgstr "První"
 

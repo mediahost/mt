@@ -1,0 +1,42 @@
+{snippet stockPrint}
+	<div n:foreach="$flashes as $flash" class="alert alert-{$flash->type} alert-dismissable">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+		{$flash->message}
+	</div>
+		
+	{var blockId => 'stockPrint' . $stock->id}
+	{var product => $stock->product}
+	{var countInBasket => $basket->getCountInBasket($stock)}
+	<div class="product-item" id="{$id}">
+		<div class="pi-img-wrapper">
+			<img src="{$basePath}/foto/{$product->image|size:'250'}" class="img-responsive" alt="{$product}" />
+                        <span class="pi-cart-count" n:if="$countInBasket">
+                            {$countInBasket}
+                            <img src="{$basePath}/assets/frontend/img/cart.svg">
+                        </span>
+			<div>
+				<a href="{$basePath}/foto/{$product->image|size}" 
+				   class="btn btn-default fancybox-button">
+					{_'Zoom'}
+				</a>
+				<a href="{plink Product: $product->id}" 
+				   class="btn btn-default fancybox-fast-view">
+					{_'View'}
+				</a>
+			</div>
+		</div>
+		<h3>
+			<a href="{plink Product: $product->id}">
+				{$product}
+			</a>
+		</h3>
+		<div class="pi-price">{$stock->getPrice($priceLevel)|currencyVat}</div>
+		
+		<a n:href="addToCart!" 
+		   n:class="btn, btn-default, add2cart, ajax, !$basket->getCountAllowedToAdd($stock) ? disabled"
+		   data-target-loading="#{$id}">{_'Add to cart'}</a>
+		   
+		<div n:if="$product->hasSign($newSign)" class="sticker sticker-new"></div>
+		<div n:if="$product->hasSign($saleSign)" class="sticker sticker-sale"></div>
+	</div>
+{/snippet}
