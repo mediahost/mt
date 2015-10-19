@@ -46,6 +46,7 @@ navigation:
 
 headline:
 	summary: 'Souhrn objednávky'
+	summaryNumber: 'Souhrn objednávky č. %number%'
 	selectShipping: 'Zvolte dopravu'
 	selectPayment: 'Zvolte platbu'
 	freeShipping: 'Možnost dopravy zdarma'
