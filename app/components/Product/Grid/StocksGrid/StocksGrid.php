@@ -9,6 +9,7 @@ use App\Model\Entity\Group;
 use App\Model\Entity\Price;
 use App\Model\Entity\Sign;
 use App\Model\Entity\Stock;
+use Grido\Components\Export;
 use Grido\DataSources\Doctrine;
 use Grido\Grid;
 use Nette\Utils\DateTime;
@@ -16,6 +17,12 @@ use Nette\Utils\Html;
 
 class StocksGrid extends BaseControl
 {
+	
+	const ID = 'grid';
+
+
+	/** @var array */
+	private $ids = [];
 
 	/** @return Grid */
 	protected function createComponentGrid()
@@ -34,6 +41,12 @@ class StocksGrid extends BaseControl
 				->setParameter('lang', $this->translator->getLocale())
 				->setParameter('defaultLang', $this->translator->getDefaultLocale())
 				->setParameter('now', new DateTime());
+		
+		if (count($this->ids)) {
+			$qb->andWhere('s.id IN (:ids)')
+					->setParameter('ids', $this->ids);
+		}
+		
 		$grid->model = new Doctrine($qb, [
 			'product' => 'p',
 			'product.name' => 't.name',
@@ -183,12 +196,41 @@ class StocksGrid extends BaseControl
 						})
 				->elementPrototype->class[] = 'red';
 
+		$operation = [
+			'export' => $this->translator->translate('Grido.Export'),
+		];
+		$grid->setOperation($operation, $this->handleOperations);
+
 		$grid->setActionWidth("20%");
 
 		$grid->setExport('stocks')
 				->setCsv(';');
 
 		return $grid;
+	}
+
+	public function handleOperations($operation, $ids)
+	{
+		switch ($operation) {
+			case 'export':
+				$this->presenter->redirect('Products:export', ['ids' => $ids]);
+				break;
+		}
+	}
+	
+	public function setIds()
+	{
+		if (is_array(func_get_arg(0))) {
+			$this->ids = func_get_arg(0);
+		} else {
+			$this->ids = func_get_args();
+		}
+		return $this;
+	}
+	
+	public function getExport()
+	{
+		return $this->getComponent(self::ID)->getComponent(Export::ID);
 	}
 
 }

@@ -40,11 +40,6 @@
 		<!-- BEGIN SIDEBAR -->
 		<div class="sidebar col-md-3 col-sm-5">
 			{include categories}
-
-            <div class="sidebar-filter margin-bottom-25">
-				<h2>{_'Filter'}</h2>
-				{control products:filter}
-			</div>
 		</div>
 		<!-- END SIDEBAR -->
 
@@ -72,6 +67,21 @@
 					</h1>
 				</div>
 				<div class="col-lg-6">{control products:sorting}</div>
+			</div>
+			
+            <div class="sidebar-filter margin-bottom-25">
+				<div class="subcategories row" n:if="isset($subcategories) && count($subcategories)">
+					<div class="col-md-3" n:foreach="$subcategories as $subcategory">
+						{? $subcategory->setCurrentLocale($lang)}
+						<a n:href="Category: $subcategory->id" class="subcategory">
+							<div class="pull-right" n:if="$subcategory->image">
+								<img src="{$basePath}/foto/{$subcategory->image|size:32:32}" alt="64x64" data-src="holder.js/32x32">
+							</div>
+							<div class="text">{$subcategory->name}</div>
+						</a>
+					</div>
+				</div>
+				{control products:filter}
 			</div>
 
 			{control products:list}
