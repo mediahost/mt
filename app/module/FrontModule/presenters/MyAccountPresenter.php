@@ -75,7 +75,27 @@ class MyAccountPresenter extends BasePresenter
 	 */
 	public function actionOrders()
 	{
-		
+		$orderRepo = $this->em->getRepository(Entity\Order::getClassName());
+		$orders = $orderRepo->findByMail($this->user->identity->mail, ['id' => 'DESC']);
+		$this->template->orders = $orders;
+	}
+
+	/**
+	 * @secured
+	 * @resource('myAccount')
+	 * @privilege('order')
+	 */
+	public function actionOrder($id)
+	{
+		$orderRepo = $this->em->getRepository(Entity\Order::getClassName());
+		$order = $orderRepo->find($id);
+		$user = $this->user->identity;
+		if ($order && (($order->user && $order->user->id == $user->id) || $order->mail == $user->mail)) {
+			$this->template->order = $order;
+		} else {
+			$this->flashMessage('This order wasn\'t found', 'danger');
+			$this->redirect('orders');
+		}
 	}
 
 	/**

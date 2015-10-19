@@ -46,6 +46,7 @@ navigation:
 
 headline:
 	summary: 'Order Summary'
+	summaryNumber: 'Order #%number%'
 	selectShipping: 'Select Shipping Option'
 	selectPayment: 'Select Payment Option'
 	freeShipping: 'The possibility of free shipping'

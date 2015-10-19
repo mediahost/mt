@@ -610,6 +610,9 @@ msgstr "Repair"
 msgid "Price with vat"
 msgstr "Price with vat"
 
+msgid "Price without vat"
+msgstr "Price without vat"
+
 msgid "Contact us:"
 msgstr "Contact us:"
 
@@ -1323,3 +1326,9 @@ msgstr "Order number"
 
 msgid "To pay"
 msgstr "To pay"
+
+msgid "You have no orders."
+msgstr "You have no orders."
+
+msgid "All future orders will be displayed here."
+msgstr "All future orders will be displayed here."
