@@ -1,8 +1,16 @@
 {snippet stockPrint}
-	<div n:foreach="$flashes as $flash" class="alert alert-{$flash->type} alert-dismissable">
-		<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-		{$flash->message}
-	</div>
+        {foreach $flashes as $flash}
+            {var flashId = 'alert-' . rand(0,10000000)}
+            <div class="alert alert-{$flash->type} alert-dismissable alert-auto-dismiss" id="{$flashId}">
+                    <button type="button" class="close close-large" data-dismiss="alert" aria-hidden="true"></button>
+                    {$flash->message}
+                    <script>
+                        setTimeout(function() {
+                            jQuery('#' + {$flashId}).fadeOut();
+                        }, 2000);
+                    </script>
+            </div>
+        {/foreach}
 		
 	{var blockId => 'stockPrint' . $stock->id}
 	{var product => $stock->product}
