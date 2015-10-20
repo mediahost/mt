@@ -118,6 +118,11 @@ class Order extends BaseEntity
 		}
 		return NULL;
 	}
+	
+	public function getNeedPin()
+	{
+		return (bool) !$this->shippingAddress;
+	}
 
 	public function setItem(Stock $stock, Price $price, $quantity, $locale)
 	{

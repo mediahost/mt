@@ -621,6 +621,9 @@ msgstr "Oprava"
 msgid "Price with vat"
 msgstr "Cena s DPH"
 
+msgid "Price without vat"
+msgstr "Cena bez DPH"
+
 msgid "Contact us:"
 msgstr "Kontaktujte nás:"
 
@@ -791,6 +794,9 @@ msgstr "Přidat skupinu"
 
 msgid "Edit Group"
 msgstr "Upravit skupinu"
+
+msgid "--- No Group ---"
+msgstr "--- Bez skupiny ---"
 
 msgid "Parameter"
 msgstr "Parametr"
@@ -1281,3 +1287,9 @@ msgstr "Číslo objednávky"
 
 msgid "To pay"
 msgstr "K úhradě"
+
+msgid "You have no orders."
+msgstr "Nemáte doposud žádné objednávky."
+
+msgid "All future orders will be displayed here."
+msgstr "Všechny objednávky, které vytvoříte budou zobrazeny zde."

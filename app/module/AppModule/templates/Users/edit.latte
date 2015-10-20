@@ -1,5 +1,5 @@
 {block pageTitle}
-	{_'Users'}
+{_'Users'}
 {/block}
 
 {block breadcrumbItems}
@@ -7,19 +7,29 @@
 	<a n:href="Users:">{_'Users'}</a>
 </li>
 <li>
-	<a n:href="this">{if $isAdd}{_'Add'}{else}{_'Edit'}{/if}</a>
+	<a n:href="this">
+		{if $isAdd}
+			{_'Add'}
+		{else}
+			{_'Edit'}
+		{/if}
+	</a>
 </li>
 {/block}
 
 {block content}
 <div class="row">
-	<div class="col-md-8">
+	<div class="col-md-6">
 		<div class="portlet light">
 			<div class="portlet-title">
 				<div class="caption font-green-sharp">
 					<i class="fa fa-edit font-green-sharp"></i>
 					<span class="caption-subject bold uppercase">
-						{if $isAdd}{_'Add User'}{else}{_'Edit User'}{/if}
+						{if $isAdd}
+							{_'Add User'}
+						{else}
+							{_'Edit User'}
+						{/if}
 					</span>
 				</div>
 				<div class="actions">
@@ -29,6 +39,49 @@
 			</div>
 			<div class="portlet-body form">
 				{control userForm}
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6" n:if="!$userEntity->isNew()">
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption font-green-sharp">
+					<i class="fa fa-building font-green-sharp"></i>
+					<span class="caption-subject bold uppercase">
+						{_'Address'}
+					</span>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<fieldset class="adresses">
+					<div class="row">
+						<div class="col-md-4 col-sm-6 block" n:if="$userEntity->billingAddress">
+							<h5>{_'cart.order.invoiceAddress'}</h5>
+							<p>
+								{$userEntity->billingAddress->format()|noescape}<br />
+								<br />
+								{_'cart.form.ico'}: {$userEntity->billingAddress->ico}<br />
+								{_'cart.form.dic'}: {$userEntity->billingAddress->dic}<br />
+								{_'cart.form.icoVat'}: {$userEntity->billingAddress->icoVat}<br />
+							</p>
+						</div>
+						<div class="col-md-4 col-sm-6 block" n:if="$userEntity->shippingAddress">
+							<h5>{_'cart.order.shippingAddress'}</h5>
+							<p>
+								{$userEntity->shippingAddress->format()|noescape}
+							</p>
+						</div>
+						<div class="col-md-4 col-sm-6 block">
+							<h5>{_'cart.order.contact'}</h5>
+							<p>
+								{_'Mail'}: {$userEntity->mail}<br />
+								{if $userEntity->billingAddress}
+									{_'Phone'}: {$userEntity->billingAddress->phone}<br />
+								{/if}
+							</p>
+						</div>
+					</div>
+				</fieldset>
 			</div>
 		</div>
 	</div>
