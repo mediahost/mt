@@ -33,9 +33,12 @@ form:
 	sameDelivery: 'Doručit na jinou adresu, než fakturační'
 	isCompany: 'Chci zadat firemní údaje (IČO a DIČ)'
 	newsletter: 'Mám zájem o akční nabídky a novinky na e-mail'
+	dealer: 'Mám zájem stát se přeprodejcem'
 	validator:
 		filled: 'Povinné pole'
 		mail: 'Zadejte správný formát'
+		company: 'Nejsou vyplněny všechny firemní údaje'
+		dealer: 'Aby jste se mohli stát přeprodejcem, je nutné vyplnit všechny firemní údaje.'
 		shippingAndPaymentRequired: 'Zvolte způsob dopravy a platby'
 
 navigation:

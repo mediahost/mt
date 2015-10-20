@@ -25,6 +25,7 @@ use Nette\Security\IIdentity;
  * @property Address $billingAddress
  * @property Address $shippingAddress
  * @property Subscriber $subscriber
+ * @property bool $wantBeDealer
  * @method User setMail(string $mail)
  * @method User setLocale(string $locale)
  * @method User setCurrency(string $code)
