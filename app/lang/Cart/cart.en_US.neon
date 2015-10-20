@@ -33,9 +33,12 @@ form:
 	sameDelivery: "Delivery address isn't same as invoice address"
 	isCompany: 'I want insert company data (VAT ID, etc.)'
 	newsletter: 'I want to receive special discounts and newsletters'
+	dealer: 'I want to be a dealer'
 	validator:
 		filled: 'This field is required'
 		mail: 'Fill the right format'
+		company: 'You must complete all company information'
+		dealer: 'Fill all company information to be a dealer.'
 		shippingAndPaymentRequired: 'Select shipping and payment options'
 
 navigation:

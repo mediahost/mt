@@ -72,6 +72,12 @@ class Personal extends BaseControl
 						->addRule(Form::EMAIL, 'cart.form.validator.mail')
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
 		$form['mail']->setDisabled($this->user->isLoggedIn());
+		$form->addCheckSwitch('dealer', 'cart.form.dealer', 'YES', 'NO')
+				->setDefaultValue(FALSE);
+		if ($this->user->identity->isDealer()) {
+			$form['dealer']->setDefaultValue(TRUE)
+					->setDisabled();
+		}
 		$form->addCheckSwitch('newsletter', 'cart.form.newsletter', 'YES', 'NO')
 				->setDefaultValue(TRUE);
 
@@ -120,8 +126,28 @@ class Personal extends BaseControl
 		$form->addSubmit('save', 'Save');
 
 		$form->setDefaults($this->getDefaults());
+		$form->onValidate[] = $this->formValidate;
 		$form->onSuccess[] = $this->formSucceeded;
 		return $form;
+	}
+
+	public function formValidate(Form $form, ArrayHash $values)
+	{
+		if ($values->dealer) {
+			if (!$values->ico || !$values->dic || !$values->icoVat) {
+				$form->addError($this->translator->translate('cart.form.validator.dealer'));
+				$form['dealer']->addError($this->translator->translate('cart.form.validator.company'));
+				if (!$values->ico) {
+					$form['ico']->addError($this->translator->translate('cart.form.validator.filled'));
+				}
+				if (!$values->dic) {
+					$form['dic']->addError($this->translator->translate('cart.form.validator.filled'));
+				}
+				if (!$values->icoVat) {
+					$form['icoVat']->addError($this->translator->translate('cart.form.validator.filled'));
+				}
+			}
+		}
 	}
 
 	public function formSucceeded(Form $form, ArrayHash $values)
@@ -130,6 +156,7 @@ class Personal extends BaseControl
 			$billingAddress = $this->loadBillingAddress($values);
 			$shippingAddress = $this->loadShippingAddress($values);
 			$this->userFacade->setAddress($this->user->identity, $billingAddress, $shippingAddress);
+			$this->userFacade->setDealerWant($this->user->identity, $values->dealer);
 			
 			if ($values->newsletter) {
 				$this->newsletterFacade->subscribe($this->user->identity);
@@ -182,6 +209,7 @@ class Personal extends BaseControl
 			$identity = $this->user->identity;
 			$values['mail'] = $identity->mail;
 			$values['newsletter'] = $identity->subscriber !== NULL;
+			$values['dealer'] = $identity->wantBeDealer;
 			if ($identity->billingAddress) {
 				$values['name'] = $identity->billingAddress->name;
 				$values['street'] = $identity->billingAddress->street;
