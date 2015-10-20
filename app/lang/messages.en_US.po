@@ -784,6 +784,9 @@ msgstr "Add Group"
 msgid "Edit Group"
 msgstr "Edit Group"
 
+msgid "--- No Group ---"
+msgstr "--- No Group ---"
+
 msgid "Parameter"
 msgstr "Parameter"
 

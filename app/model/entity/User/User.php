@@ -68,6 +68,9 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	/** @ORM\OneToOne(targetEntity="App\Model\Entity\Newsletter\Subscriber", mappedBy="user", fetch="LAZY", cascade={"persist"}) */
 	protected $subscriber;
 
+	/** @ORM\Column(type="boolean") */
+	protected $wantBeDealer = FALSE;
+
 	public function __construct($mail = NULL)
 	{
 		$this->roles = new ArrayCollection;

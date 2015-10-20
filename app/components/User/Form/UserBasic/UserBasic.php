@@ -6,6 +6,7 @@ use App\Components\BaseControl;
 use App\Components\BaseControlException;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
+use App\Model\Entity\Group;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use App\Model\Facade\RoleFacade;
@@ -74,6 +75,10 @@ class UserBasic extends BaseControl
 		$role = $form->addMultiSelectBoxes('roles', 'Roles', $this->getRoles())
 				->setRequired('Select any role');
 
+		$groupRepo = $this->em->getRepository(Group::getClassName());
+		$groups = [NULL => '--- No Group ---'] + $groupRepo->findPairs('name');
+		$form->addSelect2('group', 'Group', $groups);
+
 		$roleRepo = $this->em->getRepository(Role::getClassName());
 		$defaultRole = $roleRepo->findOneByName(Role::USER);
 		if ($defaultRole && in_array($defaultRole->getId(), $this->getRoles())) {
@@ -123,6 +128,15 @@ class UserBasic extends BaseControl
 		$this->user
 				->setLocale($this->translator->getDefaultLocale())
 				->setCurrency($this->exchange->getDefault()->getCode());
+
+		if ($values->group) {
+			$groupRepo = $this->em->getRepository(Group::getClassName());
+			$group = $groupRepo->find($values->group);
+			if ($group) {
+				$this->user->setGroups([$group]);
+			}
+		}
+
 		return $this;
 	}
 
@@ -139,6 +153,7 @@ class UserBasic extends BaseControl
 		$values = [
 			'mail' => $this->user->mail,
 			'roles' => $this->user->getRolesKeys(),
+			'group' => $this->user->group->id,
 		];
 		return $values;
 	}

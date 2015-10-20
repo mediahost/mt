@@ -795,6 +795,9 @@ msgstr "Přidat skupinu"
 msgid "Edit Group"
 msgstr "Upravit skupinu"
 
+msgid "--- No Group ---"
+msgstr "--- Bez skupiny ---"
+
 msgid "Parameter"
 msgstr "Parametr"
 
