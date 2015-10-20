@@ -40,10 +40,11 @@ class Request extends BaseControl
 	protected function createComponentForm()
 	{
 		$form = new Form();
-		$form->setTranslator($this->translator);
-		$form->setRenderer(new MetronicFormRenderer());
-		$form->getElementPrototype()->class = 'ajax';
-		$form->getElementPrototype()->addAttributes(['data-target-loading' => '#request-form-loading']);
+		$form->setTranslator($this->translator)
+				->setRenderer(new MetronicFormRenderer())
+				->getElementPrototype()->addAttributes(['data-target-loading' => '#request-form-loading'])
+				->class = 'ajax';
+
 
 		$form->addHidden('modelId');
 
@@ -51,26 +52,26 @@ class Request extends BaseControl
 
 		foreach ($this->model->questions as $qm) {
 			$questions->addRadioList($qm->id, $qm->question->text, [
-						'y' => $this->translator->translate('Yes') . ' (' . $this->exchange->format($qm->priceA) . ')',
-						'n' => $this->translator->translate('No') . ' (' . $this->exchange->format($qm->priceB) . ')',
+						'y' => $this->translator->translate('buyout.request.input.yes') . ' (' . $this->exchange->format($qm->priceA) . ')',
+						'n' => $this->translator->translate('buyout.request.input.no') . ' (' . $this->exchange->format($qm->priceB) . ')',
 					])->getControlPrototype()->class[] = 'form-control';
 		}
 
-		$form->addText('email', 'E-mail')
-						->setRequired()
+		$form->addText('email', 'buyout.request.input.email')
+						->setRequired('buyout.request.required.email')
 						->addRule(Form::EMAIL)
 						->getControlPrototype()->class[] = 'form-control';
 
-		$form->addText('fullname', 'Full name')
-						->setRequired()
+		$form->addText('fullname', 'buyout.request.input.fullname')
+						->setRequired('buyout.request.required.fullname')
 						->getControlPrototype()->class[] = 'form-control';
 
-		$form->addSubmit('recalculate', 'Recalculate')
+		$form->addSubmit('recalculate', 'buyout.request.input.recalculate')
 						->setValidationScope(FALSE)
 						->setAttribute('style', 'display:none')
 						->getControlPrototype()->class[] = 'ajax btn btn-default';
 
-		$form->addSubmit('send', 'Send')
+		$form->addSubmit('send', 'buyout.request.input.send')
 						->getControlPrototype()->class[] = 'btn btn-primary';
 
 		$form->onSuccess[] = $this->formSucceeded;
