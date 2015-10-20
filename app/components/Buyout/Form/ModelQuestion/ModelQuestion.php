@@ -31,32 +31,31 @@ class ModelQuestion extends BaseControl
 	protected function createComponentForm()
 	{
 		$form = new Form();
-		$form->setTranslator($this->translator);
-		$form->setRenderer(new MetronicFormRenderer());
-//		$form->getElementPrototype()->class = 'ajax'; // TODO: formulář si sám nastavuje hodnoty a nevíme odkud je bere!
+		$form->setTranslator($this->translator->domain('buyout.modelQuestion'))
+				->setRenderer(new MetronicFormRenderer());
 
-		$form->addText('buyoutPrice', 'Buyout price')
-						->setRequired('Base buyout price is required.')
+		$form->addText('buyoutPrice', 'input.price')
+						->setRequired('required.price')
 						->getControlPrototype()->class[] = 'mask_currency form-control input-small';
 
 		$questions = $form->addDynamic('questions', function (Container $question) {
-			$question->addTypeahead('text', 'Question', function ($query) {
+			$question->addTypeahead('text', 'input.question', function ($query) {
 						return $this->questionFacade->suggestByText($query, $this->translator->getLocale());
 					})
 					->setAttribute('autocomplete', 'off');
 
-			$question->addText('yes', 'Yes')
+			$question->addText('yes', 'input.yes')
 							->getControlPrototype()->class[] = 'mask_currency form-control input-small';
 			
-			$question->addText('no', 'No')
+			$question->addText('no', 'input.no')
 							->getControlPrototype()->class[] = 'mask_currency form-control input-small';
 		}, 5);
 
-		$questions->addSubmit('add', 'Add next question')
+		$questions->addSubmit('add', 'input.add')
 						->setValidationScope(FALSE)
 				->onClick[] = $this->addQuestionClicked;
 
-		$form->addSubmit('save', 'Save')
+		$form->addSubmit('save', 'input.save')
 						->getControlPrototype()->class[] = 'btn-primary';
 
 		$form->onSuccess[] = $this->formSucceeded;

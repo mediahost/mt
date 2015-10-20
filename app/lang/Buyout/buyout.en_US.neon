@@ -1,3 +1,31 @@
+# Components
+modelQuestion:
+	input:
+		price: 'Price'
+		question: 'Question'
+		yes: 'Yes'
+		no: 'No'
+		save: 'Save'
+		add: 'Add'
+	required:
+		price: 'Enter buyout price!'
+
+request:
+	input:
+		yes: 'Yes'
+		no: 'No'
+		email: 'E-mail:'
+		fullname: 'Full name:'
+		recapculate: 'Recalculate'
+		send: 'Send'
+	required:
+		fullname: 'Enter your first name and last name'
+		email: 'Enter your e-mail'
+	template:
+		price: 'Buyout price:'
+		total: 'Total:'
+
+# E-mail messages
 email:
 	their:
 		subject: 'Buyout request'
