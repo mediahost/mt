@@ -94,6 +94,7 @@ class UsersPresenter extends BasePresenter
 	public function renderEdit()
 	{
 		$this->template->isAdd = $this->userEntity->isNew();
+		$this->template->userEntity = $this->userEntity;
 	}
 
 	/**

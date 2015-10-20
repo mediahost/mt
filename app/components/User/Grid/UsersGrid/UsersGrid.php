@@ -5,6 +5,7 @@ namespace App\Components\User\Grid;
 use App\Components\BaseControl;
 use App\Extensions\Grido\BaseGrid;
 use App\Helpers;
+use App\Model\Entity\Group;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use Grido\DataSources\Doctrine;
@@ -26,10 +27,12 @@ class UsersGrid extends BaseControl
 
 		$repo = $this->em->getRepository(User::getClassName());
 		$qb = $repo->createQueryBuilder('u')
-				->select('u, r')
-				->leftJoin('u.roles', 'r');
+				->select('u, r, g')
+				->leftJoin('u.roles', 'r')
+				->leftJoin('u.groups', 'g');
 		$grid->model = new Doctrine($qb, [
-			'roles' => 'r.id'
+			'roles' => 'r.id',
+			'groups' => 'g.id',
 		]);
 
 		$grid->setDefaultSort([
@@ -50,11 +53,26 @@ class UsersGrid extends BaseControl
 		$roleRepo = $this->em->getRepository(Role::getClassName());
 		$grid->addColumnText('roles', 'Roles')
 				->setSortable()
-				->setFilterSelect($roleRepo->findPairs('name'));
+				->setFilterSelect([NULL => '---'] + $roleRepo->findPairs('name'));
 		$grid->getColumn('roles')
 				->setCustomRender(__DIR__ . '/tag.latte')
 				->setCustomRenderExport(function ($item) {
 					return Helpers::concatStrings(', ', $item->roles);
+				});
+				
+		$grid->addColumnBoolean('wantBeDealer', 'Dealer request', '8%')
+				->setSortable()
+				->setDisableExport()
+				->setFilterSelect([NULL => '---', 1 => 'YES', 0 => 'NO']);
+				
+		$groupRepo = $this->em->getRepository(Group::getClassName());
+		$grid->addColumnText('groups', 'Groups')
+				->setDisableExport()
+				->setSortable()
+				->setFilterSelect([NULL => '---'] + $groupRepo->findPairs('name'));
+		$grid->getColumn('groups')
+				->setCustomRender(function ($item) {
+					return Helpers::concatStrings(', ', $item->groups);
 				});
 
 		$grid->addActionHref('access', 'Access')
