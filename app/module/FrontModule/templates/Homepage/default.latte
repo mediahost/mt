@@ -43,7 +43,9 @@
 <h2>{_'Top products'}</h2>
 <div class="owl-carousel owl-carousel3">
 	<div n:foreach="$topStocks as $stock">
+            <div class="product-item-container">
 		{control stock-$stock->id}
+            </div>
 	</div>
 </div>
 {/define}
@@ -60,7 +62,9 @@
 	<h2>{$saleSign}</h2>
 	<div class="owl-carousel owl-carousel2">
 		<div n:foreach="$saleStocks as $stock">
-			{control stock-$stock->id}
+                        <div class="product-item-container">
+        			{control stock-$stock->id}
+                        </div>
 		</div>
 	</div>
 </div>
@@ -78,7 +82,9 @@
 		<h2>{$newSign}</h2>
 		<div class="owl-carousel owl-carousel5">
 			<div n:foreach="$newStocks as $stock">
-				{control stock-$stock->id}
+                                <div class="product-item-container">
+                                        {control stock-$stock->id}
+                                </div>
 			</div>
 		</div>
 	</div>
@@ -92,7 +98,9 @@
 
 		<div class="owl-carousel owl-carousel5">
 			<div n:foreach="$visitedStocks as $stock">
-				{control stock-$stock->id}
+                                <div class="product-item-container">
+        				{control stock-$stock->id}
+                                </div>
 			</div>
 		</div>
 	</div>

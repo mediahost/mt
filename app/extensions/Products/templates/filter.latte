@@ -1,8 +1,11 @@
 {snippet productFilter}
-        <a class="btn btn-primary" role="button" data-toggle="collapse" href="#frm-products-filterForm" aria-expanded="false" aria-controls="frm-products-filterForm">
-            {_"Show/hide filter"}
-        </a>
-        {form filterForm, class => "collapse"}
+        <div class="text-right">
+            <a class="btn btn-primary" role="button" data-toggle="collapse" href="#frm-products-filterForm" 
+               aria-expanded="false" aria-controls="frm-products-filterForm">
+                {_"Show/hide filter"}
+            </a>
+        </div>
+        {form filterForm}
 		{? $form->render('begin')}
                 <div class="form-group">
                         <h3>{_'Price'}</h3>
@@ -30,15 +33,15 @@
                                 <div class="row m-t">
                                     <div class="form-group col-sm-4" n:ifset="$form['S1']">
                                             {label S1 /}<br>
-                                            {input S1, class => 'select2 form-control input-small'}
+                                            {input S1, class => 'select2 form-control'}
                                     </div>
                                     <div class="form-group col-sm-4" n:ifset="$form['S2']">
                                             {label S2 /}<br>
-                                            {input S2, class => 'select2 form-control input-small'}
+                                            {input S2, class => 'select2 form-control'}
                                     </div>
                                     <div class="form-group col-sm-4" n:ifset="$form['S3']">
                                             {label S3 /}<br>
-                                            {input S3, class => 'select2 form-control input-small'}
+                                            {input S3, class => 'select2 form-control'}
                                     </div>
                                 </div>
                         </div>
