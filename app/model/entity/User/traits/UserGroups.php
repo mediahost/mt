@@ -46,5 +46,18 @@ trait UserGroups
 	{
 		return $this->groups->count() ? $this->groups->first() : NULL;
 	}
+	
+	public function isDealer()
+	{
+		return $this->isGroupType(Group::TYPE_DEALER);
+	}
+	
+	protected function isGroupType($type)
+	{
+		$isGroupType = function ($key, Group $group) use ($type) {
+			return $group->type === $type;
+		};
+		return $this->groups->exists($isGroupType);
+	}
 
 }

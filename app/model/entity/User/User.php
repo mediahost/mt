@@ -25,6 +25,7 @@ use Nette\Security\IIdentity;
  * @property Address $billingAddress
  * @property Address $shippingAddress
  * @property Subscriber $subscriber
+ * @property bool $wantBeDealer
  * @method User setMail(string $mail)
  * @method User setLocale(string $locale)
  * @method User setCurrency(string $code)
@@ -67,6 +68,9 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 
 	/** @ORM\OneToOne(targetEntity="App\Model\Entity\Newsletter\Subscriber", mappedBy="user", fetch="LAZY", cascade={"persist"}) */
 	protected $subscriber;
+
+	/** @ORM\Column(type="boolean") */
+	protected $wantBeDealer = FALSE;
 
 	public function __construct($mail = NULL)
 	{

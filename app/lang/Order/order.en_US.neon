@@ -1,0 +1,12 @@
+state:
+	type:
+		headline:
+			type_1: 'Order is waiting for processing'
+			type_2: 'Order was expeded'
+			type_3: 'Order was finished'
+			type_4: 'Order was canceled'
+		comment:
+			type_1: ''
+			type_2: ''
+			type_3: ''
+			type_4: ''

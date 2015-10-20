@@ -64,5 +64,13 @@ trait UserFacadeSetters
 		
 		return $this;
 	}
+	
+	public function setDealerWant(User $user, $want = TRUE)
+	{
+		$user->wantBeDealer = $want;
+		$this->userRepo->save($user);
+		
+		return $this;
+	}
 
 }

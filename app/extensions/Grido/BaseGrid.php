@@ -45,12 +45,12 @@ class BaseGrid extends Grid
 	 * @param string $label
 	 * @return Boolean
 	 */
-	public function addColumnBoolean($name, $label)
+	public function addColumnBoolean($name, $label, $width = '2%')
 	{
 		$column = new Boolean($this, $name, $label);
 
 		$header = $column->headerPrototype;
-		$header->style['width'] = '2%';
+		$header->style['width'] = $width;
 		$header->class[] = 'center';
 
 		return $column;

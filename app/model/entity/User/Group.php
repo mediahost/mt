@@ -17,8 +17,14 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  */
 class Group extends BaseEntity
 {
+	
+	const TYPE_DEALER = 1;
+	const TYPE_BONUS = 2;
 
 	use Identifier;
+
+	/** @ORM\Column(type="smallint") */
+	protected $type = self::TYPE_DEALER;
 
 	/** @ORM\Column(type="smallint") */
 	protected $level;
