@@ -105,6 +105,9 @@ class ProductList extends Control
 
 	/** @var array event for modifying each item */
 	public $onEachItem = [];
+        
+        /** @var bool show filter as expanded */
+        public $showFilter = false;
 
 	// <editor-fold defaultstate="collapsed" desc="protected variables">
 
@@ -953,6 +956,9 @@ class ProductList extends Control
 	public function reload()
 	{
 		if ($this->presenter->isAjax()) {
+                        if ($this->showFilter) {
+                            $this['filterForm']->getElementPrototype()->class += [10000 => 'in'];
+                        }
 			$this->redrawControl();
 			$this->presenter->redrawControl();
 		} else {
@@ -1091,7 +1097,7 @@ class ProductList extends Control
 		$form = new Form($this, $name);
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
-		$form->getElementPrototype()->class = ['sendOnChange', 'loadingNoOverlay', !$this->ajax ? : 'ajax in', 'collapse'];
+		$form->getElementPrototype()->class = ['sendOnChange', 'loadingNoOverlay', !$this->ajax ? : 'ajax', 'collapse'];
 
 		$availabilities = [
 			2 => 'In Stock',
@@ -1183,6 +1189,7 @@ class ProductList extends Control
 			}
 		}
 
+                $this->showFilter = true;
 		$this->reload();
 	}
 
