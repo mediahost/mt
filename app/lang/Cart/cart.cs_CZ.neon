@@ -34,6 +34,7 @@ form:
 	isCompany: 'Chci zadat firemní údaje (IČO a DIČ)'
 	newsletter: 'Mám zájem o akční nabídky a novinky na e-mail'
 	dealer: 'Mám zájem stát se přeprodejcem'
+	account: 'Váš účet'
 	validator:
 		filled: 'Povinné pole'
 		mail: 'Zadejte správný formát'

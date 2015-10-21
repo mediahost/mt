@@ -1335,3 +1335,18 @@ msgstr "You have no orders."
 
 msgid "All future orders will be displayed here."
 msgstr "All future orders will be displayed here."
+
+msgid "You are a dealer."
+msgstr "You are a dealer."
+
+msgid "You have been approved and now you can buy with special product prices."
+msgstr "You have been approved and now you can buy with special product prices."
+
+msgid "Your dealer request is waiting for approve."
+msgstr "Your dealer request is waiting for approve."
+
+msgid "After approving of your request we will inform you."
+msgstr "After approving of your request we will inform you."
+
+msgid "Your dealer request was send"
+msgstr "Your dealer request was send"

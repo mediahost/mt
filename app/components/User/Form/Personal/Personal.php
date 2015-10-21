@@ -37,6 +37,9 @@ class Personal extends BaseControl
 
 	// </editor-fold>
 
+	/** @var bool */
+	private $dealerRequired = FALSE;
+
 	/** @return Form */
 	protected function createComponentForm()
 	{
@@ -72,54 +75,67 @@ class Personal extends BaseControl
 						->addRule(Form::EMAIL, 'cart.form.validator.mail')
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
 		$form['mail']->setDisabled($this->user->isLoggedIn());
-		$form->addCheckSwitch('dealer', 'cart.form.dealer', 'YES', 'NO')
-				->setDefaultValue(FALSE);
-		if ($this->user->identity->isDealer()) {
-			$form['dealer']->setDefaultValue(TRUE)
-					->setDisabled();
+
+		if (!$this->dealerRequired) {
+			$form->addCheckSwitch('dealer', 'cart.form.dealer', 'YES', 'NO')
+					->setDefaultValue(FALSE);
+			if ($this->user->identity->isDealer()) {
+				$form['dealer']->setDefaultValue(TRUE)
+						->setDisabled();
+			}
 		}
+
 		$form->addCheckSwitch('newsletter', 'cart.form.newsletter', 'YES', 'NO')
 				->setDefaultValue(TRUE);
 
-		$shippingBoxId = 'shippingBox';
-		$form->addCheckSwitch('other_delivery', 'cart.form.sameDelivery', 'YES', 'NO')
-				->setDefaultValue(FALSE)
-				->addCondition(Form::EQUAL, TRUE)
-				->toggle($shippingBoxId);
+		if (!$this->dealerRequired) {
+			$shippingBoxId = 'shippingBox';
+			$form->addCheckSwitch('other_delivery', 'cart.form.sameDelivery', 'YES', 'NO')
+					->setDefaultValue(FALSE)
+					->addCondition(Form::EQUAL, TRUE)
+					->toggle($shippingBoxId);
 
-		$fieldsetShipping = Html::el('div', ['class' => 'fieldset', 'style' => 'display:none'])->id($shippingBoxId);
-		$form->addGroup('cart.form.shipping')
-				->setOption('container', $fieldsetShipping);
+			$fieldsetShipping = Html::el('div', ['class' => 'fieldset', 'style' => 'display:none'])->id($shippingBoxId);
+			$form->addGroup('cart.form.shipping')
+					->setOption('container', $fieldsetShipping);
 
-		$form->addText('s_name', 'cart.form.nameOnly', NULL, 100)
-						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
-		$form->addText('s_street', 'cart.form.street', NULL, 100)
-						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
-		$form->addText('s_city', 'cart.form.city', NULL, 100)
-						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
-		$form->addText('s_zipcode', 'cart.form.zipcode', NULL, 10)
-						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_S;
-		$form->addSelect2('s_country', 'cart.form.country', Address::getCountries())
-						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
-		$form->addText('s_phone', 'cart.form.phone', NULL, 20)
-						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_S;
+			$form->addText('s_name', 'cart.form.nameOnly', NULL, 100)
+							->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
+			$form->addText('s_street', 'cart.form.street', NULL, 100)
+							->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
+			$form->addText('s_city', 'cart.form.city', NULL, 100)
+							->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
+			$form->addText('s_zipcode', 'cart.form.zipcode', NULL, 10)
+							->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_S;
+			$form->addSelect2('s_country', 'cart.form.country', Address::getCountries())
+							->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
+			$form->addText('s_phone', 'cart.form.phone', NULL, 20)
+							->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_S;
+		}
 
-		$form->addGroup();
-		$companyBoxId = 'companyBox';
-		$form->addCheckSwitch('isCompany', 'cart.form.isCompany', 'YES', 'NO')
-				->setDefaultValue(FALSE)
-				->addCondition(Form::EQUAL, TRUE)
-				->toggle($companyBoxId);
+		if (!$this->dealerRequired) {
+			$form->addGroup();
+			$companyBoxId = 'companyBox';
+			$form->addCheckSwitch('isCompany', 'cart.form.isCompany', 'YES', 'NO')
+					->setDefaultValue(FALSE)
+					->addCondition(Form::EQUAL, TRUE)
+					->toggle($companyBoxId);
 
-		$fieldsetCompany = Html::el('div', ['class' => 'fieldset', 'style' => 'display:none'])->id($companyBoxId);
-		$form->addGroup('cart.form.company')
-				->setOption('container', $fieldsetCompany);
+			$fieldsetCompany = Html::el('div', ['class' => 'fieldset', 'style' => 'display:none'])->id($companyBoxId);
+			$form->addGroup('cart.form.company')
+					->setOption('container', $fieldsetCompany);
+		} else {
+			$form->addGroup('cart.form.company');
+		}
 
 		$form->addText('ico', 'cart.form.ico', NULL, 30)
+						->setRequired($this->dealerRequired)
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_S;
 		$form->addText('dic', 'cart.form.dic', NULL, 30)
+						->setRequired($this->dealerRequired)
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_S;
 		$form->addText('icoVat', 'cart.form.icoVat', NULL, 30)
+						->setRequired($this->dealerRequired)
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_S;
 
 		$form->addGroup();
@@ -133,7 +149,7 @@ class Personal extends BaseControl
 
 	public function formValidate(Form $form, ArrayHash $values)
 	{
-		if ($values->dealer) {
+		if (!$this->dealerRequired && $values->dealer) {
 			if (!$values->ico || !$values->dic || !$values->icoVat) {
 				$form->addError($this->translator->translate('cart.form.validator.dealer'));
 				$form['dealer']->addError($this->translator->translate('cart.form.validator.company'));
@@ -154,10 +170,10 @@ class Personal extends BaseControl
 	{
 		if ($this->user->isLoggedIn() && $this->user->identity) {
 			$billingAddress = $this->loadBillingAddress($values);
-			$shippingAddress = $this->loadShippingAddress($values);
-			$this->userFacade->setAddress($this->user->identity, $billingAddress, $shippingAddress);
-			$this->userFacade->setDealerWant($this->user->identity, $values->dealer);
-			
+			$shippingAddress = $this->dealerRequired ? NULL : $this->loadShippingAddress($values);
+			$this->userFacade->setAddress($this->user->identity, $billingAddress, $shippingAddress, !$this->dealerRequired);
+			$this->userFacade->setDealerWant($this->user->identity, $this->dealerRequired ? TRUE : $values->dealer);
+
 			if ($values->newsletter) {
 				$this->newsletterFacade->subscribe($this->user->identity);
 			} else {
@@ -177,7 +193,7 @@ class Personal extends BaseControl
 		$address->zipcode = $values->zipcode;
 		$address->country = $values->country;
 		$address->phone = $values->phone;
-		if ($values->isCompany) {
+		if ($this->dealerRequired || $values->isCompany) {
 			$address->ico = $values->ico;
 			$address->icoVat = $values->icoVat;
 			$address->dic = $values->dic;
@@ -233,6 +249,12 @@ class Personal extends BaseControl
 			}
 		}
 		return $values;
+	}
+
+	public function setDealerRequired()
+	{
+		$this->dealerRequired = TRUE;
+		return $this;
 	}
 
 }
