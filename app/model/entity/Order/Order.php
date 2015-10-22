@@ -31,6 +31,8 @@ use Nette\Utils\Random;
  * @property string $phone
  * @property Address $billingAddress
  * @property Address $shippingAddress
+ * @property \DateTime $payDate
+ * @property int $payType
  */
 class Order extends BaseEntity
 {
@@ -77,6 +79,12 @@ class Order extends BaseEntity
 	/** @ORM\Column(type="string", length=100, nullable=true) */
 	protected $note;
 
+	/** @ORM\Column(type="datetime", nullable=true) */
+	protected $payDate;
+
+	/** @ORM\Column(type="integer", nullable=true)*/
+	protected $payType;
+
 	public function __construct($locale, User $user = NULL)
 	{
 		if ($user) {
@@ -105,12 +113,12 @@ class Order extends BaseEntity
 	{
 		return $this->rate;
 	}
-	
+
 	public function getIsCompany()
 	{
 		return $this->billingAddress && $this->billingAddress->isCompany();
 	}
-	
+
 	public function getPhone()
 	{
 		if ($this->billingAddress) {
@@ -118,7 +126,7 @@ class Order extends BaseEntity
 		}
 		return NULL;
 	}
-	
+
 	public function getNeedPin()
 	{
 		return (bool) !$this->shippingAddress;
@@ -244,7 +252,7 @@ class Order extends BaseEntity
 			$exchangedValue = $exchange ? $exchange->change($priceValue, NULL, NULL, Price::PRECISION) : $priceValue;
 			$totalPrice += $exchangedValue;
 		}
-		
+
 		return $totalPrice;
 	}
 
@@ -293,7 +301,7 @@ class Order extends BaseEntity
 		$this->mail = $basket->mail;
 		$this->billingAddress = $basket->billingAddress;
 		$this->shippingAddress = $basket->shippingAddress;
-		
+
 		return $this;
 	}
 
