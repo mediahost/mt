@@ -15,9 +15,14 @@ use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Translation\Translator;
 use Nette\Object;
+use Nette\Utils\DateTime;
 
 class OrderFacade extends Object
 {
+
+	const PAID_TYPE_MANUAL = 1;
+	const PAID_TYPE_VUB = 2;
+	const PAID_TYPE_CSOB = 2;
 
 	/** @var array */
 	public $onOrderCreate = [];
@@ -83,7 +88,7 @@ class OrderFacade extends Object
 		if (!$newState) {
 			throw new FacadeException('State does not exists.');
 		}
-		
+
 		$order->state = $newState;
 		$this->orderRepo->save($order);
 
@@ -99,14 +104,14 @@ class OrderFacade extends Object
 			$orderRepo = $this->em->getRepository(Order::getClassName());
 			$order = $orderRepo->find($orderId);
 		}
-		
+
 		if (!isset($order) || !$order) {
 			throw new FacadeException('Order does not exists.');
 		}
 
 		return $this->changeState($order, $newStateId);
 	}
-	
+
 	/**
 	 * Změní pouze locky produktů. Nelze provést při změně stavu
 	 * @param Order $order
@@ -181,6 +186,28 @@ class OrderFacade extends Object
 			}
 			$stockRepo->save($item->stock);
 		}
+	}
+
+	/**
+	 * @param $orderId
+	 * @return null|Order
+	 */
+	public function get($orderId)
+	{
+		$orderRepo = $this->em->getRepository(Order::getClassName());
+		$order = $orderRepo->find($orderId);
+		return $order;
+	}
+
+	/**
+	 * @param Order $order
+	 * @param $payType
+	 */
+	public function payOrder(Order $order, $payType)
+	{
+		$order->payDate = new DateTime();
+		$order->payType = $payType;
+		$this->orderRepo->save($order);
 	}
 
 }

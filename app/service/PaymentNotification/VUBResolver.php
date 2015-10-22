@@ -2,6 +2,8 @@
 
 namespace App\Service\PaymentNotification;
 
+use App\Model\Facade\OrderFacade;
+
 class VUBResolver implements IResolver
 {
 
@@ -25,7 +27,7 @@ class VUBResolver implements IResolver
 		$vs = $matchesVS[1];
 		$price = floatval(str_replace(',', '.', $matchesPrice[1]));
 
-		$payment = new Payment($vs, $price);
+		$payment = new Payment($vs, $price, OrderFacade::PAID_TYPE_VUB);
 		return [$payment];
 	}
 
