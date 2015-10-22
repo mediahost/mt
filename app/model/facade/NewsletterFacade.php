@@ -81,6 +81,10 @@ class NewsletterFacade extends Object
 		} elseif ($identifier instanceof User) {
 			$user = $identifier;
 			$subscriber = $user->subscriber;
+
+			if ($subscriber === NULL) {
+				return;
+			}
 		} elseif (is_string($identifier)) {
 			$subscriber = $this->findSubscriber($identifier);
 

@@ -71,7 +71,7 @@
 			
             <div class="sidebar-filter margin-bottom-25">
 				<div class="subcategories row" n:if="isset($subcategories) && count($subcategories)">
-					<div class="col-md-3" n:foreach="$subcategories as $subcategory">{dump $subcategory}
+					<div class="col-md-3" n:foreach="$subcategories as $subcategory">
 						{? $subcategory->setCurrentLocale($lang)}
 						<a n:href="Category: $subcategory->id" class="subcategory">
 							<div class="pull-right" n:if="$subcategory->image">

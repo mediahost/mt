@@ -16,6 +16,8 @@ use Nette\Security\Passwords;
  * @property-write string $password
  * @property string $hash
  * @property Role $role
+ * @property bool $wantBeDealer
+ * @property Address $billingAddress
  * @property string $facebookId
  * @property string $facebookAccessToken
  * @property string $twitterId
@@ -39,6 +41,12 @@ class Registration extends BaseEntity
 	 * @ORM\JoinColumn(name="role_id", referencedColumnName="id", nullable=true)
 	 */
 	protected $role;
+
+	/** @ORM\Column(type="boolean") */
+	protected $wantBeDealer = FALSE;
+
+	/** @ORM\OneToOne(targetEntity="Address", cascade={"persist"}) */
+	protected $billingAddress;
 
 	/** @ORM\Column(type="string", length=512, nullable=true) */
 	protected $facebookId;

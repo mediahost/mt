@@ -21,8 +21,10 @@ class ProductPresenter extends BasePresenter
 
 	public function actionDefault($id)
 	{
-		$product = $this->productRepo->find($id);
-		if (!$product) {
+		if ($id) {
+			$product = $this->productRepo->find($id);
+		}
+		if (!isset($product) || !$product) {
 			$message = $this->translator->translate('Requested product doesn\'t exist. Try to choose another from list.');
 			$this->flashMessage($message, 'warning');
 			throw new BadRequestException;

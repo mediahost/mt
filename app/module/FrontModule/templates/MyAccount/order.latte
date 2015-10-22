@@ -1,0 +1,151 @@
+{block breadcrumbItems}
+<li><a n:href="MyAccount:">{_'My Account'}</a></li>
+<li class="active">{_'My Orders'}</li>
+	{/block}
+
+{block content}
+<div class="container">
+	<div class="row">
+
+		{include 'navigation.latte'}
+
+		<!-- BEGIN CONTENT -->
+		<div class="col-md-9 col-sm-7">
+			<div class="cart-page">
+				<div class="cart-content summary-data goods-data">
+					
+					{var tmpCurrency => $exchange->getWeb()}
+					{? $exchange->addRate($order->currency, $order->rate)}
+					{? $exchange->setWeb($order->currency)}
+					
+					<div class="note note-info">
+						<h2 class="block" n:if="$order->needPin">{_'PIN'}: {$order->pin}</h2>
+						<h4 class="block">{_'order.state.type.headline.type_' . $order->state->type->id}</h4>
+						<p>
+							 {_'order.state.type.comment.type_' . $order->state->type->id}
+						</p>
+					</div>
+					
+					<fieldset class="adresses">
+						<legend>{_'cart.headline.summaryNumber', NULL, ['number' => $order->id]}</legend>
+						
+						<div class="row">
+							<div class="col-md-4 col-sm-6 block"  n:if="$order->billingAddress && $order->billingAddress->isFilled()">
+								<h5>{_'cart.order.invoiceAddress'}</h5>
+								<p>
+									{$order->billingAddress->format()|noescape}
+								</p>
+							</div>
+							<div class="col-md-4 col-sm-6 block" n:if="$order->shippingAddress">
+								<h5>{_'cart.order.shippingAddress'}</h5>
+								<p>
+									{$order->shippingAddress->format()|noescape}
+								</p>
+							</div>
+							<div class="col-md-4 col-sm-6 block">
+								<h5>{_'cart.order.contact'}</h5>
+								<p>
+									{_'Phone'}: {$order->phone}<br />
+									{_'Mail'}: {$order->mail}
+								</p>
+							</div>
+						</div>
+					</fieldset>
+
+					<div class="table-wrapper-responsive">
+						<table>
+							<tr>
+								<th class="goods-page-description" colspan="2">{_'cart.name'}</th>
+								<th class="goods-page-quantity">{_'cart.quantity'}</th>
+								<th class="goods-page-price">{_'cart.unitPrice'}</th>
+								<th class="goods-page-total">{_'cart.total'}</th>
+							</tr>
+							{foreach $order->items as $item}
+								{var stock => $item->stock}
+								{var product => $stock->product}
+								<tr>
+									<td class="goods-page-image">
+										<a n:href="Product: $product->id">
+											<img src="{$basePath}/foto/{$product->image|size:55,55}" alt="{$product}" />
+										</a>
+									</td>
+									<td class="goods-page-description">
+										<h3><a n:href="Product: $product->id">{$product->name}</a></h3>
+									</td>
+									<td class="goods-page-quantity">
+										<strong>{$item->quantity}x</strong>
+									</td>
+									<td class="goods-page-price">
+										<strong>{$stock->price->withVat|currency}</strong>
+									</td>
+									<td class="goods-page-total">
+										<strong>{$item->getTotalPrice($exchange)|asCurrency:TRUE}</strong>
+									</td>
+								</tr>
+							{/foreach}
+							<tr>
+								<td class="goods-page-image">
+								</td>
+								<td class="goods-page-description">
+									<h3>{_'Shipping'}: {_$order->shipping}</h3>
+								</td>
+								<td class="goods-page-quantity">
+									<strong>1x</strong>
+								</td>
+								<td class="goods-page-price">
+									<strong>{$order->shipping->price->withVat|currency}</strong>
+								</td>
+								<td class="goods-page-total">
+									<strong>{$order->shipping->price->withVat|currency}</strong>
+								</td>
+							</tr>
+							<tr>
+								<td class="goods-page-image">
+								</td>
+								<td class="goods-page-description">
+									<h3>{_'Payment'}: {_$order->payment}</h3>
+								</td>
+								<td class="goods-page-quantity">
+									<strong>1x</strong>
+								</td>
+								<td class="goods-page-price">
+									<strong>{$order->payment->price->withVat|currency}</strong>
+								</td>
+								<td class="goods-page-total">
+									<strong>{$order->payment->price->withVat|currency}</strong>
+								</td>
+							</tr>
+						</table>
+					</div>
+
+					<div class="shopping-total">
+						<ul>
+							<li>
+								<em>{_'cart.withoutVat'}</em>
+								<strong class="price">
+									{$order->getTotalPrice($exchange, FALSE)|asCurrency:TRUE}
+								</strong>
+							</li>
+							<li>
+								<em>{_'cart.vat'}</em>
+								<strong class="price">
+									{$order->getVatSum($exchange)|asCurrency:TRUE}
+								</strong>
+							</li>
+							<li class="shopping-total-price">
+								<em>{_'cart.total'}</em>
+								<strong class="price">
+									{$order->getTotalPrice($exchange)|asCurrency:TRUE}
+								</strong>
+							</li>
+						</ul>
+					</div>
+							
+					{? $exchange->removeRate($order->currency)}	
+					{? $exchange->setWeb($tmpCurrency)}
+				</div>
+			</div>
+		</div>
+		<!-- END CONTENT -->
+	</div>
+</div>

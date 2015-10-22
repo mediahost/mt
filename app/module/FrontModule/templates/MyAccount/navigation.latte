@@ -3,7 +3,7 @@
 <div class="sidebar col-md-3 col-sm-3">
 
 	<ul class="list-group margin-bottom-25 sidebar-menu">
-		<li n:class="list-group-item, clearfix, $presenter->isLinkCurrent('MyAccount:orders') ? active">
+		<li n:class="list-group-item, clearfix, $presenter->isLinkCurrent('MyAccount:orders') || $presenter->isLinkCurrent('MyAccount:order') ? active">
 			<a n:href="MyAccount:orders">
 				<i class="fa fa-angle-right"></i>
 				{_'My Orders'}
