@@ -1,11 +1,5 @@
 {ifset $model}
 	{form form, class => 'form-horizontal'}
-		<div class="form-group">
-			<label class="col-sm-4 control-label">{_buyout.request.template.price}</label>
-			<div class="col-sm-8">
-				<p class="form-control-static">{$model->buyoutPrice|currency}</p>
-			</div>
-		</div>
 		
 		{formContainer questions}
 			{foreach $_form->getComponents(FALSE, '\Nette\Forms\IControl') as $i}
@@ -15,11 +9,9 @@
 						<div class="radio-list">
 							{var $name = $i->name}
 							{foreach $form[questions][$name]->items as $key => $label}
-								<div class="row">
-									{label $name:$key}
-										{input $name:$key} {$label}
-									{/label}
-								</div>
+								{label $name:$key}
+									{input $name:$key} {$label}
+								{/label}
 							{/foreach}
 						</div>
 					</div>
@@ -28,28 +20,37 @@
 		{/formContainer}
 
 		<div class="form-group">
-			{label email, class => 'control-label col-md-4' /}
+			<label class="col-sm-4 control-label">{_'buyout.request.template.total'}:</label>
+			<div class="col-sm-8">
+				<p class="final-price">
+					{if $summary}
+						{$summary|currency}
+					{else}
+						{$model->buyoutPrice|currency}
+					{/if}
+				</p>
+			</div>
+		</div>
+
+		<div class="form-group">
+			{$form->renderer->renderLabel($form['email'])}
 			<div class="col-md-8">
 				{input email}
 			</div>
 		</div>
 
 		<div class="form-group">
-			{label fullname, class => 'control-label col-md-4' /}
+			{$form->renderer->renderLabel($form['fullname'])}
 			<div class="col-md-8">
 				{input fullname}
 			</div>
 		</div>
 
 		<div class="form-group">
-			<label class="col-sm-4 control-label">{_buyout.request.template.total}</label>
+			<div class="col-sm-4"></div>
 			<div class="col-sm-8">
-				<p class="form-control-static">{$summary|currency}</p>
+				{input send} {input recalculate}
 			</div>
-		</div>
-
-		<div class="col-sm-8 col-sm-push-4">
-			{input send} {input recalculate}
 		</div>
 	{/form}
 {/ifset}

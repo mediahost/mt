@@ -37,6 +37,7 @@ class ModelQuestion extends BaseControl
 		$form->addText('buyoutPrice', 'input.price')
 						->setRequired('required.price')
 						->getControlPrototype()->class[] = 'mask_currency form-control input-small';
+		$form['buyoutPrice']->getLabelPrototype()->class[] = 'control-label col-md-3';
 
 		$questions = $form->addDynamic('questions', function (Container $question) {
 			$question->addTypeahead('text', 'input.question', function ($query) {
@@ -46,7 +47,7 @@ class ModelQuestion extends BaseControl
 
 			$question->addText('yes', 'input.yes')
 							->getControlPrototype()->class[] = 'mask_currency form-control input-small';
-			
+
 			$question->addText('no', 'input.no')
 							->getControlPrototype()->class[] = 'mask_currency form-control input-small';
 		}, 5);
