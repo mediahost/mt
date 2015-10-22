@@ -94,6 +94,17 @@ class ProductsPresenter extends BasePresenter
 	/**
 	 * @secured
 	 * @resource('products')
+	 * @privilege('export')
+	 */
+	public function actionExport(array $ids)
+	{
+		$this['stocksGrid']->setIds($ids);
+		$this['stocksGrid']->getExport()->handleExport();
+	}
+
+	/**
+	 * @secured
+	 * @resource('products')
 	 * @privilege('add')
 	 */
 	public function actionAdd()
@@ -265,11 +276,11 @@ class ProductsPresenter extends BasePresenter
 			'type' => $this->translator->translate('Product'), 'name' => (string) $stock
 		]);
 		$this->flashMessage($message, 'success');
-		
+
 		if ($this->isAjax()) {
 			$this->redrawControl();
 		} else {
-			$this->redirect('edit', $stock->id);			
+			$this->redirect('edit', $stock->id);
 		}
 	}
 

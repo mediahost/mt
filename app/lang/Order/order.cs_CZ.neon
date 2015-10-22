@@ -1,0 +1,12 @@
+state:
+	type:
+		headline:
+			type_1: 'Objednávka čeká na zpracování'
+			type_2: 'Objednávka byla vyexpedována'
+			type_3: 'Objednávka již byla vyřízena'
+			type_4: 'Objednávka čeká na zpracování'
+		comment:
+			type_1: ''
+			type_2: ''
+			type_3: ''
+			type_4: ''

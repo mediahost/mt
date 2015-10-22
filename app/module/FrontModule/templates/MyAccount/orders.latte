@@ -1,7 +1,7 @@
 {block breadcrumbItems}
 <li><a n:href="MyAccount:">{_'My Account'}</a></li>
 <li class="active">{_'My Orders'}</li>
-{/block}
+	{/block}
 
 {block content}
 <div class="container">
@@ -13,11 +13,39 @@
 		<div class="col-md-9 col-sm-7">
             <h1>{_'My Orders'}</h1>
             <div class="content-page">
-				<ul>
-					<li><a n:href="this">order 1</a></li>
-					<li><a n:href="this">order 2</a></li>
-					<li><a n:href="this">order 3</a></li>
-				</ul>
+				<div n:if="!count($orders)" class="alert alert-warning">
+					<strong>{_'You have no orders.'}</strong> 
+					{_'All future orders will be displayed here.'}
+				</div>
+
+				<table n:if="count($orders)" class="table">
+					<thead>
+						<tr>
+							<th>
+								{_'Order'}
+							</th>
+							<th>
+								{_'Date'}
+							</th>
+							<th>
+								{_'State'}
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr n:foreach="$orders as $order">
+							<td>
+								<a n:href="MyAccount:order $order->id">{$order}</a>
+							</td>
+							<td>
+								{$order->createdAt|date:'d.m.Y'}
+							</td>
+							<td>
+								{_'order.state.type.headline.type_' . $order->state->type->id}
+							</td>
+						</tr>
+					</tbody>
+				</table>
             </div>
 		</div>
 		<!-- END CONTENT -->

@@ -7,7 +7,9 @@
 			{/if}
 			<!-- PRODUCT ITEM START -->
 			<div class="col-md-4 col-sm-6 col-xs-12">
-				{include product, stock => $stock, product => $stock->product}
+				<div class="product-item-container">
+					{control stock-$stock->id}
+				</div>
 			</div>
 			<!-- PRODUCT ITEM END -->
 			{if $iterator->last}
@@ -28,23 +30,3 @@
 	{/if}
 	<!-- END PRODUCT LIST -->
 {/snippet}
-
-{define product}
-{var divId => 'add-to-cart-' . rand(99, 1000) . '-' . $stock->id}
-<div class="product-item" id="{$divId}">
-	<div class="pi-img-wrapper">
-		<img src="{$basePath}/foto/{$product->image|size:'238'}" class="img-responsive" alt="{$product}">
-		<div>
-			<a href="{$basePath}/foto/{$product->image|size}" class="btn btn-default fancybox-button">{_'Zoom'}</a>
-			<a href="{plink Product: $product->id}" class="btn btn-default fancybox-fast-view">{_'View'}</a>
-		</div>
-	</div>
-	<h3>
-		<a href="{plink Product: $product->id}">{$product}</a>
-	</h3>
-	<div class="pi-price">{$stock->getPrice($priceLevel)|currencyVat}</div>
-	<a n:href="addToCart! $stock->id"
-	   n:class="btn, btn-default, add2cart, ajax, !$basket->getCountAllowedToAdd($stock) ? disabled"
-	   data-target-loading="#{$divId}">{_'Add to cart'}</a>
-</div>
-{/define}

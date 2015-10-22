@@ -2,6 +2,7 @@
 
 namespace App\Extensions\Products;
 
+use App\Components\Product\Form\IPrintStockFactory;
 use App\Extensions\Products\Components\Paginator;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
@@ -16,7 +17,6 @@ use App\Model\Entity\Product;
 use App\Model\Entity\Stock;
 use App\Model\Entity\Vat;
 use App\Model\Facade\BasketFacade;
-use App\Model\Facade\Exception\InsufficientQuantityException;
 use App\Model\Facade\ProductFacade;
 use App\Model\Facade\StockFacade;
 use Doctrine\ORM\Query\Expr\Andx;
@@ -29,6 +29,7 @@ use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\QueryBuilder;
 use Kdyby\Translation\Translator;
 use Nette\Application\UI\Control;
+use Nette\Application\UI\Multiplier;
 use Nette\Localization\ITranslator;
 use Nette\Templating\FileTemplate;
 use Nette\Utils\ArrayHash;
@@ -60,6 +61,9 @@ class ProductList extends Control
 	/** @var Exchange @inject */
 	public $exchange;
 
+	/** @var IPrintStockFactory @inject */
+	public $iStockPrint;
+
 	/** @var int @persistent */
 	public $page = 1;
 
@@ -70,10 +74,7 @@ class ProductList extends Control
 	public $sort;
 
 	/** @var bool @persistent */
-	public $showAvailable = TRUE;
-
-	/** @var bool @persistent */
-	public $showNotAvailable = TRUE;
+	public $showOnlyAvailable = FALSE;
 
 	/** @var int @persistent */
 	public $minPrice;
@@ -101,6 +102,9 @@ class ProductList extends Control
 
 	/** @var array event for modifying each item */
 	public $onEachItem = [];
+
+	/** @var bool show filter as expanded */
+	public $expandFilter = FALSE;
 
 	// <editor-fold defaultstate="collapsed" desc="protected variables">
 
@@ -647,9 +651,7 @@ class ProductList extends Control
 	{
 		$this->filterNotDeleted();
 		$this->filterOnlyActive();
-		if ($this->showAvailable !== $this->showNotAvailable) {
-			$this->filterByInStore($this->showAvailable);
-		}
+		$this->filterByInStore($this->showOnlyAvailable);
 		foreach ($this->filter as $key => $value) {
 			switch ($key) {
 				case 'category':
@@ -872,11 +874,12 @@ class ProductList extends Control
 		foreach ($parameters as $code => $value) {
 			$paramKey = 'param' . $code;
 			if (Parameter::checkCodeHasType($code, Parameter::STRING)) {
-				$this->qb->andWhere("p.parameter{$code} LIKE :{$paramKey}");
+				$operator = 'LIKE';
 			} else {
-				$this->qb->andWhere("p.parameter{$code} = :{$paramKey}");
+				$operator = '=';
 			}
-			$this->qb->setParameter($paramKey, $value);
+			$this->qb->andWhere("p.parameter{$code} {$operator} :{$paramKey}")
+					->setParameter($paramKey, $value);
 		}
 		return $this;
 	}
@@ -937,28 +940,6 @@ class ProductList extends Control
 	public function handlePage($page)
 	{
 		$this->page = $page;
-		$this->reload();
-	}
-
-	/**
-	 * @param int $stockId
-	 * @internal
-	 */
-	public function handleAddToCart($stockId, $quantity = 1)
-	{
-		if ($stockId) {
-			$stockRepo = $this->em->getRepository(Stock::getClassName());
-			$stock = $stockRepo->find($stockId);
-			if ($stock) {
-				try {
-					$this->basketFacade->add($stock, $quantity);
-				} catch (InsufficientQuantityException $ex) {
-					$message = $this->translator->translate('cart.product.youCannotAdd');
-					$this->presenter->flashMessage($message, 'warning');
-				}
-			}
-		}
-
 		$this->reload();
 	}
 
@@ -1026,6 +1007,7 @@ class ProductList extends Control
 	public function renderFilter()
 	{
 		$this->template->setFile(__DIR__ . '/templates/filter.latte');
+		$this->template->expandFilter = $this->expandFilter;
 		$this->templateRender();
 	}
 
@@ -1060,6 +1042,17 @@ class ProductList extends Control
 
 	// </editor-fold>
 	// <editor-fold defaultstate="collapsed" desc="forms">
+
+
+	protected function createComponentStock()
+	{
+		return new Multiplier(function ($itemId) {
+			$control = $this->iStockPrint->create();
+			$control->setStockById($itemId);
+			$control->setPriceLevel($this->priceLevel);
+			return $control;
+		});
+	}
 
 	protected function createComponentSortingForm($name)
 	{
@@ -1099,20 +1092,8 @@ class ProductList extends Control
 		$form->setRenderer(new MetronicFormRenderer());
 		$form->getElementPrototype()->class = ['sendOnChange', 'loadingNoOverlay', !$this->ajax ? : 'ajax'];
 
-		$availabilities = [
-			2 => 'In Stock',
-			1 => 'Not Available',
-		];
-		$defaultAvailablity = [];
-		if ($this->showNotAvailable) {
-			$defaultAvailablity[] = 1;
-		}
-		if ($this->showAvailable) {
-			$defaultAvailablity[] = 2;
-		}
-		$form->addCheckboxList('availability', NULL, $availabilities)
-				->setDefaultValue($defaultAvailablity)
-				->setInline();
+		$form->addCheckbox('onlyAvailable', 'Only Available')
+				->setDefaultValue($this->showOnlyAvailable);
 
 		$limitMinPriceRaw = $this->getLimitPriceMin();
 		$limitMaxPriceRaw = $this->getLimitPriceMax();
@@ -1158,18 +1139,7 @@ class ProductList extends Control
 
 	public function processFilterForm(Form $form, ArrayHash $values)
 	{
-		$this->showAvailable = FALSE;
-		$this->showNotAvailable = FALSE;
-		foreach ($values->availability as $available) {
-			switch ($available) {
-				case 1:
-					$this->showNotAvailable = TRUE;
-					break;
-				case 2:
-					$this->showAvailable = TRUE;
-					break;
-			}
-		}
+		$this->showOnlyAvailable = $values->onlyAvailable;
 
 		$glue = preg_quote(';');
 		if (preg_match('/^(\d+)' . $glue . '(\d+)$/', $values->price, $matches)) {
@@ -1189,6 +1159,7 @@ class ProductList extends Control
 			}
 		}
 
+		$this->expandFilter = TRUE;
 		$this->reload();
 	}
 

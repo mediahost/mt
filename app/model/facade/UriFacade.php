@@ -16,11 +16,13 @@ class UriFacade extends Object
 			'Cart' => 'Kosik',
 			'Page' => 'Strana',
 			'Service' => 'Servis',
+			'Dealer' => 'Velkoobchod',
 		],
 		'sk' => [
 			'Cart' => 'Kosik',
 			'Page' => 'Strana',
 			'Service' => 'Servis',
+			'Dealer' => 'Dealer',
 		],
 	];
 

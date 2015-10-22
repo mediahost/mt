@@ -88,22 +88,9 @@
 						<div class="row">
 							<div class="col-md-3 col-sm-4 col-xs-6" n:foreach="$newStocks as $stock">
 								{continueIf $iterator->counter > 4}
-								{var product => $stock->product}
-								<div class="product-item">
-									<div class="pi-img-wrapper">
-										<a n:href="Product: $product->id">
-											<img src="{$basePath}/foto/{$product->image|size:'300'}" 
-												 class="img-responsive" alt="{$product}" />
-										</a>
-									</div>
-									<h3>
-										<a n:href="Product: $product->id">
-											{$product}
-										</a>
-									</h3>
-									<div class="pi-price">{$stock->price|currencyVat}</div>
-									<a href="#" class="btn btn-default add2cart">{_'Add to cart'}</a>
-								</div>
+                                                                <div class="product-item-container">
+                                        				{control stock-$stock->id}
+                                                                </div>
 							</div>
 						</div>
 					</div>

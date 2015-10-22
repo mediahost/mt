@@ -58,7 +58,12 @@ trait UserFacadeCreates
 				->addRole($role)
 				->setRequiredRole($registration->role)
 				->setLocale($this->translator->getLocale())
-				->setCurrency($this->exchange->getWeb()->getCode());
+				->setCurrency($this->exchange->getWeb()->getCode())
+				->setWantBeDealer($registration->wantBeDealer);
+		
+		if ($registration->billingAddress) {
+			$user->billingAddress = $registration->billingAddress;
+		}
 
 		$this->em->persist($user);
 
@@ -79,7 +84,9 @@ trait UserFacadeCreates
 		}
 
 		$this->registrationRepo->delete($registration);
-		return $this->em->flush();
+		
+		$this->em->flush();
+		return $user;
 	}
 
 	/**
@@ -92,9 +99,15 @@ trait UserFacadeCreates
 		$this->deleteRegistrations($user->mail);
 
 		$registration = new Registration();
-		$registration->setMail($user->mail)
+		$registration
+				->setMail($user->mail)
 				->setHash($user->hash)
-				->setRole($this->roleDao->find($user->requiredRole->id));
+				->setRole($this->roleDao->find($user->requiredRole->id))
+				->setWantBeDealer($user->wantBeDealer);
+		
+		if ($user->billingAddress) {
+			$registration->billingAddress = $user->billingAddress;
+		}
 
 		if ($user->facebook) {
 			$registration->setFacebookId($user->facebook->id)

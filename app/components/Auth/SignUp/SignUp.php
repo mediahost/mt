@@ -3,11 +3,13 @@
 namespace App\Components\Auth;
 
 use App\Components\BaseControl;
+use App\Forms\Controls\TextInputBased\MetronicTextInputBase;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
+use App\Forms\Renderers\MetronicHorizontalFormRenderer;
+use App\Model\Entity\Address;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
-use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
 use App\Model\Storage\SignUpStorage;
 use Nette\Forms\IControl;
@@ -34,15 +36,53 @@ class SignUp extends BaseControl
 
 	/** @var SignUpStorage @inject */
 	public $session;
-
 	// </editor-fold>
+
+	private $completeInfo = FALSE;
 
 	/** @return Form */
 	protected function createComponentForm()
 	{
 		$form = new Form();
-		$form->setRenderer(new MetronicFormRenderer());
+		$form->setRenderer($this->completeInfo ? new MetronicHorizontalFormRenderer(4, 8) : new MetronicFormRenderer());
 		$form->setTranslator($this->translator);
+
+		if ($this->completeInfo) {
+			$form->addGroup('cart.form.billing');
+
+			$form->addText('name', 'cart.form.name', NULL, 100)
+							->setRequired('cart.form.validator.filled')
+							->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
+			$form->addText('street', 'cart.form.street', NULL, 100)
+							->setRequired('cart.form.validator.filled')
+							->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
+			$form->addText('city', 'cart.form.city', NULL, 100)
+							->setRequired('cart.form.validator.filled')
+							->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
+			$form->addText('zipcode', 'cart.form.zipcode', NULL, 10)
+							->setRequired('cart.form.validator.filled')
+							->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_S;
+			$form->addSelect2('country', 'cart.form.country', Address::getCountries())
+							->setRequired('cart.form.validator.filled')
+							->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
+			$form->addText('phone', 'cart.form.phone', NULL, 20)
+							->setRequired('cart.form.validator.filled')
+							->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_S;
+
+			$form->addGroup('cart.form.company');
+
+			$form->addText('ico', 'cart.form.ico', NULL, 30)
+							->setRequired()
+							->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_S;
+			$form->addText('dic', 'cart.form.dic', NULL, 30)
+							->setRequired()
+							->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_S;
+			$form->addText('icoVat', 'cart.form.icoVat', NULL, 30)
+							->setRequired()
+							->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_S;
+
+			$form->addGroup('cart.form.account');
+		}
 
 		$form->addServerValidatedText('mail', 'E-mail')
 				->setRequired('Please enter your e-mail.')
@@ -63,7 +103,14 @@ class SignUp extends BaseControl
 				->setRequired('Please re-enter your password')
 				->addRule(Form::EQUAL, 'Passwords must be equal.', $form['password']);
 
-		$form->addSubmit('continue', 'Continue');
+		if ($this->completeInfo) {
+			$form['mail']->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
+			$form['password']->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
+			$form['passwordVerify']->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
+			$form->addSubmit('continue', 'Send');
+		} else {
+			$form->addSubmit('continue', 'Continue');
+		}
 
 		$form->onSuccess[] = $this->formSucceeded;
 		return $form;
@@ -87,10 +134,27 @@ class SignUp extends BaseControl
 				->setPassword($values->password);
 		$roleRepo = $this->em->getRepository(Role::getClassName());
 		$entity->requiredRole = $roleRepo->findOneByName(Role::USER);
+		$entity->wantBeDealer = $this->completeInfo;
+		$entity->billingAddress = $this->loadBillingAddress($values);
 
 		$this->session->verification = FALSE;
 
 		$this->onSuccess($this, $entity);
+	}
+
+	private function loadBillingAddress(ArrayHash $values)
+	{
+		$address = new Address();
+		$address->name = $values->name;
+		$address->street = $values->street;
+		$address->city = $values->city;
+		$address->zipcode = $values->zipcode;
+		$address->country = $values->country;
+		$address->phone = $values->phone;
+		$address->ico = $values->ico;
+		$address->icoVat = $values->icoVat;
+		$address->dic = $values->dic;
+		return $address;
 	}
 
 	public function renderLogin()
@@ -120,6 +184,13 @@ class SignUp extends BaseControl
 	}
 
 	// </editor-fold>
+
+	public function setCompleteInfo()
+	{
+		$this->completeInfo = TRUE;
+		return $this;
+	}
+
 }
 
 interface ISignUpFactory

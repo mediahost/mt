@@ -1,21 +1,26 @@
 {ifset $model}
-	Výkupní cena: {$model->buyoutPrice|currency}
-
 	{form form, class => 'form-horizontal'}
+		<div class="form-group">
+			<label class="col-sm-4 control-label">{_buyout.request.template.price}</label>
+			<div class="col-sm-8">
+				<p class="form-control-static">{$model->buyoutPrice|currency}</p>
+			</div>
+		</div>
+		
 		{formContainer questions}
 			{foreach $_form->getComponents(FALSE, '\Nette\Forms\IControl') as $i}
 				<div class="form-group">
 					{label $i class => 'col-sm-4 control-label' /}
 					<div class="col-sm-8">
 						<div class="radio-list">
-						{var $name = $i->name}
-						{foreach $form[questions][$name]->items as $key => $label}
-							<div class="row">
-								{label $name:$key}
-									{input $name:$key} {$label}
-								{/label}
-							</div>
-						{/foreach}
+							{var $name = $i->name}
+							{foreach $form[questions][$name]->items as $key => $label}
+								<div class="row">
+									{label $name:$key}
+										{input $name:$key} {$label}
+									{/label}
+								</div>
+							{/foreach}
 						</div>
 					</div>
 				</div>
@@ -36,11 +41,15 @@
 			</div>
 		</div>
 
-		{input send}
-		{input recalculate}
+		<div class="form-group">
+			<label class="col-sm-4 control-label">{_buyout.request.template.total}</label>
+			<div class="col-sm-8">
+				<p class="form-control-static">{$summary|currency}</p>
+			</div>
+		</div>
 
-		<div>
-			Celkem: {$summary|currency}
+		<div class="col-sm-8 col-sm-push-4">
+			{input send} {input recalculate}
 		</div>
 	{/form}
 {/ifset}
