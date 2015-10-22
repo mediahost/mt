@@ -1,7 +1,7 @@
 # Components
 modelQuestion:
 	input:
-		price: 'Price'
+		price: 'Basic Price'
 		question: 'Question'
 		yes: 'Yes'
 		no: 'No'
@@ -14,16 +14,16 @@ request:
 	input:
 		yes: 'Yes'
 		no: 'No'
-		email: 'E-mail:'
-		fullname: 'Full name:'
+		email: 'E-mail'
+		fullname: 'Full name'
 		recapculate: 'Recalculate'
-		send: 'Send'
+		send: 'Agree with price'
 	required:
 		fullname: 'Enter your first name and last name'
 		email: 'Enter your e-mail'
 	template:
-		price: 'Buyout price:'
-		total: 'Total:'
+		price: 'Buyout price'
+		total: 'Total price'
 
 # E-mail messages
 email:

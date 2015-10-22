@@ -59,6 +59,7 @@ class BuyoutPresenter extends BasePresenter
 	public function renderDefault()
 	{
 		$this->template->page = $this->page;
+		$this->template->model = $this->model;
 	}
 
 	/** @return ModelSelector */

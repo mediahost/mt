@@ -18,7 +18,7 @@
 
 			<div class="margin-bottom-20">
 				<h1>{$page->name}</h1>
-				<div class="content-page">
+				<div class="content-page" n:if="$page->html">
 					<div class="page-html-content">
 						{$page->html|noescape}
 					</div>
@@ -26,17 +26,20 @@
 			</div>
 
 			<div id="loaded-content" class="loadingNoOverlay">
-				<div class="clearfix model-selector margin-bottom-20">
-					{control modelSelector}
-				</div>
-
-				<div class="panel" id="request-form-loading">
+				<div class="panel">
 					<div class="panel-body">
-						{snippet request}
-							{control requestForm}
-						{/snippet}
+						<div class="model-selector">
+							{control modelSelector}
+						</div>
 					</div>
 				</div>
+				{snippet request}
+					<div class="panel" id="request-form-loading" n:if="$model">
+						<div class="panel-body">
+							{control requestForm}
+						</div>
+					</div>
+				{/snippet}
 			</div>
 		</div>
 	</div>

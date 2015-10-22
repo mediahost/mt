@@ -8,6 +8,7 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Kdyby\Doctrine\EntityManager;
+use Kdyby\Translation\Translator;
 use Nette\Object;
 
 class QuestionFacade extends Object
@@ -15,6 +16,9 @@ class QuestionFacade extends Object
 
 	/** @var EntityManager @inject */
 	public $em;
+
+	/** @var Translator @inject */
+	public $translator;
 
 	/**
 	 * @param string $text
@@ -34,7 +38,8 @@ class QuestionFacade extends Object
 				->setMaxResults(30);
 
 		if (is_string($lang)) {
-			$qb->andWhere('t.locale = :lang')
+			$qb->andWhere('(t.locale = :defaultLang OR t.locale = :lang)')
+					->setParameter('defaultLang', $this->translator->getDefaultLocale())
 					->setParameter('lang', $lang);
 		} else if (is_array($lang)) {
 			$orExpr = new Orx();

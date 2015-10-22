@@ -1,7 +1,7 @@
 # Components
 modelQuestion:
 	input:
-		price: 'Cena'
+		price: 'Základní cena'
 		question: 'Otázka'
 		yes: 'Ano'
 		no: 'Ne'
@@ -12,18 +12,18 @@ modelQuestion:
 
 request:
 	input:
-		yes: 'Áno'
-		no: 'Nie'
-		email: 'E-mail:'
-		fullname: 'Jméno a příjmení:'
+		yes: 'Ano'
+		no: 'Ne'
+		email: 'E-mail'
+		fullname: 'Jméno a příjmení'
 		recapculate: 'Přepočítat'
-		send: 'Odeslat'
+		send: 'Souhlasím s cenou'
 	required:
 		fullname: 'Zadejte své jméno a příjmení'
 		email: 'Zadejte svůj e-mail'
 	template:
-		price: 'Výkupní cena:'
-		total: 'Celkem:'
+		price: 'Výkupní cena'
+		total: 'Celková cena'
 
 # E-mail messages
 email:

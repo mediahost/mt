@@ -52,19 +52,22 @@ class Request extends BaseControl
 
 		foreach ($this->model->questions as $qm) {
 			$questions->addRadioList($qm->id, $qm->question->text, [
-						'y' => $this->translator->translate('buyout.request.input.yes') . ' (' . $this->exchange->format($qm->priceA) . ')',
-						'n' => $this->translator->translate('buyout.request.input.no') . ' (' . $this->exchange->format($qm->priceB) . ')',
+						'y' => $this->translator->translate('buyout.request.input.yes'),
+						'n' => $this->translator->translate('buyout.request.input.no'),
 					])->getControlPrototype()->class[] = 'form-control';
+			$questions[$qm->id]->getSeparatorPrototype()->setName(NULL);
 		}
 
 		$form->addText('email', 'buyout.request.input.email')
 						->setRequired('buyout.request.required.email')
 						->addRule(Form::EMAIL)
-						->getControlPrototype()->class[] = 'form-control';
+						->getControlPrototype()->class[] = 'form-control input-medium';
+		$form['email']->getLabelPrototype()->class[] = 'control-label col-md-4';
 
 		$form->addText('fullname', 'buyout.request.input.fullname')
 						->setRequired('buyout.request.required.fullname')
-						->getControlPrototype()->class[] = 'form-control';
+						->getControlPrototype()->class[] = 'form-control input-medium';
+		$form['fullname']->getLabelPrototype()->class[] = 'control-label col-md-4';
 
 		$form->addSubmit('recalculate', 'buyout.request.input.recalculate')
 						->setValidationScope(FALSE)
