@@ -1144,6 +1144,9 @@ msgstr "Co hledáte?"
 msgid "Not Available"
 msgstr "Nedostupné"
 
+msgid "Only Available"
+msgstr "Pouze skladem"
+
 msgid "Range:"
 msgstr "Rozsah:"
 
@@ -1308,3 +1311,6 @@ msgstr "Až schválíme váš požadavek stát se přeprodejcem, budete informov
 
 msgid "Your dealer request was send"
 msgstr "Váš požadavek stát se přeprodejcem byl odeslán"
+
+msgid "More params"
+msgstr "Více parametrů"

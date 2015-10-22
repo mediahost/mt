@@ -74,10 +74,7 @@ class ProductList extends Control
 	public $sort;
 
 	/** @var bool @persistent */
-	public $showAvailable = TRUE;
-
-	/** @var bool @persistent */
-	public $showNotAvailable = TRUE;
+	public $showOnlyAvailable = FALSE;
 
 	/** @var int @persistent */
 	public $minPrice;
@@ -105,9 +102,9 @@ class ProductList extends Control
 
 	/** @var array event for modifying each item */
 	public $onEachItem = [];
-        
-        /** @var bool show filter as expanded */
-        public $showFilter = false;
+
+	/** @var bool show filter as expanded */
+	public $expandFilter = FALSE;
 
 	// <editor-fold defaultstate="collapsed" desc="protected variables">
 
@@ -654,9 +651,7 @@ class ProductList extends Control
 	{
 		$this->filterNotDeleted();
 		$this->filterOnlyActive();
-		if ($this->showAvailable !== $this->showNotAvailable) {
-			$this->filterByInStore($this->showAvailable);
-		}
+		$this->filterByInStore($this->showOnlyAvailable);
 		foreach ($this->filter as $key => $value) {
 			switch ($key) {
 				case 'category':
@@ -956,9 +951,6 @@ class ProductList extends Control
 	public function reload()
 	{
 		if ($this->presenter->isAjax()) {
-                        if ($this->showFilter) {
-                            $this['filterForm']->getElementPrototype()->class += [10000 => 'in'];
-                        }
 			$this->redrawControl();
 			$this->presenter->redrawControl();
 		} else {
@@ -1015,6 +1007,7 @@ class ProductList extends Control
 	public function renderFilter()
 	{
 		$this->template->setFile(__DIR__ . '/templates/filter.latte');
+		$this->template->expandFilter = $this->expandFilter;
 		$this->templateRender();
 	}
 
@@ -1097,22 +1090,10 @@ class ProductList extends Control
 		$form = new Form($this, $name);
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
-		$form->getElementPrototype()->class = ['sendOnChange', 'loadingNoOverlay', !$this->ajax ? : 'ajax', 'collapse'];
+		$form->getElementPrototype()->class = ['sendOnChange', 'loadingNoOverlay', !$this->ajax ? : 'ajax'];
 
-		$availabilities = [
-			2 => 'In Stock',
-			1 => 'Not Available',
-		];
-		$defaultAvailablity = [];
-		if ($this->showNotAvailable) {
-			$defaultAvailablity[] = 1;
-		}
-		if ($this->showAvailable) {
-			$defaultAvailablity[] = 2;
-		}
-		$form->addCheckboxList('availability', NULL, $availabilities)
-				->setDefaultValue($defaultAvailablity)
-				->setInline();
+		$form->addCheckbox('onlyAvailable', 'Only Available')
+				->setDefaultValue($this->showOnlyAvailable);
 
 		$limitMinPriceRaw = $this->getLimitPriceMin();
 		$limitMaxPriceRaw = $this->getLimitPriceMax();
@@ -1158,18 +1139,7 @@ class ProductList extends Control
 
 	public function processFilterForm(Form $form, ArrayHash $values)
 	{
-		$this->showAvailable = FALSE;
-		$this->showNotAvailable = FALSE;
-		foreach ($values->availability as $available) {
-			switch ($available) {
-				case 1:
-					$this->showNotAvailable = TRUE;
-					break;
-				case 2:
-					$this->showAvailable = TRUE;
-					break;
-			}
-		}
+		$this->showOnlyAvailable = $values->onlyAvailable;
 
 		$glue = preg_quote(';');
 		if (preg_match('/^(\d+)' . $glue . '(\d+)$/', $values->price, $matches)) {
@@ -1189,7 +1159,7 @@ class ProductList extends Control
 			}
 		}
 
-                $this->showFilter = true;
+		$this->expandFilter = TRUE;
 		$this->reload();
 	}
 

@@ -1,52 +1,62 @@
 {snippet productFilter}
-        <div class="text-right">
-            <a class="btn btn-primary" role="button" data-toggle="collapse" href="#frm-products-filterForm" 
-               aria-expanded="false" aria-controls="frm-products-filterForm">
-				<i class="fa fa-tasks"></i>&nbsp;
-				{_'Show / hide filter'}
-            </a>
-        </div>
-        {form filterForm}
+	{form filterForm}
 		{? $form->render('begin')}
-                <div class="form-group">
-                        <h3>{_'Price'}</h3>
-                        <p>
-                                {input price}
-                        </p>
-                </div>
-                <div class="form-group">
-                        <h3>{_'Availability'}</h3>
-                        <div class="checkbox-list">
-                                {input availability}
-                        </div>
-                </div>
-                <div class="form-group">
-                        <h3>{_'Parameters'}</h3>
-                        <div>
-                                <div class="checkbox-list">
-                                        {ifset $form['B1']}{input B1, class => "checkbox-inline"}{/ifset}
-                                        {ifset $form['B2']}{input B2, class => "checkbox-inline"}{/ifset}
-                                        {ifset $form['B3']}{input B3, class => "checkbox-inline"}{/ifset}
-                                        {ifset $form['B4']}{input B4, class => "checkbox-inline"}{/ifset}
-                                        {ifset $form['B5']}{input B5, class => "checkbox-inline"}{/ifset}
-                                        {ifset $form['B5']}{input B6, class => "checkbox-inline"}{/ifset}
-                                </div>
-                                <div class="row m-t">
-                                    <div class="form-group col-sm-4" n:ifset="$form['S1']">
-                                            {label S1 /}<br>
-                                            {input S1, class => 'select2 form-control'}
-                                    </div>
-                                    <div class="form-group col-sm-4" n:ifset="$form['S2']">
-                                            {label S2 /}<br>
-                                            {input S2, class => 'select2 form-control'}
-                                    </div>
-                                    <div class="form-group col-sm-4" n:ifset="$form['S3']">
-                                            {label S3 /}<br>
-                                            {input S3, class => 'select2 form-control'}
-                                    </div>
-                                </div>
-                        </div>
-                </div>
+		<div class="row">
+			<div class="form-group col-sm-7">
+				{input price}
+			</div>
+			<div class="form-group col-sm-2 available">
+				{input onlyAvailable}
+			</div>
+			<div class="form-group col-sm-3 text-center more">
+				<a class="btn btn-default" role="button" data-toggle="collapse" href="#filter-div" 
+				   aria-expanded="true" aria-controls="filter-div">
+					{_'More params'}
+					<i class="fa fa-angle-down"></i>
+				</a>
+			</div>
+		</div>
+		<div id="filter-div" n:class="margin-bottom-0, collapse, $expandFilter ? in">
+			<div class="form-group">
+				<h3>{_'Parameters'}</h3>
+				<div>
+					<div class="checkbox-list">
+						{ifset $form['B1']}
+							{input B1, class => "checkbox-inline"}
+						{/ifset}
+						{ifset $form['B2']}
+							{input B2, class => "checkbox-inline"}
+						{/ifset}
+						{ifset $form['B3']}
+							{input B3, class => "checkbox-inline"}
+						{/ifset}
+						{ifset $form['B4']}
+							{input B4, class => "checkbox-inline"}
+						{/ifset}
+						{ifset $form['B5']}
+							{input B5, class => "checkbox-inline"}
+						{/ifset}
+						{ifset $form['B5']}
+							{input B6, class => "checkbox-inline"}
+						{/ifset}
+					</div>
+					<div class="row m-t">
+						<div class="form-group col-sm-4" n:ifset="$form['S1']">
+							{label S1 /}<br>
+							{input S1, class => 'select2 form-control input-medium'}
+						</div>
+						<div class="form-group col-sm-4" n:ifset="$form['S2']">
+							{label S2 /}<br>
+							{input S2, class => 'select2 form-control input-medium'}
+						</div>
+						<div class="form-group col-sm-4" n:ifset="$form['S3']">
+							{label S3 /}<br>
+							{input S3, class => 'select2 form-control input-medium'}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		{? $form->render('end')}
 	{/form}
 {/snippet}
