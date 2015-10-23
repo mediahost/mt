@@ -8,6 +8,9 @@ admin:
 			title: 'Newsletter'
 		new:
 			title: 'Compose message'
+			counter:
+				pre: "It's going to be sent"
+				post: 'messages!'
 		grid:
 			all: 'all'
 			createMessage: 'Create message'
