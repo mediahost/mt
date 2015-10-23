@@ -57,7 +57,14 @@ class NewsletterPresenter extends BasePresenter
 	 */
 	public function actionNew()
 	{
+		$counts = $this->subscriberFacade->counts($this['form']['recipients']->value);
 		
+		if (is_array($counts)) {
+			$this->template->count = $counts[$this['form']['locale']->value];
+			$this->template->data = \Nette\Utils\Json::encode($counts);
+		} else {
+			$this->template->count = $counts;
+		}
 	}
 
 	/** @return MessageGridControl */
@@ -68,7 +75,7 @@ class NewsletterPresenter extends BasePresenter
 
 	/** @return Form */
 	protected function createComponentForm()
-	{
+	{	
 		$form = new Form;
 		$form->setRenderer(new MetronicFormRenderer)
 				->setTranslator($this->translator);
@@ -79,14 +86,16 @@ class NewsletterPresenter extends BasePresenter
 			self::RECIPIENT_DEALER => self::LOCALE_DOMAIN . '.form.dealers',
 			self::LOCALE_DOMAIN . '.form.groups' => $groups,
 		];
-
+	
 		$form->addSelect('recipients', self::LOCALE_DOMAIN . '.form.recipients', $recipients)
+				->setDefaultValue(self::RECIPIENT_USER)
 				->getControlPrototype()
 				->addAttributes(['id' => 'new-newsletter-recipients']);
 
 		$form->addSelect('locale', self::LOCALE_DOMAIN . '.form.locale', $this->localeFacade->getLocalesToSelect())
-				->setDisabled($form['recipients']->value === self::RECIPIENT_DEALER);
-
+				->getControlPrototype()
+				->addAttributes(['id' => 'new-newsletter-locale']);
+		
 		$form->addText('subject', self::LOCALE_DOMAIN . '.form.subject')
 				->setRequired();
 
@@ -126,6 +135,7 @@ class NewsletterPresenter extends BasePresenter
 				$locale = $values->locale;
 			} elseif ($values->recipients === self::RECIPIENT_DEALER) {
 				$locale = self::DEFAULT_LOCALE_DEALER;
+				$form['locale']->setDisabled(TRUE);
 			} elseif (is_numeric($values->recipients)) {
 				$locale = self::DEFAULT_LOCALE_GROUP;
 			} else {
