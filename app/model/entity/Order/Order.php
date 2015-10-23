@@ -123,6 +123,11 @@ class Order extends BaseEntity
 	{
 		return (bool) !$this->shippingAddress;
 	}
+	
+	public function getPin($force = FALSE)
+	{
+		return ($force || $this->getNeedPin()) ? $this->pin : NULL;
+	}
 
 	public function setItem(Stock $stock, Price $price, $quantity, $locale)
 	{
