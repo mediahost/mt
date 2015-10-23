@@ -8,6 +8,9 @@ admin:
 			title: 'Newsletter'
 		new:
 			title: 'Nová zpráva'
+			counter:
+				pre: 'Bude odesláno'
+				post: 'zpráv!'
 		grid:
 			all: 'vše'
 			createMessage: 'Vytvořit zprávu'
