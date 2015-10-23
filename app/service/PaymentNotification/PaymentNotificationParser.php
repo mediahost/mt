@@ -70,7 +70,7 @@ class PaymentNotificationParser extends Object
 		$finder = Finder::findFiles('*')->in(__DIR__ . '/testMails');
 		$return = [];
 		foreach ($finder as $key => $file) {
-			$return[] = file_get_contents($key);
+			$return[$key] = file_get_contents($key);
 		}
 		return $return;
 	}

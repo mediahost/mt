@@ -52,7 +52,7 @@ class OrdersPresenter extends BasePresenter
 	 */
 	public function actionDefault()
 	{
-		
+
 	}
 
 	/**
@@ -73,6 +73,25 @@ class OrdersPresenter extends BasePresenter
 			$this['changeAddressForm']->setOrder($this->orderEntity);
 		}
 		$this->template->order = $this->orderEntity;
+	}
+
+	/**
+	 * @secured
+	 * @resource('orders')
+	 * @privilege('edit')
+	 */
+	public function handlePaid($id)
+	{
+		$this->orderEntity = $this->orderRepo->find($id);
+		if (!$this->orderEntity) {
+			$message = $this->translator->translate('wasntFoundShe', NULL, ['name' => $this->translator->translate('Order')]);
+			$this->flashMessage($message, 'warning');
+			$this->redirect('default');
+		} else {
+			if (!$this->orderEntity->paymentDate) {
+				$this->orderFacade->payOrder($this->orderEntity, Order::PAYMENT_BLAME_MANUAL);
+			}
+		}
 	}
 
 	/**

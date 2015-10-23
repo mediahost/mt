@@ -18,7 +18,8 @@ class TestPresenter extends BasePresenter
 		$this->paymentNotificationParser->onResolve[] = $this->processResolve;
 		$this->paymentNotificationParser->onFailed[] = $this->processFailed;
 
-		foreach ($testMails as $mail) {
+		foreach ($testMails as $name => $mail) {
+			dump($name);
 			$this->paymentNotificationParser->parseMail($mail);
 		}
 		$this->terminate();
