@@ -2,7 +2,7 @@
 
 namespace App\Service\PaymentNotification;
 
-use App\Model\Facade\OrderFacade;
+use App\Model\Entity\Order;
 
 class CSOBResolver implements IResolver
 {
@@ -39,7 +39,7 @@ class CSOBResolver implements IResolver
 				continue;
 			}
 			$vs = $matches[1];
-			$return[] = new Payment($vs, $price, OrderFacade::PAID_TYPE_CSOB);
+			$return[] = new Payment($vs, $price, Order::PAID_BLAME_CSOB);
 		}
 		return $return;
 	}

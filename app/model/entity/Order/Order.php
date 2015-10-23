@@ -31,14 +31,26 @@ use Nette\Utils\Random;
  * @property string $phone
  * @property Address $billingAddress
  * @property Address $shippingAddress
- * @property \DateTime $payDate
- * @property int $payType
+ * @property \DateTime $paymentDate
+ * @property int $paymentBlame
+ * @property string $paymentBlameName
  */
 class Order extends BaseEntity
 {
 
+	const PAYMENT_BLAME_MANUAL = 1;
+	const PAYMENT_BLAME_VUB = 2;
+	const PAYMENT_BLAME_CSOB = 3;
+
 	use Identifier;
 	use Model\Timestampable\Timestampable;
+
+	/** @var array */
+	protected $paymentBlameNames = [
+		self::PAYMENT_BLAME_MANUAL => 'admin',
+		self::PAYMENT_BLAME_VUB => 'VUB',
+		self::PAYMENT_BLAME_CSOB => 'CSOB',
+	];
 
 	/** @ORM\Column(type="string", nullable=true) */
 	protected $pin;
@@ -80,10 +92,10 @@ class Order extends BaseEntity
 	protected $note;
 
 	/** @ORM\Column(type="datetime", nullable=true) */
-	protected $payDate;
+	protected $paymentDate;
 
 	/** @ORM\Column(type="integer", nullable=true)*/
-	protected $payType;
+	protected $paymentBlame;
 
 	public function __construct($locale, User $user = NULL)
 	{
@@ -94,6 +106,13 @@ class Order extends BaseEntity
 		$this->locale = $locale;
 		$this->items = new ArrayCollection();
 		parent::__construct();
+	}
+
+	public function getPaymentBlameName()
+	{
+		if (isset($this->paymentBlameNames[$this->paymentBlame])) {
+		    return $this->paymentBlameNames[$this->paymentBlame];
+		}
 	}
 
 	public function setUser(User $user)

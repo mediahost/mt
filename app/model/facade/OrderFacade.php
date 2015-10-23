@@ -20,10 +20,6 @@ use Nette\Utils\DateTime;
 class OrderFacade extends Object
 {
 
-	const PAID_TYPE_MANUAL = 1;
-	const PAID_TYPE_VUB = 2;
-	const PAID_TYPE_CSOB = 2;
-
 	/** @var array */
 	public $onOrderCreate = [];
 
@@ -203,10 +199,10 @@ class OrderFacade extends Object
 	 * @param Order $order
 	 * @param $payType
 	 */
-	public function payOrder(Order $order, $payType)
+	public function payOrder(Order $order, $paymentBlame)
 	{
-		$order->payDate = new DateTime();
-		$order->payType = $payType;
+		$order->paymentDate = new DateTime();
+		$order->paymentBlame = $paymentBlame;
 		$this->orderRepo->save($order);
 	}
 
