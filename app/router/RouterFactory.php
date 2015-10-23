@@ -43,6 +43,7 @@ class RouterFactory
 		$router[] = $apiRouter = new RouteList('Api');
 		$router[] = $ajaxRouter = new RouteList('Ajax');
 		$router[] = $cronRouter = new RouteList('Cron');
+		$router[] = $notificationRouter = new RouteList('Notification');
 		$router[] = $adminRouter = new RouteList('App');
 		$router[] = $frontRouter = new RouteList('Front');
 
@@ -90,6 +91,14 @@ class RouterFactory
 		// <editor-fold desc="Cron">
 
 		$cronRouter[] = new Route('cron/<presenter>/<action>', [
+			'presenter' => 'Default',
+			'action' => 'default',
+		]);
+
+		// </editor-fold>
+		// <editor-fold desc="Notification">
+
+		$notificationRouter[] = new Route('notification/<presenter>/<action>', [
 			'presenter' => 'Default',
 			'action' => 'default',
 		]);

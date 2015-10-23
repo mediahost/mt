@@ -52,6 +52,13 @@ services:
 
 	nette.templateFactory: App\Templating\TemplateFactory
 
+	- App\Service\PaymentNotification\CSOBResolver
+	- App\Service\PaymentNotification\VUBResolver
+	-
+		class: App\Service\PaymentNotification\PaymentNotificationParser
+		setup:
+			- $resolvers([@App\Service\PaymentNotification\CSOBResolver, @App\Service\PaymentNotification\VUBResolver])
+
 extensions:
 	onControlCreate: App\Extensions\ListenersGenericRegistration\DI\EventOnControlCreateCreateExtension
 	events: Kdyby\Events\DI\EventsExtension
