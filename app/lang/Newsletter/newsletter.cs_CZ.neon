@@ -21,6 +21,7 @@ admin:
 				type: 'Příjemci'
 				locale: 'Jazyk'
 				status: 'Stav'
+				stats: 'Počet odeslaných'
 			types:
 				users: 'uživatelé'
 				dealers: 'dealeři'

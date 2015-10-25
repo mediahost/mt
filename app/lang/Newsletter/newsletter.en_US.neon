@@ -21,6 +21,7 @@ admin:
 				type: 'Recipients'
 				locale: 'Language'
 				status: 'Status'
+				stats: 'Number of sent'
 			types:
 				users: 'users'
 				dealers: 'dealers'
