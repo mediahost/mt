@@ -71,6 +71,14 @@ class OrdersGrid extends BaseControl
 				});
 		$grid->getColumn('state')->cellPrototype->class[] = 'changeOnClick';
 
+		$grid->addColumnDate('paymentDate', 'Payment date')
+			->setSortable()
+			->setCustomRender(function (Order $item) {
+				if ($item->paymentDate) {
+				    return date_format($item->paymentDate, 'd.m.Y') . ' ('.$item->paymentBlameName.')';
+				}
+			});
+
 		$grid->addColumnText('address', 'Address')
 				->setColumn('billingAddress.name')
 				->setCustomRender(function ($item) {

@@ -31,12 +31,26 @@ use Nette\Utils\Random;
  * @property string $phone
  * @property Address $billingAddress
  * @property Address $shippingAddress
+ * @property \DateTime $paymentDate
+ * @property int $paymentBlame
+ * @property string $paymentBlameName
  */
 class Order extends BaseEntity
 {
 
+	const PAYMENT_BLAME_MANUAL = 1;
+	const PAYMENT_BLAME_VUB = 2;
+	const PAYMENT_BLAME_CSOB = 3;
+
 	use Identifier;
 	use Model\Timestampable\Timestampable;
+
+	/** @var array */
+	protected $paymentBlameNames = [
+		self::PAYMENT_BLAME_MANUAL => 'admin',
+		self::PAYMENT_BLAME_VUB => 'VUB',
+		self::PAYMENT_BLAME_CSOB => 'CSOB',
+	];
 
 	/** @ORM\Column(type="string", nullable=true) */
 	protected $pin;
@@ -77,6 +91,12 @@ class Order extends BaseEntity
 	/** @ORM\Column(type="string", length=100, nullable=true) */
 	protected $note;
 
+	/** @ORM\Column(type="datetime", nullable=true) */
+	protected $paymentDate;
+
+	/** @ORM\Column(type="integer", nullable=true)*/
+	protected $paymentBlame;
+
 	public function __construct($locale, User $user = NULL)
 	{
 		if ($user) {
@@ -86,6 +106,13 @@ class Order extends BaseEntity
 		$this->locale = $locale;
 		$this->items = new ArrayCollection();
 		parent::__construct();
+	}
+
+	public function getPaymentBlameName()
+	{
+		if (isset($this->paymentBlameNames[$this->paymentBlame])) {
+		    return $this->paymentBlameNames[$this->paymentBlame];
+		}
 	}
 
 	public function setUser(User $user)
@@ -105,12 +132,12 @@ class Order extends BaseEntity
 	{
 		return $this->rate;
 	}
-	
+
 	public function getIsCompany()
 	{
 		return $this->billingAddress && $this->billingAddress->isCompany();
 	}
-	
+
 	public function getPhone()
 	{
 		if ($this->billingAddress) {
@@ -118,10 +145,15 @@ class Order extends BaseEntity
 		}
 		return NULL;
 	}
-	
+
 	public function getNeedPin()
 	{
 		return (bool) !$this->shippingAddress;
+	}
+	
+	public function getPin($force = FALSE)
+	{
+		return ($force || $this->getNeedPin()) ? $this->pin : NULL;
 	}
 
 	public function setItem(Stock $stock, Price $price, $quantity, $locale)
@@ -244,7 +276,7 @@ class Order extends BaseEntity
 			$exchangedValue = $exchange ? $exchange->change($priceValue, NULL, NULL, Price::PRECISION) : $priceValue;
 			$totalPrice += $exchangedValue;
 		}
-		
+
 		return $totalPrice;
 	}
 
@@ -293,7 +325,7 @@ class Order extends BaseEntity
 		$this->mail = $basket->mail;
 		$this->billingAddress = $basket->billingAddress;
 		$this->shippingAddress = $basket->shippingAddress;
-		
+
 		return $this;
 	}
 
