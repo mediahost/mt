@@ -93,24 +93,6 @@ class SettingsExtension extends CompilerExtension
 			'newsletter' => [
 				'enabled' => FALSE,
 				'email' => 'newsletter@example.sk',
-				'template' => [
-					'footer' => [
-						'address' => [
-							'company' => 'Grifin s.r.o.',
-							'street' => 'Hviezdoslavova 10',
-							'zip' => '01001',
-							'city' => 'Žilina',
-						],
-						'contact' => [
-							'phone' => '+421 908 848 484',
-							'email' => 'obchod@mobilnetelefony.sk',
-						],
-						'bank' => [
-							'cz' => 'CZ3108000000003627894339',
-							'sk' => 'SK0475000000004020234814',
-						],
-					],
-				],
 			],
 		],
 		'pageInfo' => [
@@ -122,6 +104,22 @@ class SettingsExtension extends CompilerExtension
 		'pageConfig' => [
 			'itemsPerRow' => 3,
 			'rowsPerPage' => 4,
+		],
+		'companyInfo' => [
+			'address' => [
+				'company' => 'Company name',
+				'street' => 'Main street 2',
+				'zip' => '123 45',
+				'city' => 'City',
+			],
+			'contact' => [
+				'phone' => '+420 123 456 789',
+				'email' => 'contact@company.sk',
+			],
+			'bank' => [
+				'cz' => 'CZ1234567890123456789012',
+				'sk' => 'SK1234567890123456789012',
+			],
 		],
 		'expiration' => [
 			'recovery' => '30 minutes',
@@ -160,6 +158,7 @@ class SettingsExtension extends CompilerExtension
 				->setClass('App\Extensions\Settings\SettingsStorage')
 				->addSetup('setPageInfo', [$config['pageInfo']])
 				->addSetup('setPageConfig', [$config['pageConfig']])
+				->addSetup('setCompanyInfo', [$config['companyInfo']])
 				->addSetup('setMails', [$config['mails']])
 				->addSetup('setExpiration', [$config['expiration']])
 				->addSetup('setPasswords', [$config['passwords']])
