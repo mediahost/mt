@@ -67,7 +67,7 @@ abstract class BaseMessage extends Message
 	protected function build()
 	{
 		$this->params += [
-			'settings' => $this->settings->modules->newsletter,
+			'companyInfo' => $this->settings->companyInfo,
 			'pageInfo' => $this->settings->pageInfo,
 			'mail' => $this,
 			'colon' => '',
