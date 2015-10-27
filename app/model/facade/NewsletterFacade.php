@@ -33,7 +33,7 @@ class NewsletterFacade extends Object
 	/**
 	 * @param User|string $identifier
 	 */
-	public function subscribe($identifier)
+	public function subscribe($identifier, $type = Subscriber::TYPE_USER)
 	{
 		if ($identifier instanceof User) {
 			$user = $identifier;
@@ -51,13 +51,12 @@ class NewsletterFacade extends Object
 		if ($subscriber === NULL) {
 			$subscriber = new Subscriber();
 			$subscriber->mail = $identifier;
-			$subscriber->type = Subscriber::TYPE_USER;
-
 			$subscriber->token = $this->generateToken();
 		}
 
+		$subscriber->type = $type;
 		$subscriber->ip = $this->request->getRemoteAddress();
-		$subscriber->subscribed = new DateTime;
+		$subscriber->subscribed = new DateTime();
 		$subscriber->locale = $this->translator->getLocale();
 
 		if ($user !== NULL) {

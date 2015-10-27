@@ -21,6 +21,7 @@ use Nette\Utils\Html;
  * @property string $ico
  * @property string $icoVat
  * @property string $dic
+ * @property string $note
  */
 class Address extends BaseEntity
 {

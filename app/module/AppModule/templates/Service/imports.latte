@@ -1,0 +1,29 @@
+{block pageTitle}
+	{_'Service Imports'}
+{/block}
+
+{block breadcrumbItems}
+<li>
+	<a n:href="Service:">{_'Services'}</a>
+</li>
+<li><span>{_'Imports'}</span></li>
+{/block}
+
+{block content}
+
+<div class="row">
+	<div class="col-md-6">
+        <div class="list-group">
+
+            <a n:href="importOldUsers!" class="list-group-item delete-confirm">
+                <h4 class="list-group-item-heading">
+                    {_'Import Old Users'}
+                </h4>
+                <p class="list-group-item-text">
+                    {_'From MT1'}
+                </p>
+            </a>
+
+        </div>
+	</div>
+</div>

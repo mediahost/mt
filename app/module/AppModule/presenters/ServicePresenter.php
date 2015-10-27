@@ -2,6 +2,7 @@
 
 namespace App\AppModule\Presenters;
 
+use App\Extensions\ImportFromMT1;
 use App\Extensions\Installer;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
@@ -17,6 +18,9 @@ class ServicePresenter extends BasePresenter
 
 	/** @var Installer @inject */
 	public $installer;
+
+	/** @var ImportFromMT1 @inject */
+	public $importFromOld;
 
 	/** @var RoleFacade @inject */
 	public $roleFacade;
@@ -52,6 +56,29 @@ class ServicePresenter extends BasePresenter
 	public function actionCreators()
 	{
 
+	}
+
+	/**
+	 * @secured
+	 * @resource('service')
+	 * @privilege('imports')
+	 */
+	public function actionImports()
+	{
+
+	}
+
+	/**
+	 * @secured
+	 * @resource('service')
+	 * @privilege('importOldUsers')
+	 */
+	public function handleImportOldUsers()
+	{
+		$this->importFromOld->downloadUsers();
+		$message = $this->translator->translate('Users was imported from old DB');
+		$this->flashMessage($message, 'success');
+//		$this->redirect('this');
 	}
 
 	/**
