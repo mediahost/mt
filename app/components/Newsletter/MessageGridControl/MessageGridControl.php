@@ -5,6 +5,7 @@ namespace App\Components\Newsletter;
 use App\Components\BaseControl;
 use App\Extensions\Grido\BaseGrid;
 use App\Model\Entity\Newsletter\Message;
+use App\Model\Entity\Newsletter\Status;
 use App\Model\Facade\LocaleFacade;
 use App\Model\Facade\NewsletterFacade;
 use Grido\DataSources\Doctrine;
@@ -86,6 +87,30 @@ class MessageGridControl extends BaseControl
 					Message::STATUS_SENT => self::LOCALE_DOMAIN . '.status.sent',
 		]);
 		$grid->getColumn('status')->headerPrototype->width = '8%';
+		
+		////////// Statistics //////////
+		$grid->addColumnText('stats', self::LOCALE_DOMAIN . '.header.stats')
+				->setCustomRender(function($message) {				
+					$qbSent = $this->em->getRepository(Status::getClassName())
+							->createQueryBuilder('s')
+							->select('count(s.id)')
+							->join('s.message', 'm')
+							->setParameter('message', $message);
+					
+					$qbAll = clone $qbSent;
+					
+					$sent = $qbSent->where('m = :message AND s.status = :status')
+							->setParameter('status', Message::STATUS_SENT)
+							->getQuery()
+							->getSingleScalarResult();
+
+					$all = $qbAll->where('m = :message')
+							->getQuery()
+							->getSingleScalarResult();
+					
+					return $sent . '/' . $all;
+				});
+		$grid->getColumn('stats')->headerPrototype->width = '10%';
 
 		////////// Actions //////////
 		$grid->setActionWidth("15%");
