@@ -62,3 +62,4 @@ extensions:
 	replicator: Kdyby\Replicator\DI\ReplicatorExtension
 	restful: Drahak\Restful\DI\RestfulExtension
 	nextrasForms: Nextras\Forms\DI\FormsExtension
+	importFromMT1: App\Extensions\ImportFromMT1\DI\ImportFromMT1Extension
