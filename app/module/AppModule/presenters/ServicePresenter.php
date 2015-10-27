@@ -78,7 +78,7 @@ class ServicePresenter extends BasePresenter
 		$this->importFromOld->downloadUsers();
 		$message = $this->translator->translate('Users was imported from old DB');
 		$this->flashMessage($message, 'success');
-//		$this->redirect('this');
+		$this->redirect('this');
 	}
 
 	/**
