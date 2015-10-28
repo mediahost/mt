@@ -30,7 +30,7 @@ class PrintStock extends BaseControl
 			$this->flashMessage($this->translator->translate('cart.product.youCannotAdd'), 'warning');
 		}
 
-		if ($this->presenter->isAjax) {
+		if ($this->presenter->isAjax()) {
 			$this->redrawControl();
 			$this->presenter->redrawControl();
 			if (isset($this->presenter['products'])) {
