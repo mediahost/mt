@@ -165,7 +165,7 @@ class StockCategory extends StockBase
 			$this->save();
 			$this->onAfterSave($this->stock);
 		}
-		if ($this->presenter->isAjax) {
+		if ($this->presenter->isAjax()) {
 			$this->redrawControl();
 		}
 	}
