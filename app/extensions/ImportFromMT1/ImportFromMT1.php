@@ -79,7 +79,7 @@ class ImportFromMT1 extends Object
 		if ($this->checkDbName($this->dbName)) {
 			return '`' . $this->dbName . '`';
 		} else {
-			throw new Exception('DB name isn\'t right. Change it in configuration');
+			throw new ImportFromMT1Exception('DB name isn\'t right. Change it in configuration');
 		}
 	}
 
@@ -92,6 +92,8 @@ class ImportFromMT1 extends Object
 
 	public function downloadUsers()
 	{
+		ini_set('max_execution_time', 120);
+
 		$this->importUsersBasic();
 		$this->importUsersSigns();
 		$this->importUsersAddresses();
@@ -193,7 +195,7 @@ class ImportFromMT1 extends Object
 
 		return $this;
 	}
-	
+
 	private function addFacebookConn(User $user, $key)
 	{
 		$fbRepo = $this->em->getRepository(Facebook::getClassName());
@@ -202,7 +204,7 @@ class ImportFromMT1 extends Object
 		}
 		return $this;
 	}
-	
+
 	private function addTwitterConn(User $user, $key)
 	{
 		$twRepo = $this->em->getRepository(Twitter::getClassName());
@@ -225,19 +227,19 @@ class ImportFromMT1 extends Object
 				. "JOIN {$tableAddress} a ON u.billing_address_id = a.id");
 		foreach ($stmtBilling->fetchAll() as $billingAddress) {
 			$this->addAddress($billingAddress['mail'], $billingAddress, TRUE);
-		}	
-		
+		}
+
 		$stmtDelivery = $conn->executeQuery(
 				"SELECT a.*, u.mail "
 				. "FROM {$tableUsers} u "
-				. "JOIN {$tableAddress} a ON u.delivery_address_id = a.id");	
+				. "JOIN {$tableAddress} a ON u.delivery_address_id = a.id");
 		foreach ($stmtDelivery->fetchAll() as $deliveryAddress) {
 			$this->addAddress($deliveryAddress['mail'], $deliveryAddress, FALSE);
 		}
-		
+
 		return $this;
 	}
-	
+
 	private function addAddress($mail, $data, $isBilling = TRUE)
 	{
 		$userRepo = $this->em->getRepository(User::getClassName());
@@ -280,15 +282,20 @@ class ImportFromMT1 extends Object
 		foreach ($stmt1->fetchAll() as $data) {
 			$this->newsletterFacade->subscribe($data['mail'], Subscriber::TYPE_USER);
 		}
-		
+
 		$stmt2 = $conn->executeQuery(
 				"SELECT n.mail "
 				. "FROM {$tableNewsletterDealer} n");
 		foreach ($stmt2->fetchAll() as $data) {
 			$this->newsletterFacade->subscribe($data['mail'], Subscriber::TYPE_DEALER);
 		}
-		
+
 		return $this;
 	}
 
+}
+
+class ImportFromMT1Exception extends Exception
+{
+	
 }

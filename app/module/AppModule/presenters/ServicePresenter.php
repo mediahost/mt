@@ -3,6 +3,7 @@
 namespace App\AppModule\Presenters;
 
 use App\Extensions\ImportFromMT1;
+use App\Extensions\ImportFromMT1Exception;
 use App\Extensions\Installer;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
@@ -45,7 +46,7 @@ class ServicePresenter extends BasePresenter
 	 */
 	public function actionTools()
 	{
-
+		
 	}
 
 	/**
@@ -55,7 +56,7 @@ class ServicePresenter extends BasePresenter
 	 */
 	public function actionCreators()
 	{
-
+		
 	}
 
 	/**
@@ -65,7 +66,7 @@ class ServicePresenter extends BasePresenter
 	 */
 	public function actionImports()
 	{
-
+		
 	}
 
 	/**
@@ -75,9 +76,14 @@ class ServicePresenter extends BasePresenter
 	 */
 	public function handleImportOldUsers()
 	{
-		$this->importFromOld->downloadUsers();
-		$message = $this->translator->translate('Users was imported from old DB');
-		$this->flashMessage($message, 'success');
+		try {
+			$this->importFromOld->downloadUsers();
+			$message = $this->translator->translate('Users was imported from old DB');
+			$this->flashMessage($message, 'success');
+		} catch (ImportFromMT1Exception $e) {
+			$message = $this->translator->translate('Please check settings of this module');
+			$this->flashMessage($message, 'warning');
+		}
 		$this->redirect('this');
 	}
 
