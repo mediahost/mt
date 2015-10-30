@@ -44,6 +44,9 @@ class UserFacade extends Object
 	
 	/** @var Translator @inject */
 	public $translator;
+	
+	/** @var SubscriberFacade @inject */
+	public $subscriberFacade;
 
 	/** @var UserRepository */
 	private $userRepo;

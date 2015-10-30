@@ -7,6 +7,7 @@ use App\Components\Newsletter\SubscriberGridControl;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Newsletter\Subscriber;
 use App\Model\Facade\NewsletterFacade;
+use App\Model\Facade\SubscriberFacade;
 use DateTime;
 use Nette\Application\UI;
 use Nette\Forms\Form;
@@ -20,6 +21,9 @@ class SubscriberPresenter extends BasePresenter
 
 	/** @var NewsletterFacade @inject */
 	public $newsletterFacade;
+
+	/** @var SubscriberFacade @inject */
+	public $subscriberFacade;
 
 	/**
 	 * @secured
@@ -53,14 +57,7 @@ class SubscriberPresenter extends BasePresenter
 		if ($subscriber === NULL) {
 			$this->flashMessage($this->translator->translate('newsletter.messages.handleDelete.notFound', ['id' => $id]), 'warning');
 		} else {
-			if ($subscriber->user) {
-				$subscriber->user->subscriber = NULL;
-				$this->em->persist($subscriber->user);
-			}
-
-			$this->em->remove($subscriber)
-					->flush();
-
+			$this->subscriberFacade->delete($subscriber);
 			$this->flashMessage($this->translator->translate('newsletter.messages.handleDelete.success', ['email' => $subscriber->mail]), 'success');
 		}
 
