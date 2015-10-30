@@ -90,6 +90,20 @@ class ImportFromMT1 extends Object
 		return (bool) $stmt->fetch();
 	}
 
+	public function downloadOrders()
+	{
+		ini_set('max_execution_time', 60);
+		
+		$this->importOrders();
+
+		return $this;
+	}
+
+	private function importOrders()
+	{
+		return $this;
+	}
+
 	public function downloadUsers()
 	{
 		ini_set('max_execution_time', 120);
@@ -126,12 +140,17 @@ class ImportFromMT1 extends Object
 				. "FROM {$tableUsers} u");
 		$results = $stmt->fetchAll();
 
+		$i = 0;
+		$u = 0;
 		foreach ($results as $data) {
 
 			$user = $userRepo->findOneByMail($data['mail']);
 			if (!$user && $customer) {
 				$user = new User($data['mail']);
 				$user->addRole($customer);
+				$i++;
+			} else {
+				$u++;
 			}
 
 			$user->setLocale($this->translator->getDefaultLocale())
@@ -144,6 +163,9 @@ class ImportFromMT1 extends Object
 			}
 
 			$userRepo->save($user);
+			if ($i >= 1000 || $u >= 100) {
+				break;
+			}
 		}
 		return $this;
 	}
@@ -209,7 +231,7 @@ class ImportFromMT1 extends Object
 	{
 		$twRepo = $this->em->getRepository(Twitter::getClassName());
 		if (!$twRepo->find($key)) {
-			$user->facebook = new Twitter($key);
+			$user->twitter = new Twitter($key);
 		}
 		return $this;
 	}

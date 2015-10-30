@@ -7,7 +7,7 @@
     ico="{$ico}" 
     application="PohodaConnector API" 
     version="2.0" 
-    note="{ifset $message}{$message} | {/ifset}Count: {!= count($stocks)}" 
+    note="{ifset $message}{$message} | {/ifset}Count: {!= count($stocks)}{if $lastEditTime} | Last edit time: {$lastEditTime|date:'H:i:s d.m.Y'}{/if}" 
     xmlns:dat="http://www.stormware.cz/schema/version_2/data.xsd" 
     xmlns:stk="http://www.stormware.cz/schema/version_2/stock.xsd" 
     xmlns:typ="http://www.stormware.cz/schema/version_2/type.xsd"

@@ -148,7 +148,7 @@ class PohodaItem extends BaseEntity
 
 	public function setRecountedSellingPrice($valueWithoutVat = NULL, $valueWithVat = NULL, $vatValue = 0)
 	{
-		$vat = new Vat($vatValue);
+		$vat = new Vat(NULL, $vatValue);
 		if ($valueWithoutVat) {
 			$price = new Price($vat, $valueWithoutVat, TRUE);
 		} else {

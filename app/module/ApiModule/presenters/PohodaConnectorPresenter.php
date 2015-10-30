@@ -11,7 +11,6 @@ use App\Model\Repository\StockRepository;
 use Exception;
 use Nette\Http\FileUpload;
 use Nette\Http\IRequest;
-use Nette\Utils\ArrayHash;
 use Tracy\Debugger;
 
 class PohodaConnectorPresenter extends BasePresenter
@@ -59,6 +58,7 @@ class PohodaConnectorPresenter extends BasePresenter
 			$this->template->defaultStorage = $this->settings->modules->pohoda->defaultStorage;
 			$this->template->typePrice = $this->settings->modules->pohoda->typePrice;
 			$this->template->vatRates = $this->settings->modules->pohoda->vatRates;
+			$this->template->lastEditTime = $lastConvert;
 
 			$this->pohodaFacade->setLastSync(PohodaFacade::SHORT_STOCK, PohodaFacade::LAST_DOWNLOAD);
 			$this->setView('storageCart');

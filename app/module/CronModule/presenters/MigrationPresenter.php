@@ -115,7 +115,7 @@ class MigrationPresenter extends BasePresenter
 				$productVat = $product->vat > 0 ? $product->vat : 0;
 				$vat = $vatRepo->findOneByValue($productVat);
 				if (!$vat) {
-					$vat = new Vat($productVat);
+					$vat = new Vat(NULL, $productVat);
 					$this->em->persist($vat);
 				}
 				$dbStock->vat = $vat;
