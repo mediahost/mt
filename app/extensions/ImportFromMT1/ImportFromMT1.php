@@ -20,7 +20,7 @@ use Nette\Object;
 class ImportFromMT1 extends Object
 {
 
-	const MAX_INSERTS = 100;
+	const MAX_INSERTS = 1000;
 	const TABLE_USER = 'user';
 	const TABLE_AUTH = 'auth';
 	const TABLE_PASSWORDS = 'user_passwords';
@@ -149,25 +149,40 @@ class ImportFromMT1 extends Object
 		if (!$customer) {
 			return $this;
 		}
-
+		
 		foreach ($stmt->fetchAll() as $data) {
-			$user = $userRepo->findOneByMail($data['mail']);
-			if (!$user) {
+			$userId = $userRepo->findIdByMail($data['mail']);
+			$change = FALSE;
+			if (!$userId) {
 				$this->checkLimit();
 				$user = new User($data['mail']);
 				$user->addRole($customer);
+				$user->setLocale($this->translator->getDefaultLocale())
+						->setCurrency($this->exchange->getDefault()->getCode());
+			} else {
+//				$user = $userRepo->find($userId);
+				continue;
 			}
-
-			$user->setLocale($this->translator->getDefaultLocale())
-					->setCurrency($this->exchange->getDefault()->getCode())
-					->setWantBeDealer((bool) $data['dealer_want']);
+			
+			if (!$user) {
+				continue;
+			}
+			
+			$wantBeDealer = (bool) $data['dealer_want'];
+			if ($wantBeDealer !== $user->wantBeDealer) {
+				$user->setWantBeDealer($wantBeDealer);
+				$change = TRUE;
+			}
 
 			$group = $this->getGroupByOldId($data['dealer_level']);
-			if ($group) {
+			if ($group && (!$user->group || $group->id != $user->group->id)) {
 				$user->addGroup($group);
+				$change = TRUE;
 			}
-
-			$userRepo->save($user);
+			
+			if ($user->isNew() || $change) {
+				$userRepo->save($user);
+			}
 		}
 		return $this;
 	}
@@ -188,8 +203,12 @@ class ImportFromMT1 extends Object
 				. "WHERE (a.source = ? OR a.source = ?) AND a.verified = ?", ['facebook', 'twitter', '1']);
 
 		foreach ($stmtAuth->fetchAll() as $authData) {
-			$user = $userRepo->findOneByMail($authData['mail']);
-			if ($user) {
+			$userId = $userRepo->findIdByMail($authData['mail']);
+			if ($userId) {
+				$user = $userRepo->find($userId);
+				if (!$user) {
+					continue;
+				}
 				switch ($authData['source']) {
 					case 'facebook':
 						$this->addFacebookConn($user, $authData['key']);
@@ -198,9 +217,10 @@ class ImportFromMT1 extends Object
 						$this->addTwitterConn($user, $authData['key']);
 						break;
 				}
-				$userRepo->save($user);
+				$this->em->persist($user);
 			}
 		}
+		$this->em->flush();
 
 		$stmtPasswds = $conn->executeQuery(
 				"SELECT p.password, u.mail "
@@ -210,14 +230,20 @@ class ImportFromMT1 extends Object
 
 		foreach ($passwds as $passwData) {
 			/* @var $user User */
-			$user = $userRepo->findOneByMail($passwData['mail']);
-			if ($user) {
+			$userId = $userRepo->findIdByMail($passwData['mail']);
+			if ($userId) {
+				$user = $userRepo->find($userId);
+				if (!$user) {
+					continue;
+				}
 				if (!$user->verifyPassword($passwData['password'])) {
 					$this->checkLimit();
 				}
 				$user->setPassword($passwData['password']);
+				$this->em->persist($user);
 			}
 		}
+		$this->em->flush();
 
 		return $this;
 	}
@@ -272,8 +298,12 @@ class ImportFromMT1 extends Object
 	{
 		$userRepo = $this->em->getRepository(User::getClassName());
 		/* @var $user User */
-		$user = $userRepo->findOneByMail($mail);
-		if ($user) {
+		$userId = $userRepo->findIdByMail($mail);
+		if ($userId) {
+			$user = $userRepo->find($userId);
+			if (!$user) {
+				return $this;
+			}
 			$address = new Address();
 			$isCompany = !empty($data['company']);
 			$address->name = $isCompany ? $data['company'] : ($data['firstname'] . ' ' . $data['surname']);
@@ -326,7 +356,7 @@ class ImportFromMT1 extends Object
 	private function importSubscribers()
 	{
 		$conn = $this->em->getConnection();
-		$userRepo = $this->em->getRepository(User::getClassName());
+		$subscriberRepo = $this->em->getRepository(Subscriber::getClassName());
 		$dbName = $this->getDbName();
 		$tableNewsletter = $dbName . '.' . self::TABLE_NEWSLETTER;
 		$tableNewsletterDealer = $dbName . '.' . self::TABLE_NEWSLETTER_DEALER;
@@ -335,8 +365,9 @@ class ImportFromMT1 extends Object
 				"SELECT n.mail "
 				. "FROM {$tableNewsletter} n");
 		foreach ($stmt1->fetchAll() as $data) {
-			$user = $userRepo->findOneByMail($data['mail']);
-			if (!$user->subscriber) {
+			$subscriber = $subscriberRepo->findOneByMail($data['mail']);
+			if (!$subscriber) {
+				$user = $subscriber->user ? $subscriber->user : $data['mail'];
 				$this->newsletterFacade->subscribe($user, Subscriber::TYPE_USER);
 				$this->checkLimit();
 			}
@@ -346,8 +377,9 @@ class ImportFromMT1 extends Object
 				"SELECT n.mail "
 				. "FROM {$tableNewsletterDealer} n");
 		foreach ($stmt2->fetchAll() as $data) {
-			$user = $userRepo->findOneByMail($data['mail']);
-			if (!$user->subscriber) {
+			$subscriber = $subscriberRepo->findOneByMail($data['mail']);
+			if (!$subscriber) {
+				$user = $subscriber->user ? $subscriber->user : $data['mail'];
 				$this->newsletterFacade->subscribe($user, Subscriber::TYPE_DEALER);
 				$this->checkLimit();
 			}
