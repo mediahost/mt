@@ -90,6 +90,24 @@ class ServicePresenter extends BasePresenter
 	/**
 	 * @secured
 	 * @resource('service')
+	 * @privilege('importOldOrders')
+	 */
+	public function handleImportOldOrders()
+	{
+		try {
+			$this->importFromOld->downloadOrders();
+			$message = $this->translator->translate('Orders was imported from old DB');
+			$this->flashMessage($message, 'success');
+		} catch (ImportFromMT1Exception $e) {
+			$message = $this->translator->translate('Please check settings of this module');
+			$this->flashMessage($message, 'warning');
+		}
+		$this->redirect('this');
+	}
+
+	/**
+	 * @secured
+	 * @resource('service')
 	 * @privilege('importInitData')
 	 */
 	public function handleImportInitData()

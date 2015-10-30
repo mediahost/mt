@@ -8,6 +8,7 @@ use App\Model\Entity\PohodaItem;
 use App\Model\Entity\PohodaStorage;
 use App\Model\Entity\Special\XmlItem;
 use App\Model\Entity\Stock;
+use App\Model\Entity\Vat;
 use App\Model\Repository\PohodaItemRepository;
 use Exception;
 use Kdyby\Doctrine\EntityManager;
@@ -78,15 +79,46 @@ class PohodaFacade extends Object
 			/* @var $stock Stock */
 			if (array_key_exists('code', $pohodaProductArr)) {
 				$stock = $stockRepo->findOneByPohodaCode($pohodaProductArr['code']);
-				if ($stock) {
-					$stock->product->translateAdd($language)->name = $pohodaProductArr['name'];
-					$stock->product->mergeNewTranslations();
-					$stock->quantity = $totalCount;
-					$stock->purchasePrice = $pohodaProductArr['purchasingPrice'];
-					$stock->price = $pohodaProductArr['recountedSellingWithoutVat'];
-					$stock->barcode = $pohodaProductArr['ean'];
-					$this->em->persist($stock);
-					$i++;
+				$change = FALSE;
+				if ($stock && $totalCount > 0) {
+
+					$translation = $stock->product->translateAdd($language);
+					if ($translation->name != $pohodaProductArr['name']) {
+						$translation->name = $pohodaProductArr['name'];
+						$stock->product->mergeNewTranslations();
+						$change = TRUE;
+					}
+
+					if ($stock->quantity != $totalCount) {
+						$stock->quantity = $totalCount;
+						$change = TRUE;
+					}
+
+					if (round($stock->purchasePrice->withoutVat, 2) != round($pohodaProductArr['purchasingPrice'], 2)) {
+						$stock->purchasePrice = $pohodaProductArr['purchasingPrice'];
+						$change = TRUE;
+					}
+
+					if (round($stock->price->withoutVat, 2) != round($pohodaProductArr['recountedSellingWithoutVat'], 2)) {
+						$stock->price = $pohodaProductArr['recountedSellingWithoutVat'];
+						$change = TRUE;
+					}
+
+					if ($stock->barcode != $pohodaProductArr['ean']) {
+						$stock->barcode = $pohodaProductArr['ean'];
+						$change = TRUE;
+					}
+
+					$vat = $this->getVatFromPohodaString($pohodaProductArr['sellingRateVAT']);
+					if ($vat && (!$stock->vat || $stock->vat->id != $vat->id)) {
+						$stock->vat = $vat;
+						$change = TRUE;
+					}
+
+					if ($change) {
+						$this->em->persist($stock);
+						$i++;
+					}
 				}
 			}
 
@@ -95,6 +127,21 @@ class PohodaFacade extends Object
 			}
 		}
 		$this->em->flush();
+	}
+
+	private function getVatFromPohodaString($string)
+	{
+		$vatRates = $this->settings->modules->pohoda->vatRates;
+		switch ($string) {
+			case PohodaItem::VALUE_VAT_HIGH:
+			case PohodaItem::VALUE_VAT_LOW:
+			case PohodaItem::VALUE_VAT_NONE:
+				$value = $vatRates->$string;
+			default:
+				$value = $vatRates->{PohodaItem::VALUE_VAT_NONE};
+		}
+		$vatRepo = $this->em->getRepository(Vat::getClassName());
+		return $vatRepo->findOneByValue($value);
 	}
 
 	public function getNewCode()
@@ -269,21 +316,27 @@ class PohodaFacade extends Object
 				}
 
 				// update/add product
-				if (isset($item->stk_id) && isset($item->stk_code) && isset($storage)) {
+				if (isset($item->stk_id)) {
 					$product = $productRepo->find($item->stk_id);
-					if (!$product) {
+					if (!$product && isset($storage) && isset($item->stk_code)) {
 						$product = new PohodaItem($item->stk_id);
 					}
-					$product->code = $item->stk_code;
-					$product->storage = $storage;
+				}
+				if (isset($product) && $product) {
+					if (isset($storage)) {
+						$product->storage = $storage;
+					}
+					if (isset($item->stk_code)) {
+						$product->code = $item->stk_code;
+					}
 
 					$optional = [
 						'stk_name' => 'name',
 						'stk_isSales' => 'isSales',
 						'stk_isInternet' => 'isInternet',
 						'stk_purchasingRateVAT' => 'purchasingRateVAT',
-						'stk_sellingRateVAT' => 'sellingRateVAT',
 						'stk_purchasingPrice' => 'purchasingPrice',
+						'stk_sellingRateVAT' => 'sellingRateVAT',
 						'stk_sellingPrice' => 'sellingPrice',
 						'stk_sellingPriceWithVAT' => 'sellingPriceWithVAT',
 						'stk_count' => 'count',
@@ -306,8 +359,11 @@ class PohodaFacade extends Object
 					// recount selling price
 					$vatRates = $this->settings->modules->pohoda->vatRates;
 					$sellingVatRate = $vatRates[$product->sellingRateVAT];
-					if (isset($item->sellingPrice) && isset($item->sellingPriceWithVAT)) {
-						$product->setRecountedSellingPrice($item->sellingPrice, $item->sellingPriceWithVAT, $sellingVatRate);
+					if (isset($item->stk_sellingPrice) && isset($item->stk_sellingPriceWithVAT)) {
+						if (!isset($item->stk_sellingRateVAT)) {
+							list($product->sellingRateVAT, $sellingVatRate) = $this->recountVatRate($item->stk_sellingPrice, $item->stk_sellingPriceWithVAT);
+						}
+						$product->setRecountedSellingPrice($item->stk_sellingPrice, $item->stk_sellingPriceWithVAT, $sellingVatRate);
 					} else if (isset($item->stockPrice1)) {
 						$product->setRecountedSellingPrice(NULL, $item->stockPrice1, $sellingVatRate);
 					}
@@ -331,6 +387,33 @@ class PohodaFacade extends Object
 		$minusTime = '-' . $this->settings->modules->pohoda->removeParsedXmlOlderThan;
 		$this->removeOlderParsedXml(DateTime::from($minusTime), $type);
 		$this->moveXml($filename, self::FOLDER_PARSED, $type);
+	}
+
+	private function recountVatRate($withoutVat, $withVat)
+	{
+		$vatRates = (array) $this->settings->modules->pohoda->vatRates;
+		asort($vatRates);
+
+		if ($withoutVat >= $withVat) {
+			return [PohodaItem::VALUE_VAT_NONE, 0];
+		}
+
+		$diff = $withVat - $withoutVat;
+		$onePercent = $withoutVat / 100;
+		$vatValue = round($diff / $onePercent);
+
+		$previous = [];
+		foreach ($vatRates as $key => $value) {
+			if (count($previous)) {
+				$previousValue = $previous[1];
+				$middleValue = ($previousValue + $value) / 2;
+				if ($vatValue < $middleValue) {
+					return $previous;
+				}
+			}
+			$previous = [$key, $value];
+		}
+		return $previous;
 	}
 
 	protected function createXml($xml, $type)
