@@ -4,6 +4,7 @@ namespace App\Model\Facade;
 
 use App\AppModule\Presenters\NewsletterPresenter;
 use App\Model\Entity\Group;
+use App\Model\Entity\Newsletter\Status;
 use App\Model\Entity\Newsletter\Subscriber;
 use Exception;
 use Kdyby\Doctrine\EntityManager;
@@ -91,6 +92,25 @@ class SubscriberFacade extends Object
 		}
 
 		return $count;
+	}
+
+	public function delete(Subscriber $subscriber)
+	{
+		$statusRepo = $this->em->getRepository(Status::getClassName());
+		$statuses = $statusRepo->findBy(['subscriber' => $subscriber]);
+		if (is_array($statuses)) {
+			foreach ($statuses as $status) {
+				$this->em->remove($status);
+			}
+			$this->em->flush();
+		}
+
+		if ($subscriber->user) {
+			$subscriber->user->removeSubscriber();
+			$this->em->persist($subscriber->user);
+		}
+
+		$this->em->remove($subscriber)->flush();
 	}
 
 }
