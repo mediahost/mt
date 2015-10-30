@@ -39,11 +39,8 @@ class NewsletterFacade extends Object
 			$user = $identifier;
 			$subscriber = $user->subscriber;
 		} elseif (is_string($identifier)) {
+			$user = $this->em->getRepository(User::getClassName())->findOneByMail($identifier);
 			$subscriber = $this->findSubscriber($identifier);
-
-			$user = $this->em->getRepository(User::getClassName())->findOneBy([
-				'mail' => $identifier,
-			]);
 		} else {
 			throw new InvalidArgumentException('Argument must be User or e-mail.');
 		}

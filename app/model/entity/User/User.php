@@ -125,4 +125,10 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 		return $this;
 	}
 
+	public function removeSubscriber()
+	{
+		$this->subscriber = NULL;
+		return $this;
+	}
+
 }

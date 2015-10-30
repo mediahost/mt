@@ -30,6 +30,12 @@ trait UserFacadeDelete
 	{
 		if ($this->isDeletable($user)) {
 			try {
+				if ($user->subscriber) {
+					$subscriber = $user->subscriber;
+					$user->removeSubscriber();
+					$this->em->persist($user);
+					$this->em->remove($subscriber);
+				}
 				if ($user->basket) {
 					$this->em->remove($user->basket);
 				}
