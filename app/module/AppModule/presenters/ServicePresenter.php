@@ -5,6 +5,7 @@ namespace App\AppModule\Presenters;
 use App\Extensions\ImportFromMT1;
 use App\Extensions\ImportFromMT1Exception;
 use App\Extensions\Installer;
+use App\Extensions\LimitExceededException;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -82,6 +83,9 @@ class ServicePresenter extends BasePresenter
 			$this->flashMessage($message, 'success');
 		} catch (ImportFromMT1Exception $e) {
 			$message = $this->translator->translate('Please check settings of this module');
+			$this->flashMessage($message, 'warning');
+		} catch (LimitExceededException $e) {
+			$message = $this->translator->translate('Import wasn\'t finished. Please start it again');
 			$this->flashMessage($message, 'warning');
 		}
 		$this->redirect('this');

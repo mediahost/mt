@@ -20,6 +20,7 @@ use Nette\Object;
 class ImportFromMT1 extends Object
 {
 
+	const MAX_INSERTS = 100;
 	const TABLE_USER = 'user';
 	const TABLE_AUTH = 'auth';
 	const TABLE_PASSWORDS = 'user_passwords';
@@ -34,6 +35,12 @@ class ImportFromMT1 extends Object
 
 	/** @var array */
 	private $groupsMapping = [];
+
+	/** @var int */
+	private $limit = 0;
+
+	/** @var int */
+	private $maxInserts = self::MAX_INSERTS;
 
 	// </editor-fold>
 	// <editor-fold desc="injects">
@@ -93,7 +100,7 @@ class ImportFromMT1 extends Object
 	public function downloadOrders()
 	{
 		ini_set('max_execution_time', 60);
-		
+
 		$this->importOrders();
 
 		return $this;
@@ -138,19 +145,17 @@ class ImportFromMT1 extends Object
 		$stmt = $conn->executeQuery(
 				"SELECT * "
 				. "FROM {$tableUsers} u");
-		$results = $stmt->fetchAll();
 
-		$i = 0;
-		$u = 0;
-		foreach ($results as $data) {
+		if (!$customer) {
+			return $this;
+		}
 
+		foreach ($stmt->fetchAll() as $data) {
 			$user = $userRepo->findOneByMail($data['mail']);
-			if (!$user && $customer) {
+			if (!$user) {
+				$this->checkLimit();
 				$user = new User($data['mail']);
 				$user->addRole($customer);
-				$i++;
-			} else {
-				$u++;
 			}
 
 			$user->setLocale($this->translator->getDefaultLocale())
@@ -163,9 +168,6 @@ class ImportFromMT1 extends Object
 			}
 
 			$userRepo->save($user);
-			if ($i >= 1000 || $u >= 100) {
-				break;
-			}
 		}
 		return $this;
 	}
@@ -210,8 +212,10 @@ class ImportFromMT1 extends Object
 			/* @var $user User */
 			$user = $userRepo->findOneByMail($passwData['mail']);
 			if ($user) {
+				if (!$user->verifyPassword($passwData['password'])) {
+					$this->checkLimit();
+				}
 				$user->setPassword($passwData['password']);
-				$userRepo->save($user);
 			}
 		}
 
@@ -222,6 +226,7 @@ class ImportFromMT1 extends Object
 	{
 		$fbRepo = $this->em->getRepository(Facebook::getClassName());
 		if (!$fbRepo->find($key)) {
+			$this->checkLimit();
 			$user->facebook = new Facebook($key);
 		}
 		return $this;
@@ -231,6 +236,7 @@ class ImportFromMT1 extends Object
 	{
 		$twRepo = $this->em->getRepository(Twitter::getClassName());
 		if (!$twRepo->find($key)) {
+			$this->checkLimit();
 			$user->twitter = new Twitter($key);
 		}
 		return $this;
@@ -265,6 +271,7 @@ class ImportFromMT1 extends Object
 	private function addAddress($mail, $data, $isBilling = TRUE)
 	{
 		$userRepo = $this->em->getRepository(User::getClassName());
+		/* @var $user User */
 		$user = $userRepo->findOneByMail($mail);
 		if ($user) {
 			$address = new Address();
@@ -282,18 +289,44 @@ class ImportFromMT1 extends Object
 			if ($isBilling) {
 				$billing = $address;
 				$shipping = NULL;
+				if (!$this->isAddressSame($user->billingAddress, $address)) {
+					$this->checkLimit();
+				}
 			} else {
 				$billing = NULL;
 				$shipping = $address;
+				if (!$this->isAddressSame($user->shippingAddress, $address)) {
+					$this->checkLimit();
+				}
 			}
 			$this->userFacade->setAddress($user, $billing, $shipping, FALSE);
 		}
 		return $this;
 	}
 
+	private function isAddressSame($address1, $address2)
+	{
+		if ($address1 instanceof Address && $address2 instanceof Address) {
+			if ($address1->name == $address2->name &&
+					$address1->street == $address2->street &&
+					$address1->city == $address2->city &&
+					$address1->country == $address2->country &&
+					$address1->zipcode == $address2->zipcode &&
+					$address1->phone == $address2->phone &&
+					$address1->ico == $address2->ico &&
+					$address1->dic == $address2->dic &&
+					$address1->icoVat == $address2->icoVat &&
+					$address1->note == $address2->note) {
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
+
 	private function importSubscribers()
 	{
 		$conn = $this->em->getConnection();
+		$userRepo = $this->em->getRepository(User::getClassName());
 		$dbName = $this->getDbName();
 		$tableNewsletter = $dbName . '.' . self::TABLE_NEWSLETTER;
 		$tableNewsletterDealer = $dbName . '.' . self::TABLE_NEWSLETTER_DEALER;
@@ -302,22 +335,43 @@ class ImportFromMT1 extends Object
 				"SELECT n.mail "
 				. "FROM {$tableNewsletter} n");
 		foreach ($stmt1->fetchAll() as $data) {
-			$this->newsletterFacade->subscribe($data['mail'], Subscriber::TYPE_USER);
+			$user = $userRepo->findOneByMail($data['mail']);
+			if (!$user->subscriber) {
+				$this->newsletterFacade->subscribe($user, Subscriber::TYPE_USER);
+				$this->checkLimit();
+			}
 		}
 
 		$stmt2 = $conn->executeQuery(
 				"SELECT n.mail "
 				. "FROM {$tableNewsletterDealer} n");
 		foreach ($stmt2->fetchAll() as $data) {
-			$this->newsletterFacade->subscribe($data['mail'], Subscriber::TYPE_DEALER);
+			$user = $userRepo->findOneByMail($data['mail']);
+			if (!$user->subscriber) {
+				$this->newsletterFacade->subscribe($user, Subscriber::TYPE_DEALER);
+				$this->checkLimit();
+			}
 		}
 
 		return $this;
 	}
 
+	private function checkLimit()
+	{
+		if ($this->limit >= $this->maxInserts) {
+			throw new LimitExceededException('Maximum insertion is exceeded');
+		}
+		$this->limit++;
+	}
+
 }
 
 class ImportFromMT1Exception extends Exception
+{
+	
+}
+
+class LimitExceededException extends Exception
 {
 	
 }
