@@ -3,11 +3,28 @@
 namespace App\Model\Repository;
 
 use App\Model\Entity\User;
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\QueryException;
 use Exception;
 
 class UserRepository extends BaseRepository
 {
+
+	public function findIdByMail($mail)
+	{
+		$qb = $this->createQueryBuilder('e')
+				->select('e.id')
+				->whereCriteria(['mail' => $mail]);
+
+		try {
+			$result = $qb->setMaxResults(1)
+							->getQuery()->getSingleResult(AbstractQuery::HYDRATE_SCALAR);
+			return $result['id'];
+		} catch (NoResultException $e) {
+			return NULL;
+		}
+	}
 
 	public function findPairsByRoleId($roleId, $value = NULL, $orderBy = [], $key = NULL)
 	{
