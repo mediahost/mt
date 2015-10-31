@@ -13,6 +13,7 @@ jQuery(document).ready(function () {
 	Layout.initImageZoom();
 	LayersliderInit.initLayerSlider();
 	
+	Frontend.init();
 	Buyout.init();
 	Cart.init();
 
@@ -25,5 +26,6 @@ $.nette.ext('netteAjax', {
 	complete: function () {
 		GlobalCustomInit.onReloadProductList();
 		Layout.initOWL();
+		Frontend.afterComplete();
 	}
 });

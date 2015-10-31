@@ -13,6 +13,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  * @property Stock $stock
  * @property string $name
  * @property Price $price
+ * @property Vat $vat
  * @property int $quantity
  */
 class OrderItem extends BaseEntity
@@ -49,8 +50,14 @@ class OrderItem extends BaseEntity
 	/** @return Price */
 	public function getPrice()
 	{
-		$vat = new Vat(NULL, $this->vat ? $this->vat : 0);
+		$vat = $this->getVat();
 		return new Price($vat, $this->price);
+	}
+
+	/** @return Vat */
+	public function getVat()
+	{
+		return new Vat(NULL, $this->vat ? $this->vat : 0);
 	}
 
 	public function getTotalPrice(Exchange $exchange = NULL, $withVat = TRUE)

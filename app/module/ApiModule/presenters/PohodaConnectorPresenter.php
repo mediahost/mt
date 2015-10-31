@@ -3,6 +3,8 @@
 namespace App\ApiModule\Presenters;
 
 use App\Extensions\Products\ProductList;
+use App\Model\Entity\Order;
+use App\Model\Entity\OrderStateType;
 use App\Model\Entity\PohodaItem;
 use App\Model\Entity\Stock;
 use App\Model\Facade\PohodaFacade;
@@ -11,6 +13,7 @@ use App\Model\Repository\StockRepository;
 use Exception;
 use Nette\Http\FileUpload;
 use Nette\Http\IRequest;
+use Nette\Utils\DateTime;
 use Tracy\Debugger;
 
 class PohodaConnectorPresenter extends BasePresenter
@@ -52,7 +55,7 @@ class PohodaConnectorPresenter extends BasePresenter
 //			$pohodaRepo->findByCode([380, 2222, 1111, 1456]);
 			$this->template->stocks = $list->getData(FALSE);
 //			$this->template->stocks = $list->getData();
-			
+
 			$this->template->pohodaRepo = $pohodaRepo;
 			$this->template->ico = $this->settings->modules->pohoda->ico;
 			$this->template->defaultStorage = $this->settings->modules->pohoda->defaultStorage;
@@ -70,10 +73,40 @@ class PohodaConnectorPresenter extends BasePresenter
 		if (!$this->settings->modules->pohoda->enabled || !$this->settings->modules->pohoda->allowedReadOrders) {
 			$this->resource->state = 'error';
 			$this->resource->message = 'This module is not allowed';
-		}
+		} else {
+			
+			$orderTypeRepo = $this->em->getRepository(OrderStateType::getClassName());
+			$type = $orderTypeRepo->find(OrderStateType::STORNO);
 
-		$this->pohodaFacade->setLastSync(PohodaFacade::ORDERS, PohodaFacade::LAST_DOWNLOAD);
-		$this->resource->orders = rand(1, 100);
+			$orderRepo = $this->em->getRepository(Order::getClassName());
+			$minusTime = '-' . $this->settings->modules->pohoda->ordersExportDaysBack;
+			$lastEditTime = DateTime::from($minusTime);
+			$conditions = [
+				'updatedAt >=' => $lastEditTime,
+				'state.type !=' => $type,
+			];
+			$orders = $orderRepo->findBy($conditions, ['createdAt' => 'ASC']);
+//			$orders = [];
+
+			$orderItems = [];
+			foreach ($orders as $order) {
+				foreach ($order->items as $item) {
+					$orderItems[] = $item;
+				}
+			}
+			
+			$this->template->orders = $orders;
+			$this->template->orderItems = $orderItems;
+			$this->template->ico = $this->settings->modules->pohoda->ico;
+			$this->template->defaultStorage = $this->settings->modules->pohoda->defaultStorage;
+			$this->template->typePrice = $this->settings->modules->pohoda->typePrice;
+			$this->template->vatRates = $this->settings->modules->pohoda->vatRates;
+			$this->template->lastEditTime = $lastEditTime;
+			$this->template->pageInfo = $this->settings->pageInfo;
+
+			$this->pohodaFacade->setLastSync(PohodaFacade::ORDERS, PohodaFacade::LAST_DOWNLOAD);
+			$this->setView('orders');
+		}
 	}
 
 	public function actionCreateStore($use_gzip_upload)

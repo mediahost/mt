@@ -1,15 +1,9 @@
 <div class="product-item-container">
 	{snippet stockPrint}
         {foreach $flashes as $flash}
-            {var flashId = 'alert-' . rand(0,10000000)}
-            <div class="alert alert-{$flash->type} alert-dismissable alert-auto-dismiss" id="{$flashId}">
+            <div class="alert alert-{$flash->type} alert-dismissable alert-auto-dismiss">
 				<button type="button" class="close close-large" data-dismiss="alert" aria-hidden="true"></button>
 				{$flash->message}
-				<script>
-						setTimeout(function () {
-							jQuery('#' + {$flashId}).fadeOut();
-						}, 2000);
-				</script>
             </div>
         {/foreach}
 
