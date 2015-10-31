@@ -4,11 +4,6 @@ jQuery(document).ready(function () {
 	LiveForm.options.errorMessageClass = 'help-block help-block-error';
 	LiveForm.options.errorMessagePrefix = '';
 
-        jQuery('#frm-products-filterForm').removeClass('in');
-});
-
-jQuery(document).on('click', '.alert-auto-dismiss', function() {
-        jQuery(this).remove();
 });
 
 (function (d, s, id) {
