@@ -367,8 +367,7 @@ class ImportFromMT1 extends Object
 		foreach ($stmt1->fetchAll() as $data) {
 			$subscriber = $subscriberRepo->findOneByMail($data['mail']);
 			if (!$subscriber) {
-				$user = $subscriber->user ? $subscriber->user : $data['mail'];
-				$this->newsletterFacade->subscribe($user, Subscriber::TYPE_USER);
+				$this->newsletterFacade->subscribe($data['mail'], Subscriber::TYPE_USER);
 				$this->checkLimit();
 			}
 		}
@@ -379,8 +378,7 @@ class ImportFromMT1 extends Object
 		foreach ($stmt2->fetchAll() as $data) {
 			$subscriber = $subscriberRepo->findOneByMail($data['mail']);
 			if (!$subscriber) {
-				$user = $subscriber->user ? $subscriber->user : $data['mail'];
-				$this->newsletterFacade->subscribe($user, Subscriber::TYPE_DEALER);
+				$this->newsletterFacade->subscribe($data['mail'], Subscriber::TYPE_DEALER);
 				$this->checkLimit();
 			}
 		}
