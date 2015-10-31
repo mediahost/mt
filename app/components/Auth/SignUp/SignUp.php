@@ -135,7 +135,9 @@ class SignUp extends BaseControl
 		$roleRepo = $this->em->getRepository(Role::getClassName());
 		$entity->requiredRole = $roleRepo->findOneByName(Role::USER);
 		$entity->wantBeDealer = $this->completeInfo;
-		$entity->billingAddress = $this->loadBillingAddress($values);
+		if ($this->completeInfo) {
+			$entity->billingAddress = $this->loadBillingAddress($values);
+		}
 
 		$this->session->verification = FALSE;
 
