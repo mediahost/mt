@@ -281,8 +281,7 @@ class ImportFromMT1 extends Object
 				. "FROM {$tableUsers} u "
 				. "JOIN {$tableAddress} a ON u.billing_address_id = a.id "
 				. "ORDER BY create_date DESC "
-				. "OFFSET {$start} "
-				. "LIMIT {$limit}");
+				. "LIMIT {$limit} OFFSET {$start}");
 		foreach ($stmtBilling->fetchAll() as $billingAddress) {
 			$this->addAddress($billingAddress['mail'], $billingAddress, TRUE);
 		}
@@ -292,8 +291,7 @@ class ImportFromMT1 extends Object
 				. "FROM {$tableUsers} u "
 				. "JOIN {$tableAddress} a ON u.delivery_address_id = a.id "
 				. "ORDER BY create_date DESC "
-				. "OFFSET {$start} "
-				. "LIMIT {$limit}");
+				. "LIMIT {$limit} OFFSET {$start}");
 		foreach ($stmtDelivery->fetchAll() as $deliveryAddress) {
 			$this->addAddress($deliveryAddress['mail'], $deliveryAddress, FALSE);
 		}
