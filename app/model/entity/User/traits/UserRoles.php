@@ -14,7 +14,7 @@ use App\Model\Entity\Role;
 trait UserRoles
 {
 
-	/** @ORM\ManyToMany(targetEntity="Role", fetch="EAGER", cascade={"persist"}) */
+	/** @ORM\ManyToMany(targetEntity="Role", fetch="LAZY", cascade={"persist"}) */
 	private $roles;
 
 	/**

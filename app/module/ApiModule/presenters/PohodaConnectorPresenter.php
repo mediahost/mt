@@ -86,7 +86,6 @@ class PohodaConnectorPresenter extends BasePresenter
 				'state.type !=' => $type,
 			];
 			$orders = $orderRepo->findBy($conditions, ['createdAt' => 'ASC']);
-//			$orders = [];
 
 			$orderItems = [];
 			foreach ($orders as $order) {
@@ -103,6 +102,8 @@ class PohodaConnectorPresenter extends BasePresenter
 			$this->template->vatRates = $this->settings->modules->pohoda->vatRates;
 			$this->template->lastEditTime = $lastEditTime;
 			$this->template->pageInfo = $this->settings->pageInfo;
+			$this->template->homeCurrency = $this->exchange->getDefault()->getCode();
+			$this->template->exchange = $this->exchange;
 
 			$this->pohodaFacade->setLastSync(PohodaFacade::ORDERS, PohodaFacade::LAST_DOWNLOAD);
 			$this->setView('orders');
