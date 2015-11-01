@@ -7,10 +7,12 @@ use App\Model\Facade\Exception\InsufficientQuantityException;
 use App\Model\Facade\Exception\MissingItemException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use h4kuna\Exchange\Currency\IProperty;
 use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
 use Knp\DoctrineBehaviors\Model;
+use Nette\Utils\DateTime;
 use Nette\Utils\Random;
 
 /**
@@ -31,7 +33,7 @@ use Nette\Utils\Random;
  * @property string $phone
  * @property Address $billingAddress
  * @property Address $shippingAddress
- * @property \DateTime $paymentDate
+ * @property DateTime $paymentDate
  * @property int $paymentBlame
  * @property string $paymentBlameName
  */
@@ -87,6 +89,9 @@ class Order extends BaseEntity
 
 	/** @ORM\Column(type="float", nullable=true) */
 	private $rate;
+
+	/** @var IProperty */
+	private $tmpCurrency = NULL;
 
 	/** @ORM\Column(type="string", length=100, nullable=true) */
 	protected $note;
@@ -334,12 +339,26 @@ class Order extends BaseEntity
 		return (string) $this->id;
 	}
 
-	private function setExchangeRate(Exchange $exchange)
+	public function setExchangeRate(Exchange $exchange, $setWeb = FALSE)
 	{
 		if ($this->rate && $this->currency && array_key_exists($this->currency, $exchange)) {
+			if ($setWeb) {
+				$this->tmpCurrency = $exchange->getWeb();
+				$exchange->setWeb($this->currency);
+			}
 			$currency = $exchange[$this->currency];
 			$rateRelated = ExchangeHelper::getRelatedRate($this->rate, $currency);
 			$exchange->addRate($this->currency, $rateRelated);
+		}
+	}
+
+	public function removeExchangeRate(Exchange $exchange)
+	{
+		if ($this->rate && $this->currency && array_key_exists($this->currency, $exchange)) {
+			$exchange->removeRate($this->currency);
+			if ($this->tmpCurrency) {
+				$exchange->setWeb($this->tmpCurrency);
+			}
 		}
 	}
 

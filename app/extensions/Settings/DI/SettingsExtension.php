@@ -64,7 +64,8 @@ class SettingsExtension extends CompilerExtension
 				'allowedReadOrders' => FALSE,
 				'allowedCreateStore' => FALSE,
 				'allowedCreateShortStock' => FALSE,
-				'removeParsedXmlOlderThan' => '1 month',
+				'removeParsedXmlOlderThan' => '7 days',
+				'ordersExportDaysBack' => '7 days',
 				'newCodeLenght' => 8,
 				'newCodeCharlist' => 'a-Z0-9',
 				'vatRates' => [

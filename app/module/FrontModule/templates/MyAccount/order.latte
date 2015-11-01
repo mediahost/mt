@@ -14,9 +14,7 @@
 			<div class="cart-page">
 				<div class="cart-content summary-data goods-data">
 					
-					{var tmpCurrency => $exchange->getWeb()}
-					{? $exchange->addRate($order->currency, $order->rate)}
-					{? $exchange->setWeb($order->currency)}
+					{$order->setExchangeRate($exchange, TRUE)}
 					
 					<div class="note note-info">
 						<h2 class="block" n:if="$order->needPin">{_'PIN'}: {$order->pin}</h2>
@@ -140,9 +138,7 @@
 							</li>
 						</ul>
 					</div>
-							
-					{? $exchange->removeRate($order->currency)}	
-					{? $exchange->setWeb($tmpCurrency)}
+					{$order->removeExchangeRate($exchange)}
 				</div>
 			</div>
 		</div>

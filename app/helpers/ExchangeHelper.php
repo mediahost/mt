@@ -27,12 +27,12 @@ class ExchangeHelper
 				$number = $number->withoutVat;
 			}
 		}
-		return $this->exchange->format($number, $from, $to, $vat);
+		return $this->exchange->format($number, $from, $to);
 	}
 
-	public function formatVat(Price $price)
+	public function formatVat(Price $price, $from = NULL, $to = NULL)
 	{
-		return $this->format($price, NULL, NULL, TRUE);
+		return $this->format($price, $from, $to, TRUE);
 	}
 
 	public function change($price, $from = NULL, $to = NULL, $round = NULL, $vat = NULL)
@@ -45,12 +45,12 @@ class ExchangeHelper
 				$price = $price->withoutVat;
 			}
 		}
-		return $this->exchange->change($price, $from, $to, $round, $vat);
+		return $this->exchange->change($price, $from, $to, $round);
 	}
 
-	public function changeVat(Price $price)
+	public function changeVat(Price $price, $from = NULL, $to = NULL, $round = NULL)
 	{
-		return $this->change($price, NULL, NULL, NULL, TRUE);
+		return $this->change($price, $from, $to, $round, TRUE);
 	}
 
 	public function formatNumber($number, $withSymbol = FALSE)
