@@ -113,7 +113,7 @@ class ImportFromMT1 extends Object
 
 	public function downloadUsers()
 	{
-		ini_set('max_execution_time', 120);
+		ini_set('max_execution_time', 1500);
 
 		$this->importUsersBasic();
 		$this->importUsersSigns();
@@ -149,7 +149,7 @@ class ImportFromMT1 extends Object
 		if (!$customer) {
 			return $this;
 		}
-		
+
 		foreach ($stmt->fetchAll() as $data) {
 			$userId = $userRepo->findIdByMail($data['mail']);
 			$change = FALSE;
@@ -160,14 +160,13 @@ class ImportFromMT1 extends Object
 				$user->setLocale($this->translator->getDefaultLocale())
 						->setCurrency($this->exchange->getDefault()->getCode());
 			} else {
-//				$user = $userRepo->find($userId);
 				continue;
 			}
-			
+
 			if (!$user) {
 				continue;
 			}
-			
+
 			$wantBeDealer = (bool) $data['dealer_want'];
 			if ($wantBeDealer !== $user->wantBeDealer) {
 				$user->setWantBeDealer($wantBeDealer);
@@ -179,7 +178,7 @@ class ImportFromMT1 extends Object
 				$user->addGroup($group);
 				$change = TRUE;
 			}
-			
+
 			if ($user->isNew() || $change) {
 				$userRepo->save($user);
 			}
@@ -275,10 +274,15 @@ class ImportFromMT1 extends Object
 		$tableUsers = $dbName . '.' . self::TABLE_USER;
 		$tableAddress = $dbName . '.' . self::TABLE_ADDRESS;
 
+		$start = 0;
+		$limit = self::MAX_INSERTS / 2;
 		$stmtBilling = $conn->executeQuery(
 				"SELECT a.*, u.mail "
 				. "FROM {$tableUsers} u "
-				. "JOIN {$tableAddress} a ON u.billing_address_id = a.id");
+				. "JOIN {$tableAddress} a ON u.billing_address_id = a.id "
+				. "ORDER BY create_date DESC "
+				. "OFFSET {$start} "
+				. "LIMIT {$limit}");
 		foreach ($stmtBilling->fetchAll() as $billingAddress) {
 			$this->addAddress($billingAddress['mail'], $billingAddress, TRUE);
 		}
@@ -286,7 +290,10 @@ class ImportFromMT1 extends Object
 		$stmtDelivery = $conn->executeQuery(
 				"SELECT a.*, u.mail "
 				. "FROM {$tableUsers} u "
-				. "JOIN {$tableAddress} a ON u.delivery_address_id = a.id");
+				. "JOIN {$tableAddress} a ON u.delivery_address_id = a.id "
+				. "ORDER BY create_date DESC "
+				. "OFFSET {$start} "
+				. "LIMIT {$limit}");
 		foreach ($stmtDelivery->fetchAll() as $deliveryAddress) {
 			$this->addAddress($deliveryAddress['mail'], $deliveryAddress, FALSE);
 		}
@@ -317,19 +324,16 @@ class ImportFromMT1 extends Object
 			$address->icoVat = $data['icdph'];
 			$address->note = $data['info'];
 			if ($isBilling) {
-				$billing = $address;
-				$shipping = NULL;
 				if (!$this->isAddressSame($user->billingAddress, $address)) {
 					$this->checkLimit();
+					$this->userFacade->setAddress($user, $address, NULL, FALSE);
 				}
 			} else {
-				$billing = NULL;
-				$shipping = $address;
 				if (!$this->isAddressSame($user->shippingAddress, $address)) {
 					$this->checkLimit();
+					$this->userFacade->setAddress($user, NULL, $address, FALSE);
 				}
 			}
-			$this->userFacade->setAddress($user, $billing, $shipping, FALSE);
 		}
 		return $this;
 	}
