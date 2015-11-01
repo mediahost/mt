@@ -1,5 +1,14 @@
 <?php
 
+$purge = array(
+	'temp/cache',
+	'temp/install',
+	'temp/deployment',
+);
+if (!isset($allowDeleteTmp) || $allowDeleteTmp) {
+	$purge[] = 'tmp/';
+}
+
 return array(
 	'my site' => array(
 		'remote' => 'ftp://' . $username . ':' . $password . '@' . $server,
@@ -41,21 +50,15 @@ return array(
 		',
 		'allowdelete' => TRUE,
 		'before' => array(
-				'local:composer install --no-dev -d ./../'
+			'local:composer install --no-dev -d ./../'
 		),
 		'after' => array(
-				$domain . '/install?printHtml=0',
-				'local:composer install --dev -d ./../'
+			$domain . '/install?printHtml=0',
+			'local:composer install --dev -d ./../'
 		),
-		'purge' => array(
-			'temp/cache',
-			'temp/install',
-			'temp/deployment',
-			'tmp/'
-		),
+		'purge' => $purge,
 		'preprocess' => FALSE,
 	),
-	
 	'tempdir' => __DIR__ . '/temp',
 	'colors' => TRUE,
 );
