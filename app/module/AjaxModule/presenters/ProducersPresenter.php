@@ -237,7 +237,7 @@ class ProducersPresenter extends BasePresenter
 			$message = $this->translator->translate('cantBeEmptyIt', NULL, ['name' => $this->translator->translate('ID')]);
 			$this->setError($message);
 		} catch (DBALException $e) {
-			$message = $this->translator->translate('cantBeEmptyShe', NULL, ['name' => $this->translator->translate('Entity')]);
+			$message = $this->translator->translate('cannotDeleteShe', NULL, ['name' => $this->translator->translate('Entity')]);
 			$this->setError($message);
 		}
 	}

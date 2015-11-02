@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Model\Entity\BaseTranslatable;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Model\Repository\BuyoutQuestionRepository")
  * @ORM\Table(name="buyout_question")
  *
  * @property string $text

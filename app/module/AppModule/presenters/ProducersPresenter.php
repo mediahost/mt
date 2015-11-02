@@ -8,9 +8,11 @@ use App\Components\Producer\Form\ProducerEdit;
 use App\Components\Producer\Grid\IModelParametersGridFactory;
 use App\Components\Producer\Grid\ModelParametersGrid;
 use App\Model\Entity\ModelParameter;
+use App\Model\Entity\ParameterPrice;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
+use Kdyby\Doctrine\DBALException;
 use Nette\Utils\Strings;
 
 class ProducersPresenter extends BasePresenter
@@ -159,7 +161,7 @@ class ProducersPresenter extends BasePresenter
 				$parameterRepo->delete($this->parameter);
 				$message = $this->translator->translate('successfullyDeleted', NULL, ['name' => $this->translator->translate('Parameter')]);
 				$this->flashMessage($message, 'success');
-			} catch (Exception $e) {
+			} catch (DBALException $e) {
 				$message = $this->translator->translate('cannotDelete', NULL, ['name' => $this->translator->translate('Parameter')]);
 				$this->flashMessage($message, 'danger');
 			}
