@@ -72,7 +72,7 @@ class QuestionPresenter extends BasePresenter
 				$repository->delete($entity);
 				$message = $this->translator->translate('successfullyDeletedShe', NULL, ['name' => $name]);
 				$this->flashMessage($message, 'success');
-			} catch (DBALException $e) {
+			} catch (Exception $e) {
 				$message = $this->translator->translate('cannotDeleteShe', NULL, ['name' => $name]);
 				$this->flashMessage($message, 'danger');
 			}

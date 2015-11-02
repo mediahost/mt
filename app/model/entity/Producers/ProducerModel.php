@@ -25,8 +25,7 @@ class ProducerModel extends BaseTranslatable implements IProducer
 	const ID = 'm';
 
 	use Model\Translatable\Translatable;
-
-use Model\Sluggable\Sluggable;
+	use Model\Sluggable\Sluggable;
 
 	/** @ORM\Column(type="string", length=256) */
 	protected $name;
