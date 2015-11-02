@@ -1,0 +1,8 @@
+heureka:
+	categoryText: 'Elektronika | Mobilní telefony'
+	payments:
+		shipping:
+			czech_post: 'CESKA_POSTA'
+			slovak_post: 'CESKA_POSTA'
+			dpd: 'DPD'
+			ppl: 'PPL'

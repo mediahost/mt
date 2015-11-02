@@ -79,6 +79,16 @@ class RouterFactory
 			'action' => 'createShortStock'
 				], ResourceRoute::POST);
 
+		$apiRouter[] = new ResourceRoute('<locale \w{2}>/export/heureka/products', [
+			'presenter' => 'ExportProducts',
+			'action' => 'readHeureka'
+				], ResourceRoute::GET);
+
+		$apiRouter[] = new ResourceRoute('<locale \w{2}>/export/zbozi/products', [
+			'presenter' => 'ExportProducts',
+			'action' => 'readZbozi'
+				], ResourceRoute::GET);
+
 		// </editor-fold>
 		// <editor-fold desc="Ajax">
 

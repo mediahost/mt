@@ -1,0 +1,51 @@
+{layout none}
+{contentType application/xml}
+<?xml version="1.0" encoding="utf-8"?>
+<SHOP>
+
+    <SHOPITEM n:foreach="$stocks as $stock">
+		{var product => $stock->product}
+		{var producer => $stock->product->producer}
+		{? $product->setCurrentLocale($locale)}
+		
+        <ITEM_ID>{$stock->id}</ITEM_ID>
+        <PRODUCTNAME>{if $producer}<![CDATA[{$producer}]]> | {/if}<![CDATA[{$product}]]></PRODUCTNAME>
+        <PRODUCT><![CDATA[{$product}]]></PRODUCT>
+        <DESCRIPTION><![CDATA[{$product->description}]]></DESCRIPTION>
+        <URL>{$control->link('//:Front:Product:', ['id' => $product->id, 'locale' => $locale])->href}</URL>
+        <IMGURL>{$control->link('//:Foto:Foto:', ['400-400', $product->image])->href}</IMGURL>
+        <IMGURL_ALTERNATIVE n:foreach="$product->images as $image">
+			{$control->link('//:Foto:Foto:', ['400-400', $image])->href}
+		</IMGURL_ALTERNATIVE>
+        <PRICE_VAT>{$stock->price|changeVat:NULL,NULL,2}</PRICE_VAT>
+        <HEUREKA_CPC n:if="$cpc">{$cpc}</HEUREKA_CPC>
+        <MANUFACTURER n:if="$producer"><![CDATA[{$producer}]]></MANUFACTURER>
+        <CATEGORYTEXT>{_'categoryText'}</CATEGORYTEXT>
+        <EAN n:if="$stock->barcode">{$stock->barcode}</EAN>
+		
+        <DELIVERY_DATE>{$stock->inStore ? $deliveryStoreTime : $deliveryNotInStoreTime}</DELIVERY_DATE>
+		
+		{foreach $params as $param}
+			{var paramName => 'parameter' . $param->code}
+			{var paramValue => $product->$paramName}
+			<PARAM n:if="$paramValue">
+				{? $param->setCurrentLocale($locale)}
+				<PARAM_NAME>{$param}</PARAM_NAME>
+				<VAL>{$paramValue}</VAL>
+			</PARAM>
+		{/foreach}
+		
+        <DELIVERY n:foreach="$shippings as $shipping" n:if="!$hideDelivery">
+            <DELIVERY_ID>{_$shipping}</DELIVERY_ID>
+			{var shippingPrice => $shipping->getPriceByStocks([$stock])}
+            <DELIVERY_PRICE>{$shippingPrice|changeVat:NULL,NULL,2}</DELIVERY_PRICE>
+            <DELIVERY_PRICE_COD n:if="$paymentOnDelivery && $paymentOnDelivery->containShipping($shipping)">
+				{var paymentPrice => $paymentOnDelivery->getPriceByStocks([$stock])}
+				{var codPrice => $shippingPrice->withVat + $paymentPrice->withVat}
+				{$codPrice|change:NULL,NULL,2}
+			</DELIVERY_PRICE_COD>
+        </DELIVERY>
+		
+    </SHOPITEM>
+
+</SHOP>
