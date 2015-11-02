@@ -27,10 +27,10 @@ class Shipping extends BaseTranslatable
 	const SLOVAK_POST = 3;
 	const DPD = 4;
 	const PPL = 5;
-	
+	//
 	const SPECIAL_LIMIT = 50; // with VAT
 	const SPECIAL_PRICE = 1.9; // with VAT
-	
+
 	use Model\Translatable\Translatable;
 
 	/** @ORM\Column(type="boolean") */
@@ -70,6 +70,17 @@ class Shipping extends BaseTranslatable
 	{
 		$price = $basket ? $this->getPriceByBasket($basket, $level) : $this->price;
 		return new Price($this->vat, $price);
+	}
+
+	public function getPriceByStocks(array $stocks)
+	{
+		$basket = new Basket();
+		foreach ($stocks as $stock) {
+			if ($stock instanceof Stock) {
+				$basket->setItem($stock, 1);
+			}
+		}
+		return $this->getPrice($basket);
 	}
 
 	private function getPriceByBasket(Basket $basket, $level = NULL)

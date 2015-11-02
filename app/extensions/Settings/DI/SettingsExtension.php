@@ -74,6 +74,19 @@ class SettingsExtension extends CompilerExtension
 					'none' => 0,
 				],
 			],
+			'heureka' => [
+				'enabled' => FALSE,
+				'key' => NULL, // mereni konverzí
+				'cpc' => NULL, // max. cena za proklik (max. 100)
+				'deliveryStoreTime' => 0,
+				'deliveryNotInStoreTime' => NULL,
+				'onlyInStore' => TRUE,
+				'hideDelivery' => FALSE,
+				'locales' => [],
+			],
+			'zbozi' => [
+				'enabled' => FALSE,
+			],
 			'service' => [
 				'enabled' => FALSE,
 				'pageId' => 1, // ID of page in pages to show as basic info
@@ -81,10 +94,6 @@ class SettingsExtension extends CompilerExtension
 			'dealer' => [
 				'enabled' => FALSE,
 				'pageId' => 1, // ID of page in pages to show as basic info
-			],
-			'heureka' => [
-				'enabled' => FALSE,
-				'key' => NULL, // mereni konverzí
 			],
 			'buyout' => [
 				'enabled' => FALSE,

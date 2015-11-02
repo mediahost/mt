@@ -63,6 +63,17 @@ class Payment extends BaseTranslatable
 		return new Price($this->vat, $price);
 	}
 
+	public function getPriceByStocks(array $stocks)
+	{
+		$basket = new Basket();
+		foreach ($stocks as $stock) {
+			if ($stock instanceof Stock) {
+				$basket->setItem($stock, 1);
+			}
+		}
+		return $this->getPrice($basket);
+	}
+
 	private function getPriceByBasket(Basket $basket, $level = NULL)
 	{
 		$price = $this->price;
@@ -122,6 +133,11 @@ class Payment extends BaseTranslatable
 	{
 		$this->shippings->clear();
 		return $this;
+	}
+	
+	public function containShipping(Shipping $shipping)
+	{
+		return $this->shippings->contains($shipping);
 	}
 	
 	public function __toString()
