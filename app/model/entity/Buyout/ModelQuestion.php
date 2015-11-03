@@ -22,13 +22,13 @@ class ModelQuestion extends BaseEntity
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="App\Model\Entity\ProducerModel", inversedBy="questions")
-	 * @ORM\JoinColumn(name="model_id", referencedColumnName="id")
+	 * @ORM\JoinColumn(name="model_id", referencedColumnName="id", onDelete="CASCADE")
 	 */
 	protected $model;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Question", fetch="EAGER")
-	 * @ORM\JoinColumn(name="question_id", referencedColumnName="id")
+	 * @ORM\JoinColumn(name="question_id", referencedColumnName="id", onDelete="CASCADE")
 	 */
 	protected $question;
 
