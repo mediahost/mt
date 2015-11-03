@@ -1,45 +1,45 @@
 # Components
 modelQuestion:
 	input:
-		price: 'Základní cena'
+		price: 'Základná cena'
 		question: 'Otázka'
-		yes: 'Ano'
-		no: 'Ne'
-		save: 'Uložit'
-		add: 'Přidat'
+		yes: 'Áno'
+		no: 'Nie'
+		save: 'Uložiť'
+		add: 'Pridať'
 	required:
-		price: 'Zadejte výkupní cenu!'
+		price: 'Zadajte výkupnú cenu!'
 
 request:
 	input:
-		yes: 'Ano'
-		no: 'Ne'
+		yes: 'Áno'
+		no: 'Nie'
 		email: 'E-mail'
-		fullname: 'Jméno a příjmení'
-		recapculate: 'Přepočítat'
-		send: 'Souhlasím s cenou'
+		fullname: 'Meno a priezvisko'
+		recapculate: 'Prepočítať'
+		send: 'Súhlasím s cenou'
 	required:
-		fullname: 'Zadejte své jméno a příjmení'
-		email: 'Zadejte svůj e-mail'
+		fullname: 'Zadajte svoje meno a priezvisko'
+		email: 'Zadajte svoj e-mail'
 	template:
-		price: 'Výkupní cena'
+		price: 'Výkupná cena'
 		total: 'Celková cena'
 
 # E-mail messages
 email:
 	their:
-		subject: 'Požadavek na výkup telefonu'
+		subject: 'Požiadavka na výkup telefónu'
 		template:
 			subtitle: 'Výkup z e-shopu'
 			from: 'Vaše údaje'
 	our:
-		subject: 'Požadavek na výkup telefonu'
+		subject: 'Požiadavka na výkup telefónu'
 		template:
 			subtitle: 'Výkup z e-shopu'
 			from: 'Zákazník'
 	template:
 		model: 'Model' 
-		summary: 'Výkupní cena'
+		summary: 'Výkupná cena'
 		answer:
-			y: 'Ano'
-			n: 'Ne'
+			y: 'Áno'
+			n: 'Nie'

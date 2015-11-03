@@ -1,13 +1,13 @@
 shipping:
-	personal: 'Osobně'
+	personal: 'Osobne'
 	czech_post: 'Česká Pošta'
 	slovak_post: 'Slovenská Pošta'
 	dpd: 'DPD'
 	ppl: 'PPL'
 payment:
-	personal: 'Osobně'
-	on_delivery: 'Dobírkou'
-	bank_account: 'Převodem na účet předem'
+	personal: 'Osobne'
+	on_delivery: 'Dobierkou'
+	bank_account: 'Prevodom na účet vopred'
 
 form:
-	select: '--- beze změny ---'
+	select: '--- bez zmeny ---'

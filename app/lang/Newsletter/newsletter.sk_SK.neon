@@ -1,7 +1,7 @@
 admin:
 	sidebar:
 		newsletter: 'Newsletter'
-		subscribers: 'Odběratelé'
+		subscribers: 'Odberatelia'
 
 	newsletter:
 		default:
@@ -9,105 +9,104 @@ admin:
 		new:
 			title: 'Nová zpráva'
 			counter:
-				pre: 'Bude odesláno'
-				post: 'zpráv!'
+				pre: 'Bude odoslaných'
+				post: 'správ!'
 		grid:
-			all: 'vše'
-			createMessage: 'Vytvořit zprávu'
-			title: 'Přehled zpráv'
+			all: 'všetko'
+			createMessage: 'Vytvoriť správu'
+			title: 'Prehľad správ'
 			header:
-				subject: 'Předmět'
-				created: 'Vytvořeno'
-				type: 'Příjemci'
+				subject: 'Predmet'
+				created: 'Vytvorené'
+				type: 'Príjemcovia'
 				locale: 'Jazyk'
 				status: 'Stav'
-				stats: 'Počet odeslaných'
 			types:
-				users: 'uživatelé'
-				dealers: 'dealeři'
+				users: 'používatelia'
+				dealers: 'díleri'
 			status:
-				running: 'spuštěný'
+				running: 'spustený'
 				paused: 'pozastavený'
-				sent: 'odeslaný'
-				unknown: 'neznámý'
+				sent: 'odoslaný'
+				unknown: 'neznámy'
 			action:
-				pause: 'Pozastavit'
-				run: 'Spustit'
+				pause: 'Pozastaviť'
+				run: 'Spustiť'
 		form:
-			all: 'vše'
-			subject: 'Předmět'
-			content: 'Tělo'
-			recipients: 'Příjemci'
+			all: 'všetko'
+			subject: 'Predmet'
+			content: 'Telo'
+			recipients: 'Príjemcovia'
 			groups: 'Skupiny'
-			users: 'uživatelé'
-			dealers: 'dealeři'
+			users: 'používatelia'
+			dealers: 'díleri'
 			locale: 'Jazyk'
 			testEmail: 'Testovací e-mail'
-			send: 'Odeslat'
-			sendTest: 'Odeslat testovací'
+			send: 'Odoslať'
+			sendTest: 'Odoslať testovacie'
 
 	subscriber:
 		default:
-			title: 'Odběratelé'
+			title: 'Odberatelia'
 		add:
-			title: 'Přidat odběratele'
+			title: 'Pridať odberateľa'
 		grid:
-			all: 'vše'
-			addSubscriber: 'Přidat odběratele'
-			title: 'Přehled odběratelů'
+			all: 'všetko'
+			addSubscriber: 'Pridať odberateľa'
+			title: 'Prehľad odberateľov'
 			header:
 				id: 'ID #'
 				email: 'E-mail'
-				subscribed: 'Přihlášeno'
+				subscribed: 'Prihlásených'
 				ip: 'IP'
 				type: 'Typ'
 				locale: 'Jazyk'
 			types:
 				user: 'uživatel'
-				dealer: 'dealer'
+				dealer: 'díler'
 				unknown: 'neznámý'
 
 subscribeControl:
 	label: 'E-mail'
-	placeholder: 'Zadejte váš e-mail'
-	submit: 'Přihlásit'
-	success: 'Odběr úspěšně přihlášen.'
+	placeholder: 'Zadajte váš e-mail'
+	submit: 'Prihlásiť'
+	success: 'Odber úspešne prihlásený.'
 
 presenter:
-	success: 'Odhlášení z odběru proběhlo úspěšně!'
-	tokenNotMatch: 'Token pro odhlášení se neshoduje s e-mailem!'
+	success: 'Odhlásenie z odberu prebehlo úspešne!'
+	tokenNotMatch: 'Token pre odhlásenie sa nezhoduje s e-mailom!'
 	template:
-		h1: 'Odhlásit odběr novinek'
+		h1: 'Odhlásiť odber noviniek'
 
 unsubscribeForm:
 	label: 'E-mail'
-	submit: 'Odhlásit odběr'
-	emailSent: 'Poslali jsme vám potvrzovací e-mail. Přejděte do schránky.'
+	submit: 'Odhlásiť odber'
+	emailSent: 'Poslali sme vám potvrdzovací e-mail. Prejdite do emailovej schránky.'
 
 messages:
 	unsubscribe:
-		subject: 'Odhlášení odběru novinek'
+		subject: 'Odhlásenie odberu noviniek'
 	handleDelete:
-		notFound: 'Odběratel s ID %id% nebyl nalezen.'
-		success: 'Odběratel "%email%" byl úspěšně smazán.'
+		notFound: 'Odberateľ s ID %id% nebol nájdený.'
+		success: 'Odberateľ "%email%" bol úspešne zmazaný z databázy.'
 	addSubscriber:
-		success: 'Nový odběratel byl úspěšně uložen.'
-		alreadyExists: 'Odběratel tohoto typu s e-mailem "%email%" již existuje.'
+		success: 'Nový odberateľ bol úspešne uložený.'
+		alreadyExists: 'Odberateľ tohto typu s e-mailom "%email%" už existuje v databáze.'
 	newMessage:
-		testSuccess: 'Testovací e-mail byl úspěšně odeslán na adresu %recipient%!'
-		queue: 'Odeslání zpráv bylo úspěšně zařazeno do fronty.'
+		testSuccess: 'Testovací e-mail bol úspešne odoslaný na adresu %recipient%!'
+		queue: 'Odoslanie správ bolo úspešne zaradené do fronty. Emaily sa budú postune odosielať.'
 
 message:
 	base:
 		layout:
-			unsubscribe: 'Pokial si již nepřejete dostávat další zprávy, můžete se %ahref%odhlásit</a> z odběru.'
-			webview: 'Zobrazit v prehliedači'
+			unsubscribe: 'Pokiaľ si už neželáte dostávať ďalšie správy, môžete sa %ahref%odhlásit</a> z odberu.'
+			webview: Zobraziť v prehliadači'
 		footer:
 			address:
 				alt: 'Adresa'
 			contact:
 				alt: 'Kontakt'
-				label: 'Potrebujete poradit?'
+				label: 'Potrebujete poradiť?'
 			bank:
 				alt: 'Info'
 				label:

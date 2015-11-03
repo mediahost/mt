@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sk_SK\n"
+"Language: cs_CZ\n"
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
@@ -36,13 +36,13 @@ msgid "locale_en"
 msgstr "Angličtina"
 
 msgid "Loading..."
-msgstr "Načítám..."
+msgstr "Načítavam..."
 
 msgid "Deactivate"
-msgstr "Deaktivovat"
+msgstr "Deaktivovať"
 
 msgid "Activate"
-msgstr "Aktivovat"
+msgstr "Aktivovať"
 
 msgid "Facebook"
 msgstr "Facebook"
@@ -51,7 +51,7 @@ msgid "Twitter"
 msgstr "Twitter"
 
 msgid "or login using"
-msgstr "nebo se přihlaste přes"
+msgstr "alebo prihlásenie pomocou"
 
 msgid "Google"
 msgstr "Google"
@@ -60,208 +60,208 @@ msgid "Linkedin"
 msgstr "Linkedin"
 
 msgid "or register with"
-msgstr "nebo se registrujte přes"
+msgstr "alebo sa zaregistrujete na"
 
 msgid "other image"
-msgstr "Jiný obrázek"
+msgstr "iný obrázok"
 
 msgid "Delete"
-msgstr "Smazat"
+msgstr "Zmazať"
 
 msgid "Availability"
-msgstr "Dostupnost"
+msgstr "Dostupnosť"
 
 msgid "Price"
 msgstr "Cena"
 
 msgid "Items %begin% to %end% of %count% total"
-msgstr "Položka %begin% až %end% z %count%  celkem"
+msgstr "Položka %begin% až %end% z %count%  celkom"
 
 msgid "Despite our efforts, we found no product."
-msgstr "Navzdory naší snaze jsme nenašli žádné zboží."
+msgstr "Napriek našej snahe, nenašli sme žiadny produkt."
 
 msgid "Try entering a different category, or possibly change product filter."
-msgstr "Zkuste vstoupit do jiné kategorie nebo změnit kritéria filtru zboží."
+msgstr "Skúste vybrať inú kategóriu, alebo prípadne zmeniť filter produktu."
 
 msgid "We believe, then you will find your product."
-msgstr "Věříme, že poté najdete svoje zboží."
+msgstr "Veríme, že potom svoj produkt najdete."
 
 msgid "Zoom"
-msgstr "Náhled"
+msgstr "Náhľad"
 
 msgid "View"
 msgstr "Detail"
 
 msgid "Add to cart"
-msgstr "Do košíku"
+msgstr "Do košíka"
 
 msgid "This ia a system generated email and reply is not required."
-msgstr "Tento email je generován systémem a nelze na něj odpovídat."
+msgstr "Tento email je generovaný systémom, neodpovedajte naň."
 
 msgid "Unsubscribe"
-msgstr "Odhlásit odběr"
+msgstr "Odhlásiť odber"
 
 msgid "from this newsletter instantly."
-msgstr "z toho newsletteru okamžitě."
+msgstr "z tohto newsletteru okamžite."
 
 msgid "About Us"
 msgstr "O nás"
 
 msgid "Privacy Policy"
-msgstr "Ochrana osobních údajů"
+msgstr "Ochrana osobných údajov"
 
 msgid "Terms of Use"
-msgstr "Podmínky použití"
+msgstr "Podmienky používania"
 
 msgid "Thank you for joining the %name%"
-msgstr "Děkujeme Vám, že jste se přidali k věrnostnímu programu %name%"
+msgstr "Ďakujeme Vám, že ste sa pridali do vernostného programu %name%"
 
 msgid "Your registration was successfull."
-msgstr "Vaše registrace proběhla úspěšně."
+msgstr "Vaša registrácia prebehla úspešne."
 
 msgid "You can set your password"
-msgstr "Můžete si nastavit své heslo"
+msgstr "Môžete si nastaviť svoje heslo"
 
 msgid "Please click the following URL to to set you password"
-msgstr "Prosím, klikněte na následující odkaz pro nastavení Vašeho hesla"
+msgstr "Pre nastavenie Vášho hesla, kliknite na nasledujúcu  URL adresu"
 
 msgid "If clicking the URL above does not work, copy and paste the URL into a browser window."
-msgstr "Pokud na tento odkaz nelze kliknout, zkopírujte ho a vložte do prohlížeče."
+msgstr "Ak na tento odkaz nemožno kliknúť, skopírujte ho a vložte do prehliadača."
 
 msgid "The link will expire in an hour."
-msgstr "Platnost odkazu vyprší za hodinu."
+msgstr "Platnosť odkazu vyprší za hodinu."
 
 msgid "Please click the following URL to activate your account"
-msgstr "Prosím, klikněte na následující odkaz, abyste aktivovali svůj účet"
+msgstr "Prosím kliknite na nasledujúcu URL adresu pre aktivácii účtu"
 
 msgid "Categories"
-msgstr "Kategorie"
+msgstr "Kategória"
 
 msgid "Add Main Category"
-msgstr "Přidat hlavní kategorii"
+msgstr "Pridať hlavnú kategóriu"
 
 msgid "New Main Category"
-msgstr "Nová hlavní kategorie"
+msgstr "Nová hlavná kategória"
 
 msgid "Edit of category"
-msgstr "Upravit kategorii"
+msgstr "Upraviť kategóriu"
 
 msgid "Edit selected category"
-msgstr "Upravit vybranou kategorii"
+msgstr "Upraviť vybranú kategóriu"
 
 msgid "Select some category from tree"
-msgstr "Vyberte kategorii ze stromu"
+msgstr "Vyberte kategóriu zo stromu"
 
 msgid "Dashboard"
-msgstr "Úvodní stránka"
+msgstr "Úvodná stránka"
 
 msgid "reports & statistics"
-msgstr "reporty a statistiky"
+msgstr "Reporty a štatistiky"
 
 msgid "Example Form"
-msgstr "Vzorový formulář"
+msgstr "Vzorový formulár"
 
 msgid "Examples"
-msgstr "Příklady"
+msgstr "Príklady"
 
 msgid "Form"
-msgstr "Formulář"
+msgstr "Formulár"
 
 msgid "by Mediahost"
 msgstr "Mediahost"
 
 msgid "Add"
-msgstr "Přidat"
+msgstr "Pridať"
 
 msgid "Edit"
-msgstr "Upravit"
+msgstr "Upraviť"
 
 msgid "Full Screen"
 msgstr "Celá obrazovka"
 
 msgid "Sign out"
-msgstr "Odhlásit"
+msgstr "Odhlásiť"
 
 msgid "Home"
-msgstr "Domů"
+msgstr "Domov"
 
 msgid "Pages"
 msgstr "Stránky"
 
 msgid "Add Page"
-msgstr "Přidat stránku"
+msgstr "Pridať stránku"
 
 msgid "Edit Page"
-msgstr "Upravit stránku"
+msgstr "Upraviť stránku"
 
 msgid "page"
 msgstr "stránka"
 
 msgid "Parameters"
-msgstr "Parametry"
+msgstr "Parametre"
 
 msgid "Add new parameter"
-msgstr "Přidat nový parametr"
+msgstr "Pridať nový parameter"
 
 msgid "Add Parameter"
-msgstr "Přidat parametr"
+msgstr "Pridať parameter"
 
 msgid "String"
-msgstr "Řetězec"
+msgstr "Reťazec"
 
 msgid "Number"
 msgstr "Číslo"
 
 msgid "YES or NO"
-msgstr "ANO nebo NE"
+msgstr "ÁNO alebo NIE"
 
 msgid "Edit Parameter"
-msgstr "Upravit parametr"
+msgstr "Upraviť parameter"
 
 msgid "Producers"
-msgstr "Výrobci"
+msgstr "Výrobcovia"
 
 msgid "Add Producer"
-msgstr "Přidat výrobce"
+msgstr "Pridať výrobcu"
 
 msgid "Model Parameters"
-msgstr "Parametry modelu"
+msgstr "Parametre modelu"
 
 msgid "Add Model Parameter"
-msgstr "Přidat parametr modelu"
+msgstr "Pridať parameter modelu"
 
 msgid "Edit Model Parameter"
-msgstr "Úprava parametru modelu"
+msgstr "Úpraviť parameter modelu"
 
 msgid "Edit of %name%"
-msgstr "Upravit %name%"
+msgstr "Úpraviť %name%"
 
 msgid "Edit selected producer, line or model"
-msgstr "Upravit vybraného výrobce, řadu nebo model"
+msgstr "Úpraviť vybraného výrobcu, radu alebo model"
 
 msgid "Select some producer, line or model from tree"
-msgstr "Vyberte výrobce, řadu nebo model ze stromu"
+msgstr "Vyberte výrobcu, radu alebo model zo stromu"
 
 msgid "Products"
-msgstr "Zboží"
+msgstr "Tovar"
 
 msgid "Add Product"
-msgstr "Přidat zboží"
+msgstr "Pridať tovar"
 
 msgid "CSV Update"
-msgstr "CSV aktualizace"
+msgstr "CSV Aktualizácia"
 
 msgid "Basic data"
-msgstr "Základní údaje"
+msgstr "Základné údaje"
 
 msgid "Prices"
 msgstr "Ceny"
 
 msgid "Quantity"
-msgstr "Množství"
+msgstr "Množstvo"
 
 msgid "Classification"
-msgstr "Klasifikace"
+msgstr "Klasifikácia"
 
 msgid "SEO"
 msgstr "SEO"
@@ -270,10 +270,10 @@ msgid "Images"
 msgstr "Obrázky"
 
 msgid "Signs"
-msgstr "Příznaky"
+msgstr "Príznaky"
 
 msgid "Similars"
-msgstr "Podobné zboží"
+msgstr "Podobný tovar"
 
 msgid "Service Creators"
 msgstr "Service Creators"
@@ -285,59 +285,58 @@ msgid "Creators"
 msgstr "Creators"
 
 msgid "Nothing"
-msgstr "Nic"
+msgstr "Nič"
 
 msgid "Nothing yet"
-msgstr "Zatím nic"
+msgstr "Zatiaľ nič"
 
 msgid "Service Tools"
-msgstr "Servisní nástroje"
+msgstr "Servisné nástroje"
 
 msgid "Tools"
 msgstr "Nástroje"
 
 msgid "Import Init Data to DB"
-msgstr "Importovat inicializační data do DB"
+msgstr "Importovať inicializačné data do DB"
 
 msgid "contains RE-INSTALL DB"
 msgstr "obsahuje RE-INSTALL DB"
 
 msgid "Clear all data in DB and imports initial data from test backup."
-msgstr ""
-"Smazat všechna data v DB a importovat počáteční data z testovací zálohy."
+msgstr "Zmazať všetky údaje v DB a importovať počiatočné údaje z testovacej zálohy."
 
 msgid "Please create BACKUP before do this DB schema!"
-msgstr "Prosím, vytvořte ZÁLOHU předtím, než nahrajete toto DB schéma"
+msgstr "Prosím, vytvorte ZÁLOHU predtým než nahráte toto DB schéma"
 
 msgid "Install DB"
-msgstr "Instalovat databázi"
+msgstr "Inštalovať databázu"
 
 msgid "Run istalation procedure."
-msgstr "Spustit instalaci."
+msgstr "Spustiť inštaláciu."
 
 msgid "DB will be maintained."
-msgstr "Databáze bude zachována."
+msgstr "DB bude zachovaná."
 
 msgid "Reinstall DB"
-msgstr "Znovu instalovat databázi."
+msgstr "Znovu inštalovať databázu"
 
 msgid "Clear actual DB schema and reinstall DB"
-msgstr "Smazat aktuální DB schéma a přeinstalovat DB"
+msgstr "Zmazať aktuálnu DB schéma preinštalovať DB"
 
 msgid "Settings"
-msgstr "Nastavení"
+msgstr "Nastavenie"
 
 msgid "E-Shop"
 msgstr "E-Shop"
 
 msgid "Currency rate"
-msgstr "Kurz měny"
+msgstr "Menový kurz"
 
 msgid "Units"
 msgstr "Jednotky"
 
 msgid "Edit units"
-msgstr "Upravit jednotky"
+msgstr "Upraviť jednotky"
 
 msgid "Administration"
 msgstr "Správa"
@@ -349,13 +348,13 @@ msgid "Orders"
 msgstr "Objednávky"
 
 msgid "Edit Order Items"
-msgstr "Upravit položky objednávky"
+msgstr "Upraviť položky objednávky"
 
 msgid "Users"
-msgstr "Uživatelé"
+msgstr "Užívatelia"
 
 msgid "Discounts"
-msgstr "Slevy"
+msgstr "Zľavy"
 
 msgid "Superadmin"
 msgstr "Superadmin"
@@ -370,19 +369,19 @@ msgid "Online Store"
 msgstr "Online obchod"
 
 msgid "Add Sign"
-msgstr "Přidat příznak"
+msgstr "Pridať príznak"
 
 msgid "Edit Sign"
-msgstr "Upravit příznak"
+msgstr "Upraviť príznak"
 
 msgid "Theme Color"
-msgstr "Barva tématu"
+msgstr "Farba témy"
 
 msgid "Layout"
-msgstr "Rozložení"
+msgstr "Rozloženie"
 
 msgid "Fluid"
-msgstr "Plovoucí"
+msgstr "Plávajúce"
 
 msgid "Boxed"
 msgstr "Boxed"
@@ -394,13 +393,13 @@ msgid "Fixed"
 msgstr "Pevný"
 
 msgid "Default"
-msgstr "Výchozí"
+msgstr "Predvolené"
 
 msgid "Sidebar Mode"
-msgstr "Mód bočního menu"
+msgstr "Mód bočného menu"
 
 msgid "Sidebar Menu"
-msgstr "Boční menu"
+msgstr "Bočné menu"
 
 msgid "Accordion"
 msgstr "Accordion"
@@ -412,97 +411,97 @@ msgid "Sidebar Style"
 msgstr "Sidebar Style"
 
 msgid "Light"
-msgstr "Světlý"
+msgstr "Svetlý"
 
 msgid "Sidebar Position"
 msgstr "Sidebar Position"
 
 msgid "Left"
-msgstr "Levý"
+msgstr "Ľavý"
 
 msgid "Right"
 msgstr "Pravý"
 
 msgid "Footer"
-msgstr "Patička"
+msgstr "Pätička"
 
 msgid "Add User"
-msgstr "Přidat uživatele"
+msgstr "Pridať užívateľa"
 
 msgid "Edit User"
-msgstr "Upravit uživatele"
+msgstr "Upraviť užívateľa"
 
 msgid "View Cart"
-msgstr "Prohlédnout košík"
+msgstr "Prezrieť košík"
 
 msgid "Checkout"
-msgstr "Pokladna"
+msgstr "Pokladňa"
 
 msgid "Bestsellers"
-msgstr "Bestsellery"
+msgstr "Najpredávanejšie"
 
 msgid "Search"
-msgstr "Hledat"
+msgstr "Hľadať"
 
 msgid "Filter"
-msgstr "Filtr"
+msgstr "Filter"
 
 msgid "Select your accessories for..."
-msgstr "Vyberte si příslušenství pro..."
+msgstr "Vyberte si príslušenstvo pre..."
 
 msgid "Access Denied"
-msgstr "Přistup zamítnut"
+msgstr "Prístup zamietnutý"
 
 msgid "You do not have permission to view this page."
-msgstr "Nemáte oprávnění ke shlédnutí této stránky."
+msgstr "Nemáte oprávnenie na pozeranie tejto stránky"
 
 msgid "Please try contact the web site administrator if you believe you should be able to view this page."
-msgstr "Prosím, zkuste kontaktovat administrátora tohoto webu, pokud si myslíte, že byste sem měli mít přístup."
+msgstr "Skúste kontaktovať administrátora tohto webu, ak si myslíte, že by ste sem mali mať prístup."
 
 msgid "Return home"
-msgstr "Zpátky domů"
+msgstr "Späť domov"
 
 msgid "Logout"
-msgstr "Odhlásit"
+msgstr "Odhlásiť"
 
 msgid "Oops!  You're lost."
-msgstr "Ups!  Ztratili jste se."
+msgstr "Ups! Stratili ste sa."
 
 msgid "We can not find the page you're looking for."
-msgstr "Nemůžeme najít stránku, kterou hledáte."
+msgstr "Nemôžeme nájsť stránku, ktorú hľadáte."
 
 msgid "or try the search bar above."
-msgstr "nebo zkuste použít vyhledávání nahoře."
+msgstr "Alebo skúste použiť vyhľadávanie hore"
 
 msgid "Page Not Found"
-msgstr "Stránka nenalezena"
+msgstr "Stránka nenájdená"
 
 msgid "Method Not Allowed"
-msgstr "Metoda nepovolena"
+msgstr "Metóda nepovolené"
 
 msgid "The requested method is not allowed for the URL."
-msgstr "Požadovaná metoda není povolena pro tuto URL"
+msgstr "Požadovaná metóda nie je povolená pre URL adresu."
 
 msgid "The page you requested has been taken off the site. We apologize for the inconvenience."
-msgstr "Stránka, kterou hledáte byla z webu smazána. Omlouváme se za způsobené nepříjemnosti."
+msgstr "Stránka, ktorú hľadáte była z webu vymazaná. Ospravedlňujeme sa za spôsobené nepríjemnosti."
 
 msgid "Oops..."
 msgstr "Ups..."
 
 msgid "Sorry, we have a problem."
-msgstr "Je nám líto, máme problém."
+msgstr "Ospravedlňujeme sa, ale máme problém."
 
 msgid "Your browser sent a request that this server could not understand or process."
-msgstr "Váš prohlížeč poslal žádost, které tento server nerozumí nebo ji neumí zpracovat."
+msgstr "Váš prehliadač poslal žiadosť, ktorej tento server nerozumie alebo ju nevie spracovať."
 
 msgid "Oops! Something went wrong."
-msgstr "Ups! Něco se pokazilo."
+msgstr "Ups! Niečo sa pokazilo."
 
 msgid "We are fixing it!"
 msgstr "Už na tom pracujeme!"
 
 msgid "Please come back in a while."
-msgstr "Prosím, vraťte se za chvíli."
+msgstr "Prosím, vráťte sa za chvíľu."
 
 msgid "Server Error"
 msgstr "Chyba serveru"
@@ -511,16 +510,16 @@ msgid "Error"
 msgstr "Chyba"
 
 msgid "Free shipping"
-msgstr "Doprava zdarma"
+msgstr "Doprava zadarmo"
 
 msgid "Open hours"
-msgstr "Otevírací doba"
+msgstr "Otváracia doba"
 
 msgid "Our Contacts"
 msgstr "Naše kontakty"
 
 msgid "Phone"
-msgstr "Telefon"
+msgstr "Telefón"
 
 msgid "Email"
 msgstr "E-mail"
@@ -532,88 +531,88 @@ msgid "Latest Tweets"
 msgstr "Naše Tweety"
 
 msgid "Loading tweets by"
-msgstr "Načítání tweetů"
+msgstr "Načítanie tweetov"
 
 msgid "Facebook Posts"
-msgstr "Naše příspěvky"
+msgstr "Facebook príspevky"
 
 msgid "Our Facebook"
 msgstr "Náš Facebook"
 
 msgid "Terms of Service"
-msgstr "Obchodní podmínky"
+msgstr "Obchodné podmienky"
 
 msgid "Logo"
 msgstr "Logo"
 
 msgid "Top products"
-msgstr "Top zboží"
+msgstr "Top tovar"
 
 msgid "Last visited"
-msgstr "Poslední navštívené"
+msgstr "Posledné navštívené"
 
 msgid "My Account"
-msgstr "Můj účet"
+msgstr "Môj účet"
 
 msgid "Account"
 msgstr "Účet"
 
 msgid "My Social Connection"
-msgstr "Sociální sítě"
+msgstr "Sociálne siete"
 
 msgid "Edit your account information"
-msgstr "Upravte své údaje o účtu"
+msgstr "Upraviť informácie o účte"
 
 msgid "Connect your account with Facebook or Twitter"
-msgstr "Propojte svůj účet s Facebookem nebo Twitterem"
+msgstr "Prepojte svoj účet s Facebookom alebo Twitterom"
 
 msgid "Change your password"
-msgstr "Změňte své heslo"
+msgstr "Zmeniť heslo"
 
 msgid "My Orders"
 msgstr "Moje objednávky"
 
 msgid "View your order history"
-msgstr "Prohlédněte si historii svých objednávek"
+msgstr "Prehliadnite si históriu svojich objednávok"
 
 msgid "Delete Account"
-msgstr "Smazat účet"
+msgstr "Zmazať účet"
 
 msgid "Do you really want to delete all data for your account?"
-msgstr "Opravdu chcete vymazat všechny údaje ze svého účtu?"
+msgstr "Naozaj chcete vymazať VŠETKY údaje zo svojho účtu?"
 
 msgid "Yes, I want"
-msgstr "Ano, chci"
+msgstr "Áno, chcem"
 
 msgid "Personal Info"
-msgstr "Osobní informace"
+msgstr "Osobné informácie"
 
 msgid "Soacial Connection"
-msgstr "Spojení s účty"
+msgstr "Spojenia s účtami"
 
 msgid "Change Password"
-msgstr "Změnit heslo"
+msgstr "Zmena hesla"
 
 msgid "In Stock"
-msgstr "Skladem"
+msgstr "Skladom"
 
 msgid "Temporarily Sold Out"
-msgstr "Dočasně vyprodáno"
+msgstr "Dočasné vypredané"
 
 msgid "Description"
 msgstr "Popis"
 
 msgid "Reviews"
-msgstr "Recenze"
+msgstr "Recenzie"
 
 msgid "Additional features"
-msgstr "Additional Features"
+msgstr "Ďalšie funkcie"
 
 msgid "%type% for %name%"
-msgstr "%type% pro %name%"
+msgstr "%type% pre %name%"
 
 msgid "Post warranty, paid service interventions"
-msgstr "Pozáruční placené servisní zásahy"
+msgstr "Pozáručné platené servisné zásahy"
 
 msgid "Repair"
 msgstr "Oprava"
@@ -628,40 +627,40 @@ msgid "Contact us:"
 msgstr "Kontaktujte nás:"
 
 msgid "Sign In"
-msgstr "Přihlásit se"
+msgstr "Prihlásiť sa"
 
 msgid "Don't you have"
-msgstr "Doposud nemáte"
+msgstr "Doteraz nenájdené"
 
 msgid "your account"
-msgstr "svůj účet"
+msgstr "svoj účet"
 
 msgid "Create account and gain an advantage in bonus program."
-msgstr "Vytvořte si účet a získejte výhody věrnostního programu."
+msgstr "Vytvoriť účet a získajte výhodu v bonusovom programe."
 
 msgid "Create an account"
-msgstr "Vytvořit účet"
+msgstr "Vytvoriť účet"
 
 msgid "Forgot Your Password?"
-msgstr "Zapomněli jste své heslo?"
+msgstr "Zabudli ste heslo?"
 
 msgid "Enter your e-mail address below to set new one."
-msgstr "Zadejte svou emailovou adresu pro nastavení nového."
+msgstr "Zadajte e-mailovú adresu pre nastavenie nového hesla"
 
 msgid "Password recovery"
 msgstr "Obnova hesla"
 
 msgid "Enter a new password to your account."
-msgstr "Zadejte nové heslo k vašemu účtu."
+msgstr "Zadajte nové heslo k vášmu účtu."
 
 msgid "Registration"
-msgstr "Registrace"
+msgstr "Registrácia"
 
 msgid "Easy to create..."
 msgstr "Hned hotovo..."
 
 msgid "Discounted shipping for"
-msgstr "Zlevněné poštovné pro"
+msgstr "Zľavnené poštovné pre"
 
 msgid "Admin"
 msgstr "Admin"
@@ -670,118 +669,118 @@ msgid "%code% rate"
 msgstr "%code% kurz"
 
 msgid "We do not register any user with mail '%mail%'."
-msgstr "Není registrován žádný uživatel s emailem '%mail%'."
+msgstr "Bohužiaľ, uživatel s emailom '%mail%' nebol nájdený v našom systéme. "
 
 msgid "Logged %name% account is using by another account."
-msgstr "Přihlašovací jméno %name% je používano jiným účtem."
+msgstr "Prihlasovacie meno %name% je už používané iným účtom."
 
 msgid "We can't find '%name%' to disconnect."
-msgstr "Nemůžeme najít '%name%' k odpojení."
+msgstr "Nemôžeme nájsť '%name%' k odpojeniu."
 
 msgid "Last login method is not possible deactivate."
-msgstr "Poslední přihlašovací metodu nelze deaktivovat."
+msgstr "Nie je možné deaktivovať poslednú prihlasovaciu metódu."
 
 msgid "%name% was connected."
-msgstr "%name% byl připojen."
+msgstr "%name% bol pripojený."
 
 msgid "%name% was disconnected."
-msgstr "%name% byl odpojen."
+msgstr "%name% bol odpojený."
 
 msgid "Password has been successfuly set!"
-msgstr "Heslo bylo úspěšně nastaveno!"
+msgstr "Heslo bolo úspešne nastavené!"
 
 msgid "You can't delete account."
-msgstr "Nemůžete vymazat účet."
+msgstr "Nemôžete vymazať účet."
 
 msgid "Your account has been deleted"
-msgstr "Váš účet byl smazán"
+msgstr "Váš účet bol zmazaný"
 
 msgid "You are logged as '%name'."
-msgstr "Jste přihlášen jako '%name%'."
+msgstr "Ste prihlásený ako '%name%'."
 
 msgid "You can't access to this user."
-msgstr "Nelze získat přístup k tomuto uživateli."
+msgstr "Nedá sa získať prístup k tomuto užívateľovi."
 
 msgid "Not implemented yet."
-msgstr "Zatím není implementován."
+msgstr "Zatiaľ nie je implementované."
 
 msgid "You can't edit this user."
-msgstr "Nemůžete upravovat tohoto uživatele."
+msgstr "Nemôžete upravovať tohto používateľa."
 
 msgid "You have reached the maximum of user groups."
-msgstr "Dosáhli jste maximálního počtu uživatelských skupin."
+msgstr "Dosiahli ste maximálneho počtu používateľských skupín."
 
 msgid "This image wasn't found for this product."
-msgstr "Obrázek nebyl pro tento produkt."
+msgstr "Obrázok pre tento tovar nebol nájdený."
 
 msgid "You aren't logged in."
-msgstr "Nejste přihlášen."
+msgstr "Nie ste prihlásený."
 
 msgid "This color isn't supported."
-msgstr "Tato barva není podporována."
+msgstr "Táto farba nie je podporovaná."
 
 msgid "There is no child for this selection."
-msgstr "Pro vybrané neexistuje potomek."
+msgstr "Nie je žiadny potomok pre tento výber"
 
 msgid "Error while saving producer."
-msgstr "Chyba při ukládání výrobce."
+msgstr "Chyba pri ukladaní výrobcu."
 
 msgid "wasntFound"
-msgstr "%name% nebyl nalezen."
+msgstr "%name% nebol nájdený."
 
 msgid "wasntFoundShe"
-msgstr "%name% nebyla nalezena."
+msgstr "%name% nebola nájdená."
 
 msgid "wasntFoundIt"
-msgstr "%name% nebylo nalezeno."
+msgstr "%name% nebolo nájdené."
 
 msgid "cantBeEmpty"
-msgstr "%name% nemůže být prázdný"
+msgstr "%name% nemôže byť prázdny."
 
 msgid "cantBeEmptyShe"
-msgstr "%name% nemůže být prázdná"
+msgstr "%name% nemôže byť prázdna."
 
 msgid "cantBeEmptyIt"
-msgstr "%name% nemůže být prázdné"
+msgstr "%name% nemôže byť prázdne."
 
 msgid "cannotDelete"
-msgstr "%name% nemůže být smazán"
+msgstr "%name% nemôže byť vymazaný."
 
 msgid "cannotDeleteShe"
-msgstr "%name% nemůže být smazána"
+msgstr "%name% nemôže byť vymazaná."
 
 msgid "cannotDeleteIt"
-msgstr "%name% nemůže být smazáno"
+msgstr "%name% nemôže byť vymazané."
 
 msgid "successfullyDeleted"
-msgstr "%name% byl úspěšně smazán"
+msgstr "%name% bol úspešne vymazaný."
 
 msgid "successfullyDeletedShe"
-msgstr "%name% byla úspěšně smazána"
+msgstr "%name% bola úspešne vymazaná."
 
 msgid "successfullyDeletedIt"
-msgstr "%name% bylo úspěšně smazáno"
+msgstr "%name% bolo úspešne vymazané."
 
 msgid "successfullySaved"
-msgstr "%type% '%name%' byl úspěšně uložen"
+msgstr "%type% '%name%' bol úspešne uložený."
 
 msgid "successfullySavedShe"
-msgstr "%type% '%name%' byla úspěšně uložena"
+msgstr "%type% '%name%' bola úspešne uložená."
 
 msgid "successfullySavedIt"
-msgstr "%type% '%name%' bylo úspěšně uloženo"
+msgstr "%type% '%name%' bolo úspešne uložené."
 
 msgid "successfullyUpdated"
-msgstr "%type% '%name%' byl úspěšně aktualizován"
+msgstr "%type% '%name%' bol úspešne aktualizovaný."
 
 msgid "successfullyUpdatedShe"
-msgstr "%type% '%name%' byla úspěšně aktualizována"
+msgstr "%type% '%name%' bola úspešne aktualizovaná."
 
 msgid "successfullyUpdatedIt"
-msgstr "%type% '%name%' bylo úspěšně aktualizováno"
+msgstr "%type% '%name%' bolo úspešne aktualizované.."
 
 msgid "%count% product was successfully updated."
-msgstr "%count% položka byla úspěšně aktualizována.|%count% položky byly úspěšně aktualizovány.|%count% položek bylo úspěšně aktualizováno."
+msgstr "%count% položka bola úspešne aktualizovaná.|%count% položky boli úspešne aktualizované.|%count% položiek bolo úspešne aktualizovaných."
 
 msgid "Group"
 msgstr "Skupina"
@@ -790,31 +789,31 @@ msgid "Groups"
 msgstr "Skupiny"
 
 msgid "Add Group"
-msgstr "Přidat skupinu"
+msgstr "Pridať skupinu"
 
 msgid "Edit Group"
-msgstr "Upravit skupinu"
+msgstr "Upraviť skupinu"
 
 msgid "--- No Group ---"
 msgstr "--- Bez skupiny ---"
 
 msgid "Parameter"
-msgstr "Parametr"
+msgstr "Parameter"
 
 msgid "Product"
-msgstr "Zboží"
+msgstr "Tovar"
 
 msgid "Sign"
-msgstr "Příznak"
+msgstr "Príznak"
 
 msgid "User"
-msgstr "Uživatel"
+msgstr "Užívateľ"
 
 msgid "Producer"
-msgstr "Výrobce"
+msgstr "Výrobca"
 
 msgid "Line"
-msgstr "Řada"
+msgstr "Rada"
 
 msgid "Model"
 msgstr "Model"
@@ -829,107 +828,106 @@ msgid "Entity"
 msgstr "Entita"
 
 msgid "Category"
-msgstr "Kategorie"
+msgstr "Kategória"
 
 msgid "Main category"
-msgstr "Hlavní kategorie"
+msgstr "Hlavná kategória"
 
 msgid "Parent category"
-msgstr "Nadřazená kategorie"
+msgstr "Nadradená kategória"
 
 msgid "Select some category"
-msgstr "Vybrat kategorii"
+msgstr "Vybrať kategóriu"
 
 msgid "Lang"
 msgstr "Jazyk"
 
 msgid "Name"
-msgstr "Název"
+msgstr "Názov"
 
 msgid "ID"
 msgstr "ID"
 
 msgid "Your e-mail has been seccessfully verified!"
-msgstr "Váš email byl úspěšně ověřen!"
+msgstr "Váš email bol úspešne overený."
 
 msgid "Verification token is incorrect."
-msgstr "Ověřovací token je nesprávný."
+msgstr "Overovací reťazec je nesprávny."
 
 msgid "Recovery link has been sent to your mail."
-msgstr "Odkaz na obnovu byl odeslán na váš email."
+msgstr "Odkaz pre obnovu hesla bol odoslaný na Váš email."
 
 msgid "You have reached the maximum of free parameters for this type."
-msgstr "Dosáhli jste maximálního počtu volných parametrů pro tento typ."
+msgstr "Dosiahli ste maximálneho počtu voľných parametrov tohto typu."
 
 msgid "You are logged in."
-msgstr "Jste přihlášen."
+msgstr "Ste prihlásený."
 
 msgid "Your account has been seccessfully created."
-msgstr "Váš účet byl úspěšně vytvořen."
+msgstr "Váš účet bol vytvorený!"
 
 msgid "Your password has been successfully changed!"
-msgstr "Vaše heslo bylo úspěšně změněno!"
+msgstr "Vaše heslo bolo úspešne zmenené!"
 
 msgid "We have sent you a verification e-mail. Please check your inbox!"
-msgstr ""
-"Poslali jsme vám ověřovací email. Prosím, zkontrolujte si svou schránku!"
+msgstr "Práve sme Vám poslali e-mail pre overenie. Skontrolujte prosím svoju schránku!"
 
 msgid "%value% is already registered."
-msgstr "%value% je již registrován."
+msgstr "%value% je už zaregistrovaná."
 
 msgid "At least %count% characters long."
-msgstr "Alespoň %count% znaků dlouhé."
+msgstr "Aspoň %count% znakov dlhé."
 
 msgid "This module isn't allowed."
-msgstr "Tento modul není povolen."
+msgstr "Tento modul nie je povolený."
 
 msgid "Requested product does't exist. Try to choose another from list."
-msgstr "Požadovaný produkt neexistuje. Zkuste si vybrat ze seznamu jiný."
+msgstr "Požadovaný produkt neexistuje. Skúste si vybrať zo zoznamu iný."
 
 msgid "Requested category doesn't exist. Try to choose another from list."
-msgstr "Požadovaná kategorie neexistuje. Zkuste si vybrat ze seznamu jinou."
+msgstr "Požadovaná kategória neexistuje. Skúste si vybrať zo zoznamu inú."
 
 msgid "Requested currency isn't supported."
-msgstr "Požadovaná měna není podporována."
+msgstr "Požadovaná mena nie je podporovaná"
 
 msgid "Requested language isn't supported."
-msgstr "Požadovaný jazyk není podporován."
+msgstr "Požadovaný jazyk nie je podporovaný."
 
 msgid "DB was reinstaled"
-msgstr "DB byla přeinstalována"
+msgstr "DB bola preinštalovaná"
 
 msgid "DB was instaled"
-msgstr "DB byla instalována"
+msgstr "DB bola inštalovaná"
 
 msgid "Data was imported from SQL files"
-msgstr "Data byla importována z SQL souborů"
+msgstr "Dáta boli importované z SQL súborov"
 
 msgid "This sorting method isn't supported."
-msgstr "Tato třídící metoda není podporována."
+msgstr "Táto metóda triedenia nie je podporovaná."
 
 msgid "This is only example form"
-msgstr "Toto je pouze vzorový formulář"
+msgstr "Toto je iba vzorový formulár"
 
 msgid "We are sorry, twitter authentication failed hard."
-msgstr "Omlouváme se za selhání na Twitteru."
+msgstr "Ospravedlňujeme sa za zlyhanie overenia prihlásenia na Twitteri."
 
 msgid "We are sorry, facebook authentication failed hard."
-msgstr "Omlouváme se za selhání na Facebooku."
+msgstr "Ospravedlňujeme sa za zlyhanie overenia prihlásenia na Facebooku."
 
 msgid "E-mail account"
-msgstr "E-mail účet"
+msgstr "E-mailový účet"
 
 msgid "Please enter your e-mail"
-msgstr "Prosím, vložte svůj email"
+msgstr "Prosím, vložte svoj e-mail"
 
 msgid "E-mail"
 msgstr "E-mail"
 
 msgid "Fill right e-mail format"
-msgstr "Vyplňte správný formát emailu"
+msgstr "Vyplňte správny formát e-mailu"
 
 msgid "Send"
-msgstr "Odeslat"
+msgstr "Odoslať"
 
 msgid "New password"
 msgstr "Nové heslo"
@@ -938,76 +936,76 @@ msgid "Password"
 msgstr "Heslo"
 
 msgid "Please enter your password"
-msgstr "Prosím, napište své heslo"
+msgstr "Zadajte svoje heslo"
 
 msgid "Please re-enter your password"
-msgstr "Prosím, znovu napište své heslo"
+msgstr "Zadajte znova svoje heslo"
 
 msgid "Password must be at least %count% characters long."
-msgstr "Heslo musí být alespoň %count% znaků dlouhé."
+msgstr "Heslo musí obsahovať najmenej %count% znakov."
 
 msgid "Re-type Your Password"
-msgstr "Znovu napište své heslo"
+msgstr "Znovu zadajte svoje heslo"
 
 msgid "Passwords must be equal."
-msgstr "Hesla musí být shodná."
+msgstr "Heslá musia byť zhodné"
 
 msgid "Set new password"
-msgstr "Nastavit nové heslo"
+msgstr "Nastaviť nové heslo"
 
 msgid "Please enter your e-mail."
-msgstr "Prosím, napište svůj email."
+msgstr "Prosím, zadajte svoj e-mail."
 
 msgid "E-mail has not valid format."
-msgstr "Email nemá platný formát."
+msgstr "E-mail nemá platný formát."
 
 msgid "for example: example@domain.com"
-msgstr "například: example@domain.com"
+msgstr "napríklad: example@domain.com"
 
 msgid "Continue"
-msgstr "Pokračovat"
+msgstr "Pokračovať"
 
 msgid "Image must be in valid image format"
-msgstr "Obrázek musí být v platném formátu"
+msgstr "Obrázok musí byť v platnom obrazovom formáte"
 
 msgid "Slider"
 msgstr "Slider"
 
 msgid "Save & Add next"
-msgstr "Uložit a přidat další"
+msgstr "Uložiť a Pridať ďalšie"
 
 msgid "Save"
-msgstr "Uložit"
+msgstr "Uložiť"
 
 msgid "Text"
 msgstr "Text"
 
 msgid "Date"
-msgstr "Datum"
+msgstr "Dátum"
 
 msgid "Name is required"
-msgstr "Je vyžadováno jméno"
+msgstr "Je vyžadované meno"
 
 msgid "ID #"
 msgstr "ID #"
 
 msgid "Are you sure you want to delete '%name%'?"
-msgstr "Jste si jisti, že chce vymazat '%name%'?"
+msgstr "Ste si istí, že chcete vymazať '%name%'?"
 
 msgid "Shortly about contain of page"
-msgstr "Krátce o obsahu stránky"
+msgstr "Krátko o obsahu stránky"
 
 msgid "Fill if you want to redirect to other page"
-msgstr "Vyplňte, pokud chcete přesměrovat na jinou stránku"
+msgstr "Vyplňte, ak chcete presmerovať na inú stránku"
 
 msgid "Content is required"
 msgstr "Obsah je vyžadovaný"
 
 msgid "This link is invalid"
-msgstr "Tento odkat je neplatný"
+msgstr "Tento odkaz je neplatný"
 
 msgid "Comment"
-msgstr "Komentář"
+msgstr "Komentár"
 
 msgid "Link"
 msgstr "Odkaz"
@@ -1016,46 +1014,46 @@ msgid "Type"
 msgstr "Typ"
 
 msgid "Text is required"
-msgstr "Je vyžadován text"
+msgstr "Je vyžadovaný text"
 
 msgid "Select some producer"
-msgstr "Vybrat výrobce"
+msgstr "Vybrať výrobcu"
 
 msgid "Select some line"
-msgstr "Vybrat řadu"
+msgstr "Vybrať radu"
 
 msgid "Select some model"
-msgstr "Vybrat model"
+msgstr "Vybrať model"
 
 msgid "Text for service"
-msgstr "Text pro servis"
+msgstr "Text pre servis"
 
 msgid "Prices are with VAT"
-msgstr "Ceny jsou s DPH"
+msgstr "Ceny sú uvedené s DPH"
 
 msgid "YES"
-msgstr "ANO"
+msgstr "Áno"
 
 msgid "NO"
-msgstr "NE"
+msgstr "Nie"
 
 msgid "CSV file"
-msgstr "CSV soubor"
+msgstr "CSV súbor"
 
 msgid "Update Products"
-msgstr "Aktualizovat zboží"
+msgstr "Aktualizovať tovar"
 
 msgid "Product title"
-msgstr "Název zboží"
+msgstr "Názov tovaru"
 
 msgid "Insert product name"
-msgstr "Vložit název zboží"
+msgstr "Vložiť nazov tovaru"
 
 msgid "Active"
-msgstr "Aktivní"
+msgstr "Aktívny"
 
 msgid "Vat included"
-msgstr "včetně DPH"
+msgstr "vrátane DPH"
 
 msgid "Vat"
 msgstr "DPH"
@@ -1067,19 +1065,19 @@ msgid "Code"
 msgstr "Kód"
 
 msgid "Barcode"
-msgstr "Čárový kód"
+msgstr "Čiarový kód"
 
 msgid "All categories"
-msgstr "Všechny kategorie"
+msgstr "Všetky kategórie"
 
 msgid "Main Image"
-msgstr "Hlavní obrázek"
+msgstr "Hlavný obrázok"
 
 msgid "New other image"
-msgstr "Další nový obrázek"
+msgstr "Ďalší nový obrázok"
 
 msgid "Purchase price"
-msgstr "Kupní cena"
+msgstr "Kúpna cena"
 
 msgid "Old price"
 msgstr "Stará cena"
@@ -1088,79 +1086,79 @@ msgid "Url"
 msgstr "URL"
 
 msgid "Url must have %count% character at least"
-msgstr "Url musí mít alespoň %count% znaků"
+msgstr "URL  musí mať asponň %count% znakov"
 
 msgid "Title must have %count% character at least"
-msgstr "Název musí mít alespoň %count% znaků"
+msgstr "Názov musí mať asponň %count% znakov"
 
 msgid "Keywords"
-msgstr "Klíčová slova"
+msgstr "Kľúčové slová"
 
 msgid "Store"
 msgstr "Obchod"
 
 msgid "Locked"
-msgstr "Zamčený"
+msgstr "Zamknutý"
 
 msgid "Public"
-msgstr "Veřejný"
+msgstr "Verejný"
 
 msgid "View on web"
-msgstr "Na webu"
+msgstr "Na webe"
 
 msgid "Fill right format"
-msgstr "Vyplňte správný formát"
+msgstr "Vyplňte data v správnom formáte"
 
 msgid "Mail must be filled"
-msgstr "Mail musí být vyplněn"
+msgstr "E-mail musi byť vyplnený"
 
 msgid "Roles"
 msgstr "Role"
 
 msgid "Access"
-msgstr "Přístup"
+msgstr "Prístup"
 
 msgid "Forget Password?"
-msgstr "Zapomněli jste heslo?"
+msgstr "Zabudli ste heslo?"
 
 msgid "Remember"
-msgstr "Zapamatovat si"
+msgstr "Zapamätať si"
 
 msgid "Code for Pohoda"
-msgstr "Kód pro Pohodu"
+msgstr "Kód pre Pohodu"
 
 msgid "Identification for synchronizing"
-msgstr "Identifikace pro synchronizaci"
+msgstr "Identifikácia pre synchronizáciu"
 
 msgid "automaticly generated"
 msgstr "automaticky generovaný"
 
 msgid "Product must be synchronized"
-msgstr "Produkt musí být synchronizován"
+msgstr "Produkt musí byť synchronizovaný"
 
 msgid "Search by Keyword"
-msgstr "Co hledáte?"
+msgstr "Čo hľadáte?"
 
 msgid "Not Available"
 msgstr "Nedostupné"
 
 msgid "Only Available"
-msgstr "Pouze skladem"
+msgstr "iba skladem"
 
 msgid "Range:"
 msgstr "Rozsah:"
 
 msgid "Sort by"
-msgstr "Seřadit"
+msgstr "Zoradiť"
 
 msgid "Show"
-msgstr "Zobrazit"
+msgstr "Zobraziť"
 
 msgid "Price (Low > High)"
-msgstr "Od nejlevnějšího"
+msgstr "Od najlacnejšieho"
 
 msgid "Price (High > Low)"
-msgstr "Od nejdražšího"
+msgstr "Od najdrahšieho"
 
 msgid "Name (A - Z)"
 msgstr "Názvu (A - Z)"
@@ -1169,13 +1167,13 @@ msgid "Name (Z - A)"
 msgstr "Názvu (Z - A)"
 
 msgid "Created At"
-msgstr "Vytvořeno"
+msgstr "Vytvorené"
 
 msgid "Language"
 msgstr "Jazyk"
 
 msgid "Edit Items"
-msgstr "Upravit položky"
+msgstr "Upraviť položky"
 
 msgid "Items"
 msgstr "Položky"
@@ -1187,64 +1185,64 @@ msgid "Order #%number%"
 msgstr "Objednávka č. %number%"
 
 msgid "Add new items"
-msgstr "Přidat nové položky"
+msgstr "Pridať nové položky"
 
 msgid "Insufficient quantity on stock."
-msgstr "Nedostatečný počet kusů skladem."
+msgstr "Nedostatočný počet kusov skladom."
 
 msgid "No more free product."
-msgstr "Skladem nejsou žádné další produkty."
+msgstr "Na sklade nie sú žiadne ďalšie produkty."
 
 msgid "Only %count% free product."
-msgstr "Pouze %count% volný.|Pouze %count% volné.|Pouze %count% volných."
+msgstr "Iba %count% volných.|Iba %count% volné.|Iba %count% volných."
 
 msgid "%count% item was already inserted."
-msgstr "%count% položka je vložena.|%count% položky jsou vloženy.|%count% položek je vloženo."
+msgstr "%count% položka je vložená.|%count% položky sú vložené.|%count% položiek je vložených."
 
 msgid "No free product '%name%'."
-msgstr "Produkt '%name%' není skladem."
+msgstr "Produkt '%name%' nie je skladom"
 
 msgid "No free product with ID '%number%'."
-msgstr "Další produkt s ID '%number%' není skladem."
+msgstr "Ďalší produkt s ID '%number%' nie je skladom."
 
 msgid "State"
 msgstr "Stav"
 
 msgid "Change State"
-msgstr "Změna stavu"
+msgstr "Zmena stavu"
 
 msgid "order in system"
-msgstr "Objednáno v systému"
+msgstr "Objednané v systéme"
 
 msgid "in proceedings"
-msgstr "Připravujeme"
+msgstr "Pripravujeme"
 
 msgid "sent shippers"
-msgstr "Odesláno přepravci"
+msgstr "Odoslané prepravcovi"
 
 msgid "ready to take"
-msgstr "Připraveno k převzetí"
+msgstr "Pripravené na prevzatie"
 
 msgid "ok - recieved"
-msgstr "Ok - Přijato"
+msgstr "Ok - Prijaté"
 
 msgid "ok - taken"
-msgstr "Ok - Převzato"
+msgstr "Ok - Prevzaté"
 
 msgid "canceled"
-msgstr "Zrušeno"
+msgstr "Zrušené"
 
 msgid "Currency"
-msgstr "Měna"
+msgstr "Mena"
 
 msgid "--- anyone ---"
-msgstr "--- všechny ---"
+msgstr "--- všetky ---"
 
 msgid "Buyout"
 msgstr "Výkup"
 
 msgid "Buyout questions"
-msgstr "Výkupní otázky"
+msgstr "Výkupné otázky"
 
 msgid "Shippings & Payments"
 msgstr "Dopravné a platby"
@@ -1268,19 +1266,19 @@ msgid "Edit Shipping '%name%'"
 msgstr "Úprava poštovného '%name%'"
 
 msgid "For Shippings"
-msgstr "Pro dopravy"
+msgstr "Pre dopravy"
 
 msgid "Need Address"
-msgstr "Vyžaduje adresu"
+msgstr "Zadajte adresu"
 
 msgid "Address"
 msgstr "Adresa"
 
 msgid "Your personal data was saved."
-msgstr "Vaše osobní údaje byly uloženy."
+msgstr "Vaše osobné údaje boli uložené."
 
 msgid "There are %count% products locked"
-msgstr "%count% produkt je zamčen|%count% produkty jsou zamčeny|%count% produktů je zamčeno"
+msgstr "%count% produkt je zamknutý|%count% produkty sú zamknuté|%count% produktov je zamknutých"
 
 msgid "Allowed tags"
 msgstr "Povolené tagy"
@@ -1289,28 +1287,28 @@ msgid "Order number"
 msgstr "Číslo objednávky"
 
 msgid "To pay"
-msgstr "K úhradě"
+msgstr "K úhrade"
 
 msgid "You have no orders."
-msgstr "Nemáte doposud žádné objednávky."
+msgstr "Nemáte doposiaľ žiadne objednávky."
 
 msgid "All future orders will be displayed here."
-msgstr "Všechny objednávky, které vytvoříte budou zobrazeny zde."
+msgstr "Všetky objednávky, ktoré vytvoríte budú zobrazené tu"
 
 msgid "You are a dealer."
-msgstr "Jste naším přeprodejcem."
+msgstr "Ste našim veľkoobchodníkom (dílerom)."
 
 msgid "You have been approved and now you can buy with special product prices."
-msgstr "Byli jste schváleni jako přeprodejce a nyní můžete nakupovat za zvýhodněné ceny."
+msgstr "Boli ste schválený ako díler, teraz môžete nakupovať za zvýhodnené ceny."
 
 msgid "Your dealer request is waiting for approve."
-msgstr "Váš požadavek čeká na schválení."
+msgstr "Vaša požiadavka čaká na schválenie."
 
 msgid "After approving of your request we will inform you."
-msgstr "Až schválíme váš požadavek stát se přeprodejcem, budete informováni e-mailem."
+msgstr "Po schválení vašej žiadosti vás budeme informovať."
 
 msgid "Your dealer request was send"
-msgstr "Váš požadavek stát se přeprodejcem byl odeslán"
+msgstr "Vaša požiadavka stať sa dílerom bola úspešne odoslaná. "
 
 msgid "More params"
-msgstr "Více parametrů"
+msgstr "Viac parametrov"

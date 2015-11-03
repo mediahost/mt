@@ -2,52 +2,59 @@ msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sk_SK\n"
+"Language: cs_CZ\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"X-Generator: Poedit 1.8.2\n"
 
 msgid "Invert"
-msgstr "Invert"
+msgstr "Obrátiť"
 
 msgid "Actions"
-msgstr "Actions"
+msgstr "Akcia"
 
 msgid "SelectSomeRow"
-msgstr "Select Some Row"
+msgstr "Vyberte nejaký stĺpec"
 
 msgid "Selected"
 msgstr "Vybrané"
 
 msgid "Export"
-msgstr "Exportovat"
+msgstr "Exportovať"
 
 msgid "First"
-msgstr "First"
+msgstr "Prvý"
 
 msgid "Previous"
-msgstr "Previous"
+msgstr "Predchádzajúci"
 
 msgid "EnterPage"
-msgstr "Enter Page"
+msgstr "Zadejte stranu"
 
 msgid "Next"
-msgstr "Next"
+msgstr "Ďalšie"
 
 msgid "Last"
-msgstr "Last"
+msgstr "Posledný"
 
 msgid "ExportAllItems"
-msgstr "Export All Items"
+msgstr "Exportovať všetky položky"
 
 msgid "NoResults"
-msgstr "No Results"
+msgstr "Žiadny výsledok"
 
 msgid "Reset"
-msgstr "Reset"
+msgstr "Vynulovať"
 
 msgid "Search"
-msgstr "Search"
+msgstr "Vyhľadať"
 
 msgid "Items"
-msgstr "Items %begin% to %end% of %count% total"
+msgstr "Zobrazené %begin% až %end% z celkových %count%"
 
 msgid "id"
 msgstr "ID #"
