@@ -6,6 +6,7 @@ use App\Extensions\ImportFromMT1;
 use App\Extensions\ImportFromMT1Exception;
 use App\Extensions\Installer;
 use App\Extensions\LimitExceededException;
+use App\Extensions\WrongSituationException;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -87,6 +88,26 @@ class ServicePresenter extends BasePresenter
 		} catch (LimitExceededException $e) {
 			$message = $this->translator->translate('Import wasn\'t finished. Please start it again');
 			$this->flashMessage($message, 'warning');
+		}
+		$this->redirect('this');
+	}
+
+	/**
+	 * @secured
+	 * @resource('service')
+	 * @privilege('importOldProducts')
+	 */
+	public function handleImportOldProducts()
+	{
+		try {
+			$this->importFromOld->downloadProducts();
+			$message = $this->translator->translate('Products was imported from old DB');
+			$this->flashMessage($message, 'success');
+		} catch (ImportFromMT1Exception $e) {
+			$message = $this->translator->translate('Please check settings of this module');
+			$this->flashMessage($message, 'warning');
+		} catch (WrongSituationException $e) {
+			$this->flashMessage($e->getMessage(), 'warning');
 		}
 		$this->redirect('this');
 	}
