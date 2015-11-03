@@ -1,24 +1,24 @@
 subject:
-	forgotten: 'Zapomenuté heslo'
-	createRegistration: 'Vaše registrace'
-	verify: 'Ověření e-mailu'
-	changeStateOrder: 'Vaše objednávka č.%id%'
-	createOrder: 'Vaše objednávka č.%id%'
+	forgotten: 'Zabudnuté heslo'
+	createRegistration: 'Vaša registrácia'
+	verify: 'Overenie e-mailu'
+	changeStateOrder: 'Vaša objednávka č.%id%'
+	createOrder: 'Vaša objednávka č.%id%'
 	createOrderShop: 'Nová objednávka č.%id%'
 order:
-	salutation: 'Vážený zákazníku'
+	salutation: 'Vážený zákazník'
 	headline: 'Objednávka č.%number%'
-	weWillInformYou: 'O dalším postupu vaší objednávky vás budeme informovat e-mailem.'
-	shopNotice: 'Na vašem webu %name% je nová objednávka.'
-	pinCode: 'Objednávce byl přidělen PIN: %pin%'
+	weWillInformYou: 'O ďalšom postupe vašej objednávky vás budeme informovať e-mailom.'
+	shopNotice: 'Na vašom webe %name% je nová objednávka.'
+	pinCode: 'Objednávke bol pridelený PIN: %pin%'
 	change:
 		done:
-			successfullyCompleted: 'Vaše objednávka byla úspěšně dokončena.'
-			lookingForward: 'Těšíme se na váš další nákup.'
+			successfullyCompleted: 'Vaša objednávka bola úspešne dokončená.'
+			lookingForward: 'Tešíme sa na váš ďalší nákup.'
 		storno:
-			wasCanceled: 'Vaše objednávka byla zrušena.'
-			contactUs: 'V případě jakékoli nesrovnalosti nás prosím ihned kontaktujte.'
+			wasCanceled: 'Vaša objednávka bola zrušená.'
+			contactUs: 'V prípade akejkoľvek nezrovnalosti nás prosím ihneď kontaktujte.'
 		expeded:
-			hasBeenExpeded: 'Vaše objednávka byla expedována.'
+			hasBeenExpeded: 'Vaša objednávka bola expedovaná.'
 	new:
-		recieved: 'děkujeme Vám za Váš nákup, právě jsme přijali vaši objednávku.'
+		recieved: 'ďakujeme Vám za Váš nákup, práve sme prijali vašu objednávku.'
