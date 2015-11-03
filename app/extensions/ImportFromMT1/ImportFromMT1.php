@@ -6,7 +6,9 @@ use App\Model\Entity\Address;
 use App\Model\Entity\Facebook;
 use App\Model\Entity\Group;
 use App\Model\Entity\Newsletter\Subscriber;
+use App\Model\Entity\Product;
 use App\Model\Entity\Role;
+use App\Model\Entity\Stock;
 use App\Model\Entity\Twitter;
 use App\Model\Entity\User;
 use App\Model\Facade\NewsletterFacade;
@@ -21,6 +23,7 @@ class ImportFromMT1 extends Object
 {
 
 	const MAX_INSERTS = 1000;
+	const TABLE_PRODUCT = 'product';
 	const TABLE_USER = 'user';
 	const TABLE_AUTH = 'auth';
 	const TABLE_PASSWORDS = 'user_passwords';
@@ -97,11 +100,62 @@ class ImportFromMT1 extends Object
 		return (bool) $stmt->fetch();
 	}
 
+	public function downloadProducts()
+	{
+		ini_set('max_execution_time', 600);
+
+		$this->importProducts();
+
+		return $this;
+	}
+
 	public function downloadOrders()
 	{
 		ini_set('max_execution_time', 60);
 
 		$this->importOrders();
+
+		return $this;
+	}
+
+	private function importProducts()
+	{
+		$conn = $this->em->getConnection();
+		$dbName = $this->getDbName();
+		$tableProducts = $dbName . '.' . self::TABLE_PRODUCT;
+		
+		$productTable = $this->em->getClassMetadata(Product::getClassName())->getTableName();
+		$conn->executeQuery('ALTER TABLE `' . $productTable . '` AUTO_INCREMENT=1');
+
+		$userRepo = $this->em->getRepository(User::getClassName());
+		$admin = $userRepo->findOneByMail('superadmin');
+
+		$offset = 0;
+		$limit = self::MAX_INSERTS / 2;
+		$stmt = $conn->executeQuery(
+				"SELECT id, code, imported_code "
+				. "FROM {$tableProducts} p "
+				. "WHERE active = ? AND deleted = ? "
+				. "ORDER BY id "
+				. "LIMIT {$limit} OFFSET {$offset}"
+				, [1, 0]);
+
+		$stockTable = $this->em->getClassMetadata(Stock::getClassName())->getTableName();
+
+		foreach ($stmt->fetchAll() as $oldData) {
+			$this->checkLimit();
+			$startNum = (int) $oldData['id'];
+			$conn->executeQuery('ALTER TABLE `' . $stockTable . '` AUTO_INCREMENT=' . $startNum);
+
+			$stock = new Stock();
+			$stock->setQuantity(0);
+			$stock->createdBy = $admin;
+			$stock->updatedBy = $admin;
+			$stock->product->createdBy = $admin;
+			$stock->product->updatedBy = $admin;
+			$this->em->persist($stock);
+			$this->em->flush();
+		}
 
 		return $this;
 	}
@@ -404,6 +458,11 @@ class ImportFromMT1Exception extends Exception
 }
 
 class LimitExceededException extends Exception
+{
+	
+}
+
+class WrongSituationException extends Exception
 {
 	
 }
