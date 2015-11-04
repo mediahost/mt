@@ -87,6 +87,7 @@ class MigrationPresenter extends BasePresenter
 			} else {
 				$stock->active = FALSE;
 				$this->em->persist($stock);
+				Debugger::log('Product with ID ' . $stock->id . ' was deactivated', self::LOGNAME);
 				continue;
 			}
 

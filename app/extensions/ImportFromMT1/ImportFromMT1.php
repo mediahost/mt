@@ -123,17 +123,17 @@ class ImportFromMT1 extends Object
 		$conn = $this->em->getConnection();
 		$dbName = $this->getDbName();
 		$tableProducts = $dbName . '.' . self::TABLE_PRODUCT;
-		
+
 		$productTable = $this->em->getClassMetadata(Product::getClassName())->getTableName();
 		$conn->executeQuery('ALTER TABLE `' . $productTable . '` AUTO_INCREMENT=1');
 
 		$userRepo = $this->em->getRepository(User::getClassName());
 		$admin = $userRepo->findOneByMail('superadmin');
 
-		$offset = 0;
+		$offset = (int) $conn->executeQuery("SELECT COUNT(id) FROM stock")->fetchColumn();
 		$limit = self::MAX_INSERTS / 2;
 		$stmt = $conn->executeQuery(
-				"SELECT id, code, imported_code "
+				"SELECT id "
 				. "FROM {$tableProducts} p "
 				. "WHERE active = ? AND deleted = ? "
 				. "ORDER BY id "
