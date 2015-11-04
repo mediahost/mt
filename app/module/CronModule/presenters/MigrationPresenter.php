@@ -36,25 +36,36 @@ class MigrationPresenter extends BasePresenter
 	/** @link http://www.mobilnetelefony.sk/export/migration/create-producers */
 	const URL_PRODUCERS = 'http://www.mobilnetelefony.sk/export/migration/get-producers';
 
-	/** @link http://www.mobilnetelefony.sk/export/migration/create-groups */
-	const URL_GROUPS = 'http://www.mobilnetelefony.sk/export/migration/get-groups';
-
 	/** @var PohodaFacade @inject */
 	public $pohodaFacade;
 
-	public function actionUpdateProducts($toInsert = 0, $toUpdate = 0)
+	public function actionUpdateProducts($toUpdate = 0)
 	{
-		ini_set('max_execution_time', 200);
+		ini_set('max_execution_time', 300);
 		Debugger::timer();
-		$insertCount = $toInsert >= 0 ? ($toInsert <= 100 ? $toInsert : 100) : 0;
-		$updateCount = $toUpdate >= 0 ? ($toUpdate <= 100 ? $toUpdate : 100) : 0;
-		list($inserted, $updated) = $this->actualizeProducts($insertCount, $updateCount);
+		$maxUpdates = 200;
+		$updateCount = $toUpdate >= 0 ? ($toUpdate <= $maxUpdates ? $toUpdate : $maxUpdates) : 0;
+		$updated = $this->actualizeProducts($updateCount);
 		$time = Debugger::timer();
 		$this->status = parent::STATUS_OK;
-		$this->message = sprintf('%s producers was updated and %s was inserted. (%f2)', $updated, $inserted, $time);
+		$this->message = sprintf('%s producers was updated. (%f2)', $updated, $time);
 	}
 
-	private function actualizeProducts($insertCountMax = 0, $updateCountMax = 0)
+	public function actionUpdateCategories()
+	{
+		$added = $this->addCategories();
+		$this->status = parent::STATUS_OK;
+		$this->message = sprintf('%s categories was inserted.', $added);
+	}
+
+	public function actionUpdateProducers()
+	{
+		$added = $this->addProducers();
+		$this->status = parent::STATUS_OK;
+		$this->message = sprintf('%s producers was inserted.', $added);
+	}
+
+	private function actualizeProducts($updateCountMax = 0)
 	{
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
 		$producerRepo = $this->em->getRepository(Producer::getClassName());
@@ -66,157 +77,141 @@ class MigrationPresenter extends BasePresenter
 		$products = $this->getJson(self::URL_PRODUCTS);
 		$unit = $unitRepo->find(1);
 
-		$inserted = 0;
+		$stocks = $stockRepo->findBy([], ['updatedAt' => 'ASC'], $updateCountMax);
+
 		$updated = 0;
-		foreach ($products as $product) {
-			if ($product->active) {
+		foreach ($stocks as $stock) {
+			/* @var $stock Stock */
+			if (isset($products->{$stock->id})) {
+				$oldProduct = $products->{$stock->id};
+			} else {
+				$stock->active = FALSE;
+				$this->em->persist($stock);
+				continue;
+			}
 
-				$pohodaCode = $product->importedCode ? $product->importedCode : $product->code;
-				switch ($product->importedFrom) {
-					case self::FROM_OLD_VERSION:
-						$importedFrom = self::IMPORTED_FROM_OLD_VERSION;
-						break;
-					case self::FROM_MOBILESHOP_API:
-						$importedFrom = self::IMPORTED_FROM_MOBILESHOP_API;
-						break;
-					default:
-						$importedFrom = self::IMPORTED_FROM_FIRST_VERSION;
-						break;
-				}
+			$pohodaCode = $oldProduct->importedCode ? $oldProduct->importedCode : $oldProduct->code;
+			switch ($oldProduct->importedFrom) {
+				case self::FROM_OLD_VERSION:
+					$importedFrom = self::IMPORTED_FROM_OLD_VERSION;
+					break;
+				case self::FROM_MOBILESHOP_API:
+					$importedFrom = self::IMPORTED_FROM_MOBILESHOP_API;
+					break;
+				default:
+					$importedFrom = self::IMPORTED_FROM_FIRST_VERSION;
+					break;
+			}
 
-				/* @var $dbStock Stock */
-				$dbStock = $stockRepo->findOneByPohodaCode($pohodaCode);
-				if (!$dbStock) {
-					if ($inserted >= $insertCountMax) {
-						continue;
+			$productTranslation = $stock->product->translateAdd($this->locale);
+			$productTranslation->name = $oldProduct->name;
+			$productTranslation->description = $oldProduct->descript;
+			$productTranslation->perex = $oldProduct->perex;
+			$stock->product->mergeNewTranslations();
+			$stock->product->unit = $unit;
+
+			$stock->active = $oldProduct->active;
+			$stock->pohodaCode = $pohodaCode;
+			$stock->barcode = $oldProduct->ean;
+			$stock->quantity = $oldProduct->quantity;
+			$stock->lock = $oldProduct->lock;
+			$stock->barcode = $oldProduct->ean;
+			$stock->importedFrom = $importedFrom;
+
+			$productVat = $oldProduct->vat > 0 ? $oldProduct->vat : 0;
+			$vat = $vatRepo->findOneByValue($productVat);
+			if (!$vat) {
+				$vat = new Vat(NULL, $productVat);
+				$this->em->persist($vat);
+			}
+			$stock->vat = $vat;
+			$stock->purchasePrice = $oldProduct->purchasePrice;
+			$stock->oldPrice = $oldProduct->oldPrice;
+
+			if (!$stock->hasDiscounts()) {
+				foreach ($oldProduct->priceLevelsVatNot as $levelId => $priceLevel) {
+					switch ($levelId) {
+						case 7:
+							$groupId = 1;
+							break;
+						case 8:
+							$groupId = 2;
+							break;
 					}
-					$dbStock = new Stock();
-					$dbStock->pohodaCode = $pohodaCode;
-				} else {
-					if ($updated >= $updateCountMax) {
-						continue;
+					$fixed = array_key_exists(0, $priceLevel) ? $priceLevel[0] : NULL;
+					$percentage = array_key_exists(1, $priceLevel) ? $priceLevel[1] : NULL;
+					if ($percentage) {
+						$discount = new Discount(100 - $percentage, Discount::PERCENTAGE);
+					} elseif ($fixed) {
+						$discount = new Discount($fixed, Discount::FIXED_PRICE);
 					}
-				}
-
-				$productTranslation = $dbStock->product->translateAdd($this->locale);
-				$productTranslation->name = $product->name;
-				$productTranslation->description = $product->descript;
-				$productTranslation->perex = $product->perex;
-				$dbStock->product->mergeNewTranslations();
-				$dbStock->product->unit = $unit;
-
-				$dbStock->active = TRUE;
-				$dbStock->barcode = $product->ean;
-				$dbStock->quantity = $product->quantity;
-				$dbStock->lock = $product->lock;
-				$dbStock->barcode = $product->ean;
-				$dbStock->importedFrom = $importedFrom;
-
-				$productVat = $product->vat > 0 ? $product->vat : 0;
-				$vat = $vatRepo->findOneByValue($productVat);
-				if (!$vat) {
-					$vat = new Vat(NULL, $productVat);
-					$this->em->persist($vat);
-				}
-				$dbStock->vat = $vat;
-				$dbStock->purchasePrice = $product->purchasePrice;
-				$dbStock->oldPrice = $product->oldPrice;
-				if ($dbStock->isNew()) {
-					foreach ($product->priceLevelsVatNot as $levelId => $priceLevel) {
-						switch ($levelId) {
-							case 7:
-								$groupId = 1;
-								break;
-							case 8:
-								$groupId = 2;
-								break;
-						}
-						$fixed = array_key_exists(0, $priceLevel) ? $priceLevel[0] : NULL;
-						$percentage = array_key_exists(1, $priceLevel) ? $priceLevel[1] : NULL;
-						if ($percentage) {
-							$discount = new Discount(100 - $percentage, Discount::PERCENTAGE);
-						} elseif ($fixed) {
-							$discount = new Discount($fixed, Discount::FIXED_PRICE);
-						}
-						if (isset($discount) && isset($groupId)) {
-							$group = $groupRepo->find($groupId);
-							if ($group) {
-								$dbStock->addDiscount($discount, $group);
-							}
-						}
-					}
-					$dbStock->setDefaltPrice($product->price, (bool) $product->vatIncluded);
-				}
-
-				$producers = $this->getProducersNames();
-				if ($product->producerId && array_key_exists($product->producerId, $producers)) {
-					$producerName = $producers[$product->producerId];
-					$dbStock->product->producer = $producerRepo->findOneByName($producerName);
-				}
-
-				$categories = $this->getCategoriesNames();
-				if ($product->mainCategoryId && array_key_exists($product->mainCategoryId, $categories)) {
-					$categoryName = $categories[$product->mainCategoryId];
-					$mainCategory = $categoryRepo->findOneByName($categoryName, $this->locale);
-					if ($mainCategory) {
-						$dbStock->product->mainCategory = $mainCategory;
-					}
-				}
-				if (!$dbStock->product->mainCategory) {
-					Debugger::log('Missing mainCategory for CODE: ' . $pohodaCode . '; ID: ' . $product->id);
-					continue;
-				}
-				if ($dbStock->isNew() && count($product->otherCategoriesIds)) {
-					$dbStock->product->clearCategories();
-					foreach ($product->otherCategoriesIds as $otherCategoryId) {
-						if (array_key_exists($otherCategoryId, $categories)) {
-							$categoryName = $categories[$otherCategoryId];
-							$category = $categoryRepo->findOneByName($producerName, $this->locale);
-							if ($category) {
-								$dbStock->product->addCategory($category);
-							}
+					if (isset($discount) && isset($groupId)) {
+						$group = $groupRepo->find($groupId);
+						if ($group) {
+							$stock->addDiscount($discount, $group);
 						}
 					}
 				}
+			}
+			$stock->setDefaltPrice($oldProduct->price, (bool) $oldProduct->vatIncluded);
 
-				if ($product->image && !$dbStock->product->image) {
-					$file = $this->downloadImage($product->image);
-					$dbStock->product->image = $file;
+			$producers = $this->getProducersNames();
+			if ($oldProduct->producerId && array_key_exists($oldProduct->producerId, $producers)) {
+				$producerName = $producers[$oldProduct->producerId];
+				$stock->product->producer = $producerRepo->findOneByName($producerName);
+			}
+
+			$categories = $this->getCategoriesNames();
+			if ($oldProduct->mainCategoryId && array_key_exists($oldProduct->mainCategoryId, $categories)) {
+				$categoryName = $categories[$oldProduct->mainCategoryId];
+				$mainCategory = $categoryRepo->findOneByName($categoryName, $this->locale);
+				if ($mainCategory) {
+					$stock->product->mainCategory = $mainCategory;
 				}
-				if ($dbStock->isNew() && count($product->otherImages) && !count($dbStock->product->images)) {
-					foreach ($product->otherImages as $otherImage) {
-						$file = $this->downloadImage($otherImage);
-						$dbStock->product->otherImage = $file;
+			}
+			if (!$stock->product->mainCategory) {
+				Debugger::log('Missing mainCategory for CODE: ' . $pohodaCode . '; ID: ' . $oldProduct->id, self::LOGNAME);
+				continue;
+			}
+			if (count($oldProduct->otherCategoriesIds) && count($stock->product->categories) === 1) {
+				$stock->product->clearCategories();
+				foreach ($oldProduct->otherCategoriesIds as $otherCategoryId) {
+					if (array_key_exists($otherCategoryId, $categories)) {
+						$categoryName = $categories[$otherCategoryId];
+						$category = $categoryRepo->findOneByName($producerName, $this->locale);
+						if ($category) {
+							$stock->product->addCategory($category);
+						}
 					}
 				}
-				
-				if ($dbStock->isNew()) {
-					$inserted++;
-				} else {
-					$updated++;
-				}
-				$this->em->persist($dbStock);
+			}
 
-				if (($inserted + $updated) % 500 === 0) {
-					$this->em->flush();
+			if ($oldProduct->image && !$stock->product->image) {
+				$file = $this->downloadImage($oldProduct->image);
+				$stock->product->image = $file;
+			}
+			if (count($oldProduct->otherImages) && !count($stock->product->images)) {
+				foreach ($oldProduct->otherImages as $otherImage) {
+					$file = $this->downloadImage($otherImage);
+					$stock->product->otherImage = $file;
 				}
+			}
+
+			$this->em->persist($stock);
+			$updated++;
+
+			if (($updated % 500) === 0) {
+				$this->em->flush();
 			}
 		}
 		$this->em->flush();
-		return [$inserted, $updated];
+		return $updated;
 	}
 
 	private function downloadImage($url)
 	{
 		$content = file_get_contents($url);
 		return Image::fromString($content);
-	}
-
-	public function actionUpdateProducers()
-	{
-		$added = $this->addProducers();
-		$this->status = parent::STATUS_OK;
-		$this->message = sprintf('%s producers was inserted.', $added);
 	}
 
 	private function addProducers()
@@ -247,13 +242,6 @@ class MigrationPresenter extends BasePresenter
 			$names[$id] = $producer->name;
 		}
 		return $names;
-	}
-
-	public function actionUpdateCategories()
-	{
-		$added = $this->addCategories();
-		$this->status = parent::STATUS_OK;
-		$this->message = sprintf('%s categories was inserted.', $added);
 	}
 
 	private function addCategories()

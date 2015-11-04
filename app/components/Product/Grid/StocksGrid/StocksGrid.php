@@ -17,9 +17,8 @@ use Nette\Utils\Html;
 
 class StocksGrid extends BaseControl
 {
-	
-	const ID = 'grid';
 
+	const ID = 'grid';
 
 	/** @var array */
 	private $ids = [];
@@ -41,12 +40,12 @@ class StocksGrid extends BaseControl
 				->setParameter('lang', $this->translator->getLocale())
 				->setParameter('defaultLang', $this->translator->getDefaultLocale())
 				->setParameter('now', new DateTime());
-		
+
 		if (count($this->ids)) {
 			$qb->andWhere('s.id IN (:ids)')
 					->setParameter('ids', $this->ids);
 		}
-		
+
 		$grid->model = new Doctrine($qb, [
 			'product' => 'p',
 			'product.name' => 't.name',
@@ -182,8 +181,13 @@ class StocksGrid extends BaseControl
 				->setFilterSelect([1 => 'YES', 0 => 'NO']);
 		$grid->getColumn('active')->headerPrototype->style = 'width:95px';
 
-		$grid->addActionHref('view', 'View on web', ':Front:Product:')
-				->setIcon('fa fa-eye');
+		$grid->addActionHref('view', NULL)
+				->setCustomRender(function ($item) {
+					$icon = Html::el('i class="fa fa-eye"');
+					return Html::el('a class="grid-action-view btn btn-xs btn-mini"')
+							->href($this->presenter->link(':Front:Product:', $item->product->id))
+							->setHtml($icon . ' ' . $this->translator->translate('View on web'));
+				});
 
 		$grid->addActionHref('edit', 'Edit')
 				->setIcon('fa fa-edit');
@@ -217,7 +221,7 @@ class StocksGrid extends BaseControl
 				break;
 		}
 	}
-	
+
 	public function setIds()
 	{
 		if (is_array(func_get_arg(0))) {
@@ -227,7 +231,7 @@ class StocksGrid extends BaseControl
 		}
 		return $this;
 	}
-	
+
 	public function getExport()
 	{
 		return $this->getComponent(self::ID)->getComponent(Export::ID);

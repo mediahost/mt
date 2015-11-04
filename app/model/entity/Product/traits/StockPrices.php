@@ -120,6 +120,12 @@ trait StockPrices
 		return $this->getGroupDiscountByLevel($group->level);
 	}
 
+	/** @return bool */
+	public function hasDiscounts()
+	{
+		return (bool) $this->groupDiscounts->count();
+	}
+
 	/*	 * ******************************************************************* */
 
 	public function setDefaltPrice($value, $withVat = FALSE)
