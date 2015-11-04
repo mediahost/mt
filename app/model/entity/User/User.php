@@ -51,7 +51,7 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	/** @ORM\Column(type="boolean", nullable=true) */
 	protected $sidebarClosed;
 
-	/** @ORM\OneToOne(targetEntity="Basket", mappedBy="user") */
+	/** @ORM\OneToOne(targetEntity="Basket", mappedBy="user", fetch="LAZY") */
 	protected $basket;
 
 	/** @ORM\OneToMany(targetEntity="Order", mappedBy="user", fetch="EXTRA_LAZY") */
@@ -66,7 +66,7 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	/** @ORM\OneToMany(targetEntity="VisitedProduct", mappedBy="user", fetch="EXTRA_LAZY", cascade={"remove"}, orphanRemoval=true) */
 	protected $visitedProducts;
 
-	/** @ORM\OneToOne(targetEntity="App\Model\Entity\Newsletter\Subscriber", mappedBy="user", fetch="LAZY", cascade={"persist"}) */
+	/** @ORM\OneToOne(targetEntity="App\Model\Entity\Newsletter\Subscriber", mappedBy="user", fetch="EXTRA_LAZY", cascade={"persist"}) */
 	protected $subscriber;
 
 	/** @ORM\Column(type="boolean") */
