@@ -33,16 +33,6 @@
 				<!-- END RESPONSIVE QUICK SEARCH FORM -->
 			</li>
 
-			<!-- BEGIN DASHBOARD -->
-			<li n:if="$user->isAllowed('dashboard', 'default')"
-				n:class="start, $presenter->isLinkCurrent('Dashboard:*') ? active">
-				<a n:href="Dashboard:">
-					<i class="fa fa-dashboard"></i>
-					<span class="title">{_'Dashboard'}</span><span class="selected"></span>
-				</a>
-			</li>
-			<!-- END DASHBOARD -->
-
 			<!-- BEGIN ADMIN -->
 			{if $user->isAllowed('users')}
 				<li class="heading">

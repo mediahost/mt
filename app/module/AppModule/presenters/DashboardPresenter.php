@@ -12,7 +12,7 @@ class DashboardPresenter extends BasePresenter
 	 */
 	public function actionDefault()
 	{
-		
+		$this->redirect('Orders:');
 	}
 
 }
