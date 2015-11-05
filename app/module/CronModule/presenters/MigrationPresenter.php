@@ -224,6 +224,7 @@ class MigrationPresenter extends BasePresenter
 			} catch (Exception $ex) {
 				Debugger::log($ex->getMessage(), self::LOGNAME);
 				Debugger::log('Work with ID: ' . $stock->id, self::LOGNAME);
+				break;
 			}
 		}
 		return $updated;
