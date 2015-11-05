@@ -6,7 +6,6 @@ use App\Model\Entity\Address;
 use App\Model\Entity\Facebook;
 use App\Model\Entity\Group;
 use App\Model\Entity\Newsletter\Subscriber;
-use App\Model\Entity\Product;
 use App\Model\Entity\Role;
 use App\Model\Entity\Stock;
 use App\Model\Entity\Twitter;
