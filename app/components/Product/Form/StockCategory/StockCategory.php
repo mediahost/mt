@@ -232,7 +232,7 @@ class StockCategory extends StockBase
 	protected function getDefaults()
 	{
 		$values = [
-			'main_category' => $this->stock->product->mainCategory->id,
+			'main_category' => $this->stock->product->mainCategory ? $this->stock->product->mainCategory->id : NULL,
 		];
 		foreach ($this->stock->product->categories as $category) {
 			$values['categories'][] = $category->id;
