@@ -179,7 +179,7 @@ class MigrationPresenter extends BasePresenter
 				foreach ($oldProduct->otherCategoriesIds as $otherCategoryId) {
 					if (array_key_exists($otherCategoryId, $categories)) {
 						$categoryName = $categories[$otherCategoryId];
-						$category = $categoryRepo->findOneByName($producerName, $this->locale);
+						$category = $categoryRepo->findOneByName($categoryName, $this->locale);
 						if ($category) {
 							$stock->product->addCategory($category);
 						}
