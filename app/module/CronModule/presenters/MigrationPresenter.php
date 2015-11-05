@@ -54,7 +54,7 @@ class MigrationPresenter extends BasePresenter
 			$time = Debugger::timer(self::LOGNAME);
 			$this->unlock(self::LOGNAME);
 			$this->status = parent::STATUS_OK;
-			$this->message = sprintf('%s producers was updated. (%f2)', $updated, $time);
+			$this->message = sprintf('%s products was updated. (%f2)', $updated, $time);
 		} else {
 			$this->status = parent::STATUS_ERROR;
 			$this->message = sprintf('This script is still running.');
