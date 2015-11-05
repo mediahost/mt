@@ -2,6 +2,7 @@
 
 namespace App\CronModule\Presenters;
 
+use App\Helpers;
 use App\Model\Entity\Category;
 use App\Model\Entity\Discount;
 use App\Model\Entity\Group;
@@ -26,6 +27,8 @@ class MigrationPresenter extends BasePresenter
 	const IMPORTED_FROM_OLD_VERSION = 'old-ver';
 	const IMPORTED_FROM_FIRST_VERSION = 'first-ver';
 	const IMPORTED_FROM_MOBILESHOP_API = 'mobileshop-api';
+	const LOCK_FILE_CONTENT = '1';
+	const LOCK_UNNAMED = '_UNNAMED_';
 
 	/** @link http://www.mobilnetelefony.sk/export/migration/create-products */
 	const URL_PRODUCTS = 'http://www.mobilnetelefony.sk/export/migration/get-products';
@@ -41,14 +44,21 @@ class MigrationPresenter extends BasePresenter
 
 	public function actionUpdateProducts($toUpdate = 0)
 	{
-		ini_set('max_execution_time', 300);
-		Debugger::timer();
-		$maxUpdates = 200;
-		$updateCount = $toUpdate >= 0 ? ($toUpdate <= $maxUpdates ? $toUpdate : $maxUpdates) : 0;
-		$updated = $this->actualizeProducts($updateCount);
-		$time = Debugger::timer();
-		$this->status = parent::STATUS_OK;
-		$this->message = sprintf('%s producers was updated. (%f2)', $updated, $time);
+		ini_set('max_execution_time', 200);
+		if ($this->lock(self::LOGNAME)) {
+			Debugger::timer(self::LOGNAME);
+			$maxUpdates = 200;
+			$maxTime = 60;
+			$updateCount = $toUpdate >= 0 ? ($toUpdate <= $maxUpdates ? $toUpdate : $maxUpdates) : 0;
+			$updated = $this->actualizeProducts($updateCount, $maxTime);
+			$time = Debugger::timer(self::LOGNAME);
+			$this->unlock(self::LOGNAME);
+			$this->status = parent::STATUS_OK;
+			$this->message = sprintf('%s producers was updated. (%f2)', $updated, $time);
+		} else {
+			$this->status = parent::STATUS_ERROR;
+			$this->message = sprintf('This script is still running.');
+		}
 	}
 
 	public function actionUpdateCategories()
@@ -65,8 +75,10 @@ class MigrationPresenter extends BasePresenter
 		$this->message = sprintf('%s producers was inserted.', $added);
 	}
 
-	private function actualizeProducts($updateCountMax = 0)
+	private function actualizeProducts($updateCountMax = 0, $maxTime = 0)
 	{
+		$methodName = 'actualizeProducts';
+		$time = Debugger::timer($methodName);
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
 		$producerRepo = $this->em->getRepository(Producer::getClassName());
 		$categoryRepo = $this->em->getRepository(Category::getClassName());
@@ -81,6 +93,11 @@ class MigrationPresenter extends BasePresenter
 
 		$updated = 0;
 		foreach ($stocks as $stock) {
+			$time += Debugger::timer($methodName);
+			if ($time >= $maxTime) {
+				break;
+			}
+			
 			/* @var $stock Stock */
 			if (isset($products->{$stock->id})) {
 				$oldProduct = $products->{$stock->id};
@@ -305,6 +322,46 @@ class MigrationPresenter extends BasePresenter
 	{
 		$json = file_get_contents($url);
 		return Json::decode($json);
+	}
+
+	private function lock($name)
+	{
+		if ($this->isLocked($name)) {
+			return FALSE;
+		} else {
+			file_put_contents($this->getLockFile($name), self::LOCK_FILE_CONTENT);
+			return TRUE;
+		}
+	}
+
+	private function unlock($name)
+	{
+		if ($this->isLocked($name)) {
+			return $this->removeLockFile($name);
+		} else {
+			return FALSE;
+		}
+	}
+
+	private function isLocked($name)
+	{
+		return file_exists($this->getLockFile($name));
+	}
+	
+	private function getLockFile($name)
+	{
+		$dir = '../temp/lock';
+		Helpers::mkDir($dir);
+		return $dir . '/' . $name . '.lock';
+	}
+	
+	private function removeLockFile($name)
+	{
+		$file = $this->getLockFile($name);
+		$dir = '../temp/lock';
+		@unlink($file);
+		Helpers::rmDir($dir);
+		return TRUE;
 	}
 
 }
