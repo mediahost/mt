@@ -12,6 +12,7 @@ use App\Model\Entity\Unit;
 use App\Model\Entity\Vat;
 use App\Model\Facade\PohodaFacade;
 use App\Model\Repository\CategoryRepository;
+use Exception;
 use Nette\Utils\ArrayHash;
 use Nette\Utils\Image;
 use Nette\Utils\Json;
@@ -104,6 +105,7 @@ class MigrationPresenter extends BasePresenter
 			} else {
 				$stock->active = FALSE;
 				$this->em->persist($stock);
+				$this->em->flush();
 				Debugger::log('Product with ID ' . $stock->id . ' was deactivated', self::LOGNAME);
 				continue;
 			}
@@ -216,13 +218,14 @@ class MigrationPresenter extends BasePresenter
 			}
 
 			$this->em->persist($stock);
-			$updated++;
-
-			if (($updated % 500) === 0) {
+			try {
 				$this->em->flush();
+				$updated++;
+			} catch (Exception $ex) {
+				Debugger::log($ex->getMessage(), self::LOGNAME);
+				Debugger::log('Work with ID: ' . $stock->id, self::LOGNAME);
 			}
 		}
-		$this->em->flush();
 		return $updated;
 	}
 
