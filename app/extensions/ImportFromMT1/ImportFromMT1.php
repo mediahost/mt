@@ -124,21 +124,20 @@ class ImportFromMT1 extends Object
 		$dbName = $this->getDbName();
 		$tableProducts = $dbName . '.' . self::TABLE_PRODUCT;
 
-		$productTable = $this->em->getClassMetadata(Product::getClassName())->getTableName();
-		$conn->executeQuery('ALTER TABLE `' . $productTable . '` AUTO_INCREMENT=1');
-
 		$userRepo = $this->em->getRepository(User::getClassName());
 		$admin = $userRepo->findOneByMail('superadmin');
-
-		$offset = (int) $conn->executeQuery("SELECT COUNT(id) FROM stock")->fetchColumn();
-		$limit = self::MAX_INSERTS / 2;
+		
+		$maxId = (int) $conn->executeQuery("SELECT MAX(id) FROM stock")->fetchColumn();
+		$offset = 0;
+		$limit = self::MAX_INSERTS;
 		$stmt = $conn->executeQuery(
 				"SELECT id "
 				. "FROM {$tableProducts} p "
 				. "WHERE active = ? AND deleted = ? "
+				. "AND id > ? "
 				. "ORDER BY id "
 				. "LIMIT {$limit} OFFSET {$offset}"
-				, [1, 0]);
+				, [1, 0, $maxId]);
 
 		$stockTable = $this->em->getClassMetadata(Stock::getClassName())->getTableName();
 
