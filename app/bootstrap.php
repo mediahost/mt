@@ -12,7 +12,7 @@ $configurator->setDebugMode([
 	'188.121.172.183', // Samo
 	'31.10.57.18', // Martin - Rudoltice
 	'193.86.138.194', // Martin - Brno
-        '89.102.207.157', //Simple Dino
+	'89.102.207.157', //Simple Dino
 ]);
 
 $configurator->enableDebugger(__DIR__ . '/../log');
