@@ -156,7 +156,7 @@ class ProductList extends Control
 	public function addFilterCategory(Category $category)
 	{
 		$this->setFilter([
-			'category' => array_keys($category->childrenArray),
+			'category' => implode(',', array_keys($category->childrenArray)),
 		]);
 		if (!count($this->limitPrices)) {
 			$this->limitPrices = $this->stockFacade->getLimitPrices($this->getPriceLevelName(), $category);
@@ -720,6 +720,7 @@ class ProductList extends Control
 
 	protected function filterByCategory($category)
 	{
+		$category = is_string($category) ? explode(',', $category) : $category;
 		$this->qb->innerJoin('p.categories', 'categories');
 		if (is_array($category)) {
 			$this->qb
