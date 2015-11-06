@@ -31,6 +31,8 @@ class ErrorPresenter extends BasePresenter
 		if ($this->isAjax()) { // AJAX request? Note this error in payload.
 			$this->payload->error = TRUE;
 			$this->terminate();
+		} else {
+			$this->template->isErrorPresenter = TRUE;
 		}
 	}
 

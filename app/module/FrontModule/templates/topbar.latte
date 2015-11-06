@@ -43,7 +43,13 @@
 <!-- BEGIN TOP BAR MENU -->
 <div class="col-md-6 col-sm-6 col-xs-6 additional-nav">
 	<ul n:if="!$user->loggedIn" class="list-unstyled list-inline pull-right">
-		<li><a n:href="this#signInModal" data-toggle="modal">{_'Sign In'}</a></li>
+		<li>
+			{if isset($isErrorPresenter) && $isErrorPresenter}
+				<a n:href="Sign:in">{_'Sign In'}</a>
+			{else}
+				<a n:href="this#signInModal" data-toggle="modal">{_'Sign In'}</a>
+			{/if}
+		</li>
 		<li><a n:href="Sign:up">{_'Registration'}</a></li>
 	</ul>
 	<ul n:if="$user->loggedIn" class="list-unstyled list-inline pull-right">
