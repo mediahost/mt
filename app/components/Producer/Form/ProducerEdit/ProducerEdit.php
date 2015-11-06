@@ -73,20 +73,24 @@ class ProducerEdit extends BaseControl
 						->addCondition(Form::FILLED)
 						->addRule(Form::IMAGE, 'Image must be in valid image format');
 
-				$form->addSubmit('partSave', 'Save')
-						->getControlPrototype()->class[] = 'btn-primary';
-				$form->addGroup('Prices');
-
-				$form->addCheckSwitch('with_vat', 'Prices are with VAT', 'YES', 'NO')
-						->setDefaultValue($this->defaultWithVat);
-				$form->addSelect2('vat', 'Vat', $this->vatFacade->getValues())
-								->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
 				$parameterRepo = $this->em->getRepository(ModelParameter::getClassName());
 				$parameters = $parameterRepo->findAll();
-				$prices = $form->addContainer('prices');
-				foreach ($parameters as $parameter) {
-					$prices->addText($parameter->id, (string) $parameter)
-							->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
+
+				if (count($parameters)) {
+					$form->addSubmit('partSave', 'Save')
+									->getControlPrototype()->class[] = 'btn-primary';
+					$form->addGroup('Prices');
+
+					$form->addCheckSwitch('with_vat', 'Prices are with VAT', 'YES', 'NO')
+							->setDefaultValue($this->defaultWithVat);
+					$form->addSelect2('vat', 'Vat', $this->vatFacade->getValues())
+									->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
+
+					$prices = $form->addContainer('prices');
+					foreach ($parameters as $parameter) {
+						$prices->addText($parameter->id, (string) $parameter)
+								->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
+					}
 				}
 				break;
 		}

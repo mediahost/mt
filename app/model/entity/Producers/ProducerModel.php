@@ -17,6 +17,7 @@ use Nette\Utils\Strings;
  * @property string $name
  * @property string $html
  * @property ProducerLine $line
+ * @property float $buyoutPrice
  * @property ArrayCollection $questions
  */
 class ProducerModel extends BaseTranslatable implements IProducer
@@ -43,7 +44,7 @@ class ProducerModel extends BaseTranslatable implements IProducer
 	protected $products;
 
 	/** @ORM\Column(type="float") */
-	protected $buyoutPrice;
+	protected $buyoutPrice = 0;
 
 	/** @ORM\OneToMany(targetEntity="App\Model\Entity\Buyout\ModelQuestion", mappedBy="model", indexBy="id") */
 	protected $questions;
