@@ -150,7 +150,7 @@ abstract class BasePresenter extends Presenter
 	private function setLocale()
 	{
 		if ($this->user->isLoggedIn()) {
-			if ($this->user->identity->locale !== $this->locale) { // Locale has changed
+			if ($this->user->identity->locale !== $this->locale && $this->name !== 'Front:Error') { // Locale has changed
 				$overwrite = $this->getParameter('overwrite', 'no');
 
 				if ($overwrite == 'yes' || $this->user->identity->locale === NULL) {
