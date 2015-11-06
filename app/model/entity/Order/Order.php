@@ -30,7 +30,9 @@ use Nette\Utils\Random;
  * @property bool $isDeletable
  * @property string $pin
  * @property string $mail
+ * @property string $ip
  * @property string $phone
+ * @property string $note
  * @property Address $billingAddress
  * @property Address $shippingAddress
  * @property DateTime $paymentDate
@@ -75,6 +77,9 @@ class Order extends BaseEntity
 	/** @ORM\Column(type="string", nullable=true) */
 	protected $mail;
 
+	/** @ORM\Column(type="string", nullable=true) */
+	protected $ip;
+
 	/** @ORM\OneToOne(targetEntity="Address", cascade={"persist", "remove"}) */
 	protected $billingAddress;
 
@@ -93,7 +98,7 @@ class Order extends BaseEntity
 	/** @var IProperty */
 	private $tmpCurrency = NULL;
 
-	/** @ORM\Column(type="string", length=100, nullable=true) */
+	/** @ORM\Column(type="string", length=255, nullable=true) */
 	protected $note;
 
 	/** @ORM\Column(type="datetime", nullable=true) */
