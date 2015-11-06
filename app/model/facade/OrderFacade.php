@@ -14,6 +14,7 @@ use App\Model\Repository\OrderRepository;
 use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Translation\Translator;
+use Nette\Http\Request;
 use Nette\Object;
 use Nette\Utils\DateTime;
 
@@ -38,6 +39,9 @@ class OrderFacade extends Object
 	/** @var Exchange @inject */
 	public $exchange;
 
+	/** @var Request @inject */
+	public $request;
+
 	/** @var OrderRepository */
 	private $orderRepo;
 
@@ -59,6 +63,7 @@ class OrderFacade extends Object
 			throw new Exception\ItemsIsntOnStockException();
 		}
 		$order = new Order($locale, $user);
+		$order->ip = $this->request->remoteAddress;
 		$order->state = $stateRepo->find(OrderState::ORDERED_IN_SYSTEM);
 		$order->setCurrency($currency->getCode(), $rate);
 		$order->import($basket, $priceLevel);
