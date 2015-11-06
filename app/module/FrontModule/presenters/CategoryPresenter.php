@@ -82,7 +82,7 @@ class CategoryPresenter extends BasePresenter
 			$item['priceNoVatFormated'] = $this->exchange->format($price->withoutVat);
 			$item['priceWithVat'] = $price->withVat;
 			$item['priceWithVatFormated'] = $this->exchange->format($price->withVat);
-			$item['url'] = $this->link('//:Front:Product:', ['url' => $product->url]);
+			$item['url'] = $this->link('//:Front:Product:', ['id' => $product->id]);
 			$item['image_original'] = $this->link('//:Foto:Foto:', ['name' => $product->image]);
 			$item['image_thumbnail_100'] = $this->link('//:Foto:Foto:', ['size' => '100-0', 'name' => $product->image]);
 			$items[] = $item;
