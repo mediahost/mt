@@ -15,6 +15,7 @@ use App\Model\Repository\CategoryRepository;
 use Exception;
 use Nette\Utils\ArrayHash;
 use Nette\Utils\Image;
+use Nette\Utils\ImageException;
 use Nette\Utils\Json;
 use Tracy\Debugger;
 
@@ -57,6 +58,7 @@ class MigrationPresenter extends BasePresenter
 			$this->status = parent::STATUS_OK;
 			$this->message = sprintf('%s products was updated. (%f2)', $updated, $time);
 		} else {
+			Debugger::log('Try to start while script is running.', self::LOGNAME . '_lock');
 			$this->status = parent::STATUS_ERROR;
 			$this->message = sprintf('This script is still running.');
 		}
@@ -98,7 +100,7 @@ class MigrationPresenter extends BasePresenter
 			if ($time >= $maxTime) {
 				break;
 			}
-			
+
 			/* @var $stock Stock */
 			if (isset($products->{$stock->id})) {
 				$oldProduct = $products->{$stock->id};
@@ -208,12 +210,16 @@ class MigrationPresenter extends BasePresenter
 
 			if ($oldProduct->image && !$stock->product->image) {
 				$file = $this->downloadImage($oldProduct->image);
-				$stock->product->image = $file;
+				if ($file) {
+					$stock->product->image = $file;
+				}
 			}
 			if (count($oldProduct->otherImages) && !count($stock->product->images)) {
 				foreach ($oldProduct->otherImages as $otherImage) {
 					$file = $this->downloadImage($otherImage);
-					$stock->product->otherImage = $file;
+					if ($file) {
+						$stock->product->otherImage = $file;
+					}
 				}
 			}
 
@@ -233,7 +239,11 @@ class MigrationPresenter extends BasePresenter
 	private function downloadImage($url)
 	{
 		$content = file_get_contents($url);
-		return Image::fromString($content);
+		try {
+			return Image::fromString($content);
+		} catch (ImageException $ex) {
+			return NULL;
+		}
 	}
 
 	private function addProducers()
@@ -351,14 +361,14 @@ class MigrationPresenter extends BasePresenter
 	{
 		return file_exists($this->getLockFile($name));
 	}
-	
+
 	private function getLockFile($name)
 	{
 		$dir = '../temp/lock';
 		Helpers::mkDir($dir);
 		return $dir . '/' . $name . '.lock';
 	}
-	
+
 	private function removeLockFile($name)
 	{
 		$file = $this->getLockFile($name);
