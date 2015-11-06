@@ -127,8 +127,8 @@ class SettingsExtension extends CompilerExtension
 				'email' => 'contact@company.sk',
 			],
 			'bank' => [
-				'cz' => 'CZ1234567890123456789012',
 				'sk' => 'SK1234567890123456789012',
+				'cz' => 'CZ1234567890123456789012',
 			],
 		],
 		'expiration' => [
