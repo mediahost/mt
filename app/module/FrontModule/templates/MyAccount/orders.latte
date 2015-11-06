@@ -13,12 +13,12 @@
 		<div class="col-md-9 col-sm-7">
             <h1>{_'My Orders'}</h1>
             <div class="content-page">
-				<div n:if="!count($orders)" class="alert alert-warning">
+				<div n:if="!$orders || !count($orders)" class="alert alert-warning">
 					<strong>{_'You have no orders.'}</strong> 
 					{_'All future orders will be displayed here.'}
 				</div>
 
-				<table n:if="count($orders)" class="table">
+				<table n:if="$orders && count($orders)" class="table">
 					<thead>
 						<tr>
 							<th>
