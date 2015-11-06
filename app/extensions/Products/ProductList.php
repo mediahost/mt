@@ -862,9 +862,6 @@ class ProductList extends Control
 		if ($isInStore) {
 			$this->qb->andWhere("s.inStore >= :inStore")
 					->setParameter('inStore', 1);
-		} else {
-			$this->qb->andWhere("s.inStore = :inStore")
-					->setParameter('inStore', 0);
 		}
 
 		return $this;
