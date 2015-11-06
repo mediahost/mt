@@ -2,10 +2,12 @@
 
 namespace App\Extensions;
 
+use App\Helpers;
 use App\Model\Entity\Address;
 use App\Model\Entity\Facebook;
 use App\Model\Entity\Group;
 use App\Model\Entity\Newsletter\Subscriber;
+use App\Model\Entity\Order;
 use App\Model\Entity\Role;
 use App\Model\Entity\Stock;
 use App\Model\Entity\Twitter;
@@ -17,18 +19,23 @@ use Exception;
 use h4kuna\Exchange\Exchange;
 use Kdyby\Translation\Translator;
 use Nette\Object;
+use Nette\Utils\DateTime;
 
 class ImportFromMT1 extends Object
 {
 
 	const MAX_INSERTS = 1000;
-	const TABLE_PRODUCT = 'product';
-	const TABLE_USER = 'user';
-	const TABLE_AUTH = 'auth';
-	const TABLE_PASSWORDS = 'user_passwords';
-	const TABLE_ADDRESS = 'user_address';
-	const TABLE_NEWSLETTER = 'newsletter_register';
-	const TABLE_NEWSLETTER_DEALER = 'newsletter_register_dealer';
+	const MAX_ORDERS = 1;
+	const ORDER_CANCELED_ID = 6;
+	const TABLE_PRODUCT = '`product`';
+	const TABLE_ORDER = '`order`';
+	const TABLE_ORDER_ADDRESS = '`order_address`';
+	const TABLE_USER = '`user`';
+	const TABLE_AUTH = '`auth`';
+	const TABLE_PASSWORDS = '`user_passwords`';
+	const TABLE_ADDRESS = '`user_address`';
+	const TABLE_NEWSLETTER = '`newsletter_register`';
+	const TABLE_NEWSLETTER_DEALER = '`newsletter_register_dealer`';
 
 	// <editor-fold desc="constants & variables">
 
@@ -119,16 +126,17 @@ class ImportFromMT1 extends Object
 
 	private function importProducts()
 	{
+		$this->maxInserts = self::MAX_INSERTS;
 		$conn = $this->em->getConnection();
 		$dbName = $this->getDbName();
 		$tableProducts = $dbName . '.' . self::TABLE_PRODUCT;
 
 		$userRepo = $this->em->getRepository(User::getClassName());
 		$admin = $userRepo->findOneByMail('superadmin');
-		
-		$maxId = (int) $conn->executeQuery("SELECT MAX(id) FROM stock")->fetchColumn();
+
+		$maxId = (int) $conn->executeQuery("SELECT MAX(id) FROM `stock`")->fetchColumn();
 		$offset = 0;
-		$limit = self::MAX_INSERTS;
+		$limit = $this->maxInserts;
 		$stmt = $conn->executeQuery(
 				"SELECT id "
 				. "FROM {$tableProducts} p "
@@ -160,6 +168,157 @@ class ImportFromMT1 extends Object
 
 	private function importOrders()
 	{
+		$this->maxInserts = self::MAX_ORDERS;
+		$conn = $this->em->getConnection();
+		$dbName = $this->getDbName();
+		$tableOrders = $dbName . '.' . self::TABLE_ORDER;
+		$tableOrderAddresses = $dbName . '.' . self::TABLE_ORDER_ADDRESS;
+
+		$userRepo = $this->em->getRepository(User::getClassName());
+		$orderTable = $this->em->getClassMetadata(Order::getClassName())->getTableName();
+
+		$maxId = (int) $conn->executeQuery("SELECT MAX(id) FROM `order`")->fetchColumn();
+		$offset = 0;
+		$limit = $this->maxInserts;
+		$canceledStatusId = self::ORDER_CANCELED_ID;
+		$stmt = $conn->executeQuery(
+				"SELECT * "
+				. "FROM {$tableOrders} o "
+				. "WHERE deleted = ? AND order_status_id != ? "
+				. "AND code > ? "
+				. "ORDER BY code "
+				. "LIMIT {$limit} OFFSET {$offset}"
+				, [0, $canceledStatusId, $maxId]);
+
+		foreach ($stmt->fetchAll() as $oldData) {
+			$this->checkLimit();
+			$orderID = (int) $oldData['id'];
+			$orderCode = (int) $oldData['code'];
+			$conn->executeQuery('ALTER TABLE `' . $orderTable . '` AUTO_INCREMENT=' . $orderCode);
+
+			$addrBilling = $conn->executeQuery(
+							"SELECT * "
+							. "FROM {$tableOrderAddresses} oa "
+							. "WHERE type = ? AND order_id = ? "
+							, ['billing', $orderID])->fetch();
+			$addrDelivery = $conn->executeQuery(
+							"SELECT * "
+							. "FROM {$tableOrderAddresses} oa "
+							. "WHERE type = ? AND order_id = ? "
+							, ['billing', $orderID])->fetch();
+
+			$billingAddress = new Address();
+			try {
+				if ($addrBilling['company']) {
+					$billingAddress->name = $addrBilling['company'];
+				} else {
+					$billingAddress->name = Helpers::concatStrings(' ', $addrBilling['firstname'], $addrBilling['surname']);
+				}
+				$billingAddress->street = $addrBilling['street'];
+				$billingAddress->city = $addrBilling['city'];
+				switch ($addrBilling['country']) {
+					case 'CZE':
+						$billingAddress->country = 'CZ';
+						break;
+					default:
+						$billingAddress->country = 'SK';
+						break;
+				}
+				$billingAddress->zipcode = $addrBilling['zipcode'];
+				$billingAddress->phone = $addrBilling['phone'];
+				$billingAddress->ico = $addrBilling['ico'];
+				$billingAddress->dic = $addrBilling['dic'];
+				$billingAddress->icoVat = $addrBilling['icdph'];
+			} catch (Exception $ex) {
+				throw new WrongSituationException('Wrong billing address for order with ID: ' . $orderID);
+			}
+
+			$shippingAddress = new Address();
+			try {
+				if ($addrDelivery['company']) {
+					$shippingAddress->name = $addrDelivery['company'];
+				} else {
+					$shippingAddress->name = Helpers::concatStrings(' ', $addrDelivery['firstname'], $addrDelivery['surname']);
+				}
+				$shippingAddress->street = $addrDelivery['street'];
+				$shippingAddress->city = $addrDelivery['city'];
+				switch ($addrDelivery['country']) {
+					case 'CZE':
+						$shippingAddress->country = 'CZ';
+						break;
+					default:
+						$shippingAddress->country = 'SK';
+						break;
+				}
+				$shippingAddress->zipcode = $addrDelivery['zipcode'];
+				$shippingAddress->phone = $addrDelivery['phone'];
+			} catch (Exception $ex) {
+				
+			}
+
+
+			if (!isset($addrBilling['mail'])) {
+				throw new WrongSituationException('No email for order with ID: ' . $orderID);
+			} else {
+				$user = $userRepo->findOneByMail($addrBilling['mail']);
+			}
+
+			switch ($oldData['lang']) {
+				case 'sk':
+				case 'cs':
+					$locale = $oldData['lang'];
+					break;
+				default:
+					$locale = $this->translator->getLocale();
+					break;
+			}
+
+			$order = new Order($locale, $user);
+			$order->mail = $addrBilling['mail'];
+			$order->ip = $oldData['ip'];
+			$order->note = $oldData['private_notice'];
+			$order->createdAt = DateTime::from($oldData['create_date']);
+			
+			if ($billingAddress->isFilled()) {
+				$order->billingAddress = $billingAddress;
+			}
+			if ($shippingAddress->isFilled()) {
+				$order->shippingAddress = $shippingAddress;
+			}
+
+			switch ($oldData['currency']) {
+				case 'CZK':
+					$order->setCurrency('CZK', $oldData['rate']);
+					break;
+				case 'EUR':
+				default:
+					$order->setCurrency('EUR', NULL);
+					break;
+			}
+
+			if ($oldData['payment_date'] &&
+					preg_match('/^\d{4}\-\d{2}\-\d{2}$/', $oldData['payment_date']) &&
+					$oldData['payment_date'] != '0000-00-00') {
+				$order->paymentDate = DateTime::from($oldData['payment_date']);
+			}
+			switch ($oldData['payment_date_type']) {
+				case '2':
+					$order->paymentBlameName = Order::PAYMENT_BLAME_VUB;
+					break;
+				case '3':
+					$order->paymentBlameName = Order::PAYMENT_BLAME_CSOB;
+					break;
+				case '1':
+					$order->paymentBlameName = Order::PAYMENT_BLAME_MANUAL;
+					break;
+			}
+
+			\Tracy\Debugger::barDump($order);
+			exit;
+//			$this->em->persist($order);
+//			$this->em->flush();
+		}
+
 		return $this;
 	}
 
