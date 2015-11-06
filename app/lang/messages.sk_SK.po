@@ -630,7 +630,7 @@ msgid "Sign In"
 msgstr "Prihlásiť sa"
 
 msgid "Don't you have"
-msgstr "Doteraz nenájdené"
+msgstr "Nemáte vytvorený"
 
 msgid "your account"
 msgstr "svoj účet"
