@@ -126,6 +126,8 @@ class ServicePresenter extends BasePresenter
 		} catch (ImportFromMT1Exception $e) {
 			$message = $this->translator->translate('Please check settings of this module');
 			$this->flashMessage($message, 'warning');
+		} catch (WrongSituationException $e) {
+			$this->flashMessage($e->getMessage(), 'warning');
 		}
 		$this->redirect('this');
 	}
