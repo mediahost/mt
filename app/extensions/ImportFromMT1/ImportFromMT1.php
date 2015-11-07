@@ -8,7 +8,9 @@ use App\Model\Entity\Facebook;
 use App\Model\Entity\Group;
 use App\Model\Entity\Newsletter\Subscriber;
 use App\Model\Entity\Order;
+use App\Model\Entity\Payment;
 use App\Model\Entity\Role;
+use App\Model\Entity\Shipping;
 use App\Model\Entity\Stock;
 use App\Model\Entity\Twitter;
 use App\Model\Entity\User;
@@ -30,6 +32,8 @@ class ImportFromMT1 extends Object
 	const TABLE_PRODUCT = '`product`';
 	const TABLE_ORDER = '`order`';
 	const TABLE_ORDER_ADDRESS = '`order_address`';
+	const TABLE_ORDER_PAYMENT = '`order_payment`';
+	const TABLE_ORDER_SHIPPING = '`order_shipping`';
 	const TABLE_USER = '`user`';
 	const TABLE_AUTH = '`auth`';
 	const TABLE_PASSWORDS = '`user_passwords`';
@@ -173,6 +177,8 @@ class ImportFromMT1 extends Object
 		$dbName = $this->getDbName();
 		$tableOrders = $dbName . '.' . self::TABLE_ORDER;
 		$tableOrderAddresses = $dbName . '.' . self::TABLE_ORDER_ADDRESS;
+		$tableOrderPayment = $dbName . '.' . self::TABLE_ORDER_PAYMENT;
+		$tableOrderShipping = $dbName . '.' . self::TABLE_ORDER_SHIPPING;
 
 		$userRepo = $this->em->getRepository(User::getClassName());
 		$orderTable = $this->em->getClassMetadata(Order::getClassName())->getTableName();
@@ -256,6 +262,57 @@ class ImportFromMT1 extends Object
 				
 			}
 
+			$paymentRepo = $this->em->getRepository(Payment::getClassName());
+			$orderPayment = $conn->executeQuery(
+							"SELECT * "
+							. "FROM {$tableOrderPayment} op "
+							. "WHERE order_id = ? "
+							, [$orderID])->fetch();
+			if ($orderPayment) {
+				/* @var $payment Payment */
+				switch ($orderPayment['payment_id']) {
+					case '3':
+						$payment = $paymentRepo->find(Payment::ON_DELIVERY);
+						break;
+					case '5':
+						$payment = $paymentRepo->find(Payment::BANK_ACCOUNT);
+						break;
+					case '6':
+						$payment = $paymentRepo->find(Payment::PERSONAL);
+						break;
+					default:
+						throw new WrongSituationException('Unknown payment (ID: ' . $orderPayment['payment_id'] . ') for order with ID: ' . $orderID);
+				}
+				$payment->setPrice($orderPayment['price'], $orderPayment['vat_included']);
+			} else {
+				throw new WrongSituationException('Missing payment for order with ID: ' . $orderID);
+			}
+
+			$shippingRepo = $this->em->getRepository(Shipping::getClassName());
+			$orderShipping = $conn->executeQuery(
+							"SELECT * "
+							. "FROM {$tableOrderShipping} op "
+							. "WHERE order_id = ? "
+							, [$orderID])->fetch();
+			if ($orderShipping) {
+				/* @var $shipping Shipping */
+				switch ($orderShipping['shipping_id']) {
+					case '1':
+						$shipping = $shippingRepo->find(Shipping::SLOVAK_POST);
+						break;
+					case '10':
+						$shipping = $shippingRepo->find(Shipping::DPD);
+						break;
+					case '13':
+						$shipping = $shippingRepo->find(Shipping::PERSONAL);
+						break;
+					default:
+						throw new WrongSituationException('Unknown payment (ID: ' . $orderShipping['shipping_id'] . ') for order with ID: ' . $orderID);
+				}
+				$shipping->setPrice($orderShipping['price'], $orderShipping['vat_included']);
+			} else {
+				throw new WrongSituationException('Missing payment for order with ID: ' . $orderID);
+			}
 
 			if (!isset($addrBilling['mail'])) {
 				throw new WrongSituationException('No email for order with ID: ' . $orderID);
@@ -278,7 +335,9 @@ class ImportFromMT1 extends Object
 			$order->ip = $oldData['ip'];
 			$order->note = $oldData['private_notice'];
 			$order->createdAt = DateTime::from($oldData['create_date']);
-			
+			$order->setPayment($payment);
+			$order->setShipping($shipping);
+
 			if ($billingAddress->isFilled()) {
 				$order->billingAddress = $billingAddress;
 			}
@@ -313,7 +372,8 @@ class ImportFromMT1 extends Object
 					break;
 			}
 
-			\Tracy\Debugger::barDump($order);
+			\Tracy\Debugger::barDump($order->getTotalPrice());
+			\Tracy\Debugger::barDump($oldData['total_pricevat']);
 			exit;
 //			$this->em->persist($order);
 //			$this->em->flush();
