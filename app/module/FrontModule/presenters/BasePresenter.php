@@ -140,12 +140,20 @@ abstract class BasePresenter extends BaseBasePresenter
 		$categoryRepo = $this->em->getRepository(Category::getClassName());
 		$this->template->menuCategories = ArrayHash::from([
 					'category1' => $categoryRepo->find(355),
+					'category2' => $categoryRepo->find(177),
 		]);
 		$pageRepo = $this->em->getRepository(Page::getClassName());
+		$settings = $this->settings;
 		$this->template->menuPages = ArrayHash::from([
-					'page1' => $pageRepo->find(3),
-					'page2' => $pageRepo->find(2),
-					'page3' => $pageRepo->find(1),
+					'page1' => $pageRepo->find($settings->pageInfo->orderByPhonePageId),
+					'page2' => $settings->modules->buyout->enabled ? $pageRepo->find($settings->modules->buyout->pageId) : NULL,
+					'page3' => $settings->modules->service->enabled ? $pageRepo->find($settings->modules->service->pageId) : NULL,
+					'page4' => $pageRepo->find($settings->pageInfo->contactPageId),
+					'page5' => $settings->modules->dealer->enabled ? $pageRepo->find($settings->modules->dealer->pageId) : NULL,
+		]);
+		$this->template->footerPages = ArrayHash::from([
+					'page1' => $pageRepo->find($settings->pageInfo->termPageId),
+					'page2' => $pageRepo->find($settings->pageInfo->complaintPageId),
 		]);
 	}
 

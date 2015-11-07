@@ -110,6 +110,9 @@ class SettingsExtension extends CompilerExtension
 			'author' => 'author',
 			'description' => 'description',
 			'termPageId' => 1,
+			'complaintPageId' => 1,
+			'contactPageId' => 1,
+			'orderByPhonePageId' => 1,
 		],
 		'pageConfig' => [
 			'itemsPerRow' => 3,
