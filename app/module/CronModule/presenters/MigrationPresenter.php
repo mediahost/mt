@@ -294,7 +294,7 @@ class MigrationPresenter extends BasePresenter
 		$category = $categoryItem->category;
 		$children = $categoryItem->children;
 		if ($category->active) {
-			$dbCategory = $categoryRepo->findOneByName($category->name, $this->locale);
+			$dbCategory = $categoryRepo->findOneByName($category->name, $this->locale, $parent);
 			if (!$dbCategory) {
 				$dbCategory = new Category($category->name, $this->locale);
 				$dbCategory->parent = $parent;
