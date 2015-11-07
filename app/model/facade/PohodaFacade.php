@@ -94,12 +94,12 @@ class PohodaFacade extends Object
 						$change = TRUE;
 					}
 
-					if (round($stock->purchasePrice->withoutVat, 2) != round($pohodaProductArr['purchasingPrice'], 2)) {
+					if (!$stock->purchasePrice || round($stock->purchasePrice->withoutVat, 2) != round($pohodaProductArr['purchasingPrice'], 2)) {
 						$stock->purchasePrice = $pohodaProductArr['purchasingPrice'];
 						$change = TRUE;
 					}
 
-					if (round($stock->price->withoutVat, 2) != round($pohodaProductArr['recountedSellingWithoutVat'], 2)) {
+					if (!$stock->price || round($stock->price->withoutVat, 2) != round($pohodaProductArr['recountedSellingWithoutVat'], 2)) {
 						$stock->price = $pohodaProductArr['recountedSellingWithoutVat'];
 						$change = TRUE;
 					}

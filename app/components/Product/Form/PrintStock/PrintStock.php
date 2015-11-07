@@ -3,6 +3,7 @@
 namespace App\Components\Product\Form;
 
 use App\Components\BaseControl;
+use App\Components\BaseControlException;
 use App\Model\Entity\Sign;
 use App\Model\Entity\Stock;
 use App\Model\Facade\BasketFacade;
@@ -24,9 +25,14 @@ class PrintStock extends BaseControl
 	public function handleAddToCart()
 	{
 		try {
+			if (!$this->stock) {
+				throw new BaseControlException();
+			}
 			$this->basketFacade->add($this->stock);
 			$this->flashMessage($this->translator->translate('cart.product.added'), 'success');
 		} catch (InsufficientQuantityException $ex) {
+			$this->flashMessage($this->translator->translate('cart.product.youCannotAdd'), 'warning');
+		} catch (BaseControlException $ex) {
 			$this->flashMessage($this->translator->translate('cart.product.youCannotAdd'), 'warning');
 		}
 
