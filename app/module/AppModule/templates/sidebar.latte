@@ -32,6 +32,14 @@
 				</form>
 				<!-- END RESPONSIVE QUICK SEARCH FORM -->
 			</li>
+			
+			<li class="start">
+				<a n:href=":Front:Homepage:">
+					<i class="icon-globe"></i> 
+					<span class="title">{_'Online Store'}</span>
+					<span class="selected"></span>
+				</a>
+			</li>
 
 			<!-- BEGIN ADMIN -->
 			{if $user->isAllowed('users')}
@@ -238,17 +246,6 @@
 						</a>
 					</li>
 				</ul>
-			</li>
-			
-			<li class="heading">
-				<h3 class="uppercase"></h3>
-			</li>
-			<li class="last">
-				<a n:href=":Front:Homepage:">
-					<i class="icon-globe"></i> 
-					<span class="title">{_'Online Store'}</span>
-					<span class="selected"></span>
-				</a>
 			</li>
 			<!-- END TOGETHER AREA -->
 		</ul>
