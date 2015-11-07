@@ -54,12 +54,18 @@ class CategoryRepository extends BaseRepository
 	 * @param string $lang
 	 * @return Category
 	 */
-	public function findOneByName($name, $lang = NULL)
+	public function findOneByName($name, $lang = NULL, $parent = NULL)
 	{
 		$qb = $this->createQueryBuilder('c')
 				->join('c.translations', 't')
 				->where('t.name = :name')
 				->setParameter('name', $name);
+		if ($parent) {
+			$qb->andWhere('c.parent = :parent')
+					->setParameter('parent', $parent);
+		} else {
+			$qb->andWhere('c.parent IS NULL');
+		}
 		if ($lang) {
 			$qb->andWhere('t.locale = :lang')
 					->setParameter('lang', $lang);
