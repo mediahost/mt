@@ -702,6 +702,7 @@ class ProductList extends Control
 	protected function filterOnlyActive()
 	{
 		$this->qb
+				->andWhere('s.active = :active')
 				->andWhere('p.active = :active')
 				->setParameter('active', TRUE);
 
