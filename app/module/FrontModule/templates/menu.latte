@@ -5,77 +5,14 @@
 		{if $menuCategories->category1}
 			{include categoryLink, category => $menuCategories->category1}
 		{/if}
-		<li class="dropdown dropdown-megamenu">
-			<a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">Příslušenstvo</a>
-			<ul class="dropdown-menu">
-                <li>
-					<div class="header-navigation-content">
-						<div class="row">
-							<div class="col-md-4 header-navigation-col">
-								<h4>Footwear</h4>
-								<ul>
-									<li><a n:href="this">Astro Trainers</a></li>
-									<li><a n:href="this">Basketball Shoes</a></li>
-									<li><a n:href="this">Boots</a></li>
-									<li><a n:href="this">Canvas Shoes</a></li>
-									<li><a n:href="this">Football Boots</a></li>
-									<li><a n:href="this">Golf Shoes</a></li>
-									<li><a n:href="this">Hi Tops</a></li>
-									<li><a n:href="this">Indoor and Court Trainers</a></li>
-								</ul>
-							</div>
-							<div class="col-md-4 header-navigation-col">
-								<h4>Clothing</h4>
-								<ul>
-									<li><a n:href="this">Base Layer</a></li>
-									<li><a n:href="this">Character</a></li>
-									<li><a n:href="this">Chinos</a></li>
-									<li><a n:href="this">Combats</a></li>
-									<li><a n:href="this">Cricket Clothing</a></li>
-									<li><a n:href="this">Fleeces</a></li>
-									<li><a n:href="this">Gilets</a></li>
-									<li><a n:href="this">Golf Tops</a></li>
-								</ul>
-							</div>
-							<div class="col-md-4 header-navigation-col">
-								<h4>Accessories</h4>
-								<ul>
-									<li><a n:href="this">Belts</a></li>
-									<li><a n:href="this">Caps</a></li>
-									<li><a n:href="this">Gloves, Hats and Scarves</a></li>
-								</ul>
-
-								<h4>Clearance</h4>
-								<ul>
-									<li><a n:href="this">Jackets</a></li>
-									<li><a n:href="this">Bottoms</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-                </li>
-			</ul>
-		</li>
-		<li class="dropdown dropdown100 nav-catalogue">
-			<a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">Výkup telefonov</a>
-			<ul class="dropdown-menu">
-                <li>
-					<div class="header-navigation-content">
-						<div class="row">
-							<div class="col-md-3 col-sm-4 col-xs-6" n:foreach="$newStocks as $stock">
-								{continueIf $iterator->counter > 4}
-								<div class="product-item-container">
-									{control stock-$stock->id}
-								</div>
-							</div>
-						</div>
-					</div>
-                </li>
-			</ul>
-		</li>
+		{if $menuCategories->category2}
+			{include categoryLink, category => $menuCategories->category2}
+		{/if}
 		<li n:if="$menuPages->page1">{include pageLink, page => $menuPages->page1}</li>
 		<li n:if="$menuPages->page2">{include pageLink, page => $menuPages->page2}</li>
 		<li n:if="$menuPages->page3">{include pageLink, page => $menuPages->page3}</li>
+		<li n:if="$menuPages->page4">{include pageLink, page => $menuPages->page4}</li>
+		<li n:if="$menuPages->page5">{include pageLink, page => $menuPages->page5}</li>
 	</ul>
 </div>
 <!-- END NAVIGATION -->
@@ -97,6 +34,7 @@
 		<li n:foreach="$category->children as $children">
 			{? $children->setCurrentLocale($lang)}
 			<a n:href="Category: $children->id">{$children}</a>
+			{breakIf $iterator->counter >= 10}
 		</li>
 	</ul>
 	<!-- END DROPDOWN MENU -->
