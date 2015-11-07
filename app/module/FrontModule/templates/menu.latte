@@ -2,33 +2,9 @@
 <!-- BEGIN NAVIGATION -->
 <div class="header-navigation">
 	<ul>
-		<li class="dropdown">
-			<a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">Zľavy a akce</a>
-			<!-- BEGIN DROPDOWN MENU -->
-			<ul class="dropdown-menu">
-                <li><a n:href="this">Running Shoes</a></li>
-                <li class="dropdown-submenu">
-					<a n:href="this">Hi Tops <i class="fa fa-angle-right"></i></a>
-					<ul class="dropdown-menu" role="menu">
-						<li><a n:href="this">Second Level Link</a></li>
-						<li><a n:href="this">Second Level Link</a></li>
-						<li class="dropdown-submenu">
-							<a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">
-								Second Level Link 
-								<i class="fa fa-angle-right"></i>
-							</a>
-							<ul class="dropdown-menu">
-								<li><a n:href="this">Third Level Link</a></li>
-								<li><a n:href="this">Third Level Link</a></li>
-								<li><a n:href="this">Third Level Link</a></li>
-							</ul>
-						</li>
-					</ul>
-                </li>
-                <li><a n:href="this">Jackets and Coats</a></li>
-			</ul>
-			<!-- END DROPDOWN MENU -->
-		</li>
+		{if $menuCategories->category1}
+			{include categoryLink, category => $menuCategories->category1}
+		{/if}
 		<li class="dropdown dropdown-megamenu">
 			<a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="#">Příslušenstvo</a>
 			<ul class="dropdown-menu">
@@ -108,4 +84,21 @@
 {define pageLink}
 {? $page->setCurrentLocale($lang)}
 <a {if $page->isInterLink()}href="{link $page->link}"{else}href="{link Page: $page->id}"{/if}>{$page}</a>
+{/define}
+
+{define categoryLink}
+{? $category->setCurrentLocale($lang)}
+<li n:class="$category->hasChildren ? dropdown">
+	<a n:class="$category->hasChildren ? dropdown-toggle" 
+	   {if $category->hasChildren}data-toggle="dropdown"{/if} 
+	   n:href="Category: $category->id">{$category}</a>
+	<!-- BEGIN DROPDOWN MENU -->
+	<ul n:if="$category->hasChildren" class="dropdown-menu">
+		<li n:foreach="$category->children as $children">
+			{? $children->setCurrentLocale($lang)}
+			<a n:href="Category: $children->id">{$children}</a>
+		</li>
+	</ul>
+	<!-- END DROPDOWN MENU -->
+</li>
 {/define}

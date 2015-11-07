@@ -137,6 +137,10 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	protected function loadTemplateMenu()
 	{
+		$categoryRepo = $this->em->getRepository(Category::getClassName());
+		$this->template->menuCategories = ArrayHash::from([
+					'category1' => $categoryRepo->find(355),
+		]);
 		$pageRepo = $this->em->getRepository(Page::getClassName());
 		$this->template->menuPages = ArrayHash::from([
 					'page1' => $pageRepo->find(3),
