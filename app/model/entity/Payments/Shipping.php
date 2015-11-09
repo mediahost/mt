@@ -108,8 +108,8 @@ class Shipping extends BaseTranslatable
 		$specialLimit = new Price($this->vat, self::SPECIAL_LIMIT, FALSE);
 		$specialPrice = new Price($this->vat, self::SPECIAL_PRICE, FALSE);
 		if ($basket->hasItemInSpecialCategory()) {
-			$specialSum = $basket->getSumOfItemsInSpecialCategory($level, FALSE);
-			if ($specialSum <= $specialLimit->withoutVat && $this->price > $specialPrice->withoutVat) {
+			$specialSum = $basket->getSumOfItemsInSpecialCategory($level, TRUE);
+			if ($specialSum <= $specialLimit->withVat && $this->price > $specialPrice->withVat) {
 				$price = $specialPrice->withoutVat;
 			}
 		}
@@ -128,8 +128,8 @@ class Shipping extends BaseTranslatable
 	{
 		$specialLimit = new Price($this->vat, self::SPECIAL_LIMIT, FALSE);
 		if ($basket->hasItemInSpecialCategory()) {
-			$specialSum = $basket->getSumOfItemsInSpecialCategory($level, FALSE);
-			if ($specialSum > $specialLimit->withoutVat) {
+			$specialSum = $basket->getSumOfItemsInSpecialCategory($level, TRUE);
+			if ($specialSum > $specialLimit->withVat) {
 				$price = 0;
 			}
 		}
@@ -138,7 +138,7 @@ class Shipping extends BaseTranslatable
 
 	private function applyFree($price, Basket $basket, $level = NULL)
 	{
-		if ($this->freePrice > 0 && $basket->getItemsTotalPrice(NULL, $level, FALSE) > $this->freePrice) {
+		if ($this->freePrice > 0 && $basket->getItemsTotalPrice(NULL, $level, TRUE) > $this->freePrice) {
 			$price = 0;
 		}
 		return $price;

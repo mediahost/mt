@@ -47,10 +47,10 @@ class CartPresenter extends BasePresenter
 		$shippingRepo = $this->em->getRepository(Shipping::getClassName());
 		$shipping = $shippingRepo->find(Shipping::DPD);
 
-		$freeShippingPrice = $shipping->freePrice->withoutVat;
+		$freeShippingPrice = $shipping->freePrice->withVat;
 		$specialFreeShippingPrice = Shipping::SPECIAL_LIMIT;
-		$productsTotal = $basket->getItemsTotalPrice(NULL, $this->priceLevel, FALSE);
-		$specialTotal = $basket->getSumOfItemsInSpecialCategory($this->priceLevel, FALSE);
+		$productsTotal = $basket->getItemsTotalPrice(NULL, $this->priceLevel, TRUE);
+		$specialTotal = $basket->getSumOfItemsInSpecialCategory($this->priceLevel, TRUE);
 
 		$buyMore = $freeShippingPrice - $productsTotal;
 		$buySpecialMore = $specialFreeShippingPrice - $specialTotal;
