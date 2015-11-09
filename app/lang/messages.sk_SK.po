@@ -1232,6 +1232,18 @@ msgstr "Ok - Prevzaté"
 msgid "canceled"
 msgstr "Zrušené"
 
+msgid "Payment date"
+msgstr "Dátum zaplatenia"
+
+msgid "Not yet paid"
+msgstr "Doteraz nezaplatené"
+
+msgid "Set as paid"
+msgstr "Označiť ako zaplatené"
+
+msgid "Paid"
+msgstr "Zaplatené"
+
 msgid "Currency"
 msgstr "Mena"
 
