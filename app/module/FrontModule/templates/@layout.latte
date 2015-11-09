@@ -8,15 +8,15 @@
 
 	<!-- BEGIN HEAD -->
 	<head>
-		<title>{block title|striptags}{$pageInfo->projectName}{/block}</title>
+		<title>{ifset $pageTitle}{$pageTitle} | {/ifset}{block title|striptags}{$pageInfo->projectName}{/block}</title>
 		
 		<meta charset="utf-8"/>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 		<meta name="robots" content="noindex,nofollow">
-		<meta content="" name="description"/>
-		<meta content="" name="keywords">
-		<meta content="" name="author"/>
+		<meta name="description" content="{$pageDescription|striptags}"/>
+		<meta name="keywords" content="{$pageKeywords}">
+		<meta name="author" content="{$pageInfo->author}"/>
 
 		<meta property="og:type" content="website">
 		<meta property="og:site_name" content="{$pageInfo->projectName}">

@@ -129,6 +129,11 @@
 			"Producers:renameProducer": {{link //:Ajax:Producers:renameProducer}},
 			"Producers:deleteProducer": {{link //:Ajax:Producers:deleteProducer}},
 			"Buyout:default": {{link //:App:Buyout:default}}
+		},
+		"applets": {
+			"googleAnalytics": {{ifset $googleAnalyticsCode}}{{$googleAnalyticsCode}}{{else}}""{{/ifset}},
+			"smartSupp": {{ifset $smartSuppKey}}{{$smartSuppKey}}{{else}}""{{/ifset}},
+			"facebookApplet": {{ifset $facebookAppletId}}{{$facebookAppletId}}{{else}}""{{/ifset}}
 		}
 	}
 </script>

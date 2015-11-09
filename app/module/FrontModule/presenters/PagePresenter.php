@@ -19,6 +19,9 @@ class PagePresenter extends BasePresenter
 	{
 		$this->page->setCurrentLocale($this->locale);
 		$this->template->page = $this->page;
+		$this->changePageInfo(self::PAGE_INFO_TITLE, $this->page);
+		$this->changePageInfo(self::PAGE_INFO_KEYWORDS, $this->page);
+		$this->changePageInfo(self::PAGE_INFO_DESCRIPTION, $this->page);
 	}
 	
 	public function actionTerms()

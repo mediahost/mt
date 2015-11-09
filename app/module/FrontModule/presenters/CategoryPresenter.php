@@ -37,15 +37,25 @@ class CategoryPresenter extends BasePresenter
 		/* @var $products ProductList */
 		$products = $this['products'];
 		
+		$title = NULL;
+		$keywords = $description = [];
 		if ($this->category) {
 			$products->addFilterCategory($this->category);
 			$this->template->category = $this->category;
 			$this->template->subcategories = $this->subcategories;
+			$title = $this->category->getTreeName(' | ', TRUE);
+			$keywords = $this->category->getTreeName(', ', TRUE);
+			$description = $this->category->getTreeName(' - ');
 		}
 		if ($this->searched) {
 			$products->addFilterFulltext($this->searched);
 			$this->template->searched = $this->searched;
+			$title = $keywords = $description = $this->searched;
 		}
+		
+		$this->changePageInfo(self::PAGE_INFO_TITLE, $title);
+		$this->changePageInfo(self::PAGE_INFO_KEYWORDS, $keywords);
+		$this->changePageInfo(self::PAGE_INFO_DESCRIPTION, $description);
 	}
 
 	public function actionSearch($text)
