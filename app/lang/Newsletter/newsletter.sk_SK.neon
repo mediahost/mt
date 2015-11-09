@@ -21,6 +21,7 @@ admin:
 				type: 'Príjemcovia'
 				locale: 'Jazyk'
 				status: 'Stav'
+				stats: 'Počet odoslaných'
 			types:
 				users: 'používatelia'
 				dealers: 'díleri'
@@ -100,7 +101,7 @@ message:
 	base:
 		layout:
 			unsubscribe: 'Pokiaľ si už neželáte dostávať ďalšie správy, môžete sa %ahref%odhlásit</a> z odberu.'
-			webview: Zobraziť v prehliadači'
+			webview: 'Zobraziť v prehliadači'
 		footer:
 			address:
 				alt: 'Adresa'
