@@ -70,6 +70,11 @@ class Parameter extends BaseTranslatable
 		return NULL;
 	}
 	
+	public function getTypeIsBool()
+	{
+		return $this->getType() === self::BOOLEAN;
+	}
+	
 	public function isNew()
 	{
 		return $this->id === NULL;

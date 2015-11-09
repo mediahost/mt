@@ -5,6 +5,7 @@ namespace App\FrontModule\Presenters;
 use App\Components\Basket\Form\AddToCart;
 use App\Components\Basket\Form\IAddToCartFactory;
 use App\Extensions\Products\ProductList;
+use App\Model\Entity\Parameter;
 use App\Model\Entity\Stock;
 use Nette\Application\BadRequestException;
 use Nette\Application\Responses\JsonResponse;
@@ -30,6 +31,9 @@ class ProductPresenter extends BasePresenter
 			throw new BadRequestException;
 		}
 
+		$paramRepo = $this->em->getRepository(Parameter::getClassName());
+		$allParams = $paramRepo->findAll();
+
 		$product->setCurrentLocale($this->locale);
 
 		$this->stock = $product->stock;
@@ -37,6 +41,7 @@ class ProductPresenter extends BasePresenter
 		$this->activeCategory = $product->mainCategory;
 		$this->template->product = $product;
 		$this->template->stock = $this->stock;
+		$this->template->params = $allParams;
 
 		// Last visited
 		$this->user->storage->addVisited($this->stock);
