@@ -41,7 +41,7 @@
 								{$order->createdAt|date:'d.m.Y'}
 							</td>
 							<td>
-								{_'order.state.type.headline.type_' . $order->state->type->id}
+								<a n:href="MyAccount:order $order->id">{_'order.state.type.headline.type_' . $order->state->type->id}</a>
 							</td>
 						</tr>
 					</tbody>
