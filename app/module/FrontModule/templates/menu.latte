@@ -25,18 +25,7 @@
 
 {define categoryLink}
 {? $category->setCurrentLocale($lang)}
-<li n:class="$category->hasChildren ? dropdown">
-	<a n:class="$category->hasChildren ? dropdown-toggle" 
-	   {if $category->hasChildren}data-toggle="dropdown"{/if} 
-	   n:href="Category: $category->id">{$category}</a>
-	<!-- BEGIN DROPDOWN MENU -->
-	<ul n:if="$category->hasChildren" class="dropdown-menu">
-		<li n:foreach="$category->children as $children">
-			{? $children->setCurrentLocale($lang)}
-			<a n:href="Category: $children->id">{$children}</a>
-			{breakIf $iterator->counter >= 10}
-		</li>
-	</ul>
-	<!-- END DROPDOWN MENU -->
+<li>
+	<a n:href="Category: $category->id">{$category}</a>
 </li>
 {/define}
