@@ -64,6 +64,7 @@ class OrdersPresenter extends BasePresenter
 	{
 		$this->orderEntity = $this->orderRepo->find($id);
 		if (!$this->orderEntity) {
+			$this->exchange->setWeb($this->orderEntity->currency);
 			$message = $this->translator->translate('wasntFoundShe', NULL, ['name' => $this->translator->translate('Order')]);
 			$this->flashMessage($message, 'warning');
 			$this->redirect('default');
