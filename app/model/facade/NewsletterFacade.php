@@ -83,7 +83,7 @@ class NewsletterFacade extends Object
 			}
 		} elseif (is_string($identifier)) {
 			$subscriber = $this->findSubscriber($identifier);
-
+			
 			if ($subscriber === NULL) {
 				return;
 			}
@@ -102,7 +102,7 @@ class NewsletterFacade extends Object
 		}
 
 		if ($user !== NULL) {
-			$user->subscriber = NULL;
+			$user->removeSubscriber();
 			$this->em->persist($user);
 		}
 
