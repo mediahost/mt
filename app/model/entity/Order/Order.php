@@ -333,8 +333,8 @@ class Order extends BaseEntity
 			$this->setPayment($basket->payment);
 		}
 		$this->mail = $basket->mail;
-		$this->billingAddress = $basket->billingAddress;
-		$this->shippingAddress = $basket->shippingAddress;
+		$this->billingAddress = $basket->billingAddress ? clone $basket->billingAddress : NULL;
+		$this->shippingAddress = $basket->shippingAddress ? clone $basket->shippingAddress : NULL;
 
 		return $this;
 	}
