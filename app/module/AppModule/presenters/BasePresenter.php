@@ -6,6 +6,12 @@ use App\BaseModule\Presenters\BasePresenter as BaseBasePresenter;
 
 abstract class BasePresenter extends BaseBasePresenter
 {
+	
+	protected function startup()
+	{
+		parent::startup();
+		$this->exchange->setWeb($this->exchange->getDefault()->getCode());
+	}
 
 	public function handleToggleSidebar($value)
 	{
