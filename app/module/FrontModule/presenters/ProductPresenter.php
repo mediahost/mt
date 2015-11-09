@@ -46,6 +46,16 @@ class ProductPresenter extends BasePresenter
 		// Last visited
 		$this->user->storage->addVisited($this->stock);
 	}
+	
+	public function renderDefault()
+	{
+		$name = $this->template->product->seo->name ? $this->template->product->seo->name : $this->template->product;
+		$keywords = $this->template->product->seo->keywords ? $this->template->product->seo->keywords : $this->template->product;
+		$description = $this->template->product->seo->description ? $this->template->product->seo->description : $this->template->product;
+		$this->changePageInfo(self::PAGE_INFO_TITLE, $name);
+		$this->changePageInfo(self::PAGE_INFO_KEYWORDS, $keywords);
+		$this->changePageInfo(self::PAGE_INFO_DESCRIPTION, $description);
+	}
 
 	public function actionSearchJson($text, $getProductId = TRUE, $page = 1, $perPage = 10)
 	{

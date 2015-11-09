@@ -13,6 +13,7 @@ use App\Components\Product\Form\IPrintStockFactory;
 use App\Extensions\Products\IProductListFactory;
 use App\Extensions\Products\ProductList;
 use App\Forms\Form;
+use App\Helpers;
 use App\Model\Entity\Category;
 use App\Model\Entity\Page;
 use App\Model\Entity\Producer;
@@ -28,6 +29,10 @@ use Nette\Utils\ArrayHash;
 
 abstract class BasePresenter extends BaseBasePresenter
 {
+
+	const PAGE_INFO_TITLE = 'title';
+	const PAGE_INFO_KEYWORDS = 'keywords';
+	const PAGE_INFO_DESCRIPTION = 'description';
 
 	/** @var IModelSelectorFactory @inject */
 	public $iModelSelectorFactory;
@@ -103,10 +108,31 @@ abstract class BasePresenter extends BaseBasePresenter
 
 		$this->template->basket = $this->basketFacade;
 
+		$this->template->pageKeywords = $this->settings->pageInfo->keywords;
+		$this->template->pageDescription = $this->settings->pageInfo->description;
+
 		$this->loadTemplateMenu();
 		$this->loadTemplateCategoriesSettings();
 		$this->loadTemplateSigns();
 		$this->loadTemplateProducers();
+		$this->loadTemplateApplets();
+	}
+
+	public function changePageInfo($type, $content)
+	{
+		if ($content) {
+			switch ($type) {
+				case self::PAGE_INFO_TITLE:
+					$this->template->pageTitle = $content;
+					break;
+				case self::PAGE_INFO_DESCRIPTION:
+					$this->template->pageDescription = Helpers::concatStrings(' | ', $content, $this->template->pageDescription);
+					break;
+				case self::PAGE_INFO_KEYWORDS:
+					$this->template->pageKeywords = Helpers::concatStrings(', ', $content, $this->template->pageKeywords);
+					break;
+			}
+		}
 	}
 
 	public function handleSignOut()
@@ -191,6 +217,19 @@ abstract class BasePresenter extends BaseBasePresenter
 		$producerRepo = $this->em->getRepository(Producer::getClassName());
 		$producers = $producerRepo->findAll();
 		$this->template->producers = $producers;
+	}
+
+	protected function loadTemplateApplets()
+	{
+		if ($this->settings->modules->googleAnalytics->enabled) {
+			$this->template->googleAnalyticsCode = $this->settings->modules->googleAnalytics->code;
+		}
+		if ($this->settings->modules->smartSupp->enabled) {
+			$this->template->smartSuppKey = $this->settings->modules->smartSupp->key;
+		}
+		if ($this->settings->modules->facebookApplet->enabled) {
+			$this->template->facebookAppletId = $this->settings->modules->facebookApplet->id;
+		}
 	}
 
 	// <editor-fold desc="forms">

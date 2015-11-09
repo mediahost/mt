@@ -104,15 +104,29 @@ class SettingsExtension extends CompilerExtension
 				'enabled' => FALSE,
 				'email' => 'newsletter@example.sk',
 			],
+			'googleAnalytics' => [
+				'enabled' => FALSE,
+				'code' => NULL,
+			],
+			'smartSupp' => [
+				'enabled' => FALSE,
+				'key' => NULL,
+			],
+			'facebookApplet' => [
+				'enabled' => FALSE,
+				'id' => NULL,
+			],
 		],
 		'pageInfo' => [
 			'projectName' => 'projectName',
-			'author' => 'author',
+			'author' => 'Mediahost.sk',
+			'authorUrl' => 'http://www.mediahost.sk/',
+			'keywords' => 'keywords',
 			'description' => 'description',
-			'termPageId' => 1,
-			'complaintPageId' => 1,
-			'contactPageId' => 1,
-			'orderByPhonePageId' => 1,
+			'termPageId' => 1, // TODO: move to pageConfig
+			'complaintPageId' => 1, // TODO: move to pageConfig
+			'contactPageId' => 1, // TODO: move to pageConfig
+			'orderByPhonePageId' => 1, // TODO: move to pageConfig
 		],
 		'pageConfig' => [
 			'itemsPerRow' => 3,

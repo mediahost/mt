@@ -37,9 +37,9 @@ trait CategoryBase
 	 * - in order from top to this category
 	 * @return array
 	 */
-	public function getPath()
+	public function getPath($reverse = FALSE)
 	{
-		return array_reverse($this->getParents());
+		return $reverse ? $this->getParents() : array_reverse($this->getParents());
 	}
 
 	/**
@@ -47,10 +47,17 @@ trait CategoryBase
 	 * - in order from top to this category
 	 * @return array
 	 */
-	public function getPathWithThis()
+	public function getPathWithThis($reverse = FALSE)
 	{
-		$path = $this->getPath();
-		$path[$this->id] = $this;
+		if ($reverse) {
+			$path = [
+				$this->id => $this,
+			];
+			$path += $this->getPath($reverse);
+		} else {
+			$path = $this->getPath($reverse);
+			$path[$this->id] = $this;
+		}
 		return $path;
 	}
 
@@ -111,9 +118,9 @@ trait CategoryBase
 	/**
 	 * Return name with path to root parent
 	 */
-	public function getTreeName($glue = '/')
+	public function getTreeName($glue = '/', $reverse = FALSE)
 	{
-		$path = $this->getPathWithThis();
+		$path = $this->getPathWithThis($reverse);
 		return Helpers::concatStrings($glue, $path);
 	}
 
