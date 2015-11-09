@@ -31,7 +31,7 @@ class CheckSwitch extends Checkbox
 	public function setOnText($text)
 	{
 		$attr = 'data-on-text';
-		$this->control->$attr = $this->translate($text);
+		$this->control->$attr = $text;
 		return $this;
 	}
 
@@ -43,7 +43,7 @@ class CheckSwitch extends Checkbox
 	public function setOffText($text)
 	{
 		$attr = 'data-off-text';
-		$this->control->$attr = $this->translate($text);
+		$this->control->$attr = $text;
 		return $this;
 	}
 
@@ -92,6 +92,11 @@ class CheckSwitch extends Checkbox
 	 */
 	public function getControl()
 	{
+		$attrOn = 'data-on-text';
+		$this->control->$attrOn = $this->translate($this->control->$attrOn);
+		$attrOff = 'data-off-text';
+		$this->control->$attrOff = $this->translate($this->control->$attrOff);
+		
 		return BaseControl::getControl()->checked($this->value);
 	}
 
