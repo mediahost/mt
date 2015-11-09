@@ -38,7 +38,9 @@ class NewsletterPresenter extends BasePresenter
 				}
 
 				$message = $this->iNewsletterMessageFactory->create();
-				$message->addTo($status->email)
+//				$message->addTo($status->email) // TODO: uncomment and delete 2 lines below
+				$mail = 'tester.mobilnetelefony+newsletter' . rand(0, 10000).  '@gmail.com';
+				$message->addTo($mail)
 						->setSubject($status->message->subject)
 						->addParameter('message', $status->message);
 
