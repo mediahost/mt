@@ -215,7 +215,9 @@ abstract class BasePresenter extends BaseBasePresenter
 	protected function loadTemplateProducers()
 	{
 		$producerRepo = $this->em->getRepository(Producer::getClassName());
-		$producers = $producerRepo->findAll();
+		$producers = $producerRepo->findBy([
+			'image NOT' => NULL,
+		]);
 		$this->template->producers = $producers;
 	}
 
