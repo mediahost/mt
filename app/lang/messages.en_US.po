@@ -1276,6 +1276,18 @@ msgstr "Ok - Taken"
 msgid "canceled"
 msgstr "Canceled"
 
+msgid "Payment date"
+msgstr "Payment date"
+
+msgid "Not yet paid"
+msgstr "Not yet paid"
+
+msgid "Set as paid"
+msgstr "Set as paid"
+
+msgid "Paid"
+msgstr "Paid"
+
 msgid "Currency"
 msgstr "Currency"
 

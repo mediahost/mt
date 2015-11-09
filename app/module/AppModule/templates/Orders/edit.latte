@@ -22,11 +22,6 @@
 				{include status}
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-md-12">
-				{include paying}
-			</div>
-		</div>
 	</div>
 </div>
 <div class="row">
@@ -107,26 +102,21 @@
 	</div>
 	<div class="portlet-body form">
 		{control changeStateForm}
-	</div>
-</div>
-{/define}
 
-{define paying}
-<div class="portlet light">
-	<div class="portlet-title">
-		<div class="caption font-green-sharp">
-			<i class="fa fa-edit font-green-sharp"></i>
-			<span class="caption-subject bold uppercase">
-				{_'Payment date'}
-			</span>
-		</div>
-	</div>
-	<div class="portlet-body form">
 		{if $order->paymentDate}
-			{$order->paymentDate|date:'d.m.Y'} ({$order->paymentBlameName})
+			<div class="note note-info">
+				<h4 class="block">{_'Paid'}</h4>
+				<p>
+					{$order->paymentDate|date:'d.m.Y'} ({$order->paymentBlameName})
+				</p>
+			</div>
 		{else}
-			<p>{_'Not yet paid'}</p>
-			<a n:href="paid!" class="btn btn-primary">{_'Set as paid'}</a>
+			<div class="note note-warning">
+				<h4 class="block">{_'Not yet paid'}</h4>
+				<p>
+					<a n:href="paid!" class="btn btn-primary">{_'Set as paid'}</a>
+				</p>
+			</div>
 		{/if}
 	</div>
 </div>
