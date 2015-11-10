@@ -135,7 +135,7 @@ class Basket extends BaseEntity
 		$isInSpecialCategory = function ($key, BasketItem $item) use ($specialCategories, &$sum, $level, $withVat) {
 			if ($item->stock->product->isInCategories($specialCategories)) {
 				$price = $item->stock->getPrice($level);
-				$sum += $withVat ? $price->withVat : $price->withoutVat;
+				$sum += ($withVat ? $price->withVat : $price->withoutVat)  * $item->quantity;
 			}
 			return TRUE;
 		};

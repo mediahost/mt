@@ -139,18 +139,32 @@ class OrderProductsEdit extends BaseControl
 				$form['new']->addError($message);
 			}
 		}
+		$stocks = [];
+		$quantities = [];
+		foreach ($this->order->items as $orderItem) {
+			$stocks[] = $orderItem->stock;
+			$quantities[$orderItem->stock->id] = $orderItem->quantity;
+		}
 		if ($values->shipping) {
 			$shippingRepo = $this->em->getRepository(Shipping::getClassName());
 			$shipping = $shippingRepo->find($values->shipping);
 			if ($shipping) {
+				$originalPrice = $shipping->price;
+				$customPrice = $shipping->getPriceByStocks($stocks, $quantities);
+				$shipping->setPrice($customPrice->withoutVat, FALSE);
 				$this->order->shipping = $shipping;
+				$shipping->price = $originalPrice->withoutVat;
 			}
 		}
 		if ($values->payment) {
 			$paymentRepo = $this->em->getRepository(Payment::getClassName());
 			$payment = $paymentRepo->find($values->payment);
 			if ($payment) {
+				$originalPrice = $payment->price;
+				$customPrice = $payment->getPriceByStocks($stocks, $quantities);
+				$payment->setPrice($customPrice->withoutVat, FALSE);
 				$this->order->payment = $payment;
+				$payment->price = $originalPrice->withoutVat;
 			}
 		}
 
