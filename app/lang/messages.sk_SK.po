@@ -114,7 +114,7 @@ msgid "Terms of Use"
 msgstr "Podmienky používania"
 
 msgid "Thank you for joining the %name%"
-msgstr "Ďakujeme Vám, že ste sa pridali do vernostného programu %name%"
+msgstr "Ďakujeme za registráciu!"
 
 msgid "Your registration was successfull."
 msgstr "Vaša registrácia prebehla úspešne."
