@@ -10,6 +10,7 @@ order:
 	wasntFoundWasExecuted: 'Požadovaná objednávka již byla vyřízena.'
 	invoiceAddress: 'Fakturační adresa'
 	shippingAddress: 'Dodací adresa'
+	personal: 'K vyzvednutí osobně'
 	contact: 'Kontaktní údaje'
 
 form:
