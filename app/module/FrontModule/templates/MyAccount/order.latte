@@ -13,31 +13,37 @@
 		<div class="col-md-9 col-sm-7">
 			<div class="cart-page">
 				<div class="cart-content summary-data goods-data">
-					
+
 					{$order->setExchangeRate($exchange, TRUE)}
-					
+
 					<div class="note note-info">
 						<h2 class="block" n:if="$order->needPin">{_'PIN'}: {$order->pin}</h2>
 						<h4 class="block">{_'order.state.type.headline.type_' . $order->state->type->id}</h4>
 						<p>
-							 {_'order.state.type.comment.type_' . $order->state->type->id}
+							{_'order.state.type.comment.type_' . $order->state->type->id}
 						</p>
 					</div>
-					
+
 					<fieldset class="adresses">
 						<legend>{_'cart.headline.summaryNumber', NULL, ['number' => $order->id]}</legend>
-						
+
 						<div class="row">
-							<div class="col-md-4 col-sm-6 block"  n:if="$order->billingAddress && $order->billingAddress->isFilled()">
+							{var existBilling => $order->billingAddress && $order->billingAddress->isFilled()}
+							{var existShipping => $order->shippingAddress || $existBilling}
+							<div class="col-md-4 col-sm-6 block"  n:if="$existBilling">
 								<h5>{_'cart.order.invoiceAddress'}</h5>
 								<p>
 									{$order->billingAddress->format()|noescape}
 								</p>
 							</div>
-							<div class="col-md-4 col-sm-6 block" n:if="$order->shippingAddress">
+							<div class="col-md-4 col-sm-6 block" n:if="$existShipping">
 								<h5>{_'cart.order.shippingAddress'}</h5>
 								<p>
-									{$order->shippingAddress->format()|noescape}
+									{if $order->shippingAddress}
+										{$order->shippingAddress->format()|noescape}
+									{elseif $existBilling}
+										{$order->billingAddress->format()|noescape}
+									{/if}
 								</p>
 							</div>
 							<div class="col-md-4 col-sm-6 block">
@@ -46,6 +52,9 @@
 									{_'Phone'}: {$order->phone}<br />
 									{_'Mail'}: {$order->mail}
 								</p>
+							</div>
+							<div class="col-md-4 col-sm-6 block" n:if="!$existBilling && !$existShipping">
+								<h5>{_'cart.order.personal'}</h5>
 							</div>
 						</div>
 					</fieldset>

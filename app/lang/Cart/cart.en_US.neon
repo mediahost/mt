@@ -10,6 +10,7 @@ order:
 	wasntFoundWasExecuted: 'Requested order was already executed'
 	invoiceAddress: 'Invoice Address'
 	shippingAddress: 'Shipping Address'
+	personal: 'To pick up personally'
 	contact: 'Contact'
 
 form:

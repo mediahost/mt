@@ -59,7 +59,9 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-6" n:if="$order->billingAddress && $order->billingAddress->isFilled()">
+			{var existBilling => $order->billingAddress && $order->billingAddress->isFilled()}
+			{var existShipping => $order->shippingAddress || $existBilling}
+			<div class="col-md-6" n:if="$existBilling">
 				<h4 class="block">{_'cart.order.invoiceAddress'}</h4>
 				<div class="row static-info">
 					<div class="col-md-12 value">
@@ -67,13 +69,20 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6" n:if="$order->shippingAddress">
+			<div class="col-md-6" n:if="$existShipping">
 				<h4 class="block">{_'cart.order.shippingAddress'}</h4>
 				<div class="row static-info">
 					<div class="col-md-12 value">
-						{$order->shippingAddress->format()|noescape}
+						{if $order->shippingAddress}
+							{$order->shippingAddress->format()|noescape}
+						{elseif $existBilling}
+							{$order->billingAddress->format()|noescape}
+						{/if}
 					</div>
 				</div>
+			</div>
+			<div class="col-md-6" n:if="!$existBilling && !$existShipping">
+				<h4 class="block">{_'cart.order.personal'}</h4>
 			</div>
 		</div>
 		<div class="row">
