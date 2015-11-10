@@ -85,6 +85,10 @@ class ServicePresenter extends BasePresenter
 			$this->model->setCurrentLocale($this->locale);
 		}
 		$this->template->model = $this->model;
+		
+		$this->changePageInfo(self::PAGE_INFO_TITLE, $this->page);
+		$this->changePageInfo(self::PAGE_INFO_KEYWORDS, $this->page);
+		$this->changePageInfo(self::PAGE_INFO_DESCRIPTION, $this->page);
 
 		if ($this->isAjax()) {
 			$this->redrawControl();

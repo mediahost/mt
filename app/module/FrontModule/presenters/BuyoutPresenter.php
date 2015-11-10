@@ -60,6 +60,10 @@ class BuyoutPresenter extends BasePresenter
 	{
 		$this->template->page = $this->page;
 		$this->template->model = $this->model;
+		
+		$this->changePageInfo(self::PAGE_INFO_TITLE, $this->page);
+		$this->changePageInfo(self::PAGE_INFO_KEYWORDS, $this->page);
+		$this->changePageInfo(self::PAGE_INFO_DESCRIPTION, $this->page);
 	}
 
 	/** @return ModelSelector */

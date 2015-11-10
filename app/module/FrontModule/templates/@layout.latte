@@ -21,8 +21,8 @@
 		<meta property="og:type" content="website">
 		<meta property="og:site_name" content="{$pageInfo->projectName}">
 		<meta property="og:title" content="{include title}">
-		<meta property="og:description" content="">
-		<meta property="og:image" content="{link //:Foto:Foto:}">
+		<meta property="og:description" content="{$pageDescription|striptags}">
+		<meta property="og:image" content="{link //Homepage:}favicon.png">
 		<meta property="og:url" content="{link //this}">
 
 		{include cssMetronicCore}
