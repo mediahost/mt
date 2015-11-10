@@ -42,7 +42,6 @@ class Product extends BaseTranslatable
 
 	use Model\Translatable\Translatable;
 	use Model\Blameable\Blameable;
-	use Model\Loggable\Loggable;
 	use Model\Timestampable\Timestampable;
 	use Model\SoftDeletable\SoftDeletable;
 	use Traits\ProductCategories;
