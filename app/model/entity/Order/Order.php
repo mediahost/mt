@@ -328,15 +328,19 @@ class Order extends BaseEntity
 		}
 		if ($basket->shipping) {
 			$shipping = $basket->shipping;
+			$originalPrice = $shipping->price;
 			$customPrice = $shipping->getPrice($basket, $level);
 			$shipping->setPrice($customPrice->withoutVat, FALSE);
 			$this->setShipping($shipping);
+			$shipping->price = $originalPrice->withoutVat;
 		}
 		if ($basket->payment) {
 			$payment = $basket->payment;
+			$originalPrice = $payment->price;
 			$customPrice = $payment->getPrice($basket, $level);
 			$payment->setPrice($customPrice->withoutVat, FALSE);
 			$this->setPayment($payment);
+			$payment->price = $originalPrice->withoutVat;
 		}
 		$this->mail = $basket->mail;
 		$this->billingAddress = $basket->billingAddress ? clone $basket->billingAddress : NULL;

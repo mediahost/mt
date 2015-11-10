@@ -63,12 +63,13 @@ class Payment extends BaseTranslatable
 		return new Price($this->vat, $price);
 	}
 
-	public function getPriceByStocks(array $stocks)
+	public function getPriceByStocks(array $stocks, array $quantities = [])
 	{
 		$basket = new Basket();
 		foreach ($stocks as $stock) {
 			if ($stock instanceof Stock) {
-				$basket->setItem($stock, 1);
+				$quantity = array_key_exists($stock->id, $quantities) ? $quantities[$stock->id] : 1;
+				$basket->setItem($stock, $quantity);
 			}
 		}
 		return $this->getPrice($basket);
