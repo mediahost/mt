@@ -45,9 +45,8 @@
 
 		<!-- BEGIN CONTENT -->
 		<div class="col-md-9 col-sm-7">
-
+			<h2>{_'Select your accessories for...'}</h2>
 			<div class="model-selector clearfix" n:ifset="$accessoriesFor">
-				<h2>{_'Select your accessories for...'}</h2>
 				{control modelSelector}
 			</div>
 
@@ -68,8 +67,8 @@
 				</div>
 				<div class="col-lg-6">{control products:sorting}</div>
 			</div>
-			
-            <div class="sidebar-filter margin-bottom-25">
+
+			<div class="sidebar-filter margin-bottom-25">
 				<div class="subcategories row" n:if="isset($subcategories) && count($subcategories)">
 					<div class="col-md-3" n:foreach="$subcategories as $subcategory">
 						{? $subcategory->setCurrentLocale($lang)}
