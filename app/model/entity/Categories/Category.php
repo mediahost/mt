@@ -98,14 +98,13 @@ class Category extends BaseTranslatable
 	
 	public static function getSpecialCategories()
 	{
-		// TODO: fill by right IDS
-		$idNahradneDiely = 2;
-		$idPrislusenstvi = 3;
-		$idUsbKluce = 4;
-		$idPreServis = 5;
+		$idNahradneDiely = 74;
+		$idPrislusenstvo = 177;
+		$idUsbKluce = 331;
+		$idPreServis = 339;
 		return [
 			$idNahradneDiely,
-			$idPrislusenstvi,
+			$idPrislusenstvo,
 			$idUsbKluce,
 			$idPreServis,
 		];
