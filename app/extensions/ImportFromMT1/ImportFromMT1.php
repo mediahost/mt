@@ -8,12 +8,14 @@ use App\Model\Entity\Facebook;
 use App\Model\Entity\Group;
 use App\Model\Entity\Newsletter\Subscriber;
 use App\Model\Entity\Order;
+use App\Model\Entity\OrderState;
 use App\Model\Entity\Payment;
 use App\Model\Entity\Role;
 use App\Model\Entity\Shipping;
 use App\Model\Entity\Stock;
 use App\Model\Entity\Twitter;
 use App\Model\Entity\User;
+use App\Model\Entity\Vat;
 use App\Model\Facade\NewsletterFacade;
 use App\Model\Facade\UserFacade;
 use Doctrine\ORM\EntityManager;
@@ -34,6 +36,7 @@ class ImportFromMT1 extends Object
 	const TABLE_ORDER_ADDRESS = '`order_address`';
 	const TABLE_ORDER_PAYMENT = '`order_payment`';
 	const TABLE_ORDER_SHIPPING = '`order_shipping`';
+	const TABLE_ORDER_PARTS = '`order_parts`';
 	const TABLE_USER = '`user`';
 	const TABLE_AUTH = '`auth`';
 	const TABLE_PASSWORDS = '`user_passwords`';
@@ -179,9 +182,14 @@ class ImportFromMT1 extends Object
 		$tableOrderAddresses = $dbName . '.' . self::TABLE_ORDER_ADDRESS;
 		$tableOrderPayment = $dbName . '.' . self::TABLE_ORDER_PAYMENT;
 		$tableOrderShipping = $dbName . '.' . self::TABLE_ORDER_SHIPPING;
+		$tableOrderParts = $dbName . '.' . self::TABLE_ORDER_PARTS;
 
-		$userRepo = $this->em->getRepository(User::getClassName());
 		$orderTable = $this->em->getClassMetadata(Order::getClassName())->getTableName();
+		$stockRepo = $this->em->getRepository(Stock::getClassName());
+		$vatRepo = $this->em->getRepository(Vat::getClassName());
+		$stateRepo = $this->em->getRepository(OrderState::getClassName());
+		$userRepo = $this->em->getRepository(User::getClassName());
+		$admin = $userRepo->findOneByMail('superadmin');
 
 		$maxId = (int) $conn->executeQuery("SELECT MAX(id) FROM `order`")->fetchColumn();
 		$offset = 0;
@@ -337,6 +345,7 @@ class ImportFromMT1 extends Object
 			$order->createdAt = DateTime::from($oldData['create_date']);
 			$order->setPayment($payment);
 			$order->setShipping($shipping);
+			$order->state = $stateRepo->find(OrderState::ORDERED_IN_SYSTEM);
 
 			if ($billingAddress->isFilled()) {
 				$order->billingAddress = $billingAddress;
@@ -372,11 +381,51 @@ class ImportFromMT1 extends Object
 					break;
 			}
 
-			\Tracy\Debugger::barDump($order->getTotalPrice());
-			\Tracy\Debugger::barDump($oldData['total_pricevat']);
-			exit;
-//			$this->em->persist($order);
-//			$this->em->flush();
+			$parts = $conn->executeQuery(
+							"SELECT * "
+							. "FROM {$tableOrderParts} oa "
+							. "WHERE order_id = ? "
+							, [$orderID])->fetchAll();
+			foreach ($parts as $part) {
+				$productId = $part['product_id'];
+				$requestedQuantity = $part['quantity'];
+				if ($productId) {
+					$stock = $stockRepo->find($productId);
+					$stock->quantity += $requestedQuantity;
+					if (!$stock->vat) {
+						$message = "Stock with ID '{$productId}' hasn't correct data in order with ID '{$orderID}' (CODE: {$orderCode})";
+						throw new WrongSituationException($message);
+					}
+					$stockRepo->save($stock);
+					$stock->setDefaltPrice($part['price'], (bool) $part['vat_included']);
+				} else {
+					$stock = new Stock();
+					$stock->setQuantity($requestedQuantity);
+					$stock->active = FALSE;
+					$stock->createdBy = $admin;
+					$stock->updatedBy = $admin;
+					$stock->product->active = FALSE;
+					$stock->product->createdBy = $admin;
+					$stock->product->updatedBy = $admin;
+					$productTranslation = $stock->product->translateAdd($this->translator->getDefaultLocale());
+					$productTranslation->name = $part['name'];
+					$stock->product->mergeNewTranslations();
+					$productVat = $part['vat'] > 0 ? $part['vat'] : 0;
+					$vat = $vatRepo->findOneByValue($productVat);
+					if (!$vat) {
+						$vat = new Vat(NULL, $productVat);
+						$this->em->persist($vat);
+					}
+					$stock->vat = $vat;
+					$stock->setDefaltPrice($part['price'], (bool) $part['vat_included']);
+					$stockRepo->save($stock);
+				}
+				$price = $stock->getPrice();
+				$order->setItem($stock, $price, $part['quantity'], $order->locale);
+			}
+			
+			$this->em->persist($order);
+			$this->em->flush();
 		}
 
 		return $this;
