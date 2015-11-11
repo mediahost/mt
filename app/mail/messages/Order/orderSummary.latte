@@ -41,29 +41,32 @@
 						<td style="{$tdStyle|noescape}">{$order->billingAddress->icoVat}</td>
 					</tr>
 				</table>
+				{var shippingAddress => $order->billingAddress}
 				{if $order->shippingAddress && $order->shippingAddress->isFilled()}
-					<h5 style="font-size: 17px;display: block;margin: 5px 0 15px 0;">
-						{_'cart.order.shippingAddress'}
-					</h5>
-					<table>
-						<tr n:if="$order->shippingAddress->name">
-							<th style="{$thStyle|noescape}">{_'cart.form.name'}:</th>
-							<td style="{$tdStyle|noescape}">{$order->shippingAddress->name}</td>
-						</tr>
-						<tr n:if="$order->shippingAddress->street">
-							<th style="{$thStyle|noescape}">{_'cart.form.street'}:</th>
-							<td style="{$tdStyle|noescape}">{$order->shippingAddress->street}</td>
-						</tr>
-						<tr n:if="$order->shippingAddress->city">
-							<th style="{$thStyle|noescape}">{_'cart.form.city'}:</th>
-							<td style="{$tdStyle|noescape}">{$order->shippingAddress->cityFormat}</td>
-						</tr>
-						<tr n:if="$order->shippingAddress->country">
-							<th style="{$thStyle|noescape}">{_'cart.form.country'}:</th>
-							<td style="{$tdStyle|noescape}">{$order->shippingAddress->countryFormat}</td>
-						</tr>
-					</table>
+					{var shippingAddress => $order->shippingAddress}
 				{/if}
+				<h5 style="font-size: 17px;display: block;margin: 5px 0 15px 0;">
+					{_'cart.order.shippingAddress'}
+				</h5>
+				<table>
+					<tr n:if="$shippingAddress->name">
+						<th style="{$thStyle|noescape}">{_'cart.form.name'}:</th>
+						<td style="{$tdStyle|noescape}">{$shippingAddress->name}</td>
+					</tr>
+					<tr n:if="$shippingAddress->street">
+						<th style="{$thStyle|noescape}">{_'cart.form.street'}:</th>
+						<td style="{$tdStyle|noescape}">{$shippingAddress->street}</td>
+					</tr>
+					<tr n:if="$shippingAddress->city">
+						<th style="{$thStyle|noescape}">{_'cart.form.city'}:</th>
+						<td style="{$tdStyle|noescape}">{$shippingAddress->cityFormat}</td>
+					</tr>
+					<tr n:if="$shippingAddress->country">
+						<th style="{$thStyle|noescape}">{_'cart.form.country'}:</th>
+						<td style="{$tdStyle|noescape}">{$shippingAddress->countryFormat}</td>
+					</tr>
+				</table>
+					
 				<h5 style="font-size: 17px;display: block;margin: 5px 0 15px 0;">
 					{_'cart.order.contact'}
 				</h5>
