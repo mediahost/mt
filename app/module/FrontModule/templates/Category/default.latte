@@ -45,12 +45,12 @@
 
 		<!-- BEGIN CONTENT -->
 		<div class="col-md-9 col-sm-7">
-			{if $accessoriesFor}
+			{ifset $accessoriesFor}
 				<h2>{_'Select your accessories for...'}</h2>
 				<div class="model-selector clearfix">
 					{control modelSelector}
 				</div>
-			{/if}
+			{/ifset}
 
 			<div class="clearfix">
 				<div class="col-lg-6">
