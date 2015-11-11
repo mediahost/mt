@@ -11,6 +11,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "X-Generator: Poedit 1.8.2\n"
 
+msgid "shopTitle"
+msgstr "Mobilné telefóny, Nahradné diely, mobily, príslušenstvo, eshop"
+
 msgid "Yes"
 msgstr "Áno"
 
