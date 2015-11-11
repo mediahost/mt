@@ -2,11 +2,13 @@
 
 namespace App\CronModule\Presenters;
 
+use App\Extensions\Settings\SettingsStorage;
 use App\Helpers;
 use App\Model\Entity\Category;
 use App\Model\Entity\Discount;
 use App\Model\Entity\Group;
 use App\Model\Entity\Producer;
+use App\Model\Entity\Sign;
 use App\Model\Entity\Stock;
 use App\Model\Entity\Unit;
 use App\Model\Entity\Vat;
@@ -31,6 +33,8 @@ class MigrationPresenter extends BasePresenter
 	const IMPORTED_FROM_MOBILESHOP_API = 'mobileshop-api';
 	const LOCK_FILE_CONTENT = '1';
 	const LOCK_UNNAMED = '_UNNAMED_';
+	const DB_NAME = 'nh2106100db'; // 'shopbox.mobilnetelefony.sk';
+	const TABLE_PRODUCT_SIGN = '`product_sign`';
 
 	/** @link http://www.mobilnetelefony.sk/export/migration/create-products */
 	const URL_PRODUCTS = 'http://www.mobilnetelefony.sk/export/migration/get-products';
@@ -44,6 +48,9 @@ class MigrationPresenter extends BasePresenter
 	/** @var PohodaFacade @inject */
 	public $pohodaFacade;
 
+	/** @var SettingsStorage @inject */
+	public $settings;
+
 	public function actionUpdateProducts($toUpdate = 0)
 	{
 		ini_set('max_execution_time', 200);
@@ -53,6 +60,26 @@ class MigrationPresenter extends BasePresenter
 			$maxTime = 60;
 			$updateCount = $toUpdate >= 0 ? ($toUpdate <= $maxUpdates ? $toUpdate : $maxUpdates) : 0;
 			$updated = $this->actualizeProducts($updateCount, $maxTime);
+			$time = Debugger::timer(self::LOGNAME);
+			$this->unlock(self::LOGNAME);
+			$this->status = parent::STATUS_OK;
+			$this->message = sprintf('%s products was updated. (%f2)', $updated, $time);
+		} else {
+			Debugger::log('Try to start while script is running.', self::LOGNAME . '_lock');
+			$this->status = parent::STATUS_ERROR;
+			$this->message = sprintf('This script is still running.');
+		}
+	}
+
+	public function actionUpdateProductsShort($toUpdate = 0)
+	{
+		ini_set('max_execution_time', 200);
+		if ($this->lock(self::LOGNAME)) {
+			Debugger::timer(self::LOGNAME);
+			$maxUpdates = 200;
+			$maxTime = 60;
+			$updateCount = $toUpdate >= 0 ? ($toUpdate <= $maxUpdates ? $toUpdate : $maxUpdates) : 0;
+			$updated = $this->actualizeProductsShort($updateCount, $maxTime);
 			$time = Debugger::timer(self::LOGNAME);
 			$this->unlock(self::LOGNAME);
 			$this->status = parent::STATUS_OK;
@@ -90,6 +117,7 @@ class MigrationPresenter extends BasePresenter
 		$vatRepo = $this->em->getRepository(Vat::getClassName());
 
 		$products = $this->getJson(self::URL_PRODUCTS);
+		$categories = $this->getCategoriesNames();
 		$unit = $unitRepo->find(1);
 
 		$stocks = $stockRepo->findBy([], ['updatedAt' => 'ASC'], $updateCountMax);
@@ -183,7 +211,6 @@ class MigrationPresenter extends BasePresenter
 				$stock->product->producer = $producerRepo->findOneByName($producerName);
 			}
 
-			$categories = $this->getCategoriesNames();
 			if ($oldProduct->mainCategoryId && array_key_exists($oldProduct->mainCategoryId, $categories)) {
 				$categoryName = $categories[$oldProduct->mainCategoryId];
 				$mainCategory = $categoryRepo->findOneByName($categoryName, $this->locale);
@@ -220,6 +247,96 @@ class MigrationPresenter extends BasePresenter
 					if ($file) {
 						$stock->product->otherImage = $file;
 					}
+				}
+			}
+
+			$this->em->persist($stock);
+			try {
+				$this->em->flush();
+				$updated++;
+			} catch (Exception $ex) {
+				Debugger::log($ex->getMessage(), self::LOGNAME);
+				Debugger::log('Work with ID: ' . $stock->id, self::LOGNAME);
+				break;
+			}
+		}
+		return $updated;
+	}
+
+	private function actualizeProductsShort($updateCountMax = 0, $maxTime = 0)
+	{
+		$methodName = 'actualizeProductsShort';
+		$time = Debugger::timer($methodName);
+		$stockRepo = $this->em->getRepository(Stock::getClassName());
+		$signRepo = $this->em->getRepository(Sign::getClassName());
+		$signSettings = $this->settings->modules->signs;
+
+		$products = $this->getJson(self::URL_PRODUCTS);
+		$categories = $this->getCategoriesNames();
+		$categoryTree = $this->loadCategoryTree($this->getJson(self::URL_CATEGORIES));
+
+		$conn = $this->em->getConnection();
+		$dbName = '`' . self::DB_NAME . '`';
+		$tableSigns = $dbName . '.' . self::TABLE_PRODUCT_SIGN;
+
+		$stocks = $stockRepo->findBy([], ['updatedAt' => 'ASC'], $updateCountMax);
+
+		$updated = 0;
+		foreach ($stocks as $stock) {
+			$time += Debugger::timer($methodName);
+			if ($time >= $maxTime) {
+				break;
+			}
+
+			/* @var $stock Stock */
+			if (isset($products->{$stock->id})) {
+				$oldProduct = $products->{$stock->id};
+			} else {
+				$stock->active = FALSE;
+				$this->em->persist($stock);
+				$this->em->flush();
+				Debugger::log('Product with ID ' . $stock->id . ' was deactivated', self::LOGNAME);
+				continue;
+			}
+
+			$stock->active = $oldProduct->active;
+
+			if ($oldProduct->mainCategoryId && array_key_exists($oldProduct->mainCategoryId, $categories)) {
+				$mainCategory = $this->findCategory($oldProduct->mainCategoryId, $categoryTree, $categories);
+				if ($mainCategory) {
+					$stock->product->mainCategory = $mainCategory;
+				}
+			}
+			if (!$stock->product->mainCategory) {
+				Debugger::log('Missing mainCategory for ID: ' . $oldProduct->id, self::LOGNAME);
+				continue;
+			}
+			if (count($oldProduct->otherCategoriesIds)) {
+				$stock->product->clearCategories();
+				foreach ($oldProduct->otherCategoriesIds as $otherCategoryId) {
+					if (array_key_exists($otherCategoryId, $categories)) {
+						$category = $this->findCategory($otherCategoryId, $categoryTree, $categories);
+						if ($category) {
+							$stock->product->addCategory($category);
+						}
+					}
+				}
+			}
+
+			$signs = $conn->executeQuery(
+							"SELECT * "
+							. "FROM {$tableSigns} s "
+							. "WHERE product_id = ?", [$oldProduct->id])->fetchAll();
+			foreach ($signs as $sign) {
+				switch ($sign['sign_id']) {
+					case '1':
+						$sign = $signRepo->find($signSettings->values->new);
+						$stock->product->addSign($sign);
+						break;
+					case '3':
+						$sign = $signRepo->find($signSettings->values->sale);
+						$stock->product->addSign($sign);
+						break;
 				}
 			}
 
@@ -320,6 +437,37 @@ class MigrationPresenter extends BasePresenter
 			}
 		}
 		return $children;
+	}
+
+	private function findCategory($id, $categoryTree, $categoryNames)
+	{
+		$categoryRepo = $this->em->getRepository(Category::getClassName());
+
+		$parentId = $this->findParentInCategoryTree($categoryTree, $id);
+		if ($parentId) {
+			$parent = $this->findCategory($parentId, $categoryTree, $categoryNames);
+		} else {
+			$parent = NULL;
+		}
+
+		return $categoryRepo->findOneByName($categoryNames[$id], $this->locale, $parent);
+	}
+
+	private function findParentInCategoryTree(array $tree, $id, $parent = NULL)
+	{
+		foreach ($tree as $key => $value) {
+			if ((int) $key === (int) $id) {
+				return $parent;
+			} else {
+				if (count($value->children)) {
+					$finded = $this->findParentInCategoryTree($value->children, $id, $key);
+					if ($finded) {
+						return $finded;
+					}
+				}
+			}
+		}
+		return NULL;
 	}
 
 	private function getCategoriesNames()
