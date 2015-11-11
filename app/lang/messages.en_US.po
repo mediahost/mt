@@ -4,6 +4,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: en_US\n"
 
+msgid "shopTitle"
+msgstr "Mobilné telefóny, Nahradné diely, mobily, príslušenstvo, eshop"
+
 msgid "Yes"
 msgstr "Yes"
 

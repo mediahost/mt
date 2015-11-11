@@ -14,4 +14,10 @@ class HomepagePresenter extends BasePresenter
 		$this->showBrands = (bool) $brands;
 	}
 
+	public function renderDefault()
+	{
+		$titleText = $this->translator->translate('shopTitle');
+		$this->changePageInfo(self::PAGE_INFO_TITLE, $titleText);
+	}
+
 }
