@@ -356,21 +356,25 @@ class Order extends BaseEntity
 
 	public function setExchangeRate(Exchange $exchange, $setWeb = FALSE)
 	{
-		if ($this->rate && $this->currency && array_key_exists($this->currency, $exchange)) {
+		if ($this->currency && array_key_exists($this->currency, $exchange)) {
 			if ($setWeb) {
 				$this->tmpCurrency = $exchange->getWeb();
 				$exchange->setWeb($this->currency);
 			}
-			$currency = $exchange[$this->currency];
-			$rateRelated = ExchangeHelper::getRelatedRate($this->rate, $currency);
-			$exchange->addRate($this->currency, $rateRelated);
+			if ($this->rate) {
+				$currency = $exchange[$this->currency];
+				$rateRelated = ExchangeHelper::getRelatedRate($this->rate, $currency);
+				$exchange->addRate($this->currency, $rateRelated);
+			}
 		}
 	}
 
 	public function removeExchangeRate(Exchange $exchange)
 	{
-		if ($this->rate && $this->currency && array_key_exists($this->currency, $exchange)) {
-			$exchange->removeRate($this->currency);
+		if ($this->currency && array_key_exists($this->currency, $exchange)) {
+			if ($this->rate) {
+				$exchange->removeRate($this->currency);
+			}
 			if ($this->tmpCurrency) {
 				$exchange->setWeb($this->tmpCurrency);
 			}
