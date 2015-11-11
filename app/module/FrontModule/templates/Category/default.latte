@@ -45,10 +45,12 @@
 
 		<!-- BEGIN CONTENT -->
 		<div class="col-md-9 col-sm-7">
-			<h2>{_'Select your accessories for...'}</h2>
-			<div class="model-selector clearfix" n:ifset="$accessoriesFor">
-				{control modelSelector}
-			</div>
+			{if $accessoriesFor}
+				<h2>{_'Select your accessories for...'}</h2>
+				<div class="model-selector clearfix">
+					{control modelSelector}
+				</div>
+			{/if}
 
 			<div class="clearfix">
 				<div class="col-lg-6">
