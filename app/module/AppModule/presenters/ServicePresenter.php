@@ -88,6 +88,31 @@ class ServicePresenter extends BasePresenter
 		} catch (LimitExceededException $e) {
 			$message = $this->translator->translate('Import wasn\'t finished. Please start it again');
 			$this->flashMessage($message, 'warning');
+		} catch (WrongSituationException $e) {
+			$this->flashMessage($e->getMessage(), 'warning');
+		}
+		$this->redirect('this');
+	}
+
+	/**
+	 * @secured
+	 * @resource('service')
+	 * @privilege('actualizeOldUsers')
+	 */
+	public function handleActualizeOldUsers()
+	{
+		try {
+			$this->importFromOld->actualizeUsers();
+			$message = $this->translator->translate('Users was updated from old DB');
+			$this->flashMessage($message, 'success');
+		} catch (ImportFromMT1Exception $e) {
+			$message = $this->translator->translate('Please check settings of this module');
+			$this->flashMessage($message, 'warning');
+		} catch (LimitExceededException $e) {
+			$message = $this->translator->translate('Update wasn\'t finished. Please start it again');
+			$this->flashMessage($message, 'warning');
+		} catch (WrongSituationException $e) {
+			$this->flashMessage($e->getMessage(), 'warning');
 		}
 		$this->redirect('this');
 	}
@@ -115,6 +140,26 @@ class ServicePresenter extends BasePresenter
 	/**
 	 * @secured
 	 * @resource('service')
+	 * @privilege('actualizeOldProducts')
+	 */
+	public function handleActualizeOldProducts()
+	{
+		try {
+			$this->importFromOld->actualizeProducts();
+			$message = $this->translator->translate('Products was updated from old DB');
+			$this->flashMessage($message, 'success');
+		} catch (ImportFromMT1Exception $e) {
+			$message = $this->translator->translate('Please check settings of this module');
+			$this->flashMessage($message, 'warning');
+		} catch (WrongSituationException $e) {
+			$this->flashMessage($e->getMessage(), 'warning');
+		}
+		$this->redirect('this');
+	}
+
+	/**
+	 * @secured
+	 * @resource('service')
 	 * @privilege('importOldOrders')
 	 */
 	public function handleImportOldOrders()
@@ -122,6 +167,26 @@ class ServicePresenter extends BasePresenter
 		try {
 			$this->importFromOld->downloadOrders();
 			$message = $this->translator->translate('Orders was imported from old DB');
+			$this->flashMessage($message, 'success');
+		} catch (ImportFromMT1Exception $e) {
+			$message = $this->translator->translate('Please check settings of this module');
+			$this->flashMessage($message, 'warning');
+		} catch (WrongSituationException $e) {
+			$this->flashMessage($e->getMessage(), 'warning');
+		}
+		$this->redirect('this');
+	}
+
+	/**
+	 * @secured
+	 * @resource('service')
+	 * @privilege('actualizeOldOrders')
+	 */
+	public function handleActualizeOldOrders()
+	{
+		try {
+			$this->importFromOld->actualizeOrders();
+			$message = $this->translator->translate('Orders was updated from old DB');
 			$this->flashMessage($message, 'success');
 		} catch (ImportFromMT1Exception $e) {
 			$message = $this->translator->translate('Please check settings of this module');
