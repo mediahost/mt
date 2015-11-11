@@ -136,31 +136,9 @@ class StockFacade extends Object
 		return $this->getSignedProducts($id);
 	}
 
-	private function getDemoProducts()
-	{
-		$sorting = [
-			0 => 'ASC',
-			1 => 'DESC',
-		];
-		return $this->stockRepo
-						->createQueryBuilder('s')
-						->innerJoin('s.product', 'p')
-						->where('s.active = :active')
-						->andWhere('p.active = :active')
-						->andWhere('s.inStore >= :minInStore')
-						->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
-						->setParameter('active', TRUE)
-						->setParameter('minInStore', 1)
-						->setParameter('now', new DateTime())
-						->orderBy('s.id', $sorting[rand(0, 1)])
-						->setMaxResults(10)
-						->getQuery()
-						->getResult();
-	}
-
 	public function getBestSellers()
 	{
-		return $this->getDemoProducts();
+		return [];
 	}
 
 	public function urlToId($uri, Request $request)
