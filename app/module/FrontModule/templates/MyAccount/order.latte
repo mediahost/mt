@@ -70,14 +70,17 @@
 							{foreach $order->items as $item}
 								{var stock => $item->stock}
 								{var product => $stock->product}
+								{var isActive => $stock->active && $product->active}
 								<tr>
 									<td class="goods-page-image">
-										<a n:href="Product: $product->id">
+										<a n:href="Product: $product->id" n:tag-if="$isActive">
 											<img src="{$basePath}/foto/{$product->image|size:55,55}" alt="{$product}" />
 										</a>
 									</td>
 									<td class="goods-page-description">
-										<h3><a n:href="Product: $product->id">{$product->name}</a></h3>
+										<h3>
+											<a n:href="Product: $product->id" n:tag-if="$isActive">{$product->name}</a>
+										</h3>
 									</td>
 									<td class="goods-page-quantity">
 										<strong>{$item->quantity}x</strong>
