@@ -87,17 +87,19 @@
 {/define}
 
 {define bestsellers}
-<h2>{_'Bestsellers'}</h2>
-<div n:foreach="$bestsellerStocks as $stock" class="item">
-	{var product => $stock->product}
-	<a n:href="Product: $product->id">
-		<img src="{$basePath}/foto/{$product->image|size:'65'}" alt="{$product}">
-	</a>
-	<h3>
+<div class="sidebar-products clearfix" n:if="count($bestsellerStocks)">
+	<h2>{_'Bestsellers'}</h2>
+	<div n:foreach="$bestsellerStocks as $stock" class="item">
+		{var product => $stock->product}
 		<a n:href="Product: $product->id">
-			{$product}
+			<img src="{$basePath}/foto/{$product->image|size:'65'}" alt="{$product}">
 		</a>
-	</h3>
-	<div class="price">{$stock->price|currencyVat}</div>
+		<h3>
+			<a n:href="Product: $product->id">
+				{$product}
+			</a>
+		</h3>
+		<div class="price">{$stock->price|currencyVat}</div>
+	</div>
 </div>
 {/define}
