@@ -20,7 +20,7 @@ class OrderState extends BaseEntity
 	const SENT_SHIPPERS = 3;
 	const READY_TO_TAKE = 4;
 	const OK_RECIEVED = 5;
-	const OK_TAKEN = 5;
+	const OK_TAKEN = 6;
 	const CANCELED = 7;
 	const NO_STATE = self::CANCELED;
 

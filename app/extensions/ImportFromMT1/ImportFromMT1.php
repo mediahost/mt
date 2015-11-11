@@ -17,6 +17,7 @@ use App\Model\Entity\Twitter;
 use App\Model\Entity\User;
 use App\Model\Entity\Vat;
 use App\Model\Facade\NewsletterFacade;
+use App\Model\Facade\OrderFacade;
 use App\Model\Facade\UserFacade;
 use Doctrine\ORM\EntityManager;
 use Exception;
@@ -29,7 +30,7 @@ class ImportFromMT1 extends Object
 {
 
 	const MAX_INSERTS = 1000;
-	const MAX_ORDERS = 1;
+	const MAX_ORDERS = 10;
 	const ORDER_CANCELED_ID = 6;
 	const TABLE_PRODUCT = '`product`';
 	const TABLE_ORDER = '`order`';
@@ -75,6 +76,9 @@ class ImportFromMT1 extends Object
 
 	/** @var NewsletterFacade @inject */
 	public $newsletterFacade;
+
+	/** @var OrderFacade @inject */
+	public $orderFacade;
 
 	// </editor-fold>
 	// <editor-fold desc="setters">
@@ -122,11 +126,50 @@ class ImportFromMT1 extends Object
 		return $this;
 	}
 
+	public function actualizeProducts()
+	{
+		ini_set('max_execution_time', 60);
+
+		$this->updateProducts();
+
+		return $this;
+	}
+
 	public function downloadOrders()
 	{
 		ini_set('max_execution_time', 60);
 
 		$this->importOrders();
+
+		return $this;
+	}
+
+	public function actualizeOrders()
+	{
+		ini_set('max_execution_time', 60);
+
+		$this->updateOrders();
+
+		return $this;
+	}
+
+	public function downloadUsers()
+	{
+		ini_set('max_execution_time', 1500);
+
+		$this->importUsersBasic();
+		$this->importUsersSigns();
+		$this->importUsersAddresses();
+		$this->importSubscribers();
+
+		return $this;
+	}
+
+	public function actualizeUsers()
+	{
+		ini_set('max_execution_time', 60);
+
+		$this->updateUsers();
 
 		return $this;
 	}
@@ -173,6 +216,11 @@ class ImportFromMT1 extends Object
 		return $this;
 	}
 
+	private function updateProducts()
+	{
+		return $this;
+	}
+
 	private function importOrders()
 	{
 		$this->maxInserts = self::MAX_ORDERS;
@@ -189,9 +237,11 @@ class ImportFromMT1 extends Object
 		$vatRepo = $this->em->getRepository(Vat::getClassName());
 		$stateRepo = $this->em->getRepository(OrderState::getClassName());
 		$userRepo = $this->em->getRepository(User::getClassName());
+		$paymentRepo = $this->em->getRepository(Payment::getClassName());
+		$shippingRepo = $this->em->getRepository(Shipping::getClassName());
 		$admin = $userRepo->findOneByMail('superadmin');
 
-		$maxId = (int) $conn->executeQuery("SELECT MAX(id) FROM `order`")->fetchColumn();
+		$maxId = (int) $conn->executeQuery("SELECT MAX(id) FROM `{$orderTable}`")->fetchColumn();
 		$offset = 0;
 		$limit = $this->maxInserts;
 		$canceledStatusId = self::ORDER_CANCELED_ID;
@@ -270,7 +320,6 @@ class ImportFromMT1 extends Object
 				
 			}
 
-			$paymentRepo = $this->em->getRepository(Payment::getClassName());
 			$orderPayment = $conn->executeQuery(
 							"SELECT * "
 							. "FROM {$tableOrderPayment} op "
@@ -296,7 +345,6 @@ class ImportFromMT1 extends Object
 				throw new WrongSituationException('Missing payment for order with ID: ' . $orderID);
 			}
 
-			$shippingRepo = $this->em->getRepository(Shipping::getClassName());
 			$orderShipping = $conn->executeQuery(
 							"SELECT * "
 							. "FROM {$tableOrderShipping} op "
@@ -423,7 +471,7 @@ class ImportFromMT1 extends Object
 				$price = $stock->getPrice();
 				$order->setItem($stock, $price, $part['quantity'], $order->locale);
 			}
-			
+
 			$this->em->persist($order);
 			$this->em->flush();
 		}
@@ -431,14 +479,59 @@ class ImportFromMT1 extends Object
 		return $this;
 	}
 
-	public function downloadUsers()
+	private function updateOrders()
 	{
-		ini_set('max_execution_time', 1500);
+		$conn = $this->em->getConnection();
+		$dbName = $this->getDbName();
+		$tableOrders = $dbName . '.' . self::TABLE_ORDER;
 
-		$this->importUsersBasic();
-		$this->importUsersSigns();
-		$this->importUsersAddresses();
-		$this->importSubscribers();
+		$stateRepo = $this->em->getRepository(OrderState::getClassName());
+		$orderRepo = $this->em->getRepository(Order::getClassName());
+		$orders = $orderRepo->findBy([], ['updatedAt' => 'DESC'], self::MAX_ORDERS);
+
+		foreach ($orders as $order) {
+			$orderStatusId = $conn->executeQuery(
+							"SELECT order_status_id "
+							. "FROM {$tableOrders} o "
+							. "WHERE code = ? "
+							. "LIMIT 1"
+							, [$order->id])->fetchColumn();
+
+			switch ($orderStatusId) {
+				case '1':
+					$state = $stateRepo->find(OrderState::ORDERED_IN_SYSTEM);
+					break;
+				case '2':
+					$state = $stateRepo->find(OrderState::IN_PROCEEDINGS);
+					break;
+				case '3':
+					$state = $stateRepo->find(OrderState::SENT_SHIPPERS);
+					break;
+				case '4':
+					$state = $stateRepo->find(OrderState::OK_RECIEVED);
+					break;
+				case '5':
+					$state = $stateRepo->find(OrderState::READY_TO_TAKE);
+					break;
+				case '6':
+					$state = $stateRepo->find(OrderState::CANCELED);
+					break;
+				case '7':
+					$state = $stateRepo->find(OrderState::OK_TAKEN);
+					break;
+				default:
+					$message = "Order with ID {$order->id} has unknows state ID '{$orderStatusId}'";
+					throw new WrongSituationException($message);
+			}
+			if ($state && $order->state->id != $state->id) {
+				$oldState = $order->state;
+				$order->state = $state;
+				$this->em->persist($order);
+				$this->em->flush();
+				
+				$this->orderFacade->relockAndRequantityProducts($order, $oldState);
+			}
+		}
 
 		return $this;
 	}
@@ -567,26 +660,6 @@ class ImportFromMT1 extends Object
 		return $this;
 	}
 
-	private function addFacebookConn(User $user, $key)
-	{
-		$fbRepo = $this->em->getRepository(Facebook::getClassName());
-		if (!$fbRepo->find($key)) {
-			$this->checkLimit();
-			$user->facebook = new Facebook($key);
-		}
-		return $this;
-	}
-
-	private function addTwitterConn(User $user, $key)
-	{
-		$twRepo = $this->em->getRepository(Twitter::getClassName());
-		if (!$twRepo->find($key)) {
-			$this->checkLimit();
-			$user->twitter = new Twitter($key);
-		}
-		return $this;
-	}
-
 	private function importUsersAddresses()
 	{
 		$conn = $this->em->getConnection();
@@ -616,6 +689,64 @@ class ImportFromMT1 extends Object
 			$this->addAddress($deliveryAddress['mail'], $deliveryAddress, FALSE);
 		}
 
+		return $this;
+	}
+
+	private function importSubscribers()
+	{
+		$conn = $this->em->getConnection();
+		$subscriberRepo = $this->em->getRepository(Subscriber::getClassName());
+		$dbName = $this->getDbName();
+		$tableNewsletter = $dbName . '.' . self::TABLE_NEWSLETTER;
+		$tableNewsletterDealer = $dbName . '.' . self::TABLE_NEWSLETTER_DEALER;
+
+		$stmt1 = $conn->executeQuery(
+				"SELECT n.mail "
+				. "FROM {$tableNewsletter} n");
+		foreach ($stmt1->fetchAll() as $data) {
+			$subscriber = $subscriberRepo->findOneByMail($data['mail']);
+			if (!$subscriber) {
+				$this->newsletterFacade->subscribe($data['mail'], Subscriber::TYPE_USER);
+				$this->checkLimit();
+			}
+		}
+
+		$stmt2 = $conn->executeQuery(
+				"SELECT n.mail "
+				. "FROM {$tableNewsletterDealer} n");
+		foreach ($stmt2->fetchAll() as $data) {
+			$subscriber = $subscriberRepo->findOneByMail($data['mail']);
+			if (!$subscriber) {
+				$this->newsletterFacade->subscribe($data['mail'], Subscriber::TYPE_DEALER);
+				$this->checkLimit();
+			}
+		}
+
+		return $this;
+	}
+
+	private function updateUsers()
+	{
+		return $this;
+	}
+
+	private function addFacebookConn(User $user, $key)
+	{
+		$fbRepo = $this->em->getRepository(Facebook::getClassName());
+		if (!$fbRepo->find($key)) {
+			$this->checkLimit();
+			$user->facebook = new Facebook($key);
+		}
+		return $this;
+	}
+
+	private function addTwitterConn(User $user, $key)
+	{
+		$twRepo = $this->em->getRepository(Twitter::getClassName());
+		if (!$twRepo->find($key)) {
+			$this->checkLimit();
+			$user->twitter = new Twitter($key);
+		}
 		return $this;
 	}
 
@@ -673,39 +804,6 @@ class ImportFromMT1 extends Object
 			}
 		}
 		return FALSE;
-	}
-
-	private function importSubscribers()
-	{
-		$conn = $this->em->getConnection();
-		$subscriberRepo = $this->em->getRepository(Subscriber::getClassName());
-		$dbName = $this->getDbName();
-		$tableNewsletter = $dbName . '.' . self::TABLE_NEWSLETTER;
-		$tableNewsletterDealer = $dbName . '.' . self::TABLE_NEWSLETTER_DEALER;
-
-		$stmt1 = $conn->executeQuery(
-				"SELECT n.mail "
-				. "FROM {$tableNewsletter} n");
-		foreach ($stmt1->fetchAll() as $data) {
-			$subscriber = $subscriberRepo->findOneByMail($data['mail']);
-			if (!$subscriber) {
-				$this->newsletterFacade->subscribe($data['mail'], Subscriber::TYPE_USER);
-				$this->checkLimit();
-			}
-		}
-
-		$stmt2 = $conn->executeQuery(
-				"SELECT n.mail "
-				. "FROM {$tableNewsletterDealer} n");
-		foreach ($stmt2->fetchAll() as $data) {
-			$subscriber = $subscriberRepo->findOneByMail($data['mail']);
-			if (!$subscriber) {
-				$this->newsletterFacade->subscribe($data['mail'], Subscriber::TYPE_DEALER);
-				$this->checkLimit();
-			}
-		}
-
-		return $this;
 	}
 
 	private function checkLimit()
