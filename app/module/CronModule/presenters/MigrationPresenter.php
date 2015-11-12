@@ -2,7 +2,10 @@
 
 namespace App\CronModule\Presenters;
 
+use App\Extensions\ImportFromMT1;
+use App\Extensions\ImportFromMT1Exception;
 use App\Extensions\Settings\SettingsStorage;
+use App\Extensions\WrongSituationException;
 use App\Helpers;
 use App\Model\Entity\Category;
 use App\Model\Entity\Discount;
@@ -51,6 +54,9 @@ class MigrationPresenter extends BasePresenter
 
 	/** @var SettingsStorage @inject */
 	public $settings;
+
+	/** @var ImportFromMT1 @inject */
+	public $importFromOld;
 
 	public function actionUpdateProducts($toUpdate = 0)
 	{
@@ -104,6 +110,50 @@ class MigrationPresenter extends BasePresenter
 		$added = $this->addProducers();
 		$this->status = parent::STATUS_OK;
 		$this->message = sprintf('%s producers was inserted.', $added);
+	}
+
+	public function actionInsertOrders()
+	{
+		if ($this->lock(self::LOGNAME)) {
+			try {
+				$this->importFromOld->downloadOrders();
+				$this->unlock(self::LOGNAME);
+				$this->status = parent::STATUS_OK;
+				$this->message = sprintf('Orders was inserted.');
+			} catch (ImportFromMT1Exception $e) {
+				$this->unlock(self::LOGNAME);
+				Debugger::log('Please check settings of this module', self::LOGNAME . '_exception');
+			} catch (WrongSituationException $e) {
+				$this->unlock(self::LOGNAME);
+				Debugger::log($e->getMessage(), self::LOGNAME . '_exception');
+			}
+		} else {
+			Debugger::log('Try to start while script is running.', self::LOGNAME . '_lock');
+			$this->status = parent::STATUS_ERROR;
+			$this->message = sprintf('This script is still running.');
+		}
+	}
+
+	public function actionUpdateOrders()
+	{
+		if ($this->lock(self::LOGNAME)) {
+			try {
+				$this->importFromOld->actualizeOrders();
+				$this->unlock(self::LOGNAME);
+				$this->status = parent::STATUS_OK;
+				$this->message = sprintf('Orders was updated.');
+			} catch (ImportFromMT1Exception $e) {
+				$this->unlock(self::LOGNAME);
+				Debugger::log('Please check settings of this module', self::LOGNAME . '_exception');
+			} catch (WrongSituationException $e) {
+				$this->unlock(self::LOGNAME);
+				Debugger::log($e->getMessage(), self::LOGNAME . '_exception');
+			}
+		} else {
+			Debugger::log('Try to start while script is running.', self::LOGNAME . '_lock');
+			$this->status = parent::STATUS_ERROR;
+			$this->message = sprintf('This script is still running.');
+		}
 	}
 
 	private function actualizeProducts($updateCountMax = 0, $maxTime = 0)

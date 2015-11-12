@@ -31,7 +31,7 @@ class ImportFromMT1 extends Object
 {
 
 	const MAX_INSERTS = 1000;
-	const MAX_ORDERS = 200;
+	const MAX_ORDERS = 100;
 	const ORDER_CANCELED_ID = 6;
 	const TABLE_PRODUCT = '`product`';
 	const TABLE_ORDER = '`order`';
@@ -138,7 +138,7 @@ class ImportFromMT1 extends Object
 
 	public function downloadOrders()
 	{
-		ini_set('max_execution_time', 60);
+		ini_set('max_execution_time', 200);
 
 		$this->importOrders();
 
@@ -147,7 +147,7 @@ class ImportFromMT1 extends Object
 
 	public function actualizeOrders()
 	{
-		ini_set('max_execution_time', 60);
+		ini_set('max_execution_time', 200);
 
 		$this->updateOrders();
 

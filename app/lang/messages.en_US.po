@@ -1371,3 +1371,6 @@ msgstr "Your dealer request was send"
 
 msgid "More params"
 msgstr "More params"
+
+msgid "Incorrect login or password!"
+msgstr "Incorrect mail or password!"

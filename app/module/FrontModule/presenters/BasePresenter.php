@@ -107,6 +107,7 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->template->visitedStocks = $this->user->storage->getVisited();
 
 		$this->template->basket = $this->basketFacade;
+		$this->template->loginError = $this['signInModal']->hasErrors();
 
 		$this->template->pageKeywords = $this->settings->pageInfo->keywords;
 		$this->template->pageDescription = $this->settings->pageInfo->description;

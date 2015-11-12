@@ -1329,3 +1329,6 @@ msgstr "Váš požadavek stát se přeprodejcem byl odeslán"
 
 msgid "More params"
 msgstr "Více parametrů"
+
+msgid "Incorrect login or password!"
+msgstr "Nesprávny e-mail alebo heslo!"

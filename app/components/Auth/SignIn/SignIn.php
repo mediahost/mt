@@ -32,6 +32,9 @@ class SignIn extends BaseControl
 
 	// </editor-fold>
 
+	/** @var Form */
+	private $form;
+
 	/** @var User */
 	private $user;
 
@@ -41,27 +44,27 @@ class SignIn extends BaseControl
 	/** @return Form */
 	protected function createComponentForm()
 	{
-		$form = new Form();
-		$form->setRenderer(new MetronicFormRenderer());
-		$form->setTranslator($this->translator);
+		$this->form = new Form();
+		$this->form->setRenderer(new MetronicFormRenderer());
+		$this->form->setTranslator($this->translator);
 
-		$mail = $form->addText('mail', 'E-mail')
+		$mail = $this->form->addText('mail', 'E-mail')
 				->setAttribute('placeholder', 'E-mail');
 		if (!$this->user) {
 			$mail->setRequired('Please enter your e-mail');
 		}
 
-		$form->addPassword('password', 'Password')
+		$this->form->addPassword('password', 'Password')
 				->setAttribute('placeholder', 'Password')
 				->setRequired('Please enter your password.');
 
-		$form->addCheckbox('remember', 'Remember')
+		$this->form->addCheckbox('remember', 'Remember')
 						->getLabelPrototype()->class = "rememberme check";
 
-		$form->addSubmit('signIn', 'Sign In');
+		$this->form->addSubmit('signIn', 'Sign In');
 
-		$form->onSuccess[] = $this->formSucceeded;
-		return $form;
+		$this->form->onSuccess[] = $this->formSucceeded;
+		return $this->form;
 	}
 
 	/**
@@ -93,7 +96,7 @@ class SignIn extends BaseControl
 
 			$this->onSuccess($this->presenter, $user, $values->remember);
 		} catch (AuthenticationException $e) {
-			$form->addError('Incorrect login or password!');
+			$form->addError($this->translator->translate('Incorrect login or password!'));
 		}
 	}
 
@@ -125,12 +128,17 @@ class SignIn extends BaseControl
 		parent::render();
 	}
 
-	// <editor-fold desc="setters">
+	// <editor-fold desc="setters & getters">
 	
 	public function setBacklink($backlink)
 	{
 		$this->backlink = $backlink;
 		return $this;
+	}
+	
+	public function hasErrors()
+	{
+		return $this->form && $this->form->hasErrors();
 	}
 
 	// </editor-fold>

@@ -134,7 +134,8 @@
 			"googleAnalytics": {{ifset $googleAnalyticsCode}}{{$googleAnalyticsCode}}{{else}}""{{/ifset}},
 			"smartSupp": {{ifset $smartSuppKey}}{{$smartSuppKey}}{{else}}""{{/ifset}},
 			"facebookApplet": {{ifset $facebookAppletId}}{{$facebookAppletId}}{{else}}""{{/ifset}}
-		}
+		},
+		"loginError": {{ifset $loginError}}{{$loginError}}{{else}}false{{/ifset}}
 	}
 </script>
 <script src="{$basePath}/assets/global/scripts/config.js" type="text/javascript"></script>
