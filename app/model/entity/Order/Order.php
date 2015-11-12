@@ -37,7 +37,7 @@ use Nette\Utils\Random;
  * @property Address $shippingAddress
  * @property DateTime $paymentDate
  * @property int $paymentBlame
- * @property string $paymentBlameName
+ * @property-read string $paymentBlameName
  */
 class Order extends BaseEntity
 {
