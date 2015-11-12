@@ -30,7 +30,7 @@ class ImportFromMT1 extends Object
 {
 
 	const MAX_INSERTS = 1000;
-	const MAX_ORDERS = 10;
+	const MAX_ORDERS = 200;
 	const ORDER_CANCELED_ID = 6;
 	const TABLE_PRODUCT = '`product`';
 	const TABLE_ORDER = '`order`';
@@ -437,9 +437,8 @@ class ImportFromMT1 extends Object
 			foreach ($parts as $part) {
 				$productId = $part['product_id'];
 				$requestedQuantity = $part['quantity'];
-				if ($productId) {
-					$stock = $stockRepo->find($productId);
-					$stock->quantity += $requestedQuantity;
+				if ($productId && $stock = $stockRepo->find($productId)) {
+					$stock->increaseQuantity($requestedQuantity);
 					if (!$stock->vat) {
 						$message = "Stock with ID '{$productId}' hasn't correct data in order with ID '{$orderID}' (CODE: {$orderCode})";
 						throw new WrongSituationException($message);
@@ -487,7 +486,7 @@ class ImportFromMT1 extends Object
 
 		$stateRepo = $this->em->getRepository(OrderState::getClassName());
 		$orderRepo = $this->em->getRepository(Order::getClassName());
-		$orders = $orderRepo->findBy([], ['updatedAt' => 'DESC'], self::MAX_ORDERS);
+		$orders = $orderRepo->findBy([], ['updatedAt' => 'ASC'], self::MAX_ORDERS);
 
 		foreach ($orders as $order) {
 			$orderStatusId = $conn->executeQuery(
@@ -526,6 +525,7 @@ class ImportFromMT1 extends Object
 			if ($state && $order->state->id != $state->id) {
 				$oldState = $order->state;
 				$order->state = $state;
+				$order->updatedAt = new DateTime();
 				$this->em->persist($order);
 				$this->em->flush();
 				
