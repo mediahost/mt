@@ -16,6 +16,7 @@ use App\Model\Facade\PohodaFacade;
 use App\Model\Repository\CategoryRepository;
 use Exception;
 use Nette\Utils\ArrayHash;
+use Nette\Utils\DateTime;
 use Nette\Utils\Image;
 use Nette\Utils\ImageException;
 use Nette\Utils\Json;
@@ -340,6 +341,7 @@ class MigrationPresenter extends BasePresenter
 				}
 			}
 
+			$stock->updatedAt = new DateTime();
 			$this->em->persist($stock);
 			try {
 				$this->em->flush();
