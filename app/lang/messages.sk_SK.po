@@ -1327,3 +1327,6 @@ msgstr "Vaša požiadavka stať sa dílerom bola úspešne odoslaná. "
 
 msgid "More params"
 msgstr "Viac parametrov"
+
+msgid "Incorrect login or password!"
+msgstr "Nesprávny e-mail alebo heslo!"

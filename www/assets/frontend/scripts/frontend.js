@@ -6,6 +6,9 @@ var Frontend = function () {
 			$(document).on('click', '.alert-auto-dismiss', function () {
 				$(this).fadeOut();
 			});
+			if (loginError) {
+				$('#signInModal').modal('show');
+			}
 		},
 		afterComplete: function () {
 			setTimeout(function () {
