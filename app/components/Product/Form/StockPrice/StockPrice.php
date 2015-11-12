@@ -28,6 +28,9 @@ class StockPrice extends StockBase
 	/** @var bool */
 	private $defaultWithVat = TRUE;
 
+	/** @var bool */
+	private $percentIsSale = TRUE;
+
 	// </editor-fold>
 
 	/** @return Form */
@@ -63,7 +66,7 @@ class StockPrice extends StockBase
 					->setAttribute('placeholder', $this->exchangeHelper->format($placeholderPrice));
 			$percents->addText($group->id, $group->name)
 					->setAttribute('class', ['mask_percentage', MetronicTextInputBase::SIZE_S])
-					->setAttribute('placeholder', '100%');
+					->setAttribute('placeholder', $this->percentIsSale ? '0%' : '100%');
 		}
 
 		$form->addSelect2('vat', 'Vat', $this->vatFacade->getValues())
@@ -107,7 +110,8 @@ class StockPrice extends StockBase
 				$discount = new Discount($fixedValue, Discount::FIXED_PRICE);
 			} else if ($percents->$groupId &&
 					0 < $percents->$groupId && $percents->$groupId <= 100) {
-				$discount = new Discount(100 - $percents->$groupId, Discount::PERCENTAGE);
+				$value = $this->percentIsSale ? (100 - $percents->$groupId) : $percents->$groupId;
+				$discount = new Discount($value, Discount::PERCENTAGE);
 			}
 
 			$this->loadDiscount($discount, $groupId);
@@ -171,7 +175,7 @@ class StockPrice extends StockBase
 			/* @var $groupDiscount GroupDiscount */
 			switch ($groupDiscount->discount->type) {
 				case Discount::PERCENTAGE:
-					$value = 100 - $groupDiscount->discount->value;
+					$value = $this->percentIsSale ? (100 - $groupDiscount->discount->value) : $groupDiscount->discount->value;
 					break;
 				default:
 					$value = $groupDiscount->discount->value;
