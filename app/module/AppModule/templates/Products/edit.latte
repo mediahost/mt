@@ -1,5 +1,11 @@
 {block pageTitle}
 {$stock}
+<small>
+	<a n:href=":Front:Product: $stock->product->id">
+		<i class="fa fa-eye"></i>
+		{_'View on web'}
+	</a>
+</small>
 {/block}
 
 {block breadcrumbItems}
