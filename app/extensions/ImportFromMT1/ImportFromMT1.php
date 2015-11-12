@@ -16,6 +16,7 @@ use App\Model\Entity\Stock;
 use App\Model\Entity\Twitter;
 use App\Model\Entity\User;
 use App\Model\Entity\Vat;
+use App\Model\Facade\Exception\InsufficientQuantityException;
 use App\Model\Facade\NewsletterFacade;
 use App\Model\Facade\OrderFacade;
 use App\Model\Facade\UserFacade;
@@ -468,7 +469,16 @@ class ImportFromMT1 extends Object
 					$stockRepo->save($stock);
 				}
 				$price = $stock->getPrice();
-				$order->setItem($stock, $price, $part['quantity'], $order->locale);
+
+				try {
+					$order->setItem($stock, $price, $part['quantity'], $order->locale);
+				} catch (InsufficientQuantityException $ex) {
+					$message = "Stock with ID '{$stock->id}'"
+					. " has only {$stock->inStore}"
+					. " in store and required {$part['quantity']}"
+					. " in order with ID '{$orderID}' (CODE: {$orderCode})";
+					throw new WrongSituationException($message);
+				}
 			}
 
 			$this->em->persist($order);
@@ -528,7 +538,7 @@ class ImportFromMT1 extends Object
 				$order->updatedAt = new DateTime();
 				$this->em->persist($order);
 				$this->em->flush();
-				
+
 				$this->orderFacade->relockAndRequantityProducts($order, $oldState);
 			}
 		}
