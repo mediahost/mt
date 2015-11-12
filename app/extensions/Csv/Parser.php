@@ -39,12 +39,6 @@ class Parser extends Object
 	/** @var int */
 	private $lenght;
 
-	/** @var string */
-	private $charsetIn = self::CHARSET_IN;
-
-	/** @var string */
-	private $charsetOut = self::CHARSET_OUT;
-
 	/** @var resource */
 	private $handle;
 
@@ -69,13 +63,6 @@ class Parser extends Object
 		$this->enclosure = (string) $enclosure;
 		$this->escape = (string) $escape;
 		$this->lenght = (int) $lenght;
-		return $this;
-	}
-
-	public function setCharset($in = self::CHARSET_IN, $out = self::CHARSET_OUT)
-	{
-		$this->charsetIn = (string) $in;
-		$this->charsetOut = (string) $out;
 		return $this;
 	}
 
@@ -198,8 +185,22 @@ class Parser extends Object
 		if (is_array($this->rowAliases) && array_key_exists($key, $this->rowAliases)) {
 			$key = $this->rowAliases[$key];
 		}
-		$decoded = $value === "" ? NULL : iconv($this->charsetIn, $this->charsetOut, $value);
+		$decoded = $value === "" ? NULL : $this->autoUTF($value);
 		return $decoded;
+	}
+
+	function autoUTF($s)
+	{
+		// detect UTF-8
+		if (preg_match('#[\x80-\x{1FF}\x{2000}-\x{3FFF}]#u', $s))
+			return $s;
+
+		// detect WINDOWS-1250
+		if (preg_match('#[\x7F-\x9F\xBC]#', $s))
+			return iconv('WINDOWS-1250', 'UTF-8', $s);
+
+		// assume ISO-8859-2
+		return iconv('ISO-8859-2', 'UTF-8', $s);
 	}
 
 }
