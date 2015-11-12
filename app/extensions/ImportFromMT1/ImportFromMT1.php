@@ -420,13 +420,13 @@ class ImportFromMT1 extends Object
 			}
 			switch ($oldData['payment_date_type']) {
 				case '2':
-					$order->paymentBlameName = Order::PAYMENT_BLAME_VUB;
+					$order->paymentBlame = Order::PAYMENT_BLAME_VUB;
 					break;
 				case '3':
-					$order->paymentBlameName = Order::PAYMENT_BLAME_CSOB;
+					$order->paymentBlame = Order::PAYMENT_BLAME_CSOB;
 					break;
 				case '1':
-					$order->paymentBlameName = Order::PAYMENT_BLAME_MANUAL;
+					$order->paymentBlame = Order::PAYMENT_BLAME_MANUAL;
 					break;
 			}
 
