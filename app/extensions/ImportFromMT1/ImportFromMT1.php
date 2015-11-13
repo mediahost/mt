@@ -737,6 +737,20 @@ class ImportFromMT1 extends Object
 
 	private function updateUsers()
 	{
+		$userRepo = $this->em->getRepository(User::getClassName());
+		
+		$fbUsers = $userRepo->findBy([
+			'facebook NOT' => NULL,
+		], [], 100);
+		
+		foreach ($fbUsers as $user) {
+			$facebook = $user->facebook;
+			$user->facebook = NULL;
+			$this->em->persist($user);
+			$this->em->remove($facebook);
+		}
+		$this->em->flush();
+		
 		return $this;
 	}
 
