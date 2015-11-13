@@ -93,7 +93,7 @@ class SignListener extends Object implements Subscriber
 	 * @param string $backlink
 	 */
 	public function onStartup(Control $control, User $user, $rememberMe = FALSE, $backlink = NULL)
-	{	
+	{
 		$this->backlink = $backlink;
 		if ($user->id) {
 			$this->onSuccess($control->presenter, $user, $rememberMe);
@@ -125,10 +125,16 @@ class SignListener extends Object implements Subscriber
 	public function onRequiredSuccess(Control $control, User $user)
 	{
 		$existedUser = $this->userFacade->findByMail($user->mail);
-		// nepodporuje automatické joinování účtů (nebylo v aplikaci požadováno)
 		if (!$existedUser) {
 			$this->verify($control, $user);
 		} else {
+			// podporuje pouze automatické joinování FB účtu
+			if ($user->facebook && !$existedUser->facebook) {
+				$existedUser->facebook = $user->facebook;
+				$this->em->persist($existedUser);
+				$this->em->flush();
+				$this->onSuccess($control->presenter, $existedUser);
+			}
 			$message = $this->translator->translate('%value% is already registered.', NULL, ['value' => $user->mail]);
 			$control->presenter->flashMessage($message);
 			$control->presenter->redirect(self::REDIRECT_SIGNIN_PAGE);
@@ -216,7 +222,7 @@ class SignListener extends Object implements Subscriber
 
 		$presenter->user->login($user);
 		$presenter->flashMessage($this->translator->translate('You are logged in.'), 'success');
-		
+
 		$presenter->restoreRequest($this->backlink);
 		$presenter->restoreRequest($presenter->backlink);
 
