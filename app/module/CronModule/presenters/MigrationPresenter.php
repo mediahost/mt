@@ -112,6 +112,13 @@ class MigrationPresenter extends BasePresenter
 		$this->message = sprintf('%s producers was inserted.', $added);
 	}
 
+	public function actionUpdateUsers()
+	{
+		$this->importFromOld->actualizeUsers();
+		$this->status = parent::STATUS_OK;
+		$this->message = sprintf('Users was updated.');
+	}
+
 	public function actionInsertOrders()
 	{
 		if ($this->lock(self::LOGNAME)) {
