@@ -87,7 +87,8 @@ class CsvStockImport extends BaseControl
 				$priceName = 'price' . $group->level;
 				$priceValue = $row->$priceName;
 				if (preg_match('/^(\d+)\%$/', $priceValue, $matches)) {
-					$discount = new Discount($matches[1], Discount::PERCENTAGE);
+					$value = StockPrice::PERCENT_IS_PRICE ? $matches[1] : 100 - $matches[1];
+					$discount = new Discount($value, Discount::PERCENTAGE);
 				} else {
 					$discount = new Discount($priceValue, Discount::FIXED_PRICE);
 				}

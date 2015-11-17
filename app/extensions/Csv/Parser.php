@@ -5,6 +5,7 @@ namespace App\Extensions\Csv;
 use App\Extensions\Csv\Exceptions\BeforeProcessException;
 use App\Extensions\Csv\Exceptions\InternalException;
 use App\Extensions\Csv\Exceptions\WhileProcessException;
+use Exception;
 use Kdyby\Translation\Translator;
 use Nette\Http\FileUpload;
 use Nette\Object;
@@ -54,7 +55,6 @@ class Parser extends Object
 	public function __construct()
 	{
 		$this->setCsv();
-		$this->setCharset();
 	}
 
 	public function setCsv($delimiter = ',', $enclosure = '"', $escape = '\\', $lenght = 0)
@@ -117,7 +117,7 @@ class Parser extends Object
 				$executed[$line] = $this->parseLine($line, $row);
 			} catch (InternalException $e) {
 				throw new WhileProcessException($executed, $e->getMessage());
-			} catch (\Exception $e) {
+			} catch (Exception $e) {
 				Debugger::log($e->getMessage(), Strings::webalize(get_class($this)));
 				$message = $this->translator->translate('Proccessing failed on line %count%.', $line);
 				throw new WhileProcessException($executed, $message);
