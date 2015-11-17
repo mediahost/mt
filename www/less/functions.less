@@ -79,6 +79,7 @@
 }
 
 .gradientBackground(@color1: #ffffff, @color2: #000000, @percentage1: 0, @percentage2: 1) {
+    background-color: @color1;
     background-image: linear-gradient(bottom, @color1 percentage(@percentage1), @color2 percentage(@percentage2));
     background-image: -o-linear-gradient(bottom, @color1 percentage(@percentage1), @color2 percentage(@percentage2));
     background-image: -moz-linear-gradient(bottom, @color1 percentage(@percentage1), @color2 percentage(@percentage2));
@@ -89,8 +90,8 @@
             linear,
             left bottom,
             left top,
-            color-stop(@percentage1, @color1),
-            color-stop(@percentage2, @color2)
+            from(@color1),
+            to(@color2)
     );
 }
 
