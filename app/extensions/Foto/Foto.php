@@ -85,7 +85,7 @@ class Foto extends Object
 			$sizeX = $matches[1];
 			$sizeY = $matches[2];
 			if ((int) $sizeY === 0) {
-				$resizeMethod = Image::EXACT;
+				$resizeMethod = Image::FILL_EXACT;
 			}
 		}
 
@@ -98,7 +98,7 @@ class Foto extends Object
 				$img = Image::fromFile($filename);
 
 				switch ($resizeMethod) {
-					case Image::EXACT:
+					case Image::FILL_EXACT:
 						$sizeY = $sizeX;
 						break;
 					case Image::FIT:
@@ -107,7 +107,6 @@ class Foto extends Object
 						$sizeY = min($sizeY, $img->height);
 						break;
 				}
-
 				$img->resize($sizeX, $sizeY, $resizeMethod);
 				$img->save($resized);
 			}
