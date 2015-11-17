@@ -505,7 +505,8 @@ class ImportFromMT1 extends Object
 
 		$stateRepo = $this->em->getRepository(OrderState::getClassName());
 		$orderRepo = $this->em->getRepository(Order::getClassName());
-		$orders = $orderRepo->findBy([], ['updatedAt' => 'ASC'], self::MAX_ORDERS);
+		$maxDate = DateTime::from('- 2 months');
+		$orders = $orderRepo->findBy(['createdAt >' => $maxDate], ['updatedAt' => 'ASC'], self::MAX_ORDERS);
 
 		foreach ($orders as $order) {
 			$orderStatusId = $conn->executeQuery(
