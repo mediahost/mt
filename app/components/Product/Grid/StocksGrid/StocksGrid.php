@@ -3,6 +3,7 @@
 namespace App\Components\Product\Grid;
 
 use App\Components\BaseControl;
+use App\Components\Product\Form\StockPrice;
 use App\Extensions\Grido\BaseGrid;
 use App\Model\Entity\Discount;
 use App\Model\Entity\Group;
@@ -141,7 +142,7 @@ class StocksGrid extends BaseControl
 					->setCustomRenderExport(function ($row) use ($priceLevel, $group) {
 						$discount = $row->getDiscountByGroup($group);
 						if ($discount && $discount->type === Discount::PERCENTAGE) {
-							return $discount->value . '%';
+							return (StockPrice::PERCENT_IS_PRICE ? $discount->value : 100 - $discount->value) . '%';
 						}
 						return Price::floatToStr($row->$priceLevel->withoutVat);
 					});

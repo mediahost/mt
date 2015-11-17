@@ -17,6 +17,9 @@ use Nette\Utils\ArrayHash;
 
 class StockPrice extends StockBase
 {
+
+	const PERCENT_IS_PRICE = TRUE;
+
 	// <editor-fold desc="variables">
 
 	/** @var VatFacade @inject */
@@ -29,7 +32,7 @@ class StockPrice extends StockBase
 	private $defaultWithVat = TRUE;
 
 	/** @var bool */
-	private $percentIsSale = TRUE;
+	private $percentIsSale = self::PERCENT_IS_PRICE;
 
 	// </editor-fold>
 
@@ -40,7 +43,7 @@ class StockPrice extends StockBase
 
 		$form = new Form();
 		$form->setTranslator($this->translator)
-			->setRenderer(new MetronicHorizontalFormRenderer());
+				->setRenderer(new MetronicHorizontalFormRenderer());
 		$form->getElementPrototype()->class('ajax');
 
 		$groupRepo = $this->em->getRepository(Group::getClassName());
@@ -106,11 +109,14 @@ class StockPrice extends StockBase
 
 			$fixedValue = Price::strToFloat($fixedValue);
 			$discount = NULL;
+			$percentValue = $percents->$groupId;
 			if ($fixedValue > 0) {
 				$discount = new Discount($fixedValue, Discount::FIXED_PRICE);
-			} else if ($percents->$groupId &&
-					0 < $percents->$groupId && $percents->$groupId <= 100) {
-				$value = $this->percentIsSale ? (100 - $percents->$groupId) : $percents->$groupId;
+			} else if ($percentValue &&
+					0 < $percentValue && $percentValue < 100 &&
+					(($this->percentIsSale && $percentValue > 0) || (!$this->percentIsSale && $percentValue < 100))
+			) {
+				$value = $this->percentIsSale ? $percents->$groupId : (100 - $percents->$groupId);
 				$discount = new Discount($value, Discount::PERCENTAGE);
 			}
 
@@ -175,7 +181,7 @@ class StockPrice extends StockBase
 			/* @var $groupDiscount GroupDiscount */
 			switch ($groupDiscount->discount->type) {
 				case Discount::PERCENTAGE:
-					$value = $this->percentIsSale ? (100 - $groupDiscount->discount->value) : $groupDiscount->discount->value;
+					$value = $this->percentIsSale ? $groupDiscount->discount->value : (100 - $groupDiscount->discount->value);
 					break;
 				default:
 					$value = $groupDiscount->discount->value;
