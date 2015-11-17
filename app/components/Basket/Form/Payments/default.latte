@@ -40,7 +40,7 @@
 							</div>
 							<div class="col-md-2 value">
 								{if $price > 0}
-									{$price|currency}
+									{$price|asCurrency:TRUE}
 								{else}
 									{_'cart.free'}
 								{/if}

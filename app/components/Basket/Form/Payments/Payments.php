@@ -125,7 +125,7 @@ class Payments extends BaseControl
 	protected function getPaymentsPrice()
 	{
 		$basket = $this->basketFacade->getBasket();
-		return $basket->getPaymentsPrice(NULL, $this->priceLevel);
+		return $basket->getPaymentsPrice($this->exchange, $this->priceLevel);
 	}
 
 	public function render()
