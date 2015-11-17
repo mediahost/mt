@@ -10,6 +10,7 @@ use App\Model\Entity\Newsletter\Subscriber;
 use App\Model\Entity\Order;
 use App\Model\Entity\OrderState;
 use App\Model\Entity\Payment;
+use App\Model\Entity\Product;
 use App\Model\Entity\Role;
 use App\Model\Entity\Shipping;
 use App\Model\Entity\Stock;
@@ -182,10 +183,11 @@ class ImportFromMT1 extends Object
 		$dbName = $this->getDbName();
 		$tableProducts = $dbName . '.' . self::TABLE_PRODUCT;
 
+		$stockRepo = $this->em->getRepository(Stock::getClassName());
 		$userRepo = $this->em->getRepository(User::getClassName());
 		$admin = $userRepo->findOneByMail('superadmin');
 
-		$maxId = (int) $conn->executeQuery("SELECT MAX(id) FROM `stock`")->fetchColumn();
+		$maxId = $this->loadNumber();
 		$offset = 0;
 		$limit = $this->maxInserts;
 		$stmt = $conn->executeQuery(
@@ -201,17 +203,24 @@ class ImportFromMT1 extends Object
 
 		foreach ($stmt->fetchAll() as $oldData) {
 			$this->checkLimit();
-			$startNum = (int) $oldData['id'];
-			$conn->executeQuery('ALTER TABLE `' . $stockTable . '` AUTO_INCREMENT=' . $startNum);
+			$stockId = (int) $oldData['id'];
+			$this->saveNumber($stockId);
 
-			$stock = new Stock();
-			$stock->setQuantity(0);
-			$stock->createdBy = $admin;
-			$stock->updatedBy = $admin;
-			$stock->product->createdBy = $admin;
-			$stock->product->updatedBy = $admin;
-			$this->em->persist($stock);
-			$this->em->flush();
+			$stock = $stockRepo->find($stockId);
+			if (!$stock) {
+				$conn->executeQuery("INSERT INTO `stock` (`id`) VALUES ('{$stockId}')");
+				$stock = $stockRepo->find($stockId);
+				if ($stock) {
+					$stock->product = new Product();
+					$stock->setQuantity(0);
+					$stock->createdBy = $admin;
+					$stock->updatedBy = $admin;
+					$stock->product->createdBy = $admin;
+					$stock->product->updatedBy = $admin;
+					$this->em->persist($stock);
+					$this->em->flush();
+				}
+			}
 		}
 
 		return $this;
@@ -474,9 +483,9 @@ class ImportFromMT1 extends Object
 					$order->setItem($stock, $price, $part['quantity'], $order->locale);
 				} catch (InsufficientQuantityException $ex) {
 					$message = "Stock with ID '{$stock->id}'"
-					. " has only {$stock->inStore}"
-					. " in store and required {$part['quantity']}"
-					. " in order with ID '{$orderID}' (CODE: {$orderCode})";
+							. " has only {$stock->inStore}"
+							. " in store and required {$part['quantity']}"
+							. " in order with ID '{$orderID}' (CODE: {$orderCode})";
 					throw new WrongSituationException($message);
 				}
 			}
@@ -738,11 +747,11 @@ class ImportFromMT1 extends Object
 	private function updateUsers()
 	{
 		$userRepo = $this->em->getRepository(User::getClassName());
-		
+
 		$fbUsers = $userRepo->findBy([
 			'facebook NOT' => NULL,
-		], [], 100);
-		
+				], [], 100);
+
 		foreach ($fbUsers as $user) {
 			$facebook = $user->facebook;
 			$user->facebook = NULL;
@@ -750,7 +759,7 @@ class ImportFromMT1 extends Object
 			$this->em->remove($facebook);
 		}
 		$this->em->flush();
-		
+
 		return $this;
 	}
 
@@ -836,6 +845,26 @@ class ImportFromMT1 extends Object
 			throw new LimitExceededException('Maximum insertion is exceeded');
 		}
 		$this->limit++;
+	}
+
+	private function saveNumber($number)
+	{
+		$dir = '../temp/session';
+		Helpers::mkDir($dir);
+		$file = $dir . '/number';
+		return file_put_contents($file, $number);
+	}
+
+	private function loadNumber()
+	{
+		$file = '../temp/session/number';
+		if (is_file($file)) {
+			$content = file_get_contents($file);
+			if ($content) {
+				return (int) $content;
+			}
+		}
+		return 0;
 	}
 
 }
