@@ -169,14 +169,20 @@ class MigrationPresenter extends BasePresenter
 		$time = Debugger::timer($methodName);
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
 		$producerRepo = $this->em->getRepository(Producer::getClassName());
-		$categoryRepo = $this->em->getRepository(Category::getClassName());
 		$groupRepo = $this->em->getRepository(Group::getClassName());
 		$unitRepo = $this->em->getRepository(Unit::getClassName());
 		$vatRepo = $this->em->getRepository(Vat::getClassName());
+		$signRepo = $this->em->getRepository(Sign::getClassName());
 
+		$signSettings = $this->settings->modules->signs;
 		$products = $this->getJson(self::URL_PRODUCTS);
 		$categories = $this->getCategoriesNames();
+		$categoryTree = $this->loadCategoryTree($this->getJson(self::URL_CATEGORIES));
 		$unit = $unitRepo->find(1);
+		
+		$conn = $this->em->getConnection();
+		$dbName = '`' . self::DB_NAME . '`';
+		$tableSigns = $dbName . '.' . self::TABLE_PRODUCT_SIGN;
 
 		$stocks = $stockRepo->findBy([], ['updatedAt' => 'ASC'], $updateCountMax);
 
@@ -192,9 +198,9 @@ class MigrationPresenter extends BasePresenter
 				$oldProduct = $products->{$stock->id};
 			} else {
 				$stock->active = FALSE;
-				$this->em->persist($stock);
-				$this->em->flush();
-				Debugger::log('Product with ID ' . $stock->id . ' was deactivated', self::LOGNAME);
+				$stock->updatedAt = new DateTime();
+				$stockRepo->delete($stock);
+				Debugger::log('Product with ID ' . $stock->id . ' was removed', self::LOGNAME);
 				continue;
 			}
 
@@ -270,26 +276,42 @@ class MigrationPresenter extends BasePresenter
 			}
 
 			if ($oldProduct->mainCategoryId && array_key_exists($oldProduct->mainCategoryId, $categories)) {
-				$categoryName = $categories[$oldProduct->mainCategoryId];
-				$mainCategory = $categoryRepo->findOneByName($categoryName, $this->locale);
+				$mainCategory = $this->findCategory($oldProduct->mainCategoryId, $categoryTree, $categories);
 				if ($mainCategory) {
 					$stock->product->mainCategory = $mainCategory;
 				}
 			}
+			
 			if (!$stock->product->mainCategory) {
-				Debugger::log('Missing mainCategory for CODE: ' . $pohodaCode . '; ID: ' . $oldProduct->id, self::LOGNAME);
+				Debugger::log('Missing mainCategory for ID: ' . $oldProduct->id, self::LOGNAME);
 				continue;
 			}
-			if (count($oldProduct->otherCategoriesIds) && count($stock->product->categories) === 1) {
+			if (count($oldProduct->otherCategoriesIds)) {
 				$stock->product->clearCategories();
 				foreach ($oldProduct->otherCategoriesIds as $otherCategoryId) {
 					if (array_key_exists($otherCategoryId, $categories)) {
-						$categoryName = $categories[$otherCategoryId];
-						$category = $categoryRepo->findOneByName($categoryName, $this->locale);
+						$category = $this->findCategory($otherCategoryId, $categoryTree, $categories);
 						if ($category) {
 							$stock->product->addCategory($category);
 						}
 					}
+				}
+			}
+
+			$signs = $conn->executeQuery(
+							"SELECT * "
+							. "FROM {$tableSigns} s "
+							. "WHERE product_id = ?", [$oldProduct->id])->fetchAll();
+			foreach ($signs as $sign) {
+				switch ($sign['sign_id']) {
+					case '1':
+						$sign = $signRepo->find($signSettings->values->new);
+						$stock->product->addSign($sign);
+						break;
+					case '3':
+						$sign = $signRepo->find($signSettings->values->sale);
+						$stock->product->addSign($sign);
+						break;
 				}
 			}
 
@@ -308,6 +330,7 @@ class MigrationPresenter extends BasePresenter
 				}
 			}
 
+			$stock->updatedAt = new DateTime();
 			$this->em->persist($stock);
 			try {
 				$this->em->flush();
