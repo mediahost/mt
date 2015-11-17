@@ -121,7 +121,7 @@ class ProductsPresenter extends BasePresenter
 	public function actionEdit($id)
 	{
 		$this->stockEntity = $this->stockRepo->find($id);
-		if (!$this->stockEntity) {
+		if (!$this->stockEntity || $this->stockEntity->isDeleted()) {
 			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Product')]);
 			$this->flashMessage($message, 'warning');
 			$this->redirect('default');
