@@ -12,6 +12,7 @@ use Nette\Utils\DateTime;
 
 /**
  * @ORM\Entity(repositoryClass="App\Model\Repository\StockRepository")
+ * @ORM\EntityListeners({"App\Listeners\Model\Entity\ProductListener"})
  *
  * @property Product $product
  * @property Variant $variant1
