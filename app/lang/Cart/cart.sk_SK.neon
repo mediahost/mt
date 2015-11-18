@@ -72,6 +72,7 @@ send: 'Odoslať'
 finish: 'Dokončiť objednávku'
 
 name: 'Tovar'
+code: 'Kód'
 quantity: 'Množstvo'
 unitPrice: 'Jedn. cena'
 total: 'Celkom'
