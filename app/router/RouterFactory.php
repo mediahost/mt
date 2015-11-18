@@ -82,12 +82,12 @@ class RouterFactory
 		$apiRouter[] = new ResourceRoute('<locale \w{2}>/export/heureka/products', [
 			'presenter' => 'ExportProducts',
 			'action' => 'readHeureka'
-				], ResourceRoute::GET);
+				], ResourceRoute::GET | ResourceRoute::POST | ResourceRoute::PUT | ResourceRoute::HEAD);
 
 		$apiRouter[] = new ResourceRoute('<locale \w{2}>/export/zbozi/products', [
 			'presenter' => 'ExportProducts',
 			'action' => 'readZbozi'
-				], ResourceRoute::GET);
+				], ResourceRoute::GET | ResourceRoute::POST | ResourceRoute::PUT | ResourceRoute::HEAD);
 
 		// </editor-fold>
 		// <editor-fold desc="Ajax">
