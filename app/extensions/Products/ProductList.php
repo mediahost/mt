@@ -476,7 +476,7 @@ class ProductList extends Control
 	 * @throws Exception
 	 * @return array
 	 */
-	public function getData($applyPaging = TRUE, $useCache = TRUE, $fetch = TRUE)
+	public function getData($applyPaging = TRUE, $useCache = TRUE, $fetch = TRUE, $prepare = TRUE)
 	{
 		if ($this->qb === NULL) {
 			throw new Exception('Model cannot be empty, please use method $productList->setQb().');
@@ -508,9 +508,11 @@ class ProductList extends Control
 
 			$this->onFetchData($this, $data);
 
-			foreach ($data as $item) {
-				$item->product->setCurrentLocale($this->translator->getLocale());
-				$this->onEachItem($this, $item);
+			if ($prepare) {
+				foreach ($data as $item) {
+					$item->product->setCurrentLocale($this->translator->getLocale());
+					$this->onEachItem($this, $item);
+				}
 			}
 		}
 
