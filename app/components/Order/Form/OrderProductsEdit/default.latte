@@ -8,6 +8,9 @@
 				<thead>
 					<tr>
 						<th class="hidden-xs" style="width: 50px;"></th>
+						<th style="width: 100px;">
+							{_'cart.code'}
+						</th>
 						<th>
 							{_'cart.name'}
 						</th>
@@ -33,6 +36,9 @@
 								</a>
 							</td>
 							<td>
+								{$stock->pohodaCode}
+							</td>
+							<td>
 								<a href="{plink Products:edit $stock->id}">{$item->name}</a>
 							</td>
 							<td class="text-right">
@@ -55,13 +61,13 @@
 						</tr>
 					{/foreach}
 					<tr>
-						<td class="hidden-xs"></td>
+						<td class="hidden-xs" colspan="2"></td>
 						<td>{_'Shipping'} - {_$order->shipping}</td>
 						<td colspan="2">{input shipping}</td>
 						<td class="text-right">{$order->shipping->price|currencyVat}</td>
 					</tr>
 					<tr>
-						<td class="hidden-xs"></td>
+						<td class="hidden-xs" colspan="2"></td>
 						<td>{_'Payment'} - {_$order->payment}</td>
 						<td colspan="2">{input payment}</td>
 						<td class="text-right">{$order->payment->price|currencyVat}</td>
@@ -69,7 +75,7 @@
 				</tbody>
 				<tfoot>
 					<tr>
-						<td colspan="3" rowspan="3"></td>
+						<td colspan="4" rowspan="3"></td>
 						<td>{_'cart.withoutVat'}</td>
 						<td class="text-right">
 							{$order->getTotalPrice($exchange, FALSE)|asCurrency:TRUE}

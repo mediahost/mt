@@ -72,6 +72,7 @@ send: 'Odeslat'
 finish: 'Dokončit objednávku'
 
 name: 'Zboží'
+code: 'Kód'
 quantity: 'Množství'
 unitPrice: 'Jedn. cena'
 total: 'Celkem'
