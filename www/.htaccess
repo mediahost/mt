@@ -10,8 +10,11 @@
 	RewriteEngine On
 	# RewriteBase /
 
-	RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
-	RewriteRule ^(.*)$ http://%1/$1 [R,QSA,L]
+	RewriteRule index.php/(.*)/$ http://%{HTTP_HOST}/$1 [R,L,NE]
+	RewriteRule index.php/(.*)$ http://%{HTTP_HOST}/$1 [R,L,NE]
+
+	RewriteCond %{HTTP_HOST} ^([^.]*)\.([^.]*)$
+	RewriteRule ^(.*)$ http://www.%{HTTP_HOST}/$1 [R,QSA,L]
 
 	# prevents files starting with dot to be viewed by browser
 	RewriteRule /\.|^\. - [F]
