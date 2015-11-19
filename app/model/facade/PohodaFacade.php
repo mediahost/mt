@@ -137,8 +137,10 @@ class PohodaFacade extends Object
 			case PohodaItem::VALUE_VAT_LOW:
 			case PohodaItem::VALUE_VAT_NONE:
 				$value = $vatRates->$string;
+				break;
 			default:
 				$value = $vatRates->{PohodaItem::VALUE_VAT_NONE};
+				break;
 		}
 		$vatRepo = $this->em->getRepository(Vat::getClassName());
 		return $vatRepo->findOneByValue($value);
