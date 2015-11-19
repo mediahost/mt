@@ -71,26 +71,32 @@ class PohodaFacade extends Object
 			$conditions['updatedAt >='] = $lastChange;
 		}
 
-		$pohodaItems = $pohodaRepo->findArrGroupedBy($conditions);
+		$pohodaItems = $pohodaRepo->findArrGroupedBy($conditions, 1000, 0);
 		$i = 0;
 		foreach ($pohodaItems as $group) {
 			list($pohodaProductArr, $totalCount) = $group;
+			$totalCount = $totalCount > 0 ? $totalCount : 0;
 
 			/* @var $stock Stock */
 			if (array_key_exists('code', $pohodaProductArr)) {
+
 				$stock = $stockRepo->findOneByPohodaCode($pohodaProductArr['code']);
 				$change = FALSE;
-				if ($stock && $totalCount > 0) {
+				if (!$stock) {
+					continue;
+				}
+
+				if ($stock->quantity != $totalCount) {
+					$stock->quantity = $totalCount;
+					$change = TRUE;
+				}
+
+				if ($totalCount) {
 
 					$translation = $stock->product->translateAdd($language);
 					if ($translation->name != $pohodaProductArr['name']) {
 						$translation->name = $pohodaProductArr['name'];
 						$stock->product->mergeNewTranslations();
-						$change = TRUE;
-					}
-
-					if ($stock->quantity != $totalCount) {
-						$stock->quantity = $totalCount;
 						$change = TRUE;
 					}
 
@@ -114,11 +120,11 @@ class PohodaFacade extends Object
 						$stock->vat = $vat;
 						$change = TRUE;
 					}
+				}
 
-					if ($change) {
-						$this->em->persist($stock);
-						$i++;
-					}
+				if ($change) {
+					$this->em->persist($stock);
+					$i++;
 				}
 			}
 
