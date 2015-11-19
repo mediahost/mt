@@ -72,12 +72,12 @@ class RouterFactory
 		$apiRouter[] = new ResourceRoute('xml_pohoda/zasoby.php', [
 			'presenter' => 'PohodaConnector',
 			'action' => 'createStore'
-				], ResourceRoute::POST);
+				], ResourceRoute::GET | ResourceRoute::POST);
 
 		$apiRouter[] = new ResourceRoute('xml_pohoda/zasoby_short.php', [
 			'presenter' => 'PohodaConnector',
 			'action' => 'createShortStock'
-				], ResourceRoute::POST);
+				], ResourceRoute::GET | ResourceRoute::POST);
 
 		$apiRouter[] = new ResourceRoute('<locale \w{2}>/export/heureka/products', [
 			'presenter' => 'ExportProducts',
