@@ -54,10 +54,10 @@ class PohodaItem extends BaseEntity
 	/** @ORM\Column(type="string", length=20, nullable=true) */
 	protected $ean;
 
-	/** @ORM\Column(type="integer", nullable=true) */
+	/** @ORM\Column(type="string", length=20, nullable=true) */
 	protected $count;
 
-	/** @ORM\Column(type="integer", nullable=true) */
+	/** @ORM\Column(type="string", length=20, nullable=true) */
 	protected $countReceivedOrders;
 	
 	/** @var int */
