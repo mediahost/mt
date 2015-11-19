@@ -499,60 +499,36 @@ class ImportFromMT1 extends Object
 
 	private function updateOrders()
 	{
-		$conn = $this->em->getConnection();
-		$dbName = $this->getDbName();
-		$tableOrders = $dbName . '.' . self::TABLE_ORDER;
-
-		$stateRepo = $this->em->getRepository(OrderState::getClassName());
 		$orderRepo = $this->em->getRepository(Order::getClassName());
-		$maxDate = DateTime::from('- 2 months');
-		$orders = $orderRepo->findBy(['createdAt >' => $maxDate], ['updatedAt' => 'ASC'], self::MAX_ORDERS);
+		$stateRepo = $this->em->getRepository(OrderState::getClassName());
+		$stockRepo = $this->em->getRepository(Stock::getClassName());
+		$state1 = $stateRepo->find(OrderState::ORDERED_IN_SYSTEM);
+		$state2 = $stateRepo->find(OrderState::IN_PROCEEDINGS);
+		
+		$orders1 = $orderRepo->findBy(['state' => $state1]);
+		$orders2 = $orderRepo->findBy(['state' => $state2]);
+		$orders = array_merge($orders1, $orders2);
 
+		$stocks = [];
 		foreach ($orders as $order) {
-			$orderStatusId = $conn->executeQuery(
-							"SELECT order_status_id "
-							. "FROM {$tableOrders} o "
-							. "WHERE code = ? "
-							. "LIMIT 1"
-							, [$order->id])->fetchColumn();
-
-			switch ($orderStatusId) {
-				case '1':
-					$state = $stateRepo->find(OrderState::ORDERED_IN_SYSTEM);
-					break;
-				case '2':
-					$state = $stateRepo->find(OrderState::IN_PROCEEDINGS);
-					break;
-				case '3':
-					$state = $stateRepo->find(OrderState::SENT_SHIPPERS);
-					break;
-				case '4':
-					$state = $stateRepo->find(OrderState::OK_RECIEVED);
-					break;
-				case '5':
-					$state = $stateRepo->find(OrderState::READY_TO_TAKE);
-					break;
-				case '6':
-					$state = $stateRepo->find(OrderState::CANCELED);
-					break;
-				case '7':
-					$state = $stateRepo->find(OrderState::OK_TAKEN);
-					break;
-				default:
-					$message = "Order with ID {$order->id} has unknows state ID '{$orderStatusId}'";
-					throw new WrongSituationException($message);
-			}
-			if ($state && $order->state->id != $state->id) {
-				$oldState = $order->state;
-				$order->state = $state;
-				$order->updatedAt = new DateTime();
-				$this->em->persist($order);
-				$this->em->flush();
-
-				$this->orderFacade->relockAndRequantityProducts($order, $oldState);
+			foreach ($order->items as $item) {
+				$id = $item->stock->id;
+				$quantity = $item->quantity;
+				if (array_key_exists($item->stock->id, $stocks)) {
+					$stocks[$id] += $quantity;
+				} else {
+					$stocks[$id] = $quantity;
+				}
 			}
 		}
-
+		foreach ($stocks as $stockId => $locks) {
+			/* @var $stock Stock */
+			$stock = $stockRepo->find($stockId);
+			if ($stock) {
+				$stock->setLock($locks);
+				$stockRepo->save($stock);
+			}
+		}
 		return $this;
 	}
 
