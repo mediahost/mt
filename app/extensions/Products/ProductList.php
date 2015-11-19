@@ -164,6 +164,14 @@ class ProductList extends Control
 		return $this;
 	}
 
+	public function addFilterNotCategory(Category $category)
+	{
+		$this->setFilter([
+			'categoryNot' => implode(',', array_keys($category->childrenArray)),
+		]);
+		return $this;
+	}
+
 	public function addFilterProducer(Producer $producer)
 	{
 		$this->setFilter([
@@ -659,6 +667,9 @@ class ProductList extends Control
 				case 'category':
 					$this->filterByCategory($value);
 					break;
+				case 'categoryNot':
+					$this->filterByCategoryNot($value);
+					break;
 				case 'producer':
 					$this->filterByProducer($value);
 					break;
@@ -732,6 +743,23 @@ class ProductList extends Control
 		} else {
 			$this->qb
 					->andWhere('categories = :category')
+					->setParameter('category', $category);
+		}
+
+		return $this;
+	}
+
+	protected function filterByCategoryNot($category)
+	{
+		$category = is_string($category) ? explode(',', $category) : $category;
+		$this->qb->innerJoin('p.categories', 'categories');
+		if (is_array($category)) {
+			$this->qb
+					->andWhere('categories NOT IN (:categories)')
+					->setParameter('categories', $category);
+		} else {
+			$this->qb
+					->andWhere('categories != :category')
 					->setParameter('category', $category);
 		}
 

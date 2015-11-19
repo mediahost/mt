@@ -82,6 +82,7 @@ class SettingsExtension extends CompilerExtension
 				'deliveryNotInStoreTime' => NULL,
 				'onlyInStore' => TRUE,
 				'hideDelivery' => FALSE,
+				'denyCategoryId' => NULL,
 				'locales' => [],
 			],
 			'zbozi' => [
