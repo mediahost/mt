@@ -82,7 +82,7 @@ class PohodaConnectorPresenter extends BasePresenter
 			$minusTime = '-' . $this->settings->modules->pohoda->ordersExportDaysBack;
 			$lastEditTime = DateTime::from($minusTime);
 			$conditions = [
-				'updatedAt >=' => $lastEditTime,
+				'createdAt >=' => $lastEditTime,
 				'state.type !=' => $type,
 			];
 			$orders = $orderRepo->findBy($conditions, ['createdAt' => 'ASC']);
