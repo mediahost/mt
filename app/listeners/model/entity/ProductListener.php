@@ -2,10 +2,6 @@
 
 namespace App\Listeners\Model\Entity;
 
-use App\ApiModule\Presenters\ExportProductsPresenter;
-use App\Model\Entity\Product;
-use App\Model\Entity\ProductTranslation;
-use App\Model\Entity\Stock;
 use App\Model\Facade\StockFacade;
 use Doctrine\ORM\Events;
 use Kdyby\Doctrine\EntityManager;
@@ -35,43 +31,25 @@ class ProductListener extends Object implements Subscriber
 
 	public function prePersist($params)
 	{
-		$this->clearCache($params);
+		$this->clearCache();
 	}
 
 	public function preUpdate($params)
 	{
-		$this->clearCache($params);
+		$this->clearCache();
 	}
 
 	public function postRemove($params)
 	{
-		$this->clearCache($params);
+		$this->clearCache();
 	}
 
 	// </editor-fold>
 
-	private function clearCache($params)
+	private function clearCache()
 	{
-		$tags = [
-			StockFacade::TAG_ALL_PRODUCTS,
-			ExportProductsPresenter::TAG_STOCK,
-		];
-
-		$id = NULL;
-		if ($params instanceof Stock) {
-			$id = $params->id;
-		} else if ($params instanceof Product) {
-			$id = $params->stock->id;
-		} else if ($params instanceof ProductTranslation) {
-			$id = $params->translatable->stock->id;
-		}
-		
-		if ($id) {
-			$tags[] = ExportProductsPresenter::TAG_STOCK . '/' . $id;
-		}
-
 		$this->stockFacade->getCache()->clean([
-			Cache::TAGS => $tags,
+			Cache::TAGS => [StockFacade::TAG_ALL_PRODUCTS],
 		]);
 	}
 

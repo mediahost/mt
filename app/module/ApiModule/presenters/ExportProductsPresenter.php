@@ -3,6 +3,7 @@
 namespace App\ApiModule\Presenters;
 
 use App\Extensions\Products\ProductList;
+use App\Model\Entity\Category;
 use App\Model\Entity\Parameter;
 use App\Model\Entity\Payment;
 use App\Model\Entity\Shipping;
@@ -14,16 +15,13 @@ use Nette\Caching\Cache;
 class ExportProductsPresenter extends BasePresenter
 {
 
-	const KEY_ALL_STOCKS = 'heureka-stocks';
-	const TAG_ALL_STOCKS = 'heureka/stocks';
-	const TAG_STOCK = 'heureka/stock';
-	const TAG_DELIVERY = 'heureka/delivery';
-
 	/** @var StockFacade @inject */
 	public $stockFacade;
 
-	public function actionReadHeureka()
+	public function actionReadHeureka($reload = FALSE)
 	{
+		ini_set('max_execution_time', 1500);
+
 		if (!$this->settings->modules->heureka->enabled) {
 			$this->resource->state = 'error';
 			$this->resource->message = 'This module is not allowed';
@@ -39,6 +37,7 @@ class ExportProductsPresenter extends BasePresenter
 
 			/* @var $stockRepo StockRepository */
 			$stockRepo = $this->em->getRepository(Stock::getClassName());
+			$categoryRepo = $this->em->getRepository(Category::getClassName());
 
 			$list = new ProductList();
 			$list->setTranslator($this->translator);
@@ -46,6 +45,12 @@ class ExportProductsPresenter extends BasePresenter
 			$list->qb = $stockRepo->createQueryBuilder('s')
 					->innerJoin('s.product', 'p');
 			$list->showOnlyAvailable = $this->settings->modules->heureka->onlyInStore;
+			if ($this->settings->modules->heureka->denyCategoryId) {
+				$denyCategory = $categoryRepo->find($this->settings->modules->heureka->denyCategoryId);
+				if ($denyCategory) {
+					$list->addFilterNotCategory($denyCategory);
+				}
+			}
 
 			$paramRepo = $this->em->getRepository(Parameter::getClassName());
 			$allParams = $paramRepo->findAll();
@@ -57,23 +62,25 @@ class ExportProductsPresenter extends BasePresenter
 				'active' => TRUE,
 				'needAddress' => TRUE,
 			]);
-			
-			$locale = $this->translator->getLocale();
-			$cache = $this->stockFacade->getCache();
-			
-			$stocks = $cache->load(self::KEY_ALL_STOCKS . $locale);
-			if (!$stocks) {
+
+			$cacheKey = 'heureka-stocks-' . $this->translator->getLocale();
+			$cacheTag = 'heureka/stocks/' . $this->translator->getLocale();
+
+			if ($reload) {
+				$cache = $this->stockFacade->getCache();
+				$cache->clean([Cache::TAGS => [$cacheTag]]);
 				$stocks = $list->getData(FALSE, TRUE, TRUE, FALSE);
-				$cache->save(self::KEY_ALL_STOCKS . $locale, $stocks, [
-					Cache::TAGS => [self::TAG_STOCK],
-				]);
+			} else {
+				$stocks = [];
 			}
 
 			$this->template->stocks = $stocks;
 			$this->template->params = $allParams;
 			$this->template->shippings = $shippings;
 			$this->template->paymentOnDelivery = $paymentOnDelivery;
-			$this->template->locale = $locale;
+			$this->template->locale = $this->translator->getLocale();
+			$this->template->cacheKey = $cacheKey;
+			$this->template->cacheTag = $cacheTag;
 			$this->template->cpc = $this->settings->modules->heureka->cpc;
 			$this->template->deliveryStoreTime = $this->settings->modules->heureka->deliveryStoreTime;
 			$this->template->deliveryNotInStoreTime = $this->settings->modules->heureka->deliveryNotInStoreTime;
