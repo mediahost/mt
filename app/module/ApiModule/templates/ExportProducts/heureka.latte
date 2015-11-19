@@ -2,9 +2,8 @@
 {contentType application/xml}
 <?xml version="1.0" encoding="utf-8"?>
 <SHOP>
-
-    <SHOPITEM n:foreach="$stocks as $stock">
-		{cache $locale . $stock->id, tags => ['heureka/stock/' . $stock->id, 'heureka/stocks', 'heureka/delivery']}
+	{cache $cacheKey, tags => [$cacheTag]}
+		<SHOPITEM n:foreach="$stocks as $stock">
 			{var product => $stock->product}
 			{var producer => $stock->product->producer}
 			{? $product->setCurrentLocale($locale)}
@@ -46,8 +45,7 @@
 					{$codPrice|change:NULL,NULL,2}
 				</DELIVERY_PRICE_COD>
 			</DELIVERY>
-		{/cache}
 
-    </SHOPITEM>
-
+		</SHOPITEM>
+	{/cache}
 </SHOP>
