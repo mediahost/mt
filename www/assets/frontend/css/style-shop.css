@@ -785,9 +785,7 @@ Header and header elements
 }
 .product-main-image {
 	margin-bottom: 20px;
-}
-.product-main-image img {
-	width: 100%;
+	text-align: center;
 }
 .product-other-images {
 	text-align: left;
