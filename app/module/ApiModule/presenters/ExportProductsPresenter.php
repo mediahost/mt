@@ -21,6 +21,9 @@ class ExportProductsPresenter extends BasePresenter
 	public function actionReadHeureka($reload = FALSE)
 	{
 		ini_set('max_execution_time', 1500);
+		if ($reload) {
+			proc_nice(19);
+		}
 
 		if (!$this->settings->modules->heureka->enabled) {
 			$this->resource->state = 'error';
