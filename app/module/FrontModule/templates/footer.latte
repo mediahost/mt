@@ -57,39 +57,44 @@
 					{$pageInfo->description}
 				</p>
 
-				<div class="photo-stream">
-					<h2>{_'Open hours'}</h2>
-					<table>
-						<tr>
-							<th style="width:150px">Pondelok:</th>
-							<td>9:00 - 17:00</td>
-						</tr>
-						<tr>
-							<th>Utorok:</th>
-							<td>9:00 - 17:00</td>
-						</tr>
-						<tr>
-							<th>Streda:</th>
-							<td>9:00 - 17:00</td>
-						</tr>
-						<tr>
-							<th>Štvrtok:</th>
-							<td>9:00 - 17:00</td>
-						</tr>
-						<tr>
-							<th>Piatok:</th>
-							<td>9:00 - 17:00</td>
-						</tr>
-						<tr>
-							<th>Sobota – Nedeľa:</th>
-							<td>Zatvorené</td>
-						</tr>
-						<tr>
-							<th>Sviatky:</th>
-							<td>Zatvorené</td>
-						</tr>
-					</table>             
-				</div>
+				<h2>{_'Open hours'}</h2>
+				<table>
+					<tr>
+						<th style="width:150px">Pondelok:</th>
+						<td>9:00 - 17:00</td>
+					</tr>
+					<tr>
+						<th>Utorok:</th>
+						<td>9:00 - 17:00</td>
+					</tr>
+					<tr>
+						<th>Streda:</th>
+						<td>9:00 - 17:00</td>
+					</tr>
+					<tr>
+						<th>Štvrtok:</th>
+						<td>9:00 - 17:00</td>
+					</tr>
+					<tr>
+						<th>Piatok:</th>
+						<td>9:00 - 17:00</td>
+					</tr>
+					<tr>
+						<th>Sobota – Nedeľa:</th>
+						<td>Zatvorené</td>
+					</tr>
+					<tr>
+						<th>Sviatky:</th>
+						<td>Zatvorené</td>
+					</tr>
+				</table>   
+
+				{if $footerPages->page2}
+					{var $footerPage => $footerPages->page2}
+					{? $footerPage->setCurrentLocale($lang)}
+					<h2 class="margin-top-20">{$footerPage}</h2>
+					<a n:href="Page:, $footerPage->id">{$footerPage}</a>
+				{/if}
 			</div>
 
 			<!-- END BOTTOM ABOUT BLOCK -->
