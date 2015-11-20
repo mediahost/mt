@@ -752,14 +752,13 @@ class ProductList extends Control
 	protected function filterByCategoryNot($category)
 	{
 		$category = is_string($category) ? explode(',', $category) : $category;
-		$this->qb->innerJoin('p.categories', 'categories');
 		if (is_array($category)) {
 			$this->qb
-					->andWhere('categories NOT IN (:categories)')
+					->andWhere('p.mainCategory NOT IN (:categories)')
 					->setParameter('categories', $category);
 		} else {
 			$this->qb
-					->andWhere('categories != :category')
+					->andWhere('p.mainCategory != :category')
 					->setParameter('category', $category);
 		}
 
