@@ -31,12 +31,16 @@ class ProductListener extends Object implements Subscriber
 
 	public function prePersist($params)
 	{
-		$this->clearCache();
+		if ($this->hasChange($params)) {
+			$this->clearCache();
+		}
 	}
 
 	public function preUpdate($params)
 	{
-		$this->clearCache();
+		if ($this->hasChange($params)) {
+			$this->clearCache();
+		}
 	}
 
 	public function postRemove($params)
@@ -45,6 +49,16 @@ class ProductListener extends Object implements Subscriber
 	}
 
 	// </editor-fold>
+
+	private function hasChange($entity)
+	{
+		$uow = $this->em->getUnitOfWork();
+		$changes = $uow->getEntityChangeSet($entity);
+		if (is_array($changes) && array_key_exists('name', $changes)) {
+			return TRUE;
+		}
+		return FALSE;
+	}
 
 	private function clearCache()
 	{
