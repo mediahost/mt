@@ -190,17 +190,6 @@ class OrderFacade extends Object
 	}
 
 	/**
-	 * @param $orderId
-	 * @return null|Order
-	 */
-	public function get($orderId)
-	{
-		$orderRepo = $this->em->getRepository(Order::getClassName());
-		$order = $orderRepo->find($orderId);
-		return $order;
-	}
-
-	/**
 	 * @param Order $order
 	 * @param $payType
 	 */

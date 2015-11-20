@@ -2,6 +2,7 @@
 
 namespace App\NotificationModule\Presenters;
 
+use App\Model\Entity\Order;
 use App\Model\Facade\OrderFacade;
 use App\Service\PaymentNotification\Payment;
 use App\Service\PaymentNotification\PaymentNotificationParser;
@@ -29,7 +30,8 @@ class BankPresenter extends BasePresenter
 
 	public function processPayment(Payment $payment)
 	{
-		$order = $this->orderFacade->get($payment->vs);
+		$orderRepo = $this->em->getRepository(Order::getClassName());
+		$order = $orderRepo->find($payment->vs);
 		if (!$order) {
 		    return;
 		}

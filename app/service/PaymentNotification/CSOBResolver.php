@@ -39,7 +39,7 @@ class CSOBResolver implements IResolver
 				continue;
 			}
 			$vs = $matches[1];
-			$return[] = new Payment($vs, $price, Order::PAID_BLAME_CSOB);
+			$return[] = new Payment($vs, $price, Order::PAYMENT_BLAME_CSOB);
 		}
 		return $return;
 	}
