@@ -2,7 +2,7 @@
 {contentType application/xml}
 <?xml version="1.0" encoding="utf-8"?>
 <SHOP>
-	{cache $cacheKey, tags => [$cacheTag]}
+	{cache $cacheKey, expire => '14 days', tags => [$cacheTag]}
 		<SHOPITEM n:foreach="$stocks as $stock">
 			{var product => $stock->product}
 			{var producer => $stock->product->producer}
