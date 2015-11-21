@@ -65,6 +65,7 @@
 								<th class="goods-page-description" colspan="2">{_'cart.name'}</th>
 								<th class="goods-page-quantity">{_'cart.quantity'}</th>
 								<th class="goods-page-price">{_'cart.unitPrice'}</th>
+								<th class="goods-page-vat">{_'cart.vat'}</th>
 								<th class="goods-page-total">{_'cart.total'}</th>
 							</tr>
 							{foreach $order->items as $item}
@@ -88,6 +89,9 @@
 									<td class="goods-page-price">
 										<strong>{$stock->price->withVat|currency}</strong>
 									</td>
+									<td class="goods-page-vat">
+										<strong>{$stock->vat}</strong>
+									</td>
 									<td class="goods-page-total">
 										<strong>{$item->getTotalPrice($exchange)|asCurrency:TRUE}</strong>
 									</td>
@@ -105,6 +109,9 @@
 								<td class="goods-page-price">
 									<strong>{$order->shipping->price->withVat|currency}</strong>
 								</td>
+								<td class="goods-page-vat">
+									<strong>{$order->shipping->vat}</strong>
+								</td>
 								<td class="goods-page-total">
 									<strong>{$order->shipping->price->withVat|currency}</strong>
 								</td>
@@ -120,6 +127,9 @@
 								</td>
 								<td class="goods-page-price">
 									<strong>{$order->payment->price->withVat|currency}</strong>
+								</td>
+								<td class="goods-page-vat">
+									<strong>{$order->payment->vat}</strong>
 								</td>
 								<td class="goods-page-total">
 									<strong>{$order->payment->price->withVat|currency}</strong>
