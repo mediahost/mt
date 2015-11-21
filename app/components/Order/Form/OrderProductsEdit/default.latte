@@ -14,10 +14,13 @@
 						<th>
 							{_'cart.name'}
 						</th>
-						<th style="width: 158px;">
+						<th style="width: 100px;">
 							{_'cart.unitPrice'}
 						</th>
-						<th style="width: 97px;">
+						<th class="text-center" style="width: 58px;">
+							{_'cart.vat'}
+						</th>
+						<th class="text-center" style="width: 97px;">
 							{_'cart.quantity'}
 						</th>
 						<th style="width: 130px;">
@@ -44,6 +47,9 @@
 							<td class="text-right">
 								{$item->price|currencyVat}
 							</td>
+							<td class="text-center">
+								{$item->vat}
+							</td>
 							<td style="padding-top: 1px; padding-bottom: 1px;">
 								{input $form['quantities'][$stock->id]}
 								{? $form['quantities'][$stock->id]->setOption('rendered', TRUE)}
@@ -63,19 +69,19 @@
 					<tr>
 						<td class="hidden-xs" colspan="2"></td>
 						<td>{_'Shipping'} - {_$order->shipping}</td>
-						<td colspan="2">{input shipping}</td>
+						<td colspan="3">{input shipping}</td>
 						<td class="text-right">{$order->shipping->price|currencyVat}</td>
 					</tr>
 					<tr>
 						<td class="hidden-xs" colspan="2"></td>
 						<td>{_'Payment'} - {_$order->payment}</td>
-						<td colspan="2">{input payment}</td>
+						<td colspan="3">{input payment}</td>
 						<td class="text-right">{$order->payment->price|currencyVat}</td>
 					</tr>
 				</tbody>
 				<tfoot>
 					<tr>
-						<td colspan="4" rowspan="3"></td>
+						<td colspan="5" rowspan="3"></td>
 						<td>{_'cart.withoutVat'}</td>
 						<td class="text-right">
 							{$order->getTotalPrice($exchange, FALSE)|asCurrency:TRUE}

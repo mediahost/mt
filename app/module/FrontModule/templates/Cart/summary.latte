@@ -43,6 +43,7 @@
 								<th class="goods-page-description" colspan="2">{_'cart.name'}</th>
 								<th class="goods-page-quantity">{_'cart.quantity'}</th>
 								<th class="goods-page-price">{_'cart.unitPrice'}</th>
+								<th class="goods-page-vat">{_'cart.vat'}</th>
 								<th class="goods-page-total">{_'cart.total'}</th>
 							</tr>
 							{foreach $basket->items as $item}
@@ -66,6 +67,9 @@
 									<td class="goods-page-price">
 										<strong>{$stock->getPrice($priceLevel)|currencyVat}</strong>
 									</td>
+									<td class="goods-page-vat">
+										<strong>{$stock->vat}</strong>
+									</td>
 									<td class="goods-page-total">
 										<strong>{$item->getTotalPrice($exchange, $priceLevel)|asCurrency:TRUE}</strong>
 									</td>
@@ -83,6 +87,9 @@
 								<td class="goods-page-price">
 									<strong>{$basket->getShippingPrice($priceLevel)|currencyVat}</strong>
 								</td>
+								<td class="goods-page-vat">
+									<strong>{$basket->shipping->vat}</strong>
+								</td>
 								<td class="goods-page-total">
 									<strong>{$basket->getShippingPrice($priceLevel)|currencyVat}</strong>
 								</td>
@@ -98,6 +105,9 @@
 								</td>
 								<td class="goods-page-price">
 									<strong>{$basket->getPaymentPrice($priceLevel)|currencyVat}</strong>
+								</td>
+								<td class="goods-page-vat">
+									<strong>{$basket->payment->vat}</strong>
 								</td>
 								<td class="goods-page-total">
 									<strong>{$basket->getPaymentPrice($priceLevel)|currencyVat}</strong>
