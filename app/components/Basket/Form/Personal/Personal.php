@@ -141,7 +141,9 @@ class Personal extends BaseControl
 				->setOption('container', $fieldsetCompany);
 
 		$form->addText('ico', 'cart.form.ico', NULL, 30)
-						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_S;
+				->addConditionOn($form['isCompany'], Form::EQUAL, TRUE)
+				->addRule(Form::FILLED, 'cart.form.validator.filled');
+		$form['ico']->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_S;
 		$form->addText('dic', 'cart.form.dic', NULL, 30)
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_S;
 		$form->addText('icoVat', 'cart.form.icoVat', NULL, 30)
