@@ -86,6 +86,12 @@ class Stock extends BaseEntity
 	{
 		return $this->id === NULL;
 	}
+	
+	public function setActive($value = TRUE)
+	{
+		$this->active = $value;
+		$this->product->active = $value;
+	}
 
 	public function &__get($name)
 	{
