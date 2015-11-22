@@ -18,12 +18,10 @@ class ExportProductsPresenter extends BasePresenter
 	/** @var StockFacade @inject */
 	public $stockFacade;
 
-	public function actionReadHeureka($reload = FALSE)
+	public function actionReadHeureka()
 	{
 		ini_set('max_execution_time', 1500);
-		if ($reload) {
-			proc_nice(19);
-		}
+//		proc_nice(19);
 
 		if (!$this->settings->modules->heureka->enabled) {
 			$this->resource->state = 'error';
@@ -41,22 +39,13 @@ class ExportProductsPresenter extends BasePresenter
 			/* @var $stockRepo StockRepository */
 			$stockRepo = $this->em->getRepository(Stock::getClassName());
 			$categoryRepo = $this->em->getRepository(Category::getClassName());
-
-			$list = new ProductList();
-			$list->setTranslator($this->translator);
-			$list->setExchange($this->exchange, $this->exchange->getDefault());
-			$list->qb = $stockRepo->createQueryBuilder('s')
-					->innerJoin('s.product', 'p');
-			$list->showOnlyAvailable = $this->settings->modules->heureka->onlyInStore;
+			
+			$showOnlyInStore = $this->settings->modules->heureka->onlyInStore;
+			$denyCategory = NULL;
 			if ($this->settings->modules->heureka->denyCategoryId) {
 				$denyCategory = $categoryRepo->find($this->settings->modules->heureka->denyCategoryId);
-				if ($denyCategory) {
-					$list->addFilterNotCategory($denyCategory);
-				}
 			}
-
-			$paramRepo = $this->em->getRepository(Parameter::getClassName());
-			$allParams = $paramRepo->findAll();
+			$stocks = $this->stockFacade->getExportStocksArray($showOnlyInStore, $denyCategory);
 
 			$paymentRepo = $this->em->getRepository(Payment::getClassName());
 			$paymentOnDelivery = $paymentRepo->find(Payment::ON_DELIVERY);
@@ -66,24 +55,11 @@ class ExportProductsPresenter extends BasePresenter
 				'needAddress' => TRUE,
 			]);
 
-			$cacheKey = 'heureka-stocks-' . $this->translator->getLocale();
-			$cacheTag = 'heureka/stocks/' . $this->translator->getLocale();
-
-			if ($reload) {
-				$cache = $this->stockFacade->getCache();
-				$cache->clean([Cache::TAGS => [$cacheTag]]);
-				$stocks = $list->getData(FALSE, TRUE, TRUE, FALSE);
-			} else {
-				$stocks = [];
-			}
-
 			$this->template->stocks = $stocks;
-			$this->template->params = $allParams;
+			$this->template->stockRepo = $stockRepo;
 			$this->template->shippings = $shippings;
 			$this->template->paymentOnDelivery = $paymentOnDelivery;
 			$this->template->locale = $this->translator->getLocale();
-			$this->template->cacheKey = $cacheKey;
-			$this->template->cacheTag = $cacheTag;
 			$this->template->cpc = $this->settings->modules->heureka->cpc;
 			$this->template->deliveryStoreTime = $this->settings->modules->heureka->deliveryStoreTime;
 			$this->template->deliveryNotInStoreTime = $this->settings->modules->heureka->deliveryNotInStoreTime;

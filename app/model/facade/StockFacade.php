@@ -15,6 +15,7 @@ use App\Model\Repository\ProductRepository;
 use App\Model\Repository\SignRepository;
 use App\Model\Repository\StockRepository;
 use App\Router\RouterFactory;
+use Doctrine\ORM\AbstractQuery;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Translation\Translator;
 use Nette\Application\Request;
@@ -199,6 +200,39 @@ class StockFacade extends Object
 	{
 		$cache = new Cache($this->cacheStorage, get_class($this));
 		return $cache;
+	}
+
+	public function getExportStocksArray($onlyInStore = TRUE, Category $denyCategory = NULL)
+	{
+		$qb = $this->stockRepo->createQueryBuilder('s')
+				->select('s, p, i, c, t, v')
+				->innerJoin('s.product', 'p')
+				->leftJoin('p.translations', 't')
+				->innerJoin('p.image', 'i')
+				->innerJoin('p.mainCategory', 'c')
+				->innerJoin('s.vat', 'v')
+				->andWhere('(t.locale = :lang OR t.locale = :defaultLang)')
+				->setParameter('lang', $this->translator->getLocale())
+				->setParameter('defaultLang', $this->translator->getDefaultLocale())
+				->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
+				->andWhere('p.deletedAt IS NULL OR p.deletedAt > :now')
+				->setParameter('now', new DateTime())
+				->andWhere('s.active = :active')
+				->andWhere('p.active = :active')
+				->setParameter('active', TRUE);
+		if ($onlyInStore) {
+			$qb
+					->andWhere("s.inStore >= :inStore")
+					->setParameter('inStore', 1);
+		}
+		if ($denyCategory) {
+			$denyCategories = implode(',', array_keys($denyCategory->childrenArray));
+			$qb
+					->andWhere('p.mainCategory NOT IN (:categories)')
+					->setParameter('categories', $denyCategories);
+		}
+		return $qb->getQuery()
+				->getResult(AbstractQuery::HYDRATE_ARRAY);
 	}
 
 }
