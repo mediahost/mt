@@ -55,7 +55,7 @@ class PohodaFacade extends Object
 	/** @var SettingsStorage @inject */
 	public $settings;
 
-	public function updateFullProducts($lastChange = NULL)
+	public function updateFullProducts($lastChange = NULL, $offset = 0)
 	{
 		/* @var $pohodaRepo PohodaItemRepository */
 		$pohodaRepo = $this->em->getRepository(PohodaItem::getClassName());
@@ -71,11 +71,15 @@ class PohodaFacade extends Object
 			$conditions['updatedAt >='] = $lastChange;
 		}
 
-		$pohodaItems = $pohodaRepo->findArrGroupedBy($conditions, 1000, 0);
+		$pohodaItems = $pohodaRepo->findArrBy($conditions, 1000, $offset);
 		$i = 0;
-		foreach ($pohodaItems as $group) {
-			list($pohodaProductArr, $totalCount) = $group;
-			$totalCount = $totalCount > 0 ? $totalCount : 0;
+		foreach ($pohodaItems as $pohodaProductArr) {
+			$totalSumValue = $pohodaRepo->getSumCountGroupedBy($pohodaProductArr['code']);
+			$totalCount = 0;
+			if (is_array($totalSumValue) && array_key_exists(1, $totalSumValue)) {
+				$totalCountRaw = (int) $totalSumValue[1];
+				$totalCount = $totalCountRaw > 0 ? $totalCountRaw : 0;
+			}
 
 			/* @var $stock Stock */
 			if (array_key_exists('code', $pohodaProductArr)) {
