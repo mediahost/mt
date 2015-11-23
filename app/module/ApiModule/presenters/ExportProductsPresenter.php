@@ -18,10 +18,12 @@ class ExportProductsPresenter extends BasePresenter
 	/** @var StockFacade @inject */
 	public $stockFacade;
 
-	public function actionReadHeureka()
+	public function actionReadHeureka($reload = FALSE)
 	{
 		ini_set('max_execution_time', 1500);
-//		proc_nice(19);
+		if ($reload) {
+			proc_nice(19);
+		}
 
 		if (!$this->settings->modules->heureka->enabled) {
 			$this->resource->state = 'error';
@@ -39,13 +41,23 @@ class ExportProductsPresenter extends BasePresenter
 			/* @var $stockRepo StockRepository */
 			$stockRepo = $this->em->getRepository(Stock::getClassName());
 			$categoryRepo = $this->em->getRepository(Category::getClassName());
-			
+
 			$showOnlyInStore = $this->settings->modules->heureka->onlyInStore;
 			$denyCategory = NULL;
 			if ($this->settings->modules->heureka->denyCategoryId) {
 				$denyCategory = $categoryRepo->find($this->settings->modules->heureka->denyCategoryId);
 			}
-			$stocks = $this->stockFacade->getExportStocksArray($showOnlyInStore, $denyCategory);
+
+			$cacheKey = 'heureka-stocks-' . $this->translator->getLocale();
+			$cacheTag = 'heureka/stocks/' . $this->translator->getLocale();
+
+			if ($reload) {
+				$cache = $this->stockFacade->getCache();
+				$cache->clean([Cache::TAGS => [$cacheTag]]);
+				$stocks = $this->stockFacade->getExportStocksArray($showOnlyInStore, $denyCategory);
+			} else {
+				$stocks = [];
+			}
 
 			$paymentRepo = $this->em->getRepository(Payment::getClassName());
 			$paymentOnDelivery = $paymentRepo->find(Payment::ON_DELIVERY);
@@ -60,6 +72,9 @@ class ExportProductsPresenter extends BasePresenter
 			$this->template->shippings = $shippings;
 			$this->template->paymentOnDelivery = $paymentOnDelivery;
 			$this->template->locale = $this->translator->getLocale();
+			$this->template->defaultLocale = $this->translator->getDefaultLocale();
+			$this->template->cacheKey = $cacheKey;
+			$this->template->cacheTag = $cacheTag;
 			$this->template->cpc = $this->settings->modules->heureka->cpc;
 			$this->template->deliveryStoreTime = $this->settings->modules->heureka->deliveryStoreTime;
 			$this->template->deliveryNotInStoreTime = $this->settings->modules->heureka->deliveryNotInStoreTime;
