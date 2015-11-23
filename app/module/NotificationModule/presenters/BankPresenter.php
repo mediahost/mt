@@ -4,8 +4,8 @@ namespace App\NotificationModule\Presenters;
 
 use App\Model\Entity\Order;
 use App\Model\Facade\OrderFacade;
-use App\Service\PaymentNotification\Payment;
-use App\Service\PaymentNotification\PaymentNotificationParser;
+use App\Extensions\PaymentNotification\Payment;
+use App\Extensions\PaymentNotification\PaymentNotificationParser;
 use h4kuna\Exchange\Exchange;
 
 class BankPresenter extends BasePresenter

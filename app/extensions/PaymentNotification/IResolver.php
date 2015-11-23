@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\PaymentNotification;
+namespace App\Extensions\PaymentNotification;
 
 interface IResolver
 {
