@@ -3,6 +3,7 @@
 namespace App\Model\Repository;
 
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Func;
 use Exception;
 
@@ -23,6 +24,34 @@ class PohodaItemRepository extends BaseRepository
 						->setMaxResults($limit)
 						->setFirstResult($offset)
 						->getResult(AbstractQuery::HYDRATE_ARRAY);
+	}
+
+	public function findArrBy(array $criteria, $limit = null, $offset = null)
+	{
+		parent::findBy();
+		$qb = $this->createQueryBuilder('p')
+				->whereCriteria($criteria)
+			->autoJoinOrderBy((array) ['updatedAt' => 'DESC']);
+		return $qb->getQuery()
+						->setMaxResults($limit)
+						->setFirstResult($offset)
+						->getResult(AbstractQuery::HYDRATE_ARRAY);
+	}
+
+	public function getSumCountGroupedBy($code)
+	{
+		$qb = $this->createQueryBuilder('p')
+				->select(new Func('SUM', 'p.count'))
+				->whereCriteria(['p.' . self::CODE => $code])
+				->groupBy('p.' . self::CODE);
+
+		try {
+			return $qb->setMaxResults(1)
+							->getQuery()
+							->getSingleResult();
+		} catch (NoResultException $e) {
+			return NULL;
+		}
 	}
 
 	public function findIdsForCode($useCache = TRUE)
