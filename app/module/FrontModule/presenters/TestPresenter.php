@@ -2,8 +2,8 @@
 
 namespace App\FrontModule\Presenters;
 
-use App\Service\PaymentNotification\Payment;
-use App\Service\PaymentNotification\PaymentNotificationParser;
+use App\Extensions\PaymentNotification\Payment;
+use App\Extensions\PaymentNotification\PaymentNotificationParser;
 
 class TestPresenter extends BasePresenter
 {
