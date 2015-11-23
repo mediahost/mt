@@ -1330,3 +1330,6 @@ msgstr "Viac parametrov"
 
 msgid "Incorrect login or password!"
 msgstr "Nesprávny e-mail alebo heslo!"
+
+msgid "include %value% VAT"
+msgstr "vrátane %value% DPH"

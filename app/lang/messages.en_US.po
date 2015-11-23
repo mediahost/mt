@@ -1374,3 +1374,6 @@ msgstr "More params"
 
 msgid "Incorrect login or password!"
 msgstr "Incorrect mail or password!"
+
+msgid "include %value% VAT"
+msgstr "include %value% VAT"

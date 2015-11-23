@@ -1332,3 +1332,6 @@ msgstr "Více parametrů"
 
 msgid "Incorrect login or password!"
 msgstr "Nesprávny e-mail alebo heslo!"
+
+msgid "include %value% VAT"
+msgstr "včetně %value% DPH"
