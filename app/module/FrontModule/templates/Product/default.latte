@@ -5,7 +5,7 @@
 	<a n:href="Category: $category->id">{$category}</a>
 </li>
 <li class="active">{$product}</li>
-{/block}
+	{/block}
 
 {block content}
 <div class="container">
@@ -52,6 +52,7 @@
 								<em n:if="$stock->oldPrice">
 									<span>{$stock->oldPrice|currency}</span>
 								</em>
+								<span class="vat">{_'include %value% VAT', NULL, ['value' => $stock->vat]}</span>
 							</div>
 							<div class="availability">
 								{_'Availability'}: 

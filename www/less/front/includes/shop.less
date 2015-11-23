@@ -296,8 +296,16 @@
         background: @blueDark !important;
     }
 }
-.price-availability-block .price strong {
-    color: @blueDark;
+.price-availability-block {
+	.price {
+		strong {
+			color: @blueDark;
+		}
+		.vat {
+			display: block;
+			color: #7b8a99;
+		}
+	}
 }
 
 .steps-block-red {

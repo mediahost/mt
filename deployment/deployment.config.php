@@ -1,10 +1,12 @@
 <?php
 
 $purge = array(
-	'temp/cache',
-	'temp/install',
 	'temp/deployment',
 );
+if (!isset($allowDeleteCache) || $allowDeleteCache) {
+	$purge[] = 'temp/cache';
+	$purge[] = 'temp/install';
+}
 if (!isset($allowDeleteTmp) || $allowDeleteTmp) {
 	$purge[] = 'tmp/';
 }
