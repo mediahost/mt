@@ -50,9 +50,11 @@
 
 {define accessories}
 <h2>{_'Select your accessories for...'}</h2>
-<div class="model-selector clearfix">
-	{control modelSelector}
-</div>
+{cache 'modelSelector', expire => '1 day', tags => ['producers', 'lines', 'models']}
+	<div class="model-selector clearfix">
+		{control modelSelector}
+	</div>
+{/cache}
 {/define}
 
 {define sales}
