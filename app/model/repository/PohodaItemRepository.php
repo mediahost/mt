@@ -28,7 +28,6 @@ class PohodaItemRepository extends BaseRepository
 
 	public function findArrBy(array $criteria, $limit = null, $offset = null)
 	{
-		parent::findBy();
 		$qb = $this->createQueryBuilder('p')
 				->whereCriteria($criteria)
 			->autoJoinOrderBy((array) ['updatedAt' => 'DESC']);
