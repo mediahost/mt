@@ -1,6 +1,7 @@
 {block menu}
 <!-- BEGIN NAVIGATION -->
 <div class="header-navigation">
+	{cache 'navigation' . $lang, expire => '1 day', tags => ['pages']}
 	<ul>
 		{if $menuCategories->category1}
 			{include categoryLink, category => $menuCategories->category1}
@@ -14,6 +15,7 @@
 		<li n:if="$menuPages->page4">{include pageLink, page => $menuPages->page4}</li>
 		<li n:if="$menuPages->page5">{include pageLink, page => $menuPages->page5}</li>
 	</ul>
+	{/cache}
 </div>
 <!-- END NAVIGATION -->
 {/block}

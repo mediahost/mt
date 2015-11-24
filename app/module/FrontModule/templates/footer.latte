@@ -3,13 +3,15 @@
 <!-- BEGIN BRANDS -->
 <div class="brands"
 	 n:if="$showBrands">
-	<div class="container">
-		<div class="owl-carousel owl-carousel6-brands">
-			<a n:foreach="$producers as $producer" n:href="Category:producer, $producer->slug">
-				<img src="{$basePath}/foto/{$producer->image|size:169:100}" alt="{$producer}" title="{$producer}">
-			</a>
+	{cache 'brands' . $lang, expire => '1 day', tags => ['producers']}
+		<div class="container">
+			<div class="owl-carousel owl-carousel6-brands">
+				<a n:foreach="$producers as $producer" n:href="Category:producer, $producer->slug">
+					<img src="{$basePath}/foto/{$producer->image|size:169:100}" alt="{$producer}" title="{$producer}">
+				</a>
+			</div>
 		</div>
-	</div>
+	{/cache}
 </div>
 <!-- END BRANDS -->
 
@@ -177,24 +179,26 @@
 
 <!-- BEGIN FOOTER -->
 <div class="footer">
-	<div class="container">
-		<div class="row">
-			<!-- BEGIN COPYRIGHT -->
-			<div class="col-md-6 col-sm-6 padding-top-10">
-				{!= date('Y')} &copy; {$pageInfo->projectName} {_'by Mediahost'} | 
-				{if $footerPages->page1}
-					{var $footerPage => $footerPages->page1}
-					{? $footerPage->setCurrentLocale($lang)}
-					<a n:href="Page:, $footerPage->id">{$footerPage}</a> | 
-				{/if}
-				{if $footerPages->page2}
-					{var $footerPage => $footerPages->page2}
-					{? $footerPage->setCurrentLocale($lang)}
-					<a n:href="Page:, $footerPage->id">{$footerPage}</a>
-				{/if}
+	{cache 'footer' . $lang, expire => '1 day', tags => ['pages']}
+		<div class="container">
+			<div class="row">
+				<!-- BEGIN COPYRIGHT -->
+				<div class="col-md-6 col-sm-6 padding-top-10">
+					{!= date('Y')} &copy; {$pageInfo->projectName} {_'by Mediahost'} | 
+					{if $footerPages->page1}
+						{var $footerPage => $footerPages->page1}
+						{? $footerPage->setCurrentLocale($lang)}
+						<a n:href="Page:, $footerPage->id">{$footerPage}</a> | 
+					{/if}
+					{if $footerPages->page2}
+						{var $footerPage => $footerPages->page2}
+						{? $footerPage->setCurrentLocale($lang)}
+						<a n:href="Page:, $footerPage->id">{$footerPage}</a>
+					{/if}
+				</div>
+				<!-- END COPYRIGHT -->
 			</div>
-			<!-- END COPYRIGHT -->
 		</div>
-	</div>
+	{/cache}
 </div>
 <!-- END FOOTER -->

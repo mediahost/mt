@@ -87,15 +87,25 @@ class StockFacade extends Object
 		return $limitPrices;
 	}
 
-	private function getSignedProducts($signId)
+	private function getSignedProducts($signId, $count = 10, $useCache = TRUE)
 	{
 		if (!$signId) {
 			return [];
 		}
-		$sorting = [
-			0 => 'ASC',
-			1 => 'DESC',
-		];
+
+		if ($useCache) {
+			$cache = $this->getCache();
+			$key = 'signed-Products-' . $signId . '-' . $this->translator->getLocale();
+			$products = $cache->load($key);
+			if (!$products) {
+				$products = $this->getSignedProducts($signId, $count, FALSE);
+				$cache->save($key, $products, array(
+					Cache::EXPIRE => '1 day',
+				));
+			}
+			return $products;
+		}
+
 		$newSign = $this->signRepo->find($signId);
 		if (!$newSign) {
 			return [];
@@ -110,31 +120,31 @@ class StockFacade extends Object
 				->setParameter('active', TRUE)
 				->setParameter('sign', $newSign)
 				->setParameter('now', new DateTime());
-		return $qb->orderBy('s.id', $sorting[rand(0, 1)])
-						->setMaxResults(10)
+		return $qb->orderBy('s.id', 'DESC')
+						->setMaxResults($count)
 						->getQuery()
 						->getResult();
 	}
 
-	public function getSales()
+	public function getSales($count = 5)
 	{
 		$signs = $this->settings->modules->signs;
 		$id = $signs->enabled ? $signs->values->sale : NULL;
-		return $this->getSignedProducts($id);
+		return $this->getSignedProducts($id, $count);
 	}
 
-	public function getNews()
+	public function getNews($count = 10)
 	{
 		$signs = $this->settings->modules->signs;
 		$id = $signs->enabled ? $signs->values->new : NULL;
-		return $this->getSignedProducts($id);
+		return $this->getSignedProducts($id, $count);
 	}
 
-	public function getTops()
+	public function getTops($count = 3)
 	{
 		$signs = $this->settings->modules->signs;
 		$id = $signs->enabled ? $signs->values->top : NULL;
-		return $this->getSignedProducts($id);
+		return $this->getSignedProducts($id, $count);
 	}
 
 	public function getBestSellers()
@@ -232,7 +242,7 @@ class StockFacade extends Object
 					->setParameter('categories', $denyCategories);
 		}
 		return $qb->getQuery()
-				->getResult(AbstractQuery::HYDRATE_ARRAY);
+						->getResult(AbstractQuery::HYDRATE_ARRAY);
 	}
 
 }
