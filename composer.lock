@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4ec9e2b8ece3c3d5bb2e6f49c1369e61",
-    "content-hash": "a9d2e53057575187b3df0c00f75d37c2",
+    "hash": "cac01322ebdf28990af3fe47ee8e40ba",
+    "content-hash": "ba553ba8626846f717d7c21473ce46e5",
     "packages": [
         {
             "name": "dg/adminer-custom",
@@ -834,6 +834,39 @@
             "description": "Object wrapper above number_format",
             "homepage": "https://github.com/h4kuna/number-format",
             "time": "2015-04-09 16:25:37"
+        },
+        {
+            "name": "heureka/overenozakazniky",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/heureka/heureka-overeno-php-api.git",
+                "reference": "aeb92b23d507b64bf8d1fef288272fc42ed3e649"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/heureka/heureka-overeno-php-api/zipball/aeb92b23d507b64bf8d1fef288272fc42ed3e649",
+                "reference": "aeb92b23d507b64bf8d1fef288272fc42ed3e649",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/HeurekaOvereno.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Heureka.cz",
+                    "email": "podpora@heureka.cz"
+                }
+            ],
+            "description": "Heureka overeno service API",
+            "time": "2014-06-26 11:25:03"
         },
         {
             "name": "jandrabek/nette-mailpanel",
@@ -3637,16 +3670,16 @@
         },
         {
             "name": "symfony/config",
-            "version": "v2.7.6",
+            "version": "v2.7.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "831f88908b51b9ce945f5e6f402931d1ac544423"
+                "reference": "61973327bfb054f6f470de7be033a28b76c1dc20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/831f88908b51b9ce945f5e6f402931d1ac544423",
-                "reference": "831f88908b51b9ce945f5e6f402931d1ac544423",
+                "url": "https://api.github.com/repos/symfony/config/zipball/61973327bfb054f6f470de7be033a28b76c1dc20",
+                "reference": "61973327bfb054f6f470de7be033a28b76c1dc20",
                 "shasum": ""
             },
             "require": {
@@ -3662,7 +3695,10 @@
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\Config\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -3680,20 +3716,20 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2015-10-11 09:39:48"
+            "time": "2015-11-02 20:20:53"
         },
         {
             "name": "symfony/console",
-            "version": "v2.7.6",
+            "version": "v2.7.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "5efd632294c8320ea52492db22292ff853a43766"
+                "reference": "16bb1cb86df43c90931df65f529e7ebd79636750"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/5efd632294c8320ea52492db22292ff853a43766",
-                "reference": "5efd632294c8320ea52492db22292ff853a43766",
+                "url": "https://api.github.com/repos/symfony/console/zipball/16bb1cb86df43c90931df65f529e7ebd79636750",
+                "reference": "16bb1cb86df43c90931df65f529e7ebd79636750",
                 "shasum": ""
             },
             "require": {
@@ -3718,7 +3754,10 @@
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\Console\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -3736,20 +3775,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2015-10-20 14:38:46"
+            "time": "2015-11-18 09:54:26"
         },
         {
             "name": "symfony/filesystem",
-            "version": "v2.7.6",
+            "version": "v2.7.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "56fd6df73be859323ff97418d97edc1d756df6df"
+                "reference": "8e173509d7fdbbba3cf34d6d072f2073c0210c1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/56fd6df73be859323ff97418d97edc1d756df6df",
-                "reference": "56fd6df73be859323ff97418d97edc1d756df6df",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/8e173509d7fdbbba3cf34d6d072f2073c0210c1d",
+                "reference": "8e173509d7fdbbba3cf34d6d072f2073c0210c1d",
                 "shasum": ""
             },
             "require": {
@@ -3764,7 +3803,10 @@
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\Filesystem\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -3782,20 +3824,20 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2015-10-18 20:23:18"
+            "time": "2015-11-18 13:41:01"
         },
         {
             "name": "symfony/property-access",
-            "version": "v2.7.6",
+            "version": "v2.7.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
-                "reference": "368b784738fa932e6d86866038312b03e073a824"
+                "reference": "49d76463a54d8b3005fa58f3b8df41d0ae206eaa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-access/zipball/368b784738fa932e6d86866038312b03e073a824",
-                "reference": "368b784738fa932e6d86866038312b03e073a824",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/49d76463a54d8b3005fa58f3b8df41d0ae206eaa",
+                "reference": "49d76463a54d8b3005fa58f3b8df41d0ae206eaa",
                 "shasum": ""
             },
             "require": {
@@ -3810,7 +3852,10 @@
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\PropertyAccess\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -3839,20 +3884,20 @@
                 "property path",
                 "reflection"
             ],
-            "time": "2015-10-23 14:47:27"
+            "time": "2015-11-18 13:41:01"
         },
         {
             "name": "symfony/translation",
-            "version": "v2.7.6",
+            "version": "v2.7.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "6ccd9289ec1c71d01a49d83480de3b5293ce30c8"
+                "reference": "e4ecb9c3ba1304eaf24de15c2d7a428101c1982f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/6ccd9289ec1c71d01a49d83480de3b5293ce30c8",
-                "reference": "6ccd9289ec1c71d01a49d83480de3b5293ce30c8",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/e4ecb9c3ba1304eaf24de15c2d7a428101c1982f",
+                "reference": "e4ecb9c3ba1304eaf24de15c2d7a428101c1982f",
                 "shasum": ""
             },
             "require": {
@@ -3881,7 +3926,10 @@
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\Translation\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -3899,20 +3947,20 @@
             ],
             "description": "Symfony Translation Component",
             "homepage": "https://symfony.com",
-            "time": "2015-10-27 15:38:06"
+            "time": "2015-11-18 13:41:01"
         },
         {
             "name": "symfony/validator",
-            "version": "v2.7.6",
+            "version": "v2.7.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/validator.git",
-                "reference": "df9021e689aa3d08367881e7f8917219fabe5e64"
+                "reference": "8b78ce4c296a2fc453f9a32ece71940011b8b44b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/validator/zipball/df9021e689aa3d08367881e7f8917219fabe5e64",
-                "reference": "df9021e689aa3d08367881e7f8917219fabe5e64",
+                "url": "https://api.github.com/repos/symfony/validator/zipball/8b78ce4c296a2fc453f9a32ece71940011b8b44b",
+                "reference": "8b78ce4c296a2fc453f9a32ece71940011b8b44b",
                 "shasum": ""
             },
             "require": {
@@ -3951,7 +3999,10 @@
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\Validator\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -3969,7 +4020,7 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "https://symfony.com",
-            "time": "2015-10-18 20:23:18"
+            "time": "2015-11-18 13:41:01"
         },
         {
             "name": "tedivm/jshrink",
@@ -4345,16 +4396,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v2.7.6",
+            "version": "v2.7.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "4a959dd4e19c2c5d7512689413921e0a74386ec7"
+                "reference": "f6290983c8725d0afa29bdc3e5295879de3e58f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/4a959dd4e19c2c5d7512689413921e0a74386ec7",
-                "reference": "4a959dd4e19c2c5d7512689413921e0a74386ec7",
+                "url": "https://api.github.com/repos/symfony/process/zipball/f6290983c8725d0afa29bdc3e5295879de3e58f5",
+                "reference": "f6290983c8725d0afa29bdc3e5295879de3e58f5",
                 "shasum": ""
             },
             "require": {
@@ -4369,7 +4420,10 @@
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\Process\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -4387,7 +4441,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2015-10-23 14:47:27"
+            "time": "2015-11-19 16:11:24"
         }
     ],
     "aliases": [],
@@ -4417,6 +4471,7 @@
         "drahak/restful": 20,
         "kdyby/forms-replicator": 20,
         "kdyby/doctrine-cache": 20,
+        "heureka/overenozakazniky": 20,
         "nette/tester": 20,
         "kdyby/tester-extras": 20
     },

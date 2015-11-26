@@ -14,7 +14,10 @@ use App\Model\Entity\Order;
 use App\Model\Entity\Shipping;
 use App\Model\Facade\Exception\ItemsIsntOnStockException;
 use Doctrine\ORM\NoResultException;
+use HeurekaOvereno;
+use HeurekaOverenoException;
 use Nette\Utils\Html;
+use Tracy\Debugger;
 
 class CartPresenter extends BasePresenter
 {
@@ -121,6 +124,7 @@ class CartPresenter extends BasePresenter
 				if (!$order) {
 					throw new NoResultException();
 				}
+				$this->sendHeurekaOvereno($order);
 			} else {
 				throw new NoResultException();
 			}
@@ -130,12 +134,24 @@ class CartPresenter extends BasePresenter
 		}
 
 		$this->getSessionSection()->orderId = NULL;
+	}
 
+	private function sendHeurekaOvereno(Order $order)
+	{
 		$heurekaSettings = $this->settings->modules->heureka;
 		if ($heurekaSettings->enabled) {
-			$this->template->heurekaKey = $heurekaSettings->key;
+			try {
+				$overeno = new HeurekaOvereno($heurekaSettings->key, HeurekaOvereno::LANGUAGE_SK);
+				$overeno->setEmail($order->mail);
+				$overeno->addOrderId($order->id);
+				foreach ($order->items as $item) {
+					$overeno->addProductItemId($item->stock->id);
+				}
+				$overeno->send();
+			} catch (HeurekaOverenoException $ex) {
+				Debugger::log($ex->getMessage(), 'heureka-overeno');
+			}
 		}
-		$this->template->order = $order;
 	}
 
 	private function checkEmptyCart()
