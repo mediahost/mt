@@ -16,6 +16,7 @@ order:
 form:
 	name: 'Name and surname (Company name)'
 	nameOnly: 'Name and surname'
+	address: 'Address'
 	street: 'Street'
 	city: 'City'
 	country: 'Country'

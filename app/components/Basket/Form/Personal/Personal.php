@@ -194,7 +194,7 @@ class Personal extends BaseControl
 
 	private function createFormWithoutAddress(Form &$form)
 	{
-		$form->addGroup('cart.address');
+		$form->addGroup('cart.form.address');
 		$form->addText('mail', 'cart.form.mail', NULL, 255)
 						->addRule(Form::FILLED, 'cart.form.validator.filled')
 						->addRule(Form::EMAIL, 'cart.form.validator.mail')
