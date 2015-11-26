@@ -1,28 +1,19 @@
-{if $item->state->type->id === App\Model\Entity\OrderStateType::ORDERED}
-	{var $color = 'label-info'}
-{elseif $item->state->type->id === App\Model\Entity\OrderStateType::EXPEDED}
-	{var $color = 'label-warning'}
-{elseif $item->state->type->id === App\Model\Entity\OrderStateType::DONE}
-	{var $color = 'label-success'}
-{elseif $item->state->type->id === App\Model\Entity\OrderStateType::STORNO}
-	{var $color = 'label-danger'}
+{if $item->state->id === App\Model\Entity\OrderState::ORDERED_IN_SYSTEM}
+	{var $color = 'bg-blue'}
+{elseif $item->state->id === App\Model\Entity\OrderState::IN_PROCEEDINGS}
+	{var $color = 'bg-blue-hoki'}
+{elseif $item->state->id === App\Model\Entity\OrderState::SENT_SHIPPERS}
+	{var $color = 'bg-yellow'}
+{elseif $item->state->id === App\Model\Entity\OrderState::READY_TO_TAKE}
+	{var $color = 'bg-yellow-casablanca'}
+{elseif $item->state->id === App\Model\Entity\OrderState::OK_RECIEVED}
+	{var $color = 'bg-green-meadow'}
+{elseif $item->state->id === App\Model\Entity\OrderState::OK_TAKEN}
+	{var $color = 'bg-green'}
+{elseif $item->state->id === App\Model\Entity\OrderState::CANCELED}
+	{var $color = 'bg-red'}
 {else}
 	{var $color = 'label-default'}
 {/if}
 
 <span class="label {$color}">{_$item->state->name}</span>
-{*<select name="editstate" class="select2" id="frm-ordersGrid-grid-form-editstate">
-	<option n:foreach="$stateList as $stateKey => $stateItem"
-			{if $stateKey === $item->state->id}selected="selected"{/if}
-			value="{$stateKey}">{_$stateItem}</option>
-</select>*}
-
-<!--<select name="editstate" class="select2" id="frm-ordersGrid-grid-form-editstate">
-	<option value="1" selected="">Objednáno v systému</option>
-	<option value="2">Připravujeme</option>
-	<option value="3">Odesláno přepravci</option>
-	<option value="4">Připraveno k převzetí</option>
-	<option value="5">Ok - Přijato</option>
-	<option value="6">Ok - Převzato</option>
-	<option value="7">Zrušeno</option>
-</select>-->
