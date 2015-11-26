@@ -117,6 +117,7 @@ class StockFacade extends Object
 				->where('signs = :sign')
 				->andWhere('s.active = :active AND p.active = :active')
 				->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
+				->andWhere('s.inStore >= 1')
 				->setParameter('active', TRUE)
 				->setParameter('sign', $newSign)
 				->setParameter('now', new DateTime());

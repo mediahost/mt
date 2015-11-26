@@ -131,12 +131,20 @@ class CategoryPresenter extends BasePresenter
 		if ($model) {
 			$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
 			$model = $modelRepo->findOneBySlug($model);
-			$line = $model->line;
-			$producer = $line->producer;
+			if ($model) {
+				$line = $model->line;
+				$producer = $line->producer;
+			} else {
+				$producer = NULL;
+			}
 		} else if ($line) {
 			$lineRepo = $this->em->getRepository(ProducerLine::getClassName());
 			$line = $lineRepo->findOneBySlug($line);
-			$model = $line->model;
+			if ($line) {
+				$producer = $line->producer;
+			} else {
+				$producer = NULL;
+			}
 		} else if ($producer) {
 			$producerRepo = $this->em->getRepository(Producer::getClassName());
 			$producer = $producerRepo->findOneBySlug($producer);
