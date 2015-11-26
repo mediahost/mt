@@ -16,6 +16,7 @@ order:
 form:
 	name: 'Jméno a příjmení (název firmy)'
 	nameOnly: 'Jméno a příjmení'
+	address: 'Adresa'
 	street: 'Ulice a č.p.'
 	city: 'Město'
 	country: 'Země'
