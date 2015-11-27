@@ -67,9 +67,9 @@ class Basket extends BaseEntity
 		return $this;
 	}
 
-	public function setItem(Stock $stock, $quantity)
+	public function setItem(Stock $stock, $quantity, $checkQuantity = TRUE)
 	{
-		if ($quantity > $stock->inStore) {
+		if ($checkQuantity && $quantity > $stock->inStore) {
 			throw new InsufficientQuantityException();
 		}
 

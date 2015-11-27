@@ -87,23 +87,10 @@ class StockFacade extends Object
 		return $limitPrices;
 	}
 
-	private function getSignedProducts($signId, $count = 10, $useCache = TRUE)
+	private function getSignedProducts($signId, $count = 10)
 	{
 		if (!$signId) {
 			return [];
-		}
-
-		if ($useCache) {
-			$cache = $this->getCache();
-			$key = 'signed-Products-' . $signId . '-' . $this->translator->getLocale();
-			$products = $cache->load($key);
-			if (!$products) {
-				$products = $this->getSignedProducts($signId, $count, FALSE);
-				$cache->save($key, $products, array(
-					Cache::EXPIRE => '1 day',
-				));
-			}
-			return $products;
 		}
 
 		$newSign = $this->signRepo->find($signId);
@@ -236,11 +223,10 @@ class StockFacade extends Object
 					->andWhere("s.inStore >= :inStore")
 					->setParameter('inStore', 1);
 		}
-		if ($denyCategory) {
-			$denyCategories = implode(',', array_keys($denyCategory->childrenArray));
+		if ($denyCategory && count($denyCategory->childrenArray)) {
 			$qb
 					->andWhere('p.mainCategory NOT IN (:categories)')
-					->setParameter('categories', $denyCategories);
+					->setParameter('categories', array_keys($denyCategory->childrenArray));
 		}
 		return $qb->getQuery()
 						->getResult(AbstractQuery::HYDRATE_ARRAY);
