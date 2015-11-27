@@ -69,7 +69,7 @@ class Payment extends BaseTranslatable
 		foreach ($stocks as $stock) {
 			if ($stock instanceof Stock) {
 				$quantity = array_key_exists($stock->id, $quantities) ? $quantities[$stock->id] : 1;
-				$basket->setItem($stock, $quantity);
+				$basket->setItem($stock, $quantity, FALSE);
 			}
 		}
 		return $this->getPrice($basket);

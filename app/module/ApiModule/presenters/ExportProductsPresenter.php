@@ -54,10 +54,8 @@ class ExportProductsPresenter extends BasePresenter
 			if ($reload) {
 				$cache = $this->stockFacade->getCache();
 				$cache->clean([Cache::TAGS => [$cacheTag]]);
-				$stocks = $this->stockFacade->getExportStocksArray($showOnlyInStore, $denyCategory);
-			} else {
-				$stocks = [];
 			}
+			$stocks = $this->stockFacade->getExportStocksArray($showOnlyInStore, $denyCategory);
 
 			$paymentRepo = $this->em->getRepository(Payment::getClassName());
 			$paymentOnDelivery = $paymentRepo->find(Payment::ON_DELIVERY);
