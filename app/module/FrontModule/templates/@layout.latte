@@ -9,11 +9,10 @@
 	<!-- BEGIN HEAD -->
 	<head>
 		<title>{ifset $pageTitle}{$pageTitle} | {/ifset}{block title|striptags}{$pageInfo->projectName}{/block}</title>
-		
+
 		<meta charset="utf-8"/>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-		<meta name="robots" content="noindex,nofollow">
 		<meta name="description" content="{$pageDescription|striptags}"/>
 		<meta name="keywords" content="{$pageKeywords}">
 		<meta name="author" content="{$pageInfo->author}"/>
@@ -33,35 +32,35 @@
 
 		<link href="{$basePath}/favicon.ico" rel="shortcut icon">
 
-		{block head}{/block}		
+		{block head}{/block}
 	</head>
 	<!-- END HEAD -->
 
 	<!-- Body BEGIN -->
 	<body class="{block bodyClass}ecommerce{/block}">
 		<script> document.documentElement.className += ' js'</script>
-		
+
 		{snippetArea header}
 		{include 'header.latte'}
 		{/snippetArea}
-		
+
 		{include 'slider.latte'}
 
 		<div class="main">
 			<div class="container">
-				
+
 				<!-- BEGIN BREADCRUMBS -->
-				
+
 				<ul class="breadcrumb" n:block="breadcrumb">
 					{var breadcrumb => ['Home' => '']}
 					<li><a n:href=":Front:Homepage:">{_'Home'}</a></li>
 					{block breadcrumbItems}{/block}
 				</ul>
 				<!-- END BREADCRUMBS -->
-				
+
 				<!-- CONTENT -->
 				<div n:class="row, !$showBrands ? margin-bottom-40">
-					
+
 					<!-- BEGIN FLASH MESSAGES-->
 					<div n:snippet="flashMessages">
 						<div n:foreach="$flashes as $flash"
@@ -71,7 +70,7 @@
 						</div>
 					</div>
 					<!-- END FLASH MESSAGES-->
-					
+
 					<!-- BEGIN CONTENT -->
 					{include content}
 					<!-- END CONTENT -->
@@ -81,7 +80,7 @@
 		</div>
 
 		{include 'footer.latte'}
-		
+
 		{block scripts}
 		<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 		{include jsMetronicCore}
