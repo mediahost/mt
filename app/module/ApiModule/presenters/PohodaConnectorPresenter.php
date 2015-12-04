@@ -47,14 +47,18 @@ class PohodaConnectorPresenter extends BasePresenter
 			$list->setExchange($this->exchange, $this->exchange->getDefault());
 			$list->qb = $stockRepo->createQueryBuilder('s')
 					->innerJoin('s.product', 'p');
-			$list->filter = [
-				'updatedFrom' => $lastConvert,
-			];
+			$list->addFilterUpdatedFrom($lastConvert);
+
+			$insertList = new ProductList();
+			$insertList->setTranslator($this->translator);
+			$insertList->setExchange($this->exchange, $this->exchange->getDefault());
+			$insertList->qb = $stockRepo->createQueryBuilder('s')
+					->innerJoin('s.product', 'p');
+			$insertList->addFilterCreatedFrom(new DateTime('- 3 days'));
 
 			$pohodaRepo->findAll(); // load all items in doctrine and find will be without SQL
-//			$pohodaRepo->findByCode([380, 2222, 1111, 1456]);
 			$this->template->stocks = $list->getData(FALSE);
-//			$this->template->stocks = $list->getData();
+			$this->template->stocksToInsert = $insertList->getData(FALSE);
 
 			$this->template->pohodaRepo = $pohodaRepo;
 			$this->template->ico = $this->settings->modules->pohoda->ico;
@@ -62,6 +66,7 @@ class PohodaConnectorPresenter extends BasePresenter
 			$this->template->typePrice = $this->settings->modules->pohoda->typePrice;
 			$this->template->vatRates = $this->settings->modules->pohoda->vatRates;
 			$this->template->lastEditTime = $lastConvert;
+			$this->template->insertedStockIds = [];
 
 			$this->pohodaFacade->setLastSync(PohodaFacade::SHORT_STOCK, PohodaFacade::LAST_DOWNLOAD);
 			$this->setView('storageCart');
