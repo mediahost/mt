@@ -109,6 +109,10 @@ class SettingsExtension extends CompilerExtension
 				'enabled' => FALSE,
 				'code' => NULL,
 			],
+			'googleSiteVerification' => [
+				'enabled' => FALSE,
+				'code' => NULL,
+			],
 			'smartSupp' => [
 				'enabled' => FALSE,
 				'key' => NULL,
