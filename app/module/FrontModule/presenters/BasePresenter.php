@@ -227,6 +227,9 @@ abstract class BasePresenter extends BaseBasePresenter
 		if ($this->settings->modules->googleAnalytics->enabled) {
 			$this->template->googleAnalyticsCode = $this->settings->modules->googleAnalytics->code;
 		}
+		if ($this->settings->modules->googleSiteVerification->enabled) {
+			$this->template->googleSiteVerification = $this->settings->modules->googleSiteVerification->code;
+		}
 		if ($this->settings->modules->smartSupp->enabled) {
 			$this->template->smartSuppKey = $this->settings->modules->smartSupp->key;
 		}
