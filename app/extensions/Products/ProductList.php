@@ -235,6 +235,14 @@ class ProductList extends Control
 		return $this;
 	}
 
+	public function addFilterCreatedFrom($time)
+	{
+		$this->setFilter([
+			'createdFrom' => (string) $time,
+		]);
+		return $this;
+	}
+
 	public function addFilterParameter($code, $value)
 	{
 		$this->filter['parameter'][$code] = $value;
@@ -688,6 +696,9 @@ class ProductList extends Control
 				case 'updatedFrom':
 					$this->filterByUpdatedFrom($value);
 					break;
+				case 'createdFrom':
+					$this->filterByCreatedFrom($value);
+					break;
 				case 'parameter':
 					$this->filterByParameters($value);
 					break;
@@ -727,6 +738,16 @@ class ProductList extends Control
 		$dateTime = $time instanceof DateTime ? $time : DateTime::from($time);
 		$this->qb
 				->andWhere('s.updatedAt >= :time OR p.updatedAt >= :time')
+				->setParameter('time', $dateTime);
+
+		return $this;
+	}
+
+	protected function filterByCreatedFrom($time)
+	{
+		$dateTime = $time instanceof DateTime ? $time : DateTime::from($time);
+		$this->qb
+				->andWhere('s.createdAt >= :time OR p.createdAt >= :time')
 				->setParameter('time', $dateTime);
 
 		return $this;
