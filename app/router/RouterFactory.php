@@ -37,6 +37,8 @@ class RouterFactory
 	 */
 	public function createRouter()
 	{
+		Route::$defaultFlags = Route::SECURED;
+		
 		$router = new RouteList();
 
 		$router[] = $fotoRouter = new RouteList('Foto');
