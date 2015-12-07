@@ -31,6 +31,8 @@ class StocksGrid extends BaseControl
 		$grid->setTranslator($this->translator);
 		$grid->setTheme(BaseGrid::THEME_METRONIC);
 
+		$this->exchange->setVat(0, NULL, NULL);
+
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
 		$qb = $stockRepo->createQueryBuilder('s')
 				->select('s, p')
@@ -131,6 +133,25 @@ class StocksGrid extends BaseControl
 				->setFilterNumber();
 		$grid->getColumn('defaultPrice')->headerPrototype->style = 'width:110px';
 		$grid->getColumn('defaultPrice')->cellPrototype->style = 'text-align: right';
+		$grid->getColumn('defaultPrice')->cellPrototype->class[] = 'changeOnClick';
+		$grid->getColumn('defaultPrice')
+				->setEditableCallback(function ($id, $newValue, $oldValue, $column) {
+					$stockRepo = $this->em->getRepository(Stock::getClassName());
+					$stock = $stockRepo->find($id);
+					if ($stock) {
+						$stock->setDefaltPrice($newValue);
+						$stockRepo->save($stock);
+						return TRUE;
+					} else {
+						return FALSE;
+					}
+				})
+				->setEditableRowCallback(function ($id, $column) {
+					return $this->em->getRepository(Stock::getClassName())->find($id);
+				})
+				->setEditableValueCallback(function (Stock $item) {
+					return $item->price->withoutVat;
+				});
 
 		/*		 * ************************************************ */
 		$groupRepo = $this->em->getRepository(Group::getClassName());
