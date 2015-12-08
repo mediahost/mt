@@ -10,6 +10,7 @@ use Drahak\Restful\Application\Routes\ResourceRoute;
 use Nette\Application\IRouter;
 use Nette\Application\Routers\Route;
 use Nette\Application\Routers\RouteList;
+use Nette\Configurator;
 
 class RouterFactory
 {
@@ -37,7 +38,9 @@ class RouterFactory
 	 */
 	public function createRouter()
 	{
-		Route::$defaultFlags = Route::SECURED;
+		if (!Configurator::detectDebugMode()) {
+			Route::$defaultFlags = Route::SECURED;
+		}
 		
 		$router = new RouteList();
 
