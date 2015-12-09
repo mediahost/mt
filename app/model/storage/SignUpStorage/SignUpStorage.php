@@ -2,7 +2,6 @@
 
 namespace App\Model\Storage;
 
-use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use Nette\Http\Session;
 use Nette\Http\SessionSection;

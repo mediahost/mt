@@ -50,7 +50,7 @@
 
 {define accessories}
 <h2>{_'Select your accessories for...'}</h2>
-{cache 'modelSelector', expire => '1 day', tags => ['producers', 'lines', 'models']}
+{cache 'modelSelector' . $lang, expire => '1 day', tags => ['producers', 'lines', 'models']}
 	<div class="model-selector clearfix">
 		{control modelSelector}
 	</div>

@@ -30,7 +30,7 @@ class PohodaItemRepository extends BaseRepository
 	{
 		$qb = $this->createQueryBuilder('p')
 				->whereCriteria($criteria)
-			->autoJoinOrderBy((array) ['updatedAt' => 'DESC']);
+				->autoJoinOrderBy((array) ['updatedAt' => 'DESC']);
 		return $qb->getQuery()
 						->setMaxResults($limit)
 						->setFirstResult($offset)

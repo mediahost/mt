@@ -71,7 +71,7 @@ class PohodaFacade extends Object
 			$conditions['updatedAt >='] = $lastChange;
 		}
 
-		$pohodaItems = $pohodaRepo->findArrBy($conditions, 1000, $offset);
+		$pohodaItems = $pohodaRepo->findArrBy($conditions, 500, $offset);
 		$i = 0;
 		foreach ($pohodaItems as $pohodaProductArr) {
 			$totalSumValue = $pohodaRepo->getSumCountGroupedBy($pohodaProductArr['code']);
