@@ -1,0 +1,34 @@
+{block breadcrumbItems}
+<li><a n:href="MyAccount:">{_'My Account'}</a></li>
+<li class="active">{_'Dealer API'}</li>
+	{/block}
+
+{block content}
+<div class="container">
+	<div class="row">
+
+		{include 'navigation.latte'}
+
+		<!-- BEGIN CONTENT -->
+		<div class="col-md-9 col-sm-7">
+            <h1>{_'Dealer API'}</h1>
+			<div n:class="panel, $user->identity->clientId ? panel-success : panel-warning">
+				<div class="panel-heading">
+					<h3 class="panel-title">{_'Client ID'}</h3>
+				</div>
+				<div class="panel-body">
+					{if $user->identity->clientId}
+						<p>
+							<label for="client_token">{_'Your token'}:</label>
+							<strong id="client_token">{$user->identity->clientId}</strong>
+						</p>
+						<a class="btn btn-default" n:href="resetToken!">{_'Reset token'}</a>
+					{else}
+						<a class="btn btn-default" n:href="resetToken!">{_'Create token'}</a>
+					{/if}
+				</div>
+			</div>
+		</div>
+		<!-- END CONTENT -->
+	</div>
+</div>

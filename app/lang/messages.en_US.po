@@ -1377,3 +1377,24 @@ msgstr "Incorrect mail or password!"
 
 msgid "include %value% VAT"
 msgstr "include %value% VAT"
+
+msgid "Dealer API"
+msgstr "Dealer API"
+
+msgid "Your token"
+msgstr "Your token"
+
+msgid "Reset token"
+msgstr "Reset token"
+
+msgid "Create token"
+msgstr "Create token"
+
+msgid "Client ID"
+msgstr "Client ID"
+
+msgid "Your token has been created"
+msgstr "Your token has been created"
+
+msgid "You can't reset token."
+msgstr "You can't reset token."

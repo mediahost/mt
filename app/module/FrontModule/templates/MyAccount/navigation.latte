@@ -27,12 +27,13 @@
 				{_'Change Password'}
 			</a>
 		</li>
-<!--		<li n:class="list-group-item, clearfix, $presenter->isLinkCurrent('MyAccount:delete') ? active">
-			<a n:href="MyAccount:delete">
+		<li n:if="$user->identity->isDealer()"
+			n:class="list-group-item, clearfix, $presenter->isLinkCurrent('MyAccount:dealer') ? active">
+			<a n:href="MyAccount:dealer">
 				<i class="fa fa-angle-right"></i>
-				{_'Delete Account'}
+				{_'Dealer API'}
 			</a>
-		</li>-->
+		</li>
 	</ul>
 </div>
 <!-- END SIDEBAR -->
