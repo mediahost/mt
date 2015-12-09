@@ -120,11 +120,32 @@ class MyAccountPresenter extends BasePresenter
 			$this->user->logout();
 			$message = $this->translator->translate('Your account has been deleted');
 			$this->flashMessage($message, 'success');
-			$this->redirect(":Front:Homepage:");
+			$this->redirect(':Front:Homepage:');
 		} catch (CantDeleteUserException $ex) {
 			$message = $this->translator->translate('You can\'t delete account.');
 			$this->flashMessage($message, 'danger');
-			$this->redirect("this");
+			$this->redirect('this');
+		}
+	}
+
+	/**
+	 * @secured
+	 * @resource('myAccount')
+	 * @privilege('resetToken')
+	 */
+	public function handleResetToken()
+	{
+		try {
+			$userRepo = $this->em->getRepository(Entity\User::getClassName());
+			$this->user->identity->resetClientId();
+			$userRepo->save($this->user->identity);
+			$message = $this->translator->translate('Your token has been created');
+			$this->flashMessage($message, 'success');
+			$this->redirect('this');
+		} catch (CantDeleteUserException $ex) {
+			$message = $this->translator->translate('You can\'t reset token.');
+			$this->flashMessage($message, 'danger');
+			$this->redirect('this');
 		}
 	}
 
@@ -146,9 +167,9 @@ class MyAccountPresenter extends BasePresenter
 	/** @return ConnectManager */
 	protected function createComponentConnect()
 	{
-		$userDao = $this->em->getDao(Entity\User::getClassName());
+		$userRepo = $this->em->getRepository(Entity\User::getClassName());
 		$control = $this->iConnectManagerFactory->create();
-		$control->setUser($userDao->find($this->user->id));
+		$control->setUser($userRepo->find($this->user->id));
 		$control->setAppActivateRedirect($this->link('password'));
 		$control->onConnect[] = function ($type) {
 			$message = $this->translator->translate('%name% was connected.', NULL, ['name' => $type]);

@@ -1333,3 +1333,24 @@ msgstr "Nesprávny e-mail alebo heslo!"
 
 msgid "include %value% VAT"
 msgstr "vrátane %value% DPH"
+
+msgid "Dealer API"
+msgstr "API pro veľkoobchod"
+
+msgid "Your token"
+msgstr "Váš token"
+
+msgid "Reset token"
+msgstr "Obnoviť token"
+
+msgid "Create token"
+msgstr "Vytvoriť token"
+
+msgid "Client ID"
+msgstr "Klientské ID"
+
+msgid "Your token has been created"
+msgstr "Váš token byl vytvorený"
+
+msgid "You can't reset token."
+msgstr "Nelze resetovať token."

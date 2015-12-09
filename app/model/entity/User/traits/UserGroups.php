@@ -3,6 +3,7 @@
 namespace App\Model\Entity\Traits;
 
 use App\Model\Entity\Group;
+use Nette\Utils\Random;
 
 /**
  * @property array $groups
@@ -12,6 +13,9 @@ trait UserGroups
 
 	/** @ORM\ManyToMany(targetEntity="Group", inversedBy="users") */
 	protected $groups;
+
+	/** @ORM\Column(type="string", length=100, nullable=true) */
+	private $clientId;
 
 	public function setGroups(array $groups)
 	{
@@ -50,6 +54,17 @@ trait UserGroups
 	public function isDealer()
 	{
 		return $this->isGroupType(Group::TYPE_DEALER);
+	}
+	
+	public function resetClientId()
+	{
+		$this->clientId = Random::generate(52);
+		return $this;
+	}
+	
+	public function getClientId()
+	{
+		return $this->clientId;
 	}
 	
 	protected function isGroupType($type)
