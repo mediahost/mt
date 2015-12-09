@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cac01322ebdf28990af3fe47ee8e40ba",
-    "content-hash": "ba553ba8626846f717d7c21473ce46e5",
+    "hash": "b2149e3f3799c9264e2ebbbc99d647cf",
+    "content-hash": "fae25f05da12f6db7ba5db8c3f3a9369",
     "packages": [
         {
             "name": "dg/adminer-custom",
@@ -677,6 +677,62 @@
             "time": "2015-08-31 13:19:01"
         },
         {
+            "name": "drahak/oauth2",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/drahak/OAuth2.git",
+                "reference": "ceffa27b55d8637c123c884fc99cdc84c88a3995"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/drahak/OAuth2/zipball/ceffa27b55d8637c123c884fc99cdc84c88a3995",
+                "reference": "ceffa27b55d8637c123c884fc99cdc84c88a3995",
+                "shasum": ""
+            },
+            "require": {
+                "nette/nette": "@dev",
+                "php": ">= 5.3.0"
+            },
+            "require-dev": {
+                "janmarek/mockista": "dev-master",
+                "nette/tester": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Drahak\\OAuth2": "src/"
+                },
+                "classmap": [
+                    "src/Drahak/OAuth2/exceptions.php",
+                    "src/Drahak/OAuth2/Grant/exceptions.php",
+                    "src/Drahak/OAuth2/Storage/exceptions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause",
+                "GPL-2.0",
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Drahomír Hanák",
+                    "homepage": "http://www.drahak.eu"
+                }
+            ],
+            "description": "Nette OAuth2 Provider bundle",
+            "homepage": "http://www.drahak.eu",
+            "keywords": [
+                "drahak",
+                "nette",
+                "oauth2",
+                "provider",
+                "server"
+            ],
+            "time": "2013-09-19 16:55:51"
+        },
+        {
             "name": "drahak/restful",
             "version": "dev-master",
             "source": {
@@ -686,7 +742,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drahak/Restful/zipball/364bf2ee115511da3df1c7c2cf7da0355e6b82d4",
+                "url": "https://api.github.com/repos/drahak/Restful/zipball/fe381abf8ca95bdf4608f2f0120c132ef49886b1",
                 "reference": "364bf2ee115511da3df1c7c2cf7da0355e6b82d4",
                 "shasum": ""
             },
@@ -754,7 +810,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/h4kuna/exchange/zipball/9bab7084610edb2b3fb25d4de0c3b306a0d9437e",
+                "url": "https://api.github.com/repos/h4kuna/exchange/zipball/d211e605d715f150d9eb64551394136fc3bc3452",
                 "reference": "9bab7084610edb2b3fb25d4de0c3b306a0d9437e",
                 "shasum": ""
             },
@@ -925,7 +981,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/janmarek/WebLoader/zipball/37cae8807f6cdd20ddbf8834d2c782804acd6be3",
+                "url": "https://api.github.com/repos/janmarek/WebLoader/zipball/812c86473323f57af092bbb1a2f0d72868240210",
                 "reference": "37cae8807f6cdd20ddbf8834d2c782804acd6be3",
                 "shasum": ""
             },
@@ -1862,7 +1918,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kdyby/Translation/zipball/bd928341971c1c62674e254b9ae8e9ead17c654b",
+                "url": "https://api.github.com/repos/Kdyby/Translation/zipball/182d12611b9a3553908c51ddbec80d4233617677",
                 "reference": "bd928341971c1c62674e254b9ae8e9ead17c654b",
                 "shasum": ""
             },
@@ -3018,7 +3074,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/nette/zipball/40b55666b78d7ec6272c46e94f15e4f36bd583e2",
+                "url": "https://api.github.com/repos/nette/nette/zipball/059cff35c281125e5da0615a1cd0b10908ebb944",
                 "reference": "40b55666b78d7ec6272c46e94f15e4f36bd583e2",
                 "shasum": ""
             },
@@ -4312,7 +4368,7 @@
             ],
             "authors": [
                 {
-                    "name": "Padraic Brady",
+                    "name": "Pádraic Brady",
                     "email": "padraic.brady@gmail.com",
                     "homepage": "http://blog.astrumfutura.com"
                 },
@@ -4396,16 +4452,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v2.7.7",
+            "version": "v2.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "f6290983c8725d0afa29bdc3e5295879de3e58f5"
+                "reference": "1b988a88e3551102f3c2d9e1d47a18c3a78d6312"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/f6290983c8725d0afa29bdc3e5295879de3e58f5",
-                "reference": "f6290983c8725d0afa29bdc3e5295879de3e58f5",
+                "url": "https://api.github.com/repos/symfony/process/zipball/1b988a88e3551102f3c2d9e1d47a18c3a78d6312",
+                "reference": "1b988a88e3551102f3c2d9e1d47a18c3a78d6312",
                 "shasum": ""
             },
             "require": {
@@ -4414,7 +4470,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.7-dev"
+                    "dev-master": "2.8-dev"
                 }
             },
             "autoload": {
@@ -4441,7 +4497,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2015-11-19 16:11:24"
+            "time": "2015-11-30 12:35:10"
         }
     ],
     "aliases": [],
@@ -4472,6 +4528,7 @@
         "kdyby/forms-replicator": 20,
         "kdyby/doctrine-cache": 20,
         "heureka/overenozakazniky": 20,
+        "drahak/oauth2": 20,
         "nette/tester": 20,
         "kdyby/tester-extras": 20
     },
