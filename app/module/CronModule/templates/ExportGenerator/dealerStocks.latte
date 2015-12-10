@@ -1,0 +1,22 @@
+{layout none}
+<?xml version="1.0" encoding="utf-8"?>
+<STORE>
+	<ITEM n:foreach="$stocks as $stock">
+		{var loadedStock => $stockRepo->find($stock['id'])}
+		{var product => $stock['product']}
+		{var translations => $product['translations']}
+		{var translation => isset($translations[$locale]) ? $translations[$locale] : $translations[$defaultLocale]}
+		{var image => $product['image']}
+		{var producer => NULL}
+		{*var producer => $loadedStock->product->producer*}
+
+		<ITEM_ID>{$stock['id']}</ITEM_ID>
+		<PRODUCT><![CDATA[{$translation['name']}]]></PRODUCT>
+		<PRODUCER n:if="$producer"><![CDATA[{$producer}]]></PRODUCER>
+		<DESCRIPTION><![CDATA[{$translation['description']}]]></DESCRIPTION>
+		<URL>{link '//:Front:Product:', 'id' => $product['id'], 'locale' => $locale}</URL>
+		<IMGURL>{link '//:Foto:Foto:', '400-400', $image['filename']}</IMGURL>
+		<CATEGORY_ID>{$product['mainCategory']['id']}</CATEGORY_ID>
+		<EAN n:if="$stock['barcode']">{$stock['barcode']}</EAN>
+	</ITEM>
+</STORE>

@@ -1,0 +1,11 @@
+{layout none}
+{contentType application/xml}
+<?xml version="1.0" encoding="utf-8"?>
+<STORE_DETAIL>
+	<ITEM n:foreach="$stocks as $stock">
+		<ITEM_ID>{$stock->id}</ITEM_ID>
+		<PRICE_VAT>{$stock->getPrice($level)|changeVat:NULL,NULL,2}</PRICE_VAT>
+		<PRICE_NOVAT>{$stock->getPrice($level)|change:NULL,NULL,2}</PRICE_NOVAT>
+		<IN_STORE>{$stock->inStore}</IN_STORE>
+	</ITEM>
+</STORE_DETAIL>

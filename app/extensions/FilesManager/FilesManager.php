@@ -14,8 +14,10 @@ class FilesManager extends Object
 	
 	const POHODA_IMPORT = 'pohoda-xml-import';
 	const EXPORTS = 'exports';
-	const EXPORT_STOCKS = 'stocks';
-	const EXPORT_CATEGORIES = 'categories';
+	const EXPORT_ZBOZI_STOCKS = 'zbozi-stocks';
+	const EXPORT_HEUREKA_STOCKS = 'heureka-stocks';
+	const EXPORT_DEALER_STOCKS = 'dealer-stocks';
+	const EXPORT_DEALER_CATEGORIES = 'dealer-categories';
 
 	/** @var string */
 	private $rootFolder;
@@ -40,11 +42,12 @@ class FilesManager extends Object
 	public function getExportFilename($type, $locale, $ext = 'xml')
 	{
 		switch ($type) {
-			case self::EXPORT_STOCKS:
+			case self::EXPORT_DEALER_STOCKS:
+			case self::EXPORT_HEUREKA_STOCKS:
 				$dir = $this->getDir(self::EXPORTS);
-				$path = Helpers::getPath($dir, self::EXPORT_STOCKS, $locale);
+				$path = Helpers::getPath($dir, $type, $locale);
 				FileSystem::createDir($path);
-				return $path . '/' . self::EXPORT_STOCKS . '.' . $ext;
+				return "{$path}/{$type}.{$ext}";
 
 			default:
 				throw new FilesManagerException('Unknown type for export filename.');
