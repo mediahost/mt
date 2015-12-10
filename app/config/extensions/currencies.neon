@@ -10,3 +10,6 @@ exchangeExtension:
 		eur: [decimal: 2, point: ',', thousand: ' ', mask: '1 S', symbol: '€']
 		czk: [decimal: 2, point: ',', thousand: ' ', mask: '1 S', symbol: 'Kč'] 
 	}
+	vat: 0
+	vatIn: false
+	vatOut: false
