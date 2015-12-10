@@ -139,7 +139,9 @@ class Shipping extends BaseTranslatable
 
 	private function applyFree($price, Basket $basket, $level = NULL)
 	{
-		if ($this->freePrice > 0 && $basket->getItemsTotalPrice(NULL, $level, TRUE) > $this->freePrice) {
+		$freePrice = $this->getFreePrice();
+		$freePriceVat = $freePrice->withVat;
+		if ($freePriceVat > 0 && $basket->getItemsTotalPrice(NULL, $level, TRUE) > $freePriceVat) {
 			$price = 0;
 		}
 		return $price;
