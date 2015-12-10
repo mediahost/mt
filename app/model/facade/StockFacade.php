@@ -200,7 +200,7 @@ class StockFacade extends Object
 		return $cache;
 	}
 
-	public function getExportStocksArray($onlyInStore = TRUE, Category $denyCategory = NULL)
+	public function getExportStocksArray($onlyInStore = TRUE, Category $denyCategory = NULL, $limit = NULL)
 	{
 		$qb = $this->stockRepo->createQueryBuilder('s')
 				->select('s, p, i, c, t, v')
@@ -228,8 +228,74 @@ class StockFacade extends Object
 					->andWhere('p.mainCategory NOT IN (:categories)')
 					->setParameter('categories', array_keys($denyCategory->childrenArray));
 		}
+
+		if ($limit) {
+			$qb->setMaxResults($limit);
+		}
+
 		return $qb->getQuery()
 						->getResult(AbstractQuery::HYDRATE_ARRAY);
+	}
+
+	public function getExportShortStocksArray($onlyInStore = TRUE, Category $denyCategory = NULL, $limit = NULL)
+	{
+		$qb = $this->stockRepo->createQueryBuilder('s')
+				->select('s, p, i, c, t')
+				->innerJoin('s.product', 'p')
+				->leftJoin('p.translations', 't')
+				->innerJoin('p.image', 'i')
+				->innerJoin('p.mainCategory', 'c')
+				->andWhere('(t.locale = :lang OR t.locale = :defaultLang)')
+				->setParameter('lang', $this->translator->getLocale())
+				->setParameter('defaultLang', $this->translator->getDefaultLocale())
+				->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
+				->andWhere('p.deletedAt IS NULL OR p.deletedAt > :now')
+				->setParameter('now', new DateTime())
+				->andWhere('s.active = :active')
+				->andWhere('p.active = :active')
+				->setParameter('active', TRUE);
+		if ($onlyInStore) {
+			$qb
+					->andWhere("s.inStore >= :inStore")
+					->setParameter('inStore', 1);
+		}
+		if ($denyCategory && count($denyCategory->childrenArray)) {
+			$qb
+					->andWhere('p.mainCategory NOT IN (:categories)')
+					->setParameter('categories', array_keys($denyCategory->childrenArray));
+		}
+
+		if ($limit) {
+			$qb->setMaxResults($limit);
+		}
+
+		return $qb->getQuery()
+						->getResult(AbstractQuery::HYDRATE_ARRAY);
+	}
+
+	public function getExportStocksDetails($onlyInStore = TRUE, $limit = NULL)
+	{
+		$qb = $this->stockRepo->createQueryBuilder('s')
+				->select('s')
+				->innerJoin('s.product', 'p')
+				->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
+				->andWhere('p.deletedAt IS NULL OR p.deletedAt > :now')
+				->setParameter('now', new DateTime())
+				->andWhere('s.active = :active')
+				->andWhere('p.active = :active')
+				->setParameter('active', TRUE);
+		if ($onlyInStore) {
+			$qb
+					->andWhere("s.inStore >= :inStore")
+					->setParameter('inStore', 1);
+		}
+
+		if ($limit) {
+			$qb->setMaxResults($limit);
+		}
+
+		return $qb->getQuery()
+						->getResult(AbstractQuery::HYDRATE_OBJECT);
 	}
 
 }

@@ -94,6 +94,16 @@ class RouterFactory
 			'action' => 'readZbozi'
 				], ResourceRoute::GET | ResourceRoute::POST | ResourceRoute::PUT | ResourceRoute::HEAD);
 
+		$apiRouter[] = new ResourceRoute('<locale \w{2}>/export/dealer/stocks', [
+			'presenter' => 'Dealer',
+			'action' => 'readStocks'
+				], ResourceRoute::GET | ResourceRoute::POST);
+
+		$apiRouter[] = new ResourceRoute('<locale \w{2}>/export/dealer/availability', [
+			'presenter' => 'Dealer',
+			'action' => 'readAvailability'
+				], ResourceRoute::GET | ResourceRoute::POST);
+
 		// </editor-fold>
 		// <editor-fold desc="Ajax">
 
