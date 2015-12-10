@@ -2,6 +2,7 @@
 
 namespace App\Model\Facade;
 
+use App\Extensions\FilesManager;
 use App\Extensions\Settings\SettingsStorage;
 use App\Helpers;
 use App\Model\Entity\PohodaItem;
@@ -14,7 +15,6 @@ use Exception;
 use Kdyby\Doctrine\EntityManager;
 use MissingSettingsException;
 use Nette\Database\UniqueConstraintViolationException;
-use Nette\DI\Container;
 use Nette\Object;
 use Nette\Utils\DateTime;
 use Nette\Utils\FileSystem;
@@ -49,8 +49,8 @@ class PohodaFacade extends Object
 	/** @var EntityManager @inject */
 	public $em;
 
-	/** @var Container @inject */
-	public $container;
+	/** @var FilesManager @inject */
+	public $filesManager;
 
 	/** @var SettingsStorage @inject */
 	public $settings;
@@ -468,11 +468,7 @@ class PohodaFacade extends Object
 
 	protected function getRootDir()
 	{
-		$root = Helpers::getPath($this->container->parameters['appDir'], '..');
-		$rootPohoda = Helpers::getPath($root, self::DIR_FOR_IMPORT);
-		FileSystem::createDir($rootPohoda);
-
-		return $rootPohoda;
+		return $this->filesManager->getDir(FilesManager::POHODA_IMPORT);
 	}
 
 	protected function getDirForXml($dir, $folder)

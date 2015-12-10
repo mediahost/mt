@@ -70,3 +70,4 @@ extensions:
 	restful: Drahak\Restful\DI\RestfulExtension
 	nextrasForms: Nextras\Forms\DI\FormsExtension
 	importFromMT1: App\Extensions\ImportFromMT1\DI\ImportFromMT1Extension
+	filesManager: App\Extensions\FilesManager\DI\FilesManagerExtension
