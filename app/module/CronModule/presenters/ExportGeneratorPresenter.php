@@ -25,7 +25,7 @@ class ExportGeneratorPresenter extends BasePresenter
 	public function actionDealerStocks()
 	{
 		proc_nice(19);
-		ini_set('max_execution_time', 60);
+		ini_set('max_execution_time', 600);
 
 		if (!$this->settings->modules->dealer->enabled) {
 			throw new ForbiddenRequestException('Dealer module is not allowed');
@@ -53,7 +53,7 @@ class ExportGeneratorPresenter extends BasePresenter
 	public function actionHeurekaStocks()
 	{
 		proc_nice(19);
-		ini_set('max_execution_time', 60);
+		ini_set('max_execution_time', 1500);
 
 		if (!$this->settings->modules->heureka->enabled) {
 			throw new ForbiddenRequestException('Dealer module is not allowed');
