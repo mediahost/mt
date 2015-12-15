@@ -1398,3 +1398,36 @@ msgstr "Your token has been created"
 
 msgid "You can't reset token."
 msgstr "You can't reset token."
+
+msgid "XML for stocks list"
+msgstr "XML for stocks list"
+
+msgid "XML for availiblity list"
+msgstr "XML for availiblity list"
+
+msgid "Create order"
+msgstr "Create order"
+
+msgid "Array of pairs Stock Id & Quantity"
+msgstr "Array of pairs Stock Id & Quantity"
+
+msgid "ID of Shipping"
+msgstr "ID of Shipping"
+
+msgid "ID of Payment"
+msgstr "ID of Payment"
+
+msgid "Shipping ID"
+msgstr "Shipping ID"
+
+msgid "Shipping Name"
+msgstr "Shipping Name"
+
+msgid "Allowed Payments"
+msgstr "Allowed Payments"
+
+msgid "Payment ID"
+msgstr "Payment ID"
+
+msgid "Payment Name"
+msgstr "Payment Name"

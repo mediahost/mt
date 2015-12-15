@@ -48,7 +48,7 @@ trait UserGroups
 	
 	public function getGroup()
 	{
-		return $this->groups->count() ? $this->groups->first() : NULL;
+		return $this->groups && $this->groups->count() ? $this->groups->first() : NULL;
 	}
 	
 	public function isDealer()

@@ -130,5 +130,18 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 		$this->subscriber = NULL;
 		return $this;
 	}
+	
+	public function getShippingAddress($realShipping = FALSE)
+	{
+		if ($realShipping) {
+			if ($this->shippingAddress && $this->shippingAddress->isComplete()) {
+				return $this->shippingAddress;
+			} else {
+				return $this->billingAddress;
+			}
+		} else {
+			return $this->shippingAddress;
+		}
+	}
 
 }
