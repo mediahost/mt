@@ -55,7 +55,7 @@ class DealerPresenter extends BasePresenter
 	{
 		parent::checkRequirements($element);
 		try {
-			$clientId = $this->request->getPost(self::CLIENT_ID);
+			$clientId = $this->request->getPost(self::CLIENT_ID, $this->request->getQuery(self::CLIENT_ID));
 			$this->checkClient($clientId);
 		} catch (SecurityException $e) {
 			$this->sendErrorResource($e, $this->typeMap[$this->type]);
