@@ -166,6 +166,11 @@ class Shipping extends BaseTranslatable
 		return $this;
 	}
 
+	public function isAllowedPayment(Payment $payment)
+	{
+		return $this->payments->contains($payment);
+	}
+
 	public function __toString()
 	{
 		return $this->name;

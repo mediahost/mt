@@ -104,6 +104,11 @@ class RouterFactory
 			'action' => 'readAvailability'
 				], ResourceRoute::GET | ResourceRoute::POST);
 
+		$apiRouter[] = new ResourceRoute('insert/order', [
+			'presenter' => 'Dealer',
+			'action' => 'createOrder'
+				], ResourceRoute::GET | ResourceRoute::POST);
+
 		// </editor-fold>
 		// <editor-fold desc="Ajax">
 

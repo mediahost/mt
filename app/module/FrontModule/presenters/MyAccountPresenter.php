@@ -8,6 +8,8 @@ use App\Components\Auth\ISetPasswordFactory;
 use App\Components\Auth\SetPassword;
 use App\Components\User\Form\IPersonalFactory;
 use App\Components\User\Form\Personal;
+use App\Helpers;
+use App\LocaleHelpers;
 use App\Model\Entity;
 use App\Model\Entity\User;
 use App\Model\Facade\CantDeleteUserException;
@@ -106,6 +108,29 @@ class MyAccountPresenter extends BasePresenter
 	public function actionDelete()
 	{
 		
+	}
+
+	/**
+	 * @secured
+	 * @resource('myAccount')
+	 * @privilege('dealer')
+	 */
+	public function actionDealer()
+	{
+		$localesArr = LocaleHelpers::getLocalesFromTranslator($this->translator);
+		$this->template->allLocales = Helpers::concatArray($localesArr, '|');
+		$currenciesArr = array_keys($this->exchange->getArrayCopy());
+		$this->template->allCurrencies = Helpers::concatArray($currenciesArr, '|');
+		$exampleTopStocks = $this->stockFacade->getTops(2);
+		$exampleStockQuantity = [];
+		foreach ($exampleTopStocks as $exampleStock) {
+			$exampleStockQuantity[$exampleStock->id] = rand(1, $exampleStock->inStore > 3 ? 2 : $exampleStock->inStore);
+		}
+		$this->template->exampleStocks = $exampleStockQuantity;
+		$shippingsRepo = $this->em->getRepository(Entity\Shipping::getClassName());
+		$this->template->shippings = $shippingsRepo->findBy(['active' => TRUE]);
+		$paymentsRepo = $this->em->getRepository(Entity\Payment::getClassName());
+		$this->template->payments = $paymentsRepo->findBy(['active' => TRUE]);
 	}
 
 	/**

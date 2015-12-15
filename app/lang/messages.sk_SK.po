@@ -1354,3 +1354,36 @@ msgstr "Váš token byl vytvorený"
 
 msgid "You can't reset token."
 msgstr "Nelze resetovať token."
+
+msgid "XML for stocks list"
+msgstr "XML seznam tovarov"
+
+msgid "XML for availiblity list"
+msgstr "XML dostupnosťou tovarov"
+
+msgid "Create order"
+msgstr "Vytvorenie objednávky"
+
+msgid "Array of pairs Stock Id & Quantity"
+msgstr "Pole párov - ID tovaru a množstvo"
+
+msgid "ID of Shipping"
+msgstr "ID dopravy"
+
+msgid "ID of Payment"
+msgstr "ID platby"
+
+msgid "Shipping ID"
+msgstr "ID dopravy"
+
+msgid "Shipping Name"
+msgstr "Názov dopravy"
+
+msgid "Allowed Payments"
+msgstr "Povolené platby"
+
+msgid "Payment ID"
+msgstr "ID platby"
+
+msgid "Payment Name"
+msgstr "Názov platby"
