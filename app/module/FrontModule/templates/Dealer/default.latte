@@ -39,7 +39,7 @@
 					</div>
 				{/if}
 				
-				<div class="content-page">
+				<div class="content-page" n:if="!$identity->isDealer()">
 					<div class="page-html-content">
 						{$page->html|noescape}
 					</div>
