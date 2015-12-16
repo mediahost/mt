@@ -1,7 +1,7 @@
 {block breadcrumbItems}
 <li><a n:href="MyAccount:">{_'My Account'}</a></li>
 <li class="active">{_'Dealer API'}</li>
-	{/block}
+{/block}
 
 {block content}
 <div class="container">
@@ -33,6 +33,26 @@
 			{var clientIdParam => App\ApiModule\Presenters\DealerPresenter::CLIENT_ID . '=' . $clientId}
 			{var clientIdParamText => App\ApiModule\Presenters\DealerPresenter::CLIENT_ID . '=<CLIENT_ID>'}
 			{var baseUrl => $_control->link('//:Front:Homepage:', ['backlink' => NULL])}
+
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">{_'XML for categories list'}</h3>
+				</div>
+				<div class="panel-body">
+					{var categoriesLink => 'export/dealer/categories'}
+					<p>
+						<a href="{$baseUrl}{$lang}/{$categoriesLink}?{$clientIdParam}">
+							{$baseUrl}&lt;LOCALE&gt;/{$categoriesLink}?{$clientIdParamText}
+						</a>
+					</p>
+					<dl>
+						<dt>LOCALE</dt>
+						<dd>{$allLocales}</dd>
+						<dt>CLIENT_ID</dt>
+						<dd>{$clientId}</dd>
+					</dl>
+				</div>
+			</div>
 
 			<div class="panel panel-default">
 				<div class="panel-heading">
@@ -139,13 +159,37 @@
 					<pre class="src-html">
 						{include insertOrderCode, baseUrl => $baseUrl, createOrderLink => $createOrderLink, clientId => $clientId, stocks => $exampleStocks}
 					</pre>
+					<h5>{_'Example of succesfully response'} (JSON)</h5>
+					<pre class="src-html">
+						{include sucessfullResponse}
+					</pre>
+					<h5>{_'Example of error response'} (JSON)</h5>
+					<pre class="src-html">
+						{include errorResponse}
+					</pre>
 				</div>
 			</div>
 		</div>
 		<!-- END CONTENT -->
 	</div>
 </div>
+{/block}
 
+{define sucessfullResponse}
+{
+	"state": "ok",
+	"message": "Order was created",
+	"order_id": 123456,
+	"total_price": 123.45
+}
+{/define}
+
+{define errorResponse}
+{
+	"state": "error",
+	"message": "No products to order"
+}
+{/define}
 
 {define insertOrderCode}
 &lt;?php

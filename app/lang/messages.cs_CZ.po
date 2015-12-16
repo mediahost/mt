@@ -1360,6 +1360,9 @@ msgstr "Nelze resetovat token."
 msgid "XML for stocks list"
 msgstr "XML seznam produktů"
 
+msgid "XML for categories list"
+msgstr "XML seznam kategorií"
+
 msgid "XML for availiblity list"
 msgstr "XML dostupností produktů"
 
@@ -1389,3 +1392,9 @@ msgstr "ID platby"
 
 msgid "Payment Name"
 msgstr "Název platby"
+
+msgid "Example of succesfully response"
+msgstr "Příklad úspěšné odpovědi"
+
+msgid "Example of error response"
+msgstr "Příklad neúspěšné odpovědi"

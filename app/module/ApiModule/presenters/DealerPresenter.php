@@ -103,6 +103,31 @@ class DealerPresenter extends BasePresenter
 	}
 
 	/**
+	 * From pre saved XML
+	 */
+	public function actionReadCategories()
+	{
+//		proc_nice(19);
+		ini_set('max_execution_time', 60);
+
+		if (!$this->settings->modules->dealer->enabled) {
+			$this->resource->state = 'error';
+			$this->resource->message = 'This module is not allowed';
+		} else {
+			$locale = $this->translator->getLocale();
+			$filename = $this->filesManager->getExportFilename(FilesManager::EXPORT_DEALER_CATEGORIES, $locale);
+			if (is_file($filename)) {
+				$content = file_get_contents($filename);
+				$response = new TextResponse($content, new NullMapper(), IResource::XML);
+				$this->sendResponse($response);
+			} else {
+				$this->resource->state = 'error';
+				$this->resource->message = 'Missing \'' . $locale . '\' translation for this export';
+			}
+		}
+	}
+
+	/**
 	 * Generated XML
 	 */
 	public function actionReadAvailability($id = NULL, $currency = 'eur')
