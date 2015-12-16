@@ -89,6 +89,21 @@ class OrderFacade extends Object
 		if (!$newState) {
 			throw new FacadeException('State does not exists.');
 		}
+		
+		if ($oldState->type->isLocking(OrderStateType::LOCK_STORNO) &&
+				($newState->type->isLocking(OrderStateType::LOCK_ORDER) ||
+				$newState->type->isLocking(OrderStateType::LOCK_DONE))) {
+			$insuficientQuantity = FALSE;
+			foreach ($order->items as $orderItem) {
+				if ($orderItem->quantity > $orderItem->stock->inStore) {
+					$insuficientQuantity = TRUE;
+					break;
+				}
+			}
+			if ($insuficientQuantity) {
+				throw new FacadeException('State cannot be change.');
+			}
+		}
 
 		$order->state = $newState;
 		$this->orderRepo->save($order);

@@ -8,6 +8,7 @@ use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Order;
 use App\Model\Entity\OrderState;
+use App\Model\Facade\Exception\FacadeException;
 use App\Model\Facade\OrderFacade;
 use Nette\Utils\ArrayHash;
 
@@ -58,7 +59,11 @@ class ChangeState extends BaseControl
 
 	private function load(Form $form, ArrayHash $values)
 	{
-		$this->orderFacade->changeState($this->order, $values->state);
+		try {
+			$this->orderFacade->changeState($this->order, $values->state);
+		} catch (FacadeException $ex) {
+			$form->addError($this->translator->translate('Status can not be changed'));
+		}
 		return $this;
 	}
 
