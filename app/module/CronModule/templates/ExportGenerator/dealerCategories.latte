@@ -1,0 +1,11 @@
+{layout none}
+<?xml version="1.0" encoding="utf-8"?>
+<CATEGORIES>
+	<CATEGORY n:foreach="$categories as $category">
+		{? $category->setCurrentLocale($locale)}
+		<ID>{$category->id}</ID>
+		<PARENT_ID n:if="$category->parent">{$category->parent->id}</PARENT_ID>
+		<NAME><![CDATA[{$category}]]></NAME>
+		<FULLNAME><![CDATA[{$category->treeName}]]></FULLNAME>
+	</CATEGORY>
+</CATEGORIES>

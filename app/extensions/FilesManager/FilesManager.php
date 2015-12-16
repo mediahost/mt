@@ -43,6 +43,7 @@ class FilesManager extends Object
 	{
 		switch ($type) {
 			case self::EXPORT_DEALER_STOCKS:
+			case self::EXPORT_DEALER_CATEGORIES:
 			case self::EXPORT_HEUREKA_STOCKS:
 				$dir = $this->getDir(self::EXPORTS);
 				$path = Helpers::getPath($dir, $type, $locale);

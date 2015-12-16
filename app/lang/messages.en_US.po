@@ -1402,6 +1402,9 @@ msgstr "You can't reset token."
 msgid "XML for stocks list"
 msgstr "XML for stocks list"
 
+msgid "XML for categories list"
+msgstr "XML for categories list"
+
 msgid "XML for availiblity list"
 msgstr "XML for availiblity list"
 
@@ -1431,3 +1434,9 @@ msgstr "Payment ID"
 
 msgid "Payment Name"
 msgstr "Payment Name"
+
+msgid "Example of succesfully response"
+msgstr "Example of succesfully response"
+
+msgid "Example of error response"
+msgstr "Example of error response"

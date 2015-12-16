@@ -104,6 +104,11 @@ class RouterFactory
 			'action' => 'readAvailability'
 				], ResourceRoute::GET | ResourceRoute::POST);
 
+		$apiRouter[] = new ResourceRoute('<locale \w{2}>/export/categories', [
+			'presenter' => 'Dealer',
+			'action' => 'readCategories'
+				], ResourceRoute::GET | ResourceRoute::POST);
+
 		$apiRouter[] = new ResourceRoute('insert/order', [
 			'presenter' => 'Dealer',
 			'action' => 'createOrder'

@@ -50,6 +50,31 @@ class ExportGeneratorPresenter extends BasePresenter
 		$this->message = 'File was generated';
 	}
 
+	public function actionDealerCategories()
+	{
+		proc_nice(19);
+		ini_set('max_execution_time', 600);
+
+		if (!$this->settings->modules->dealer->enabled) {
+			throw new ForbiddenRequestException('Dealer module is not allowed');
+		}
+
+		$categoryRepo = $this->em->getRepository(Category::getClassName());
+		$categories = $categoryRepo->findAll();
+
+		$this->template->categories = $categories;
+		$this->template->locale = $this->translator->getLocale();
+		$this->setView();
+
+		$output = (string) $this->template;
+		$filename = $this->filesManager->getExportFilename(FilesManager::EXPORT_DEALER_CATEGORIES, $this->translator->getLocale());
+
+		file_put_contents($filename, $output);
+
+		$this->status = parent::STATUS_OK;
+		$this->message = 'File was generated';
+	}
+
 	public function actionHeurekaStocks()
 	{
 		proc_nice(19);
