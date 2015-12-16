@@ -107,7 +107,7 @@ class DealerPresenter extends BasePresenter
 	 */
 	public function actionReadCategories()
 	{
-//		proc_nice(19);
+		proc_nice(19);
 		ini_set('max_execution_time', 60);
 
 		if (!$this->settings->modules->dealer->enabled) {

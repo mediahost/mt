@@ -82,7 +82,7 @@
 					{var availabilityLink => 'export/dealer/availability'}
 					<p>
 						<a href="{$baseUrl}{$lang}/{$availabilityLink}?{$clientIdParam}">
-							{$baseUrl}&lt;LOCALE&gt;/{$availabilityLink}?{$clientIdParamText}
+							{$baseUrl}&lt;LOCALE&gt;/{$availabilityLink}?{$clientIdParamText}[&id=&lt;PRODUCT_ID&gt;]
 						</a>
 					</p>
 
@@ -91,6 +91,8 @@
 						<dd>{$allLocales}</dd>
 						<dt>CLIENT_ID</dt>
 						<dd>{$clientId}</dd>
+						<dt>id</dt>
+						<dd>{_'Optional parameter for product ID'}</dd>
 					</dl>
 				</div>
 			</div>
@@ -109,6 +111,8 @@
 					<dl>
 						<dt>client_id</dt>
 						<dd>{$clientId}</dd>
+						<dt>locale</dt>
+						<dd>{$allLocales}</dd>
 						<dt>currency</dt>
 						<dd>{$allCurrencies}</dd>
 						<dt>stocks</dt>
@@ -198,22 +202,24 @@
 $url = '{$baseUrl}{$createOrderLink}';
 $clientId = '{$clientId}';
 $currency = '{$currency->getCode()}';
+$locale = '{$lang}';
 $shippingId = '{App\Model\Entity\Shipping::PERSONAL}'; 
 $paymentId = '{App\Model\Entity\Payment::PERSONAL}'; 
 
 // STOCK_ID => QUANTITY
-$stocks = [
+$stocks = array(
 {foreach $stocks as $stockId => $quantity}
 	'{$stockId}' => '{$quantity}',
 {/foreach}
-];
+);
 
-$data = [
+$data = array(
 	'client_id' => urlencode($clientId),
+	'locale' => urlencode($locale),
 	'currency' => urlencode($currency),
 	'shipping' => urlencode($shippingId),
 	'payment' => urlencode($paymentId),
-];
+);
 foreach ($stocks as $stockId => $quantity) {
 	$data['stocks[' . $stockId . ']'] = urlencode($quantity);
 }
