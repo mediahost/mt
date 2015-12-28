@@ -76,7 +76,8 @@ class SettingsExtension extends CompilerExtension
 			],
 			'heureka' => [
 				'enabled' => FALSE,
-				'key' => NULL, // mereni konverzí
+				'keyOvereno' => NULL, // ověřeno zákazníky
+				'keyConversion' => NULL, // mereni konverzí
 				'cpc' => NULL, // max. cena za proklik (max. 100)
 				'deliveryStoreTime' => 0,
 				'deliveryNotInStoreTime' => NULL,

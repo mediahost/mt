@@ -22,4 +22,27 @@
 	</div>
 	<!-- END CONTENT -->
 </div>
+{include heurekaScript}
 {/block}
+
+{define heurekaScript}
+<script type="text/javascript" n:if="isset($heurekaConversionKey)" n:syntax="double">
+	var _hrq = _hrq || [];
+	_hrq.push(['setKey', {{$heurekaConversionKey}}]);
+	_hrq.push(['setOrderId', {{$order->id}}]);
+	{{foreach $order->items as $item}}
+	_hrq.push(['addProduct', {{$item->name}}, {{$item->price->withVat}}, {{$item->quantity}}]);
+    {{/foreach}}
+
+	_hrq.push(['trackOrder']);
+
+	(function () {
+		var ho = document.createElement('script');
+		ho.type = 'text/javascript';
+		ho.async = true;
+		ho.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.heureka.sk/direct/js/ext/2-roi-async.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ho, s);
+	})();
+</script>
+{/define}

@@ -134,6 +134,12 @@ class CartPresenter extends BasePresenter
 		}
 
 		$this->getSessionSection()->orderId = NULL;
+		
+		$heurekaSettings = $this->settings->modules->heureka;
+		if ($heurekaSettings->enabled) {
+			$this->template->heurekaConversionKey = $heurekaSettings->keyConversion;
+		}
+		$this->template->order = $order;
 	}
 
 	private function sendHeurekaOvereno(Order $order)
@@ -141,7 +147,7 @@ class CartPresenter extends BasePresenter
 		$heurekaSettings = $this->settings->modules->heureka;
 		if ($heurekaSettings->enabled) {
 			try {
-				$overeno = new HeurekaOvereno($heurekaSettings->key, HeurekaOvereno::LANGUAGE_SK);
+				$overeno = new HeurekaOvereno($heurekaSettings->keyOvereno, HeurekaOvereno::LANGUAGE_SK);
 				$overeno->setEmail($order->mail);
 				$overeno->addOrderId($order->id);
 				foreach ($order->items as $item) {
