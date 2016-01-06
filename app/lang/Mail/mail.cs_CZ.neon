@@ -5,6 +5,12 @@ subject:
 	changeStateOrder: 'Vaše objednávka č.%id%'
 	createOrder: 'Vaše objednávka č.%id%'
 	createOrderShop: 'Nová objednávka č.%id%'
+	unfinished: 'Nedokončená objednávka'
+basket:
+	salutation: 'Pekný den,'
+	unfinished: 'Říká se, že v životě nelitujeme věcí, které jsme udělali, ale těch, které jsme nezkusili. Snad vaše nedokončená objednávka nebude jednou z nich. To však lze ještě změnit!'
+	subtitle: 'Pokud v objednávce neplánujete pokračovat, nic se neděje, uvolníme ji pro ostatní zájemce.'
+	continue: 'Pokračovat v objednávce'
 order:
 	salutation: 'Vážený zákazníku'
 	headline: 'Objednávka č.%number%'
