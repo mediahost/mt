@@ -10,6 +10,7 @@ use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
 use Knp\DoctrineBehaviors\Model;
+use Nette\Utils\DateTime;
 
 /**
  * @ORM\Entity(repositoryClass="App\Model\Repository\BasketRepository")
@@ -23,6 +24,7 @@ use Knp\DoctrineBehaviors\Model;
  * @property Address $billingAddress
  * @property Address $shippingAddress
  * @property bool $isCompany
+ * @property DateTime $sendedMailAt
  */
 class Basket extends BaseEntity
 {
@@ -35,6 +37,9 @@ class Basket extends BaseEntity
 
 	/** @ORM\OneToMany(targetEntity="BasketItem", mappedBy="basket", cascade={"persist", "remove"}, orphanRemoval=true) */
 	protected $items;
+
+	/** @ORM\Column(type="datetime") */
+    private $changeItemsAt;
 
 	/** @ORM\ManyToOne(targetEntity="Shipping") */
 	protected $shipping;
@@ -50,6 +55,9 @@ class Basket extends BaseEntity
 
 	/** @ORM\OneToOne(targetEntity="Address") */
 	protected $shippingAddress;
+
+	/** @ORM\Column(type="datetime", nullable=true) */
+    protected $sendedMailAt;
 
 	public function __construct(User $user = NULL)
 	{
@@ -97,6 +105,9 @@ class Basket extends BaseEntity
 			$item->quantity = $quantity;
 			$this->items->add($item);
 		}
+		
+		$this->changeItemsAt = new DateTime('now');
+		
 		return $this;
 	}
 	

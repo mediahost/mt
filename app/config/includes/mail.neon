@@ -11,3 +11,4 @@ services:
 	- {implement: App\Mail\Messages\Buyout\ITheirMessageFactory, inject: yes}
 	- {implement: App\Mail\Messages\Newsletter\IUnsubscribeMessageFactory, inject: yes}
 	- {implement: App\Mail\Messages\Newsletter\INewsletterMessageFactory, inject: yes}
+	- {implement: App\Mail\Messages\Basket\IUnfinishedMessageFactory, inject: yes}

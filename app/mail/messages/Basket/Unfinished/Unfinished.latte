@@ -1,0 +1,43 @@
+{layout '../../@layout.latte'}
+
+{includeblock '../basketSummary.latte'}
+
+{block content}
+<table class="container content" align="left" width="100%">
+	<tr>
+		<td>
+			<table class="row note">
+				<tr>
+					<td class="wrapper">
+						<p>
+							{_'mail.basket.salutation'}<br>
+							<br>
+							{_'mail.basket.unfinished'}
+						</p>
+						<br/>
+					</td>
+				</tr>
+			</table>
+
+			{include basketSummary}
+			<p>&nbsp;</p>
+			<p>
+				<a href="{$link}"
+				   style="display:inline-block;padding:5px 10px;border-radius:4px;background:#2795D4;color:#fff !important;font-size:13px;text-decoration:none;font-weight:bold;padding:10px 21px;font-size:17px" 
+				   target="_blank">
+					{_'mail.basket.continue'}
+				</a>
+			</p>
+			
+			<table class="row note">
+				<tr>
+					<td class="wrapper">
+						<p>
+							{_'mail.basket.subtitle'}
+						</p>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>

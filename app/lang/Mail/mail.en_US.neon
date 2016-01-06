@@ -5,6 +5,12 @@ subject:
 	changeStateOrder: 'Your order #%id%'
 	createOrder: 'Your order #%id%'
 	createOrderShop: 'New order #%id%'
+	unfinished: 'Unfinished order'
+basket:
+	salutation: 'Hello...'
+	unfinished: 'They say that in life we do not regret the things that we have done, but those we do not tried. Perhaps your incomplete order is not one of them. But you can still change it!'
+	subtitle: 'If the order does not plan to continue, nothing happens, we will release it to other interested parties.'
+	continue: 'Continue in order'
 order:
 	salutation: 'Dear customer'
 	headline: 'Order #%number%'

@@ -1,0 +1,29 @@
+{define basketSummary}
+{var thStyle => 'text-align: right;font-weight: normal;font-style: italic'}
+{var tdStyle => 'padding-left: 10px'}
+
+<table width="100%" border="0" cellpadding="2" cellspacing="0">
+    <colgroup>
+        <col width="73%">
+        <col width="5%">
+        <col width="20%">
+    </colgroup>
+    <tbody>
+        <tr n:foreach="$basket->items as $item">
+			{var product => $item->stock->product}
+			{var unit => $product->unit}
+			{? $product->setCurrentLocale($locale)}
+			{? $unit->setCurrentLocale($locale)}
+            <td style="padding:5px 0px">
+				{$product->name}
+			</td>
+            <td style="padding:5px 10px 5px 0px" valign="top" nowrap="">
+				{$item->quantity}{$unit}
+			</td>
+            <td style="padding:5px 10px 0px 0px" valign="top" align="right">
+				<b><font color="#398000">{$item->getTotalPrice($exchange)|asCurrency:TRUE}</font></b>
+			</td>
+        </tr>
+    </tbody>
+</table>
+{/define}
