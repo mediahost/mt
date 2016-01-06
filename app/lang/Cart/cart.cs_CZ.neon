@@ -96,3 +96,6 @@ yourCartIsEmpty: 'Nákupní košík je zcela prázdný'
 continueShopping: 'Pokračovat v nákupu'
 orderWasSend: 'Vaše objednávka byla právě odeslána.'
 moreInfoInMail: 'Další informace očekávejte v e-mailu.'
+
+recovered: 'Košík byl úspěšně obnoven.'
+notFound: 'Požadovaný košík nebyl nalezen.'

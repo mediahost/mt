@@ -96,3 +96,6 @@ yourCartIsEmpty: 'Your shopping cart is empty'
 continueShopping: 'Continue shopping'
 orderWasSend: 'Your order has just been sent.'
 moreInfoInMail: 'You can expect more information in an e-mail.'
+
+recovered: 'Basket was succesfully recovered.'
+notFound: "Requested basket wasn't found."

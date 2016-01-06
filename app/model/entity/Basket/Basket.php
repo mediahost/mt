@@ -4,6 +4,7 @@ namespace App\Model\Entity;
 
 use App\Model\Facade\Exception\InsufficientQuantityException;
 use App\Model\Facade\Exception\MissingItemException;
+use App\Model\Repository\BasketRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use h4kuna\Exchange\Exchange;
@@ -11,10 +12,12 @@ use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
 use Knp\DoctrineBehaviors\Model;
 use Nette\Utils\DateTime;
+use Nette\Utils\Random;
 
 /**
  * @ORM\Entity(repositoryClass="App\Model\Repository\BasketRepository")
  *
+ * @property string $accessHash
  * @property ArrayCollection $items
  * @property int $itemsCount
  * @property Shipping $shipping
@@ -31,6 +34,9 @@ class Basket extends BaseEntity
 
 	use Identifier;
 	use Model\Timestampable\Timestampable;
+
+	/** @ORM\Column(type="string", nullable=true) */
+	protected $accessHash;
 
 	/** @ORM\OneToOne(targetEntity="User", inversedBy="basket", fetch="LAZY") */
 	protected $user;
@@ -65,6 +71,7 @@ class Basket extends BaseEntity
 			$this->setUser($user);
 		}
 		$this->items = new ArrayCollection();
+		$this->changeItemsAt = new DateTime();
 		parent::__construct();
 	}
 
@@ -72,6 +79,7 @@ class Basket extends BaseEntity
 	{
 		$this->user = $user;
 		$user->basket = $this;
+		$this->resetChangeItemsAt();
 		return $this;
 	}
 
@@ -106,8 +114,29 @@ class Basket extends BaseEntity
 			$this->items->add($item);
 		}
 		
-		$this->changeItemsAt = new DateTime('now');
+		$this->resetChangeItemsAt(FALSE);
 		
+		return $this;
+	}
+	
+	public function setMail($mail)
+	{
+		$this->mail = $mail;
+		$this->resetChangeItemsAt();
+		return $this;
+	}
+	
+	public function resetChangeItemsAt($checkItemsCount = TRUE)
+	{
+		if (!$checkItemsCount || ($checkItemsCount && $this->items->count())) {
+			$this->changeItemsAt = new DateTime();
+		}
+		return $this;
+	}
+	
+	public function setAccessHash()
+	{
+		$this->accessHash = Random::generate(32);
 		return $this;
 	}
 	
