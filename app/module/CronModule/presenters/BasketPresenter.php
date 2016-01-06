@@ -24,6 +24,7 @@ class BasketPresenter extends BasePresenter
 
 		if (count($baskets)) {
 			foreach ($baskets as $basket) {
+				/* @var $basket Basket */
 				if ($basket->user && $basket->user->locale) {
 					$this->translator->setLocale($basket->user->locale);
 					$mail = $basket->user->mail;
@@ -33,10 +34,11 @@ class BasketPresenter extends BasePresenter
 				}
 
 				if ($mail) {
+					$basket->setAccessHash();
 					$message = $this->iUnfinishedMessageFactory->create();
 					$message->addTo($mail)
 							->addParameter('basket', $basket)
-							->addParameter('link', $this->link('//:Front:Cart:'));
+							->addParameter('link', $this->link('//:Front:Cart:uncomplete', ['cart' => $basket->accessHash]));
 
 					try {
 						$message->send();

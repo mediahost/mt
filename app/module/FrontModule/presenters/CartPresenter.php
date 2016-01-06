@@ -9,6 +9,7 @@ use App\Components\Basket\Form\IPersonalFactory;
 use App\Components\Basket\Form\Payments;
 use App\Components\Basket\Form\Personal;
 use App\Helpers;
+use App\Model\Entity\Basket;
 use App\Model\Entity\Category;
 use App\Model\Entity\Order;
 use App\Model\Entity\Shipping;
@@ -67,6 +68,21 @@ class CartPresenter extends BasePresenter
 				$this->template->specialCategoriesLinks = $specialCategoriesLinks;
 			}
 		}
+	}
+
+	public function actionUncomplete($cart)
+	{
+		$basketRepo = $this->em->getRepository(Basket::getClassName());
+		$uncompleteBasket = $basketRepo->findOneByAccessHash($cart);
+		
+		if ($uncompleteBasket) {
+			$this->basketFacade->import($uncompleteBasket);
+			$this->flashMessage($this->translator->translate('cart.recovered'), 'success');
+		} else {
+			$this->flashMessage($this->translator->translate('cart.notFound'), 'warning');
+		}
+		
+		$this->redirect('default');
 	}
 
 	public function actionPayments()
@@ -134,7 +150,7 @@ class CartPresenter extends BasePresenter
 		}
 
 		$this->getSessionSection()->orderId = NULL;
-		
+
 		$heurekaSettings = $this->settings->modules->heureka;
 		if ($heurekaSettings->enabled) {
 			$this->template->heurekaConversionKey = $heurekaSettings->keyConversion;
