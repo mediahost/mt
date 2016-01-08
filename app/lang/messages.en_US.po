@@ -349,6 +349,33 @@ msgstr "Users"
 msgid "Discounts"
 msgstr "Discounts"
 
+msgid "Discount"
+msgstr "Discount"
+
+msgid "Add Discount"
+msgstr "Add Discount"
+
+msgid "Edit Discount"
+msgstr "Edit Discount"
+
+msgid "Value"
+msgstr "Value"
+
+msgid "Value is required"
+msgstr "Value is required"
+
+msgid "Active from"
+msgstr "Active from"
+
+msgid "Active to"
+msgstr "Active to"
+
+msgid "now"
+msgstr "now"
+
+msgid "without ending"
+msgstr "without ending"
+
 msgid "Superadmin"
 msgstr "Superadmin"
 
@@ -1443,3 +1470,18 @@ msgstr "Example of error response"
 
 msgid "Status can not be changed"
 msgstr "Status can not be changed"
+
+msgid "percent"
+msgstr "Percent"
+
+msgid "fixed"
+msgstr "Fixed price"
+
+msgid "minus"
+msgstr "Minus price"
+
+msgid "Must be between %d and %d"
+msgstr "Must be between %d and %d"
+
+msgid "Must be bigger than %d"
+msgstr "Must be bigger than %d"

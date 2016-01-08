@@ -360,6 +360,33 @@ msgstr "Uživatelé"
 msgid "Discounts"
 msgstr "Slevy"
 
+msgid "Discount"
+msgstr "Sleva"
+
+msgid "Add Discount"
+msgstr "Přidat slevu"
+
+msgid "Edit Discount"
+msgstr "Upravit slevu"
+
+msgid "Value"
+msgstr "Hodnota"
+
+msgid "Value is required"
+msgstr "Hodnota musí být zadána"
+
+msgid "Active from"
+msgstr "Aktivní od"
+
+msgid "Active to"
+msgstr "Aktivní do"
+
+msgid "now"
+msgstr "nyní"
+
+msgid "without ending"
+msgstr "bez ukončení"
+
 msgid "Superadmin"
 msgstr "Superadmin"
 
@@ -1401,3 +1428,18 @@ msgstr "Příklad neúspěšné odpovědi"
 
 msgid "Status can not be changed"
 msgstr "Stav nemůže být změněn"
+
+msgid "percent"
+msgstr "Procenta"
+
+msgid "fixed"
+msgstr "Pevná částka"
+
+msgid "minus"
+msgstr "Minus částka"
+
+msgid "Must be between %d and %d"
+msgstr "Musí být mezi %d a %d"
+
+msgid "Must be bigger than %d"
+msgstr "Musí být větší než %d"

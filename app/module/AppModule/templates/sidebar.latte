@@ -74,10 +74,12 @@
 						<span class="title">{_'Users'}</span><span class="selected"></span>
 					</a>
 				</li>
-				<li>
-					<a n:href="this">
+				<li n:if="$user->isAllowed('vouchers', 'default')"
+					n:class="$presenter->isLinkCurrent('Voucher:*') ? active">
+					<a n:href="Voucher:">
 						<i class="fa fa-scissors"></i>
-						<span class="title">{_'Discounts'}</span><span class="selected"></span>
+						<span class="title">{_'Discounts'}</span>
+						<span class="selected"></span>
 					</a>
 				</li>
 				<li n:if="$user->isAllowed('pages', 'default')"
