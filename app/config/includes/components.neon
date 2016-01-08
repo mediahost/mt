@@ -59,6 +59,10 @@ services:
 	- {implement: App\Components\Group\Form\IGroupEditFactory, inject: yes}
 	- {implement: App\Components\Group\Grid\IGroupsGridFactory, inject: yes}
 
+	# Discount
+	- {implement: App\Components\Discount\Form\IVoucherEditFactory, inject: yes}
+	- {implement: App\Components\Discount\Grid\IVouchersGridFactory, inject: yes}
+
 	# Newsletter
 	- {implement: App\Components\Newsletter\ISubscribeControlFactory, inject: yes}
 	- {implement: App\Components\Newsletter\ISubscriberGridControlFactory, inject: yes}

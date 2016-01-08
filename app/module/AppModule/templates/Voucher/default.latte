@@ -1,0 +1,43 @@
+{block pageTitle}
+{_'Discounts'}
+{/block}
+
+{block breadcrumbItems}
+<li><span>{_'Discounts'}</span></li>
+		{/block}
+
+{block content}
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-scissors"></i>
+					<span class="caption-subject bold uppercase">{_'Discounts'}</span>
+				</div>
+				<div class="actions">
+					<div class="btn-group">
+						<a class="btn btn-circle green-sharp" n:href="this" data-toggle="dropdown" aria-expanded="false">
+							<i class="fa fa-plus"></i> {_'Add Discount'} <i class="fa fa-angle-down"></i>
+						</a>
+						<ul class="dropdown-menu pull-right">
+							{var percentVal => App\Model\Entity\Voucher::PERCENTAGE}
+							{var minusVal => App\Model\Entity\Voucher::MINUS_VALUE}
+							<li>
+								<a n:href="add, type => $percentVal">{_$percentVal}</a>
+							</li>
+							<li>
+								<a n:href="add, type => $minusVal">{_$minusVal}</a>
+							</li>
+						</ul>
+					</div>
+					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body">
+				{control vouchersGrid}
+			</div>
+		</div>
+	</div>
+</div>
