@@ -88,6 +88,10 @@ class SettingsExtension extends CompilerExtension
 			],
 			'zbozi' => [
 				'enabled' => FALSE,
+				'onlyInStore' => TRUE,
+				'deliveryStoreTime' => 0,
+				'deliveryNotInStoreTime' => NULL,
+				'locales' => ['cs'],
 			],
 			'service' => [
 				'enabled' => FALSE,

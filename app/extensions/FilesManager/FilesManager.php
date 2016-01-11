@@ -45,6 +45,7 @@ class FilesManager extends Object
 			case self::EXPORT_DEALER_STOCKS:
 			case self::EXPORT_DEALER_CATEGORIES:
 			case self::EXPORT_HEUREKA_STOCKS:
+			case self::EXPORT_ZBOZI_STOCKS:
 				$dir = $this->getDir(self::EXPORTS);
 				$path = Helpers::getPath($dir, $type, $locale);
 				FileSystem::createDir($path);

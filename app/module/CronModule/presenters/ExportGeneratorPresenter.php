@@ -81,7 +81,7 @@ class ExportGeneratorPresenter extends BasePresenter
 		ini_set('max_execution_time', 1500);
 
 		if (!$this->settings->modules->heureka->enabled) {
-			throw new ForbiddenRequestException('Dealer module is not allowed');
+			throw new ForbiddenRequestException('Heureka module is not allowed');
 		} else if (!in_array($this->translator->getLocale(), (array) $this->settings->modules->heureka->locales)) {
 			throw new ForbiddenRequestException('This language is not supported');
 		}
@@ -127,6 +127,46 @@ class ExportGeneratorPresenter extends BasePresenter
 
 		$output = (string) $this->template;
 		$filename = $this->filesManager->getExportFilename(FilesManager::EXPORT_HEUREKA_STOCKS, $this->translator->getLocale());
+
+		file_put_contents($filename, $output);
+
+		$this->status = parent::STATUS_OK;
+		$this->message = 'File was generated';
+	}
+
+	public function actionZboziStocks()
+	{
+		proc_nice(19);
+		ini_set('max_execution_time', 1500);
+
+		if (!$this->settings->modules->zbozi->enabled) {
+			throw new ForbiddenRequestException('Zbozi module is not allowed');
+		} else if (!in_array($this->translator->getLocale(), (array) $this->settings->modules->zbozi->locales)) {
+			throw new ForbiddenRequestException('This language is not supported');
+		}
+
+		switch ($this->translator->getLocale()) {
+			case 'cs':
+				$this->exchange->setWeb('CZK');
+				break;
+		}
+
+		/* @var $stockRepo StockRepository */
+		$stockRepo = $this->em->getRepository(Stock::getClassName());
+
+		$showOnlyInStore = $this->settings->modules->zbozi->onlyInStore;
+		$stocks = $this->stockFacade->getExportStocksArray($showOnlyInStore);
+
+		$this->template->stocks = $stocks;
+		$this->template->stockRepo = $stockRepo;
+		$this->template->locale = $this->translator->getLocale();
+		$this->template->defaultLocale = $this->translator->getDefaultLocale();
+		$this->template->deliveryStoreTime = $this->settings->modules->zbozi->deliveryStoreTime;
+		$this->template->deliveryNotInStoreTime = $this->settings->modules->zbozi->deliveryNotInStoreTime;
+		$this->setView();
+
+		$output = (string) $this->template;
+		$filename = $this->filesManager->getExportFilename(FilesManager::EXPORT_ZBOZI_STOCKS, $this->translator->getLocale());
 
 		file_put_contents($filename, $output);
 

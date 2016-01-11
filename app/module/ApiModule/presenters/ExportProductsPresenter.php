@@ -44,7 +44,27 @@ class ExportProductsPresenter extends BasePresenter
 
 	public function actionReadZbozi()
 	{
-		$this->resource->message = 'Hello world';
+		proc_nice(19);
+		ini_set('max_execution_time', 1500);
+
+		if (!$this->settings->modules->zbozi->enabled) {
+			$this->resource->state = 'error';
+			$this->resource->message = 'This module is not allowed';
+		} else if (!in_array($this->translator->getLocale(), (array) $this->settings->modules->zbozi->locales)) {
+			$this->resource->state = 'error';
+			$this->resource->message = 'This language is not supported';
+		} else {
+			$locale = $this->translator->getLocale();
+			$filename = $this->filesManager->getExportFilename(FilesManager::EXPORT_ZBOZI_STOCKS, $locale);
+			if (is_file($filename)) {
+				$content = file_get_contents($filename);
+				$response = new TextResponse($content, new NullMapper(), IResource::XML);
+				$this->sendResponse($response);
+			} else {
+				$this->resource->state = 'error';
+				$this->resource->message = 'Missing \'' . $locale . '\' translation for this export';
+			}
+		}
 	}
 
 }

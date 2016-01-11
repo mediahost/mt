@@ -1,0 +1,27 @@
+{layout none}
+<?xml version="1.0" encoding="utf-8"?>
+<SHOP xmlns="http://www.zbozi.cz/ns/offer/1.0">
+	<SHOPITEM n:foreach="$stocks as $stock">
+		{var loadedStock => $stockRepo->find($stock['id'])}
+		{var product => $stock['product']}
+		{var translations => $product['translations']}
+		{var translation => isset($translations[$locale]) ? $translations[$locale] : $translations[$defaultLocale]}
+		{var image => $product['image']}
+		{var producer => NULL}
+		{*var producer => $loadedStock->product->producer*}
+		{var vat => new App\Model\Entity\Vat(NULL, $stock['vat']['value'])}
+		{var price => new App\Model\Entity\Price($vat, $stock['defaultPrice'])}
+
+		<ITEM_ID>{$stock['id']}</ITEM_ID>
+		<PRODUCTNAME><![CDATA[{if $producer}{$producer} {/if}{$translation['name']}]]></PRODUCTNAME>
+		<PRODUCT><![CDATA[{$translation['name']}]]></PRODUCT>
+		<DESCRIPTION><![CDATA[{$translation['description']}]]></DESCRIPTION>
+		<URL>{link '//:Front:Product:', 'id' => $product['id'], 'locale' => $locale}</URL>
+		<IMGURL>{link '//:Foto:Foto:', '400-400', $image['filename']}</IMGURL>
+		<PRICE_VAT>{$price|changeVat:NULL,NULL,2}</PRICE_VAT>
+		<MANUFACTURER n:if="$producer"><![CDATA[{$producer}]]></MANUFACTURER>
+		<CATEGORYTEXT>{_'categoryText'}</CATEGORYTEXT>
+		<EAN n:if="$stock['barcode']">{$stock['barcode']}</EAN>
+		<DELIVERY_DATE>{$stock['inStore'] ? $deliveryStoreTime : $deliveryNotInStoreTime}</DELIVERY_DATE>
+	</SHOPITEM>
+</SHOP>
