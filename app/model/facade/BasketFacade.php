@@ -54,10 +54,10 @@ class BasketFacade extends Object
 		return $this;
 	}
 
-	public function import(Basket $toImport)
+	public function import(Basket $toImport, $skipException = FALSE)
 	{
 		$basket = $this->getBasket();
-		$basket->import($toImport);
+		$basket->import($toImport, $skipException);
 		$this->basketRepo->save($basket);
 		return $this;
 	}
