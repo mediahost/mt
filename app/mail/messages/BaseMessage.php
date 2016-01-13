@@ -73,6 +73,7 @@ abstract class BaseMessage extends Message
 			'colon' => '',
 			'locale' => $this->translator->locale,
 			'exchange' => $this->exchange,
+			'basePath' => $this->httpRequest->getUrl()->getBaseUrl(),
 		];
 
 		$template = $this->templateFactory->createTemplate();
