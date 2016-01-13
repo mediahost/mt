@@ -291,7 +291,7 @@ class Basket extends BaseEntity
 		return $withVat - $withoutVat;
 	}
 
-	public function import(Basket $basket, $skipException = FALSE)
+	public function import(Basket $basket, $skipException = FALSE, $checkQuantity = TRUE)
 	{
 		if ($basket->itemsCount) {
 			$this->items->clear();
@@ -299,7 +299,7 @@ class Basket extends BaseEntity
 		/* @var $item BasketItem */
 		foreach ($basket->items as $item) {
 			try {
-				$this->setItem($item->stock, $item->quantity);
+				$this->setItem($item->stock, $item->quantity, $checkQuantity);
 			} catch (InsufficientQuantityException $exc) {
 				if (!$skipException) {
 					throw $exc;
