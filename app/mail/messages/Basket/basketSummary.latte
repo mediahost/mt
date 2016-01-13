@@ -14,13 +14,16 @@
 			{var unit => $product->unit}
 			{? $product->setCurrentLocale($locale)}
 			{? $unit->setCurrentLocale($locale)}
+            <td>
+				<img src="{$basePath}/foto/{$product->image|size:'80'}" alt="{$product->name}" border="0">
+			</td>
             <td style="padding:5px 0px">
 				{$product->name}
 			</td>
-            <td style="padding:5px 10px 5px 0px" valign="top" nowrap="">
+            <td style="padding:5px 10px 5px 0px" nowrap="">
 				{$item->quantity}{$unit}
 			</td>
-            <td style="padding:5px 10px 0px 0px" valign="top" align="right">
+            <td style="padding:5px 10px 0px 0px" align="right">
 				<b><font color="#398000">{$item->getTotalPrice($exchange)|asCurrency:TRUE}</font></b>
 			</td>
         </tr>

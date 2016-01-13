@@ -20,15 +20,46 @@
 			</table>
 
 			{include basketSummary}
-			<p>&nbsp;</p>
-			<p>
-				<a href="{$link}"
-				   style="display:inline-block;padding:5px 10px;border-radius:4px;background:#2795D4;color:#fff !important;font-size:13px;text-decoration:none;font-weight:bold;padding:10px 21px;font-size:17px" 
-				   target="_blank">
-					{_'mail.basket.continue'}
-				</a>
-			</p>
-			
+			<br />
+			<br />
+			<table width="100%" border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td>
+						<div>
+							<!--[if mso]>
+							  <v:roundrect 
+								xmlns:v="urn:schemas-microsoft-com:vml"
+								xmlns:w="urn:schemas-microsoft-com:office:word"
+								href="{$link}"
+								style="height:36px;v-text-anchor:middle;width:250px;"
+								arcsize="5%"
+								strokecolor="#2795D4"
+								fillcolor="#2795D4">
+								<w:anchorlock/>
+								<center style="color:#ffffff;font-family: arial,sans-serif;font-size:16px;">{_'mail.basket.continue'}</center>
+							  </v:roundrect>
+							<![endif]-->
+							<a href="{$link}"
+							   style="background-color:#2795D4;
+							   border:1px solid #2795D4;
+							   border-radius:3px;
+							   color:#ffffff;
+							   display:inline-block;
+							   font-family: arial,sans-serif;
+							   font-size:16px;
+							   line-height:44px;
+							   text-align:center;
+							   text-decoration:none;
+							   width:250px;
+							   -webkit-text-size-adjust:none;
+							   mso-hide:all;">
+								{_'mail.basket.continue'}
+							</a>
+						</div>
+					</td>
+				</tr>
+			</table>
+			<br />
 			<table class="row note">
 				<tr>
 					<td class="wrapper">
