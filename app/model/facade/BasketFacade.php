@@ -4,10 +4,12 @@ namespace App\Model\Facade;
 
 use App\Model\Entity\Address;
 use App\Model\Entity\Basket;
+use App\Model\Entity\EntityException;
 use App\Model\Entity\Payment;
 use App\Model\Entity\Price;
 use App\Model\Entity\Shipping;
 use App\Model\Entity\Stock;
+use App\Model\Entity\Voucher;
 use App\Model\Facade\Exception\InsufficientQuantityException;
 use App\Model\Facade\Exception\MissingItemException;
 use App\Model\Repository\BasketRepository;
@@ -90,6 +92,31 @@ class BasketFacade extends Object
 		return $quantity;
 	}
 
+	/** @var bool */
+	public function addVoucher($code)
+	{
+		if (empty($code)) {
+			throw new Exception\BasketFacadeException('cart.voucher.invalid');
+		}
+		$voucherRepo = $this->em->getRepository(Voucher::getClassName());
+		/* @var $voucher Voucher */
+		$voucher = $voucherRepo->findOneByCode($code);
+		if (!$voucher) {
+			throw new Exception\BasketFacadeException('cart.voucher.invalid');
+		}
+		if (!$voucher->active) {
+			throw new Exception\BasketFacadeException('cart.voucher.inactive');
+		}
+		
+		try {
+			$basket = $this->getBasket();
+			$basket->addVoucher($voucher);
+			$this->basketRepo->save($basket);
+		} catch (EntityException $ex) {
+			throw new Exception\BasketFacadeException($ex->getMessage());
+		}
+	}
+
 	/** @var BasketFacade */
 	public function setShipping(Shipping $shipping, $clearPayment = FALSE)
 	{
@@ -145,7 +172,7 @@ class BasketFacade extends Object
 	{
 		$addressRepo = $this->em->getRepository(Address::getClassName());
 		$basket = $this->getBasket();
-		
+
 		$basket->mail = $mail;
 
 		if ($billing) {
@@ -179,7 +206,7 @@ class BasketFacade extends Object
 				$addressRepo->delete($toDeleteShipping);
 			}
 		}
-		
+
 		return $this;
 	}
 
@@ -206,7 +233,7 @@ class BasketFacade extends Object
 	{
 		return !$this->getProductsCount();
 	}
-	
+
 	/** @var bool */
 	public function isAllItemsInStore()
 	{

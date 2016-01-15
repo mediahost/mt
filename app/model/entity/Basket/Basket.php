@@ -20,6 +20,7 @@ use Nette\Utils\Random;
  * @property string $accessHash
  * @property ArrayCollection $items
  * @property int $itemsCount
+ * @property ArrayCollection $vouchers
  * @property Shipping $shipping
  * @property Payment $payment
  * @property string $mail
@@ -43,6 +44,9 @@ class Basket extends BaseEntity
 
 	/** @ORM\OneToMany(targetEntity="BasketItem", mappedBy="basket", cascade={"persist", "remove"}, orphanRemoval=true) */
 	protected $items;
+
+	/** @ORM\ManyToMany(targetEntity="Voucher") */
+	protected $vouchers;
 
 	/** @ORM\Column(type="datetime") */
     private $changeItemsAt;
@@ -71,6 +75,7 @@ class Basket extends BaseEntity
 			$this->setUser($user);
 		}
 		$this->items = new ArrayCollection();
+		$this->vouchers = new ArrayCollection();
 		$this->changeItemsAt = new DateTime();
 		parent::__construct();
 	}
@@ -132,6 +137,33 @@ class Basket extends BaseEntity
 			$this->changeItemsAt = new DateTime();
 		}
 		return $this;
+	}
+	
+	public function addVoucher(Voucher $voucher)
+	{
+		if ($this->vouchers->contains($voucher)) {
+			throw new EntityException('cart.voucher.alreadyInCart');
+		}
+		
+		$this->checkVoucherConditions($voucher);
+		
+		$this->vouchers->add($voucher);
+		return $this;
+	}
+	
+	private function checkVoucherConditions(Voucher $voucher)
+	{
+		switch ($voucher->type) {
+			case Voucher::MINUS_VALUE:
+				if ($voucher->value >= $this->getItemsTotalPrice()) {
+					throw new EntityException('cart.voucher.higherThanProducts');
+				}
+				break;
+			case Voucher::PERCENTAGE:
+				break;
+			default:
+				throw new EntityException('cart.voucher.notAllowed');
+		}
 	}
 	
 	public function setAccessHash()

@@ -13,6 +13,14 @@ order:
 	personal: 'K vyzdvihnutie osobne'
 	contact: 'Kontaktné údaje'
 
+voucher:
+	wasAdded: 'Zľava bola pridaná.'
+	invalid: 'Zľavový kód nie je platný.'
+	inactive: 'Zľava nie je momentálne aktívna.'
+	alreadyInCart: 'Zľava je už vo vašom košíku.'
+	higherThanProducts: 'Zľava je vyššia ako suma za vaše produkty a nemožno ju použiť.'
+	notAllowed: 'Táto zľava nie je povolená.'
+
 form:
 	name: 'Meno a priezvisko (názov firmy)'
 	nameOnly: 'Meno a priezvisko'
