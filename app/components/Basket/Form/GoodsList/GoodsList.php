@@ -9,6 +9,7 @@ use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Stock;
 use App\Model\Facade\BasketFacade;
+use App\Model\Facade\Exception\BasketFacadeException;
 use App\Model\Facade\Exception\InsufficientQuantityException;
 
 class GoodsList extends BaseControl
@@ -54,13 +55,16 @@ class GoodsList extends BaseControl
 					->setType(Spinner::TYPE_UP_DOWN)
 					->setSize(MetronicTextInputBase::SIZE_XS);
 		}
+		
+		$form->addText('voucher', 'Discount Code')
+				->setAttribute('placeholder', 'Discount Code');
+		$form->addSubmit('insert', 'Insert');
 
 		$form->addSubmit('send', 'cart.continue')
 				->setDisabled(!$this->basketFacade->isAllItemsInStore());
 
 		$form->setDefaults($this->getDefaults());
 		$form->onSuccess[] = $this->formSucceeded;
-//		$form->onValidate[] = $this->formValidate;
 		return $form;
 	}
 
@@ -83,6 +87,19 @@ class GoodsList extends BaseControl
 
 	public function formSucceeded(Form $form, $values)
 	{
+		if ($form['insert']->submittedBy) {
+			try {
+				$this->basketFacade->addVoucher($values->voucher);
+				$this->presenter->flashMessage($this->translator->translate('cart.voucher.wasAdded'), 'success');
+			} catch (BasketFacadeException $ex) {
+				$this->presenter->flashMessage($this->translator->translate($ex->getMessage()), 'danger');
+			}
+			if ($this->presenter->ajax) {
+				$this->presenter->redrawControl();
+			}
+			return;
+		}
+		
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
 		foreach ($values->quantity as $stockId => $quantity) {
 			$stock = $stockRepo->find($stockId);

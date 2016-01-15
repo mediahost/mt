@@ -13,6 +13,14 @@ order:
 	personal: 'To pick up personally'
 	contact: 'Contact'
 
+voucher:
+	wasAdded: 'Voucher was added.'
+	invalid: 'Voucher code is invalid.'
+	inactive: 'Voucher is not active.'
+	alreadyInCart: 'Voucher is already in cart.'
+	higherThanProducts: 'Discount has a higher value than products in order.'
+	notAllowed: 'This voucher is not allowed.'
+
 form:
 	name: 'Name and surname (Company name)'
 	nameOnly: 'Name and surname'

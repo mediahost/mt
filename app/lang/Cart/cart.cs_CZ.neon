@@ -13,6 +13,14 @@ order:
 	personal: 'K vyzvednutí osobně'
 	contact: 'Kontaktní údaje'
 
+voucher:
+	wasAdded: 'Sleva byla přidána.'
+	invalid: 'Slevový kód není platný.'
+	inactive: 'Sleva není momentálně aktivní.'
+	alreadyInCart: 'Sleva je již ve vašem košíku.'
+	higherThanProducts: 'Sleva je vyšší než částka za vaše produkty a nelze ji použít.'
+	notAllowed: 'Tato sleva není povolena.'
+
 form:
 	name: 'Jméno a příjmení (název firmy)'
 	nameOnly: 'Jméno a příjmení'
