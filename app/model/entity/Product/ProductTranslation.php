@@ -42,6 +42,16 @@ class ProductTranslation extends BaseEntity
 
 	/** @ORM\Column(type="text", nullable=true) */
 	private $seoDescription;
+	
+	public function setName($value)
+	{
+		$oldName = $this->name;
+		$this->name = $value;
+		if ($oldName != $this->name) {
+			$this->translatable->stock->setChangePohodaData();
+		}
+		return $this;
+	}
 
 	public function getSeo()
 	{

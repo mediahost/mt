@@ -28,6 +28,7 @@ use Nette\Utils\DateTime;
  * @property DateTime $createdAt
  * @property DateTime $updatedAt
  * @property DateTime $deletedAt
+ * @property DateTime $updatedPohodaDataAt
  * @property boolean $active
  * @property int $quantity
  * @property int $lock
@@ -69,6 +70,9 @@ class Stock extends BaseEntity
 
 	/** @ORM\Column(type="string", length=20, nullable=true) */
 	protected $importedFrom;
+	
+	/** @ORM\Column(type="datetime", nullable=true) */
+    protected $updatedPohodaDataAt;
 
 	public function __construct()
 	{
@@ -91,6 +95,13 @@ class Stock extends BaseEntity
 	{
 		$this->active = $value;
 		$this->product->active = $value;
+	}
+	
+	public function setChangePohodaData($time = 'now')
+	{
+		$datetime = $time instanceof DateTime ? $time : DateTime::from($time);
+		$this->updatedPohodaDataAt = $datetime;
+		return $this;
 	}
 
 	public function &__get($name)

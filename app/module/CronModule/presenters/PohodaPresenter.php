@@ -23,10 +23,11 @@ class PohodaPresenter extends BasePresenter
 			throw new ForbiddenRequestException('Pohoda module is not allowed');
 		}
 		
+		// TODO: je potřeba prověřit, zda v celém procesu funguje kontrola tímto časem správně
 		$lastDataChangeTime = $this->pohodaFacade->getLastSync(PohodaFacade::ANY_IMPORT, PohodaFacade::LAST_UPDATE);
 		if ($lastDataChangeTime || $all) {
 			try {
-				$this->pohodaFacade->updateFullProducts($lastDataChangeTime, $offset);
+				$this->pohodaFacade->updateFullProducts($all ? NULL : $lastDataChangeTime, $offset);
 				$this->status = parent::STATUS_OK;
 				$this->message = 'Synchronize was successfull';
 				$this->pohodaFacade->clearLastSync(PohodaFacade::ANY_IMPORT, PohodaFacade::LAST_UPDATE);
