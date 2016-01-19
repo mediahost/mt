@@ -89,6 +89,10 @@ class PohodaFacade extends Object
 				if (!$stock) {
 					continue;
 				}
+				
+				if ($stock->updatedPohodaDataAt > $pohodaProductArr['updatedAt']) {
+					continue;
+				}
 
 				if ($stock->quantity != $totalCount) {
 					$stock->quantity = $totalCount;

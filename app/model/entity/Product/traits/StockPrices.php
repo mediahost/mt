@@ -147,6 +147,9 @@ trait StockPrices
 		} else {
 			$this->defaultPrice = $price->withoutVat;
 		}
+		
+		$this->setChangePohodaData();
+		
 		return $this;
 	}
 
@@ -158,6 +161,9 @@ trait StockPrices
 			$price = new Price($this->vat, $value, !$withVat);
 			$this->purchasePrice = $price->withoutVat;
 		}
+		
+		$this->setChangePohodaData();
+		
 		return $this;
 	}
 
