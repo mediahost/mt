@@ -92,8 +92,7 @@ class BasketFacade extends Object
 		return $quantity;
 	}
 
-	/** @var bool */
-	public function addVoucher($code)
+	public function addVoucher($code, $level = NULL)
 	{
 		if (empty($code)) {
 			throw new Exception\BasketFacadeException('cart.voucher.invalid');
@@ -110,11 +109,20 @@ class BasketFacade extends Object
 		
 		try {
 			$basket = $this->getBasket();
-			$basket->addVoucher($voucher);
+			$basket->addVoucher($voucher, $level);
 			$this->basketRepo->save($basket);
 		} catch (EntityException $ex) {
 			throw new Exception\BasketFacadeException($ex->getMessage());
 		}
+		return $this;
+	}
+
+	public function removeVoucher(Voucher $voucher)
+	{
+		$basket = $this->getBasket();
+		$basket->removeVoucher($voucher);
+		$this->basketRepo->save($basket);
+		return $this;
 	}
 
 	/** @var BasketFacade */
@@ -298,6 +306,13 @@ class BasketFacade extends Object
 	}
 
 	/** @var float */
+	public function getDiscountsTotalPrice($level = NULL)
+	{
+		$basket = $this->getBasket();
+		return $basket->getVouchersTotalPrice($this->exchange, $level);
+	}
+
+	/** @var float */
 	public function getTotalPrice($level = NULL, $withVat = TRUE)
 	{
 		$basket = $this->getBasket();
@@ -311,11 +326,39 @@ class BasketFacade extends Object
 		return $basket->getVatSum($this->exchange, $level);
 	}
 
+	/** @var float */
+	public function getProductsTotalPriceToPay($level = NULL)
+	{
+		$basket = $this->getBasket();
+		return $basket->getItemsWithVouchersTotalPrice($this->exchange, $level);
+	}
+
+	/** @var float */
+	public function getTotalPriceToPay($level = NULL)
+	{
+		$basket = $this->getBasket();
+		return $basket->getTotalPriceToPay($this->exchange, $level);
+	}
+
 	/** @var array */
 	public function getItems()
 	{
 		$basket = $this->getBasket();
 		return $basket->items;
+	}
+
+	/** @var array */
+	public function getVouchers()
+	{
+		$basket = $this->getBasket();
+		return $basket->vouchers;
+	}
+
+	/** @var bool */
+	public function hasVouchers()
+	{
+		$basket = $this->getBasket();
+		return (bool) $basket->getVouchersCount();
 	}
 
 }

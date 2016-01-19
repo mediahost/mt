@@ -97,8 +97,31 @@
 									</td>
 								</tr>
 							{/foreach}
+							{var productsTotalWith => $order->getItemsTotalPrice($exchange)}
+							{foreach $order->vouchers as $voucher}
+								<tr>
+									<td class="goods-page-image">
+										<img src="{$basePath}/images/logo/logo_cart.png" alt="logo" />
+									</td>
+									<td class="goods-page-description">
+										<h3>{_'Discount'} - {$voucher->code}</h3>
+									</td>
+									<td class="goods-page-quantity">
+										<strong>1x</strong>
+									</td>
+									<td class="goods-page-price">
+										<strong>-{$voucher->getValueString($currencySymbol, $exchange)}</strong>
+									</td>
+									<td class="goods-page-vat">
+									</td>
+									<td class="goods-page-total">
+										<strong>-{$voucher->getDiscountValue($productsTotalWith, $exchange)|asCurrency:TRUE}</strong>
+									</td>
+								</tr>
+							{/foreach}
 							<tr>
 								<td class="goods-page-image">
+									<img src="{$basePath}/images/logo/logo_cart.png" alt="logo" />
 								</td>
 								<td class="goods-page-description">
 									<h3>{_'Shipping'}: {_$order->shipping}</h3>
@@ -118,6 +141,7 @@
 							</tr>
 							<tr>
 								<td class="goods-page-image">
+									<img src="{$basePath}/images/logo/logo_cart.png" alt="logo" />
 								</td>
 								<td class="goods-page-description">
 									<h3>{_'Payment'}: {_$order->payment}</h3>
@@ -152,10 +176,24 @@
 									{$order->getVatSum($exchange)|asCurrency:TRUE}
 								</strong>
 							</li>
+							<li>
+								<em>{_'cart.totalVat'}</em>
+								<strong class="price">
+									{$order->getTotalPrice($exchange)|asCurrency:TRUE}
+								</strong>
+							</li>
+							<li>
+								{if $order->hasVouchers()}
+									<em>{_'cart.discount'}</em>
+									<strong class="price discount">
+										-{$order->getVouchersTotalPrice($exchange)|asCurrency:TRUE}
+									</strong>
+								{/if}
+							</li>
 							<li class="shopping-total-price">
 								<em>{_'cart.total'}</em>
 								<strong class="price">
-									{$order->getTotalPrice($exchange)|asCurrency:TRUE}
+									{$order->getTotalPriceToPay($exchange)|asCurrency:TRUE}
 								</strong>
 							</li>
 						</ul>

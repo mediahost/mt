@@ -128,6 +128,22 @@
 						</ord:foreignCurrency>
 
 					</ord:orderItem>
+					
+					{var productsTotalWith => $order->getItemsTotalPrice($exchange)}
+					<ord:orderItem n:foreach="$order->vouchers as $voucher">
+						<ord:text>{_'Discount'} - {$voucher->code} -{$voucher->getValueString($currencySymbol, $exchange)}</ord:text>
+						<ord:quantity>1</ord:quantity>
+						<ord:payVAT>false</ord:payVAT>
+						<ord:rateVAT>none</ord:rateVAT>
+						<ord:discountPercentage>0.00</ord:discountPercentage>
+						<ord:homeCurrency n:if="$order->currency === $homeCurrency">
+							<typ:unitPrice>-{$voucher->getDiscountValue($productsTotalWith, $exchange)|change:NULL,NULL,2}</typ:unitPrice>
+						</ord:homeCurrency>
+						<ord:foreignCurrency n:if="$order->currency !== $homeCurrency">
+							<typ:unitPrice>-{$voucher->getDiscountValue($productsTotalWith, $exchange)|change:NULL,NULL,2}</typ:unitPrice>
+						</ord:foreignCurrency>
+
+					</ord:orderItem>
 
 				</ord:orderDetail>
 

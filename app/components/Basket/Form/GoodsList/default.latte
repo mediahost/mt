@@ -65,6 +65,33 @@
 							</td>
 						</tr>
 					{/foreach}
+					{var productsTotalWith => $basket->getProductsTotalPrice($priceLevel)}
+					{foreach $basket->vouchers as $voucher}
+						<tr>
+							<td class="goods-page-image">
+								<img src="{$basePath}/images/logo/logo_cart.png" alt="logo" />
+							</td>
+							<td class="goods-page-description">
+								<h3>{_'Discount'} - {$voucher->code}</h3>
+							</td>
+							<td class="goods-page-quantity">
+								<strong>1x</strong>
+							</td>
+							<td class="goods-page-price">
+								<strong>-{$voucher->getValueString($currencySymbol, $exchange)}</strong>
+							</td>
+							<td class="goods-page-vat">
+							</td>
+							<td class="goods-page-total">
+								<strong>-{$voucher->getDiscountValue($productsTotalWith, $exchange)|asCurrency:TRUE}</strong>
+							</td>
+							<td class="del-goods-col">
+								<a class="del-goods ajax" 
+								   href="{plink removeVoucherFromCart! $voucher->id}" 
+								   data-target-loading="#snippet--goodsList">&nbsp;</a>
+							</td>
+						</tr>
+					{/foreach}
 				</table>
 			</div>
 
@@ -82,17 +109,31 @@
 							{$basket->getProductsVatSum($priceLevel)|asCurrency:TRUE}
 						</strong>
 					</li>
+					<li>
+						<em>{_'cart.totalVat'}</em>
+						<strong class="price">
+							{$basket->getProductsTotalPrice($priceLevel)|asCurrency:TRUE}
+						</strong>
+					</li>
+					<li>
+						{if $basket->hasVouchers()}
+						<em>{_'cart.discount'}</em>
+						<strong class="price discount">
+							-{$basket->getDiscountsTotalPrice($priceLevel)|asCurrency:TRUE}
+						</strong>
+						{/if}
+					</li>
 					<li class="shopping-total-price">
 						<em>{_'cart.total'}</em>
 						<strong class="price">
-							{$basket->getProductsTotalPrice($priceLevel)|asCurrency:TRUE}
+							{$basket->getProductsTotalPriceToPay($priceLevel)|asCurrency:TRUE}
 						</strong>
 					</li>
 				</ul>
 			</div>
 
 			<div class="insert-discount">
-				<h4>Discount</h4>
+				<h4>{_'cart.discount'}</h4>
 				<div class="input-group">
 					<div class="input-icon">
 						<i class="fa fa-gift fa-fw"></i>

@@ -126,6 +126,18 @@
 				<b><font color="#398000">{$item->getTotalPrice($exchange)|asCurrency:TRUE}</font></b>
 			</td>
         </tr>
+		{var productsTotalWith => $order->getItemsTotalPrice($exchange)}
+        <tr n:foreach="$order->vouchers as $voucher">
+            <td style="border-bottom:1px #f2f3f5 solid;padding:5px 0px">
+				{_'Discount'} - {$voucher->code} -{$voucher->getValueString($currencySymbol, $exchange)}
+			</td>
+            <td style="border-bottom:1px #f2f3f5 solid;padding:5px 10px 5px 0px" valign="top" nowrap="">
+				1x
+			</td>
+            <td style="border-bottom:1px #f2f3f5 solid;padding:5px 10px 0px 0px" valign="top" align="right">
+				<b><font color="#398000">-{$voucher->getDiscountValue($productsTotalWith, $exchange)|asCurrency:TRUE}</font></b>
+			</td>
+        </tr>
         <tr>
             <td style="border-bottom:1px #f2f3f5 solid;padding:5px 0px">
 				{_'Shipping'}: {_$order->shipping}
@@ -155,7 +167,7 @@
 
         <tr>
             <td style="padding:10px" align="right" colspan="2"><strong>{_"To pay"}</strong></td>
-            <td style="padding:10px" align="right"><strong>{$order->getTotalPrice($exchange)|asCurrency:TRUE}</strong></td>
+            <td style="padding:10px" align="right"><strong>{$order->getTotalPriceToPay($exchange)|asCurrency:TRUE}</strong></td>
         </tr>
 
         <tr>

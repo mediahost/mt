@@ -10,7 +10,7 @@ class BasketRepository extends BaseRepository
 	public function findAllUnfinished($withItems = TRUE)
 	{
 		// init time of start module
-		$init = '2016-01-07 00:00:00';
+		$init = '2016-01-12 17:00:00';
 		// hours from last change of basket
 		$minusTime = '24 hours';
 		

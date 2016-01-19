@@ -66,6 +66,18 @@
 							</td>
 						</tr>
 					{/foreach}
+					{var productsTotalWith => $order->getItemsTotalPrice($exchange)}
+					{foreach $order->vouchers as $voucher}
+						<tr>
+							<td class="hidden-xs" colspan="2"></td>
+							<td>{_'Discount'} - {$voucher->code}</td>
+							<td class="text-right">-{$voucher->getValueString($currencySymbol, $exchange)}</td>
+							<td colspan="2"></td>
+							<td class="text-right">
+								-{$voucher->getDiscountValue($productsTotalWith, $exchange)|asCurrency:TRUE}
+							</td>
+						</tr>
+					{/foreach}
 					<tr>
 						<td class="hidden-xs" colspan="2"></td>
 						<td>{_'Shipping'} - {_$order->shipping}</td>
@@ -81,23 +93,35 @@
 				</tbody>
 				<tfoot>
 					<tr>
-						<td colspan="5" rowspan="3"></td>
-						<td>{_'cart.withoutVat'}</td>
+						<td colspan="4" rowspan="{$order->hasVouchers() ? 5 : 4}"></td>
+						<td colspan="2">{_'cart.withoutVat'}</td>
 						<td class="text-right">
 							{$order->getTotalPrice($exchange, FALSE)|asCurrency:TRUE}
 						</td>
 					</tr>
 					<tr>
-						<td>{_'cart.vat'}</td>
+						<td colspan="2">{_'cart.vat'}</td>
 						<td class="text-right">
 							{$order->getVatSum($exchange)|asCurrency:TRUE}
 						</td>
 					</tr>
 					<tr>
-						<th>{_'cart.total'}</th>
+						<td colspan="2">{_'cart.totalVat'}</td>
 						<td class="text-right">
 							{$order->getTotalPrice($exchange)|asCurrency:TRUE}
 						</td>
+					</tr>
+					<tr n:if="$order->hasVouchers()">
+						<td colspan="2">{_'cart.discount'}</td>
+						<td class="text-right discount">
+							-{$order->getVouchersTotalPrice($exchange)|asCurrency:TRUE}
+						</td>
+					</tr>
+					<tr>
+						<th colspan="2">{_'cart.total'}</th>
+						<th class="text-right">
+							{$order->getTotalPriceToPay($exchange)|asCurrency:TRUE}
+						</th>
 					</tr>
 				</tfoot>
 			</table>

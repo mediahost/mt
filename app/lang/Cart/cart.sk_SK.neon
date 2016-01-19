@@ -14,11 +14,14 @@ order:
 	contact: 'Kontaktné údaje'
 
 voucher:
+	code: 'Zľavový kód'
+	insert: 'Vložiť'
 	wasAdded: 'Zľava bola pridaná.'
 	invalid: 'Zľavový kód nie je platný.'
 	inactive: 'Zľava nie je momentálne aktívna.'
 	alreadyInCart: 'Zľava je už vo vašom košíku.'
 	higherThanProducts: 'Zľava je vyššia ako suma za vaše produkty a nemožno ju použiť.'
+	sumIsHigherThanProducts: 'Celková zľava je vyššia ako suma za vaše produkty a nemožno ju použiť.'
 	notAllowed: 'Táto zľava nie je povolená.'
 
 form:
@@ -84,7 +87,7 @@ name: 'Tovar'
 code: 'Kód'
 quantity: 'Množstvo'
 unitPrice: 'Jedn. cena'
-total: 'Celkom'
+total: 'K úhrade'
 unitPriceVat: 'Jedn. cena s DPH'
 totalVat: 'Celkom s DPH'
 totalWithoutVat: 'Celkom bez DPH'
@@ -97,6 +100,7 @@ notInStore: 'Produkt už nie je na sklade. S týmto produktom nemožno dokonči�
 mustChangeInStore: 'Znížte počet kusov v košíku.'
 queueBeforeYou: 'Vo fronte na váš tovar bol niekto pred vami!'
 queueBeforeYouSorry: 'Ospravedlňujeme sa, ale počas vášho nákupu niekto iný kúpil tovar, o ktoré ste mali záujem.'
+discount: 'Zľava'
 
 isEmpty: 'Zatiaľ prázdny'
 countItem: '%count% položka|%count% položky|%count% položek'
