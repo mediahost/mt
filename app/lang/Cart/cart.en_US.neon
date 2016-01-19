@@ -14,11 +14,14 @@ order:
 	contact: 'Contact'
 
 voucher:
+	code: 'Discount code'
+	insert: 'Insert'
 	wasAdded: 'Voucher was added.'
 	invalid: 'Voucher code is invalid.'
 	inactive: 'Voucher is not active.'
 	alreadyInCart: 'Voucher is already in cart.'
 	higherThanProducts: 'Discount has a higher value than products in order.'
+	sumIsHigherThanProducts: 'Sum of discounts has a higher value than products in order.'
 	notAllowed: 'This voucher is not allowed.'
 
 form:
@@ -84,7 +87,7 @@ name: 'Name'
 code: 'Code'
 quantity: 'Quantity'
 unitPrice: 'Unit price'
-total: 'Total'
+total: 'To pay'
 unitPriceVat: 'Unit price with VAT'
 totalVat: 'Total with VAT'
 totalWithoutVat: 'Total without VAT'
@@ -97,6 +100,7 @@ notInStore: "Product isn't in store. You cannot finish order with this product."
 mustChangeInStore: 'Decrease product count in basket.'
 queueBeforeYou: 'In the queue for your goods was somebody in front of you!'
 queueBeforeYouSorry: 'Sorry, but while you are buying someone else bought the goods for which you were interested.'
+discount: 'Discount'
 
 isEmpty: 'Cart is empty'
 countItem: '%count% item|%count% items'

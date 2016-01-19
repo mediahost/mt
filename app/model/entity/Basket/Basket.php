@@ -21,6 +21,7 @@ use Nette\Utils\Random;
  * @property ArrayCollection $items
  * @property int $itemsCount
  * @property ArrayCollection $vouchers
+ * @property int $vouchersCount
  * @property Shipping $shipping
  * @property Payment $payment
  * @property string $mail
@@ -133,29 +134,34 @@ class Basket extends BaseEntity
 	
 	public function resetChangeItemsAt($checkItemsCount = TRUE)
 	{
-		if (!$checkItemsCount || ($checkItemsCount && $this->items->count())) {
+		if (!$checkItemsCount || ($checkItemsCount && $this->items && $this->items->count())) {
 			$this->changeItemsAt = new DateTime();
 		}
 		return $this;
 	}
 	
-	public function addVoucher(Voucher $voucher)
+	public function addVoucher(Voucher $voucher, $level = NULL)
 	{
 		if ($this->vouchers->contains($voucher)) {
 			throw new EntityException('cart.voucher.alreadyInCart');
 		}
 		
-		$this->checkVoucherConditions($voucher);
+		$this->checkVoucherConditions($voucher, $level);
 		
 		$this->vouchers->add($voucher);
 		return $this;
 	}
 	
-	private function checkVoucherConditions(Voucher $voucher)
+	private function checkVoucherConditions(Voucher $voucher, $level = NULL)
 	{
+		$itemsTotalSum = $this->getItemsTotalPrice(NULL, $level);
+		
+		if (round($this->getVouchersTotalPrice()) >= $itemsTotalSum) {
+			throw new EntityException('cart.voucher.sumIsHigherThanProducts');
+		}
 		switch ($voucher->type) {
 			case Voucher::MINUS_VALUE:
-				if ($voucher->value >= $this->getItemsTotalPrice()) {
+				if ($voucher->value >= $itemsTotalSum) {
 					throw new EntityException('cart.voucher.higherThanProducts');
 				}
 				break;
@@ -164,6 +170,14 @@ class Basket extends BaseEntity
 			default:
 				throw new EntityException('cart.voucher.notAllowed');
 		}
+	}
+	
+	public function removeVoucher(Voucher $voucher)
+	{
+		if ($this->vouchers->contains($voucher)) {
+			$this->vouchers->removeElement($voucher);
+		}
+		return $this;
 	}
 	
 	public function setAccessHash()
@@ -265,7 +279,13 @@ class Basket extends BaseEntity
 	/** @return int */
 	public function getItemsCount()
 	{
-		return count($this->items);
+		return $this->items->count();
+	}
+
+	/** @return int */
+	public function getVouchersCount()
+	{
+		return $this->vouchers->count();
 	}
 
 	/** @return float */
@@ -285,6 +305,27 @@ class Basket extends BaseEntity
 		$withVat = $this->getItemsTotalPrice($exchange, $level, TRUE);
 		$withoutVat = $this->getItemsTotalPrice($exchange, $level, FALSE);
 		return $withVat - $withoutVat;
+	}
+
+	/** @return float */
+	public function getVouchersTotalPrice(Exchange $exchange = NULL, $level = NULL, $withVat = TRUE)
+	{
+		$totalPrice = 0;
+		$itemsTotal = $this->getItemsTotalPrice($exchange, $level, $withVat);
+		$countSum = function ($key, Voucher $voucher) use (&$totalPrice, $exchange, $itemsTotal) {
+			$totalPrice += $voucher->getDiscountValue($itemsTotal, $exchange);
+			return TRUE;
+		};
+		$this->vouchers->forAll($countSum);
+		return $totalPrice;
+	}
+
+	/** @return float */
+	public function getItemsWithVouchersTotalPrice(Exchange $exchange = NULL, $level = NULL, $withVat = TRUE)
+	{
+		$itemsTotal = $this->getItemsTotalPrice($exchange, $level, $withVat);
+		$vouchersTotal = $this->getVouchersTotalPrice($exchange, $level);
+		return $itemsTotal - $vouchersTotal;
 	}
 
 	/** @return float */
@@ -323,6 +364,14 @@ class Basket extends BaseEntity
 		return $withVat - $withoutVat;
 	}
 
+	/** @return float */
+	public function getTotalPriceToPay(Exchange $exchange = NULL, $level = NULL, $withVat = TRUE)
+	{
+		$itemsWithVoucherTotal = $this->getItemsWithVouchersTotalPrice($exchange, $level, $withVat);
+		$paymentsTotal = $this->getPaymentsPrice($exchange, $level, $withVat);
+		return $itemsWithVoucherTotal + $paymentsTotal;
+	}
+
 	public function import(Basket $basket, $skipException = FALSE, $checkQuantity = TRUE)
 	{
 		if ($basket->itemsCount) {
@@ -333,6 +382,19 @@ class Basket extends BaseEntity
 			try {
 				$this->setItem($item->stock, $item->quantity, $checkQuantity);
 			} catch (InsufficientQuantityException $exc) {
+				if (!$skipException) {
+					throw $exc;
+				}
+			}
+		}
+		if ($basket->vouchersCount) {
+			$this->vouchers->clear();
+		}
+		/* @var $voucher Voucher */
+		foreach ($basket->vouchers as $voucher) {
+			try {
+				$this->addVoucher($voucher);
+			} catch (EntityException $exc) {
 				if (!$skipException) {
 					throw $exc;
 				}

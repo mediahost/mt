@@ -221,6 +221,8 @@ class OrderProductsEdit extends BaseControl
 			}
 		}
 		$this->template->exchange = $this->exchange;
+		$currency = $this->exchange[$this->exchange->getWeb()];
+		$this->template->currencySymbol = $currency->getFormat()->getSymbol();
 		$this->template->order = $this->order;
 		parent::render();
 	}

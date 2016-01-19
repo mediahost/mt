@@ -38,7 +38,6 @@ class VouchersGrid extends BaseControl
 				})
 				->setSortable()
 				->setFilterNumber();
-//		$grid->getColumn('value')->headerPrototype->width = '10%';
 		
 		$grid->addColumnText('type', 'Type')
 				->setCustomRender(function (Voucher $item) {

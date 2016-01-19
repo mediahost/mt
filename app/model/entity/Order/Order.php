@@ -21,6 +21,7 @@ use Nette\Utils\Random;
  *
  * @property ArrayCollection $items
  * @property-read int $itemsCount
+ * @property ArrayCollection $vouchers
  * @property User $user
  * @property OrderState $state
  * @property string $currency
@@ -67,6 +68,9 @@ class Order extends BaseEntity
 
 	/** @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order", cascade={"all"}, orphanRemoval=true) */
 	protected $items;
+
+	/** @ORM\ManyToMany(targetEntity="Voucher", inversedBy="orders") */
+	protected $vouchers;
 
 	/** @ORM\OneToOne(targetEntity="OrderShipping", inversedBy="order", cascade={"all"}) */
 	protected $shipping;
@@ -115,6 +119,7 @@ class Order extends BaseEntity
 		$this->pin = Random::generate(4, '0-9');
 		$this->locale = $locale;
 		$this->items = new ArrayCollection();
+		$this->vouchers = new ArrayCollection();
 		parent::__construct();
 	}
 
@@ -245,6 +250,12 @@ class Order extends BaseEntity
 		return count($this->items);
 	}
 
+	/** @return int */
+	public function getVouchersCount()
+	{
+		return count($this->vouchers);
+	}
+
 	/** @return Price */
 	public function getItemPrice(Stock $stock)
 	{
@@ -267,6 +278,27 @@ class Order extends BaseEntity
 			$totalPrice += $item->getTotalPrice($exchange, $withVat);
 		}
 		return $totalPrice;
+	}
+
+	/** @return float */
+	public function getVouchersTotalPrice(Exchange $exchange = NULL, $withVat = TRUE)
+	{
+		$totalPrice = 0;
+		$itemsTotal = $this->getItemsTotalPrice($exchange, $withVat);
+		$countSum = function ($key, Voucher $voucher) use (&$totalPrice, $exchange, $itemsTotal) {
+			$totalPrice += $voucher->getDiscountValue($itemsTotal, $exchange);
+			return TRUE;
+		};
+		$this->vouchers->forAll($countSum);
+		return $totalPrice;
+	}
+
+	/** @return float */
+	public function getItemsWithVouchersTotalPrice(Exchange $exchange = NULL, $withVat = TRUE)
+	{
+		$itemsTotal = $this->getItemsTotalPrice($exchange, $withVat);
+		$vouchersTotal = $this->getVouchersTotalPrice($exchange);
+		return $itemsTotal - $vouchersTotal;
 	}
 
 	/** @return float */
@@ -299,6 +331,14 @@ class Order extends BaseEntity
 	}
 
 	/** @return float */
+	public function getTotalPriceToPay(Exchange $exchange = NULL, $withVat = TRUE)
+	{
+		$itemsWithVoucherTotal = $this->getItemsWithVouchersTotalPrice($exchange, $withVat);
+		$paymentsTotal = $this->getPaymentsTotalPrice($exchange, $withVat);
+		return $itemsWithVoucherTotal + $paymentsTotal;
+	}
+
+	/** @return float */
 	public function getVatSum(Exchange $exchange)
 	{
 		$withVat = $this->getTotalPrice($exchange, TRUE);
@@ -318,6 +358,12 @@ class Order extends BaseEntity
 		return ($this->state->type->id === OrderStateType::STORNO);
 	}
 
+	/** @var bool */
+	public function hasVouchers()
+	{
+		return (bool) $this->vouchers->count();
+	}
+
 	public function import(Basket $basket, $level = NULL)
 	{
 		$this->items->clear();
@@ -325,6 +371,11 @@ class Order extends BaseEntity
 			/* @var $item BasketItem */
 			$price = $item->stock->getPrice($level);
 			$this->setItem($item->stock, $price, $item->quantity, $this->locale);
+		}
+		$this->vouchers->clear();
+		foreach ($basket->vouchers as $voucher) {
+			/* @var $voucher Voucher */
+			$this->vouchers->add($voucher);
 		}
 		if ($basket->shipping) {
 			$shipping = $basket->shipping;

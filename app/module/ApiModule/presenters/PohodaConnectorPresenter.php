@@ -109,6 +109,8 @@ class PohodaConnectorPresenter extends BasePresenter
 			$this->template->pageInfo = $this->settings->pageInfo;
 			$this->template->homeCurrency = $this->exchange->getDefault()->getCode();
 			$this->template->exchange = $this->exchange;
+			$currency = $this->exchange[$this->exchange->getWeb()];
+			$this->template->currencySymbol = $currency->getFormat()->getSymbol();
 
 			$this->pohodaFacade->setLastSync(PohodaFacade::ORDERS, PohodaFacade::LAST_DOWNLOAD);
 			$this->setView('orders');

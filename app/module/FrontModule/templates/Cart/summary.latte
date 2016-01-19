@@ -75,8 +75,31 @@
 									</td>
 								</tr>
 							{/foreach}
+							{var productsTotalWith => $basket->getProductsTotalPrice($priceLevel)}
+							{foreach $basket->vouchers as $voucher}
+								<tr>
+									<td class="goods-page-image">
+										<img src="{$basePath}/images/logo/logo_cart.png" alt="logo" />
+									</td>
+									<td class="goods-page-description">
+										<h3>{_'Discount'} - {$voucher->code}</h3>
+									</td>
+									<td class="goods-page-quantity">
+										<strong>1x</strong>
+									</td>
+									<td class="goods-page-price">
+										<strong>-{$voucher->getValueString($currencySymbol, $exchange)}</strong>
+									</td>
+									<td class="goods-page-vat">
+									</td>
+									<td class="goods-page-total">
+										<strong>-{$voucher->getDiscountValue($productsTotalWith, $exchange)|asCurrency:TRUE}</strong>
+									</td>
+								</tr>
+							{/foreach}
 							<tr>
 								<td class="goods-page-image">
+									<img src="{$basePath}/images/logo/logo_cart.png" alt="logo" />
 								</td>
 								<td class="goods-page-description">
 									<h3>{_'Shipping'}: {_$basket->shipping}</h3>
@@ -96,6 +119,7 @@
 							</tr>
 							<tr>
 								<td class="goods-page-image">
+									<img src="{$basePath}/images/logo/logo_cart.png" alt="logo" />
 								</td>
 								<td class="goods-page-description">
 									<h3>{_'Payment'}: {_$basket->payment}</h3>
@@ -130,10 +154,24 @@
 									{$basket->getVatSum($priceLevel)|asCurrency:TRUE}
 								</strong>
 							</li>
+							<li>
+								<em>{_'cart.totalVat'}</em>
+								<strong class="price">
+									{$basket->getTotalPrice($priceLevel)|asCurrency:TRUE}
+								</strong>
+							</li>
+							<li>
+								{if $basket->hasVouchers()}
+									<em>{_'cart.discount'}</em>
+									<strong class="price discount">
+										-{$basket->getDiscountsTotalPrice($priceLevel)|asCurrency:TRUE}
+									</strong>
+								{/if}
+							</li>
 							<li class="shopping-total-price">
 								<em>{_'cart.total'}</em>
 								<strong class="price">
-									{$basket->getTotalPrice($priceLevel)|asCurrency:TRUE}
+									{$basket->getTotalPriceToPay($priceLevel)|asCurrency:TRUE}
 								</strong>
 							</li>
 						</ul>

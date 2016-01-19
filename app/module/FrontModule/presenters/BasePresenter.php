@@ -21,6 +21,7 @@ use App\Model\Entity\ProducerModel;
 use App\Model\Entity\Product;
 use App\Model\Entity\Sign;
 use App\Model\Entity\Stock;
+use App\Model\Entity\Voucher;
 use App\Model\Repository\CategoryRepository;
 use App\Model\Repository\ProductRepository;
 use App\Model\Repository\StockRepository;
@@ -150,6 +151,25 @@ abstract class BasePresenter extends BaseBasePresenter
 			$stock = $stockRepo->find($stockId);
 			if ($stock) {
 				$this->basketFacade->remove($stock);
+			}
+		}
+		if ($this->ajax) {
+			$this->redrawControl();
+			if (isset($this['products'])) {
+				$this['products']->redrawControl();
+			}
+		} else {
+			$this->redirect('this');
+		}
+	}
+
+	public function handleRemoveVoucherFromCart($voucherId)
+	{
+		if ($voucherId) {
+			$voucherRepo = $this->em->getRepository(Voucher::getClassName());
+			$voucher = $voucherRepo->find($voucherId);
+			if ($voucher) {
+				$this->basketFacade->removeVoucher($voucher);
 			}
 		}
 		if ($this->ajax) {

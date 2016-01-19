@@ -55,10 +55,11 @@ class GoodsList extends BaseControl
 					->setType(Spinner::TYPE_UP_DOWN)
 					->setSize(MetronicTextInputBase::SIZE_XS);
 		}
-		
-		$form->addText('voucher', 'Discount Code')
-				->setAttribute('placeholder', 'Discount Code');
-		$form->addSubmit('insert', 'Insert');
+
+		$form->addText('voucher', 'cart.voucher.code')
+				->setAttribute('placeholder', 'cart.voucher.code')
+				->getControlPrototype()->class[] = 'noSendOnChange';
+		$form->addSubmit('insert', 'cart.voucher.insert');
 
 		$form->addSubmit('send', 'cart.continue')
 				->setDisabled(!$this->basketFacade->isAllItemsInStore());
@@ -94,6 +95,7 @@ class GoodsList extends BaseControl
 			} catch (BasketFacadeException $ex) {
 				$this->presenter->flashMessage($this->translator->translate($ex->getMessage()), 'danger');
 			}
+			$form['voucher']->setValue(NULL);
 			if ($this->presenter->ajax) {
 				$this->presenter->redrawControl();
 			}
@@ -118,7 +120,7 @@ class GoodsList extends BaseControl
 			$this->onSend();
 		} else {
 			if ($this->presenter->ajax) {
-				$this->presenter->redrawControl();
+		$this->presenter->redrawControl();
 			}
 		}
 	}
@@ -135,6 +137,8 @@ class GoodsList extends BaseControl
 		$this->template->basket = $this->basketFacade;
 		$this->template->priceLevel = $this->priceLevel;
 		$this->template->exchange = $this->exchange;
+		$currency = $this->exchange[$this->exchange->getWeb()];
+		$this->template->currencySymbol = $currency->getFormat()->getSymbol();
 		parent::render();
 	}
 

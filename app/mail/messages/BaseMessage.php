@@ -66,6 +66,7 @@ abstract class BaseMessage extends Message
 
 	protected function build()
 	{
+		$currency = $this->exchange[$this->exchange->getWeb()];
 		$this->params += [
 			'companyInfo' => $this->settings->companyInfo,
 			'pageInfo' => $this->settings->pageInfo,
@@ -73,6 +74,7 @@ abstract class BaseMessage extends Message
 			'colon' => '',
 			'locale' => $this->translator->locale,
 			'exchange' => $this->exchange,
+			'currencySymbol' => $currency->getFormat()->getSymbol(),
 			'basePath' => $this->httpRequest->getUrl()->getBaseUrl(),
 		];
 

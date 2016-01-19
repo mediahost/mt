@@ -107,7 +107,7 @@ class OrdersGrid extends BaseControl
 		$grid->addColumnText('totalPrice', 'Total price')
 				->setCustomRender(function ($item) {
 					$toCurrency = $item->currency;
-					$totalPrice = $item->getTotalPrice($this->exchange);
+					$totalPrice = $item->getTotalPriceToPay($this->exchange);
 					return $this->exchange->formatTo($totalPrice, $toCurrency);
 				})
 				->setFilterNumber();
