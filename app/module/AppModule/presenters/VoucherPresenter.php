@@ -7,6 +7,7 @@ use App\Components\Discount\Form\VoucherEdit;
 use App\Components\Discount\Grid\IVouchersGridFactory;
 use App\Components\Discount\Grid\VouchersGrid;
 use App\Model\Entity\Voucher;
+use App\Model\Facade\VoucherFacade;
 use Exception;
 use Kdyby\Doctrine\EntityRepository;
 
@@ -20,6 +21,9 @@ class VoucherPresenter extends BasePresenter
 	private $voucherRepo;
 
 	// <editor-fold desc="injects">
+
+	/** @var VoucherFacade @inject */
+	public $voucherFacade;
 
 	/** @var IVoucherEditFactory @inject */
 	public $iVoucherEditFactory;
@@ -92,7 +96,7 @@ class VoucherPresenter extends BasePresenter
 			$this->flashMessage($message, 'danger');
 		} else {
 			try {
-				$this->voucherRepo->delete($voucher);
+				$this->voucherFacade->delete($voucher);
 				$message = $this->translator->translate('successfullyDeletedShe', NULL, ['name' => $this->translator->translate('Discount')]);
 				$this->flashMessage($message, 'success');
 			} catch (Exception $e) {
@@ -101,6 +105,11 @@ class VoucherPresenter extends BasePresenter
 			}
 		}
 		$this->redirect('default');
+	}
+
+	public function canDelete(Voucher $voucher)
+	{
+		return $this->voucherFacade->isDeletable($voucher);
 	}
 
 	// <editor-fold desc="forms">

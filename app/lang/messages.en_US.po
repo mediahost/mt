@@ -364,6 +364,9 @@ msgstr "Value"
 msgid "Value is required"
 msgstr "Value is required"
 
+msgid "Code is required"
+msgstr "Code is required"
+
 msgid "Active from"
 msgstr "Active from"
 
@@ -882,6 +885,9 @@ msgstr "We have sent you a verification e-mail. Please check your inbox!"
 
 msgid "%value% is already registered."
 msgstr "%value% is already registered."
+
+msgid "%value% is already used."
+msgstr "%value% is already used."
 
 msgid "At least %count% characters long."
 msgstr "At least %count% characters long."
