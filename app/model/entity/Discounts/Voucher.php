@@ -31,6 +31,9 @@ class Voucher extends DiscountBase
 	/** @ORM\Column(type="string", length=32) */
 	protected $code;
 
+	/** @ORM\ManyToMany(targetEntity="Basket", mappedBy="vouchers") */
+	protected $baskets;
+
 	/** @ORM\ManyToMany(targetEntity="Order", mappedBy="vouchers") */
 	protected $orders;
 
@@ -57,18 +60,6 @@ class Voucher extends DiscountBase
 	{
 		return Strings::upper($this->code);
 	}
-	
-//	public function getValue(Exchange $exchange = NULL)
-//	{
-//		switch ($this->type) {
-//			case self::PERCENTAGE:
-//				$value = ($fromValue / 100) * $this->value;
-//				break;
-//			default:
-//				$value = $this->value;
-//				break;
-//		}
-//	}
 	
 	public function getSymbol($currency = NUll)
 	{

@@ -57,6 +57,9 @@ class VouchersGrid extends BaseControl
 							$message = $this->translator->translate('Are you sure you want to delete \'%name%\'?', NULL, ['name' => (string) $item]);
 							return $message;
 						})
+						->setDisable(function($item) {
+							return !$this->presenter->canDelete($item);
+						})
 				->elementPrototype->class[] = 'red';
 
 		$grid->setActionWidth("20%");

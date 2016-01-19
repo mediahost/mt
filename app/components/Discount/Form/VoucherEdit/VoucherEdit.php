@@ -10,6 +10,8 @@ use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Price;
 use App\Model\Entity\Voucher;
+use App\Model\Facade\VoucherFacade;
+use Nette\Forms\IControl;
 use Nette\Utils\ArrayHash;
 
 class VoucherEdit extends BaseControl
@@ -17,6 +19,9 @@ class VoucherEdit extends BaseControl
 
 	/** @var Voucher */
 	private $voucher;
+
+	/** @var VoucherFacade @inject */
+	public $voucherFacade;
 
 	// <editor-fold desc="events">
 
@@ -34,16 +39,23 @@ class VoucherEdit extends BaseControl
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
 
-		$form->addText('value', 'Value')
-						->setRequired('Value is required')
-						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_M;
+		if ($this->voucher->isNew()) {
+			$form->addServerValidatedText('code', 'Code')
+							->setRequired('Code is required')
+							->addServerRule([$this, 'validateCode'], $this->translator->translate('%value% is already used.'))
+							->setValue($this->voucher->code)
+							->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_M;
 
-		if ($this->voucher->type === Voucher::PERCENTAGE) {
-			$form['value']->addRule(Form::RANGE, 'Must be between %d and %d', [1, 99]);
-			$form['value']->getControlPrototype()->class[] = 'mask_percentage';
-		} else {
-			$form['value']->addRule(Form::MIN, 'Must be bigger than %d', 0.1);
-			$form['value']->getControlPrototype()->class[] = 'mask_currency';
+			$form->addText('value', 'Value')
+							->setRequired('Value is required')
+							->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_M;
+			if ($this->voucher->type === Voucher::PERCENTAGE) {
+				$form['value']->addRule(Form::RANGE, 'Must be between %d and %d', [1, 99]);
+				$form['value']->getControlPrototype()->class[] = 'mask_percentage';
+			} else {
+				$form['value']->addRule(Form::MIN, 'Must be bigger than %d', 0.1);
+				$form['value']->getControlPrototype()->class[] = 'mask_currency';
+			}
 		}
 
 		$form->addDatePicker('activeFrom', 'Active from')
@@ -60,6 +72,11 @@ class VoucherEdit extends BaseControl
 		return $form;
 	}
 
+	public function validateCode(IControl $control, $arg = NULL)
+	{
+		return $this->voucherFacade->isUnique($control->getValue());
+	}
+
 	public function formSucceeded(Form $form, $values)
 	{
 		$this->load($values);
@@ -69,7 +86,12 @@ class VoucherEdit extends BaseControl
 
 	private function load(ArrayHash $values)
 	{
-		$this->voucher->setValue(Price::strToFloat($values->value));
+		if ($values->code) {
+			$this->voucher->setCode($values->code);
+		}
+		if ($values->value) {
+			$this->voucher->setValue(Price::strToFloat($values->value));
+		}
 		if ($values->activeFrom) {
 			$this->voucher->activeFrom = $values->activeFrom;
 		}

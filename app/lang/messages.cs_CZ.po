@@ -375,6 +375,9 @@ msgstr "Hodnota"
 msgid "Value is required"
 msgstr "Hodnota musí být zadána"
 
+msgid "Code is required"
+msgstr "Kód musí být zadán"
+
 msgid "Active from"
 msgstr "Aktivní od"
 
@@ -906,6 +909,9 @@ msgstr ""
 
 msgid "%value% is already registered."
 msgstr "%value% je již registrován."
+
+msgid "%value% is already used."
+msgstr "%value% je již použito."
 
 msgid "At least %count% characters long."
 msgstr "Alespoň %count% znaků dlouhé."

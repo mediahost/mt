@@ -374,6 +374,9 @@ msgstr "Hodnota"
 msgid "Value is required"
 msgstr "Hodnota musí byť zadaná"
 
+msgid "Code is required"
+msgstr "Kód musí byť zadán"
+
 msgid "Active from"
 msgstr "Aktívny od"
 
@@ -904,6 +907,9 @@ msgstr "Práve sme Vám poslali e-mail pre overenie. Skontrolujte prosím svoju 
 
 msgid "%value% is already registered."
 msgstr "%value% je už zaregistrovaná."
+
+msgid "%value% is already used."
+msgstr "%value% je už použito."
 
 msgid "At least %count% characters long."
 msgstr "Aspoň %count% znakov dlhé."
