@@ -20,7 +20,8 @@ class ProductTranslation extends BaseEntity
 {
 
 	use Model\Translatable\Translation;
-	use Model\Sluggable\Sluggable;
+
+use Model\Sluggable\Sluggable;
 
 	/** @ORM\Column(type="string", nullable=true) */
 	protected $name;
@@ -42,13 +43,15 @@ class ProductTranslation extends BaseEntity
 
 	/** @ORM\Column(type="text", nullable=true) */
 	private $seoDescription;
-	
+
 	public function setName($value)
 	{
 		$oldName = $this->name;
 		$this->name = $value;
 		if ($oldName != $this->name) {
-			$this->translatable->stock->setChangePohodaData();
+			if ($this->translatable->stock) {
+				$this->translatable->stock->setChangePohodaData();
+			}
 		}
 		return $this;
 	}
