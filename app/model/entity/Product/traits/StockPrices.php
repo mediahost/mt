@@ -64,6 +64,18 @@ trait StockPrices
 	/** @ORM\Column(type="float", nullable=true) */
 	private $price10;
 
+	/** @ORM\Column(type="float", nullable=true) */
+	private $price11;
+
+	/** @ORM\Column(type="float", nullable=true) */
+	private $price12;
+
+	/** @ORM\Column(type="float", nullable=true) */
+	private $price13;
+
+	/** @ORM\Column(type="float", nullable=true) */
+	private $price14;
+
 	// </editor-fold>
 
 	/** @ORM\OneToMany(targetEntity="GroupDiscount", mappedBy="stock", cascade={"persist", "remove"}) */
@@ -232,7 +244,7 @@ trait StockPrices
 		return $group ? $group->level : NULL;
 	}
 
-	protected function recalculateOtherPrices()
+	public function recalculateOtherPrices()
 	{
 		$priceProperties = self::getPriceProperties();
 		$defaultPrice = $this->getPrice();

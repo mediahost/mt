@@ -13,6 +13,8 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  *
  * @property string $name
  * @property string $level
+ * @property int $type
+ * @property float $percentage
  * @property ArrayCollection $users
  */
 class Group extends BaseEntity
@@ -31,6 +33,9 @@ class Group extends BaseEntity
 
 	/** @ORM\Column(type="string", length=50) */
 	protected $name;
+
+	/** @ORM\Column(type="float", nullable=true) */
+	protected $percentage;
 
 	/** @ORM\ManyToMany(targetEntity="User", mappedBy="groups") */
 	protected $users;
@@ -61,6 +66,27 @@ class Group extends BaseEntity
 	public function isNew()
 	{
 		return $this->id === NULL;
+	}
+
+	public function isDealerType()
+	{
+		return $this->type === self::TYPE_DEALER;
+	}
+
+	public function isBonusType()
+	{
+		return $this->type === self::TYPE_BONUS;
+	}
+	
+	public function getDiscount()
+	{
+		return new Discount($this->percentage, Discount::PERCENTAGE);
+	}
+	
+	public function getDiscountedPrice(Price $price)
+	{
+		$discount = $this->getDiscount();
+		return $discount->getDiscountedPrice($price);
 	}
 
 }

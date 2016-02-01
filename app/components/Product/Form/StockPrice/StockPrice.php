@@ -44,7 +44,7 @@ class StockPrice extends StockBase
 		$form = new Form();
 		$form->setTranslator($this->translator)
 				->setRenderer(new MetronicHorizontalFormRenderer());
-		$form->getElementPrototype()->class('ajax');
+		$form->getElementPrototype()->class('form-horizontal ajax');
 
 		$groupRepo = $this->em->getRepository(Group::getClassName());
 		$groups = $groupRepo->findAll();
@@ -60,16 +60,24 @@ class StockPrice extends StockBase
 		$fixed = $form->addContainer(Discount::FIXED_PRICE);
 		$percents = $form->addContainer(Discount::PERCENTAGE);
 		foreach ($groups as $group) {
-			$groupPrice = $this->defaultWithVat ? $this->stock->getPrice($group)->withVat : $this->stock->getPrice($group)->withoutVat;
+			/* @var $group Group */
 			$discount = $this->stock->getDiscountByGroup($group);
-			$placeholderPrice = $discount && $discount->type === Discount::PERCENTAGE ? $groupPrice : $defaultPrice;
+			if ($group->isBonusType()) {
+				$placeholderPercentage = $group->percentage;
+				$groupPrice = $discount && $discount->type === Discount::PERCENTAGE ? $this->stock->getPrice($group) : $group->getDiscountedPrice($this->stock->price);
+				$placeholderPrice = $this->defaultWithVat ? $groupPrice->withVat : $groupPrice->withoutVat;
+			} else {
+				$placeholderPercentage = 0;
+				$groupPrice = $this->defaultWithVat ? $this->stock->getPrice($group)->withVat : $this->stock->getPrice($group)->withoutVat;
+				$placeholderPrice = $discount && $discount->type === Discount::PERCENTAGE ? $groupPrice : $defaultPrice;
+			}
 
 			$fixed->addText($group->id, $group->name)
 					->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
 					->setAttribute('placeholder', $this->exchangeHelper->format($placeholderPrice));
 			$percents->addText($group->id, $group->name)
 					->setAttribute('class', ['mask_percentage', MetronicTextInputBase::SIZE_S])
-					->setAttribute('placeholder', $this->percentIsSale ? '0%' : '100%');
+					->setAttribute('placeholder', ($this->percentIsSale ? $placeholderPercentage : (100 - $placeholderPercentage)) . '%');
 		}
 
 		$form->addSelect2('vat', 'Vat', $this->vatFacade->getValues())
@@ -116,7 +124,7 @@ class StockPrice extends StockBase
 					0 < $percentValue && $percentValue < 100 &&
 					(($this->percentIsSale && $percentValue > 0) || (!$this->percentIsSale && $percentValue < 100))
 			) {
-				$value = $this->percentIsSale ? $percents->$groupId : (100 - $percents->$groupId);
+				$value = $this->percentIsSale ? $percentValue : (100 - $percentValue);
 				$discount = new Discount($value, Discount::PERCENTAGE);
 			}
 
@@ -132,6 +140,7 @@ class StockPrice extends StockBase
 		$groupRepo = $this->em->getRepository(Group::getClassName());
 		$groupDiscountRepo = $this->em->getRepository(GroupDiscount::getClassName());
 
+		/* @var $group Group */
 		$group = $groupRepo->find($groupId);
 		if (!$group) {
 			return $this;
@@ -139,6 +148,8 @@ class StockPrice extends StockBase
 
 		if ($discount) {
 			$this->stock->addDiscount($discount, $group);
+		} else if ($group->isBonusType()) {
+			$this->stock->addDiscount($group->getDiscount(), $group);
 		} else {
 			$removedElements = $this->stock->removeDiscountsByGroup($group);
 			foreach ($removedElements as $removedElement) {

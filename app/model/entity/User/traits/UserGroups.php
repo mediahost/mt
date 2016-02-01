@@ -3,10 +3,12 @@
 namespace App\Model\Entity\Traits;
 
 use App\Model\Entity\Group;
+use Doctrine\Common\Collections\ArrayCollection;
 use Nette\Utils\Random;
 
 /**
- * @property array $groups
+ * @property ArrayCollection $groups
+ * @property string $clientId client ID for dealer API
  */
 trait UserGroups
 {
@@ -31,48 +33,99 @@ trait UserGroups
 		}
 		return $this;
 	}
-	
-    public function addGroup(Group $group)
-    {
+
+	public function addGroup(Group $group)
+	{
 		if (!$this->groups->contains($group)) {
 			$this->groups->add($group);
 			$group->addUser($this);
 		}
 		return $this;
-    }
+	}
 
 	public function removeGroup(Group $group)
 	{
 		return $this->groups->removeElement($group);
 	}
-	
+
+	public function clearGroups($withBonus = FALSE)
+	{
+		if ($withBonus) {
+			$this->groups->clear();
+		} else {
+			$removeDealer = function ($key, Group $group) {
+				if ($group->type === Group::TYPE_DEALER) {
+					$this->removeGroup($group);
+				}
+				return TRUE;
+			};
+			$this->groups->forAll($removeDealer);
+		}
+		return $this;
+	}
+
 	public function getGroup()
 	{
-		return $this->groups && $this->groups->count() ? $this->groups->first() : NULL;
+		$group = $this->getDealerGroup();
+		if (!$group) {
+			$group = $this->getBonusGroup();
+		}
+		return $group;
 	}
-	
+
+	public function getDealerGroup()
+	{
+		return $this->getFirstGroup(Group::TYPE_DEALER);
+	}
+
+	public function getBonusGroup()
+	{
+		return $this->getFirstGroup(Group::TYPE_BONUS);
+	}
+
+	protected function getFirstGroup($type = Group::TYPE_DEALER)
+	{
+		$firstGroup = NULL;
+		$isGroupType = function ($key, Group $group) use ($type, &$firstGroup) {
+			if ($group->type === $type) {
+				$firstGroup = $group;
+				return FALSE;
+			}
+			return TRUE;
+		};
+		if ($this->groups && $this->groups->count()) {
+			$this->groups->forAll($isGroupType);
+		}
+		return $firstGroup;
+	}
+
 	public function isDealer()
 	{
 		return $this->isGroupType(Group::TYPE_DEALER);
 	}
-	
-	public function resetClientId()
+
+	public function isInBonus()
 	{
-		$this->clientId = Random::generate(52);
-		return $this;
+		return $this->isGroupType(Group::TYPE_BONUS);
 	}
-	
-	public function getClientId()
-	{
-		return $this->clientId;
-	}
-	
+
 	protected function isGroupType($type)
 	{
 		$isGroupType = function ($key, Group $group) use ($type) {
 			return $group->type === $type;
 		};
 		return $this->groups->exists($isGroupType);
+	}
+
+	public function resetClientId()
+	{
+		$this->clientId = Random::generate(52);
+		return $this;
+	}
+
+	public function getClientId()
+	{
+		return $this->clientId;
 	}
 
 }

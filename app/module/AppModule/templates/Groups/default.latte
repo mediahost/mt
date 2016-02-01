@@ -13,7 +13,7 @@
 			<div class="portlet-title">
 				<div class="caption">
 					<i class="icon-users"></i>
-					<span class="caption-subject bold uppercase">{_'Groups'}</span>
+					<span class="caption-subject bold uppercase">{_'Dealers'}</span>
 				</div>
 				<div class="actions">
 					<a n:href="Groups:add" class="btn btn-circle green-sharp">
@@ -25,6 +25,30 @@
 			</div>
 			<div class="portlet-body">
 				{control groupsGrid}
+			</div>
+		</div>
+	</div>
+</div>
+			
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-users"></i>
+					<span class="caption-subject bold uppercase">{_'Bonus'}</span>
+				</div>
+				<div class="actions">
+					<a n:href="recountPrices!" n:if="$user->isAllowed('groups', 'recountPrices')" class="btn btn-circle red-flamingo">
+						<i class="fa fa-refresh"></i>
+						{_'Recount Prices'}
+					</a>
+					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body">
+				{control bonusGrid}
 			</div>
 		</div>
 	</div>

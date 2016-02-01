@@ -109,6 +109,17 @@ class GroupsPresenter extends BasePresenter
 		$this->redirect('default');
 	}
 
+	/**
+	 * @secured
+	 * @resource('groups')
+	 * @privilege('recountPrices')
+	 */
+	public function handleRecountPrices()
+	{
+		$this->stockFacade->recountPrices();
+		$this->redirect('default');
+	}
+
 	// <editor-fold desc="forms">
 
 	/** @return GroupEdit */
@@ -132,6 +143,15 @@ class GroupsPresenter extends BasePresenter
 	public function createComponentGroupsGrid()
 	{
 		$control = $this->iGroupsGridFactory->create();
+		$control->setType(Group::TYPE_DEALER);
+		return $control;
+	}
+
+	/** @return GroupsGrid */
+	public function createComponentBonusGrid()
+	{
+		$control = $this->iGroupsGridFactory->create();
+		$control->setType(Group::TYPE_BONUS);
 		return $control;
 	}
 

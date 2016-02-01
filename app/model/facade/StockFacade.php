@@ -4,6 +4,9 @@ namespace App\Model\Facade;
 
 use App\Extensions\Settings\SettingsStorage;
 use App\Model\Entity\Category;
+use App\Model\Entity\Discount;
+use App\Model\Entity\Group;
+use App\Model\Entity\GroupDiscount;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
@@ -296,6 +299,42 @@ class StockFacade extends Object
 
 		return $qb->getQuery()
 						->getResult(AbstractQuery::HYDRATE_OBJECT);
+	}
+	
+	private function repairGroupsDiscounts()
+	{
+		$groupRepo = $this->em->getRepository(Group::getClassName());
+		$discountRepo = $this->em->getRepository(Discount::getClassName());
+		$groupDiscountRepo = $this->em->getRepository(GroupDiscount::getClassName());
+		
+		$groups = $groupRepo->findBy(['type' => Group::TYPE_BONUS]);
+		foreach ($groups as $group) {
+			/* @var $group Group */
+			/* @var $groupDiscount GroupDiscount */
+			$groupDiscounts = $groupDiscountRepo->findBy(['group' => $group]);
+			foreach ($groupDiscounts as $groupDiscount) {
+				$discount = $groupDiscount->discount;
+				$discount->setValue($group->percentage, Discount::PERCENTAGE);
+				$discountRepo->save($discount);
+			}
+		}
+		
+		return $this;
+	}
+	
+	public function recountPrices()
+	{
+		$this->repairGroupsDiscounts();
+		
+		$stocks = $this->stockRepo->findAll();
+		foreach ($stocks as $stock) {
+			/* @var $stock Stock */
+			$stock->recalculateOtherPrices();
+			$this->em->persist($stock);
+		}
+		$this->em->flush();
+		
+		return $this;
 	}
 
 }

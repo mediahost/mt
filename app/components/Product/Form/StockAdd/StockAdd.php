@@ -6,6 +6,7 @@ use App\Forms\Controls\TextInputBased\MetronicTextInputBase;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicHorizontalFormRenderer;
 use App\Model\Entity\Category;
+use App\Model\Entity\Group;
 use App\Model\Entity\Stock;
 use App\Model\Entity\Unit;
 use App\Model\Entity\Vat;
@@ -122,8 +123,14 @@ class StockAdd extends StockBase
 		$vatRepo = $this->em->getRepository(Vat::getClassName());
 		$vat = $vatRepo->find($values->vat);
 		$this->stock->vat = $vat;
+		
 		$this->stock->setDefaltPrice($values->price, $values->with_vat);
-
+		$groupRepo = $this->em->getRepository(Group::getClassName());
+		$groups = $groupRepo->findBy(['type' => Group::TYPE_BONUS]);
+		foreach ($groups as $group) {
+			$this->stock->addDiscount($group->getDiscount(), $group);
+		}
+		
 		return $this;
 	}
 

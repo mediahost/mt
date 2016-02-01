@@ -89,7 +89,7 @@ class OrderFacade extends Object
 		if (!$newState) {
 			throw new FacadeException('State does not exists.');
 		}
-		
+
 		if ($oldState->type->isLocking(OrderStateType::LOCK_STORNO) &&
 				($newState->type->isLocking(OrderStateType::LOCK_ORDER) ||
 				$newState->type->isLocking(OrderStateType::LOCK_DONE))) {
@@ -206,13 +206,45 @@ class OrderFacade extends Object
 
 	/**
 	 * @param Order $order
-	 * @param $payType
+	 * @param $paymentBlame
 	 */
 	public function payOrder(Order $order, $paymentBlame)
 	{
 		$order->paymentDate = new DateTime();
 		$order->paymentBlame = $paymentBlame;
 		$this->orderRepo->save($order);
+	}
+
+	public function getAllOrders(User $user)
+	{
+		$orderRepo = $this->em->getRepository(Order::getClassName());
+		return $orderRepo->findByMail($user->mail, ['id' => 'DESC']);
+	}
+
+	public function getOrdersSum(User $user, $startDate = NULL)
+	{
+		$conditions = [
+			'mail' => $user->mail,
+		];
+		if ($startDate) {
+			$conditions['createdAt >'] = $startDate;
+		}
+		
+		$orderRepo = $this->em->getRepository(Order::getClassName());
+		$orders = $orderRepo->findBy($conditions, ['id' => 'DESC']);
+		$ordersSum = 0;
+		foreach ($orders as $order) {
+			/* @var $order Order */
+			$ordersSum += $order->getTotalPriceToPay();
+		}
+		
+		return $ordersSum;
+	}
+
+	public function getBonusCount(User $user)
+	{
+		$startDate = new DateTime('2015-11-10 12:13:53');
+		return floor($this->getOrdersSum($user, $startDate));
 	}
 
 }
