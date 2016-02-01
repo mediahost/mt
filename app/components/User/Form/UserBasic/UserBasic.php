@@ -76,7 +76,7 @@ class UserBasic extends BaseControl
 				->setRequired('Select any role');
 
 		$groupRepo = $this->em->getRepository(Group::getClassName());
-		$groups = [NULL => '--- No Group ---'] + $groupRepo->findPairs('name');
+		$groups = [NULL => '--- No Group ---'] + $groupRepo->findPairs(['type' => Group::TYPE_DEALER], 'name');
 		$form->addSelect2('group', 'Group', $groups);
 
 		$roleRepo = $this->em->getRepository(Role::getClassName());
@@ -133,7 +133,8 @@ class UserBasic extends BaseControl
 			$groupRepo = $this->em->getRepository(Group::getClassName());
 			$group = $groupRepo->find($values->group);
 			if ($group) {
-				$this->user->setGroups([$group]);
+				$this->user->clearGroups();
+				$this->user->addGroup($group);
 			}
 		}
 

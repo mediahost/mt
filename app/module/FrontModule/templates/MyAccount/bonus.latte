@@ -1,0 +1,28 @@
+{block breadcrumbItems}
+<li><a n:href="MyAccount:">{_'My Account'}</a></li>
+<li class="active">{_'My Bonus Points'}</li>
+	{/block}
+
+{block content}
+<div class="container">
+	<div class="row">
+
+		{include 'navigation.latte'}
+
+		<!-- BEGIN CONTENT -->
+		<div class="col-md-9 col-sm-7">
+            <h1>{_'My Bonus Points'}</h1>
+            <div class="content-page">
+				<div n:if="$points" class="panel panel-info">
+					<div class="panel-heading">
+						<h3 class="panel-title">{_'Bonus Points'}</h3>
+					</div>
+					<div class="panel-body">
+						{_'You have: %count% bonus point', $points}
+					</div>
+				</div>
+            </div>
+		</div>
+		<!-- END CONTENT -->
+	</div>
+</div>

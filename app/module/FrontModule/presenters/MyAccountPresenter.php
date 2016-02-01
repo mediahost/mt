@@ -77,9 +77,7 @@ class MyAccountPresenter extends BasePresenter
 	 */
 	public function actionOrders()
 	{
-		$orderRepo = $this->em->getRepository(Entity\Order::getClassName());
-		$orders = $orderRepo->findByMail($this->user->identity->mail, ['id' => 'DESC']);
-		$this->template->orders = $orders;
+		$this->template->orders = $this->orderFacade->getAllOrders($this->user->identity);
 	}
 
 	/**
@@ -98,6 +96,16 @@ class MyAccountPresenter extends BasePresenter
 			$this->flashMessage('This order wasn\'t found', 'danger');
 			$this->redirect('orders');
 		}
+	}
+
+	/**
+	 * @secured
+	 * @resource('myAccount')
+	 * @privilege('bonus')
+	 */
+	public function actionBonus()
+	{
+		$this->template->points = $this->orderFacade->getBonusCount($this->user->identity);
 	}
 
 	/**

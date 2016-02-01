@@ -7,6 +7,8 @@ use App\Components\BaseControlException;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Group;
+use App\Model\Facade\StockFacade;
+use Nette\Security\User;
 use Nette\Utils\ArrayHash;
 
 class GroupEdit extends BaseControl
@@ -22,6 +24,12 @@ class GroupEdit extends BaseControl
 
 	// </editor-fold>
 
+	/** @var User @inject */
+	public $user;
+
+	/** @var StockFacade @inject */
+	public $stockFacade;
+
 	/** @return Form */
 	protected function createComponentForm()
 	{
@@ -31,8 +39,16 @@ class GroupEdit extends BaseControl
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
 
-		$form->addText('name', 'Name')
-				->setRequired('Name is required');
+		if ($this->group->isDealerType() || $this->user->isAllowed('groups')) {
+			$form->addText('name', 'Name')
+					->setRequired('Name is required');
+		}
+
+		if ($this->group->isBonusType() && $this->user->isAllowed('groups', 'editBonus')) {
+			$form->addText('percentage', 'Discount')
+					->setRequired('Discount is required')
+					->setAttribute('class', ['mask_percentage']);
+		}
 
 		$form->addSubmit('save', 'Save');
 
@@ -50,7 +66,12 @@ class GroupEdit extends BaseControl
 
 	private function load(ArrayHash $values)
 	{
-		$this->group->name = $values->name;
+		if ($values->name) {
+			$this->group->name = $values->name;
+		}
+		if ($values->percentage) {
+			$this->group->percentage = (float) $values->percentage;
+		}
 		return $this;
 	}
 
@@ -66,6 +87,7 @@ class GroupEdit extends BaseControl
 	{
 		$values = [
 			'name' => $this->group->name,
+			'percentage' => $this->group->percentage,
 		];
 		return $values;
 	}
