@@ -88,7 +88,7 @@ trait UserFacadeSetters
 			$bonusIds->bsc => [1, 1000],
 			$bonusIds->vip => [1001, 2500],
 			$bonusIds->plt => [2501, 5000],
-			$bonusIds->gns => [5000, NULL],
+			$bonusIds->gns => [5001, NULL],
 		];
 
 		$groupRepo = $this->em->getRepository(Group::getClassName());
