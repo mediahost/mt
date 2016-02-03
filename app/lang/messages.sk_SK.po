@@ -1447,3 +1447,33 @@ msgstr "Musí byť medzi %d a %d"
 
 msgid "Must be bigger than %d"
 msgstr "Musí byť väčšia ako %d"
+
+msgid "Bonus Points"
+msgstr "Bonusové body"
+
+msgid "My Bonus Points"
+msgstr "Moje bonusové body"
+
+msgid "You have: %count% bonus point"
+msgstr "Máte: %count% bonusový bod|Máte: %count% bonusové body|Máte: %count% bonusových bodov"
+
+msgid "We offer you a loyalty program to lower prices."
+msgstr "Ponúkame vám vernostný program nižších cien."
+
+msgid "Points count"
+msgstr "Počet bodov"
+
+msgid "Your discount"
+msgstr "Vaša zľava"
+
+msgid "For your every purchase we assign bonus points."
+msgstr "Za každý váš nákup vám pridelíme bonusové body."
+
+msgid "One euro, one point to your account."
+msgstr "Jedno euro, jeden bod na váš účet."
+
+msgid "And to your point, you will have a permanent discount on all products in our range."
+msgstr "A podľa vašich bodov budete mať trvalú zľavu na všetky produkty v našej ponuke."
+
+msgid "Recount prices"
+msgstr "Prepočítať ceny"

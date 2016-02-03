@@ -1491,3 +1491,33 @@ msgstr "Must be between %d and %d"
 
 msgid "Must be bigger than %d"
 msgstr "Must be bigger than %d"
+
+msgid "Bonus Points"
+msgstr "Bonus Points"
+
+msgid "My Bonus Points"
+msgstr "My Bonus Points"
+
+msgid "You have: %count% bonus point"
+msgstr "You have: %count% bonus point|You have: %count% bonus points"
+
+msgid "We offer you a loyalty program to lower prices."
+msgstr "We offer you a loyalty program to lower prices."
+
+msgid "Points count"
+msgstr "Points count"
+
+msgid "Your discount"
+msgstr "Your discount"
+
+msgid "For your every purchase we assign bonus points."
+msgstr "For your every purchase we assign bonus points."
+
+msgid "One euro, one point to your account."
+msgstr "One euro, one point to your account."
+
+msgid "And to your point, you will have a permanent discount on all products in our range."
+msgstr "And to your point, you will have a permanent discount on all products in our range."
+
+msgid "Recount prices"
+msgstr "Recount prices"
