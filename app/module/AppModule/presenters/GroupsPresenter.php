@@ -114,9 +114,9 @@ class GroupsPresenter extends BasePresenter
 	 * @resource('groups')
 	 * @privilege('recountPrices')
 	 */
-	public function handleRecountPrices()
+	public function handleRecountPrices($offset = 0, $limit = 500)
 	{
-		$this->stockFacade->recountPrices();
+		$this->stockFacade->recountPrices($offset, $limit);
 		$this->redirect('default');
 	}
 

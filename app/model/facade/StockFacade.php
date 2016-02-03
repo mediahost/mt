@@ -301,35 +301,18 @@ class StockFacade extends Object
 						->getResult(AbstractQuery::HYDRATE_OBJECT);
 	}
 	
-	private function repairGroupsDiscounts()
+	public function recountPrices($offset = 0, $limit = 500)
 	{
 		$groupRepo = $this->em->getRepository(Group::getClassName());
-		$discountRepo = $this->em->getRepository(Discount::getClassName());
-		$groupDiscountRepo = $this->em->getRepository(GroupDiscount::getClassName());
-		
 		$groups = $groupRepo->findBy(['type' => Group::TYPE_BONUS]);
-		foreach ($groups as $group) {
-			/* @var $group Group */
-			/* @var $groupDiscount GroupDiscount */
-			$groupDiscounts = $groupDiscountRepo->findBy(['group' => $group]);
-			foreach ($groupDiscounts as $groupDiscount) {
-				$discount = $groupDiscount->discount;
-				$discount->setValue($group->percentage, Discount::PERCENTAGE);
-				$discountRepo->save($discount);
-			}
-		}
 		
-		return $this;
-	}
-	
-	public function recountPrices()
-	{
-		$this->repairGroupsDiscounts();
+		$stocks = $this->stockRepo->findBy([], NULL, $limit, $offset);
 		
-		$stocks = $this->stockRepo->findAll();
 		foreach ($stocks as $stock) {
 			/* @var $stock Stock */
-			$stock->recalculateOtherPrices();
+			foreach ($groups as $group) {
+				$stock->addDiscount($group->getDiscount(), $group);
+			}
 			$this->em->persist($stock);
 		}
 		$this->em->flush();
