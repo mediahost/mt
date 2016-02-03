@@ -105,7 +105,7 @@ class MyAccountPresenter extends BasePresenter
 	 */
 	public function actionBonus()
 	{
-		$this->template->points = $this->orderFacade->getBonusCount($this->user->identity);
+		$this->template->points = $this->user->identity->bonusCount;
 	}
 
 	/**

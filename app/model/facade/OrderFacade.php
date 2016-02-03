@@ -2,6 +2,7 @@
 
 namespace App\Model\Facade;
 
+use App\Extensions\Settings\SettingsStorage;
 use App\Model\Entity\Basket;
 use App\Model\Entity\Order;
 use App\Model\Entity\OrderItem;
@@ -32,6 +33,9 @@ class OrderFacade extends Object
 
 	/** @var EntityManager @inject */
 	public $em;
+	
+	/** @var SettingsStorage @inject */
+	public $settings;
 
 	/** @var Translator @inject */
 	public $translator;
@@ -221,15 +225,24 @@ class OrderFacade extends Object
 		return $orderRepo->findByMail($user->mail, ['id' => 'DESC']);
 	}
 
-	public function getOrdersSum(User $user, $startDate = NULL)
+	public function getOrdersSum(User $user, array $stateTypes = [], $startDate = NULL)
 	{
 		$conditions = [
 			'mail' => $user->mail,
 		];
+
+		if (count($stateTypes)) {
+			$orderStateRepo = $this->em->getRepository(OrderState::getClassName());
+			$orderStates = $orderStateRepo->findBy(['type IN' => $stateTypes]);
+			if ($orderStates) {
+				$conditions['state IN'] = $orderStates;
+			}
+		}
+
 		if ($startDate) {
 			$conditions['createdAt >'] = $startDate;
 		}
-		
+
 		$orderRepo = $this->em->getRepository(Order::getClassName());
 		$orders = $orderRepo->findBy($conditions, ['id' => 'DESC']);
 		$ordersSum = 0;
@@ -237,14 +250,20 @@ class OrderFacade extends Object
 			/* @var $order Order */
 			$ordersSum += $order->getTotalPriceToPay();
 		}
-		
+
 		return $ordersSum;
 	}
 
-	public function getBonusCount(User $user)
+	public function getActualBonusCount(User $user)
 	{
-		$startDate = new DateTime('2015-11-10 12:13:53');
-		return floor($this->getOrdersSum($user, $startDate));
+		$bonusSettings = $this->settings->modules->bonus;
+		$startDate = new DateTime($bonusSettings->enabledFrom);
+		$stateTypesIds = [OrderStateType::EXPEDED, OrderStateType::DONE];
+		
+		$orderStateTypeRepo = $this->em->getRepository(OrderStateType::getClassName());
+		$stateTypes = $orderStateTypeRepo->findBy(['id IN' => $stateTypesIds]);
+		
+		return floor($this->getOrdersSum($user, $stateTypes, $startDate));
 	}
 
 }

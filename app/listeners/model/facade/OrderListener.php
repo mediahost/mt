@@ -12,6 +12,7 @@ use App\Model\Entity\Order;
 use App\Model\Entity\OrderState;
 use App\Model\Entity\OrderStateType;
 use App\Model\Facade\OrderFacade;
+use App\Model\Facade\UserFacade;
 use Kdyby\Events\Subscriber;
 use Nette\Object;
 
@@ -20,6 +21,9 @@ class OrderListener extends Object implements Subscriber
 
 	/** @var OrderFacade @inject */
 	public $orderFacade;
+
+	/** @var UserFacade @inject */
+	public $userFacade;
 
 	/** @var SettingsStorage @inject */
 	public $settings;
@@ -90,6 +94,11 @@ class OrderListener extends Object implements Subscriber
 		}
 
 		$this->orderFacade->relockAndRequantityProducts($order, $oldState);
+
+		$user = $order->user ? $order->user : $this->userFacade->findByMail($order->mail);
+		if ($user) {
+			$this->userFacade->recountBonus($user);
+		}
 	}
 
 	public function onChangeProducts(Order $order, array $oldOrderItems)

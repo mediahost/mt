@@ -54,6 +54,15 @@ class SettingsExtension extends CompilerExtension
 					'top' => 3,
 				],
 			],
+			'bonus' => [ // fixed IDs for bonus groups
+				'enabledFrom' => '2016-03-01 00:00:00',
+				'values' => [
+					'bsc' => 1, // basic
+					'vip' => 2, // vip
+					'plt' => 3, // platinum
+					'gns' => 4, // genius
+				],
+			],
 			'pohoda' => [
 				'enabled' => FALSE,
 				'ico' => '',
