@@ -129,11 +129,11 @@ class UserBasic extends BaseControl
 				->setLocale($this->translator->getDefaultLocale())
 				->setCurrency($this->exchange->getDefault()->getCode());
 
+		$this->user->clearGroupsByType(Group::TYPE_DEALER);
 		if ($values->group) {
 			$groupRepo = $this->em->getRepository(Group::getClassName());
 			$group = $groupRepo->find($values->group);
 			if ($group) {
-				$this->user->clearGroups();
 				$this->user->addGroup($group);
 			}
 		}

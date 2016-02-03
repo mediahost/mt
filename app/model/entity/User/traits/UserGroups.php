@@ -53,14 +53,20 @@ trait UserGroups
 		if ($withBonus) {
 			$this->groups->clear();
 		} else {
-			$removeDealer = function ($key, Group $group) {
-				if ($group->type === Group::TYPE_DEALER) {
-					$this->removeGroup($group);
-				}
-				return TRUE;
-			};
-			$this->groups->forAll($removeDealer);
+			$this->clearGroupsByType(Group::TYPE_DEALER);
 		}
+		return $this;
+	}
+
+	public function clearGroupsByType($type = Group::TYPE_DEALER)
+	{
+		$removeDealer = function ($key, Group $group) use ($type) {
+			if ($group->type === $type) {
+				$this->removeGroup($group);
+			}
+			return TRUE;
+		};
+		$this->groups->forAll($removeDealer);
 		return $this;
 	}
 

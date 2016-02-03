@@ -45,6 +45,9 @@ class UserFacade extends Object
 	/** @var Translator @inject */
 	public $translator;
 	
+	/** @var OrderFacade @inject */
+	public $orderFacade;
+	
 	/** @var SubscriberFacade @inject */
 	public $subscriberFacade;
 
@@ -72,6 +75,18 @@ class UserFacade extends Object
 	public function isUnique($mail)
 	{
 		return $this->findByMail($mail) === NULL;
+	}
+	
+	public function recountBonus(User $user)
+	{
+		if ($user->isDealer()) {
+			return $this;
+		}
+		$user->bonusCount = $this->orderFacade->getActualBonusCount($user);
+		$this->userRepo->save($user);
+		
+		$this->setBonusGroup($user);
+		return $this;
 	}
 
 }

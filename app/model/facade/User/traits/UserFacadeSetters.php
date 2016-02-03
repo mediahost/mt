@@ -3,6 +3,7 @@
 namespace App\Model\Facade\Traits;
 
 use App\Model\Entity\Address;
+use App\Model\Entity\Group;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use InvalidArgumentException;
@@ -27,7 +28,7 @@ trait UserFacadeSetters
 			throw new InvalidArgumentException;
 		}
 	}
-	
+
 	public function setAddress(User $user, Address $billing = NULL, Address $shipping = NULL, $removeNull = TRUE)
 	{
 		if ($billing) {
@@ -40,7 +41,7 @@ trait UserFacadeSetters
 			$toDeleteBilling = $user->billingAddress;
 			$user->billingAddress = NULL;
 		}
-		
+
 		if ($shipping) {
 			if (!$user->shippingAddress) {
 				$user->shippingAddress = new Address();
@@ -51,7 +52,7 @@ trait UserFacadeSetters
 			$toDeleteShipping = $user->shippingAddress;
 			$user->shippingAddress = NULL;
 		}
-		
+
 		$this->userRepo->save($user);
 		if ($removeNull) {
 			if (isset($toDeleteBilling)) {
@@ -61,15 +62,48 @@ trait UserFacadeSetters
 				$this->addressRepo->delete($toDeleteShipping);
 			}
 		}
-		
+
 		return $this;
 	}
-	
+
 	public function setDealerWant(User $user, $want = TRUE)
 	{
 		$user->wantBeDealer = $want;
 		$this->userRepo->save($user);
+
+		return $this;
+	}
+
+	public function setBonusGroup(User $user)
+	{
+		$user->clearGroupsByType(Group::TYPE_BONUS);
 		
+		if ($user->isDealer()) {
+			$this->userRepo->save($user);
+			return $this;
+		}
+
+		$bonusIds = $this->settings->modules->bonus->values;
+		$groupLimits = [
+			$bonusIds->bsc => [1, 1000],
+			$bonusIds->vip => [1001, 2500],
+			$bonusIds->plt => [2501, 5000],
+			$bonusIds->gns => [5000, NULL],
+		];
+
+		$groupRepo = $this->em->getRepository(Group::getClassName());
+		$group = NULL;
+		foreach ($groupLimits as $groupId => $limits) {
+			list($min, $max) = $limits;
+			if ($min <= $user->bonusCount && ($user->bonusCount <= $max || $max === NULL)) {
+				$group = $groupRepo->find($groupId);
+			}
+		}
+		if ($group) {
+			$user->addGroup($group);
+		}
+
+		$this->userRepo->save($user);
 		return $this;
 	}
 
