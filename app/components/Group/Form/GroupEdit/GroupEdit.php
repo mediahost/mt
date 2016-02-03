@@ -66,10 +66,10 @@ class GroupEdit extends BaseControl
 
 	private function load(ArrayHash $values)
 	{
-		if ($values->name) {
+		if (isset($values->name) && $values->name) {
 			$this->group->name = $values->name;
 		}
-		if ($values->percentage) {
+		if (isset($values->percentage) && $values->percentage) {
 			$this->group->percentage = (float) $values->percentage;
 		}
 		return $this;
