@@ -1,7 +1,7 @@
 {block breadcrumbItems}
 <li><a n:href="MyAccount:">{_'My Account'}</a></li>
-<li class="active">{_'My Bonus Points'}</li>
-	{/block}
+<li class="active">{_'Bonus Points'}</li>
+{/block}
 
 {block content}
 <div class="container">
@@ -11,16 +11,69 @@
 
 		<!-- BEGIN CONTENT -->
 		<div class="col-md-9 col-sm-7">
-            <h1>{_'My Bonus Points'}</h1>
+            <h1>{_'Bonus Points'}</h1>
             <div class="content-page">
 				<div n:if="$points" class="panel panel-info">
 					<div class="panel-heading">
-						<h3 class="panel-title">{_'Bonus Points'}</h3>
+						<h3 class="panel-title">{_'My Bonus Points'}</h3>
 					</div>
 					<div class="panel-body">
 						{_'You have: %count% bonus point', $points}
 					</div>
 				</div>
+				<p>
+					{_'We offer you a loyalty program to lower prices.'}<br/>
+					<br/>
+					{_'For your every purchase we assign bonus points.'} {_'One euro, one point to your account.'}<br/>
+					{_'And to your point, you will have a permanent discount on all products in our range.'}<br/>
+				</p>
+				<table class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th style="width: 33%"></th>
+							<th style="width: 33%">{_'Points count'}</th>
+							<th style="width: 33%">{_'Your discount'}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>BASIC</td>
+							<td>1 - 1000</td>
+							<td>
+								0.25%
+								<span n:if="1 <= $points && $points <= 1000"
+									  class="badge badge-primary pull-right">{_'Your discount'}</span>
+							</td>
+						</tr>
+						<tr>
+							<td>VIP</td>
+							<td>1001 - 2500</td>
+							<td>
+								0.5%
+								<span n:if="1001 <= $points && $points <= 2500"
+									  class="badge badge-primary pull-right">{_'Your discount'}</span>
+							</td>
+						</tr>
+						<tr>
+							<td>PLATINUM</td>
+							<td>2501 - 5000</td>
+							<td>
+								0.75%
+								<span n:if="2501 <= $points && $points <= 5000"
+									  class="badge badge-primary pull-right">{_'Your discount'}</span>
+							</td>
+						</tr>
+						<tr>
+							<td>GENIUS</td>
+							<td>5001 a více</td>
+							<td>
+								1%
+								<span n:if="5001 <= $points"
+									  class="badge badge-primary pull-right">{_'Your discount'}</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
             </div>
 		</div>
 		<!-- END CONTENT -->
