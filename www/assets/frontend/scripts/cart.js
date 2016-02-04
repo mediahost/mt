@@ -22,6 +22,14 @@ var Cart = function () {
 		}
 	};
 
+	var cartGoodsList = function () {
+		$('.showDiscountInput').on('click', function (e) {
+			e.preventDefault();
+			$('#discountInput').css('display', 'table');
+			$(this).hide();
+		});
+	};
+
 	var cartPayments = function () {
 		$(document).on('change', paymentsInputSelector, function (e) {
 			checkRadio();
@@ -37,6 +45,7 @@ var Cart = function () {
 
 	return {
 		init: function () {
+			cartGoodsList();
 			cartPayments();
 			cartAddress();
 		}

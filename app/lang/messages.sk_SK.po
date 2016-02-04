@@ -1477,3 +1477,6 @@ msgstr "A podľa vašich bodov budete mať trvalú zľavu na všetky produkty v 
 
 msgid "Recount prices"
 msgstr "Prepočítať ceny"
+
+msgid "Insert your discount"
+msgstr "Vložiť vašu zľavu"

@@ -1521,3 +1521,6 @@ msgstr "And to your point, you will have a permanent discount on all products in
 
 msgid "Recount prices"
 msgstr "Recount prices"
+
+msgid "Insert your discount"
+msgstr "Insert your discount"
