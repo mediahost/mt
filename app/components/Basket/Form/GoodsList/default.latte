@@ -117,10 +117,10 @@
 					</li>
 					<li>
 						{if $basket->hasVouchers()}
-						<em>{_'cart.discount'}</em>
-						<strong class="price discount">
-							-{$basket->getDiscountsTotalPrice($priceLevel)|asCurrency:TRUE}
-						</strong>
+							<em>{_'cart.discount'}</em>
+							<strong class="price discount">
+								-{$basket->getDiscountsTotalPrice($priceLevel)|asCurrency:TRUE}
+							</strong>
 						{/if}
 					</li>
 					<li class="shopping-total-price">
@@ -134,14 +134,15 @@
 
 			<div class="insert-discount">
 				<h4>{_'cart.discount'}</h4>
-				<div class="input-group">
+				<a n:href="this#" class="showDiscountInput">{_'Insert your discount'}</a>
+				<div class="input-group display-none" id="discountInput">
 					<div class="input-icon">
 						<i class="fa fa-gift fa-fw"></i>
 						{input $form['voucher']}
 					</div>
 					<span class="input-group-btn">
 						{button insert, class=>'btn btn-primary'}
-							{caption}
+						{caption}
 						{/button}
 					</span>
 				</div>
