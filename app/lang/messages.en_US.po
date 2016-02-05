@@ -250,6 +250,9 @@ msgstr "Basic data"
 msgid "Prices"
 msgstr "Prices"
 
+msgid "Prices for "%name%""
+msgstr "Prices for "%name%""
+
 msgid "Quantity"
 msgstr "Quantity"
 

@@ -139,6 +139,32 @@ class ProductsPresenter extends BasePresenter
 		}
 	}
 
+	/**
+	 * @secured
+	 * @resource('products')
+	 * @privilege('editPrices')
+	 */
+	public function actionEditPrices($id)
+	{
+		$this->stockEntity = $this->stockRepo->find($id);
+		if (!$this->stockEntity || $this->stockEntity->isDeleted()) {
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Product')]);
+			$this->flashMessage($message, 'warning');
+			$this->redirect('default');
+		} else {
+			$this->stockEntity->product->setCurrentLocale($this->locale);
+			$this['stockPriceForm']->setStock($this->stockEntity);
+			$this['stockPriceForm']->onAfterSave = function (Stock $stock) {
+				$message = $this->translator->translate('successfullySaved', NULL, [
+					'type' => $this->translator->translate('Product'), 'name' => (string) $stock
+				]);
+				$this->flashMessage($message, 'success');
+				$this->redirect('default');
+			};
+			$this->template->stock = $this->stockEntity;
+		}
+	}
+
 	public function renderEdit()
 	{
 		$this->template->stock = $this->stockEntity;

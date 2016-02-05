@@ -260,6 +260,9 @@ msgstr "Základné údaje"
 msgid "Prices"
 msgstr "Ceny"
 
+msgid "Prices for "%name%""
+msgstr "Ceny pre "%name%""
+
 msgid "Quantity"
 msgstr "Množstvo"
 
