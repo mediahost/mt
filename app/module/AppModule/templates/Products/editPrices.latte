@@ -1,0 +1,14 @@
+{layout none}
+<div class="portlet light">
+	<div class="portlet-title">
+		<div class="caption font-green-sharp">
+			<i class="fa fa-euro font-green-sharp"></i>
+			<span class="caption-subject bold uppercase">
+				{_'Prices for "%name%"', NULL, ['name' => $stock->product]}
+			</span>
+		</div>
+	</div>
+	<div class="portlet-body form">
+		{control stockPriceForm}
+	</div>
+</div>

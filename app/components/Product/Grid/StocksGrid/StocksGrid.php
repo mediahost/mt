@@ -124,7 +124,13 @@ class StocksGrid extends BaseControl
 		/*		 * ************************************************ */
 		$grid->addColumnNumber('defaultPrice', 'Price')
 				->setCustomRender(function ($row) {
-					return $this->exchange->format($row->price->withoutVat);
+					$link = Html::el('a', [
+								'data-toggle' => 'modal',
+								'data-target' => '#editPrice',
+							])
+							->href($this->presenter->link('editPrices', $row->id))
+							->setText($this->exchange->format($row->price->withoutVat));
+					return $link;
 				})
 				->setCustomRenderExport(function ($row) {
 					return Price::floatToStr($row->price->withoutVat);
@@ -133,7 +139,7 @@ class StocksGrid extends BaseControl
 				->setFilterNumber();
 		$grid->getColumn('defaultPrice')->headerPrototype->style = 'width:110px';
 		$grid->getColumn('defaultPrice')->cellPrototype->style = 'text-align: right';
-		$grid->getColumn('defaultPrice')->cellPrototype->class[] = 'changeOnClick';
+//		$grid->getColumn('defaultPrice')->cellPrototype->class[] = 'changeOnClick'; // commented for link with ajax edit
 		$grid->getColumn('defaultPrice')
 				->setEditableCallback(function ($id, $newValue, $oldValue, $column) {
 					$stockRepo = $this->em->getRepository(Stock::getClassName());
