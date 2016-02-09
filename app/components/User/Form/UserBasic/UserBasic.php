@@ -154,7 +154,7 @@ class UserBasic extends BaseControl
 		$values = [
 			'mail' => $this->user->mail,
 			'roles' => $this->user->getRolesKeys(),
-			'group' => $this->user->group ? $this->user->group->id : NULL,
+			'group' => $this->user->dealerGroup ? $this->user->dealerGroup->id : NULL,
 		];
 		return $values;
 	}
