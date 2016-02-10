@@ -126,6 +126,7 @@ abstract class BaseMessage extends Message
 		} else {
 			parent::addTo($email, $name);
 		}
+		return $this;
 	}
 
 	public function send()
