@@ -1,6 +1,7 @@
 {snippet productPaginator}
 	{if count($stocks)}
-		{var targetSelector => '#snippet-products-productPaginator'}
+		{var loadingSelector => '#snippet-products-productPaginator'}
+		{var moveSelector => '#snippet-products-productList'}
 		<div n:block="count" class="col-md-4 col-sm-4 items-info">
 			{_'Items %begin% to %end% of %count% total', NULL, ['begin' => $paginator->countBegin, 'end' => $paginator->countEnd, 'count' => $paginator->itemCount]}
 		</div>
@@ -9,7 +10,8 @@
 				<li>
 					<a n:href="page! page => $paginator->page - 1" 
 					   n:class="$ajax ? ajax, btn, $paginator->isFirst() ? disabled"
-					   data-target-loading="{$targetSelector}">&laquo;</a>
+					   data-target-loading="{$loadingSelector}"
+					   data-target-move="{$moveSelector}">&laquo;</a>
 				</li>
 				<li n:foreach="$paginator->getSteps() as $step">
 					{if $step == $control->page}
@@ -17,14 +19,16 @@
 					{else}
 						<a n:href="page! page => $step" 
 						   n:class="$ajax ? ajax"
-						   data-target-loading="{$targetSelector}">{$step}</a>
+						   data-target-loading="{$loadingSelector}"
+						   data-target-move="{$moveSelector}">{$step}</a>
 					{/if}
 					<a n:if="$iterator->nextValue > $step + 1" class="btn prompt disabled">...</a>
 				</li>
 				<li>
 					<a n:href="page! page => $paginator->page + 1" 
 					   n:class="$ajax ? ajax, btn, $paginator->isLast() ? disabled"
-					   data-target-loading="{$targetSelector}">&raquo;</a>
+					   data-target-loading="{$loadingSelector}"
+					   data-target-move="{$moveSelector}">&raquo;</a>
 				</li>
 			</ul>
 		</div>
