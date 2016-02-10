@@ -105,8 +105,6 @@ class MyAccountPresenter extends BasePresenter
 	 */
 	public function actionBonus()
 	{
-		\Tracy\Debugger::barDump((string) $this->user->identity->bonusGroup);
-		\Tracy\Debugger::barDump($this->user->identity->bonusGroup->percentage);
 		$this->template->points = $this->user->identity->bonusCount;
 		$this->template->group = $this->user->identity->bonusGroup;
 	}
