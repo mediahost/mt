@@ -34,7 +34,6 @@ class BasketPresenter extends BasePresenter
 				}
 
 				if ($mail) {
-					$mail = 'info@mediahost.sk';
 					$basket->setAccessHash();
 					$message = $this->iUnfinishedMessageFactory->create();
 					$message->addTo($mail)
