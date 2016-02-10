@@ -1460,6 +1460,9 @@ msgstr "Moje bonusové body"
 msgid "You have: %count% bonus point"
 msgstr "Máte: %count% bonusový bod|Máte: %count% bonusové body|Máte: %count% bonusových bodov"
 
+msgid "and you are ranked in group %group%, which entitles you to a discount of %value%% on every product in our e-shop!"
+msgstr "a ste zaradený v skupine %group%, čo Vás oprávňuje k %value%% zľavě z každého produktu na našom e-shope!"
+
 msgid "We offer you a loyalty program to lower prices."
 msgstr "Ponúkame vám vernostný program nižších cien."
 
@@ -1469,8 +1472,8 @@ msgstr "Počet bodov"
 msgid "Your discount"
 msgstr "Vaša zľava"
 
-msgid "For your every purchase we assign bonus points."
-msgstr "Za každý váš nákup vám pridelíme bonusové body."
+msgid "For your every completed purchase we assign bonus points."
+msgstr "Za každý váš prevzatý nákup vám pridelíme bonusové body."
 
 msgid "One euro, one point to your account."
 msgstr "Jedno euro, jeden bod na váš účet."
