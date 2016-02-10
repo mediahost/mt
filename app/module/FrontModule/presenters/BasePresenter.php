@@ -275,7 +275,7 @@ abstract class BasePresenter extends BaseBasePresenter
 		$list = $this->iProductListFactory->create();
 		$list->setTranslator($this->translator);
 		$list->setExchange($this->exchange, $this->exchange->getWeb());
-		$list->setItemsPerPage($this->settings->pageConfig->rowsPerPage, $this->settings->pageConfig->itemsPerRow);
+		$list->setItemsPerPage($this->settings->pageConfig->itemsPerRow, $this->settings->pageConfig->rowsPerPage);
 
 		$list->setAjax();
 		$list->setPriceLevel($this->priceLevel);
