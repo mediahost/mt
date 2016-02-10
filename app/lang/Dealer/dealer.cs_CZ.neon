@@ -1,0 +1,5 @@
+# E-mail messages
+email:
+	our:
+		subject: 'Požadavek být dealerem'
+		notification: 'Uživatel "%mail%" má zájem být dealerem.'

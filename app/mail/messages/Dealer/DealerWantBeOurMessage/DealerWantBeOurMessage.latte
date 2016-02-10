@@ -1,0 +1,17 @@
+{layout '../../@layout.latte'}
+
+{block subtitle}
+<font size="+1" color="#00285A">{_dealer.email.our.subject}</font>
+{/block}
+
+{block content}      
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+    <tbody>
+        <tr>
+            <td>
+                <p>{_dealer.email.our.notification, NULL, ['mail' => $dealer]}</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{/block}
