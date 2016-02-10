@@ -34,19 +34,22 @@
 				return;
 			}
 
-			var targetAttr = 'data-target-loading';
+			var moveTargetAttr = 'data-target-move';
+			this.moveTarget = $(settings.nette.el.attr(moveTargetAttr));
+
+			var loadingTargetAttr = 'data-target-loading';
 			var parentPortlet = null;
 			if (settings.nette.form && settings.nette.form.length) {
 				var form = settings.nette.form;
-				if (form.attr(targetAttr)) {
-					this.element = $(form.attr(targetAttr));
+				if (form.attr(loadingTargetAttr)) {
+					this.element = $(form.attr(loadingTargetAttr));
 					var parentPortlet = this.element;
 				} else {
 					this.element = settings.nette.form;
 					var parentPortlet = this.element.closest('.portlet');
 				}
-			} else if (settings.nette.el.attr(targetAttr)) {
-				var parentPortlet = $(settings.nette.el.attr(targetAttr));
+			} else if (settings.nette.el.attr(loadingTargetAttr)) {
+				var parentPortlet = $(settings.nette.el.attr(loadingTargetAttr));
 			} else {
 				var parentPortlet = settings.nette.el.closest('.portlet');
 			}
@@ -64,9 +67,13 @@
 		},
 		complete: function () {
 			Metronic.unblockUI(this.element);
+			if (this.moveTarget) {
+				$(document).scrollTop((this.moveTarget.offset().top - 20));
+			}
 		}
 	}, {
-		element: undefined
+		element: undefined,
+		moveTarget: undefined
 	});
 
 })(jQuery);
