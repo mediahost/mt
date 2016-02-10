@@ -19,12 +19,13 @@
 					</div>
 					<div class="panel-body">
 						{_'You have: %count% bonus point', $points}
+						{_'and you are ranked in group %group%, which entitles you to a discount of %value%% on every product in our e-shop!', NULL, ['group' => $group, 'value' => $group->percentage]}
 					</div>
 				</div>
 				<p>
 					{_'We offer you a loyalty program to lower prices.'}<br/>
 					<br/>
-					{_'For your every purchase we assign bonus points.'} {_'One euro, one point to your account.'}<br/>
+					{_'For your every completed purchase we assign bonus points.'} {_'One euro, one point to your account.'}<br/>
 					{_'And to your point, you will have a permanent discount on all products in our range.'}<br/>
 				</p>
 				<table class="table table-bordered table-striped">
