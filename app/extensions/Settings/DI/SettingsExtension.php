@@ -109,6 +109,7 @@ class SettingsExtension extends CompilerExtension
 			'dealer' => [
 				'enabled' => FALSE,
 				'pageId' => 1, // ID of page in pages to show as basic info
+				'email' => 'dealer@example.sk',
 			],
 			'buyout' => [
 				'enabled' => FALSE,

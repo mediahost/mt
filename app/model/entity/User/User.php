@@ -16,6 +16,7 @@ use Nette\Security\IIdentity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Model\Repository\UserRepository")
+ * @ORM\EntityListeners({"App\Listeners\Model\Entity\UserListener"})
  *
  * @property string $mail
  * @property Group $group

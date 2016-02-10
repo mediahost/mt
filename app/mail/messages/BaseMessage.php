@@ -13,6 +13,7 @@ use Nette\Application\UI\ITemplateFactory;
 use Nette\Http\Request;
 use Nette\Mail\IMailer;
 use Nette\Mail\Message;
+use Nette\Utils\ArrayHash;
 
 abstract class BaseMessage extends Message
 {
@@ -88,13 +89,13 @@ abstract class BaseMessage extends Message
 
 		return parent::build();
 	}
-	
+
 	protected function changeLocale($locale)
 	{
 		$this->oldLocale = $this->translator->getLocale();
 		$this->translator->setLocale($locale);
 	}
-	
+
 	protected function changeCurrency($currency, $rate = NULL)
 	{
 		$this->exchange->setWeb($currency);
@@ -113,6 +114,17 @@ abstract class BaseMessage extends Message
 	{
 		if ($this->oldLocale) {
 			$this->translator->setLocale($this->oldLocale);
+		}
+	}
+
+	public function addTo($email, $name = NULL)
+	{
+		if (is_array($email) || $email instanceof ArrayHash) {
+			foreach ($email as $mail) {
+				parent::addTo($mail);
+			}
+		} else {
+			parent::addTo($email, $name);
 		}
 	}
 
@@ -135,7 +147,7 @@ abstract class BaseMessage extends Message
 	{
 		$this->isNewsletter = TRUE;
 		$this->unsubscribeLink = $unsubscribeLink;
-		
+
 		return $this;
 	}
 
@@ -145,7 +157,7 @@ abstract class BaseMessage extends Message
 		$this->addParameter('order', $order);
 		$this->changeLocale($order->locale);
 		$this->changeCurrency($order->currency, $order->rate);
-		
+
 		return $this;
 	}
 
