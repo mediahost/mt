@@ -67,7 +67,7 @@
 		},
 		complete: function () {
 			Metronic.unblockUI(this.element);
-			if (this.moveTarget) {
+			if (this.moveTarget.length) {
 				$(document).scrollTop((this.moveTarget.offset().top - 20));
 			}
 		}
