@@ -159,7 +159,12 @@ class ProductsPresenter extends BasePresenter
 					'type' => $this->translator->translate('Product'), 'name' => (string) $stock
 				]);
 				$this->flashMessage($message, 'success');
-				$this->redirect('default');
+				
+				if ($this->isAjax()) {
+					// do something when ajax
+				} else {
+					$this->redirect('default');
+				}
 			};
 			$this->template->stock = $this->stockEntity;
 		}

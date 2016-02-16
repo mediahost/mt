@@ -31,6 +31,7 @@ var GlobalCustomInit = function () {
 		},
 		onReloadModalEvent: function () {
 			this.initFormComponents();
+			$.nette.load();
 			Nette.initAllForms();
 		},
 		onReloadProductList: function () {
