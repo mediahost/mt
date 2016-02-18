@@ -6,6 +6,8 @@ subject:
 	createOrder: 'Vaša objednávka č.%id%'
 	createOrderShop: 'Nová objednávka č.%id%'
 	unfinished: 'Nedokončená objednávka'
+	available: 'Naskladnenie tovaru'
+	loweredPrice: 'Zmena ceny tovaru'
 basket:
 	salutation: 'Pekný deň,'
 	unfinished: 'Hovorí sa, že v živote neľutujeme veci, ktoré sme urobili, ale tie, ktoré sme neskúsili. Snáď vaša nedokončená objednávka nebude jednou z nich. Ešte to môžete zmeniť!'
@@ -28,3 +30,8 @@ order:
 			hasBeenExpeded: 'Vaša objednávka bola expedovaná.'
 	new:
 		recieved: 'ďakujeme Vám za Váš nákup, práve sme prijali vašu objednávku.'
+watchdog:
+	salutation: 'Pekný deň,'
+	available: 'práve bol naskladnený produkt, o ktorý ste prejavili záujem. Radi vám umožníme jeho nákup na našich stránkach.'
+	loweredPrice: 'práve došlo k zníženie ceny výrobku pod cenu, ktorú ste si priali. Radi vám umožníme nákup za túto cenu.'
+	visit: 'Prejsť na tovar'

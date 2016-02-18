@@ -12,6 +12,7 @@ use Nette\Utils\DateTime;
 
 /**
  * @ORM\Entity(repositoryClass="App\Model\Repository\StockRepository")
+ * @ORM\EntityListeners({"App\Listeners\Model\Entity\StockListener"})
  *
  * @property Product $product
  * @property Variant $variant1
@@ -73,11 +74,15 @@ class Stock extends BaseEntity
 	
 	/** @ORM\Column(type="datetime", nullable=true) */
     protected $updatedPohodaDataAt;
+	
+	/** @ORM\OneToMany(targetEntity="WatchDog", mappedBy="stock") */
+	protected $watchDogs;
 
 	public function __construct()
 	{
 		$this->product = new Product();
 		$this->groupDiscounts = new ArrayCollection();
+		$this->watchDogs = new ArrayCollection();
 		parent::__construct();
 	}
 

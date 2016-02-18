@@ -99,5 +99,8 @@ services:
 	- {implement: App\Components\Payments\Form\IShippingEditFactory, inject: yes}
 	- {implement: App\Components\Payments\Form\IPaymentEditFactory, inject: yes}
 
+	# WatchDog
+	- {implement: App\Components\WatchDog\Form\IWatchDogFactory, inject: yes}
+
 	# Example
 	- {implement: App\Components\Example\Form\IExampleFormFactory, inject: yes}

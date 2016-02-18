@@ -6,6 +6,7 @@ services:
 	- {class: App\Listeners\Model\Entity\ImageListener, inject: yes}
 	- {class: App\Listeners\Model\Entity\RateListener, inject: yes}
 	- {class: App\Listeners\Model\Entity\ProductListener, inject: yes}
+	- {class: App\Listeners\Model\Entity\StockListener, inject: yes}
 	- {class: App\Listeners\Model\Entity\CategoryListener, inject: yes}
 	- {class: App\Listeners\Model\Entity\PageListener, inject: yes}
 	- {class: App\Listeners\Model\Entity\UserListener, inject: yes}

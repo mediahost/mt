@@ -63,6 +63,12 @@
 								{else}
 									<strong>{_'Temporarily Sold Out'}</strong>
 								{/if}
+								<div class="watchdog">
+									<a href="#watchdog" data-toggle="modal">
+										<span class="fa fa-bar-chart-o"></span>
+										{_'Watch Price'}
+									</a>
+								</div>
 							</div>
 						</div>
 						<div class="product-page-perex" n:if="$product->perex">
@@ -140,6 +146,18 @@
 
 	</div>
 	<!-- END SIDEBAR & CONTENT -->
+</div>
+
+<div class="modal fade" id="watchdog" tabindex="-1" role="basic" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h4 class="modal-title">{_'Set Reminder'}</h4>
+			</div>
+			{control watchDog:modal}
+		</div>
+	</div>
 </div>
 {/block}
 
