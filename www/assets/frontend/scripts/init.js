@@ -23,7 +23,10 @@ jQuery(document).ready(function () {
 });
 
 $.nette.ext('netteAjax', {
-	complete: function () {
+	complete: function (r, t, params) {
+		if (params.nette.el.attr('data-dismiss-after')) {
+			params.nette.el.closest('.modal').find('[data-dismiss="modal"]').click();
+		}
 		GlobalCustomInit.onReloadProductList();
 		Layout.initOWL();
 		Frontend.afterComplete();

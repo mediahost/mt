@@ -1,0 +1,34 @@
+{form form}
+	<div class="modal-body">
+		
+		<div class="form-group">
+			<label class="control-label">{_'I want to be informed'}:</label>
+		</div>
+		
+		<div class="form-group">
+			{input checkAvailable}
+			{label checkAvailable /}
+		</div>
+		
+		<div class="form-inline form-group">
+			{input checkPrice}
+			{label checkPrice /}
+			{input price, class => 'form-control mask_currency input-small'}
+			<label for="frm-watchDog-form-price" class="control-label">({_'incl. VAT'})</label>
+		</div>
+
+		<div class="form-group">
+			{var label = $form->renderer->renderPureLabel($form['mail'])}
+			{var label->class[] = 'control-label'}
+			{$label}
+			<div>
+				{input mail, class => 'form-control'}
+			</div>
+		</div>
+			
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn default" data-dismiss="modal">{_'Cancel'}</button>
+		{button submit, class => 'btn blue', data-dismiss-after => 'true'}{caption}{/button}
+	</div>
+{/form}

@@ -4,6 +4,8 @@ namespace App\FrontModule\Presenters;
 
 use App\Components\Basket\Form\AddToCart;
 use App\Components\Basket\Form\IAddToCartFactory;
+use App\Components\WatchDog\Form\IWatchDogFactory;
+use App\Components\WatchDog\Form\WatchDog;
 use App\Extensions\Products\ProductList;
 use App\Model\Entity\Parameter;
 use App\Model\Entity\Stock;
@@ -16,6 +18,9 @@ class ProductPresenter extends BasePresenter
 
 	/** @var IAddToCartFactory @inject */
 	public $iAddToCartFactory;
+
+	/** @var IWatchDogFactory @inject */
+	public $iWatchDogFactory;
 
 	/** @var Stock */
 	public $stock;
@@ -113,6 +118,23 @@ class ProductPresenter extends BasePresenter
 		$control->onAfterAdd = function ($quantity) {
 			if ($this->isAjax()) {
 				$this->redrawControl();
+			}
+		};
+		return $control;
+	}
+
+	/** @return WatchDog */
+	public function createComponentWatchDog()
+	{
+		$control = $this->iWatchDogFactory->create();
+		$control->setStock($this->stock, $this->priceLevel);
+		$control->setAjax(TRUE);
+		$control->onAfterSubmit = function () {
+			$this->flashMessage($this->translator->translate('Watching was saved.'));
+			if ($this->isAjax()) {
+				$this->redrawControl();
+			} else {
+				$this->redirect('this');
 			}
 		};
 		return $control;

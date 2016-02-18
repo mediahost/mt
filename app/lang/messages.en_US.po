@@ -1530,3 +1530,33 @@ msgstr "Recount prices"
 
 msgid "Insert your discount"
 msgstr "Insert your discount"
+
+msgid "Watch Price"
+msgstr "Watch Price/Availability"
+
+msgid "Set Reminder"
+msgstr "Set Reminder"
+
+msgid "I want to be informed"
+msgstr "I want to be informed"
+
+msgid "Check available"
+msgstr "When the goods are available"
+
+msgid "Check price"
+msgstr "When a price is lower than"
+
+msgid "incl. VAT"
+msgstr "incl. VAT"
+
+msgid "By Email to"
+msgstr "By Email to"
+
+msgid "Confirm"
+msgstr "Confirm"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Watching was saved."
+msgstr "Watching was saved."

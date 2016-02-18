@@ -1488,3 +1488,33 @@ msgstr "Přepočítat ceny"
 
 msgid "Insert your discount"
 msgstr "Vložit vaši slevu"
+
+msgid "Watch Price"
+msgstr "Sledovat cenu"
+
+msgid "Set Reminder"
+msgstr "Nastavit hlídání"
+
+msgid "I want to be informed"
+msgstr "Chci být informovaný"
+
+msgid "Check available"
+msgstr "Když bude produkt skladem"
+
+msgid "Check price"
+msgstr "Při snížení ceny pod"
+
+msgid "incl. VAT"
+msgstr "s DPH"
+
+msgid "By Email to"
+msgstr "Na Email"
+
+msgid "Confirm"
+msgstr "Potvrdit"
+
+msgid "Cancel"
+msgstr "Zavřít"
+
+msgid "Watching was saved."
+msgstr "Hlídání bylo uloženo."

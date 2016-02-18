@@ -1,0 +1,81 @@
+{layout '../../@layout.latte'}
+
+{block content}
+<table class="container content" align="left" width="100%">
+	<tr>
+		<td>
+			<table class="row note">
+				<tr>
+					<td class="wrapper">
+						<p>
+							{_'mail.watchdog.salutation'}<br>
+							<br>
+							{_'mail.watchdog.loweredPrice'}
+						</p>
+						<br/>
+					</td>
+				</tr>
+			</table>
+
+			<table width="100%" border="0" cellpadding="2" cellspacing="0">
+				<tbody>
+					<tr>
+						{var product => $stock->product}
+						{? $product->setCurrentLocale($locale)}
+						<td>
+							<img src="{$basePath}/foto/{$product->image|size:'100'}" alt="{$product->name}" border="0">
+						</td>
+						<td style="padding:5px 0px">
+							<a n:href="{$colon}Front:Product: id => $stock->id" style="text-decoration:none;" target="_blank">
+								<font color="#00275A"><b>{$product->name}</b></font>
+							</a>
+						</td>
+						<td style="padding:5px 10px 0px 0px" align="right">
+							<b><font color="#398000">{$stock->price|currencyVat}</font></b>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<br/>
+			<br/>
+
+			<table width="100%" border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td>
+						<div>
+							<!--[if mso]>
+							  <v:roundrect 
+								xmlns:v="urn:schemas-microsoft-com:vml"
+								xmlns:w="urn:schemas-microsoft-com:office:word"
+								n:href="{$colon}Front:Product: id => $stock->id"
+								style="height:36px;v-text-anchor:middle;width:250px;"
+								arcsize="5%"
+								strokecolor="#2795D4"
+								fillcolor="#2795D4">
+								<w:anchorlock/>
+								<center style="color:#ffffff;font-family: arial,sans-serif;font-size:16px;">{_'mail.watchdog.visit'}</center>
+							  </v:roundrect>
+							<![endif]-->
+							<a n:href="{$colon}Front:Product: id => $stock->id"
+							   style="background-color:#2795D4;
+							   border:1px solid #2795D4;
+							   border-radius:3px;
+							   color:#ffffff;
+							   display:inline-block;
+							   font-family: arial,sans-serif;
+							   font-size:16px;
+							   line-height:44px;
+							   text-align:center;
+							   text-decoration:none;
+							   width:250px;
+							   -webkit-text-size-adjust:none;
+							   mso-hide:all;">
+								{_'mail.watchdog.visit'}
+							</a>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>

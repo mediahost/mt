@@ -31,14 +31,14 @@ class ProductListener extends Object implements Subscriber
 
 	public function prePersist($params)
 	{
-		if ($this->hasChange($params)) {
+		if ($this->hasChangeName($params)) {
 			$this->clearCache();
 		}
 	}
 
 	public function preUpdate($params)
 	{
-		if ($this->hasChange($params)) {
+		if ($this->hasChangeName($params)) {
 			$this->clearCache();
 		}
 	}
@@ -50,7 +50,7 @@ class ProductListener extends Object implements Subscriber
 
 	// </editor-fold>
 
-	private function hasChange($entity)
+	private function hasChangeName($entity)
 	{
 		$uow = $this->em->getUnitOfWork();
 		$changes = $uow->getEntityChangeSet($entity);
