@@ -31,4 +31,27 @@ class BasketRepository extends BaseRepository
 						->getResult();
 	}
 
+	public function findEmpty($olderThan = NULL)
+	{
+		$emptyCriteria = [
+			'user' => NULL,
+			'shipping' => NULL,
+			'payment' => NULL,
+			'shippingAddress' => NULL,
+			'billingAddress' => NULL,
+			'mail' => NULL,
+			'sendedMailAt' => NULL,
+			'accessHash' => NULL,
+		];
+		if ($olderThan) {
+			$emptyCriteria['createdAt <='] = new DateTime('-' . $olderThan);
+		}
+
+		$qb = $this->createQueryBuilder('b')
+				->whereCriteria($emptyCriteria);
+
+		return $qb->getQuery()
+						->getResult();
+	}
+
 }
