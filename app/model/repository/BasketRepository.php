@@ -44,13 +44,26 @@ class BasketRepository extends BaseRepository
 			'accessHash' => NULL,
 		];
 		if ($olderThan) {
-			$emptyCriteria['createdAt <='] = new DateTime('-' . $olderThan);
+			$emptyCriteria['updatedAt <='] = new DateTime('-' . $olderThan);
 		}
 
 		$qb = $this->createQueryBuilder('b')
+				->setMaxResults(10000)
 				->whereCriteria($emptyCriteria);
 
 		return $qb->getQuery()
+						->getResult();
+	}
+
+	public function findOlders($olderThan)
+	{
+		$criteria['updatedAt <='] = new DateTime('-' . $olderThan);
+
+		$qb = $this->createQueryBuilder('b')
+				->whereCriteria($criteria);
+
+		return $qb->getQuery()
+						->setMaxResults(10000)
 						->getResult();
 	}
 

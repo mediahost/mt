@@ -22,6 +22,7 @@ class BasketFacade extends Object
 {
 
 	const KEEP_EMPTY_BASKETS = '1 months';
+	const KEEP_BASKETS = '3 months';
 
 	/** @var EntityManager @inject */
 	public $em;
@@ -108,7 +109,7 @@ class BasketFacade extends Object
 		if (!$voucher->active) {
 			throw new Exception\BasketFacadeException('cart.voucher.inactive');
 		}
-		
+
 		try {
 			$basket = $this->getBasket();
 			$basket->addVoucher($voucher, $level);
@@ -362,10 +363,20 @@ class BasketFacade extends Object
 		$basket = $this->getBasket();
 		return (bool) $basket->getVouchersCount();
 	}
-	
-	public function clearOldEmptyBaskets()
+
+	public function removeOldEmptyBaskets()
 	{
 		$emptyBaskets = $this->basketRepo->findEmpty(self::KEEP_EMPTY_BASKETS);
+
+		foreach ($emptyBaskets as $basket) {
+			$this->em->remove($basket);
+		}
+		$this->em->flush();
+	}
+
+	public function removeOldBaskets()
+	{
+		$emptyBaskets = $this->basketRepo->findOlders(self::KEEP_BASKETS);
 
 		foreach ($emptyBaskets as $basket) {
 			$this->em->remove($basket);
