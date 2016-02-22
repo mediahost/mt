@@ -88,7 +88,8 @@ class StockPrice extends StockBase
 		$form->addText('old', 'Old price')
 				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
 
-		$form->addSubmit('save', 'Save');
+		$form->addSubmit('save', 'Save')
+				->setAttribute('data-dismiss-after', 'true');
 
 		$form->setDefaults($this->getDefaults());
 		$form->onSuccess[] = $this->formSucceeded;

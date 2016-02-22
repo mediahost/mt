@@ -23,7 +23,7 @@ jQuery(document).ready(function () {
 });
 
 $.nette.ext('netteAjax', {
-	complete: function (r, t, params) {
+	complete: function (payload, t, params) {
 		if (params.nette.el.attr('data-dismiss-after')) {
 			params.nette.el.closest('.modal').find('[data-dismiss="modal"]').click();
 		}

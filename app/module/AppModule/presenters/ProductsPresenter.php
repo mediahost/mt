@@ -160,9 +160,7 @@ class ProductsPresenter extends BasePresenter
 				]);
 				$this->flashMessage($message, 'success');
 				
-				if ($this->isAjax()) {
-					// do something when ajax
-				} else {
+				if (!$this->isAjax()) {
 					$this->redirect('default');
 				}
 			};
