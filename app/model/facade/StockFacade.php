@@ -4,9 +4,7 @@ namespace App\Model\Facade;
 
 use App\Extensions\Settings\SettingsStorage;
 use App\Model\Entity\Category;
-use App\Model\Entity\Discount;
 use App\Model\Entity\Group;
-use App\Model\Entity\GroupDiscount;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
