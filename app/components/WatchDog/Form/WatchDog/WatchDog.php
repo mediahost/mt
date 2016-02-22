@@ -46,7 +46,10 @@ class WatchDog extends BaseControl
 			$form->getElementPrototype()->class('ajax loadingNoOverlay');
 		}
 
-		$form->addCheckbox('checkAvailable', 'Check available');
+		$available = $form->addCheckbox('checkAvailable', 'Check available');
+		if ($this->stock->inStore) {
+			$available->setDisabled();
+		}
 		$form->addCheckbox('checkPrice', 'Check price');
 
 		$form->addText('price', 'Price')
@@ -65,14 +68,15 @@ class WatchDog extends BaseControl
 
 	public function formSucceeded(Form $form, $values)
 	{
-		$price = $values->checkPrice ? Price::strToFloat($values->price) : NULL;
+		$price = isset($values->checkPrice) && $values->checkPrice ? Price::strToFloat($values->price) : NULL;
 		$exchWebCode = $this->exchange->getWeb()->getCode();
 		$exchDefaultCode = $this->exchange->getDefault()->getCode();
 		if ($price && $exchWebCode !== $exchDefaultCode) {
 			$changedPrice = $this->exchange->change($price, $exchWebCode, $exchDefaultCode);
 			$price = round($changedPrice, Price::PRECISION);
 		}
-		$this->watchDogFacade->add($this->stock, $values->mail, $values->checkAvailable, $price, $this->priceLevel);
+		$availability = isset($values->checkAvailable) ? $values->checkAvailable : NULL;
+		$this->watchDogFacade->add($this->stock, $values->mail, $availability, $price, $this->priceLevel);
 		$this->onAfterSubmit();
 	}
 
