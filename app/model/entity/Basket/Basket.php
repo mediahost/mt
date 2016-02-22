@@ -42,10 +42,10 @@ class Basket extends BaseEntity
 	/** @ORM\OneToOne(targetEntity="User", inversedBy="basket", fetch="LAZY") */
 	protected $user;
 
-	/** @ORM\OneToMany(targetEntity=BasketItemm", mappedBy="basket", cascade={"persist", "remove"}, orphanRemoval=true) */
+	/** @ORM\OneToMany(targetEntity="BasketItem", mappedBy="basket", cascade={"persist", "remove"}, orphanRemoval=true) */
 	protected $items;
 
-	/** @ORM\ManyToMany(targetEntity=Voucherr") */
+	/** @ORM\ManyToMany(targetEntity="Voucher") */
 	protected $vouchers;
 
 	/** @ORM\Column(type="datetime") */
