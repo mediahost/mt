@@ -4,6 +4,7 @@ namespace App\CronModule\Presenters;
 
 use App\Mail\Messages\Basket\IUnfinishedMessageFactory;
 use App\Model\Entity\Basket;
+use App\Model\Repository\BasketRepository;
 use DateTime;
 use Nette\Mail\SendException;
 use Tracy\Debugger;
@@ -19,6 +20,7 @@ class BasketPresenter extends BasePresenter
 	{
 		$this->status = parent::STATUS_OK;
 
+		/* @var $basketRepo BasketRepository */
 		$basketRepo = $this->em->getRepository(Basket::getClassName());
 		$baskets = $basketRepo->findUnfinished();
 
@@ -27,21 +29,20 @@ class BasketPresenter extends BasePresenter
 				/* @var $basket Basket */
 				if ($basket->user && $basket->user->locale) {
 					$this->translator->setLocale($basket->user->locale);
-					$mail = $basket->user->mail;
 				} else {
 					$this->translator->setLocale($this->translator->getDefaultLocale());
-					$mail = $basket->mail;
 				}
 
-				if ($mail) {
+				if ($basket->mail) {
 					$basket->setAccessHash();
 					$message = $this->iUnfinishedMessageFactory->create();
-					$message->addTo($mail)
+					$message->addTo($basket->mail)
 							->addParameter('basket', $basket)
 							->addParameter('link', $this->link('//:Front:Cart:uncomplete', ['cart' => $basket->accessHash]));
 
 					try {
 						$message->send();
+						$basket->sendedMailAt = new DateTime();
 					} catch (SendException $e) {
 						$this->status = parent::STATUS_ERROR;
 						$this->message = 'One or more messages has not been sent, see log.';
@@ -49,7 +50,6 @@ class BasketPresenter extends BasePresenter
 					}
 				}
 
-				$basket->sendedMailAt = new DateTime();
 				$this->em->flush($basket);
 			}
 

@@ -17,6 +17,7 @@ class BasketRepository extends BaseRepository
 		$criteria = [
 			'changeItemsAt >=' => new DateTime($init),
 			'changeItemsAt <=' => new DateTime('-' . $minusTime),
+			'mail NOT' => NULL,
 			'sendedMailAt' => NULL,
 		];
 

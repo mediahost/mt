@@ -49,7 +49,7 @@ class Basket extends BaseEntity
 	protected $vouchers;
 
 	/** @ORM\Column(type="datetime") */
-    private $changeItemsAt;
+	private $changeItemsAt;
 
 	/** @ORM\ManyToOne(targetEntity="Shipping") */
 	protected $shipping;
@@ -67,7 +67,7 @@ class Basket extends BaseEntity
 	protected $shippingAddress;
 
 	/** @ORM\Column(type="datetime", nullable=true) */
-    protected $sendedMailAt;
+	protected $sendedMailAt;
 
 	public function __construct(User $user = NULL)
 	{
@@ -83,6 +83,9 @@ class Basket extends BaseEntity
 	public function setUser(User $user)
 	{
 		$this->user = $user;
+		if ($user->mail) {
+			$this->setMail($user->mail);
+		}
 		$user->basket = $this;
 		$this->resetChangeItemsAt();
 		return $this;
@@ -118,19 +121,19 @@ class Basket extends BaseEntity
 			$item->quantity = $quantity;
 			$this->items->add($item);
 		}
-		
+
 		$this->resetChangeItemsAt(FALSE);
-		
+
 		return $this;
 	}
-	
+
 	public function setMail($mail)
 	{
 		$this->mail = $mail;
 		$this->resetChangeItemsAt();
 		return $this;
 	}
-	
+
 	public function resetChangeItemsAt($checkItemsCount = TRUE)
 	{
 		if (!$checkItemsCount || ($checkItemsCount && $this->items && $this->items->count())) {
@@ -138,23 +141,23 @@ class Basket extends BaseEntity
 		}
 		return $this;
 	}
-	
+
 	public function addVoucher(Voucher $voucher, $level = NULL)
 	{
 		if ($this->vouchers->contains($voucher)) {
 			throw new EntityException('cart.voucher.alreadyInCart');
 		}
-		
+
 		$this->checkVoucherConditions($voucher, $level);
-		
+
 		$this->vouchers->add($voucher);
 		return $this;
 	}
-	
+
 	private function checkVoucherConditions(Voucher $voucher, $level = NULL)
 	{
 		$itemsTotalSum = $this->getItemsTotalPrice(NULL, $level);
-		
+
 		if (round($this->getVouchersTotalPrice()) >= $itemsTotalSum) {
 			throw new EntityException('cart.voucher.sumIsHigherThanProducts');
 		}
@@ -170,7 +173,7 @@ class Basket extends BaseEntity
 				throw new EntityException('cart.voucher.notAllowed');
 		}
 	}
-	
+
 	public function removeVoucher(Voucher $voucher)
 	{
 		if ($this->vouchers->contains($voucher)) {
@@ -178,18 +181,18 @@ class Basket extends BaseEntity
 		}
 		return $this;
 	}
-	
+
 	public function setAccessHash()
 	{
 		$this->accessHash = Random::generate(32);
 		return $this;
 	}
-	
+
 	public function hasPayments()
 	{
 		return $this->shipping && $this->payment;
 	}
-	
+
 	public function hasAddress()
 	{
 		if (!$this->hasPayments()) {
@@ -203,7 +206,7 @@ class Basket extends BaseEntity
 		}
 		return TRUE;
 	}
-	
+
 	public function hasItemInSpecialCategory()
 	{
 		$specialCategories = Category::getSpecialCategories();
@@ -212,7 +215,7 @@ class Basket extends BaseEntity
 		};
 		return $this->items->exists($isInSpecialCategory);
 	}
-	
+
 	public function getSumOfItemsInSpecialCategory($level = NULL, $withVat = FALSE)
 	{
 		$sum = 0;
@@ -220,19 +223,19 @@ class Basket extends BaseEntity
 		$isInSpecialCategory = function ($key, BasketItem $item) use ($specialCategories, &$sum, $level, $withVat) {
 			if ($item->stock->product->isInCategories($specialCategories)) {
 				$price = $item->stock->getPrice($level);
-				$sum += ($withVat ? $price->withVat : $price->withoutVat)  * $item->quantity;
+				$sum += ($withVat ? $price->withVat : $price->withoutVat) * $item->quantity;
 			}
 			return TRUE;
 		};
 		$this->items->forAll($isInSpecialCategory);
 		return $sum;
 	}
-	
+
 	public function needAddress()
 	{
 		return $this->shipping && $this->shipping->needAddress;
 	}
-	
+
 	public function getShippingAddress($realShipping = FALSE)
 	{
 		if ($realShipping) {
@@ -245,12 +248,12 @@ class Basket extends BaseEntity
 			return $this->shippingAddress;
 		}
 	}
-	
+
 	public function getPhone()
 	{
 		return $this->billingAddress ? $this->billingAddress->phone : NULL;
 	}
-	
+
 	public function isAllItemsInStore()
 	{
 		$isOnStock = function ($key, BasketItem $item) {
@@ -258,7 +261,7 @@ class Basket extends BaseEntity
 		};
 		return $this->items->forAll($isOnStock);
 	}
-	
+
 	public function getIsCompany()
 	{
 		return $this->shippingAddress && $this->shippingAddress->isCompany();
@@ -334,13 +337,13 @@ class Basket extends BaseEntity
 		if ($this->shipping) {
 			$shippingPrice = $this->shipping->getPrice($this, $level);
 			$priceValue = $withVat ? $shippingPrice->withVat : $shippingPrice->withoutVat;
-			$exchangedValue = $exchange ? $exchange->change($priceValue, NULL, NULL, Price::PRECISION) : $priceValue;			
+			$exchangedValue = $exchange ? $exchange->change($priceValue, NULL, NULL, Price::PRECISION) : $priceValue;
 			$totalPrice += $exchangedValue;
 		}
 		if ($this->payment) {
 			$paymentPrice = $this->payment->getPrice($this, $level);
 			$priceValue = $withVat ? $paymentPrice->withVat : $paymentPrice->withoutVat;
-			$exchangedValue = $exchange ? $exchange->change($priceValue, NULL, NULL, Price::PRECISION) : $priceValue;			
+			$exchangedValue = $exchange ? $exchange->change($priceValue, NULL, NULL, Price::PRECISION) : $priceValue;
 			$totalPrice += $exchangedValue;
 		}
 
