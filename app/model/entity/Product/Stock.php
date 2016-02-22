@@ -77,12 +77,16 @@ class Stock extends BaseEntity
 	
 	/** @ORM\OneToMany(targetEntity="WatchDog", mappedBy="stock") */
 	protected $watchDogs;
+	
+	/** @ORM\OneToMany(targetEntity="Visit", mappedBy="stock") */
+	protected $visits;
 
 	public function __construct()
 	{
 		$this->product = new Product();
 		$this->groupDiscounts = new ArrayCollection();
 		$this->watchDogs = new ArrayCollection();
+		$this->visits = new ArrayCollection();
 		parent::__construct();
 	}
 

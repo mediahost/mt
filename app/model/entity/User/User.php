@@ -65,8 +65,8 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	/** @ORM\OneToOne(targetEntity="Address") */
 	protected $billingAddress;
 
-	/** @ORM\OneToMany(targetEntity="VisitedProduct", mappedBy="user", fetch="EXTRA_LAZY", cascade={"remove"}, orphanRemoval=true) */
-	protected $visitedProducts;
+	/** @ORM\OneToMany(targetEntity="Visit", mappedBy="user", fetch="EXTRA_LAZY") */
+	protected $visits;
 
 	/** @ORM\OneToOne(targetEntity="App\Model\Entity\Newsletter\Subscriber", mappedBy="user", fetch="EXTRA_LAZY", cascade={"persist"}) */
 	protected $subscriber;
@@ -82,7 +82,7 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 		$this->roles = new ArrayCollection;
 		$this->groups = new ArrayCollection();
 		$this->orders = new ArrayCollection();
-		$this->visitedProducts = new ArrayCollection();
+		$this->visits = new ArrayCollection();
 
 		if ($mail) {
 			$this->mail = $mail;
