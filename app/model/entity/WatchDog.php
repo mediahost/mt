@@ -18,7 +18,7 @@ class WatchDog extends BaseEntity
 
 	/**
 	 * @ORM\Id 
-	 * @ORM\Column(type="string", nullable=false, unique=true) 
+	 * @ORM\Column(type="string", nullable=false) 
 	 */
 	protected $mail;
 
