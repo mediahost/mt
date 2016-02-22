@@ -20,7 +20,7 @@ class BasketPresenter extends BasePresenter
 		$this->status = parent::STATUS_OK;
 
 		$basketRepo = $this->em->getRepository(Basket::getClassName());
-		$baskets = $basketRepo->findAllUnfinished();
+		$baskets = $basketRepo->findUnfinished();
 
 		if (count($baskets)) {
 			foreach ($baskets as $basket) {

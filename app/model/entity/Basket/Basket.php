@@ -4,7 +4,6 @@ namespace App\Model\Entity;
 
 use App\Model\Facade\Exception\InsufficientQuantityException;
 use App\Model\Facade\Exception\MissingItemException;
-use App\Model\Repository\BasketRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use h4kuna\Exchange\Exchange;
@@ -43,10 +42,10 @@ class Basket extends BaseEntity
 	/** @ORM\OneToOne(targetEntity="User", inversedBy="basket", fetch="LAZY") */
 	protected $user;
 
-	/** @ORM\OneToMany(targetEntity="BasketItem", mappedBy="basket", cascade={"persist", "remove"}, orphanRemoval=true) */
+	/** @ORM\OneToMany(targetEntity=BasketItemm", mappedBy="basket", cascade={"persist", "remove"}, orphanRemoval=true) */
 	protected $items;
 
-	/** @ORM\ManyToMany(targetEntity="Voucher") */
+	/** @ORM\ManyToMany(targetEntity=Voucherr") */
 	protected $vouchers;
 
 	/** @ORM\Column(type="datetime") */
