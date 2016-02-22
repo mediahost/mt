@@ -9,6 +9,7 @@ use App\Components\WatchDog\Form\WatchDog;
 use App\Extensions\Products\ProductList;
 use App\Model\Entity\Parameter;
 use App\Model\Entity\Stock;
+use App\Model\Facade\VisitFacade;
 use Nette\Application\BadRequestException;
 use Nette\Application\Responses\JsonResponse;
 use Nette\Utils\Strings;
@@ -21,6 +22,9 @@ class ProductPresenter extends BasePresenter
 
 	/** @var IWatchDogFactory @inject */
 	public $iWatchDogFactory;
+
+	/** @var VisitFacade @inject */
+	public $visitFacade;
 
 	/** @var Stock */
 	public $stock;
@@ -47,9 +51,10 @@ class ProductPresenter extends BasePresenter
 		$this->template->product = $product;
 		$this->template->stock = $this->stock;
 		$this->template->params = $allParams;
+		$this->template->actualVisits = $this->visitFacade->getVisitsCount($this->stock);
 
 		// Last visited
-		$this->user->storage->addVisited($this->stock);
+		$this->user->storage->addVisit($this->stock);
 	}
 	
 	public function renderDefault()

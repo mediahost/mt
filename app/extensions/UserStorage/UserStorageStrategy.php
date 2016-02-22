@@ -5,13 +5,14 @@ namespace App\Extensions\UserStorage;
 use App\Model\Entity\Basket;
 use App\Model\Entity\Stock;
 use App\Model\Entity\User;
-use App\Model\Entity\VisitedProduct;
+use App\Model\Entity\Visit;
+use App\Model\Facade\VisitFacade;
 use App\Model\Repository\BasketRepository;
 use App\Model\Repository\StockRepository;
-use App\Model\Repository\VisitedProductRepository;
-use DateTime;
+use App\Model\Repository\VisitRepository;
 use h4kuna\Exchange\Currency\IProperty;
 use Kdyby\Doctrine\EntityManager;
+use Nette\Http\Request;
 use Nette\Object;
 use Nette\Security\IIdentity;
 use Nette\Security\IUserStorage;
@@ -25,8 +26,8 @@ class UserStorageStrategy extends Object implements IUserStorage
 	/** @var GuestStorage */
 	private $guestStorage;
 
-	/** @var VisitedProductRepository */
-	private $visitedRepo;
+	/** @var VisitRepository */
+	private $visitRepo;
 
 	/** @var StockRepository */
 	private $stockRepo;
@@ -37,10 +38,14 @@ class UserStorageStrategy extends Object implements IUserStorage
 	/** @var EntityManager */
 	private $em;
 
-	public function __construct(EntityManager $em)
+	/** @var VisitFacade */
+	private $visitFacade;
+
+	public function __construct(EntityManager $em, VisitFacade $visitFacade)
 	{
 		$this->em = $em;
-		$this->visitedRepo = $em->getRepository(VisitedProduct::getClassName());
+		$this->visitFacade = $visitFacade;
+		$this->visitRepo = $em->getRepository(Visit::getClassName());
 		$this->stockRepo = $em->getRepository(Stock::getClassName());
 		$this->basketRepo = $em->getRepository(Basket::getClassName());
 	}
@@ -152,53 +157,36 @@ class UserStorageStrategy extends Object implements IUserStorage
 		return $user;
 	}
 
-	public function addVisited(Stock $stock)
+	public function addVisit(Stock $stock)
 	{
 		if ($this->isAuthenticated()) {
-			$visited = $this->visitedRepo->findOneByUserAndStock($this->userStorage->identity, $stock);
-
-			if ($visited === NULL) {
-				$visited = new VisitedProduct();
-				$visited->setStock($stock)
-						->setUser($this->userStorage->identity)
-						->setVisited(new DateTime());
-			} else {
-				$latest = $this->visitedRepo->findLatest($this->userStorage->identity);
-
-				if ($latest !== $visited) {
-					$visited->setVisited(new DateTime());
-				}
-			}
-
-			$this->em->persist($visited)
-					->flush();
+			$user = $this->userStorage->identity;
 		} else {
-			if (array_key_exists($stock->id, $this->guestStorage->visitedProducts)) {
-				$this->guestStorage->deleteVisitedProduct($stock);
+			$user = NULL;
+			if (array_key_exists($stock->id, $this->guestStorage->visits)) {
+				$this->guestStorage->deleteVisit($stock);
 			}
-
-			$this->guestStorage->addVisitedProduct($stock);
+			$this->guestStorage->addVisit($stock);
 		}
+
+		$this->visitFacade->add($stock, $user);
 	}
 
 	public function getVisited($limit = 5)
 	{
-		$ids = [];
-
+		$stocks = [];
 		if ($this->isAuthenticated()) {
-			$visited = $this->visitedRepo->findBy([
-				'user' => $this->userStorage->identity,
-					], ['visited' => 'ASC'], $limit, 0);
-
+			$visited = $this->visitFacade->getUserVisits($this->userStorage->identity, $limit);
 			foreach ($visited as $visited) {
-				$ids[] = $visited->stock->id;
+				$stocks[$visited->stock->id] = $visited->stock;
 			}
 		} else {
-			$ids = array_keys($this->guestStorage->visitedProducts);
+			$ids = array_keys($this->guestStorage->visits);
 			array_slice($ids, 0, $limit);
+			$stocks = $this->stockRepo->findAssoc(['id' => $ids], 'id');
 		}
 
-		return $this->stockRepo->findAssoc(['id' => $ids,], 'id');
+		return $stocks;
 	}
 
 	/**
@@ -250,7 +238,7 @@ class UserStorageStrategy extends Object implements IUserStorage
 		}
 
 		$this->saveUser($user);
-		
+
 		if (isset($basket)) {
 			$this->basketRepo->delete($basket);
 		}

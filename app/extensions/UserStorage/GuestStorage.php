@@ -16,7 +16,7 @@ use Nette\Security\IUserStorage;
 use SplStack;
 
 /**
- * @property SplStack $visitedProducts
+ * @property SplStack $visits
  */
 class GuestStorage extends Object implements IUserStorage
 {
@@ -46,29 +46,29 @@ class GuestStorage extends Object implements IUserStorage
 		return $this->section->identity;
 	}
 
-	public function getVisitedProducts()
+	public function getVisits()
 	{
 		if (!($this->section->identity instanceof User)) {
 			$this->setDefault();
 		}
 
-		return $this->section->visitedProducts;
+		return $this->section->visits;
 	}
 
-	public function setVisitedProducts($array)
+	public function setVisits($array)
 	{
-		$this->section->visitedProducts = $array;
+		$this->section->visits = $array;
 	}
 	
-	public function addVisitedProduct(Stock $stock)
+	public function addVisit(Stock $stock)
 	{
-		$this->section->visitedProducts = [$stock->id => new DateTime()] + $this->section->visitedProducts;
+		$this->section->visits = [$stock->id => new DateTime()] + $this->section->visits;
 		return $this;
 	}
 	
-	public function deleteVisitedProduct(Stock $stock)
+	public function deleteVisit(Stock $stock)
 	{
-		unset($this->section->visitedProducts[$stock->id]);
+		unset($this->section->visits[$stock->id]);
 		return $this;
 	}
 	
@@ -113,7 +113,7 @@ class GuestStorage extends Object implements IUserStorage
 		$role = $this->roleRepo->findOneByName(Role::GUEST);
 		$user->addRole($role);
 		$this->section->identity = $user;
-		$this->section->visitedProducts = [];
+		$this->section->visits = [];
 		$this->section->basketId = NULL;
 		return $this;
 	}
