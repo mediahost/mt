@@ -21,7 +21,7 @@ use Nette\Security\IUserStorage;
 class BasketFacade extends Object
 {
 
-	const KEEP_EMPTY_BASKETS = '1 months';
+	const KEEP_EMPTY_BASKETS = '3 days';
 	const KEEP_BASKETS = '3 months';
 
 	/** @var EntityManager @inject */
