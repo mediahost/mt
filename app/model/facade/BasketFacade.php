@@ -21,6 +21,8 @@ use Nette\Security\IUserStorage;
 class BasketFacade extends Object
 {
 
+	const KEEP_EMPTY_BASKETS = '1 months';
+
 	/** @var EntityManager @inject */
 	public $em;
 
@@ -359,6 +361,16 @@ class BasketFacade extends Object
 	{
 		$basket = $this->getBasket();
 		return (bool) $basket->getVouchersCount();
+	}
+	
+	public function clearOldEmptyBaskets()
+	{
+		$emptyBaskets = $this->basketRepo->findEmpty(self::KEEP_EMPTY_BASKETS);
+
+		foreach ($emptyBaskets as $basket) {
+			$this->em->remove($basket);
+		}
+		$this->em->flush();
 	}
 
 }
