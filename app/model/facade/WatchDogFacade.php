@@ -76,8 +76,9 @@ class WatchDogFacade extends Object
 			$message->send();
 
 			$watchDog->sendedAt = new DateTime();
-			$this->watchDogRepo->save($watchDog);
+			$this->em->persist($watchDog);
 		}
+		$this->em->flush();
 		return $this;
 	}
 
@@ -96,9 +97,10 @@ class WatchDogFacade extends Object
 				$message->send();
 
 				$watchDog->sendedAt = new DateTime();
-				$this->watchDogRepo->save($watchDog);
+				$this->em->persist($watchDog);
 			}
 		}
+		$this->em->flush();
 		return $this;
 	}
 
