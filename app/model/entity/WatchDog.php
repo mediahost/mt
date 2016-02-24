@@ -24,7 +24,7 @@ class WatchDog extends BaseEntity
 
 	/**
 	 * @ORM\Id 
-	 * @ORM\ManyToOne(targetEntity="Stock", inversedBy="watchDogs", cascade={"persist"}) 
+	 * @ORM\ManyToOne(targetEntity="Stock", inversedBy="watchDogs") 
 	 */
 	protected $stock;
 
