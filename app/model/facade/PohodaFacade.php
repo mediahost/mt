@@ -90,7 +90,9 @@ class PohodaFacade extends Object
 					continue;
 				}
 				
-				if ($stock->updatedPohodaDataAt > $pohodaProductArr['updatedAt']) {
+				$isFromToday = $stock->createdAt >= DateTime::from('-24 hours');
+				$isChangedFromShop = $stock->updatedPohodaDataAt > $pohodaProductArr['updatedAt'];
+				if ($isChangedFromShop && !$isFromToday) {
 					continue;
 				}
 
