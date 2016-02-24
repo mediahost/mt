@@ -427,7 +427,7 @@ class Installer extends Object
 	private function getLockFile($name)
 	{
 		Helpers::mkDir($this->installDir);
-		return $this->installDir . '/' . $name . '.lock';
+		return $this->installDir . DIRECTORY_SEPARATOR . $name . '.lock';
 	}
 
 	// </editor-fold>

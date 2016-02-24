@@ -596,7 +596,7 @@ class MigrationPresenter extends BasePresenter
 	{
 		$dir = '../temp/lock';
 		Helpers::mkDir($dir);
-		return $dir . '/' . $name . '.lock';
+		return $dir . DIRECTORY_SEPARATOR . $name . '.lock';
 	}
 
 	private function removeLockFile($name)
