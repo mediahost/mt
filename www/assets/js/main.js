@@ -38,6 +38,24 @@ if (applets.smartSupp) {
 	})(document);
 }
 
+if (applets.smartLook) {
+	window.smartlook || (function (d) {
+		var o = smartlook = function () {
+			o.api.push(arguments)
+		}, s = d.getElementsByTagName('script')[0];
+		var c = d.createElement('script');
+		o.api = new Array();
+		c.async = true;
+		c.type = 'text/javascript';
+		c.charset = 'utf-8';
+		c.src = '//rec.getsmartlook.com/bundle.js';
+		s.parentNode.insertBefore(c, s);
+	})(document);
+	smartlook('init', applets.smartLook, {
+		"host": "s2.getsmartlook.com"
+	});
+}
+
 if (applets.facebookApplet) {
 	(function (d, s, id) {
 		var js, fjs = d.getElementsByTagName(s)[0];

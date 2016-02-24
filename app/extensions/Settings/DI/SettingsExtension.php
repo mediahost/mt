@@ -132,6 +132,10 @@ class SettingsExtension extends CompilerExtension
 				'enabled' => FALSE,
 				'key' => NULL,
 			],
+			'smartLook' => [
+				'enabled' => FALSE,
+				'key' => NULL,
+			],
 			'facebookApplet' => [
 				'enabled' => FALSE,
 				'id' => NULL,
