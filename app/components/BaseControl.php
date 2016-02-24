@@ -94,7 +94,7 @@ abstract class BaseControl extends UI\Control
 		$dir = dirname($this->getReflection()->getFileName());
 
 		$template = $this->getTemplate();
-		$template->setFile($dir . '/' . $this->templateFile . '.latte');
+		$template->setFile($dir . DIRECTORY_SEPARATOR . $this->templateFile . '.latte');
 		$template->render();
 	}
 

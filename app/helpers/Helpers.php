@@ -243,7 +243,7 @@ class Helpers
 	 */
 	public static function getPath($_ = NULL)
 	{
-		return call_user_func_array(get_class() . '::concatStrings', array_merge(["/"], func_get_args()));
+		return call_user_func_array(get_class() . '::concatStrings', array_merge(['/'], func_get_args()));
 	}
 
 	// </editor-fold>
