@@ -489,7 +489,7 @@ class PohodaFacade extends Object
 	protected function getFilenameForXml($dir, $folder)
 	{
 		$filename = time() . '.xml';
-		return $this->getDirForXml($dir, $folder) . '/' . $filename;
+		return $this->getDirForXml($dir, $folder) . DIRECTORY_SEPARATOR . $filename;
 	}
 
 	protected function getFilenameLastSync($type, $sync)
@@ -497,7 +497,7 @@ class PohodaFacade extends Object
 		$filename = Strings::webalize($type) . '.time';
 		$dir = Helpers::getPath($this->getRootDir(), $sync);
 		FileSystem::createDir($dir);
-		return $dir . '/' . $filename;
+		return $dir . DIRECTORY_SEPARATOR . $filename;
 	}
 
 	protected function getLastSyncDate($type, $sync)
