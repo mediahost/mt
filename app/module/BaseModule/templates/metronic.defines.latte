@@ -133,6 +133,7 @@
 		"applets": {
 			"googleAnalytics": {{ifset $googleAnalyticsCode}}{{$googleAnalyticsCode}}{{else}}""{{/ifset}},
 			"smartSupp": {{ifset $smartSuppKey}}{{$smartSuppKey}}{{else}}""{{/ifset}},
+			"smartLook": {{ifset $smartLookKey}}{{$smartLookKey}}{{else}}""{{/ifset}},
 			"facebookApplet": {{ifset $facebookAppletId}}{{$facebookAppletId}}{{else}}""{{/ifset}}
 		},
 		"loginError": {{ifset $loginError}}{{$loginError}}{{else}}false{{/ifset}}

@@ -253,6 +253,9 @@ abstract class BasePresenter extends BaseBasePresenter
 		if ($this->settings->modules->smartSupp->enabled) {
 			$this->template->smartSuppKey = $this->settings->modules->smartSupp->key;
 		}
+		if ($this->settings->modules->smartLook->enabled) {
+			$this->template->smartLookKey = $this->settings->modules->smartLook->key;
+		}
 		if ($this->settings->modules->facebookApplet->enabled) {
 			$this->template->facebookAppletId = $this->settings->modules->facebookApplet->id;
 		}
