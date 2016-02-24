@@ -8,7 +8,6 @@ use Doctrine\ORM\Events;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Events\Subscriber;
 use Nette\Object;
-use Tracy\Debugger;
 
 class StockListener extends Object implements Subscriber
 {
@@ -22,27 +21,15 @@ class StockListener extends Object implements Subscriber
 	public function getSubscribedEvents()
 	{
 		return array(
-			Events::prePersist,
-			Events::preUpdate,
-			Events::postRemove,
+			Events::postFlush,
 		);
 	}
 
 	// <editor-fold desc="listeners redirectors">
 
-	public function prePersist($params)
+	public function postFlush($params)
 	{
 		$this->checkWatchDog($params);
-	}
-
-	public function preUpdate($params)
-	{
-		$this->checkWatchDog($params);
-	}
-
-	public function postRemove($params)
-	{
-		
 	}
 
 	// </editor-fold>
