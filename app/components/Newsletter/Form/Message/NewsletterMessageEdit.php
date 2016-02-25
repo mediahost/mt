@@ -14,6 +14,7 @@ use App\Model\Entity\Newsletter\Subscriber;
 use App\Model\Facade\LocaleFacade;
 use App\Model\Facade\NewsletterFacade;
 use App\Model\Facade\SubscriberFacade;
+use Nette\Http\FileUpload;
 use Nette\Http\Request;
 use Nette\Utils\ArrayHash;
 use Nette\Utils\DateTime;
@@ -82,12 +83,14 @@ class NewsletterMessageEdit extends BaseControl
 		$form->addWysiHtml('content', self::LOCALE_DOMAIN . '.form.content', 20)
 						->setRequired()
 						->getControlPrototype()->class[] = 'page-html-content';
+		
+		$form->addUpload('attachment', self::LOCALE_DOMAIN . '.form.attachment', TRUE);
 
 		$testMail = $form->addText('testEmail', self::LOCALE_DOMAIN . '.form.testEmail');
 
 		$form->addSubmit('send', self::LOCALE_DOMAIN . '.form.send');
-		$form->addSubmit('sendTest', self::LOCALE_DOMAIN . '.form.sendTest')
-						->getControlPrototype()->class[] = 'ajax';
+		$form->addSubmit('sendTest', self::LOCALE_DOMAIN . '.form.sendTest');
+//						->getControlPrototype()->class[] = 'ajax';
 
 		$testMail->addConditionOn($form['sendTest'], Form::SUBMITTED)
 				->addRule(Form::EMAIL);
@@ -147,8 +150,12 @@ class NewsletterMessageEdit extends BaseControl
 		$mail = $this->iNewsletterMail->create();
 		$mail->addTo($values->testEmail)
 				->setSubject($values->subject)
-				->addParameter('message', $message)
-				->send();
+				->addParameter('message', $message);
+		foreach ($values->attachment as $attachment) {
+			/* @var $attachment FileUpload */
+			$mail->addAttachment($attachment);
+		}
+		$mail->send();
 	}
 
 	private function createNewsletterMessage(Form $form, ArrayHash $values)
@@ -159,6 +166,10 @@ class NewsletterMessageEdit extends BaseControl
 				->setStatus(Message::STATUS_RUNNING)
 				->setCreated(new DateTime())
 				->setLocale($values->locale);
+		
+		foreach ($values->attachment as $attachment) {
+			$message->addAttachment($attachment);
+		}
 
 		$this->em->persist($message);
 

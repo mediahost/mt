@@ -12,6 +12,7 @@ class FilesManager extends Object
 {
 	// <editor-fold desc="constants & variables">
 	
+	const MAILS = 'mails';
 	const POHODA_IMPORT = 'pohoda-xml-import';
 	const EXPORTS = 'exports';
 	const EXPORT_ZBOZI_STOCKS = 'zbozi-stocks';
@@ -65,6 +66,9 @@ class FilesManager extends Object
 				break;
 			case self::POHODA_IMPORT:
 				$path = Helpers::getPath($path, self::POHODA_IMPORT);
+				break;
+			case self::MAILS:
+				$path = Helpers::getPath($path, self::MAILS);
 				break;
 
 			default:

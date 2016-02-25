@@ -2,7 +2,10 @@
 
 namespace App\CronModule\Presenters;
 
+use App\Extensions\FilesManager;
+use App\Helpers;
 use App\Mail\Messages\Newsletter\INewsletterMessageFactory;
+use App\Model\Entity\File;
 use App\Model\Entity\Newsletter\Message;
 use App\Model\Entity\Newsletter\Status;
 use App\Model\Facade\NewsletterFacade;
@@ -19,6 +22,9 @@ class NewsletterPresenter extends BasePresenter
 	/** @var NewsletterFacade @inject */
 	public $newsletterFacade;
 
+	/** @var FilesManager @inject */
+	public $filesManager;
+
 	/** @var INewsletterMessageFactory @inject */
 	public $iNewsletterMessageFactory;
 
@@ -26,11 +32,11 @@ class NewsletterPresenter extends BasePresenter
 	{
 		$this->status = parent::STATUS_OK;
 
-		/* @var $statuses Status[] */
 		$statuses = $this->em->getRepository(Status::getClassName())->findBy(['status' => Message::STATUS_RUNNING], [], $quantity);
 
 		if (count($statuses) > 0) {
 			foreach ($statuses as $status) {
+				/* @var $status Status */
 				if ($status->message->locale === NULL) {
 					$this->translator->setLocale($status->subscriber->locale);
 				} else {
@@ -44,6 +50,13 @@ class NewsletterPresenter extends BasePresenter
 
 				if ($status->subscriber) {
 					$message->addParameter('subscriber', $status->subscriber);
+				}
+
+				$mailRoot = $this->filesManager->getDir(FilesManager::MAILS);
+				foreach ($status->message->attachments as $attachment) {
+					/* @var $attachment File */
+					$realFilename = Helpers::getPath($mailRoot, $attachment->filename);
+					$message->addAttachment($realFilename);
 				}
 
 				try {

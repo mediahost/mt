@@ -2,9 +2,11 @@
 
 namespace App\Model\Entity\Newsletter;
 
+use App\Model\Entity\File;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\BaseEntity;
+use Nette\Http\FileUpload;
 
 /**
  * @ORM\Entity
@@ -49,12 +51,20 @@ class Message extends BaseEntity
 	/** @ORM\Column(type="boolean") */
 	protected $unsubscribable = TRUE;
 
-	/** @ORM\OneToMany(targetEntity="Status", mappedBy="$message") */
+	/** @ORM\OneToMany(targetEntity="Status", mappedBy="message") */
 	protected $statuses;
 
+	/** 
+	 * @ORM\ManyToMany(targetEntity="App\Model\Entity\File", cascade="all")
+	 * @ORM\JoinTable(name="newsletter_file")
+	 */
+	protected $attachments;
+	
 	public function __construct()
 	{
 		$this->statuses = new ArrayCollection();
+		$this->attachments = new ArrayCollection();
+		parent::__construct();
 	}
 
 	public function setLocale($locale)
@@ -64,6 +74,17 @@ class Message extends BaseEntity
 		} else {
 			$this->locale = $locale;
 		}
+	}
+
+	public function addAttachment(FileUpload $file)
+	{
+		$image = new File($file);
+		$image->requestedFilename = $file->getSanitizedName();
+		$image->setFolder(File::FOLDER_ATTACHMENTS);
+		
+		$this->attachments->add($image);
+		
+		return $this;
 	}
 
 	public function __toString()

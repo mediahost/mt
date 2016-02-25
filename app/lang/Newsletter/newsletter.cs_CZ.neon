@@ -42,6 +42,7 @@ admin:
 			users: 'uživatelé'
 			dealers: 'dealeři'
 			locale: 'Jazyk'
+			attachment: 'Příloha'
 			testEmail: 'Testovací e-mail'
 			send: 'Odeslat'
 			sendTest: 'Odeslat testovací'
