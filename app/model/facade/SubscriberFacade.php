@@ -2,7 +2,6 @@
 
 namespace App\Model\Facade;
 
-use App\AppModule\Presenters\NewsletterPresenter;
 use App\Model\Entity\Group;
 use App\Model\Entity\Newsletter\Status;
 use App\Model\Entity\Newsletter\Subscriber;
@@ -14,6 +13,9 @@ use Nette\Object;
 
 class SubscriberFacade extends Object
 {
+
+	const RECIPIENT_USER = 'u';
+	const RECIPIENT_DEALER = 'd';
 
 	/** @var EntityManager */
 	private $em;
@@ -74,13 +76,13 @@ class SubscriberFacade extends Object
 	{
 		$count = NULL;
 
-		if ($recipient === NewsletterPresenter::RECIPIENT_USER) {
+		if ($recipient === self::RECIPIENT_USER) {
 			$locales = $this->localeFacade->getLocalesToSelect();
 
 			foreach ($locales as $locale => $label) {
 				$count[$locale] = $this->countByType(Subscriber::TYPE_USER, $locale);
 			}
-		} elseif ($recipient === NewsletterPresenter::RECIPIENT_DEALER) {
+		} elseif ($recipient === self::RECIPIENT_DEALER) {
 			$count = $this->countByType(Subscriber::TYPE_DEALER);
 		} elseif (is_numeric($recipient)) {
 			/* @var \App\Model\Entity\Group $group */

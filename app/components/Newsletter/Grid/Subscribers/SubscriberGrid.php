@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\Newsletter;
+namespace App\Components\Newsletter\Grid;
 
 use App\Components\BaseControl;
 use App\Extensions\Grido\BaseGrid;
@@ -8,7 +8,7 @@ use App\Model\Entity\Newsletter\Subscriber;
 use App\Model\Facade\LocaleFacade;
 use Grido\DataSources\Doctrine;
 
-class SubscriberGridControl extends BaseControl
+class SubscriberGrid extends BaseControl
 {
 
 	const LOCALE_DOMAIN = 'newsletter.admin.subscriber.grid';
@@ -86,9 +86,9 @@ class SubscriberGridControl extends BaseControl
 
 }
 
-interface ISubscriberGridControlFactory
+interface ISubscriberGridFactory
 {
 
-	/** @return SubscriberGridControl */
+	/** @return SubscriberGrid */
 	function create();
 }

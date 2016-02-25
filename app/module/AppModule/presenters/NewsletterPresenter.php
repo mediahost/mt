@@ -2,43 +2,19 @@
 
 namespace App\AppModule\Presenters;
 
-use App\Components\Newsletter\IMessageGridControlFactory;
-use App\Components\Newsletter\MessageGridControl;
-use App\Forms\Form;
-use App\Forms\Renderers\MetronicFormRenderer;
-use App\Mail\Messages\Newsletter\INewsletterMessageFactory;
-use App\Model\Entity\Group;
-use App\Model\Entity\Newsletter\Message;
-use App\Model\Entity\Newsletter\Status;
-use App\Model\Entity\Newsletter\Subscriber;
-use App\Model\Facade\LocaleFacade;
-use App\Model\Facade\SubscriberFacade;
-use DateTime;
-use Exception;
-use Nette\Application\UI;
-use Nette\Forms\Controls\TextInput;
-use Nette\Utils\ArrayHash;
+use App\Components\Newsletter\Form\INewsletterMessageEditFactory;
+use App\Components\Newsletter\Form\NewsletterMessageEdit;
+use App\Components\Newsletter\Grid\IMessageGridFactory;
+use App\Components\Newsletter\Grid\MessageGrid;
 
 class NewsletterPresenter extends BasePresenter
 {
 
-	const LOCALE_DOMAIN = 'newsletter.admin.newsletter';
-	const RECIPIENT_USER = 'u';
-	const RECIPIENT_DEALER = 'd';
-	const DEFAULT_LOCALE_DEALER = 'en';
-	const DEFAULT_LOCALE_GROUP = 'sk';
+	/** @var IMessageGridFactory @inject */
+	public $iMessageGridFactory;
 
-	/** @var IMessageGridControlFactory @inject */
-	public $iMessageGridControlFactory;
-
-	/** @var INewsletterMessageFactory @inject */
-	public $iNewsletterMessage;
-
-	/** @var LocaleFacade @inject */
-	public $localeFacade;
-
-	/** @var SubscriberFacade @inject */
-	public $subscriberFacade;
+	/** @var INewsletterMessageEditFactory @inject */
+	public $iNewsletterMessageEdit;
 
 	/**
 	 * @secured
@@ -57,155 +33,23 @@ class NewsletterPresenter extends BasePresenter
 	 */
 	public function actionNew()
 	{
-		$counts = $this->subscriberFacade->counts($this['form']['recipients']->value);
 		
-		if (is_array($counts)) {
-			$this->template->count = $counts[$this['form']['locale']->value];
-			$this->template->data = \Nette\Utils\Json::encode($counts);
-		} else {
-			$this->template->count = $counts;
-		}
 	}
 
-	/** @return MessageGridControl */
+	/** @return MessageGrid */
 	protected function createComponentGrid()
 	{
-		return $this->iMessageGridControlFactory->create();
+		return $this->iMessageGridFactory->create();
 	}
 
-	/** @return Form */
+	/** @return NewsletterMessageEdit */
 	protected function createComponentForm()
-	{	
-		$form = new Form;
-		$form->setRenderer(new MetronicFormRenderer)
-				->setTranslator($this->translator);
-
-		$groups = $this->em->getRepository(Group::getClassName())->findPairs('name', [], 'id');
-		$recipients = [
-			self::RECIPIENT_USER => self::LOCALE_DOMAIN . '.form.users',
-			self::RECIPIENT_DEALER => self::LOCALE_DOMAIN . '.form.dealers',
-			self::LOCALE_DOMAIN . '.form.groups' => $groups,
-		];
-	
-		$form->addSelect('recipients', self::LOCALE_DOMAIN . '.form.recipients', $recipients)
-				->setDefaultValue(self::RECIPIENT_USER)
-				->getControlPrototype()
-				->addAttributes(['id' => 'new-newsletter-recipients']);
-
-		$form->addSelect('locale', self::LOCALE_DOMAIN . '.form.locale', $this->localeFacade->getLocalesToSelect())
-				->getControlPrototype()
-				->addAttributes(['id' => 'new-newsletter-locale']);
-		
-		$form->addText('subject', self::LOCALE_DOMAIN . '.form.subject')
-				->setRequired();
-
-		$form->addWysiHtml('content', self::LOCALE_DOMAIN . '.form.content', 20)
-						->setRequired()
-						->getControlPrototype()->class[] = 'page-html-content';
-
-		$form->addSubmit('send', self::LOCALE_DOMAIN . '.form.send');
-
-		$form->addSubmit('sendTest', self::LOCALE_DOMAIN . '.form.sendTest')
-						->getControlPrototype()->class[] = 'ajax';
-
-		$testEmail = new TextInput(self::LOCALE_DOMAIN . '.form.testEmail');
-		$testEmail->addConditionOn($form['sendTest'], Form::SUBMITTED)
-				->addRule(Form::EMAIL);
-
-		$form->addComponent($testEmail, 'testEmail', 'send');
-
-		$form->addSubmit('validate', self::LOCALE_DOMAIN . '.form.validate')
-						->setValidationScope(FALSE)
-						->getControlPrototype()
-						->addAttributes(['id' => 'new-newsletter-validate'])->class[] = 'ajax hidden';
-
-		$form->onSuccess[] = [$this, 'formSucceded'];
-		return $form;
-	}
-
-	/**
-	 * @param UI\Form $form
-	 * @param ArrayHash $values
-	 */
-	public function formSucceded(UI\Form $form, ArrayHash $values)
 	{
-
-		if ($form['validate']->isSubmittedBy()) {
-			if ($values->recipients === self::RECIPIENT_USER) {
-				$locale = $values->locale;
-			} elseif ($values->recipients === self::RECIPIENT_DEALER) {
-				$locale = self::DEFAULT_LOCALE_DEALER;
-				$form['locale']->setDisabled(TRUE);
-			} elseif (is_numeric($values->recipients)) {
-				$locale = self::DEFAULT_LOCALE_GROUP;
-			} else {
-				$locale = NULL;
-			}
-
-			$form->setValues(['locale' => $locale]);
-		} elseif ($form['sendTest']->isSubmittedBy()) {
-			$message = new Message;
-			$message->setContent($values->content);
-
-			$mail = $this->iNewsletterMessage->create();
-			$mail->addTo($values->testEmail)
-					->setSubject($values->subject)
-					->addParameter('message', $message)
-					->send();
-
-			$this->flashMessage($this->translator->translate('newsletter.messages.newMessage.testSuccess', ['recipient' => $values->testEmail]), 'success');
-		} elseif ($form['send']->isSubmittedBy()) {
-			$message = new Message;
-			$message->setSubject($values->subject)
-					->setContent($values->content)
-					->setStatus(Message::STATUS_RUNNING)
-					->setCreated(new DateTime)
-					->setLocale($values->locale);
-
-			$this->em->persist($message);
-
-			if ($values->recipients === self::RECIPIENT_USER) {
-				$message->setType(Message::TYPE_USER);
-				$recipients = $this->subscriberFacade->findByType(Subscriber::TYPE_USER, $values->locale);
-			} elseif ($values->recipients === self::RECIPIENT_DEALER) {
-				$message->setType(Message::TYPE_DEALER)
-						->setUnsubscribable(FALSE);
-				$recipients = $this->subscriberFacade->findByType(Subscriber::TYPE_DEALER);
-			} elseif (is_numeric($values->recipients)) {
-				$message->setType(Message::TYPE_GROUP)
-						->setUnsubscribable(FALSE);
-
-				/* @var \App\Model\Entity\Group $group */
-				$group = $this->em->getRepository(Group::getClassName())->find($values->recipients);
-				$message->group = $group;
-
-				$recipients = $group->users;
-			} else {
-				throw new Exception('Unknown recipient type.');
-			}
-
-			foreach ($recipients as $recipient) {
-				$status = new Status;
-				$status->setEmail($recipient->mail)
-						->setMessage($message)
-						->setStatus(Message::STATUS_RUNNING);
-
-				if ($values->recipients === self::RECIPIENT_USER) {
-					$status->subscriber = $recipient;
-				}
-
-				$this->em->persist($status);
-			}
-
-			$this->em->flush();
-
-			$this->flashMessage($this->translator->translate('newsletter.messages.newMessage.queue'), 'success');
+		$control = $this->iNewsletterMessageEdit->create();
+		$control->onAfterSave = function () {
 			$this->redirect('default');
-		}
-
-		if ($this->isAjax()) {
-			$this->redrawControl();
-		}
+		};
+		return $control;
 	}
 
 }

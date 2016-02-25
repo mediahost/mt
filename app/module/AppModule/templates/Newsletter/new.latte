@@ -28,15 +28,7 @@
 				</div>
 			</div>
 			<div class="portlet-body form">
-				{snippet form}
-					{control form}
-					<p>{_newsletter.admin.newsletter.new.counter.pre} <strong><span id="new-newsletter-count" class="badge badge-primary">{is_array($count)?$count['']:$count}</span></strong> {_newsletter.admin.newsletter.new.counter.post}</p>
-					{ifset $data}
-						<script id="new-newsletter-data" type="text/json">
-							{$data|noescape}
-						</script>
-					{/ifset}
-				{/snippet}
+				{control form}
 			</div>
 		</div>
 	</div>
