@@ -5,8 +5,8 @@ namespace App\FrontModule\Presenters;
 use App\BaseModule\Presenters\BasePresenter as BaseBasePresenter;
 use App\Components\Auth\ISignInFactory;
 use App\Components\Auth\SignIn;
-use App\Components\Newsletter\ISubscribeControlFactory;
-use App\Components\Newsletter\SubscribeControl;
+use App\Components\Newsletter\Form\ISubscribeFactory;
+use App\Components\Newsletter\Form\Subscribe;
 use App\Components\Producer\Form\IModelSelectorFactory;
 use App\Components\Producer\Form\ModelSelector;
 use App\Components\Product\Form\IPrintStockFactory;
@@ -38,7 +38,7 @@ abstract class BasePresenter extends BaseBasePresenter
 	/** @var IModelSelectorFactory @inject */
 	public $iModelSelectorFactory;
 
-	/** @var ISubscribeControlFactory @inject */
+	/** @var ISubscribeFactory @inject */
 	public $iSubscribeControlFactory;
 
 	/** @var IProductListFactory @inject */
@@ -263,7 +263,7 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	// <editor-fold desc="forms">
 
-	protected function createComponentStock()
+	public function createComponentStock()
 	{
 		return new Multiplier(function ($itemId) {
 			$control = $this->iStockPrint->create();
@@ -332,7 +332,7 @@ abstract class BasePresenter extends BaseBasePresenter
 		return $control;
 	}
 
-	/** @return SubscribeControl */
+	/** @return Subscribe */
 	public function createComponentSubscribe()
 	{
 		return $this->iSubscribeControlFactory->create();

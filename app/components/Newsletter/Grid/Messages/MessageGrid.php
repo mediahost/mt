@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\Newsletter;
+namespace App\Components\Newsletter\Grid;
 
 use App\Components\BaseControl;
 use App\Extensions\Grido\BaseGrid;
@@ -10,7 +10,7 @@ use App\Model\Facade\LocaleFacade;
 use App\Model\Facade\NewsletterFacade;
 use Grido\DataSources\Doctrine;
 
-class MessageGridControl extends BaseControl
+class MessageGrid extends BaseControl
 {
 
 	const LOCALE_DOMAIN = 'newsletter.admin.newsletter.grid';
@@ -152,9 +152,9 @@ class MessageGridControl extends BaseControl
 
 }
 
-interface IMessageGridControlFactory
+interface IMessageGridFactory
 {
 
-	/** @return MessageGridControl */
+	/** @return MessageGrid */
 	function create();
 }

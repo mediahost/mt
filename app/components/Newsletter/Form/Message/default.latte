@@ -1,0 +1,17 @@
+{snippet form}
+	{control form}
+	<p>
+		{_'newsletter.admin.newsletter.new.counter.pre'}
+		<strong>
+			<span id="new-newsletter-count" class="badge badge-primary">
+				{is_array($count) ? $count[''] : $count}
+			</span>
+		</strong>
+		{_'newsletter.admin.newsletter.new.counter.post'}
+	</p>
+	{ifset $data}
+		<script id="new-newsletter-data" type="text/json">
+			{$data|noescape}
+		</script>
+	{/ifset}
+{/snippet}

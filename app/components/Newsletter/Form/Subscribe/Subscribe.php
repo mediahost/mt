@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\Newsletter;
+namespace App\Components\Newsletter\Form;
 
 use App\Components\BaseControl;
 use App\Forms\Renderers\MetronicFormRenderer;
@@ -9,7 +9,7 @@ use Nette\Application\UI\Form;
 use Nette\Http\Request;
 use Nette\Utils\ArrayHash;
 
-class SubscribeControl extends BaseControl
+class Subscribe extends BaseControl
 {
 
 	/** @var Request @inject */
@@ -22,7 +22,7 @@ class SubscribeControl extends BaseControl
 	protected function createComponentForm()
 	{
 		$form = new Form;
-		$form->setTranslator($this->translator->domain('newsletter.subscribeControl'))
+		$form->setTranslator($this->translator->domain('newsletter.subscribeForm'))
 				->setRenderer(new MetronicFormRenderer())
 				->getElementPrototype()->class[] = 'ajax';
 
@@ -51,9 +51,9 @@ class SubscribeControl extends BaseControl
 
 }
 
-interface ISubscribeControlFactory
+interface ISubscribeFactory
 {
 
-	/** @return SubscribeControl */
+	/** @return Subscribe */
 	function create();
 }

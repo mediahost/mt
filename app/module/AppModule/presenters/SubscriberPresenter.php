@@ -2,22 +2,22 @@
 
 namespace App\AppModule\Presenters;
 
-use App\Components\Newsletter\ISubscriberGridControlFactory;
-use App\Components\Newsletter\SubscriberGridControl;
-use App\Forms\Renderers\MetronicFormRenderer;
+use App\Components\Newsletter\Form\ISubscriberEditFactory;
+use App\Components\Newsletter\Form\SubscriberEdit;
+use App\Components\Newsletter\Grid\ISubscriberGridFactory;
+use App\Components\Newsletter\Grid\SubscriberGrid;
 use App\Model\Entity\Newsletter\Subscriber;
 use App\Model\Facade\NewsletterFacade;
 use App\Model\Facade\SubscriberFacade;
-use DateTime;
-use Nette\Application\UI;
-use Nette\Forms\Form;
-use Nette\Utils\ArrayHash;
 
 class SubscriberPresenter extends BasePresenter
 {
 
-	/** @var ISubscriberGridControlFactory @inject */
-	public $iSubscriberGridControlFactory;
+	/** @var ISubscriberEditFactory @inject */
+	public $iSubscriberEditFactory;
+
+	/** @var ISubscriberGridFactory @inject */
+	public $iSubscriberGridFactory;
 
 	/** @var NewsletterFacade @inject */
 	public $newsletterFacade;
@@ -64,60 +64,20 @@ class SubscriberPresenter extends BasePresenter
 		$this->redirect('default');
 	}
 
-	/** @return SubscriberGridControl */
+	/** @return SubscriberGrid */
 	protected function createComponentGrid()
 	{
-		return $this->iSubscriberGridControlFactory->create();
+		return $this->iSubscriberGridFactory->create();
 	}
 
-	/** @return UI\Form */
+	/** @return SubscriberEdit */
 	protected function createComponentForm()
 	{
-		$form = new UI\Form;
-		$form->setRenderer(new MetronicFormRenderer)
-				->setTranslator($this->translator);
-
-		$form->addText('email', 'form.label.email')
-				->setRequired()
-				->addRule(Form::EMAIL);
-
-		$form->addSelect('type', 'newsletter.admin.subscriber.grid.header.type', [
-			Subscriber::TYPE_USER => 'newsletter.admin.subscriber.grid.types.user',
-			Subscriber::TYPE_DEALER => 'newsletter.admin.subscriber.grid.types.dealer',
-		]);
-
-		$form->addSubmit('save', 'form.submit.save');
-		$form->onSuccess[] = [$this, 'formSucceded'];
-		return $form;
-	}
-
-	/**
-	 * @param UI\Form $form
-	 * @param ArrayHash $values
-	 */
-	public function formSucceded(UI\Form $form, ArrayHash $values)
-	{
-		$subscriber = $this->newsletterFacade->findSubscriber($values->email, $values->type);
-
-		if ($subscriber === NULL) {
-			if ($values->type === Subscriber::TYPE_USER) {
-				$this->newsletterFacade->subscribe($values->email);
-			} elseif ($values->type === Subscriber::TYPE_DEALER) {
-				$subscriber = new Subscriber;
-				$subscriber->setMail($values->email)
-						->setType(Subscriber::TYPE_DEALER)
-						->setLocale('en')
-						->setSubscribed(new DateTime);
-				
-				$this->em->persist($subscriber)
-						->flush();
-			}
-
-			$this->flashMessage($this->translator->translate('newsletter.messages.addSubscriber.success'), 'success');
+		$control = $this->iSubscriberEditFactory->create();
+		$control->onAfterSave = function () {
 			$this->redirect('default');
-		} else {
-			$form->addError($this->translator->translate('newsletter.messages.addSubscriber.alreadyExists', ['email' => $values->email]));
-		}
+		};
+		return $control;
 	}
 
 }
