@@ -173,7 +173,8 @@ class Helpers
 		if (is_dir($dir)) {
 			$files = array_diff(scandir($dir), array('.', '..'));
 			foreach ($files as $file) {
-				(is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file");
+				$filename = self::getPath($dir, $file);
+				(is_dir($filename)) ? delTree($filename) : unlink($filename);
 			}
 			return rmdir($dir);
 		}
@@ -243,7 +244,7 @@ class Helpers
 	 */
 	public static function getPath($_ = NULL)
 	{
-		return call_user_func_array(get_class() . '::concatStrings', array_merge(['/'], func_get_args()));
+		return call_user_func_array(get_class() . '::concatStrings', array_merge([DIRECTORY_SEPARATOR], func_get_args()));
 	}
 
 	// </editor-fold>

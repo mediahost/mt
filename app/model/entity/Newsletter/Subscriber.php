@@ -58,6 +58,7 @@ class Subscriber extends BaseEntity
 	public function __construct()
 	{
 		$this->statuses = new ArrayCollection();
+		parent::__construct();
 	}
 
 	public function __toString()
