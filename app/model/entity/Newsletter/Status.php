@@ -38,4 +38,5 @@ class Status extends BaseEntity
 	 * @ORM\JoinColumn(nullable=true)
 	 */
 	protected $subscriber;
+
 }
