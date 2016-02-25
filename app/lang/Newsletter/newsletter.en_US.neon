@@ -42,6 +42,7 @@ admin:
 			users: 'users'
 			dealers: 'dealers'
 			locale: 'Locale'
+			attachment: 'Attachment'
 			testEmail: 'E-mail for test'
 			send: 'Send'
 			sendTest: 'Send test'
