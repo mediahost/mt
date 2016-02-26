@@ -20,8 +20,7 @@ class ProductTranslation extends BaseEntity
 {
 
 	use Model\Translatable\Translation;
-
-use Model\Sluggable\Sluggable;
+	use Model\Sluggable\Sluggable;
 
 	/** @ORM\Column(type="string", nullable=true) */
 	protected $name;
