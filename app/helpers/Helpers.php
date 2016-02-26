@@ -239,12 +239,21 @@ class Helpers
 	}
 
 	/**
-	 * Set inserted parameters to path separated by /
+	 * Set inserted parameters to path separated by directory separator
 	 * @return string
 	 */
 	public static function getPath($_ = NULL)
 	{
 		return call_user_func_array(get_class() . '::concatStrings', array_merge([DIRECTORY_SEPARATOR], func_get_args()));
+	}
+
+	/**
+	 * Set inserted parameters to path separated by /
+	 * @return string
+	 */
+	public static function getUrlPath($_ = NULL)
+	{
+		return call_user_func_array(get_class() . '::concatStrings', array_merge(['/'], func_get_args()));
 	}
 
 	// </editor-fold>
