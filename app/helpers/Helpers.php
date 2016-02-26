@@ -240,20 +240,13 @@ class Helpers
 
 	/**
 	 * Set inserted parameters to path separated by directory separator
+	 * Used as separator for folder same as for directory
 	 * @return string
 	 */
 	public static function getPath($_ = NULL)
 	{
-		return call_user_func_array(get_class() . '::concatStrings', array_merge([DIRECTORY_SEPARATOR], func_get_args()));
-	}
-
-	/**
-	 * Set inserted parameters to path separated by /
-	 * @return string
-	 */
-	public static function getUrlPath($_ = NULL)
-	{
-		return call_user_func_array(get_class() . '::concatStrings', array_merge(['/'], func_get_args()));
+		$separator = '/'; // DONT replace by DIRECTORY_SEPARATOR - it is using for URL path
+		return call_user_func_array(get_class() . '::concatStrings', array_merge([$separator], func_get_args()));
 	}
 
 	// </editor-fold>

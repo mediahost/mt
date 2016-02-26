@@ -81,7 +81,7 @@ class Product extends BaseTranslatable
 		$url = NULL;
 		if ($this->mainCategory) {
 			$this->mainCategory->setCurrentLocale($this->getCurrentLocale());
-			$url = Helpers::getUrlPath($this->mainCategory->url, $this->slug);
+			$url = Helpers::getPath($this->mainCategory->url, $this->slug);
 		}
 		return $url;
 	}
