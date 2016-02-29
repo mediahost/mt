@@ -7,6 +7,8 @@ services:
 	- {implement: App\Mail\Messages\Order\ChangeState\IExpededFactory, inject: yes}
 	- {implement: App\Mail\Messages\Order\ChangeState\IDoneFactory, inject: yes}
 	- {implement: App\Mail\Messages\Order\ChangeState\IStornoFactory, inject: yes}
+	- {implement: App\Mail\Messages\Order\Payment\ISuccessPaymentFactory, inject: yes}
+	- {implement: App\Mail\Messages\Order\Payment\IErrorPaymentFactory, inject: yes}
 	- {implement: App\Mail\Messages\Buyout\IOurMessageFactory, inject: yes}
 	- {implement: App\Mail\Messages\Buyout\ITheirMessageFactory, inject: yes}
 	- {implement: App\Mail\Messages\Dealer\IDealerWantBeOurMessageFactory, inject: yes}

@@ -12,6 +12,17 @@ twitter:
 	consumerKey: 'consumer_key'
 	consumerSecretKey: 'secret_key'
 
+gpwebpay:
+    privateKey: '../key/test.pem'
+    privateKeyPassword: 'mobil'
+    publicKey: '../key/gpe.signing_test.pem'
+    url: 'https://test.3dsecure.gpwebpay.com/csobsk/order.do'
+    merchantNumber: 3082563
+# Testovací karta: 5434021016824014
+# Expiry: 12/2020
+# Password: secret3
+# CVC2: 483
+
 installer:
 	lock: on # při TRUE zamyká instalaci po spuštění, pak je potřeba odmazat temp/install pro novou instalaci
 	doctrine: off # aktualizuje DB podle entit

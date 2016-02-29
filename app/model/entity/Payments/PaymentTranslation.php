@@ -10,6 +10,7 @@ use Knp\DoctrineBehaviors\Model;
  * @ORM\Entity
  *
  * @property string $html
+ * @property string $errorHtml
  */
 class PaymentTranslation extends BaseEntity
 {
@@ -18,5 +19,8 @@ class PaymentTranslation extends BaseEntity
 
 	/** @ORM\Column(type="text", nullable=true) */
 	protected $html;
+
+	/** @ORM\Column(type="text", nullable=true) */
+	protected $errorHtml;
 
 }

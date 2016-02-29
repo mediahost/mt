@@ -12,6 +12,7 @@ use Knp\DoctrineBehaviors\Model;
  * @property bool $active
  * @property bool $useCond1
  * @property bool $useCond2
+ * @property bool $isCard
  * @property string $name
  * @property string $html
  * @property Price $price
@@ -24,6 +25,7 @@ class Payment extends BaseTranslatable
 	const PERSONAL = 1;
 	const ON_DELIVERY = 2;
 	const BANK_ACCOUNT = 3;
+	const CARD_PAYMENT = 4;
 	
 	use Model\Translatable\Translatable;
 
@@ -35,6 +37,9 @@ class Payment extends BaseTranslatable
 
 	/** @ORM\Column(type="boolean") */
 	protected $useCond2 = FALSE;
+
+	/** @ORM\Column(type="boolean") */
+	protected $isCard = FALSE;
 
 	/** @ORM\Column(type="string", nullable=true) */
 	protected $name;

@@ -188,15 +188,18 @@
 							{_'cart.back'}
 						</a>
 					</div>
-					<div class="col-md-6 col-sm-6">
-						<a n:href="send!" class="btn btn-primary">
-							<i class="fa fa-check"></i>
+					<a n:href="send!" class="btn btn-primary">
+						<i class="fa fa-check"></i>
+						{if $byCard}
+							{_'cart.pay'}
+						{else}
 							{_'cart.finish'}
-						</a>
-					</div>
+						{/if}
+					</a>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- END CONTENT -->
+</div>
+<!-- END CONTENT -->
 </div>

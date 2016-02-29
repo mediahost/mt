@@ -3,6 +3,7 @@ subject:
 	createRegistration: 'Your registration'
 	verify: 'Verify your e-mail'
 	changeStateOrder: 'Your order #%id%'
+	changePaymentOrder: 'Payment order #%id%'
 	createOrder: 'Your order #%id%'
 	createOrderShop: 'New order #%id%'
 	unfinished: 'Unfinished order'
@@ -27,6 +28,8 @@ order:
 			contactUs: 'In case of any discrepancy, please contact us.'
 		expeded:
 			hasBeenExpeded: 'Your order has been expeded.'
+		payment:
+			successfully: 'Your order has been successfully payed.'
 	new:
 		recieved: 'thank you for your purchase, we have received your order correctly.'
 watchdog:
