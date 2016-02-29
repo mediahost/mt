@@ -9,6 +9,7 @@ use App\Model\Entity\Payment;
 use App\Model\Entity\Shipping;
 use App\Model\Facade\BasketFacade;
 use App\Model\Facade\PaymentsFacade;
+use Nette\Security\User;
 
 class Payments extends BaseControl
 {
@@ -18,6 +19,9 @@ class Payments extends BaseControl
 
 	/** @var PaymentsFacade @inject */
 	public $paymentFacade;
+
+	/** @var User @inject */
+	public $user;
 
 	/** @var int */
 	private $priceLevel = NULL;
@@ -42,6 +46,10 @@ class Payments extends BaseControl
 		$basket = $this->basketFacade->getBasket();
 		$shippings = $this->paymentFacade->getShippingsList($basket, $this->priceLevel);
 		$payments = $this->paymentFacade->getPaymentsList($basket, $this->priceLevel);
+		
+		if (array_key_exists(Payment::CARD_PAYMENT, $payments) && $this->user->id !== 6) {
+			unset($payments[Payment::CARD_PAYMENT]);
+		}
 
 		$form->addRadioList('shipping', 'cart.headline.selectShipping', $shippings);
 		$form->addRadioList('payment', 'cart.headline.selectPayment', $payments);
