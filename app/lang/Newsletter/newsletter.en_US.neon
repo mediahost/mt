@@ -68,7 +68,7 @@ admin:
 				dealer: 'dealer'
 				unknown: 'unknown'
 
-subscribeControl:
+subscribeForm:
 	label: 'E-mail'
 	placeholder: 'Enter your e-mail'
 	submit: 'Subscribe'
