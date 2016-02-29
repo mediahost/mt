@@ -68,7 +68,7 @@ admin:
 				dealer: 'díler'
 				unknown: 'neznámý'
 
-subscribeControl:
+subscribeForm:
 	label: 'E-mail'
 	placeholder: 'Zadajte váš e-mail'
 	submit: 'Prihlásiť'
