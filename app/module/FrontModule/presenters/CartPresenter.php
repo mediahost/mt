@@ -9,6 +9,8 @@ use App\Components\Basket\Form\IPersonalFactory;
 use App\Components\Basket\Form\Payments;
 use App\Components\Basket\Form\Personal;
 use App\Helpers;
+use App\Mail\Messages\Order\Payment\IErrorPaymentFactory;
+use App\Mail\Messages\Order\Payment\ISuccessPaymentFactory;
 use App\Model\Entity\Basket;
 use App\Model\Entity\Category;
 use App\Model\Entity\Order;
@@ -18,6 +20,12 @@ use Doctrine\ORM\NoResultException;
 use HeurekaOvereno;
 use HeurekaOverenoException;
 use Nette\Utils\Html;
+use Pixidos\GPWebPay\Components\GPWebPayControl;
+use Pixidos\GPWebPay\Components\GPWebPayControlFactory;
+use Pixidos\GPWebPay\Exceptions\GPWebPayException;
+use Pixidos\GPWebPay\Operation;
+use Pixidos\GPWebPay\Request;
+use Pixidos\GPWebPay\Response;
 use Tracy\Debugger;
 
 class CartPresenter extends BasePresenter
@@ -31,6 +39,15 @@ class CartPresenter extends BasePresenter
 
 	/** @var IPersonalFactory @inject */
 	public $iPersonalFactory;
+
+	/** @var GPWebPayControlFactory @inject */
+	public $gpWebPayFactory;
+
+	/** @var ISuccessPaymentFactory @inject */
+	public $iSuccessPaymentFactory;
+
+	/** @var IErrorPaymentFactory @inject */
+	public $iErrorPaymentFactory;
 
 	public function renderDefault()
 	{
@@ -74,14 +91,14 @@ class CartPresenter extends BasePresenter
 	{
 		$basketRepo = $this->em->getRepository(Basket::getClassName());
 		$uncompleteBasket = $basketRepo->findOneByAccessHash($cart);
-		
+
 		if ($uncompleteBasket) {
 			$this->basketFacade->import($uncompleteBasket, FALSE);
 			$this->flashMessage($this->translator->translate('cart.recovered'), 'success');
 		} else {
 			$this->flashMessage($this->translator->translate('cart.notFound'), 'warning');
 		}
-		
+
 		$this->redirect('default');
 	}
 
@@ -106,6 +123,7 @@ class CartPresenter extends BasePresenter
 			$this->redirect('default');
 		}
 
+		$this->template->byCard = $this->basketFacade->isCardPayment();
 		$this->template->termsLink = $this->link('Page:terms');
 	}
 
@@ -116,6 +134,8 @@ class CartPresenter extends BasePresenter
 		$this->checkFilledAddress();
 
 		try {
+			$payByCard = $this->basketFacade->isCardPayment();
+
 			$basket = $this->basketFacade->getBasket();
 			$user = $this->user->id ? $this->user->identity : NULL;
 			$order = $this->orderFacade->createFromBasket($basket, $user);
@@ -123,7 +143,11 @@ class CartPresenter extends BasePresenter
 
 			$this->getSessionSection()->orderId = $order->id;
 
-			$this->redirect('done');
+			if ($payByCard) {
+				$this['webPay']->handleCheckout();
+			} else {
+				$this->redirect('done');
+			}
 		} catch (ItemsIsntOnStockException $ex) {
 			$this->redirect('default');
 		}
@@ -155,6 +179,7 @@ class CartPresenter extends BasePresenter
 		if ($heurekaSettings->enabled) {
 			$this->template->heurekaConversionKey = $heurekaSettings->keyConversion;
 		}
+		$order->payment->origin->setCurrentLocale($this->locale);
 		$this->template->order = $order;
 	}
 
@@ -237,6 +262,59 @@ class CartPresenter extends BasePresenter
 		$control->onAfterSave = function () {
 			$this->redirect('summary');
 		};
+		return $control;
+	}
+
+	/** @return GPWebPayControl */
+	public function createComponentWebPay()
+	{
+		$orderId = $this->getSessionSection()->orderId;
+		$orderRepo = $this->em->getRepository(Order::getClassName());
+		$order = $orderRepo->find($orderId);
+
+		if ($order) {
+			/* @var $order Order */
+			$this->exchange->setWeb($order->currency);
+			$totalPrice = $order->getTotalPriceToPay($this->exchange);
+			switch ($order->currency) {
+				case 'CZK':
+					$curencyCode = Operation::CZK;
+					break;
+				case 'EUR':
+				default:
+					$curencyCode = Operation::EUR;
+					break;
+			}
+
+			$operation = new Operation($order->id, $totalPrice, $curencyCode);
+		} else {
+			Debugger::log("Order to pay by card was't finded. '\$orderId = {$orderId}'", 'card_payment');
+			$this->redirect('done');
+		}
+
+		$control = $this->gpWebPayFactory->create($operation);
+
+		$control->onCheckout[] = function (GPWebPayControl $control, Request $request) {
+			
+		};
+		
+		$control->onSuccess[] = function(GPWebPayControl $control, Response $response) use ($order) {
+			$this->orderFacade->payOrder($order, Order::PAYMENT_BLAME_CARD);
+			$mail = $this->iSuccessPaymentFactory->create();
+			$mail->addTo($order->mail)
+					->setOrder($order)
+					->send();
+			$this->redirect('done');
+		};
+		$control->onError[] = function(GPWebPayControl $control, GPWebPayException $exception) use ($order) {
+			Debugger::log('ORDER: ' . $order->id . '; ' . $exception->getMessage(), 'card_payment_errors');
+			$mail = $this->iErrorPaymentFactory->create();
+			$mail->addTo($order->mail)
+					->setOrder($order)
+					->send();
+			$this->redirect('done');
+		};
+
 		return $control;
 	}
 

@@ -54,6 +54,7 @@ class PaymentEdit extends BaseControl
 			$form->addCheckSwitch('active', 'Active', 'YES', 'NO');
 //			$form->addCheckSwitch('cond1', 'Apply condition #1', 'YES', 'NO');
 //			$form->addCheckSwitch('cond2', 'Apply condition #2', 'YES', 'NO');
+			$form->addCheckSwitch('isCard', 'Is Card Payment', 'YES', 'NO');
 			$form->addText('free', 'Free price')
 				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
 			$form->addGroup('Admin part');
@@ -76,6 +77,10 @@ class PaymentEdit extends BaseControl
 				->add($separator)
 				->add($tagOrderNumber);
 		$form->addWysiHtml('html', 'Text', 10)
+						->setOption('description', $description)
+						->getControlPrototype()->class[] = 'page-html-content';
+		
+		$form->addWysiHtml('errorHtml', 'Text while Error', 10)
 						->setOption('description', $description)
 						->getControlPrototype()->class[] = 'page-html-content';
 
@@ -120,11 +125,15 @@ class PaymentEdit extends BaseControl
 		if (isset($values->cond2)) {
 			$this->payment->useCond2 = $values->cond2;
 		}
+		if (isset($values->isCard)) {
+			$this->payment->isCard = $values->isCard;
+		}
 		if (isset($values->free)) {
 			$this->payment->setFreePrice($values->free, $values->with_vat);
 		}
 		
 		$this->payment->translateAdd($this->translator->getLocale())->html = $values->html;
+		$this->payment->translateAdd($this->translator->getLocale())->errorHtml = $values->errorHtml;
 		$this->payment->mergeNewTranslations();
 
 		return $this;
@@ -145,7 +154,9 @@ class PaymentEdit extends BaseControl
 			'active' => $this->payment->active,
 			'cond1' => $this->payment->useCond1,
 			'cond2' => $this->payment->useCond2,
+			'isCard' => $this->payment->isCard,
 			'html' => $this->payment->html,
+			'errorHtml' => $this->payment->errorHtml,
 		];
 		foreach ($this->payment->shippings as $shipping) {
 			$values['shippings'][] = $shipping->id;

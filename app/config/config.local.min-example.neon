@@ -12,6 +12,13 @@ twitter:
 	consumerKey: 'consumer_key'
 	consumerSecretKey: 'secret_key'
 
+gpwebpay:
+    privateKey: '../key/test.pem'
+    privateKeyPassword: 'mobil'
+    publicKey: '../key/gpe.signing_test.pem'
+    url: 'https://test.3dsecure.gpwebpay.com/csobsk/order.do'
+    merchantNumber: 3082563
+
 installer:
 	lock: off
 	doctrine: on

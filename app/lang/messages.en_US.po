@@ -1000,6 +1000,9 @@ msgstr "Phone"
 msgid "Text"
 msgstr "Text"
 
+msgid "Text while Error"
+msgstr "Text while Error"
+
 msgid "Date"
 msgstr "Date"
 

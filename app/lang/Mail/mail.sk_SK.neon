@@ -3,6 +3,7 @@ subject:
 	createRegistration: 'Vaša registrácia'
 	verify: 'Overenie e-mailu'
 	changeStateOrder: 'Vaša objednávka č.%id%'
+	changePaymentOrder: 'Platba objednávky č.%id%'
 	createOrder: 'Vaša objednávka č.%id%'
 	createOrderShop: 'Nová objednávka č.%id%'
 	unfinished: 'Nedokončená objednávka'
@@ -28,6 +29,8 @@ order:
 			contactUs: 'V prípade akejkoľvek nezrovnalosti nás prosím ihneď kontaktujte.'
 		expeded:
 			hasBeenExpeded: 'Vaša objednávka bola expedovaná.'
+		payment:
+			successfully: 'Vaša objednávka bola úspešne zaplatená.'
 	new:
 		recieved: 'ďakujeme Vám za Váš nákup, práve sme prijali vašu objednávku.'
 watchdog:

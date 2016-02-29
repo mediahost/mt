@@ -46,6 +46,7 @@ class Order extends BaseEntity
 	const PAYMENT_BLAME_MANUAL = 1;
 	const PAYMENT_BLAME_VUB = 2;
 	const PAYMENT_BLAME_CSOB = 3;
+	const PAYMENT_BLAME_CARD = 4;
 
 	use Identifier;
 	use Model\Timestampable\Timestampable;
@@ -55,6 +56,7 @@ class Order extends BaseEntity
 		self::PAYMENT_BLAME_MANUAL => 'admin',
 		self::PAYMENT_BLAME_VUB => 'VUB',
 		self::PAYMENT_BLAME_CSOB => 'CSOB',
+		self::PAYMENT_BLAME_CARD => 'WebPay',
 	];
 
 	/** @ORM\Column(type="string", nullable=true) */
@@ -128,6 +130,17 @@ class Order extends BaseEntity
 		if (isset($this->paymentBlameNames[$this->paymentBlame])) {
 		    return $this->paymentBlameNames[$this->paymentBlame];
 		}
+		return NULL;
+	}
+
+	public function isCardPayment()
+	{
+		return $this->payment->origin->isCard;
+	}
+
+	public function isPayed()
+	{
+		return (bool) $this->paymentBlame;
 	}
 
 	public function setUser(User $user)

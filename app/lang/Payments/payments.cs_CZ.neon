@@ -8,6 +8,7 @@ payment:
 	personal: 'Osobně'
 	on_delivery: 'Dobírkou'
 	bank_account: 'Převodem na účet předem'
+	card_payment: 'Platba kartou'
 
 form:
 	select: '--- beze změny ---'

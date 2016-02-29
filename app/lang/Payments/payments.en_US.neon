@@ -8,6 +8,7 @@ payment:
 	personal: 'Personal'
 	on_delivery: 'On Delivery'
 	bank_account: 'Bank Account'
+	card_payment: 'Card payment'
 
 form:
 	select: '--- Select for change ---'

@@ -179,6 +179,13 @@ class BasketFacade extends Object
 		return $basket->payment->getPrice($basket, $level);
 	}
 
+	/** @var bool */
+	public function isCardPayment()
+	{
+		$basket = $this->getBasket();
+		return $basket->payment->isCard;
+	}
+
 	public function setAddress($mail, Address $billing = NULL, Address $shipping = NULL, $removeNull = TRUE)
 	{
 		$addressRepo = $this->em->getRepository(Address::getClassName());

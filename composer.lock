@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cac01322ebdf28990af3fe47ee8e40ba",
-    "content-hash": "ba553ba8626846f717d7c21473ce46e5",
+    "hash": "56e986829cd381619d24530a1412069a",
+    "content-hash": "d23a803a9688ac5a33ad4d9e8a96d17f",
     "packages": [
         {
             "name": "dg/adminer-custom",
@@ -38,7 +38,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dg/ftp-deployment/zipball/473447c5ff4d010b446373a39363fee24736dcd2",
+                "url": "https://api.github.com/repos/dg/ftp-deployment/zipball/4fb74497470a886fa8514ab8e03067df01465226",
                 "reference": "473447c5ff4d010b446373a39363fee24736dcd2",
                 "shasum": ""
             },
@@ -686,7 +686,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drahak/Restful/zipball/fe381abf8ca95bdf4608f2f0120c132ef49886b1",
+                "url": "https://api.github.com/repos/drahak/Restful/zipball/17d181bfdfc58b20480ecdaf14591189f1306c16",
                 "reference": "fe381abf8ca95bdf4608f2f0120c132ef49886b1",
                 "shasum": ""
             },
@@ -754,7 +754,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/h4kuna/exchange/zipball/d211e605d715f150d9eb64551394136fc3bc3452",
+                "url": "https://api.github.com/repos/h4kuna/exchange/zipball/03d78e8dd5efc88f04131b9b6ac1c609425e7791",
                 "reference": "d211e605d715f150d9eb64551394136fc3bc3452",
                 "shasum": ""
             },
@@ -840,12 +840,12 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/heureka/heureka-overeno-php-api.git",
-                "reference": "aeb92b23d507b64bf8d1fef288272fc42ed3e649"
+                "url": "https://github.com/heureka/overeno-zakazniky.git",
+                "reference": "5085c9317047363e0d3df8601c3d38b7979f09be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/heureka/heureka-overeno-php-api/zipball/aeb92b23d507b64bf8d1fef288272fc42ed3e649",
+                "url": "https://api.github.com/repos/heureka/overeno-zakazniky/zipball/5085c9317047363e0d3df8601c3d38b7979f09be",
                 "reference": "aeb92b23d507b64bf8d1fef288272fc42ed3e649",
                 "shasum": ""
             },
@@ -925,7 +925,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/janmarek/WebLoader/zipball/812c86473323f57af092bbb1a2f0d72868240210",
+                "url": "https://api.github.com/repos/janmarek/WebLoader/zipball/b233e2ddec77efde687ee8d2f680f02fd5026ad0",
                 "reference": "812c86473323f57af092bbb1a2f0d72868240210",
                 "shasum": ""
             },
@@ -1529,7 +1529,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kdyby/DoctrineForms/zipball/4d13fd94e808fba3ad2201f9481fe1a6ab230a22",
+                "url": "https://api.github.com/repos/Kdyby/DoctrineForms/zipball/c5520542c91320a1d156015a672b88e2526d2e54",
                 "reference": "4d13fd94e808fba3ad2201f9481fe1a6ab230a22",
                 "shasum": ""
             },
@@ -1785,7 +1785,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kdyby/Replicator/zipball/a8e37efe715d913800cdc530e126874ff166681a",
+                "url": "https://api.github.com/repos/Kdyby/Replicator/zipball/0223962bbfaf608e2ca39c7ac10d4835e6eecf89",
                 "reference": "a8e37efe715d913800cdc530e126874ff166681a",
                 "shasum": ""
             },
@@ -1862,7 +1862,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kdyby/Translation/zipball/182d12611b9a3553908c51ddbec80d4233617677",
+                "url": "https://api.github.com/repos/Kdyby/Translation/zipball/d003446a53adf31eea6e2112ab84896b193f706c",
                 "reference": "182d12611b9a3553908c51ddbec80d4233617677",
                 "shasum": ""
             },
@@ -1957,7 +1957,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kdyby/Validator/zipball/95fa998386f70084b437a32895a6edc47999cd9e",
+                "url": "https://api.github.com/repos/Kdyby/Validator/zipball/11871b5f79d050bc1b870d13f9b3ac3b3e09ce17",
                 "reference": "95fa998386f70084b437a32895a6edc47999cd9e",
                 "shasum": ""
             },
@@ -3018,7 +3018,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/nette/zipball/059cff35c281125e5da0615a1cd0b10908ebb944",
+                "url": "https://api.github.com/repos/nette/nette/zipball/39d79cae95d56ffcdb5417328f8ccbc1d53aafda",
                 "reference": "059cff35c281125e5da0615a1cd0b10908ebb944",
                 "shasum": ""
             },
@@ -3576,6 +3576,86 @@
             "time": "2015-11-12 16:09:57"
         },
         {
+            "name": "pixidos/gpwebpay",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Pixidos/GPWebPay.git",
+                "reference": "292a2d149cdf9ac8f401276bdbfde8c061eaf71b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Pixidos/GPWebPay/zipball/292a2d149cdf9ac8f401276bdbfde8c061eaf71b",
+                "reference": "292a2d149cdf9ac8f401276bdbfde8c061eaf71b",
+                "shasum": ""
+            },
+            "require": {
+                "ext-openssl": "*",
+                "nette/application": "2.3.*",
+                "nette/di": "2.3.*",
+                "nette/utils": "2.3.*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "latte/latte": "2.3.*",
+                "nette/application": "2.3.*",
+                "nette/bootstrap": "2.3.*",
+                "nette/caching": "2.3.*",
+                "nette/component-model": "2.2.*",
+                "nette/database": "2.3.*",
+                "nette/deprecated": "2.3.*",
+                "nette/di": "2.3.*",
+                "nette/finder": "2.3.*",
+                "nette/forms": "2.3.*",
+                "nette/http": "2.3.*",
+                "nette/mail": "2.3.*",
+                "nette/neon": "2.3.*",
+                "nette/php-generator": "2.3.*",
+                "nette/reflection": "2.3.*",
+                "nette/robot-loader": "2.3.*",
+                "nette/safe-stream": "2.3.*",
+                "nette/security": "2.3.*",
+                "nette/tester": "@dev",
+                "nette/tokenizer": "2.2.*",
+                "nette/utils": "2.3.*",
+                "tracy/tracy": "2.3.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Pixidos\\GPWebPay\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause",
+                "GPL-2.0",
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "PIXDOS LTD",
+                    "email": "dev@pixidos.com"
+                },
+                {
+                    "name": "Ondra Votava",
+                    "email": "ondra.votava@pixidos.com"
+                }
+            ],
+            "description": "GP WepPay integration for Nette Framework",
+            "homepage": "https://github.com/pixidos",
+            "keywords": [
+                "checkout",
+                "gp",
+                "gp webpay",
+                "nette",
+                "pay",
+                "payment",
+                "webpay"
+            ],
+            "time": "2015-10-29 15:26:23"
+        },
+        {
             "name": "rm/header",
             "version": "dev-master",
             "source": {
@@ -3585,7 +3665,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/romanmatyus/Header/zipball/ff9e7a02fac9b514d6c4a0071e2bc1ebb330a851",
+                "url": "https://api.github.com/repos/romanmatyus/Header/zipball/786680fc6b4c59509cba50b8e3b389d0c0487f23",
                 "reference": "ff9e7a02fac9b514d6c4a0071e2bc1ebb330a851",
                 "shasum": ""
             },
@@ -4288,7 +4368,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kdyby/TesterExtras/zipball/6d138b2aac0427c59990439b65519020a3b5b2c3",
+                "url": "https://api.github.com/repos/Kdyby/TesterExtras/zipball/65ffcbc64e36be3f16c5831f64c5dfc590674753",
                 "reference": "6d138b2aac0427c59990439b65519020a3b5b2c3",
                 "shasum": ""
             },

@@ -8,10 +8,23 @@
 	<div class="row margin-bottom-20">
 		<div class="col-md-12 col-sm-12">
 			<div class="cart-page">
-				<div class="note note-success">
-					<h4 class="block">{_'cart.orderWasSend'}</h4>
+				{var paymentError => $order->isCardPayment() && !$order->isPayed()}
+				<div n:class="note, $paymentError ? note-warning : note-success">
+					<h4 class="block">
+						{if $order->isCardPayment() && $order->isPayed()}
+							{_'cart.orderWasPayed'}
+						{elseif $order->isCardPayment() && !$order->isPayed()}
+							{_'cart.orderWasNotPayed'}
+						{else}
+							{_'cart.orderWasSend'}
+						{/if}
+					</h4>
 					<p>
-						{_'cart.moreInfoInMail'}
+						{if $paymentError}
+							{_$order->payment->origin->errorHtml, NULL, ['order_number' => $order->id]|noescape}
+						{else}
+							{_'cart.moreInfoInMail'}
+						{/if}
 					</p>
 					<p>
 						<a n:href="Homepage:">{_'cart.continueShopping'}</a>
