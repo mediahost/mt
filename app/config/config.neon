@@ -72,3 +72,4 @@ extensions:
 	importFromMT1: App\Extensions\ImportFromMT1\DI\ImportFromMT1Extension
 	filesManager: App\Extensions\FilesManager\DI\FilesManagerExtension
 	gpwebpay: Pixidos\GPWebPay\DI\GPWebPayExtension
+	homecredit: App\Extensions\HomeCredit\DI\HomeCreditExtension

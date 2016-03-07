@@ -233,7 +233,8 @@ class Basket extends BaseEntity
 
 	public function needAddress()
 	{
-		return $this->shipping && $this->shipping->needAddress;
+		return ($this->shipping && $this->shipping->needAddress) ||
+				($this->payment && $this->payment->needAddress);
 	}
 
 	public function getShippingAddress($realShipping = FALSE)

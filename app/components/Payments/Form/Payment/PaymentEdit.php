@@ -52,9 +52,11 @@ class PaymentEdit extends BaseControl
 		if ($this->user->isAllowed('payments', 'editAll')) {
 			$form->addGroup('Superadmin part');
 			$form->addCheckSwitch('active', 'Active', 'YES', 'NO');
+			$form->addCheckSwitch('needAddress', 'Need Address', 'YES', 'NO');
 //			$form->addCheckSwitch('cond1', 'Apply condition #1', 'YES', 'NO');
 //			$form->addCheckSwitch('cond2', 'Apply condition #2', 'YES', 'NO');
 			$form->addCheckSwitch('isCard', 'Is Card Payment', 'YES', 'NO');
+			$form->addCheckSwitch('isHomecreditSk', 'Is Home Credit SK Payment', 'YES', 'NO');
 			$form->addText('free', 'Free price')
 				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
 			$form->addGroup('Admin part');
@@ -119,6 +121,9 @@ class PaymentEdit extends BaseControl
 		if (isset($values->active)) {
 			$this->payment->active = $values->active;
 		}
+		if (isset($values->needAddress)) {
+			$this->payment->needAddress = $values->needAddress;
+		}
 		if (isset($values->cond1)) {
 			$this->payment->useCond1 = $values->cond1;
 		}
@@ -127,6 +132,9 @@ class PaymentEdit extends BaseControl
 		}
 		if (isset($values->isCard)) {
 			$this->payment->isCard = $values->isCard;
+		}
+		if (isset($values->isHomecreditSk)) {
+			$this->payment->isHomecreditSk = $values->isHomecreditSk;
 		}
 		if (isset($values->free)) {
 			$this->payment->setFreePrice($values->free, $values->with_vat);
@@ -152,9 +160,11 @@ class PaymentEdit extends BaseControl
 		$this->payment->setCurrentLocale($this->translator->getLocale());
 		$values = [
 			'active' => $this->payment->active,
+			'needAddress' => $this->payment->needAddress,
 			'cond1' => $this->payment->useCond1,
 			'cond2' => $this->payment->useCond2,
 			'isCard' => $this->payment->isCard,
+			'isHomecreditSk' => $this->payment->isHomecreditSk,
 			'html' => $this->payment->html,
 			'errorHtml' => $this->payment->errorHtml,
 		];

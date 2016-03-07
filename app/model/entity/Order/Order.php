@@ -222,6 +222,23 @@ class Order extends BaseEntity
 		return $this;
 	}
 
+	public function getMostExpensiveItem()
+	{
+		$mostExpensive = NULL;
+		$setMostExpensive = function ($key, OrderItem $item) use (&$mostExpensive) {
+			if ($mostExpensive) {
+				if ($item->price > $mostExpensive->price) {
+					$mostExpensive = $item;
+				}
+			} else {
+				$mostExpensive = $item;
+			}
+			return TRUE;
+		};
+		$this->items->forAll($setMostExpensive);
+		return $mostExpensive;
+	}
+
 	public function setShipping(Shipping $shipping)
 	{
 		if (!$this->shipping) {

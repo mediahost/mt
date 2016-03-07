@@ -63,12 +63,19 @@
 								{else}
 									<strong>{_'Temporarily Sold Out'}</strong>
 								{/if}
-<!--								<div class="watchdog">
-									<a href="#watchdog" data-toggle="modal">
+								<div class="watchdog">
+									<!--<a href="#watchdog" data-toggle="modal">
 										<span class="fa fa-bar-chart-o"></span>
-										{_'Watch Price'}
+									{_'Watch Price'}
+									</a>-->
+									<!--<br/>-->
+									<a href="{$homecreditCalc}" 
+									   id="homecreditCalc" 
+									   data-fancybox-type="iframe">
+										<i class="fa fa-calculator"></i>
+										{_'HomeCredit iCalc'}
 									</a>
-								</div>-->
+								</div>
 							</div>
 						</div>
 						<div class="product-page-perex" n:if="$product->perex">

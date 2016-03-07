@@ -1493,6 +1493,9 @@ msgstr "Vložiť vašu zľavu"
 msgid "Watch Price"
 msgstr "Sledovať cenu"
 
+msgid "HomeCredit iCalc"
+msgstr "Platobná kalkulačka Home Credit"
+
 msgid "Set Reminder"
 msgstr "Nastaviť stráženie"
 

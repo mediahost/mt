@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
 use Nette\Utils\Html;
+use Nette\Utils\Strings;
 
 /**
  * @ORM\Entity
@@ -22,6 +23,10 @@ use Nette\Utils\Html;
  * @property string $icoVat
  * @property string $dic
  * @property string $note
+ * @property-read string $firstName
+ * @property-read string $surname
+ * @property-read string $streetOnly
+ * @property-read string $streetNumber
  */
 class Address extends BaseEntity
 {
@@ -57,7 +62,7 @@ class Address extends BaseEntity
 
 	/** @ORM\Column(type="string", length=512, nullable=true) */
 	protected $note;
-	
+
 	public function import(Address $address, $force = FALSE)
 	{
 		if ($force || $address->name) {
@@ -122,21 +127,75 @@ class Address extends BaseEntity
 		return $this->name || $this->street || $this->city || $this->zipcode;
 	}
 
+	public function getFirstName()
+	{
+		$splitted = $this->splitName();
+		if (array_key_exists(0, $splitted)) {
+			return $splitted[0];
+		}
+		return NULL;
+	}
+
+	public function getSurname()
+	{
+		$splitted = $this->splitName();
+		if (array_key_exists(1, $splitted)) {
+			return $splitted[1];
+		}
+		return NULL;
+	}
+
+	public function getStreetOnly()
+	{
+		$splitted = $this->splitStreet();
+		if (array_key_exists(0, $splitted)) {
+			return $splitted[0];
+		}
+		return NULL;
+	}
+
+	public function getStreetNumber()
+	{
+		$splitted = $this->splitStreet();
+		if (array_key_exists(1, $splitted)) {
+			return $splitted[1];
+		}
+		return NULL;
+	}
+
+	private function splitName()
+	{
+		return Strings::split($this->name, '/\s/', PREG_SPLIT_NO_EMPTY);
+	}
+
+	private function splitStreet()
+	{
+		$splitted = array_map('strrev', Strings::split(strrev($this->street), '/\s/', PREG_SPLIT_NO_EMPTY));
+		if (isset($splitted[0]) && preg_match('/^\d+/', $splitted[0])) {
+			$number = $splitted[0];
+			unset($splitted[0]);
+		} else {
+			$number = NULL;
+		}
+		$street = implode(' ', array_reverse($splitted));
+		return [$street, $number];
+	}
+
 	public function __toString()
 	{
 		return (string) $this->name;
 	}
-	
+
 	public function getCityFormat()
 	{
 		return Helpers::concatStrings(' ', $this->zipcode, $this->city);
 	}
-	
+
 	public function getCountryFormat()
 	{
 		return $this->getCountry(TRUE);
 	}
-	
+
 	public function getCountry($formated = FALSE)
 	{
 		if ($formated) {
@@ -147,7 +206,7 @@ class Address extends BaseEntity
 		}
 		return $this->country;
 	}
-	
+
 	public function format()
 	{
 		$lineSeparator = Html::el('br');

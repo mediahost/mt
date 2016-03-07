@@ -208,6 +208,7 @@ class InstallerModel extends Object
 			Payment::ON_DELIVERY => 'payments.payment.on_delivery',
 			Payment::BANK_ACCOUNT => 'payments.payment.bank_account',
 			Payment::CARD_PAYMENT => 'payments.payment.card_payment',
+			Payment::HOMECREDIT_SK => 'payments.payment.homecredit_sk',
 		];
 
 		$vatRepo = $this->em->getRepository(Vat::getClassName());

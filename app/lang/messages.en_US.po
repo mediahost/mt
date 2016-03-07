@@ -1537,6 +1537,9 @@ msgstr "Insert your discount"
 msgid "Watch Price"
 msgstr "Watch Price/Availability"
 
+msgid "HomeCredit iCalc"
+msgstr "Home Credit Calculation"
+
 msgid "Set Reminder"
 msgstr "Set Reminder"
 

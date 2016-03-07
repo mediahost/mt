@@ -6,6 +6,7 @@ use App\Components\Basket\Form\AddToCart;
 use App\Components\Basket\Form\IAddToCartFactory;
 use App\Components\WatchDog\Form\IWatchDogFactory;
 use App\Components\WatchDog\Form\WatchDog;
+use App\Extensions\HomeCredit;
 use App\Extensions\Products\ProductList;
 use App\Model\Entity\Parameter;
 use App\Model\Entity\Stock;
@@ -25,6 +26,9 @@ class ProductPresenter extends BasePresenter
 
 	/** @var VisitFacade @inject */
 	public $visitFacade;
+
+	/** @var HomeCredit @inject */
+	public $homecredit;
 
 	/** @var Stock */
 	public $stock;
@@ -46,12 +50,14 @@ class ProductPresenter extends BasePresenter
 		$product->setCurrentLocale($this->locale);
 
 		$this->stock = $product->stock;
+		$this->homecredit->setProduct($this->stock->price->withVat);
 
 		$this->activeCategory = $product->mainCategory;
 		$this->template->product = $product;
 		$this->template->stock = $this->stock;
 		$this->template->params = $allParams;
 		$this->template->actualVisits = $this->visitFacade->getVisitsCount($this->stock);
+		$this->template->homecreditCalc = $this->homecredit->getCalcLink();
 
 		// Last visited
 		$this->user->storage->addVisit($this->stock);
