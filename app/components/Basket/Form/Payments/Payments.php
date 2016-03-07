@@ -47,8 +47,12 @@ class Payments extends BaseControl
 		$shippings = $this->paymentFacade->getShippingsList($basket, $this->priceLevel);
 		$payments = $this->paymentFacade->getPaymentsList($basket, $this->priceLevel);
 		
-		if (array_key_exists(Payment::CARD_PAYMENT, $payments) && $this->user->id !== 6) {
+		$admins = [6, 5, 8056];
+		if (array_key_exists(Payment::CARD_PAYMENT, $payments) && !in_array($this->user->id, $admins)) {
 			unset($payments[Payment::CARD_PAYMENT]);
+		}
+		if (array_key_exists(Payment::HOMECREDIT_SK, $payments) && !in_array($this->user->id, $admins)) {
+			unset($payments[Payment::HOMECREDIT_SK]);
 		}
 
 		$form->addRadioList('shipping', 'cart.headline.selectShipping', $shippings);
