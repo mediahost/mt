@@ -26,7 +26,19 @@ class PaymentsFacade extends Object
 	{
 		$paymentsList = [];
 		$paymentsRepo = $this->em->getRepository(Payment::getClassName());
-		$payments = $paymentsRepo->findAll();
+		
+		$criteria = [];
+		
+		$currencyCode = $this->exchange->getExchange()->getWeb()->getCode();
+		switch ($currencyCode) {
+			case 'EUR':
+				break;
+			case 'CZK':
+				$criteria['isHomecreditSk'] = FALSE;
+				break;
+		}
+		
+		$payments = $paymentsRepo->findBy($criteria);
 		foreach ($payments as $payment) {
 			if ($payment->active) {
 				$paymentsList[$payment->id] = $this->getPaymentShippingFormat($payment, $basket, $level, $withVat);

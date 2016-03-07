@@ -10,9 +10,11 @@ use Knp\DoctrineBehaviors\Model;
  * @ORM\Entity(repositoryClass="App\Model\Repository\PaymentRepository")
  *
  * @property bool $active
+ * @property bool $needAddress
  * @property bool $useCond1
  * @property bool $useCond2
  * @property bool $isCard
+ * @property bool $isHomecreditSk
  * @property string $name
  * @property string $html
  * @property Price $price
@@ -26,6 +28,7 @@ class Payment extends BaseTranslatable
 	const ON_DELIVERY = 2;
 	const BANK_ACCOUNT = 3;
 	const CARD_PAYMENT = 4;
+	const HOMECREDIT_SK = 5;
 	
 	use Model\Translatable\Translatable;
 
@@ -39,7 +42,13 @@ class Payment extends BaseTranslatable
 	protected $useCond2 = FALSE;
 
 	/** @ORM\Column(type="boolean") */
+	protected $needAddress = FALSE;
+
+	/** @ORM\Column(type="boolean") */
 	protected $isCard = FALSE;
+
+	/** @ORM\Column(type="boolean") */
+	protected $isHomecreditSk = FALSE;
 
 	/** @ORM\Column(type="string", nullable=true) */
 	protected $name;

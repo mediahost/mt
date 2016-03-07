@@ -8,12 +8,14 @@ use App\Components\Basket\Form\IPaymentsFactory;
 use App\Components\Basket\Form\IPersonalFactory;
 use App\Components\Basket\Form\Payments;
 use App\Components\Basket\Form\Personal;
+use App\Extensions\HomeCredit;
 use App\Helpers;
 use App\Mail\Messages\Order\Payment\IErrorPaymentFactory;
 use App\Mail\Messages\Order\Payment\ISuccessPaymentFactory;
 use App\Model\Entity\Basket;
 use App\Model\Entity\Category;
 use App\Model\Entity\Order;
+use App\Model\Entity\Payment;
 use App\Model\Entity\Shipping;
 use App\Model\Facade\Exception\ItemsIsntOnStockException;
 use Doctrine\ORM\NoResultException;
@@ -42,6 +44,9 @@ class CartPresenter extends BasePresenter
 
 	/** @var GPWebPayControlFactory @inject */
 	public $gpWebPayFactory;
+
+	/** @var HomeCredit @inject */
+	public $homecredit;
 
 	/** @var ISuccessPaymentFactory @inject */
 	public $iSuccessPaymentFactory;
@@ -105,6 +110,7 @@ class CartPresenter extends BasePresenter
 	public function actionPayments()
 	{
 		$this->checkEmptyCart();
+		$this->basketFacade->checkPayments();
 	}
 
 	public function actionAddress()
@@ -123,7 +129,7 @@ class CartPresenter extends BasePresenter
 			$this->redirect('default');
 		}
 
-		$this->template->byCard = $this->basketFacade->isCardPayment();
+		$this->template->directPayment = $this->basketFacade->isDirectPayment();
 		$this->template->termsLink = $this->link('Page:terms');
 	}
 
@@ -135,6 +141,7 @@ class CartPresenter extends BasePresenter
 
 		try {
 			$payByCard = $this->basketFacade->isCardPayment();
+			$payByHomecredit = $this->basketFacade->isHomecreditSkPayment();
 
 			$basket = $this->basketFacade->getBasket();
 			$user = $this->user->id ? $this->user->identity : NULL;
@@ -145,6 +152,10 @@ class CartPresenter extends BasePresenter
 
 			if ($payByCard) {
 				$this['webPay']->handleCheckout();
+			} else if ($payByHomecredit) {
+				$this->homecredit->setOrder($order);
+				$this->homecredit->setReturnLink($this->link('//:Front:Cart:done', ['payment' => Payment::HOMECREDIT_SK]));
+				$this->redirectUrl($this->homecredit->getIShopLink());
 			} else {
 				$this->redirect('done');
 			}
@@ -153,10 +164,18 @@ class CartPresenter extends BasePresenter
 		}
 	}
 
-	public function actionDone()
+	public function actionDone($payment)
 	{
 		$orderId = $this->getSessionSection()->orderId;
 		$orderRepo = $this->em->getRepository(Order::getClassName());
+
+		switch ($payment) {
+			case Payment::HOMECREDIT_SK:
+				if ($this->homecredit->isPayed($this->getParameter('hc_ret'))) {
+					// nothing (can be sign as payd)
+				}
+				break;
+		}
 
 		try {
 			if ($orderId) {
@@ -210,6 +229,7 @@ class CartPresenter extends BasePresenter
 
 	private function checkSelectedPayments()
 	{
+		$this->basketFacade->checkPayments();
 		if (!$this->basketFacade->hasPayments()) {
 			$this->redirect('payments');
 		}
@@ -297,7 +317,7 @@ class CartPresenter extends BasePresenter
 		$control->onCheckout[] = function (GPWebPayControl $control, Request $request) {
 			
 		};
-		
+
 		$control->onSuccess[] = function(GPWebPayControl $control, Response $response) use ($order) {
 			$this->orderFacade->payOrder($order, Order::PAYMENT_BLAME_CARD);
 			$mail = $this->iSuccessPaymentFactory->create();

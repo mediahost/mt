@@ -9,6 +9,7 @@ payment:
 	on_delivery: 'On Delivery'
 	bank_account: 'Bank Account'
 	card_payment: 'Card payment'
+	homecredit_sk: 'By Home Credit'
 
 form:
 	select: '--- Select for change ---'

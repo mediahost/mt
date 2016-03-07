@@ -16,6 +16,11 @@ class ExchangeHelper
 	{
 		$this->exchange = $exchange;
 	}
+	
+	public function getExchange()
+	{
+		return $this->exchange;
+	}
 
 	public function format($number, $from = NULL, $to = NULL, $vat = NULL)
 	{

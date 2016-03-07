@@ -180,10 +180,23 @@ class BasketFacade extends Object
 	}
 
 	/** @var bool */
+	public function isDirectPayment()
+	{
+		return $this->isCardPayment();
+	}
+
+	/** @var bool */
 	public function isCardPayment()
 	{
 		$basket = $this->getBasket();
 		return $basket->payment->isCard;
+	}
+
+	/** @var bool */
+	public function isHomecreditSkPayment()
+	{
+		$basket = $this->getBasket();
+		return $basket->payment->isHomecreditSk;
 	}
 
 	public function setAddress($mail, Address $billing = NULL, Address $shipping = NULL, $removeNull = TRUE)
@@ -264,6 +277,19 @@ class BasketFacade extends Object
 	{
 		$basket = $this->getBasket();
 		return $basket->hasPayments();
+	}
+
+	/** @var bool */
+	public function checkPayments()
+	{
+		$basket = $this->getBasket();
+		$currencyCode = $this->exchange->getWeb()->getCode();
+		if ($basket->hasPayments()) {
+			if ($basket->payment->isHomecreditSk && $currencyCode === 'CZK') {
+				$basket->payment = NULL;
+			}
+		}
+		return $this;
 	}
 
 	/** @var bool */
