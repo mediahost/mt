@@ -237,6 +237,45 @@ class ServicePresenter extends BasePresenter
 		$this->redirect('this');
 	}
 
+	/**
+	 * @secured
+	 * @resource('service')
+	 * @privilege('removeCache')
+	 */
+	public function handleRemoveCache()
+	{
+		$this->removeCache(TRUE);
+		$message = $this->translator->translate('Cache was cleared');
+		$this->flashMessage($message, 'success');
+		$this->redirect('this');
+	}
+
+	/**
+	 * @secured
+	 * @resource('service')
+	 * @privilege('removeDeleteCache')
+	 */
+	public function handleRemoveDeleteCache()
+	{
+		$this->removeCache();
+		$message = $this->translator->translate('Cache was cleared');
+		$this->flashMessage($message, 'success');
+		$this->redirect('this');
+	}
+
+	private function removeCache($all = FALSE)
+	{
+		$cacheFolder = './../temp/cache/';
+		$dir = scandir(realpath($cacheFolder));
+		foreach ($dir as $folder) {
+			$folderName = realpath($cacheFolder . $folder);
+			if (($all || preg_match('/^\.delete/', $folder)) && $folder !== '.' && $folder !== '..') {
+				FileSystem::delete($folderName);
+			}
+		}
+		return $this;
+	}
+
 	private function reinstall()
 	{
 		$this->uninstall();
