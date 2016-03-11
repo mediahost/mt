@@ -81,10 +81,11 @@ class HomeCredit extends Object
 		/* @var $mostExpensive OrderItem */
 		$mostExpensive = $order->mostExpensiveItem;
 		$producer = $mostExpensive->stock->product->producer;
+		$producerName = $producer ? $producer->name : $this->translator->translate('Producer');
 		$totalPrice = $order->getTotalPriceToPay($this->exchange);
 
 		$this->orderId = $order->id;
-		$this->setProduct($totalPrice, $mostExpensive->name, $producer->name);
+		$this->setProduct($totalPrice, $mostExpensive->name, $producerName);
 		$this->address = $order->billingAddress;
 		$this->mail = $order->mail;
 
