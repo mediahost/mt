@@ -121,6 +121,10 @@ class CartPresenter extends BasePresenter
 
 	public function actionSummary()
 	{
+		if ($this->getParameter('do') === 'webPay-success') {
+			return;
+		}
+
 		$this->checkEmptyCart();
 		$this->checkSelectedPayments();
 		$this->checkFilledAddress();
@@ -222,6 +226,9 @@ class CartPresenter extends BasePresenter
 
 	private function checkEmptyCart()
 	{
+		if ($this->getSessionSection()->orderId) {
+			$this->redirect('done');
+		}
 		if ($this->basketFacade->isEmpty()) {
 			$this->redirect('default');
 		}
