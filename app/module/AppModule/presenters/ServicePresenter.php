@@ -244,7 +244,7 @@ class ServicePresenter extends BasePresenter
 	 */
 	public function handleRemoveCache()
 	{
-		$this->removeCache(TRUE);
+		$this->removeCache();
 		$message = $this->translator->translate('Cache was cleared');
 		$this->flashMessage($message, 'success');
 		$this->redirect('this');
@@ -253,26 +253,35 @@ class ServicePresenter extends BasePresenter
 	/**
 	 * @secured
 	 * @resource('service')
-	 * @privilege('removeDeleteCache')
+	 * @privilege('afterDeploy')
 	 */
-	public function handleRemoveDeleteCache()
+	public function handleAfterDeploy()
 	{
 		$this->removeCache();
-		$message = $this->translator->translate('Cache was cleared');
+		$message = $this->translator->translate('Cache was cleared with install');
 		$this->flashMessage($message, 'success');
 		$this->redirect('this');
 	}
 
-	private function removeCache($all = FALSE)
+	private function removeCache()
 	{
 		$cacheFolder = './../temp/cache/';
-		$dir = scandir(realpath($cacheFolder));
-		foreach ($dir as $folder) {
+		
+		foreach (scandir(realpath($cacheFolder)) as $key => $folder) {
 			$folderName = realpath($cacheFolder . $folder);
-			if (($all || preg_match('/^\.delete/', $folder)) && $folder !== '.' && $folder !== '..') {
+			if ($folder !== '.' && $folder !== '..' && !preg_match('/^\.delete/', $folder)) {
+				$newName = $cacheFolder . '/.delete' . uniqid() . $key;
+				FileSystem::rename($folderName, $newName);
+			}
+		}
+		
+		foreach (scandir(realpath($cacheFolder)) as $folder) {
+			$folderName = realpath($cacheFolder . $folder);
+			if (preg_match('/^\.delete/', $folder)) {
 				FileSystem::delete($folderName);
 			}
 		}
+		
 		return $this;
 	}
 
@@ -295,6 +304,7 @@ class ServicePresenter extends BasePresenter
 	{
 		FileSystem::delete(realpath('./../temp/install/'));
 		$this->installer
+				->setInstallDoctrine(TRUE)
 				->setInstallAdminer(FALSE)
 				->setInstallComposer(FALSE);
 		$this->installer->install();
