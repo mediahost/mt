@@ -50,7 +50,7 @@ class ProductPresenter extends BasePresenter
 		$product->setCurrentLocale($this->locale);
 
 		$this->stock = $product->stock;
-		$this->homecredit->setProduct($this->stock->price->withVat);
+		$this->homecredit->setProduct($this->stock->getPrice($this->priceLevel)->withVat);
 
 		$this->activeCategory = $product->mainCategory;
 		$this->template->product = $product;
