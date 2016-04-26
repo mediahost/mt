@@ -83,7 +83,7 @@ class Helpers
 	 */
 	public static function webalizePlus($s, $charlist = NULL, $lower = TRUE)
 	{
-		$s = preg_replace('#+#', 'plus', $s);
+		$s = preg_replace('#\+#', 'plus', $s);
 		return Strings::webalize($s, $charlist, $lower);
 	}
 
