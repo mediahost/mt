@@ -226,9 +226,6 @@ class CartPresenter extends BasePresenter
 
 	private function checkEmptyCart()
 	{
-		if ($this->getSessionSection()->orderId) {
-			$this->redirect('done');
-		}
 		if ($this->basketFacade->isEmpty()) {
 			$this->redirect('default');
 		}
@@ -297,9 +294,11 @@ class CartPresenter extends BasePresenter
 	{
 		$orderId = $this->getSessionSection()->orderId;
 		$orderRepo = $this->em->getRepository(Order::getClassName());
-		$order = $orderRepo->find($orderId);
+		if ($orderId) {
+			$order = $orderRepo->find($orderId);
+		}
 
-		if ($order) {
+		if (isset($order) && $order) {
 			/* @var $order Order */
 			$this->exchange->setWeb($order->currency);
 			$totalPrice = $order->getTotalPriceToPay($this->exchange);
