@@ -2,6 +2,11 @@
 
 namespace App;
 
+use LogicException;
+use Nette\Utils\Strings;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+
 /**
  * TODO: Use Nette\Utils\FileSystem
  */
@@ -13,7 +18,7 @@ class Helpers
 	 */
 	final public function __construct()
 	{
-		throw new \LogicException("Cannot instantiate static class " . get_class($this));
+		throw new LogicException("Cannot instantiate static class " . get_class($this));
 	}
 
 	// <editor-fold desc="strings">
@@ -67,6 +72,19 @@ class Helpers
 		} else {
 			return NULL;
 		}
+	}
+	
+	/**
+	 * Replace + with 'plus' and then use regular Strings::webalize
+	 * @param  string  UTF-8 encoding
+	 * @param  string  allowed characters
+	 * @param  bool
+	 * @return string
+	 */
+	public static function webalizePlus($s, $charlist = NULL, $lower = TRUE)
+	{
+		$s = preg_replace('#+#', 'plus', $s);
+		return Strings::webalize($s, $charlist, $lower);
 	}
 
 	// </editor-fold>
@@ -189,7 +207,7 @@ class Helpers
 	public static function purge($dir)
 	{
 		self::mkDir($dir);
-		foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST) as $entry) {
+		foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $entry) {
 			if ($entry->isDir()) {
 				rmdir($entry);
 			} else {
