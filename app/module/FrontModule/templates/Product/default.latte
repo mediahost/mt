@@ -46,36 +46,39 @@
 								{$product}
 							</a>
 						</h1>
-						<div class="price-availability-block clearfix">
-							<div class="price">
-								<strong>{$stock->getPrice($priceLevel)|currencyVat}</strong>
-								<em n:if="$stock->oldPrice">
-									<span>{$stock->oldPrice|currency}</span>
-								</em>
-								<span class="vat">{_'include %value% VAT', NULL, ['value' => $stock->vat]}</span>
-							</div>
-							<div class="availability">
-								{_'Availability'}: 
-								{if $stock->inStore > 10}
-									<strong>{_'In Stock'}</strong>
-								{elseif $stock->inStore > 0}
-									<strong>{$stock->inStore} {$product->unit}</strong>
-								{else}
-									<strong>{_'Temporarily Sold Out'}</strong>
-								{/if}
-								<div class="watchdog">
-									<!--<a href="#watchdog" data-toggle="modal">
-										<span class="fa fa-bar-chart-o"></span>
-									{_'Watch Price'}
-									</a>-->
-									<!--<br/>-->
-									<a href="{$homecreditCalc}" 
-									   id="homecreditCalc" 
-									   data-fancybox-type="iframe">
-										<i class="fa fa-calculator"></i>
-										{_'HomeCredit iCalc'}
-									</a>
+						<div class="price-availability-block">
+							<div class="clearfix">
+								<div class="price">
+									<strong>{$stock->getPrice($priceLevel)|currencyVat}</strong>
+									<em n:if="$stock->oldPrice">
+										<span>{$stock->oldPrice|currency}</span>
+									</em>
+									<span class="vat">{_'include %value% VAT', NULL, ['value' => $stock->vat]}</span>
 								</div>
+								<div class="availability">
+									{_'Availability'}: 
+									{if $stock->inStore > 10}
+										<strong>{_'In Stock'}</strong>
+									{elseif $stock->inStore > 0}
+										<strong>{$stock->inStore} {$product->unit}</strong>
+									{else}
+										<strong>{_'Temporarily Sold Out'}</strong>
+									{/if}
+<!--									<div class="watchdog">
+										<a href="#watchdog" data-toggle="modal">
+											<span class="fa fa-bar-chart-o"></span>
+										{_'Watch Price'}
+										</a>
+									</div>-->
+								</div>
+							</div>
+							<div n:if="$homecreditCalc" class="subimages">
+								<a href="{$homecreditCalc}"
+								   id="homecreditCalc"
+								   data-fancybox-type="iframe">
+									<img src="{$basePath}/images/homecredit/splatkova_kalkulacka_sk.jpg"
+										 alt="{_'HomeCredit iCalc'}" />
+								</a>
 							</div>
 						</div>
 						<div class="product-page-perex" n:if="$product->perex">
@@ -98,6 +101,7 @@
 								   href="https://plus.google.com/share?url={link //this}"></a>
 							</li>
 						</ul>
+
 					</div>
 
 					<div class="product-page-content">

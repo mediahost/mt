@@ -101,6 +101,9 @@ class HomeCredit extends Object
 
 	public function getIShopLink()
 	{
+		if ($this->exchange->getWeb()->getCode() !== 'EUR') {
+			return NULL;
+		}
 		if (!$this->orderId) {
 			throw new HomeCreditException('Order ID is not set');
 		}
@@ -146,6 +149,9 @@ class HomeCredit extends Object
 
 	public function getCalcLink()
 	{
+		if ($this->exchange->getWeb()->getCode() !== 'EUR') {
+			return NULL;
+		}
 		if (!$this->product) {
 			throw new HomeCreditException('Product is not set');
 		}
