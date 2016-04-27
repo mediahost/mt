@@ -306,12 +306,22 @@
 			color: #7b8a99;
 		}
 	}
-	.watchdog {
-		padding-top: 24px;
-		margin-bottom: 0px;
-		a {
-			text-decoration: none;
+	.availability {
+		.watchdog {
+			padding-top: 24px;
+			margin-bottom: 0px;
+			a {
+				text-decoration: none;
+			}
 		}
+		&:after {
+			display: block;
+			clear: both;
+			content: "";
+		}
+	}
+	.subimages {
+		padding-top: 10px;
 	}
 }
 
