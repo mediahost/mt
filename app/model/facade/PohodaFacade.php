@@ -38,6 +38,7 @@ class PohodaFacade extends Object
 	const LAST_CONVERT = 'last-convert'; // poslední převod produktů z Pohoda DB do vnitřní DB
 
 	/** @var array */
+
 	public $onDoneRecieveXml = [];
 
 	/** @var array */
@@ -84,12 +85,15 @@ class PohodaFacade extends Object
 			/* @var $stock Stock */
 			if (array_key_exists('code', $pohodaProductArr)) {
 
-				$stock = $stockRepo->findOneByPohodaCode($pohodaProductArr['code']);
+				$stock = $stockRepo->findOneBy([
+					'pohodaCode' => $pohodaProductArr['code'],
+					'active' => TRUE,
+				]);
 				$change = FALSE;
 				if (!$stock) {
 					continue;
 				}
-				
+
 				$isFromToday = $stock->createdAt >= DateTime::from('-24 hours');
 				$isChangedFromShop = $stock->updatedPohodaDataAt > $pohodaProductArr['updatedAt'];
 				if ($isChangedFromShop && !$isFromToday) {
