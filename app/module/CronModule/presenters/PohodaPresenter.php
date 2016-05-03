@@ -29,7 +29,7 @@ class PohodaPresenter extends BasePresenter
 			try {
 				$this->pohodaFacade->updateFullProducts($all ? NULL : $lastDataChangeTime, $offset);
 				$this->status = parent::STATUS_OK;
-				$this->message = 'Synchronize was successfull';
+				$this->message = 'Synchronize was successful';
 				$this->pohodaFacade->clearLastSync(PohodaFacade::ANY_IMPORT, PohodaFacade::LAST_UPDATE);
 				$this->pohodaFacade->setLastSync(PohodaFacade::ANY_IMPORT, PohodaFacade::LAST_CONVERT);
 			} catch (Exception $ex) {

@@ -90,6 +90,7 @@ class PohodaFacade extends Object
 					'active' => TRUE,
 				]);
 				$change = FALSE;
+				$skipFullActualize = FALSE;
 				if (!$stock) {
 					continue;
 				}
@@ -97,7 +98,7 @@ class PohodaFacade extends Object
 				$isFromToday = $stock->createdAt >= DateTime::from('-24 hours');
 				$isChangedFromShop = $stock->updatedPohodaDataAt > $pohodaProductArr['updatedAt'];
 				if ($isChangedFromShop && !$isFromToday) {
-					continue;
+					$skipFullActualize = TRUE;
 				}
 
 				if ($stock->quantity != $totalCount) {
@@ -105,7 +106,7 @@ class PohodaFacade extends Object
 					$change = TRUE;
 				}
 
-				if ($totalCount) {
+				if (!$skipFullActualize && $totalCount) {
 
 					$translation = $stock->product->translateAdd($language);
 					if ($translation->name != $pohodaProductArr['name']) {
