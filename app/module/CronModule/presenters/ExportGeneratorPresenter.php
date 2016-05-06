@@ -163,6 +163,7 @@ class ExportGeneratorPresenter extends BasePresenter
 		$this->template->defaultLocale = $this->translator->getDefaultLocale();
 		$this->template->deliveryStoreTime = $this->settings->modules->zbozi->deliveryStoreTime;
 		$this->template->deliveryNotInStoreTime = $this->settings->modules->zbozi->deliveryNotInStoreTime;
+		$this->template->setTranslator($this->translator->domain('export.zbozi'));
 		$this->setView();
 
 		$output = (string) $this->template;
