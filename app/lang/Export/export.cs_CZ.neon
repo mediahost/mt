@@ -3,7 +3,7 @@ heureka:
 	payments:
 		shipping:
 			czech_post: 'CESKA_POSTA'
-			slovak_post: 'CESKA_POSTA'
+			slovak_post: 'SLOVENSKA_POSTA'
 			dpd: 'DPD'
 			ppl: 'PPL'
 zbozi:

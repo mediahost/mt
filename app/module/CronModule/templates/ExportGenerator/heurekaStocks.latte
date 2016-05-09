@@ -26,7 +26,7 @@
 
 		<DELIVERY_DATE>{$stock['inStore'] ? $deliveryStoreTime : $deliveryNotInStoreTime}</DELIVERY_DATE>
 
-		<DELIVERY n:foreach="$shippings as $shipping" n:if="!$hideDelivery">
+		<DELIVERY n:foreach="$shippings as $shipping" n:if="!$hideDelivery && $shipping->isForLocality($locale)">
 			<DELIVERY_ID>{_$shipping}</DELIVERY_ID>
 				{var shippingPrice => $shipping->getPriceByStocks([$loadedStock])}
 			<DELIVERY_PRICE>{$shippingPrice|changeVat:NULL,NULL,2}</DELIVERY_PRICE>
