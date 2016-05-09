@@ -45,6 +45,9 @@ class Shipping extends BaseTranslatable
 	/** @ORM\Column(type="boolean") */
 	protected $needAddress = TRUE;
 
+	/** @ORM\Column(type="string", length=2, nullable=true) */
+	protected $locality;
+
 	/** @ORM\Column(type="string", nullable=true) */
 	protected $name;
 
@@ -169,6 +172,11 @@ class Shipping extends BaseTranslatable
 	public function isAllowedPayment(Payment $payment)
 	{
 		return $this->payments->contains($payment);
+	}
+
+	public function isForLocality($locale)
+	{
+		return !$this->locality || $this->locality == $locale;
 	}
 
 	public function __toString()

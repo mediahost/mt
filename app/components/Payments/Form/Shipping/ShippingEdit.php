@@ -55,6 +55,8 @@ class ShippingEdit extends BaseControl
 					->setOption('description', 'If sum of products in special category is bigger then special limit, then price has zero value.');
 			$form->addText('free', 'Free price')
 					->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
+			$form->addSelect2('locality', 'Locality', [NULL => 'All', 'cs' => 'CZ', 'sk' => 'SK'])
+					->setAttribute('class', [MetronicTextInputBase::SIZE_S]);
 			$form->addGroup('Admin part');
 		}
 
@@ -113,6 +115,9 @@ class ShippingEdit extends BaseControl
 		if (isset($values->free)) {
 			$this->shipping->setFreePrice($values->free, $values->with_vat);
 		}
+		if (isset($values->locality)) {
+			$this->shipping->locality = $values->locality;
+		}
 
 		$this->shipping->translateAdd($this->translator->getLocale())->html = $values->html;
 		$this->shipping->mergeNewTranslations();
@@ -137,6 +142,7 @@ class ShippingEdit extends BaseControl
 			'cond1' => $this->shipping->useCond1,
 			'cond2' => $this->shipping->useCond2,
 			'html' => $this->shipping->html,
+			'locality' => $this->shipping->locality,
 		];
 		if ($this->shipping->price) {
 			$values += [
