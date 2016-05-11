@@ -235,6 +235,15 @@ msgstr "Edit selected producer, line or model"
 msgid "Select some producer, line or model from tree"
 msgstr "Select some producer, line or model from tree"
 
+msgid "Select model from tree"
+msgstr "Select model from tree"
+
+msgid "Edit questions for selected model"
+msgstr "Edit questions for selected model"
+
+msgid "Edit questions for model"
+msgstr "Edit questions for model"
+
 msgid "Products"
 msgstr "Products"
 

@@ -1,7 +1,7 @@
-{form form, class => "form-horizontal"}
+{form form, class => 'form-horizontal form-bordered'}
 	{var labelWidth => 'col-md-3'}
 	{var colLabel => 'control-label ' . $labelWidth}
-	{var colInput => 'col-md-9'}
+	{var colInput => 'col-md-9 col-input'}
 	<div class="form-body">
 		<div class="form-group">
 			{$form->renderer->renderLabel($form['buyoutPrice'])}
@@ -11,19 +11,19 @@
 		</div>
 			
 		{foreach $form['questions']->containers as $question}
-			<div class="form-group">
-				{label $question['text'], class => $colLabel}{_'buyout.modelQuestion.input.question'} {$iterator->counter}{/label}
+			<div class="form-group question-set">
+				{label $question['text'], class => $colLabel}
+					{_'buyout.modelQuestion.input.question'} {$iterator->counter}
+				{/label}
 				<div class="{$colInput}">
 					{input $question['text']}
 				</div>
-			</div>
-			<div class="form-group">
+
 				{label $question['yes'], class => $colLabel  /}
 				<div class="{$colInput}">
 					{input $question['yes']}
 				</div>
-			</div>
-			<div class="form-group">
+
 				{label $question['no'], class => $colLabel  /}
 				<div class="{$colInput}">
 					{input $question['no']}

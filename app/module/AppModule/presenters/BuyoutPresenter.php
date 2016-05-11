@@ -70,9 +70,7 @@ class BuyoutPresenter extends BasePresenter
 		
 	}
 
-	/**
-	 * @return ModelQuestion
-	 */
+	/** @return ModelQuestion */
 	protected function createComponentModelQuestion()
 	{
 		return $this->iModelQuestionFactory->create();

@@ -42,7 +42,8 @@ class Request extends BaseControl
 		$form = new Form();
 		$form->setTranslator($this->translator)
 				->setRenderer(new MetronicFormRenderer())
-				->getElementPrototype()->addAttributes(['data-target-loading' => '#request-form-loading'])
+				->getElementPrototype()
+				->addAttributes(['data-target-loading' => '#request-form-loading'])
 				->class = 'ajax';
 
 
@@ -97,10 +98,10 @@ class Request extends BaseControl
 				$price = (int) $qm->priceB;
 			}
 			$this->summary += $price;
+		}
 
-			if ($this->summary < 0) {
-				$this->summary = 0;
-			}
+		if ($this->summary < 0) {
+			$this->summary = 0;
 		}
 
 		if ($form['send']->isSubmittedBy()) {
