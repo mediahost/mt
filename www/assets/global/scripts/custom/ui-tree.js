@@ -166,13 +166,13 @@ var UITree = function () {
 			}
 		});
         jstree.on('changed.jstree', function (e, data) {
-            if (data.event && $(data.event.toElement).is('i')) {
+            if (data.event) {
                 var checked = $(treeID).jstree('get_checked', null, true);
                 var params = '?' + $.param({categoryIds: checked});
                 var url = links['Products:exportCategory'] + params;
                 $('#categories-export').attr('href', url);
             }
-            if (data.action === 'select_node' && data.event && $(data.event.toElement).is('a')) {
+            if (data.action === 'select_node' && data.event && $(data.event.target).is('a')) {
                 Metronic.blockUI({
                     target: $(treeBlockId),
                     animate: true
