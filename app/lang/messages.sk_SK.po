@@ -245,6 +245,15 @@ msgstr "Úpraviť vybraného výrobcu, radu alebo model"
 msgid "Select some producer, line or model from tree"
 msgstr "Vyberte výrobcu, radu alebo model zo stromu"
 
+msgid "Select model from tree"
+msgstr "Vyberte model zo stromu"
+
+msgid "Edit questions for selected model"
+msgstr "Upraviť otázky pre vybraný model"
+
+msgid "Edit questions for model"
+msgstr "Upraviť otázky pre model"
+
 msgid "Products"
 msgstr "Tovar"
 

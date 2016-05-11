@@ -35,9 +35,9 @@
 					<i class="fa fa-edit font-green-sharp"></i>
 					<span class="caption-subject bold uppercase">
 						{if $entity}
-							{_'Edit of %name%', NULL, ['name' => 'Model']} '<em>{$entity}</em>'
+							{_'Edit questions for model'} '<em>{$entity}</em>'
 						{else}
-							{_'Edit selected producer, line or model'}
+							{_'Edit questions for selected model'}
 						{/if}
 					</span>
 				</div>
@@ -48,7 +48,7 @@
 			</div>
 			<div class="portlet-body" n:if="!$entity">
 				<div class="note note-info">
-					<p>{_'Select some producer, line or model from tree'}</p>
+					<p>{_'Select model from tree'}</p>
 				</div>
 			</div>
 				

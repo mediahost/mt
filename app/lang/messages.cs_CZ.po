@@ -242,8 +242,14 @@ msgstr "Upravit %name%"
 msgid "Edit selected producer, line or model"
 msgstr "Upravit vybraného výrobce, řadu nebo model"
 
-msgid "Select some producer, line or model from tree"
-msgstr "Vyberte výrobce, řadu nebo model ze stromu"
+msgid "Select model from tree"
+msgstr "Vyberte model ze stromu"
+
+msgid "Edit questions for selected model"
+msgstr "Upravit otázky pro vybraný model"
+
+msgid "Edit questions for model"
+msgstr "Upravit otázky pro model"
 
 msgid "Products"
 msgstr "Zboží"
