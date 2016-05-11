@@ -260,8 +260,8 @@ msgstr "Základní údaje"
 msgid "Prices"
 msgstr "Ceny"
 
-msgid "Prices for "%name%""
-msgstr "Ceny pro "%name%""
+msgid 'Prices for "%name%"'
+msgstr 'Ceny pro "%name%"'
 
 msgid "Quantity"
 msgstr "Množství"
@@ -1524,3 +1524,6 @@ msgstr "Zavřít"
 
 msgid "Watching was saved."
 msgstr "Hlídání bylo uloženo."
+
+msgid "Export selected"
+msgstr "Exportovat vybrané"

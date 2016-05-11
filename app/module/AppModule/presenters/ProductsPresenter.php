@@ -26,6 +26,7 @@ use App\Components\Product\Form\StockSign;
 use App\Components\Product\Form\StockSimilar;
 use App\Components\Product\Grid\IStocksGridFactory;
 use App\Components\Product\Grid\StocksGrid;
+use App\Model\Entity\Category;
 use App\Model\Entity\Image;
 use App\Model\Entity\Stock;
 use Kdyby\Doctrine\EntityRepository;
@@ -88,7 +89,7 @@ class ProductsPresenter extends BasePresenter
 	 */
 	public function actionDefault()
 	{
-		
+
 	}
 
 	/**
@@ -98,6 +99,36 @@ class ProductsPresenter extends BasePresenter
 	 */
 	public function actionExport(array $ids)
 	{
+		$this['stocksGrid']->setIds($ids);
+		$this['stocksGrid']->getExport()->handleExport();
+	}
+
+	private function getStocksIds(Category $category, array &$ids)
+	{
+		foreach ($category->products as $product) {
+			$ids[] = $product->stock->id;
+		}
+		foreach ($category->children as $child) {
+			$this->getStocksIds($child, $ids);
+		}
+	}
+
+	/**
+	 * @secured
+	 * @resource('products')
+	 * @privilege('exportCategory')
+	 */
+	public function actionExportCategory(array $categoryIds)
+	{
+		$ids = [];
+		$categoryRepo = $this->em->getRepository(Category::getClassName());
+		foreach ($categoryIds as $categoryId) {
+			/** @var Category $category */
+			$category = $categoryRepo->find($categoryId);
+			if ($category) {
+				$this->getStocksIds($category, $ids);
+			}
+		}
 		$this['stocksGrid']->setIds($ids);
 		$this['stocksGrid']->getExport()->handleExport();
 	}
@@ -159,7 +190,7 @@ class ProductsPresenter extends BasePresenter
 					'type' => $this->translator->translate('Product'), 'name' => (string) $stock
 				]);
 				$this->flashMessage($message, 'success');
-				
+
 				if (!$this->isAjax()) {
 					$this->redirect('default');
 				}

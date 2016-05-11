@@ -250,8 +250,8 @@ msgstr "Basic data"
 msgid "Prices"
 msgstr "Prices"
 
-msgid "Prices for "%name%""
-msgstr "Prices for "%name%""
+msgid 'Prices for "%name%"'
+msgstr 'Prices for "%name%"'
 
 msgid "Quantity"
 msgstr "Quantity"
@@ -1566,3 +1566,6 @@ msgstr "Cancel"
 
 msgid "Watching was saved."
 msgstr "Watching was saved."
+
+msgid "Export selected"
+msgstr "Export selected"
