@@ -260,8 +260,8 @@ msgstr "Základné údaje"
 msgid "Prices"
 msgstr "Ceny"
 
-msgid "Prices for "%name%""
-msgstr "Ceny pre "%name%""
+msgid 'Prices for "%name%"'
+msgstr 'Ceny pre "%name%"'
 
 msgid "Quantity"
 msgstr "Množstvo"
@@ -1522,3 +1522,6 @@ msgstr "Zavrieť"
 
 msgid "Watching was saved."
 msgstr "Stráženie bolo uložené."
+
+msgid "Export selected"
+msgstr "Exportovať vybrané"
