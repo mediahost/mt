@@ -78,3 +78,8 @@
 ################
 /www/foto/*
 !/www/foto/original/default.*
+
+#################
+## Uploaded images
+################
+/www/images/upload/*
