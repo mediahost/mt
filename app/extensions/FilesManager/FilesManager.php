@@ -5,6 +5,7 @@ namespace App\Extensions;
 use App\Helpers;
 use Exception;
 use Nette\DI\Container;
+use Nette\Http\FileUpload;
 use Nette\Object;
 use Nette\Utils\FileSystem;
 
@@ -13,6 +14,7 @@ class FilesManager extends Object
 	// <editor-fold desc="constants & variables">
 	
 	const MAILS = 'mails';
+	const IMAGES = 'images';
 	const POHODA_IMPORT = 'pohoda-xml-import';
 	const EXPORTS = 'exports';
 	const EXPORT_ZBOZI_STOCKS = 'zbozi-stocks';
@@ -23,6 +25,9 @@ class FilesManager extends Object
 	/** @var string */
 	private $rootFolder;
 
+	/** @var string */
+	private $imageRootFolder;
+
 	// </editor-fold>
 	// <editor-fold desc="injects">
 
@@ -32,14 +37,15 @@ class FilesManager extends Object
 	// </editor-fold>
 	// <editor-fold desc="setters">
 
-	public function setRootFolder($folder)
+	public function setRootFolder($folder, $images = self::IMAGES)
 	{
 		$this->rootFolder = $folder;
+		$this->imageRootFolder = $images;
 		return $this;
 	}
 
 	// </editor-fold>
-	
+
 	public function getExportFilename($type, $locale, $ext = 'xml')
 	{
 		switch ($type) {
@@ -55,6 +61,13 @@ class FilesManager extends Object
 			default:
 				throw new FilesManagerException('Unknown type for export filename.');
 		}
+	}
+
+	public function getImagePath($type, $fullPath = TRUE)
+	{
+		$root = $fullPath ? $this->getImageRootDir() : $this->imageRootFolder;
+		$path = Helpers::getPath($root, $type);
+		return $path;
 	}
 	
 	public function getDir($name)
@@ -81,6 +94,13 @@ class FilesManager extends Object
 	private function getRootDir()
 	{
 		$root = Helpers::getPath($this->container->parameters['appDir'], '..', $this->rootFolder);
+		FileSystem::createDir($root);
+		return $root;
+	}
+
+	private function getImageRootDir()
+	{
+		$root = Helpers::getPath($this->container->parameters['wwwDir'], $this->imageRootFolder);
 		FileSystem::createDir($root);
 		return $root;
 	}
