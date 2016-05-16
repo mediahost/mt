@@ -25,6 +25,14 @@ var HtmlEditors = function () {
 				ul: {},
 				ol: {},
 				li: {},
+				img: {
+					check_attributes: {
+						width: "numbers",
+						alt: "alt",
+						src: "url",
+						height: "numbers"
+					}
+				},
 				a: {
 					set_attributes: {
 						target: "_blank",
