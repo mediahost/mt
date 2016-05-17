@@ -89,7 +89,7 @@ class ModelSelector extends BaseControl
 		$this->onAfterSelect($this->producer, $this->line, $this->model);
 	}
 
-	private function getProducersTree()
+	private function getProducersTree($onlyWithChildren = TRUE)
 	{
 		$producersTree = [];
 		$producerRepo = $this->em->getRepository(Producer::getClassName());
@@ -98,22 +98,25 @@ class ModelSelector extends BaseControl
 			foreach ($producer->lines as $line) {
 				$models = [];
 				foreach ($line->models as $model) {
-
 					if (!($this->buyout && $model->buyoutPrice <= 0)) {
 						$models[$model->id] = [
 							'name' => (string) $model,
 						];
 					}
 				}
-				$lines[$line->id] = [
-					'name' => (string) $line,
-					'children' => $models,
+				if (!$onlyWithChildren || count($models)) {
+					$lines[$line->id] = [
+						'name' => (string)$line,
+						'children' => $models,
+					];
+				}
+			}
+			if (!$onlyWithChildren || count($lines)) {
+				$producersTree[$producer->id] = [
+					'name' => (string) $producer,
+					'children' => $lines,
 				];
 			}
-			$producersTree[$producer->id] = [
-				'name' => (string) $producer,
-				'children' => $lines,
-			];
 		}
 		return $producersTree;
 	}

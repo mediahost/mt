@@ -355,7 +355,6 @@
 								imageProgressBar.css("width", "0").html("");
 						},
 						success:function(image){
-                            console.log(image);
 							if(image["state"] == "error") {
 								alert("It's not possible to retrieve the image.");
 							} else 

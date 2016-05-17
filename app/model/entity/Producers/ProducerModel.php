@@ -13,6 +13,7 @@ use Nette\Utils\Strings;
 
 /**
  * @ORM\Entity(repositoryClass="App\Model\Repository\ProducerModelRepository")
+ * @ORM\EntityListeners({"App\Listeners\Model\Entity\ProducerModelListener"})
  *
  * @property string $name
  * @property string $html

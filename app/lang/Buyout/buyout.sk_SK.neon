@@ -24,6 +24,8 @@ request:
 	template:
 		price: 'Výkupná cena'
 		total: 'Celková cena'
+		new: 'Nový'
+		used: 'Používaný'
 
 # E-mail messages
 email:
@@ -40,6 +42,9 @@ email:
 	template:
 		model: 'Model' 
 		summary: 'Výkupná cena'
+		state: 'Stav'
+		new: 'Nový'
+		used: 'Používaný'
 		answer:
 			y: 'Áno'
 			n: 'Nie'

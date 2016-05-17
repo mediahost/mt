@@ -32,17 +32,19 @@ class ProducerFacade extends Object
 		$this->modelRepo = $this->em->getRepository(ProducerModel::getClassName());
 	}
 
-	public function getProducersList()
+	public function getProducersList($onlyWithChildren = TRUE)
 	{
 		$producers = [];
 		foreach ($this->producerRepo->findAll() as $producer) {
-			$producers[$producer->id] = (string) $producer;
+			if (!$onlyWithChildren || count($producer->lines)) {
+				$producers[$producer->id] = (string) $producer;
+			}
 		}
 		@uasort($producers, 'strcoll');
 		return $producers;
 	}
 
-	public function getLinesList(Producer $producer = NULL, $fullPath = FALSE)
+	public function getLinesList(Producer $producer = NULL, $fullPath = FALSE, $onlyWithChildren = TRUE)
 	{
 		$lines = [];
 		if ($producer) {
@@ -51,7 +53,9 @@ class ProducerFacade extends Object
 			$finded = $this->lineRepo->findAll();
 		}
 		foreach ($finded as $line) {
-			$lines[$line->id] = $fullPath ? $line->getFullName() : (string) $line;
+			if (!$onlyWithChildren || count($line->models)) {
+				$lines[$line->id] = $fullPath ? $line->getFullName() : (string) $line;
+			}
 		}
 		@uasort($lines, 'strcoll');
 		return $lines;

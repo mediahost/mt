@@ -235,9 +235,6 @@ class PohodaFacade extends Object
 
 	protected function parseXml($filename, $type, $startLine = NULL, $finishLine = NULL)
 	{
-		ini_set('max_execution_time', 60);
-		ini_set('memory_limit', '300M');
-
 		$productRepo = $this->em->getRepository(PohodaItem::getClassName());
 		$storageRepo = $this->em->getRepository(PohodaStorage::getClassName());
 
