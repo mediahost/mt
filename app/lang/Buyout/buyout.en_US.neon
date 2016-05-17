@@ -24,6 +24,8 @@ request:
 	template:
 		price: 'Buyout price'
 		total: 'Total price'
+		new: 'New'
+		used: 'Used'
 
 # E-mail messages
 email:
@@ -40,6 +42,9 @@ email:
 	template:
 		model: 'Model' 
 		summary: 'Buyout price'
+		state: 'State'
+		new: 'New'
+		used: 'Used'
 		answer:
 			y: 'Yes'
 			n: 'No'

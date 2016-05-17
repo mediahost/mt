@@ -3,13 +3,13 @@
 namespace App\Components\Buyout\Form;
 
 use App\Components\BaseControl;
+use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Mail\Messages\Buyout\IOurMessageFactory;
 use App\Mail\Messages\Buyout\ITheirMessageFactory;
 use App\Model\Entity\Buyout\ModelQuestion as ModelQuestionEntity;
 use App\Model\Entity\ProducerModel;
 use App\Model\Facade\QuestionFacade;
-use Nette\Application\UI\Form;
 use Nette\Utils\ArrayHash;
 
 class Request extends BaseControl
@@ -49,8 +49,10 @@ class Request extends BaseControl
 
 		$form->addHidden('modelId');
 
-		$questions = $form->addContainer('questions');
+		$form->addCheckbox('isNew')
+				->setDefaultValue(TRUE);
 
+		$questions = $form->addContainer('questions');
 		foreach ($this->model->questions as $qm) {
 			$questions->addRadioList($qm->id, $qm->question->text, [
 						'y' => $this->translator->translate('buyout.request.input.yes'),
@@ -59,16 +61,17 @@ class Request extends BaseControl
 			$questions[$qm->id]->getSeparatorPrototype()->setName(NULL);
 		}
 
+		$labelCol = 'col-md-5';
 		$form->addText('email', 'buyout.request.input.email')
 						->setRequired('buyout.request.required.email')
 						->addRule(Form::EMAIL)
 						->getControlPrototype()->class[] = 'form-control input-medium';
-		$form['email']->getLabelPrototype()->class[] = 'control-label col-md-4';
+		$form['email']->getLabelPrototype()->class[] = 'control-label ' . $labelCol;
 
 		$form->addText('fullname', 'buyout.request.input.fullname')
 						->setRequired('buyout.request.required.fullname')
 						->getControlPrototype()->class[] = 'form-control input-medium';
-		$form['fullname']->getLabelPrototype()->class[] = 'control-label col-md-4';
+		$form['fullname']->getLabelPrototype()->class[] = 'control-label ' . $labelCol;
 
 		$form->addSubmit('recalculate', 'buyout.request.input.recalculate')
 						->setValidationScope(FALSE)
@@ -125,7 +128,7 @@ class Request extends BaseControl
 		}
 
 		if ($this->presenter->isAjax()) {
-			$this->presenter->redrawControl();
+			$this->redrawControl();
 		}
 	}
 

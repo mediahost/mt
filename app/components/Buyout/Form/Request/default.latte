@@ -1,11 +1,24 @@
 {ifset $model}
-	{form form, class => 'form-horizontal'}
-		
+	{form form, class => 'form-horizontal buyout'}
+
+        {var labelCol => 'col-md-5'}
+        {var inputCol => 'col-md-7'}
+
+        <div class="is-new-question">
+            <a n:href="this#" class="new active">{_'buyout.request.template.new'}</a>
+            <a n:href="this#" class="old">{_'buyout.request.template.used'}</a>
+        </div>
+
+		<div class="is-new-checker">
+            {input isNew}
+		</div>
+
+        <div class="question-block">
 		{formContainer questions}
 			{foreach $_form->getComponents(FALSE, '\Nette\Forms\IControl') as $i}
 				<div class="form-group">
-					{label $i class => 'col-sm-4 control-label' /}
-					<div class="col-sm-8">
+					{label $i class => $labelCol . ' control-label' /}
+					<div class="{$inputCol}">
 						<div class="radio-list">
 							{var $name = $i->name}
 							{foreach $form[questions][$name]->items as $key => $label}
@@ -18,37 +31,47 @@
 				</div>
 			{/foreach}
 		{/formContainer}
+        </div>
 
-		<div class="form-group">
-			<label class="col-sm-4 control-label">{_'buyout.request.template.total'}:</label>
-			<div class="col-sm-8">
-				<p class="final-price">
-					{ifset $summary}
-						{$summary|currency}
-					{else}
-						{$model->buyoutPrice|currency}
-					{/ifset}
-				</p>
-			</div>
-		</div>
+        <div class="form-group part-price">
+            <label class="{$labelCol} control-label">{_'buyout.request.template.total'}:</label>
+            <div class="{$inputCol}">
+                <p class="final-price" n:snippet="price">
+                    {ifset $summary}
+                        {$summary|currency}
+                    {else}
+                        {$model->buyoutPrice|currency}
+                    {/ifset}
+                </p>
+            </div>
+        </div>
+
+        <div class="form-group full-price">
+            <label class="{$labelCol} control-label">{_'buyout.request.template.total'}:</label>
+            <div class="{$inputCol}">
+                <p class="final-price">
+                    {$model->buyoutPrice|currency}
+                </p>
+            </div>
+        </div>
 
 		<div class="form-group">
 			{$form->renderer->renderLabel($form['email'])}
-			<div class="col-md-8">
+			<div class="{$inputCol}">
 				{input email}
 			</div>
 		</div>
 
 		<div class="form-group">
 			{$form->renderer->renderLabel($form['fullname'])}
-			<div class="col-md-8">
+			<div class="{$inputCol}">
 				{input fullname}
 			</div>
 		</div>
 
 		<div class="form-group">
-			<div class="col-sm-4"></div>
-			<div class="col-sm-8">
+			<div class="{$labelCol}"></div>
+			<div class="{$inputCol}">
 				{input send} {input recalculate}
 			</div>
 		</div>

@@ -4,6 +4,7 @@ namespace App\Model\Entity\Buyout;
 
 use App\Model\Entity\ProducerModel;
 use Doctrine\ORM\Mapping as ORM;
+use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
 
 /**
@@ -18,7 +19,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
 class ModelQuestion extends BaseEntity
 {
 
-	use \Kdyby\Doctrine\Entities\Attributes\Identifier;
+	use Identifier;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="App\Model\Entity\ProducerModel", inversedBy="questions")
@@ -32,20 +33,12 @@ class ModelQuestion extends BaseEntity
 	 */
 	protected $question;
 
-	/**
-	 * @ORM\Column(type="float", nullable=true)
-	 */
+	/** @ORM\Column(type="float", nullable=true) */
 	protected $priceA;
 
-	/**
-	 * @ORM\Column(type="float", nullable=true)
-	 */
+	/** @ORM\Column(type="float", nullable=true) */
 	protected $priceB;
 
-	/**
-	 * @param ProducerModel $model
-	 * @return ModelQuestion
-	 */
 	public function setModel(ProducerModel $model)
 	{
 		$this->model = $model;

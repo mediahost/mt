@@ -18,9 +18,10 @@
     <tbody>
         <tr>
             <td>
-                <p>{_buyout.email.template.model}: <strong>{$model->name}</strong></p>
-                <p>{_buyout.email.template.summary}: <strong>{$summary|currency}</strong></p>
-                <ul>
+                <p>{_buyout.email.template.model}: <strong>{$model->fullName}</strong></p>
+                <p>{_buyout.email.template.summary}: <strong>{if $formData['isNew']}{$model->buyoutPrice|currency}{else}{$summary|currency}{/if}</strong></p>
+                <p>{_buyout.email.template.state}: <strong>{if $formData['isNew']}{_buyout.email.template.new}{else}{_buyout.email.template.used}{/if}</strong></p>
+                <ul n:if="!$formData['isNew']">
 					{foreach $formData['questions'] as $id => $answer}
 						<li>{$model->questions[$id]->question->text} <i>{_'buyout.email.template.answer.' . $answer}</i></li>
 					{/foreach}
