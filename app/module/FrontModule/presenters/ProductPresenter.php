@@ -14,6 +14,7 @@ use App\Model\Facade\VisitFacade;
 use Nette\Application\BadRequestException;
 use Nette\Application\Responses\JsonResponse;
 use Nette\Utils\Strings;
+use Tracy\Debugger;
 
 class ProductPresenter extends BasePresenter
 {
@@ -35,6 +36,8 @@ class ProductPresenter extends BasePresenter
 
 	public function actionDefault($id)
 	{
+		Debugger::timer('runTime');
+
 		if ($id) {
 			$product = $this->productRepo->find($id);
 		}
@@ -61,6 +64,10 @@ class ProductPresenter extends BasePresenter
 
 		// Last visited
 		$this->user->storage->addVisit($this->stock);
+
+		$time = Debugger::timer('runTime');
+		Debugger::barDump($time, 'runTime');
+		Debugger::log($this->getHttpRequest()->remoteAddress . ' - ' . $time, 'product-time');
 	}
 	
 	public function renderDefault()
