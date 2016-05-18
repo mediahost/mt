@@ -32,7 +32,7 @@ class ProducerFacade extends Object
 		$this->modelRepo = $this->em->getRepository(ProducerModel::getClassName());
 	}
 
-	public function getProducersList($onlyWithChildren = TRUE)
+	public function getProducersList($onlyWithChildren = FALSE)
 	{
 		$producers = [];
 		foreach ($this->producerRepo->findAll() as $producer) {
@@ -44,7 +44,7 @@ class ProducerFacade extends Object
 		return $producers;
 	}
 
-	public function getLinesList(Producer $producer = NULL, $fullPath = FALSE, $onlyWithChildren = TRUE)
+	public function getLinesList(Producer $producer = NULL, $fullPath = FALSE, $onlyWithChildren = FALSE)
 	{
 		$lines = [];
 		if ($producer) {

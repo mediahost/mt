@@ -45,8 +45,8 @@ class ModelSelector extends BaseControl
 		$form->getElementPrototype()->class = [$this->isAjax ? 'ajax' : '', 'modelSelector'];
 		$form->getElementPrototype()->addAttributes(['data-target-loading' => '#loaded-content']);
 
-		$allProducers = $this->producerFacade->getProducersList();
-		$allLines = $this->producerFacade->getLinesList();
+		$allProducers = $this->producerFacade->getProducersList(TRUE);
+		$allLines = $this->producerFacade->getLinesList(NULL, FALSE, TRUE);
 		$allModels = $this->producerFacade->getModelsList(NULL, FALSE, $this->buyout);
 
 		$form->addSelect2('producer', 'Producer', $allProducers)
