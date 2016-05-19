@@ -8,6 +8,7 @@ use App\Components\WatchDog\Form\IWatchDogFactory;
 use App\Components\WatchDog\Form\WatchDog;
 use App\Extensions\HomeCredit;
 use App\Extensions\Products\ProductList;
+use App\Model\Entity\Category;
 use App\Model\Entity\Parameter;
 use App\Model\Entity\Stock;
 use App\Model\Facade\VisitFacade;
@@ -47,8 +48,14 @@ class ProductPresenter extends BasePresenter
 			throw new BadRequestException;
 		}
 
-		$paramRepo = $this->em->getRepository(Parameter::getClassName());
-		$allParams = $paramRepo->findAll();
+		$categoryRepo = $this->em->getRepository(Category::getClassName());
+		$paramCategory = $categoryRepo->find($this->settings->modules->parameters->onlyForCategory);
+		if ($paramCategory && $product->mainCategory->isInPath($paramCategory)) {
+			$paramRepo = $this->em->getRepository(Parameter::getClassName());
+			$allParams = $paramRepo->findAll();
+		} else {
+			$allParams = FALSE;
+		}
 
 		$product->setCurrentLocale($this->locale);
 
