@@ -47,7 +47,7 @@
 			<stk:isInternet>true</stk:isInternet>
 			<stk:purchasingRateVAT>{include vat, item => $stock}</stk:purchasingRateVAT>
 			<stk:sellingRateVAT>{include vat, item => $stock}</stk:sellingRateVAT>
-			<stk:name><![CDATA[{$stock->product->name}]]></stk:name>
+			<stk:name><![CDATA[{$stock->product->name|truncate:90:''}]]></stk:name>
 			<stk:storage>
 				<typ:ids>{$defaultStorage}</typ:ids>
 			</stk:storage>
