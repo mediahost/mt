@@ -48,13 +48,12 @@ class ProductPresenter extends BasePresenter
 			throw new BadRequestException;
 		}
 
+		$allParams = FALSE;
 		$categoryRepo = $this->em->getRepository(Category::getClassName());
 		$paramCategory = $categoryRepo->find($this->settings->modules->parameters->onlyForCategory);
 		if ($paramCategory && $product->mainCategory->isInPath($paramCategory)) {
 			$paramRepo = $this->em->getRepository(Parameter::getClassName());
 			$allParams = $paramRepo->findAll();
-		} else {
-			$allParams = FALSE;
 		}
 
 		$product->setCurrentLocale($this->locale);
