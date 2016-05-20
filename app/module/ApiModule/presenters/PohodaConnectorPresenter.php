@@ -119,6 +119,7 @@ class PohodaConnectorPresenter extends BasePresenter
 
 	public function actionCreateStore($use_gzip_upload)
 	{
+		ini_set('max_execution_time', 60);
 		if (!$this->settings->modules->pohoda->enabled || !$this->settings->modules->pohoda->allowedCreateStore) {
 			$this->resource->state = 'error';
 			$this->resource->message = 'This module is not allowed';
@@ -137,6 +138,7 @@ class PohodaConnectorPresenter extends BasePresenter
 
 	public function actionCreateShortStock($use_gzip_upload)
 	{
+		ini_set('max_execution_time', 60);
 		if (!$this->settings->modules->pohoda->enabled || !$this->settings->modules->pohoda->allowedCreateShortStock) {
 			$this->resource->state = 'error';
 			$this->resource->message = 'This module is not allowed';

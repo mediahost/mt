@@ -30,7 +30,9 @@ class StockBasic extends StockBase
 		$product = $this->stock->product;
 		$product->setCurrentLocale($this->translator->getLocale());
 
-		$form->addText('name', 'Name')
+		$nameMax = 90;
+		$form->addText('name', 'Name', NULL, $nameMax)
+				->addRule(Form::MAX_LENGTH, 'Max length in Pohoda is %d', $nameMax)
 				->setAttribute('placeholder', $product->name);
 		$form->addText('pohodaCode', 'Code for Pohoda', NULL, 20)
 				->setOption('description', 'Identification for synchronizing')
