@@ -2,8 +2,6 @@
 
 namespace App\AppModule\Presenters;
 
-use App\Extensions\ImportFromMT1;
-use App\Extensions\ImportFromMT1Exception;
 use App\Extensions\Installer;
 use App\Extensions\LimitExceededException;
 use App\Extensions\WrongSituationException;
@@ -21,9 +19,6 @@ class ServicePresenter extends BasePresenter
 
 	/** @var Installer @inject */
 	public $installer;
-
-	/** @var ImportFromMT1 @inject */
-	public $importFromOld;
 
 	/** @var RoleFacade @inject */
 	public $roleFacade;
@@ -59,142 +54,6 @@ class ServicePresenter extends BasePresenter
 	public function actionCreators()
 	{
 		
-	}
-
-	/**
-	 * @secured
-	 * @resource('service')
-	 * @privilege('imports')
-	 */
-	public function actionImports()
-	{
-		
-	}
-
-	/**
-	 * @secured
-	 * @resource('service')
-	 * @privilege('importOldUsers')
-	 */
-	public function handleImportOldUsers()
-	{
-		try {
-			$this->importFromOld->downloadUsers();
-			$message = $this->translator->translate('Users was imported from old DB');
-			$this->flashMessage($message, 'success');
-		} catch (ImportFromMT1Exception $e) {
-			$message = $this->translator->translate('Please check settings of this module');
-			$this->flashMessage($message, 'warning');
-		} catch (LimitExceededException $e) {
-			$message = $this->translator->translate('Import wasn\'t finished. Please start it again');
-			$this->flashMessage($message, 'warning');
-		} catch (WrongSituationException $e) {
-			$this->flashMessage($e->getMessage(), 'warning');
-		}
-		$this->redirect('this');
-	}
-
-	/**
-	 * @secured
-	 * @resource('service')
-	 * @privilege('actualizeOldUsers')
-	 */
-	public function handleActualizeOldUsers()
-	{
-		try {
-			$this->importFromOld->actualizeUsers();
-			$message = $this->translator->translate('Users was updated from old DB');
-			$this->flashMessage($message, 'success');
-		} catch (ImportFromMT1Exception $e) {
-			$message = $this->translator->translate('Please check settings of this module');
-			$this->flashMessage($message, 'warning');
-		} catch (LimitExceededException $e) {
-			$message = $this->translator->translate('Update wasn\'t finished. Please start it again');
-			$this->flashMessage($message, 'warning');
-		} catch (WrongSituationException $e) {
-			$this->flashMessage($e->getMessage(), 'warning');
-		}
-		$this->redirect('this');
-	}
-
-	/**
-	 * @secured
-	 * @resource('service')
-	 * @privilege('importOldProducts')
-	 */
-	public function handleImportOldProducts()
-	{
-		try {
-			$this->importFromOld->downloadProducts();
-			$message = $this->translator->translate('Products was imported from old DB');
-			$this->flashMessage($message, 'success');
-		} catch (ImportFromMT1Exception $e) {
-			$message = $this->translator->translate('Please check settings of this module');
-			$this->flashMessage($message, 'warning');
-		} catch (WrongSituationException $e) {
-			$this->flashMessage($e->getMessage(), 'warning');
-		}
-		$this->redirect('this');
-	}
-
-	/**
-	 * @secured
-	 * @resource('service')
-	 * @privilege('actualizeOldProducts')
-	 */
-	public function handleActualizeOldProducts()
-	{
-		try {
-			$this->importFromOld->actualizeProducts();
-			$message = $this->translator->translate('Products was updated from old DB');
-			$this->flashMessage($message, 'success');
-		} catch (ImportFromMT1Exception $e) {
-			$message = $this->translator->translate('Please check settings of this module');
-			$this->flashMessage($message, 'warning');
-		} catch (WrongSituationException $e) {
-			$this->flashMessage($e->getMessage(), 'warning');
-		}
-		$this->redirect('this');
-	}
-
-	/**
-	 * @secured
-	 * @resource('service')
-	 * @privilege('importOldOrders')
-	 */
-	public function handleImportOldOrders()
-	{
-		try {
-			$this->importFromOld->downloadOrders();
-			$message = $this->translator->translate('Orders was imported from old DB');
-			$this->flashMessage($message, 'success');
-		} catch (ImportFromMT1Exception $e) {
-			$message = $this->translator->translate('Please check settings of this module');
-			$this->flashMessage($message, 'warning');
-		} catch (WrongSituationException $e) {
-			$this->flashMessage($e->getMessage(), 'warning');
-		}
-		$this->redirect('this');
-	}
-
-	/**
-	 * @secured
-	 * @resource('service')
-	 * @privilege('actualizeOldOrders')
-	 */
-	public function handleActualizeOldOrders()
-	{
-		try {
-			$this->importFromOld->actualizeOrders();
-			$message = $this->translator->translate('Orders was updated from old DB');
-			$this->flashMessage($message, 'success');
-		} catch (ImportFromMT1Exception $e) {
-			$message = $this->translator->translate('Please check settings of this module');
-			$this->flashMessage($message, 'warning');
-		} catch (WrongSituationException $e) {
-			$this->flashMessage($e->getMessage(), 'warning');
-		}
-		$this->redirect('this');
 	}
 
 	/**
