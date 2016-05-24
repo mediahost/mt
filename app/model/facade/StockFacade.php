@@ -24,6 +24,7 @@ use Nette\Caching\Cache;
 use Nette\Caching\IStorage;
 use Nette\Object;
 use Nette\Utils\DateTime;
+use Tracy\Debugger;
 
 class StockFacade extends Object
 {
@@ -55,6 +56,9 @@ class StockFacade extends Object
 	/** @var SignRepository */
 	private $signRepo;
 
+	/** @var array */
+	private $urls = [];
+
 	public function __construct(EntityManager $em)
 	{
 		$this->em = $em;
@@ -67,20 +71,20 @@ class StockFacade extends Object
 	public function getLimitPrices($priceLevelName, Category $category = NULL, $producer = NULL)
 	{
 		$qb = $this->stockRepo->createQueryBuilder('s')
-				->select("MIN(s.{$priceLevelName}) AS minimum, MAX(s.{$priceLevelName}) AS maximum")
-				->innerJoin('s.product', 'p');
+			->select("MIN(s.{$priceLevelName}) AS minimum, MAX(s.{$priceLevelName}) AS maximum")
+			->innerJoin('s.product', 'p');
 
 		if ($category) {
 			$qb->innerJoin('p.categories', 'categories')
-					->andWhere('categories IN (:categories)')
-					->setParameter('categories', array_keys($category->childrenArray));
+				->andWhere('categories IN (:categories)')
+				->setParameter('categories', array_keys($category->childrenArray));
 		}
 		if ($producer instanceof Producer) {
-			
+
 		} else if ($producer instanceof ProducerLine) {
-			
+
 		} else if ($producer instanceof ProducerModel) {
-			
+
 		}
 		$result = $qb->getQuery()->getOneOrNullResult();
 
@@ -99,20 +103,20 @@ class StockFacade extends Object
 			return [];
 		}
 		$qb = $this->stockRepo
-				->createQueryBuilder('s')
-				->innerJoin('s.product', 'p')
-				->innerJoin('p.signs', 'signs')
-				->where('signs = :sign')
-				->andWhere('s.active = :active AND p.active = :active')
-				->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
-				->andWhere('s.inStore >= 1')
-				->setParameter('active', TRUE)
-				->setParameter('sign', $newSign)
-				->setParameter('now', new DateTime());
+			->createQueryBuilder('s')
+			->innerJoin('s.product', 'p')
+			->innerJoin('p.signs', 'signs')
+			->where('signs = :sign')
+			->andWhere('s.active = :active AND p.active = :active')
+			->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
+			->andWhere('s.inStore >= 1')
+			->setParameter('active', TRUE)
+			->setParameter('sign', $newSign)
+			->setParameter('now', new DateTime());
 		return $qb->orderBy('s.id', 'DESC')
-						->setMaxResults($count)
-						->getQuery()
-						->getResult();
+			->setMaxResults($count)
+			->getQuery()
+			->getResult();
 	}
 
 	public function getSales($count = 5)
@@ -163,20 +167,27 @@ class StockFacade extends Object
 	}
 
 	/** @return array */
-	private function getUrls($locale = NULL)
+	public function getUrls($locale = NULL, $refresh = FALSE)
 	{
 		if ($locale === NULL) {
 			$locale = $this->translator->getDefaultLocale();
+		}
+		if (!$refresh && array_key_exists($locale, $this->urls)) {
+			return $this->urls[$locale];
 		}
 
 		$cache = $this->getCache();
 		$cacheKey = self::KEY_ALL_PRODUCTS_URLS . '_' . $locale;
 
 		$urls[$locale] = $cache->load($cacheKey);
-		if (!$urls[$locale]) {
+		if (!$urls[$locale] || $refresh) {
+			Debugger::timer('stock');
 			$urls[$locale] = $this->getLocaleUrlsArray($locale);
 			$cache->save($cacheKey, $urls[$locale], [Cache::TAGS => [self::TAG_ALL_PRODUCTS]]);
+			$timer = Debugger::timer('stock');
+			Debugger::log($timer, 'stock-url-time');
 		}
+		$this->urls[$locale] = $urls[$locale];
 
 		return $urls[$locale];
 	}
@@ -204,30 +215,30 @@ class StockFacade extends Object
 	public function getExportStocksArray($onlyInStore = TRUE, Category $denyCategory = NULL, $limit = NULL)
 	{
 		$qb = $this->stockRepo->createQueryBuilder('s')
-				->select('s, p, i, c, t, v')
-				->innerJoin('s.product', 'p')
-				->leftJoin('p.translations', 't')
-				->innerJoin('p.image', 'i')
-				->innerJoin('p.mainCategory', 'c')
-				->innerJoin('s.vat', 'v')
-				->andWhere('(t.locale = :lang OR t.locale = :defaultLang)')
-				->setParameter('lang', $this->translator->getLocale())
-				->setParameter('defaultLang', $this->translator->getDefaultLocale())
-				->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
-				->andWhere('p.deletedAt IS NULL OR p.deletedAt > :now')
-				->setParameter('now', new DateTime())
-				->andWhere('s.active = :active')
-				->andWhere('p.active = :active')
-				->setParameter('active', TRUE);
+			->select('s, p, i, c, t, v')
+			->innerJoin('s.product', 'p')
+			->leftJoin('p.translations', 't')
+			->innerJoin('p.image', 'i')
+			->innerJoin('p.mainCategory', 'c')
+			->innerJoin('s.vat', 'v')
+			->andWhere('(t.locale = :lang OR t.locale = :defaultLang)')
+			->setParameter('lang', $this->translator->getLocale())
+			->setParameter('defaultLang', $this->translator->getDefaultLocale())
+			->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
+			->andWhere('p.deletedAt IS NULL OR p.deletedAt > :now')
+			->setParameter('now', new DateTime())
+			->andWhere('s.active = :active')
+			->andWhere('p.active = :active')
+			->setParameter('active', TRUE);
 		if ($onlyInStore) {
 			$qb
-					->andWhere("s.inStore >= :inStore")
-					->setParameter('inStore', 1);
+				->andWhere("s.inStore >= :inStore")
+				->setParameter('inStore', 1);
 		}
 		if ($denyCategory && count($denyCategory->childrenArray)) {
 			$qb
-					->andWhere('p.mainCategory NOT IN (:categories)')
-					->setParameter('categories', array_keys($denyCategory->childrenArray));
+				->andWhere('p.mainCategory NOT IN (:categories)')
+				->setParameter('categories', array_keys($denyCategory->childrenArray));
 		}
 
 		if ($limit) {
@@ -235,35 +246,35 @@ class StockFacade extends Object
 		}
 
 		return $qb->getQuery()
-						->getResult(AbstractQuery::HYDRATE_ARRAY);
+			->getResult(AbstractQuery::HYDRATE_ARRAY);
 	}
 
 	public function getExportShortStocksArray($onlyInStore = TRUE, Category $denyCategory = NULL, $limit = NULL)
 	{
 		$qb = $this->stockRepo->createQueryBuilder('s')
-				->select('s, p, i, c, t')
-				->innerJoin('s.product', 'p')
-				->leftJoin('p.translations', 't')
-				->innerJoin('p.image', 'i')
-				->innerJoin('p.mainCategory', 'c')
-				->andWhere('(t.locale = :lang OR t.locale = :defaultLang)')
-				->setParameter('lang', $this->translator->getLocale())
-				->setParameter('defaultLang', $this->translator->getDefaultLocale())
-				->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
-				->andWhere('p.deletedAt IS NULL OR p.deletedAt > :now')
-				->setParameter('now', new DateTime())
-				->andWhere('s.active = :active')
-				->andWhere('p.active = :active')
-				->setParameter('active', TRUE);
+			->select('s, p, i, c, t')
+			->innerJoin('s.product', 'p')
+			->leftJoin('p.translations', 't')
+			->innerJoin('p.image', 'i')
+			->innerJoin('p.mainCategory', 'c')
+			->andWhere('(t.locale = :lang OR t.locale = :defaultLang)')
+			->setParameter('lang', $this->translator->getLocale())
+			->setParameter('defaultLang', $this->translator->getDefaultLocale())
+			->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
+			->andWhere('p.deletedAt IS NULL OR p.deletedAt > :now')
+			->setParameter('now', new DateTime())
+			->andWhere('s.active = :active')
+			->andWhere('p.active = :active')
+			->setParameter('active', TRUE);
 		if ($onlyInStore) {
 			$qb
-					->andWhere("s.inStore >= :inStore")
-					->setParameter('inStore', 1);
+				->andWhere("s.inStore >= :inStore")
+				->setParameter('inStore', 1);
 		}
 		if ($denyCategory && count($denyCategory->childrenArray)) {
 			$qb
-					->andWhere('p.mainCategory NOT IN (:categories)')
-					->setParameter('categories', array_keys($denyCategory->childrenArray));
+				->andWhere('p.mainCategory NOT IN (:categories)')
+				->setParameter('categories', array_keys($denyCategory->childrenArray));
 		}
 
 		if ($limit) {
@@ -271,24 +282,24 @@ class StockFacade extends Object
 		}
 
 		return $qb->getQuery()
-						->getResult(AbstractQuery::HYDRATE_ARRAY);
+			->getResult(AbstractQuery::HYDRATE_ARRAY);
 	}
 
 	public function getExportStocksDetails($onlyInStore = TRUE, $limit = NULL)
 	{
 		$qb = $this->stockRepo->createQueryBuilder('s')
-				->select('s')
-				->innerJoin('s.product', 'p')
-				->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
-				->andWhere('p.deletedAt IS NULL OR p.deletedAt > :now')
-				->setParameter('now', new DateTime())
-				->andWhere('s.active = :active')
-				->andWhere('p.active = :active')
-				->setParameter('active', TRUE);
+			->select('s')
+			->innerJoin('s.product', 'p')
+			->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
+			->andWhere('p.deletedAt IS NULL OR p.deletedAt > :now')
+			->setParameter('now', new DateTime())
+			->andWhere('s.active = :active')
+			->andWhere('p.active = :active')
+			->setParameter('active', TRUE);
 		if ($onlyInStore) {
 			$qb
-					->andWhere("s.inStore >= :inStore")
-					->setParameter('inStore', 1);
+				->andWhere("s.inStore >= :inStore")
+				->setParameter('inStore', 1);
 		}
 
 		if ($limit) {
@@ -296,16 +307,16 @@ class StockFacade extends Object
 		}
 
 		return $qb->getQuery()
-						->getResult(AbstractQuery::HYDRATE_OBJECT);
+			->getResult(AbstractQuery::HYDRATE_OBJECT);
 	}
-	
+
 	public function recountPrices($offset = 0, $limit = 500)
 	{
 		$groupRepo = $this->em->getRepository(Group::getClassName());
 		$groups = $groupRepo->findBy(['type' => Group::TYPE_BONUS]);
-		
+
 		$stocks = $this->stockRepo->findBy([], NULL, $limit, $offset);
-		
+
 		foreach ($stocks as $stock) {
 			/* @var $stock Stock */
 			foreach ($groups as $group) {
@@ -314,7 +325,7 @@ class StockFacade extends Object
 			$this->em->persist($stock);
 		}
 		$this->em->flush();
-		
+
 		return $this;
 	}
 

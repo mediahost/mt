@@ -2,12 +2,12 @@
 
 namespace App\Listeners\Model\Entity;
 
-use App\Model\Facade\StockFacade;
+use App\Extensions\TodoQueue;
 use Doctrine\ORM\Events;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Events\Subscriber;
-use Nette\Caching\Cache;
 use Nette\Object;
+use Tracy\Debugger;
 
 class ProductListener extends Object implements Subscriber
 {
@@ -15,28 +15,20 @@ class ProductListener extends Object implements Subscriber
 	/** @var EntityManager @inject */
 	public $em;
 
-	/** @var StockFacade @inject */
-	public $stockFacade;
+	/** @var TodoQueue @inject */
+	public $todoQueue;
 
 	public function getSubscribedEvents()
 	{
 		return array(
-			Events::prePersist,
-			Events::preUpdate,
+			Events::postUpdate,
 			Events::postRemove,
 		);
 	}
 
 	// <editor-fold desc="listeners redirectors">
 
-	public function prePersist($params)
-	{
-		if ($this->hasChangeName($params)) {
-			$this->clearCache();
-		}
-	}
-
-	public function preUpdate($params)
+	public function postUpdate($params)
 	{
 		if ($this->hasChangeName($params)) {
 			$this->clearCache();
@@ -62,9 +54,7 @@ class ProductListener extends Object implements Subscriber
 
 	private function clearCache()
 	{
-		$this->stockFacade->getCache()->clean([
-			Cache::TAGS => [StockFacade::TAG_ALL_PRODUCTS],
-		]);
+		$this->todoQueue->todo(TodoQueue::REFRESH_STOCK_CACHE);
 	}
 
 }
