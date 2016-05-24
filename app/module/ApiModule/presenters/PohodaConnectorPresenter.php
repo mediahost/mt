@@ -28,8 +28,11 @@ class PohodaConnectorPresenter extends BasePresenter
 	/** @var PohodaFacade @inject */
 	public $pohodaFacade;
 
+	/** Priority CPU using */
 	public function actionReadStorageCart()
 	{
+		proc_nice(19);
+
 		if (!$this->settings->modules->pohoda->enabled || !$this->settings->modules->pohoda->allowedReadStorageCart) {
 			$this->resource->state = 'error';
 			$this->resource->message = 'This module is not allowed';
@@ -73,8 +76,11 @@ class PohodaConnectorPresenter extends BasePresenter
 		}
 	}
 
+	/** Priority CPU using */
 	public function actionReadOrders()
 	{
+		proc_nice(19);
+
 		if (!$this->settings->modules->pohoda->enabled || !$this->settings->modules->pohoda->allowedReadOrders) {
 			$this->resource->state = 'error';
 			$this->resource->message = 'This module is not allowed';
@@ -117,9 +123,11 @@ class PohodaConnectorPresenter extends BasePresenter
 		}
 	}
 
+	/** Priority CPU using */
 	public function actionCreateStore($use_gzip_upload)
 	{
-		ini_set('max_execution_time', 60);
+		proc_nice(19);
+
 		if (!$this->settings->modules->pohoda->enabled || !$this->settings->modules->pohoda->allowedCreateStore) {
 			$this->resource->state = 'error';
 			$this->resource->message = 'This module is not allowed';
@@ -136,9 +144,11 @@ class PohodaConnectorPresenter extends BasePresenter
 		$this->setView('stockItemResponse');
 	}
 
+	/** Priority CPU using */
 	public function actionCreateShortStock($use_gzip_upload)
 	{
-		ini_set('max_execution_time', 60);
+		proc_nice(19);
+
 		if (!$this->settings->modules->pohoda->enabled || !$this->settings->modules->pohoda->allowedCreateShortStock) {
 			$this->resource->state = 'error';
 			$this->resource->message = 'This module is not allowed';

@@ -83,7 +83,6 @@ class DealerPresenter extends BasePresenter
 	public function actionReadStocks()
 	{
 		proc_nice(19);
-		ini_set('max_execution_time', 60);
 
 		if (!$this->settings->modules->dealer->enabled) {
 			$this->resource->state = 'error';
@@ -108,7 +107,6 @@ class DealerPresenter extends BasePresenter
 	public function actionReadCategories()
 	{
 		proc_nice(19);
-		ini_set('max_execution_time', 60);
 
 		if (!$this->settings->modules->dealer->enabled) {
 			$this->resource->state = 'error';
@@ -133,7 +131,6 @@ class DealerPresenter extends BasePresenter
 	public function actionReadAvailability($id = NULL, $currency = 'eur')
 	{
 		proc_nice(19);
-		ini_set('max_execution_time', 60);
 
 		if (!$this->settings->modules->dealer->enabled) {
 			$this->resource->state = 'error';
@@ -164,6 +161,8 @@ class DealerPresenter extends BasePresenter
 	 */
 	public function actionCreateOrder()
 	{
+		proc_nice(19);
+		
 		if (!$this->settings->modules->dealer->enabled) {
 			$this->resource->state = 'error';
 			$this->resource->message = 'This module is not allowed';

@@ -17,13 +17,15 @@ class PohodaPresenter extends BasePresenter
 	public function actionSynchronize($all = FALSE, $offset = 0)
 	{
 		proc_nice(19);
-		ini_set('max_execution_time', 800);
+		ini_set('max_execution_time', 120);
+		
+		Debugger::timer('pohoda-synchronize');
+		Debugger::log('start', 'pohoda-synchronize-start');
 		
 		if (!$this->settings->modules->pohoda->enabled) {
 			throw new ForbiddenRequestException('Pohoda module is not allowed');
 		}
 		
-		// TODO: je potřeba prověřit, zda v celém procesu funguje kontrola tímto časem správně
 		$lastDataChangeTime = $this->pohodaFacade->getLastSync(PohodaFacade::ANY_IMPORT, PohodaFacade::LAST_UPDATE);
 		if ($lastDataChangeTime || $all) {
 			try {
@@ -41,7 +43,9 @@ class PohodaPresenter extends BasePresenter
 			$this->status = parent::STATUS_OK;
 			$this->message = 'No change from last import';
 		}
-		Debugger::log($this->message, self::LOGNAME);
+
+		$timer = Debugger::timer('pohoda-synchronize');
+		Debugger::log($timer, 'pohoda-synchronize-stop');
 	}
 
 }

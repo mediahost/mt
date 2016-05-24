@@ -10,6 +10,7 @@ use App\Model\Entity\Stock;
 use App\Model\Facade\StockFacade;
 use App\Model\Repository\StockRepository;
 use Nette\Application\ForbiddenRequestException;
+use Tracy\Debugger;
 
 class ExportGeneratorPresenter extends BasePresenter
 {
@@ -22,10 +23,14 @@ class ExportGeneratorPresenter extends BasePresenter
 	/** @var FilesManager @inject */
 	public $filesManager;
 
+	/** MAX Priority CPU using */
 	public function actionDealerStocks()
 	{
 		proc_nice(19);
-		ini_set('max_execution_time', 600);
+		ini_set('max_execution_time', 200);
+
+		Debugger::timer('dealer-stocks');
+		Debugger::log('start', 'dealer-stocks-start');
 
 		if (!$this->settings->modules->dealer->enabled) {
 			throw new ForbiddenRequestException('Dealer module is not allowed');
@@ -46,14 +51,21 @@ class ExportGeneratorPresenter extends BasePresenter
 
 		file_put_contents($filename, $output);
 
+		$timer = Debugger::timer('dealer-stocks');
+		Debugger::log($timer, 'dealer-stocks-stop');
+
 		$this->status = parent::STATUS_OK;
 		$this->message = 'File was generated';
 	}
 
+	/** MAX Priority CPU using */
 	public function actionDealerCategories()
 	{
 		proc_nice(19);
-		ini_set('max_execution_time', 600);
+		ini_set('max_execution_time', 200);
+
+		Debugger::timer('dealer-categories');
+		Debugger::log('start', 'dealer-categories-start');
 
 		if (!$this->settings->modules->dealer->enabled) {
 			throw new ForbiddenRequestException('Dealer module is not allowed');
@@ -71,14 +83,21 @@ class ExportGeneratorPresenter extends BasePresenter
 
 		file_put_contents($filename, $output);
 
+		$timer = Debugger::timer('dealer-categories');
+		Debugger::log($timer, 'dealer-categories-stop');
+
 		$this->status = parent::STATUS_OK;
 		$this->message = 'File was generated';
 	}
 
+	/** MAX Priority CPU using */
 	public function actionHeurekaStocks()
 	{
 		proc_nice(19);
-		ini_set('max_execution_time', 1500);
+		ini_set('max_execution_time', 200);
+
+		Debugger::timer('heureka-stocks');
+		Debugger::log('start', 'heureka-stocks-start');
 
 		if (!$this->settings->modules->heureka->enabled) {
 			throw new ForbiddenRequestException('Heureka module is not allowed');
@@ -130,14 +149,21 @@ class ExportGeneratorPresenter extends BasePresenter
 
 		file_put_contents($filename, $output);
 
+		$timer = Debugger::timer('heureka-stocks');
+		Debugger::log($timer, 'heureka-stocks-stop');
+
 		$this->status = parent::STATUS_OK;
 		$this->message = 'File was generated';
 	}
 
+	/** MAX Priority CPU using */
 	public function actionZboziStocks()
 	{
 		proc_nice(19);
-		ini_set('max_execution_time', 1500);
+		ini_set('max_execution_time', 200);
+
+		Debugger::timer('zbozi-stocks');
+		Debugger::log('start', 'zbozi-stocks-start');
 
 		if (!$this->settings->modules->zbozi->enabled) {
 			throw new ForbiddenRequestException('Zbozi module is not allowed');
@@ -170,6 +196,9 @@ class ExportGeneratorPresenter extends BasePresenter
 		$filename = $this->filesManager->getExportFilename(FilesManager::EXPORT_ZBOZI_STOCKS, $this->translator->getLocale());
 
 		file_put_contents($filename, $output);
+
+		$timer = Debugger::timer('zbozi-stocks');
+		Debugger::log($timer, 'zbozi-stocks-stop');
 
 		$this->status = parent::STATUS_OK;
 		$this->message = 'File was generated';
