@@ -11,6 +11,7 @@ use Nette\Application\Request;
 use Nette\Caching\Cache;
 use Nette\Caching\IStorage;
 use Nette\Object;
+use Tracy\Debugger;
 
 class CategoryFacade extends Object
 {
@@ -29,6 +30,9 @@ class CategoryFacade extends Object
 
 	/** @var CategoryRepository */
 	private $categoryRepo;
+
+	/** @var array */
+	private $urls = [];
 
 	public function __construct(EntityManager $em)
 	{
@@ -73,20 +77,27 @@ class CategoryFacade extends Object
 	}
 
 	/** @return array */
-	private function getUrls($locale = NULL)
+	public function getUrls($locale = NULL, $refresh = FALSE)
 	{
 		if ($locale === NULL) {
 			$locale = $this->translator->getDefaultLocale();
 		}
-		
+		if (!$refresh && array_key_exists($locale, $this->urls)) {
+			return $this->urls[$locale];
+		}
+
 		$cache = $this->getCache();
 		$cacheKey = self::KEY_ALL_URLS . '_' . $locale;
 
 		$urls[$locale] = $cache->load($cacheKey);
-		if (!$urls[$locale]) {
+		if (!$urls[$locale] || $refresh) {
+			Debugger::timer('category');
 			$urls[$locale] = $this->getLocaleUrlsArray($locale);
 			$cache->save($cacheKey, $urls[$locale], [Cache::TAGS => [self::TAG_ALL_CATEGORIES]]);
+			$timer = Debugger::timer('category');
+			Debugger::log($timer, 'category-url-time');
 		}
+		$this->urls[$locale] = $urls[$locale];
 
 		return $urls[$locale];
 	}

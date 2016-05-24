@@ -70,5 +70,6 @@ extensions:
 	restful: Drahak\Restful\DI\RestfulExtension
 	nextrasForms: Nextras\Forms\DI\FormsExtension
 	filesManager: App\Extensions\FilesManager\DI\FilesManagerExtension
+	todoQueue: App\Extensions\FilesManager\DI\TodoQueueExtension
 	gpwebpay: Pixidos\GPWebPay\DI\GPWebPayExtension
 	homecredit: App\Extensions\HomeCredit\DI\HomeCreditExtension

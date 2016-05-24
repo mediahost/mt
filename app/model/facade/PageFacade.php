@@ -30,6 +30,9 @@ class PageFacade extends Object
 	/** @var PageRepository */
 	private $pageRepo;
 
+	/** @var array */
+	private $slugs = [];
+
 	public function __construct(EntityManager $em)
 	{
 		$this->em = $em;
@@ -63,6 +66,9 @@ class PageFacade extends Object
 		if ($locale === NULL) {
 			$locale = $this->translator->getDefaultLocale();
 		}
+		if (array_key_exists($locale, $this->slugs)) {
+			return $this->slugs[$locale];
+		}
 
 		$cache = $this->getCache();
 		$cacheKey = self::KEY_ALL_SLUGS . '_' . $locale;
@@ -72,6 +78,7 @@ class PageFacade extends Object
 			$slugs[$locale] = $this->getLocaleSlugsArray($locale);
 			$cache->save($cacheKey, $slugs[$locale], [Cache::TAGS => [self::TAG_ALL_PAGES]]);
 		}
+		$this->slugs[$locale] = $slugs[$locale];
 
 		return $slugs[$locale];
 	}
