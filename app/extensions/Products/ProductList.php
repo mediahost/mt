@@ -155,6 +155,10 @@ class ProductList extends Control
 
 	public function addFilterCategory(Category $category)
 	{
+		// for reducing queries
+		$categoryRepo = $this->em->getRepository(Category::getClassName());
+		$categoryRepo->findAll();
+
 		$this->setFilter([
 			'category' => implode(',', array_keys($category->childrenArray)),
 		]);

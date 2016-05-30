@@ -17,7 +17,6 @@ use Tracy\Debugger;
 class TodoQueue extends Object
 {
 
-	const REFRESH_STOCK_CACHE = 'refresh-stock-cache';
 	const REFRESH_CATEGORY_CACHE = 'refresh-category-cache';
 
 	const DO_IT_NOW = 'now';
@@ -41,7 +40,6 @@ class TodoQueue extends Object
 	{
 		switch ($type) {
 			case self::REFRESH_CATEGORY_CACHE:
-			case self::REFRESH_STOCK_CACHE:
 				$taskRepo = $this->em->getRepository(TodoTask::getClassName());
 				$task = $taskRepo->findOneByName($type);
 				if (!$task) {
@@ -74,10 +72,6 @@ class TodoQueue extends Object
 				$this->doRefreshCategoryCache();
 				break;
 
-			case self::REFRESH_STOCK_CACHE:
-				$this->doRefreshStockCache();
-				break;
-
 			default:
 				throw new TodoQueueException('Unknown todo type.');
 		}
@@ -90,24 +84,7 @@ class TodoQueue extends Object
 		$categoryRepo = $this->em->getRepository(Category::getClassName());
 		$categoryRepo->clearResultCache(CategoryRepository::ALL_CATEGORIES_CACHE_ID);
 
-		foreach ($this->translator->getAvailableLocales() as $locale) {
-			if (preg_match('/^(\w+)\_/', $locale, $matches)) {
-				$locale = $matches[1];
-				$this->categoryFacade->getUrls($locale, TRUE);
-			}
-		}
-	}
-
-	private function doRefreshStockCache()
-	{
-		Debugger::log('START', 'doRefreshStockCache');
-
-		foreach ($this->translator->getAvailableLocales() as $locale) {
-			if (preg_match('/^(\w+)\_/', $locale, $matches)) {
-				$locale = $matches[1];
-				$this->stockFacade->getUrls($locale, TRUE);
-			}
-		}
+		$categoryRepo->findAll(); // reload cache
 	}
 
 }

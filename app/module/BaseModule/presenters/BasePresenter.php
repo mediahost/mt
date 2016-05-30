@@ -86,9 +86,12 @@ abstract class BasePresenter extends Presenter
 
 	protected function beforeRender()
 	{
-		$this->template->lang = $this->translator->locale;
 		$this->template->setTranslator($this->translator);
+		$this->template->lang = $this->translator->getLocale(); // TODO: remove lang from latte
+		$this->template->locale = $this->translator->getLocale();
+		$this->template->defaultLocale = $this->translator->getDefaultLocale();
 		$this->template->allowedLanguages = $this->translator->getAvailableLocales();
+
 		$this->template->designSettings = $this->settings->design;
 		$this->template->pageInfo = $this->settings->pageInfo;
 		$this->template->exchange = $this->exchange;

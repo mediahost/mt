@@ -3,10 +3,13 @@
 namespace App\Listeners\Model\Entity;
 
 use App\Model\Entity\Stock;
+use App\Model\Facade\StockFacade;
 use App\Model\Facade\WatchDogFacade;
 use Doctrine\ORM\Events;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Events\Subscriber;
+use Nette\Caching\Cache;
+use Nette\Caching\IStorage;
 use Nette\Object;
 
 class StockListener extends Object implements Subscriber
@@ -15,6 +18,9 @@ class StockListener extends Object implements Subscriber
 	/** @var EntityManager @inject */
 	public $em;
 
+	/** @var IStorage @inject */
+	public $cacheStorage;
+
 	/** @var WatchDogFacade @inject */
 	public $watchDogFacade;
 
@@ -22,6 +28,7 @@ class StockListener extends Object implements Subscriber
 	{
 		return array(
 			Events::postFlush,
+			Events::postUpdate,
 		);
 	}
 
@@ -32,7 +39,23 @@ class StockListener extends Object implements Subscriber
 		$this->checkWatchDog($params);
 	}
 
+	public function postUpdate($params)
+	{
+		$stock = $this->getStockFromParams($params);
+		if ($stock) {
+			$this->clearCache($stock);
+		}
+	}
+
 	// </editor-fold>
+
+	private function clearCache(Stock $stock)
+	{
+		$cache = new Cache($this->cacheStorage);
+		$cache->clean([
+			Cache::TAGS => [StockFacade::TAG_STOCK . $stock->id],
+		]);
+	}
 	
 	private function checkWatchDog(Stock $stock)
 	{
@@ -68,6 +91,15 @@ class StockListener extends Object implements Subscriber
 			}
 		}
 		return FALSE;
+	}
+
+	/** @return Stock|NULL */
+	private function getStockFromParams($params)
+	{
+		if ($params instanceof Stock) {
+			return $params;
+		}
+		return NULL;
 	}
 
 }

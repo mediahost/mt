@@ -15,9 +15,9 @@ use Tracy\Debugger;
 
 class CategoryFacade extends Object
 {
-	
-	const KEY_ALL_URLS = 'category-urls';
+
 	const TAG_ALL_CATEGORIES = 'all-categories';
+	const TAG_CATEGORY = 'category_';
 
 	/** @var EntityManager @inject */
 	public $em;
@@ -30,6 +30,9 @@ class CategoryFacade extends Object
 
 	/** @var CategoryRepository */
 	private $categoryRepo;
+
+	/** @var array */
+	private $ids = [];
 
 	/** @var array */
 	private $urls = [];
@@ -55,70 +58,87 @@ class CategoryFacade extends Object
 		return $categories;
 	}
 
-	public function urlToId($uri, Request $request)
+	public function urlToId($uri, Request $request = NULL, $locale = NULL, Category $category = NULL)
 	{
-		$locale = $request->getParameter(RouterFactory::LOCALE_PARAM_NAME);
-		$slugs = $this->getUrls($locale);
-		$slug = array_search($uri, $slugs);
-		if ($slug) {
-			return $slug;
-		}
-		return NULL;
-	}
+		$locale = $this->getLocale($request, $locale);
+		$hash = $this->createCacheHash($uri, $locale);
 
-	public function idToUrl($id, Request $request)
-	{
-		$locale = $request->getParameter(RouterFactory::LOCALE_PARAM_NAME);
-		$slugs = $this->getUrls($locale);
-		if (array_key_exists($id, $slugs)) {
-			return $slugs[$id];
-		}
-		return NULL;
-	}
-
-	/** @return array */
-	public function getUrls($locale = NULL, $refresh = FALSE)
-	{
-		if ($locale === NULL) {
-			$locale = $this->translator->getDefaultLocale();
-		}
-		if (!$refresh && array_key_exists($locale, $this->urls)) {
-			return $this->urls[$locale];
+		if (!$category && isset($this->ids[$hash])) {
+			return $this->ids[$hash];
 		}
 
 		$cache = $this->getCache();
-		$cacheKey = self::KEY_ALL_URLS . '_' . $locale;
-
-		$urls[$locale] = $cache->load($cacheKey);
-		if (!$urls[$locale] || $refresh) {
-			Debugger::timer('category');
-			$urls[$locale] = $this->getLocaleUrlsArray($locale);
-			$cache->save($cacheKey, $urls[$locale], [Cache::TAGS => [self::TAG_ALL_CATEGORIES]]);
-			$timer = Debugger::timer('category');
-			Debugger::log($timer, 'category-url-time');
+		$id = $cache->load($hash);
+		if (!$id) {
+			$localeArr = $locale == $this->translator->getDefaultLocale() ? $locale : [$locale, $this->translator->getDefaultLocale()];
+			$category = $category ? $category : $this->categoryRepo->findOneByUrl($uri, $localeArr);
+			if ($category) {
+				$id = $category->id;
+				$categoryTags = $this->getCategoryTags($category);
+				$this->ids[$hash] = $id;
+				$cache->save($hash, $id, [Cache::TAGS => [
+					self::TAG_ALL_CATEGORIES,
+				] + $categoryTags]);
+			}
 		}
-		$this->urls[$locale] = $urls[$locale];
-
-		return $urls[$locale];
+		return $id;
 	}
 
-	/** @return array */
-	private function getLocaleUrlsArray($locale)
+	public function idToUrl($id, Request $request = NULL, $locale = NULL, Category $category = NULL)
 	{
-		$localeUrls = [];
-		$categories = $this->categoryRepo->findAll();
-		foreach ($categories as $category) {
-			$category->setCurrentLocale($locale);
-			$localeUrls[$category->id] = $category->url;
+		$locale = $this->getLocale($request, $locale);
+		$hash = $this->createCacheHash($id, $locale);
+
+		if (!$category && isset($this->urls[$hash])) {
+			return $this->urls[$hash];
 		}
-		return $localeUrls;
+
+		$cache = $this->getCache();
+		$url = $cache->load($hash);
+		if (!$url) {
+			$category = $category ? $category : $this->categoryRepo->find($id);
+			if ($category) {
+				$category->setCurrentLocale($locale);
+				$url = $category->getUrl();
+				$categoryTags = $this->getCategoryTags($category);
+
+				$this->urls[$hash] = $url;
+				$cache->save($hash, $url, [Cache::TAGS => [
+						self::TAG_ALL_CATEGORIES,
+					] + $categoryTags]);
+			}
+		}
+		return $url;
 	}
-	
+
 	/** @return Cache */
 	public function getCache()
 	{
 		$cache = new Cache($this->cacheStorage, get_class($this));
 		return $cache;
+	}
+
+	private function createCacheHash($value, $locale)
+	{
+		return md5($locale . $value);
+	}
+
+	private function getCategoryTags(Category $category)
+	{
+		$tags = [];
+		foreach ($category->getPathWithThis() as $item) {
+			$tags[] = self::TAG_CATEGORY . $item->id;
+		}
+		return $tags;
+	}
+
+	private function getLocale(Request $request = NULL, $locale = NULL)
+	{
+		$locale = $request ? $request->getParameter(RouterFactory::LOCALE_PARAM_NAME) : $locale;
+		if (!$locale) {
+			$locale = $this->translator->getDefaultLocale();
+		}
+		return $locale;
 	}
 
 }

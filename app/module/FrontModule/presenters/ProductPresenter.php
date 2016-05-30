@@ -11,11 +11,13 @@ use App\Extensions\Products\ProductList;
 use App\Model\Entity\Category;
 use App\Model\Entity\Parameter;
 use App\Model\Entity\Stock;
+use App\Model\Facade\StockFacade;
 use App\Model\Facade\VisitFacade;
 use Nette\Application\BadRequestException;
 use Nette\Application\Responses\JsonResponse;
+use Nette\Caching\Cache;
+use Nette\Caching\IStorage;
 use Nette\Utils\Strings;
-use Tracy\Debugger;
 
 class ProductPresenter extends BasePresenter
 {
@@ -32,20 +34,21 @@ class ProductPresenter extends BasePresenter
 	/** @var HomeCredit @inject */
 	public $homecredit;
 
+	/** @var IStorage @inject */
+	public $cacheStorage;
+
 	/** @var Stock */
 	public $stock;
 
 	public function actionDefault($id)
 	{
-		Debugger::timer('runTime');
-
 		if ($id) {
 			$product = $this->productRepo->find($id);
 		}
 		if (!isset($product) || !$product) {
 			$message = $this->translator->translate('Requested product doesn\'t exist. Try to choose another from list.');
 			$this->flashMessage($message, 'warning');
-			throw new BadRequestException;
+			throw new BadRequestException();
 		}
 
 		$allParams = FALSE;
@@ -67,13 +70,11 @@ class ProductPresenter extends BasePresenter
 		$this->template->params = $allParams;
 		$this->template->actualVisits = $this->visitFacade->getVisitsCount($this->stock);
 		$this->template->homecreditCalc = $this->homecredit->getCalcLink();
+		$this->template->productCacheTag = StockFacade::TAG_PRODUCT . $product->id;
+		$this->template->stockCacheTag = StockFacade::TAG_STOCK . $product->stock->id;
 
 		// Last visited
 		$this->user->storage->addVisit($this->stock);
-
-		$time = Debugger::timer('runTime');
-		Debugger::barDump($time, 'runTime');
-		Debugger::log($this->getHttpRequest()->remoteAddress . ' - ' . $time, 'product-time');
 	}
 	
 	public function renderDefault()

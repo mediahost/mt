@@ -2,16 +2,16 @@
 
 namespace App\Model\Repository;
 
-use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Kdyby\Doctrine\QueryBuilder;
 
 class StockRepository extends BaseRepository
 {
 
-	public function findByName($name, $lang = NULL, $limit = null, $offset = null, &$totalCount = null)
+	public function findByName($name, $locale = NULL, $limit = null, $offset = null, &$totalCount = null)
 	{
-		$qb = $this->getQbForFindByName($name, $lang);
+		$qb = $this->getQbForFindByName($name, $locale);
 
 		if ($limit) {
 			$paginator = new Paginator($qb);
@@ -25,18 +25,13 @@ class StockRepository extends BaseRepository
 						->getResult();
 	}
 
-	public function findOneByName($name, $lang = NULL)
+	public function findOneByName($name, $locale = NULL)
 	{
-		$qb = $this->getQbForFindByName($name, $lang);
-		
-		try {
-			return $qb->setMaxResults(1)->getQuery()->getSingleResult();
-		} catch (NoResultException $e) {
-			return NULL;
-		}
+		$qb = $this->getQbForFindByName($name, $locale);
+		return $qb->setMaxResults(1)->getQuery()->getOneOrNullResult();
 	}
 
-	private function getQbForFindByName($name, $lang = NULL)
+	private function getQbForFindByName($name, $locale = NULL)
 	{
 		$qb = $this->createQueryBuilder('s')
 				->select('s, p')
@@ -45,21 +40,25 @@ class StockRepository extends BaseRepository
 				->where('t.name LIKE :name')
 				->setParameter('name', '%' . $name . '%')
 				->orderBy('t.name', 'ASC');
+		$this->extendQbWhereLocale($qb, $locale);
 
-		if (is_string($lang)) {
-			$qb->andWhere('t.locale = :lang')
-					->setParameter('lang', $lang);
-		} else if (is_array($lang)) {
+		return $qb;
+	}
+
+	private function extendQbWhereLocale(QueryBuilder &$qb, $locale)
+	{
+		if (is_string($locale)) {
+			$qb->andWhere('t.locale = :locale')
+				->setParameter('locale', $locale);
+		} else if (is_array($locale)) {
 			$orExpr = new Orx();
-			foreach ($lang as $key => $langItem) {
-				$idKey = 'lang' . $key;
+			foreach ($locale as $key => $localeItem) {
+				$idKey = 'locale' . $key;
 				$orExpr->add('t.locale = :' . $idKey);
-				$qb->setParameter($idKey, $langItem);
+				$qb->setParameter($idKey, $localeItem);
 			}
 			$qb->andWhere($orExpr);
 		}
-
-		return $qb;
 	}
 
 	public function delete($stock, $deleteWithProduct = TRUE)
