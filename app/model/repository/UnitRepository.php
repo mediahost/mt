@@ -2,8 +2,6 @@
 
 namespace App\Model\Repository;
 
-use Doctrine\ORM\NoResultException;
-
 class UnitRepository extends BaseRepository
 {
 
@@ -15,13 +13,9 @@ class UnitRepository extends BaseRepository
 				->where('t.name = :name')
 				->setParameter('name', $name);
 
-		try {
-			return $qb->setMaxResults(1)
-							->getQuery()
-							->getSingleResult();
-		} catch (NoResultException $e) {
-			return NULL;
-		}
+		return $qb->setMaxResults(1)
+						->getQuery()
+						->getOneOrNullResult();
 	}
 
 }

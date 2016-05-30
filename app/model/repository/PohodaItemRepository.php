@@ -3,7 +3,6 @@
 namespace App\Model\Repository;
 
 use Doctrine\ORM\AbstractQuery;
-use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Func;
 use Exception;
 
@@ -44,13 +43,9 @@ class PohodaItemRepository extends BaseRepository
 				->whereCriteria(['p.' . self::CODE => $code])
 				->groupBy('p.' . self::CODE);
 
-		try {
-			return $qb->setMaxResults(1)
-							->getQuery()
-							->getSingleResult();
-		} catch (NoResultException $e) {
-			return NULL;
-		}
+		return $qb->setMaxResults(1)
+						->getQuery()
+						->getOneOrNullResult();
 	}
 
 	public function findIdsForCode($useCache = TRUE)
