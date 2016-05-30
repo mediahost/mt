@@ -176,16 +176,16 @@ class RouterFactory
 		]);
 
 		$slugs = '[0-9a-z/-]+';
-		$frontRouter[] = $routeProduct = new FilterRoute(self::LOCALE_PARAM . '<id ' . $slugs . '>', [
-			'presenter' => 'Product',
+		$frontRouter[] = $routePage = new FilterRoute(self::LOCALE_PARAM . 'p/<id ' . $slugs . '>', [
+			'presenter' => 'Page',
 			'action' => 'default',
 		]);
-		$frontRouter[] = $routeCategory = new FilterRoute(self::LOCALE_PARAM . '<id ' . $slugs . '>', [
+		$frontRouter[] = $routeCategory = new FilterRoute(self::LOCALE_PARAM . 'c/<id ' . $slugs . '>', [
 			'presenter' => 'Category',
 			'action' => 'default',
 		]);
-		$frontRouter[] = $routePage = new FilterRoute(self::LOCALE_PARAM . '<id ' . $slugs . '>', [
-			'presenter' => 'Page',
+		$frontRouter[] = $routeProduct = new FilterRoute(self::LOCALE_PARAM . '<id ' . $slugs . '>', [
+			'presenter' => 'Product',
 			'action' => 'default',
 		]);
 		$frontRouter[] = $routeMain = new FilterRoute(self::LOCALE_PARAM . '<presenter>[/<action>[/<id>]]', [

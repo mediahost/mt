@@ -94,7 +94,7 @@ class ExportGeneratorPresenter extends BasePresenter
 	public function actionHeurekaStocks()
 	{
 		proc_nice(19);
-		ini_set('max_execution_time', 200);
+		ini_set('max_execution_time', 800);
 
 		Debugger::timer('heureka-stocks');
 		Debugger::log('start', 'heureka-stocks-start');
@@ -114,6 +114,7 @@ class ExportGeneratorPresenter extends BasePresenter
 		/* @var $stockRepo StockRepository */
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
 		$categoryRepo = $this->em->getRepository(Category::getClassName());
+		$categoryRepo->findAll();
 
 		$showOnlyInStore = $this->settings->modules->heureka->onlyInStore;
 		$denyCategory = NULL;

@@ -2,21 +2,22 @@
 
 namespace App\Model\Repository;
 
+use App\Model\Entity\Category;
 use App\Model\Entity\Product;
 use Doctrine\ORM\AbstractQuery;
-use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Kdyby\Doctrine\QueryBuilder;
 
 class ProductRepository extends BaseRepository
 {
 
 	/**
 	 * @param string|array $url
-	 * @param string $lang
+	 * @param string $locale
 	 * @return Product
 	 */
-	public function findOneByUrl($url, $lang = NULL)
+	public function findOneByUrl($url, $locale = NULL, $onlyActive = TRUE)
 	{
 		if (is_string($url)) {
 			$url = preg_split('@/@', $url, -1, PREG_SPLIT_NO_EMPTY);
@@ -27,7 +28,8 @@ class ProductRepository extends BaseRepository
 		$slug = array_pop($url);
 		$category = NULL;
 		if (count($url)) {
-//			$category = $this->findOneByUrl($url, $lang); // search only product with right category
+			$categoryRepo = $this->_em->getRepository(Category::getClassName());
+			$category = $categoryRepo->findOneByUrl($url, $locale);
 		}
 
 		$qb = $this->createQueryBuilder('p')
@@ -35,41 +37,26 @@ class ProductRepository extends BaseRepository
 				->where('t.slug = :slug')
 				->setParameter('slug', $slug);
 		if ($category) {
-//			$qb->andWhere('c.parent = :parent')
-//					->setParameter('parent', $category);
+			$qb->andWhere('p.mainCategory = :category')
+					->setParameter('category', $category);
 		}
-		if ($lang) {
-			$qb->andWhere('t.locale = :lang')
-					->setParameter('lang', $lang);
+		if ($onlyActive) {
+			$qb->andWhere('p.active = :active')
+				->setParameter('active', TRUE);
 		}
+		$this->extendQbWhereLocale($qb, $locale);
 
-		try {
-			return $qb->setMaxResults(1)->getQuery()->getSingleResult();
-		} catch (NoResultException $e) {
-			return NULL;
-		}
+		return $qb->setMaxResults(1)->getQuery()->getOneOrNullResult();
 	}
 
-	public function findByName($name, $lang = NULL, $limit = null, $offset = null, &$totalCount = null)
+	public function findByName($name, $locale = NULL, $limit = null, $offset = null, &$totalCount = null)
 	{
 		$qb = $this->createQueryBuilder('p')
 				->join('p.translations', 't')
 				->where('t.name LIKE :name')
 				->setParameter('name', '%' . $name . '%')
 				->orderBy('t.name', 'ASC');
-
-		if (is_string($lang)) {
-			$qb->andWhere('t.locale = :lang')
-					->setParameter('lang', $lang);
-		} else if (is_array($lang)) {
-			$orExpr = new Orx();
-			foreach ($lang as $key => $langItem) {
-				$idKey = 'lang' . $key;
-				$orExpr->add('t.locale = :' . $idKey);
-				$qb->setParameter($idKey, $langItem);
-			}
-			$qb->andWhere($orExpr);
-		}
+		$this->extendQbWhereLocale($qb, $locale);
 
 		if ($limit) {
 			$paginator = new Paginator($qb);
@@ -82,16 +69,20 @@ class ProductRepository extends BaseRepository
 						->getResult();
 	}
 
-	public function findAllWithTranslation(array $criteria = [])
+	private function extendQbWhereLocale(QueryBuilder &$qb, $locale, $alias = 't')
 	{
-		parent::findBy($criteria);
-		$qb = $this->createQueryBuilder('p')
-				->whereCriteria($criteria)
-				->select('p, t')
-				->join('p.translations', 't');
-
-		return $qb->getQuery()
-						->getResult();
+		if (is_string($locale)) {
+			$qb->andWhere($alias . '.locale = :locale')
+				->setParameter('locale', $locale);
+		} else if (is_array($locale)) {
+			$orExpr = new Orx();
+			foreach ($locale as $key => $localeItem) {
+				$idKey = 'locale' . $key;
+				$orExpr->add($alias . '.locale = :' . $idKey);
+				$qb->setParameter($idKey, $localeItem);
+			}
+			$qb->andWhere($orExpr);
+		}
 	}
 
 	public function getParameterValues($code)

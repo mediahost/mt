@@ -3,6 +3,7 @@
 namespace App\Model\Entity;
 
 use App\Helpers;
+use Nette\Utils\Json;
 
 trait CategoryBase
 {
@@ -59,6 +60,15 @@ trait CategoryBase
 			$path[$this->id] = $this;
 		}
 		return $path;
+	}
+
+	public function getIdPath($encodeJson = TRUE)
+	{
+		$ids = [];
+		foreach ($this->getPathWithThis() as $category) {
+			$ids[$category->id] = $category->id;
+		}
+		return $encodeJson ? Json::encode($ids) : $ids;
 	}
 
 	/**

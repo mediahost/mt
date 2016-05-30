@@ -10,7 +10,6 @@ use App\Model\Entity\ProducerModel;
 use App\Model\Entity\Stock;
 use Nette\Application\Responses\JsonResponse;
 use Nette\Utils\Strings;
-use Tracy\Debugger;
 
 class CategoryPresenter extends BasePresenter
 {
@@ -23,8 +22,6 @@ class CategoryPresenter extends BasePresenter
 
 	public function actionDefault($id)
 	{
-		Debugger::timer('runTime');
-
 		$this->category = $this->categoryRepo->find($id);
 		if (!$this->category) {
 			$message = $this->translator->translate('Requested category doesn\'t exist. Try to choose another from list.');
@@ -33,16 +30,10 @@ class CategoryPresenter extends BasePresenter
 		}
 		$this->activeCategory = $this->category;
 		$this->subcategories = $this->category->children;
-
-		$time = Debugger::timer('runTime');
-		Debugger::barDump($time, 'runTime action');
-		Debugger::log($this->getHttpRequest()->remoteAddress . ' - ' . $time, 'category-actionDefault-time');
 	}
 	
 	public function renderDefault()
 	{
-		Debugger::timer('runTime');
-
 		/* @var $products ProductList */
 		$products = $this['products'];
 		
@@ -65,10 +56,6 @@ class CategoryPresenter extends BasePresenter
 		$this->changePageInfo(self::PAGE_INFO_TITLE, $title);
 		$this->changePageInfo(self::PAGE_INFO_KEYWORDS, $keywords);
 		$this->changePageInfo(self::PAGE_INFO_DESCRIPTION, $description);
-
-		$time = Debugger::timer('runTime');
-		Debugger::barDump($time, 'runTime render');
-		Debugger::log($this->getHttpRequest()->remoteAddress . ' - ' . $time, 'category-renderDefault-time');
 	}
 
 	public function actionSearch($text)
@@ -79,8 +66,6 @@ class CategoryPresenter extends BasePresenter
 
 	public function actionSearchJson($text, $page = 1, $perPage = 10)
 	{
-		Debugger::timer('runTime');
-
 		/* @var $list ProductList */
 		$list = $this['products'];
 		$list->setPage($page);
@@ -116,9 +101,6 @@ class CategoryPresenter extends BasePresenter
 			'items' => $items,
 			'total_count' => $list->getCount(),
 		];
-
-		$time = Debugger::timer('runTime');
-		Debugger::log($this->getHttpRequest()->remoteAddress . ' - ' . $time, 'category-searchJson-time');
 
 		$response = new JsonResponse($payload, 'application/json; charset=utf-8');
 		$this->sendResponse($response);

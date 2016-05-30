@@ -22,6 +22,7 @@ use App\Model\Entity\Product;
 use App\Model\Entity\Sign;
 use App\Model\Entity\Stock;
 use App\Model\Entity\Voucher;
+use App\Model\Facade\CategoryFacade;
 use App\Model\Repository\CategoryRepository;
 use App\Model\Repository\ProductRepository;
 use App\Model\Repository\StockRepository;
@@ -63,7 +64,7 @@ abstract class BasePresenter extends BaseBasePresenter
 	protected $currentBacklink;
 
 	/** @var array */
-	protected $categories;
+	protected $rootCategoriesIds;
 
 	/** @var Category */
 	protected $activeCategory;
@@ -86,7 +87,7 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->stockRepo = $this->em->getRepository(Stock::getClassName());
 		$this->productRepo = $this->em->getRepository(Product::getClassName());
 		$this->categoryRepo = $this->em->getRepository(Category::getClassName());
-		$this->categories = $this->categoryRepo->findAll();
+		$this->rootCategoriesIds = $this->categoryRepo->findRootIds();
 		$this->currentBacklink = $this->storeRequest();
 	}
 
@@ -94,7 +95,8 @@ abstract class BasePresenter extends BaseBasePresenter
 	{
 		parent::beforeRender();
 		$this->template->backlink = $this->currentBacklink;
-		$this->template->categories = $this->categories;
+		$this->template->rootCategoriesIds = $this->rootCategoriesIds;
+		$this->template->categoryRepo = $this->categoryRepo;
 		$this->template->activeCategory = $this->activeCategory;
 		$this->template->showSlider = $this->showSlider;
 		$this->template->showBrands = $this->showBrands;
@@ -112,6 +114,8 @@ abstract class BasePresenter extends BaseBasePresenter
 
 		$this->template->pageKeywords = $this->settings->pageInfo->keywords;
 		$this->template->pageDescription = $this->settings->pageInfo->description;
+
+		$this->template->categoryCacheTag = CategoryFacade::TAG_CATEGORY;
 
 		$this->loadTemplateMenu();
 		$this->loadTemplateCategoriesSettings();
