@@ -89,7 +89,7 @@ class Producer extends BaseTranslatable implements IProducer
 		return (bool) count($this->lines);
 	}
 
-	protected function getSluggableFields()
+	public function getSluggableFields()
 	{
 		return ['name'];
 	}

@@ -76,7 +76,7 @@ class ProductTranslation extends BaseEntity
 		return $this;
 	}
 
-	protected function getSluggableFields()
+	public function getSluggableFields()
 	{
 		return ['name'];
 	}
