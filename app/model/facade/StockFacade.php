@@ -24,7 +24,6 @@ use Nette\Caching\Cache;
 use Nette\Caching\IStorage;
 use Nette\Object;
 use Nette\Utils\DateTime;
-use Tracy\Debugger;
 
 class StockFacade extends Object
 {
@@ -103,20 +102,20 @@ class StockFacade extends Object
 			return [];
 		}
 
-		$newSign = $this->signRepo->find($signId);
-		if (!$newSign) {
+		$sign = $this->signRepo->find($signId);
+		if (!$sign) {
 			return [];
 		}
 		$qb = $this->stockRepo
 			->createQueryBuilder('s')
 			->innerJoin('s.product', 'p')
 			->innerJoin('p.signs', 'signs')
-			->where('signs = :sign')
+			->where('signs.sign = :sign')
 			->andWhere('s.active = :active AND p.active = :active')
 			->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
 			->andWhere('s.inStore >= 1')
 			->setParameter('active', TRUE)
-			->setParameter('sign', $newSign)
+			->setParameter('sign', $sign)
 			->setParameter('now', new DateTime());
 		return $qb->orderBy('s.id', 'DESC')
 			->setMaxResults($count)

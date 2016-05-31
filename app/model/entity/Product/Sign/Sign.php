@@ -15,7 +15,7 @@ class Sign extends BaseTranslatable
 
 	use Model\Translatable\Translatable;
 
-	/** @ORM\OneToMany(targetEntity="Product", mappedBy="signs") */
+	/** @ORM\OneToMany(targetEntity="ProductSign", mappedBy="sign") */
 	protected $products;
 
 	public function __construct($name = NULL, $currentLocale = NULL, $id = NULL)
