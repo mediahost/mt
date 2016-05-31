@@ -2,11 +2,9 @@
 
 namespace App\Components\Product\Form;
 
-use App\Forms\Controls\TextInputBased\MetronicTextInputBase;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicHorizontalFormRenderer;
-use App\Model\Entity\Parameter;
-use App\Model\Entity\Product;
+use App\Model\Entity\ProductSign;
 use App\Model\Entity\Sign;
 use App\Model\Entity\Stock;
 use App\Model\Facade\ParameterFacade;
@@ -61,17 +59,25 @@ class StockSign extends StockBase
 
 		$signValues = (array) $values->signs;
 		$signRepo = $this->em->getRepository(Sign::getClassName());
+		$productSignRepo = $this->em->getRepository(ProductSign::getClassName());
 
-		$signs = [];
 		foreach ($signValues as $id => $value) {
-			if ($value) {
-				$sign = $signRepo->find($id);
-				if ($sign) {
-					$signs[] = $sign;
+			$sign = $signRepo->find($id);
+			if ($sign) {
+				if ($value) {
+					$product->addSign($sign);
+				} else {
+					$signConn = $productSignRepo->findOneBy([
+						'sign' => $sign,
+						'product' => $product,
+					]);
+					if ($signConn) {
+						$product->removeSign($signConn);
+						$productSignRepo->delete($signConn);
+					}
 				}
 			}
 		}
-		$product->signs = $signs;
 
 		return $this;
 	}
@@ -87,7 +93,7 @@ class StockSign extends StockBase
 	protected function getDefaults()
 	{
 		$values = [];
-		foreach ($this->stock->product->signs as $sign) {
+		foreach ($this->stock->product->getSigns() as $sign) {
 			$values['signs'][$sign->id] = TRUE;
 		}
 		return $values;
