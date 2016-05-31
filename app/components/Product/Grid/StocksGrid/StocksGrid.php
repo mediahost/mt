@@ -226,7 +226,7 @@ class StocksGrid extends BaseControl
 							$message = $this->translator->translate('Are you sure you want to delete \'%name%\'?', NULL, ['name' => (string) $item]);
 							return $message;
 						})
-				->elementPrototype->class[] = 'red';
+			->getElementPrototype()->class[] = 'red';
 
 		$operation = [
 			'export' => $this->translator->translate('Grido.Export'),
