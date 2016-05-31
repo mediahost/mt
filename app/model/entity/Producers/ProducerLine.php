@@ -76,7 +76,7 @@ class ProducerLine extends BaseEntity implements IProducer
 		return $this->id === NULL;
 	}
 
-	protected function getSluggableFields()
+	public function getSluggableFields()
 	{
 		return ['name'];
 	}

@@ -25,7 +25,7 @@ class PageTranslation extends BaseEntity
 	/** @ORM\Column(type="text", nullable=true) */
 	protected $html;
 
-	protected function getSluggableFields()
+	public function getSluggableFields()
 	{
 		return ['name'];
 	}
