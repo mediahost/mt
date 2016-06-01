@@ -72,20 +72,16 @@ class OrderListener extends Object implements Subscriber
 	public function onChangeState(Order $order, OrderState $oldState)
 	{
 		if ($oldState->type !== $order->state->type) {
-			switch ($order->state->type->id) {
-				case OrderStateType::EXPEDED:
-					$messageForCustomer = $this->changeStateOrderExpededMessage->create();
-					break;
-				case OrderStateType::DONE:
-					$messageForCustomer = $this->changeStateOrderDoneMessage->create();
-					break;
-				case OrderStateType::STORNO:
-					$messageForCustomer = $this->changeStateOrderStornoMessage->create();
-					break;
-				default:
-					$messageForCustomer = NULL;
-					break;
+
+			$messageForCustomer = NULL;
+			if ($order->state->type->id === OrderStateType::EXPEDED || $order->state->id === OrderState::READY_TO_TAKE) {
+				$messageForCustomer = $this->changeStateOrderExpededMessage->create();
+			} else if ($order->state->type->id === OrderStateType::DONE) {
+				$messageForCustomer = $this->changeStateOrderDoneMessage->create();
+			} else if ($order->state->type->id === OrderStateType::STORNO) {
+				$messageForCustomer = $this->changeStateOrderStornoMessage->create();
 			}
+
 			if ($messageForCustomer) {
 				$messageForCustomer->setOrder($order);
 				$messageForCustomer->addTo($order->mail);
