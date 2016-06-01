@@ -1274,6 +1274,9 @@ msgstr "Odoslané prepravcovi"
 msgid "ready to take"
 msgstr "Pripravené na prevzatie"
 
+msgid "ready to take - expeded"
+msgstr "Pripravené na prevzatie - expedované"
+
 msgid "ok - recieved"
 msgstr "Ok - Prijaté"
 

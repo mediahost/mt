@@ -82,6 +82,7 @@ class OrderFacade extends Object
 	 * @param Order $order
 	 * @param OrderState|int $newState OrderState or OrderState ID
 	 * @return Order
+	 * @throws FacadeException
 	 */
 	public function changeState(Order $order, $newState)
 	{

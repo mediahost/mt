@@ -1273,6 +1273,9 @@ msgstr "Odesláno přepravci"
 msgid "ready to take"
 msgstr "Připraveno k převzetí"
 
+msgid "ready to take - expeded"
+msgstr "Připraveno k převzetí - expedováno"
+
 msgid "ok - recieved"
 msgstr "Ok - Přijato"
 

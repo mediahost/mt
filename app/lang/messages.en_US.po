@@ -1318,6 +1318,9 @@ msgstr "Sent shippers"
 msgid "ready to take"
 msgstr "Ready to take"
 
+msgid "ready to take - expeded"
+msgstr "Ready to take - Expeded"
+
 msgid "ok - recieved"
 msgstr "Ok - Recieved"
 

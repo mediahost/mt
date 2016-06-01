@@ -2,10 +2,12 @@
 	{var $color = 'bg-blue'}
 {elseif $item->state->id === App\Model\Entity\OrderState::IN_PROCEEDINGS}
 	{var $color = 'bg-blue-hoki'}
-{elseif $item->state->id === App\Model\Entity\OrderState::SENT_SHIPPERS}
-	{var $color = 'bg-yellow'}
 {elseif $item->state->id === App\Model\Entity\OrderState::READY_TO_TAKE}
 	{var $color = 'bg-yellow-casablanca'}
+{elseif $item->state->id === App\Model\Entity\OrderState::READY_TO_TAKE_EXPEDED}
+	{var $color = 'bg-yellow-gold'}
+{elseif $item->state->id === App\Model\Entity\OrderState::SENT_SHIPPERS}
+	{var $color = 'bg-yellow'}
 {elseif $item->state->id === App\Model\Entity\OrderState::OK_RECIEVED}
 	{var $color = 'bg-green-meadow'}
 {elseif $item->state->id === App\Model\Entity\OrderState::OK_TAKEN}
