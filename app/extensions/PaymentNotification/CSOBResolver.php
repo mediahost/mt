@@ -17,12 +17,12 @@ class CSOBResolver implements IResolver
 		if ($from != 'AdminTBS@csob.sk') {
 			return [];
 		}
-		$matched = preg_match('/ovoľujeme si Vám oznámiť.*informácia pre príjemcu:/ims', $message, $matches);
+		$matched = preg_match('/dovoľujeme si Vám oznámiť.*informácia pre príjemcu:/ims', $message, $matches);
 		if (!$matched) {
-		    return [];
+			return [];
 		};
 
-		$payments = explode('dovoľujeme si Vám oznámiť',$matches[0]);
+		$payments = explode('dovoľujeme si Vám oznámiť', $matches[0]);
 		$vs = NULL;
 		$price = NULL;
 		$orderId = NULL;
