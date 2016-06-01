@@ -15,7 +15,7 @@ class PaymentNotificationParser extends Object
 	protected $regCharset = '/Content-Type: text\/plain; charset="(?<charset>[^"]+)"/';
 
 	/** @var string */
-	protected $regFrom = '/From:( "[^"\n]+")? <(?<from>[^>\n]+)>/';
+	protected $regFrom = '/From:(( "[^"\n]+")|( =\?.*\?=))? <(?<from>[^>\n]+)>/';
 
 	/** @var IResolver[] */
 	public $resolvers = [];
