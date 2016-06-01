@@ -282,6 +282,10 @@ var UITree = function () {
 						case 'delete_node':
 							return true;
 						case 'move_node':
+							if (more && more.dnd) {
+								return more.pos !== "i" && node_parent.id == node.parent;
+							}
+							return true;
 						case 'copy_node':
 						default:
 							return false;
@@ -360,8 +364,12 @@ var UITree = function () {
 					return ops;
 				}
 			},
+			'dnd': {
+				'drop_target': false,
+				'drag_target': false
+			},
 			'state': {'key': stateKey},
-			'plugins': ['state', 'contextmenu', 'types']
+			'plugins': ['state', 'contextmenu', 'types', 'dnd']
 		});
 		jstree.on('create_node.jstree', function (e, data) {
 			var instance = data.instance;
@@ -415,6 +423,13 @@ var UITree = function () {
 				instance.refresh();
 			});
 		});
+		jstree.on('move_node.jstree', function (e, data) {
+			var node = data.node;
+			var request = $.get(
+				links['Producers:reorderProducer'],
+				{id: node.id, old: data.old_position, new: data.position}
+			);
+		});
 		jstree.on('changed.jstree', function (e, data) {
 			if (data.action === 'select_node' && data.event) {
 				Metronic.blockUI({
@@ -428,18 +443,18 @@ var UITree = function () {
 				console.log(links['Producers:default']);
 				console.log(data.node.id);
 				$.post(links['Producers:default'], {producerId: data.node.id})
-						.done(function (payload) {
-							if (payload.redirect) {
-								window.location.href = payload.redirect;
-							}
-							if (payload.snippets) {
-								var snippetsExt = $.nette.ext('snippets');
-								snippetsExt.updateSnippets(payload.snippets);
-							}
-							Metronic.unblockUI($(treeBlockId));
-							Metronic.unblockUI($(editBlockId));
-							GlobalCustomInit.onChangeJSTree();
-						});
+					.done(function (payload) {
+						if (payload.redirect) {
+							window.location.href = payload.redirect;
+						}
+						if (payload.snippets) {
+							var snippetsExt = $.nette.ext('snippets');
+							snippetsExt.updateSnippets(payload.snippets);
+						}
+						Metronic.unblockUI($(treeBlockId));
+						Metronic.unblockUI($(editBlockId));
+						GlobalCustomInit.onChangeJSTree();
+					});
 			}
 		});
 

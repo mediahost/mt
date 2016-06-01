@@ -37,7 +37,7 @@ class ProducerFacade extends Object
 		$producers = [];
 		foreach ($this->producerRepo->findAll() as $producer) {
 			if (!$onlyWithChildren || count($producer->lines)) {
-				$producers[$producer->id] = (string) $producer;
+				$producers[$producer->id] = (string)$producer;
 			}
 		}
 		@uasort($producers, 'strcoll');
@@ -54,7 +54,7 @@ class ProducerFacade extends Object
 		}
 		foreach ($finded as $line) {
 			if (!$onlyWithChildren || count($line->models)) {
-				$lines[$line->id] = $fullPath ? $line->getFullName() : (string) $line;
+				$lines[$line->id] = $fullPath ? $line->getFullName() : (string)$line;
 			}
 		}
 		@uasort($lines, 'strcoll');
@@ -80,14 +80,71 @@ class ProducerFacade extends Object
 		}
 
 		$models = [];
-		
+
 		foreach ($finded as $model) {
-			$models[$model->id] = $fullPath ? $model->getFullName() : (string) $model;
+			$models[$model->id] = $fullPath ? $model->getFullName() : (string)$model;
 		}
-		
+
 		@uasort($models, 'strcoll');
-		
+
 		return $models;
+	}
+
+	public function reorder($entity, $position)
+	{
+		if ($entity instanceof Producer) {
+			return $this->reorderProducer($entity, $position);
+		} else if ($entity instanceof ProducerLine) {
+			return $this->reorderLine($entity, $position);
+		} else if ($entity instanceof ProducerModel) {
+			return $this->reorderModel($entity, $position);
+		}
+		return FALSE;
+	}
+
+	private function reorderProducer(Producer $producer, $position)
+	{
+		$allProducers = $this->producerRepo->findBy([], ['priority' => 'ASC']);
+		foreach ($allProducers as $i => $producerItem) {
+			if ($producerItem->id === $producer->id) {
+				$producerItem->priority = $position;
+			} else if ($i < $position) {
+				$producerItem->priority = $i;
+			} else {
+				$producerItem->priority = $i + 1;
+			}
+			$this->producerRepo->save($producerItem);
+		}
+	}
+
+	private function reorderLine(ProducerLine $line, $position)
+	{
+		$lines = $this->lineRepo->findBy(['producer' => $line->producer], ['priority' => 'ASC']);
+		foreach ($lines as $i => $lineItem) {
+			if ($lineItem->id === $line->id) {
+				$lineItem->priority = $position;
+			} else if ($i < $position) {
+				$lineItem->priority = $i;
+			} else {
+				$lineItem->priority = $i + 1;
+			}
+			$this->lineRepo->save($lineItem);
+		}
+	}
+
+	private function reorderModel(ProducerModel $model, $position)
+	{
+		$models = $this->modelRepo->findBy(['line' => $model->line], ['priority' => 'ASC']);
+		foreach ($models as $i => $modelItem) {
+			if ($modelItem->id === $model->id) {
+				$modelItem->priority = $position;
+			} else if ($i < $position) {
+				$modelItem->priority = $i;
+			} else {
+				$modelItem->priority = $i + 1;
+			}
+			$this->modelRepo->save($modelItem);
+		}
 	}
 
 }
