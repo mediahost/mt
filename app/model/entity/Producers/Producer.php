@@ -17,6 +17,7 @@ use Nette\Utils\Strings;
  * @property array $children
  * @property-read bool $hasChildren
  * @property string $name
+ * @property int $priority
  * @property string $serviceHtml
  * @property Image $image
  * @property array $products
@@ -36,6 +37,9 @@ class Producer extends BaseTranslatable implements IProducer
 
 	/** @ORM\Column(type="string", length=256) */
 	protected $name;
+
+	/** @ORM\Column(type="smallint") */
+	protected $priority = 0;
 
 	/** @ORM\OneToOne(targetEntity="Image", cascade="all") */
 	protected $image;

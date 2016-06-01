@@ -5,6 +5,7 @@ namespace App\AjaxModule\Presenters;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\ORMException;
 use Kdyby\Doctrine\DBALException;
 
@@ -18,15 +19,15 @@ class ProducersPresenter extends BasePresenter
 		switch ($parentType) {
 			case ProducerLine::ID:
 				$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
-				$items = $modelRepo->findBy(['line' => $parentId]);
+				$items = $modelRepo->findBy(['line' => $parentId], ['priority' => 'ASC']);
 				break;
 			case Producer::ID:
 				$lineRepo = $this->em->getRepository(ProducerLine::getClassName());
-				$items = $lineRepo->findBy(['producer' => $parentId]);
+				$items = $lineRepo->findBy(['producer' => $parentId], ['priority' => 'ASC']);
 				break;
 			default:
 				$producerRepo = $this->em->getRepository(Producer::getClassName());
-				$items = $producerRepo->findAll();
+				$items = $producerRepo->findBy([], ['priority' => 'ASC']);
 		}
 
 		if (count($items)) {
@@ -35,16 +36,19 @@ class ProducersPresenter extends BasePresenter
 					$id = Producer::ID . Producer::SEPARATOR . $item->id;
 					$name = $item->name;
 					$hasChildren = $item->hasLines;
+					$priority = $item->priority;
 					$type = 'producer';
 				} else if ($item instanceof ProducerLine) {
 					$id = ProducerLine::ID . Producer::SEPARATOR . $item->id;
 					$name = $item->name;
 					$hasChildren = $item->hasModels;
+					$priority = $item->priority;
 					$type = 'line';
 				} else if ($item instanceof ProducerModel) {
 					$id = ProducerModel::ID . Producer::SEPARATOR . $item->id;
 					$name = $item->name;
 					$hasChildren = FALSE;
+					$priority = $item->priority;
 					$type = 'model';
 				} else {
 					continue;
@@ -54,6 +58,7 @@ class ProducersPresenter extends BasePresenter
 				$item['text'] = $name;
 				$item['children'] = $hasChildren;
 				$item['type'] = $type;
+				$item['order'] = $priority;
 				$this->addRawData(NULL, $item);
 			}
 		} else {
@@ -194,6 +199,40 @@ class ProducersPresenter extends BasePresenter
 			$repo->save($entity);
 
 			$this->addData('name', $entity->name);
+		} catch (ORMException $e) {
+			$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('ID')]);
+			$this->setError($message);
+		}
+	}
+
+	/**
+	 * @secured
+	 * @resource('producers')
+	 * @privilege('reorder')
+	 */
+	public function actionReorderProducer($id, $old, $new)
+	{
+		$itemId = Producer::getItemId($id, $type);
+		switch ($type) {
+			case Producer::ID:
+				$repo = $this->em->getRepository(Producer::getClassName());
+				break;
+			case ProducerLine::ID:
+				$repo = $this->em->getRepository(ProducerLine::getClassName());
+				break;
+			case ProducerModel::ID:
+				$repo = $this->em->getRepository(ProducerModel::getClassName());
+				break;
+			default:
+				$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('Type')]);
+				$this->setError($message);
+				break;
+		}
+
+		try {
+			$entity = $repo->find($itemId);
+			$this->producerFacade->reorder($entity, $new);
+			$this->addData('order', $entity->priority);
 		} catch (ORMException $e) {
 			$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('ID')]);
 			$this->setError($message);

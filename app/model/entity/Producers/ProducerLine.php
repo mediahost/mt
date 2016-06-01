@@ -12,6 +12,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  * @ORM\Entity(repositoryClass="App\Model\Repository\ProducerLineRepository")
  *
  * @property string $name
+ * @property int $priority
  * @property Producer $producer
  * @property array $models
  * @property-read bool $hasModels
@@ -26,6 +27,9 @@ class ProducerLine extends BaseEntity implements IProducer
 
 	/** @ORM\Column(type="string", length=256) */
 	protected $name;
+
+	/** @ORM\Column(type="smallint") */
+	protected $priority = 0;
 
 	/** @ORM\ManyToOne(targetEntity="Producer", inversedBy="lines") */
 	protected $producer;
