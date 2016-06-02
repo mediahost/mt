@@ -26,7 +26,7 @@
                 <div class="product-page margin-bottom-30">
                     <div class="row">
                         {cache 'product-image_' . $product->id, tags => [$productCacheTag]}
-                            <div class="col-md-6 col-sm-6">
+                            <div class="col-md-6 col-sm-6" data-cache-ver="1">
                                 <div class="product-main-image">
                                     <img src="{$basePath}/foto/{$product->image|size:'380','380'}"
                                          alt="{$product}"
