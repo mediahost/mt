@@ -21,6 +21,7 @@ use Nette\Utils\FileSystem;
 use Nette\Utils\Finder;
 use Nette\Utils\Random;
 use Nette\Utils\Strings;
+use Tracy\Debugger;
 use XMLReader;
 
 class PohodaFacade extends Object
@@ -73,8 +74,10 @@ class PohodaFacade extends Object
 		}
 
 		$pohodaItems = $pohodaRepo->findArrBy($conditions, 500, $offset);
-		$i = 0;
+		$listedCount = 0;
+		$changedCount = 0;
 		foreach ($pohodaItems as $pohodaProductArr) {
+			$listedCount++;
 			$totalSumValue = $pohodaRepo->getSumCountGroupedBy($pohodaProductArr['code']);
 			$totalCount = 0;
 			if (is_array($totalSumValue) && array_key_exists(1, $totalSumValue)) {
@@ -139,15 +142,17 @@ class PohodaFacade extends Object
 
 				if ($change) {
 					$this->em->persist($stock);
-					$i++;
+					$changedCount++;
 				}
 			}
 
-			if ($i % 500 === 0) {
+			if ($changedCount % 500 === 0) {
 				$this->em->flush();
 			}
 		}
 		$this->em->flush();
+
+		Debugger::log('LISTED: ' . $listedCount . '; UPDATED: ' . $changedCount, 'pohoda-synchronized-counts');
 	}
 
 	private function getVatFromPohodaString($string)
