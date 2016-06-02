@@ -153,7 +153,7 @@ class Image extends BaseEntity
 
 	public static function returnSizedFilename($image, $sizeX = NULL, $sizeY = NULL)
 	{
-		$size = NULL;
+		$size = 'original';
 		if ($sizeX) {
 			$sizeY = $sizeY ? $sizeY : '0';
 			$size = $sizeX . FotoHelpers::getSizeSeparator() . $sizeY;
