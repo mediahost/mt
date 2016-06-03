@@ -34,13 +34,12 @@ class CleanerPresenter extends BasePresenter
 		$signsSetting = $this->settings->modules->signs;
 
 		// new sign
-		$whatIsOld = '14 days';
 		if ($signsSetting->enabled) {
 			$sign = $signRepo->find($signsSetting->values->new);
 			if ($sign) {
 				$signs = $productSignRepo->findBy([
 					'sign' => $sign,
-					'createdAt <=' => DateTime::from('-' . $whatIsOld),
+					'createdAt <=' => DateTime::from('-' . $signsSetting->clearOlder),
 				]);
 				foreach ($signs as $item) {
 					$productSignRepo->delete($item);
