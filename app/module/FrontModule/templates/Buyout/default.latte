@@ -35,8 +35,13 @@
 				</div>
 				{snippet request}
 					<div class="panel" id="request-form-loading" n:if="$model">
-						<div class="panel-body">
+						<div class="panel-body" n:if="$model->hasQuestions()">
 							{control requestForm}
+						</div>
+						<div class="panel-body" n:if="!$model->hasQuestions()">
+							<h4>{_'Please describe your device and we will contact you back with price options'}</h4>
+							<p>&nbsp;</p>
+							{control contactBuyout}
 						</div>
 					</div>
 				{/snippet}

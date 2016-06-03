@@ -659,6 +659,12 @@ msgstr "%type% pre %name%"
 msgid "Post warranty, paid service interventions"
 msgstr "Pozáručné platené servisné zásahy"
 
+msgid "Please describe your defects and we will contact you back with solution options"
+msgstr "Popíšte chybu na svojom zariadení a budeme Vás kontaktovať späť s možnosťami riešenia"
+
+msgid "Please describe your device and we will contact you back with price options"
+msgstr "Popíšte svoje zariadenie a budeme Vás kontaktovať späť s cenovými možnosťami"
+
 msgid "Repair"
 msgstr "Oprava"
 
@@ -1272,7 +1278,7 @@ msgid "sent shippers"
 msgstr "Odoslané prepravcovi"
 
 msgid "ready to take"
-msgstr "Pripravené na prevzatie"
+msgstr "Pripravené na prevzatie - neexpedované"
 
 msgid "ready to take - expeded"
 msgstr "Pripravené na prevzatie - expedované"

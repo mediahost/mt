@@ -1,0 +1,12 @@
+producer:
+	contactShop:
+	    name: 'Your Name'
+	    mail: 'Your Mail'
+	    phone: 'Your Phone'
+	    message: 'Your message'
+	    send: 'Send'
+	    validator:
+	        mail: 'Fill your mail'
+	        message:
+	            fill: 'Fill message'
+	            min: 'Insert at least %d chars'

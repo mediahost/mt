@@ -1,0 +1,50 @@
+{layout '../../@layout.latte'}
+
+{block subtitle}
+    <font size="+1" color="#00285A">{_buyout.email.our.template.subtitle}</font>
+{/block}
+
+{block content}
+    <table width="100%" border="0" cellspacing="0" cellpadding="10">
+        <tbody>
+        <tr>
+            <td>
+                <p>
+                    {_buyout.email.our.template.from}: {$formData['fullname']}
+                    <a href="mailto:{$formData['email']}">{$formData['email']}</a>
+                    {ifset $formData['phone']}
+                        <br/>
+                        {_buyout.email.our.template.phone}: {$formData['phone']}
+                    {/ifset}
+                </p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="10">
+        <tbody>
+        <tr>
+            <td>
+                <p>{_buyout.email.template.model}: <strong>{$model->fullName}</strong></p>
+                {ifset $formData['isNew']}
+                    <p>
+                        {_buyout.email.template.summary}:
+                        <strong>{if $formData['isNew']}{$model->buyoutPrice|currency}{else}{$summary|currency}{/if}</strong>
+                    </p>
+                    <p>
+                        {_buyout.email.template.state}:
+                        <strong>{if $formData['isNew']}{_buyout.email.template.new}{else}{_buyout.email.template.used}{/if}</strong>
+                    </p>
+                    <ul n:if="!$formData['isNew'] && $formData['questions']">
+                        {foreach $formData['questions'] as $id => $answer}
+                            <li>{$model->questions[$id]->question->text}
+                                <i>{_'buyout.email.template.answer.' . $answer}</i></li>
+                        {/foreach}
+                    </ul>
+                {/ifset}
+                <p n:if="$formData['text']">{$formData['text']}</p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{/block}

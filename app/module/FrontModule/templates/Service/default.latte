@@ -41,15 +41,15 @@
 
 				<div n:snippet="modelPrices">
 					<div class="panel" n:if="$model">
-						<div class="panel-body">
+						{var showPrices => count($model->parameterPrices)}
+						<div n:if="$showPrices" class="panel-body">
 							<img src="{$basePath}/foto/{$model->image|size:150:150}" class="thumbnail" />
 							<h4>{_'Post warranty, paid service interventions'}</h4>
 							<p class="block">
 								{$model->html|noescape}
 							</p>
 						</div>
-
-						<table n:if="count($model->parameterPrices)" class="table table-hover prices-list">
+						<table n:if="$showPrices" class="table table-hover prices-list">
 							<thead>
 								<tr>
 									<th class="name">
@@ -64,7 +64,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr n:foreach="$model->parameterPrices as $parameterPrice" 
+								<tr n:foreach="$model->parameterPrices as $parameterPrice"
 									n:if="$parameterPrice->price->withoutVat > 0">
 									{var parameter => $parameterPrice->parameter}
 									{? $parameter->setCurrentLocale($lang)}
@@ -96,6 +96,11 @@
 								</tr>
 							</tfoot>
 						</table>
+						<div n:if="!$showPrices" class="panel-body">
+							<h4>{_'Please describe your defects and we will contact you back with solution options'}</h4>
+							<p>&nbsp;</p>
+							{control contactService}
+						</div>
 					</div>
 				</div>
 			</div>

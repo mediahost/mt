@@ -1,0 +1,16 @@
+# E-mail messages
+email:
+	their:
+		subject: 'Požadavek na servis telefonu'
+		template:
+			subtitle: 'Servis z e-shopu'
+			from: 'Vaše údaje'
+			phone: 'Telefon'
+	our:
+		subject: 'Požadavek na servis telefonu'
+		template:
+			subtitle: 'Servis z e-shopu'
+			from: 'Zákazník'
+			phone: 'Telefon'
+	template:
+		model: 'Model'

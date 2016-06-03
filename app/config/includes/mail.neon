@@ -11,6 +11,8 @@ services:
 	- {implement: App\Mail\Messages\Order\Payment\IErrorPaymentFactory, inject: yes}
 	- {implement: App\Mail\Messages\Buyout\IOurMessageFactory, inject: yes}
 	- {implement: App\Mail\Messages\Buyout\ITheirMessageFactory, inject: yes}
+	- {implement: App\Mail\Messages\Service\IOurMessageFactory, inject: yes}
+	- {implement: App\Mail\Messages\Service\ITheirMessageFactory, inject: yes}
 	- {implement: App\Mail\Messages\Dealer\IDealerWantBeOurMessageFactory, inject: yes}
 	- {implement: App\Mail\Messages\Newsletter\IUnsubscribeMessageFactory, inject: yes}
 	- {implement: App\Mail\Messages\Newsletter\INewsletterMessageFactory, inject: yes}

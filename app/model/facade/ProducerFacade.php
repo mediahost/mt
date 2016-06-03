@@ -7,13 +7,30 @@ use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\EntityRepository;
+use Kdyby\Translation\Translator;
+use Nette\Caching\Cache;
+use Nette\Caching\IStorage;
 use Nette\Object;
+use Tracy\Debugger;
 
 class ProducerFacade extends Object
 {
 
+	const TAG_ALL_PRODUCERS = 'all-producers';
+	const TAG_ALL_LINES = 'all-lines';
+	const TAG_ALL_MODELS = 'all-models';
+	const TAG_PRODUCER = 'producer_';
+	const TAG_LINE = 'producer-line_';
+	const TAG_MODEL = 'producer-model_';
+
 	/** @var EntityManager @inject */
 	public $em;
+
+	/** @var Translator @inject */
+	public $translator;
+
+	/** @var IStorage @inject */
+	public $cacheStorage;
 
 	/** @var EntityRepository */
 	private $producerRepo;
@@ -23,6 +40,12 @@ class ProducerFacade extends Object
 
 	/** @var EntityRepository */
 	private $modelRepo;
+
+	/** @var array */
+	private $ids = [];
+
+	/** @var array */
+	private $urls = [];
 
 	public function __construct(EntityManager $em)
 	{
@@ -35,12 +58,11 @@ class ProducerFacade extends Object
 	public function getProducersList($onlyWithChildren = FALSE)
 	{
 		$producers = [];
-		foreach ($this->producerRepo->findAll() as $producer) {
-			if (!$onlyWithChildren || count($producer->lines)) {
+		foreach ($this->producerRepo->findBy([], ['priority' => 'ASC']) as $producer) {
+			if (!$onlyWithChildren || $producer->hasLines(TRUE)) {
 				$producers[$producer->id] = (string)$producer;
 			}
 		}
-		@uasort($producers, 'strcoll');
 		return $producers;
 	}
 
@@ -48,44 +70,31 @@ class ProducerFacade extends Object
 	{
 		$lines = [];
 		if ($producer) {
-			$finded = $this->lineRepo->findBy(['producer' => $producer]);
+			$finded = $this->lineRepo->findBy(['producer' => $producer], ['priority' => 'ASC']);
 		} else {
-			$finded = $this->lineRepo->findAll();
+			$finded = $this->lineRepo->findBy([], ['priority' => 'ASC']);
 		}
 		foreach ($finded as $line) {
 			if (!$onlyWithChildren || count($line->models)) {
 				$lines[$line->id] = $fullPath ? $line->getFullName() : (string)$line;
 			}
 		}
-		@uasort($lines, 'strcoll');
 		return $lines;
 	}
 
-	public function getModelsList(ProducerLine $line = NULL, $fullPath = FALSE, $onlyBuyout = FALSE)
+	public function getModelsList(ProducerLine $line = NULL, $fullPath = FALSE)
 	{
-		$filter = NULL;
-
-		if ($onlyBuyout !== FALSE) {
-			$filter['buyoutPrice >'] = '0';
-		}
-
+		$filter = [];
 		if ($line) {
 			$filter['line'] = $line;
 		}
 
-		if ($filter !== NULL) {
-			$finded = $this->modelRepo->findBy($filter);
-		} else {
-			$finded = $this->modelRepo->findAll();
-		}
+		$finded = $this->modelRepo->findBy($filter, ['priority' => 'ASC']);
 
 		$models = [];
-
 		foreach ($finded as $model) {
 			$models[$model->id] = $fullPath ? $model->getFullName() : (string)$model;
 		}
-
-		@uasort($models, 'strcoll');
 
 		return $models;
 	}
@@ -145,6 +154,72 @@ class ProducerFacade extends Object
 			}
 			$this->modelRepo->save($modelItem);
 		}
+	}
+
+	public function urlToId($uri)
+	{
+		$hash = $this->createCacheHash($uri);
+
+		if (isset($this->ids[$hash])) {
+			return $this->ids[$hash];
+		}
+
+		$cache = $this->getCache();
+		$id = $cache->load($hash);
+		if (!$id) {
+			$model = $this->modelRepo->findOneByUrl($uri);
+			if ($model) {
+				$this->ids[$hash] = $model->id;
+				$cache->save($hash, $model->id, [Cache::TAGS => $this->getModelTags($model)]);
+			}
+		}
+		return $id;
+	}
+
+	public function idToUrl($id)
+	{
+		$hash = $this->createCacheHash($id);
+
+		if (isset($this->urls[$hash])) {
+			return $this->urls[$hash];
+		}
+
+		$cache = $this->getCache();
+		$url = $cache->load($hash);
+
+		if (!$url) {
+			$model = $this->modelRepo->find($id);
+			if ($model) {
+				$url = $model->getFullPath();
+				$this->urls[$hash] = $url;
+				$cache->save($hash, $url, [Cache::TAGS => $this->getModelTags($model)]);
+			}
+		}
+		return $url;
+	}
+
+	/** @return Cache */
+	public function getCache()
+	{
+		$cache = new Cache($this->cacheStorage, get_class($this));
+		return $cache;
+	}
+
+	private function createCacheHash($value)
+	{
+		return md5(self::TAG_PRODUCER . $value);
+	}
+
+	private function getModelTags(ProducerModel $model)
+	{
+		return [
+			self::TAG_ALL_PRODUCERS,
+			self::TAG_PRODUCER . $model->line->producer->id,
+			self::TAG_ALL_LINES,
+			self::TAG_LINE . $model->line->id,
+			self::TAG_ALL_MODELS,
+			self::TAG_MODEL . $model->id,
+		];
 	}
 
 }
