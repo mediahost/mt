@@ -22,10 +22,10 @@ class QuestionFacade extends Object
 
 	/**
 	 * @param string $text
-	 * @param string $lang
+	 * @param string $locale
 	 * @return mixed
 	 */
-	public function suggestByText($text, $lang = NULL)
+	public function suggestByText($text, $locale = NULL)
 	{
 		$qb = $this->em->getRepository(Question::getClassName())
 				->createQueryBuilder('q')
@@ -37,13 +37,13 @@ class QuestionFacade extends Object
 				->setFirstResult(0)
 				->setMaxResults(30);
 
-		if (is_string($lang)) {
-			$qb->andWhere('(t.locale = :defaultLang OR t.locale = :lang)')
-					->setParameter('defaultLang', $this->translator->getDefaultLocale())
-					->setParameter('lang', $lang);
-		} else if (is_array($lang)) {
+		if (is_string($locale)) {
+			$qb->andWhere('(t.locale = :defaultLocale OR t.locale = :locale)')
+					->setParameter('defaultLocale', $this->translator->getDefaultLocale())
+					->setParameter('locale', $locale);
+		} else if (is_array($locale)) {
 			$orExpr = new Orx();
-			foreach ($lang as $key => $langItem) {
+			foreach ($locale as $key => $langItem) {
 				$idKey = 'lang' . $key;
 				$orExpr->add('t.locale = :' . $idKey);
 				$qb->setParameter($idKey, $langItem);
@@ -57,10 +57,10 @@ class QuestionFacade extends Object
 
 	/**
 	 * @param string $text
-	 * @param string $lang
+	 * @param string $locale
 	 * @return mixed
 	 */
-	public function findOneByText($text, $lang = NULL)
+	public function findOneByText($text, $locale = NULL)
 	{
 		$qb = $this->em->getRepository(Question::getClassName())
 				->createQueryBuilder('q')
@@ -69,13 +69,13 @@ class QuestionFacade extends Object
 				->setParameter('text', $text)
 				->orderBy('t.text', 'ASC');
 
-		if (is_string($lang)) {
-			$qb->andWhere('t.locale = :lang')
-					->setParameter('lang', $lang);
-		} else if (is_array($lang)) {
+		if (is_string($locale)) {
+			$qb->andWhere('t.locale = :locale')
+					->setParameter('locale', $locale);
+		} else if (is_array($locale)) {
 			$orExpr = new Orx();
-			foreach ($lang as $key => $langItem) {
-				$idKey = 'lang' . $key;
+			foreach ($locale as $key => $langItem) {
+				$idKey = 'locale' . $key;
 				$orExpr->add('t.locale = :' . $idKey);
 				$qb->setParameter($idKey, $langItem);
 			}
@@ -86,7 +86,7 @@ class QuestionFacade extends Object
 						->getOneOrNullResult();
 	}
 
-	public function findByModel($model, $lang = NULL, $limit = NULL, $offset = 0, &$totalCount = NULL)
+	public function findByModel($model, $locale = NULL, $limit = NULL, $offset = 0, &$totalCount = NULL)
 	{
 		$qb = $this->em->getRepository(ModelQuestion::getClassName())
 				->createQueryBuilder('mq')
@@ -97,13 +97,13 @@ class QuestionFacade extends Object
 				->setParameter('model', $model)
 				->orderBy('t.text', 'ASC');
 
-		if (is_string($lang)) {
-			$qb->andWhere('t.locale = :lang')
-					->setParameter('lang', $lang);
-		} else if (is_array($lang)) {
+		if (is_string($locale)) {
+			$qb->andWhere('t.locale = :locale')
+					->setParameter('locale', $locale);
+		} else if (is_array($locale)) {
 			$orExpr = new Orx();
-			foreach ($lang as $key => $langItem) {
-				$idKey = 'lang' . $key;
+			foreach ($locale as $key => $langItem) {
+				$idKey = 'locale' . $key;
 				$orExpr->add('t.locale = :' . $idKey);
 				$qb->setParameter($idKey, $langItem);
 			}
