@@ -16,8 +16,7 @@ use Nette\Utils\Random;
  * @ORM\Entity
  * @ORM\EntityListeners({"App\Listeners\Model\Entity\ImageListener"})
  *
- * @property string $filename
- * @property FileUpload $filename
+ * @property string|FileUpload $filename
  * @property-read bool $changed
  */
 class Image extends BaseEntity
