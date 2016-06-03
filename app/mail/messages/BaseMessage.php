@@ -73,7 +73,7 @@ abstract class BaseMessage extends Message
 			'pageInfo' => $this->settings->pageInfo,
 			'mail' => $this,
 			'colon' => '',
-			'locale' => $this->translator->locale,
+			'locale' => $this->translator->getLocale(),
 			'exchange' => $this->exchange,
 			'currencySymbol' => $currency->getFormat()->getSymbol(),
 			'basePath' => $this->httpRequest->getUrl()->getBaseUrl(),

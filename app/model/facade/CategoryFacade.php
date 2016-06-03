@@ -11,7 +11,6 @@ use Nette\Application\Request;
 use Nette\Caching\Cache;
 use Nette\Caching\IStorage;
 use Nette\Object;
-use Tracy\Debugger;
 
 class CategoryFacade extends Object
 {
