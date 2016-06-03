@@ -649,6 +649,12 @@ msgstr "%type% for %name%"
 msgid "Post warranty, paid service interventions"
 msgstr "Post warranty, paid service interventions"
 
+msgid "Please describe your defects and we will contact you back with solution options"
+msgstr "Please describe your defects and we will contact you back with solution options"
+
+msgid "Please describe your device and we will contact you back with price options"
+msgstr "Please describe your device and we will contact you back with price options"
+
 msgid "Repair"
 msgstr "Repair"
 

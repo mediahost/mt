@@ -34,11 +34,13 @@ email:
 		template:
 			subtitle: 'Buyout from e-shop'
 			from: 'Your details'
+			phone: 'Phone'
 	our:
 		subject: 'Buyout request'
 		template:
 			subtitle: 'Buyout from e-shop'
 			from: 'Customer'
+			phone: 'Phone'
 	template:
 		model: 'Model' 
 		summary: 'Buyout price'

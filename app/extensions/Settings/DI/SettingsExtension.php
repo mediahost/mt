@@ -108,6 +108,7 @@ class SettingsExtension extends CompilerExtension
 			'service' => [
 				'enabled' => FALSE,
 				'pageId' => 1, // ID of page in pages to show as basic info
+				'email' => 'service@example.sk',
 			],
 			'dealer' => [
 				'enabled' => FALSE,

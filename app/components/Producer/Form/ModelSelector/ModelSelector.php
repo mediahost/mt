@@ -10,6 +10,7 @@ use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
 use App\Model\Facade\ProducerFacade;
 use Nette\Utils\ArrayHash;
+use Tracy\Debugger;
 
 class ModelSelector extends BaseControl
 {
@@ -27,7 +28,7 @@ class ModelSelector extends BaseControl
 	public $producerFacade;
 
 	/** @var boolean */
-	private $buyout;
+	private $onlyWithChildren = TRUE;
 
 	// <editor-fold desc="events">
 
@@ -45,25 +46,25 @@ class ModelSelector extends BaseControl
 		$form->getElementPrototype()->class = [$this->isAjax ? 'ajax' : '', 'modelSelector'];
 		$form->getElementPrototype()->addAttributes(['data-target-loading' => '#loaded-content']);
 
-		$allProducers = $this->producerFacade->getProducersList(TRUE);
-		$allLines = $this->producerFacade->getLinesList(NULL, FALSE, TRUE);
-		$allModels = $this->producerFacade->getModelsList(NULL, FALSE, $this->buyout);
+		$allProducers = $this->producerFacade->getProducersList($this->onlyWithChildren);
+		$allLines = $this->producerFacade->getLinesList(NULL, FALSE, $this->onlyWithChildren);
+		$allModels = $this->producerFacade->getModelsList();
 
 		$form->addSelect2('producer', 'Producer', $allProducers)
-				->setPrompt('Select some producer');
+			->setPrompt('Select some producer');
 
 		$selectLine = $form->addSelect2('line', 'Line', $allLines)
-				->setPrompt('Select some line');
+			->setPrompt('Select some line');
 
 		if ($this->producer) {
-			$filteredLines = $this->producerFacade->getLinesList($this->producer);
+			$filteredLines = $this->producerFacade->getLinesList($this->producer, FALSE, $this->onlyWithChildren);
 			$selectLine->setItems($filteredLines);
 		} else {
 			$selectLine->setDisabled();
 		}
 
 		$selectModel = $form->addSelect2('model', 'Model', $allModels)
-				->setPrompt('Select some model');
+			->setPrompt('Select some model');
 
 		if ($this->line) {
 			$filteredModels = $this->producerFacade->getModelsList($this->line);
@@ -89,31 +90,32 @@ class ModelSelector extends BaseControl
 		$this->onAfterSelect($this->producer, $this->line, $this->model);
 	}
 
-	private function getProducersTree($onlyWithChildren = TRUE)
+	public function getProducersTree($onlyWithChildren = TRUE)
 	{
 		$producersTree = [];
 		$producerRepo = $this->em->getRepository(Producer::getClassName());
-		foreach ($producerRepo->findAll() as $producer) {
+		foreach ($producerRepo->findBy([], ['priority' => 'ASC']) as $producer) {
 			$lines = [];
 			foreach ($producer->lines as $line) {
 				$models = [];
 				foreach ($line->models as $model) {
-					if (!($this->buyout && $model->buyoutPrice <= 0)) {
-						$models[$model->id] = [
-							'name' => (string) $model,
-						];
-					}
+					$models[$model->id] = [
+						'name' => (string)$model,
+						'priority' => $model->priority,
+					];
 				}
 				if (!$onlyWithChildren || count($models)) {
 					$lines[$line->id] = [
 						'name' => (string)$line,
+						'priority' => $line->priority,
 						'children' => $models,
 					];
 				}
 			}
 			if (!$onlyWithChildren || count($lines)) {
 				$producersTree[$producer->id] = [
-					'name' => (string) $producer,
+					'name' => (string)$producer,
+					'priority' => $producer->priority,
 					'children' => $lines,
 				];
 			}
@@ -125,7 +127,10 @@ class ModelSelector extends BaseControl
 	{
 		if ($values->model) {
 			$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
-			$this->model = $modelRepo->find($values->model);
+			$model = $modelRepo->find($values->model);
+			if ($model) {
+				$this->setModel($model);
+			}
 		}
 		return $this;
 	}
@@ -166,15 +171,9 @@ class ModelSelector extends BaseControl
 		return $this;
 	}
 
-	public function setBuyout($buyout = TRUE)
-	{
-		$this->buyout = $buyout;
-		return $this;
-	}
-
 	public function render()
 	{
-		$this->template->producersTree = $this->getProducersTree();
+		$this->template->producersTree = $this->getProducersTree($this->onlyWithChildren);
 		parent::render();
 	}
 

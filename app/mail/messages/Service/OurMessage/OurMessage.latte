@@ -1,0 +1,34 @@
+{layout '../../@layout.latte'}
+
+{block subtitle}
+    <font size="+1" color="#00285A">{_service.email.our.template.subtitle}</font>
+{/block}
+
+{block content}
+    <table width="100%" border="0" cellspacing="0" cellpadding="10">
+        <tbody>
+        <tr>
+            <td>
+                <p>
+                    {_service.email.our.template.from}: {$formData['fullname']}
+                    <a href="mailto:{$formData['email']}">{$formData['email']}</a>
+                    {ifset $formData['phone']}
+                        <br/>
+                        {_service.email.our.template.phone}: {$formData['phone']}
+                    {/ifset}
+                </p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="10">
+        <tbody>
+        <tr>
+            <td>
+                <p>{_service.email.template.model}: <strong>{$model->fullName}</strong></p>
+                <p n:if="$formData['text']">{$formData['text']}</p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{/block}

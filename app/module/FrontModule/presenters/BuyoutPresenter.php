@@ -4,6 +4,8 @@ namespace App\FrontModule\Presenters;
 
 use App\Components\Buyout\Form\IRequestFactory;
 use App\Components\Buyout\Form\Request;
+use App\Components\Producer\Form\ContactShop;
+use App\Components\Producer\Form\IContactShopFactory;
 use App\Components\Producer\Form\IModelSelectorFactory;
 use App\Components\Producer\Form\ModelSelector;
 use App\Model\Entity\Page;
@@ -25,17 +27,16 @@ class BuyoutPresenter extends BasePresenter
 	/** @var IRequestFactory @inject */
 	public $iRequestFactory;
 
+	/** @var IContactShopFactory @inject */
+	public $iContactShopFactory;
+
 	/** @var ProducerModel */
 	private $model;
 
-	/** @persistent */
-	public $modelId;
-
-	public function actionDefault($modelId = NULL)
+	public function actionDefault($id = NULL)
 	{
-		if ($modelId !== NULL) {
-			$this->modelId = $modelId;
-			$this->model = $this->em->getRepository(ProducerModel::getClassName())->find($modelId);
+		if ($id !== NULL) {
+			$this->model = $this->em->getRepository(ProducerModel::getClassName())->find($id);
 		}
 
 		$settings = $this->settings->modules->buyout;
@@ -70,17 +71,15 @@ class BuyoutPresenter extends BasePresenter
 	public function createComponentModelSelector()
 	{
 		$control = $this->iModelSelectorFactory->create();
-		$control->setAjax()
-				->setBuyout();
+		if ($this->model) {
+			$control->setModel($this->model);
+		}
 
 		$control->onAfterSelect = function ($producer, $line, $model) {
-			$this->model = $model;
-			$this->modelId = $model->id;
-
 			if ($this->isAjax()) {
 				$this->redrawControl();
 			} else {
-				$this->redirect('this', ['modelId' => $this->model->id]);
+				$this->redirect('this', ['id' => $model->id]);
 			}
 		};
 		return $control;
@@ -91,16 +90,29 @@ class BuyoutPresenter extends BasePresenter
 	{
 		$control = $this->iRequestFactory->create();
 		$control->onSend = function () {
-			$this->session->getSection('buyout')->modelId = NULL;
 			$this->flashMessage($this->translator->translate('Your request has been sent.'), 'success');
-			$this->redirect('this', ['modelId' => NULL]);
+			$this->redirect('this', ['id' => NULL]);
 		};
 
 		if ($this->model) {
-			$this->modelId = $this->model->id;
 			$control->setModel($this->model);
 		}
 
+		return $control;
+	}
+
+	/** @return ContactShop */
+	public function createComponentContactBuyout()
+	{
+		$control = $this->iContactShopFactory->create();
+		if ($this->model) {
+			$control->setBuyout();
+			$control->setModel($this->model);
+		}
+		$control->onSend = function () {
+			$this->flashMessage($this->translator->translate('Your request has been sent.'), 'success');
+			$this->redirect('this', ['id' => NULL]);
+		};
 		return $control;
 	}
 

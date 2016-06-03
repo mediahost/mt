@@ -34,11 +34,13 @@ email:
 		template:
 			subtitle: 'Výkup z e-shopu'
 			from: 'Vaše údaje'
+			phone: 'Telefon'
 	our:
 		subject: 'Požiadavka na výkup telefónu'
 		template:
 			subtitle: 'Výkup z e-shopu'
 			from: 'Zákazník'
+			phone: 'Telefon'
 	template:
 		model: 'Model' 
 		summary: 'Výkupná cena'

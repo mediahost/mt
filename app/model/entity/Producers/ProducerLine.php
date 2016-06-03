@@ -2,11 +2,12 @@
 
 namespace App\Model\Entity;
 
+use App\Helpers;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Model;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
+use Knp\DoctrineBehaviors\Model;
 
 /**
  * @ORM\Entity(repositoryClass="App\Model\Repository\ProducerLineRepository")
@@ -50,29 +51,35 @@ class ProducerLine extends BaseEntity implements IProducer
 		$this->models->add($model);
 		return $this;
 	}
-	
-	public function getModelsArray()
+
+	public function getModels()
 	{
 		$array = [];
 		foreach ($this->models as $model) {
-			$array[$model->id] = (string) $model;
+			$array[$model->priority] = $model;
 		}
+		ksort($array);
 		return $array;
 	}
 
-	public function getHasModels()
+	public function hasModels()
 	{
-		return (bool) count($this->models);
+		return (bool)count($this->models);
 	}
 
 	public function getFullName($glue = ' / ')
 	{
-		return Helpers::concatStrings($glue, (string) $this->line->producer, (string) $this);
+		return Helpers::concatStrings($glue, (string)$this->producer, (string)$this);
+	}
+
+	public function getFullPath($glue = '/')
+	{
+		return Helpers::concatStrings($glue, $this->producer->getFullPath(), $this->slug);
 	}
 
 	public function __toString()
 	{
-		return (string) $this->name;
+		return (string)$this->name;
 	}
 
 	public function isNew()

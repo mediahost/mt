@@ -1,0 +1,16 @@
+# E-mail messages
+email:
+	their:
+		subject: 'Service request'
+		template:
+			subtitle: 'Service from e-shop'
+			from: 'Your details'
+			phone: 'Phone'
+	our:
+		subject: 'Service request'
+		template:
+			subtitle: 'Service from e-shop'
+			from: 'Customer'
+			phone: 'Phone'
+	template:
+		model: 'Model'

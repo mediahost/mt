@@ -41,13 +41,13 @@ var Service = function () {
 
 		$(document).on('change', formSelector + ' select.sendFormOnChange', function () {
 			var modelId = $selectorModels.val();
-			var modelParam = '?modelId=' + modelId;
+			var modelParam = '?id=' + modelId;
 			var action = $(formSelector).attr('action')
 			action = action.split('?')[0];
-			
+
 			$('#frm-requestForm-form').attr('action', action + modelParam);
 			$(formSelector).attr('action', action + modelParam);
-			history.pushState('', '', modelParam);
+			// history.pushState('', '', modelParam);
 			$(this).parents('form').submit();
 		});
 
@@ -67,9 +67,18 @@ var Service = function () {
 			var item = $('<option></option>').attr('value', '');
 			select.prepend(item);
 
-			for (var i in entity['children']) {
-				var name = entity['children'][i]['name'];
-				item = $('<option></option>').attr('value', i).html(name);
+			var elements = {};
+			for (var id in entity['children']) {
+				var priority = entity['children'][id]['priority'];
+				elements[priority] = {
+					'id': id,
+					'name': entity['children'][id]['name']
+				};
+			}
+			for (var i in elements) {
+				item = $('<option></option>')
+					.attr('value', elements[i].id)
+					.html(elements[i].name);
 				select.append(item);
 			}
 		}

@@ -4,6 +4,7 @@ namespace App\Router;
 
 use App\Model\Facade\CategoryFacade;
 use App\Model\Facade\PageFacade;
+use App\Model\Facade\ProducerFacade;
 use App\Model\Facade\StockFacade;
 use App\Model\Facade\UriFacade;
 use Drahak\Restful\Application\Routes\ResourceRoute;
@@ -32,6 +33,9 @@ class RouterFactory
 
 	/** @var UriFacade @inject */
 	public $uriFacade;
+
+	/** @var ProducerFacade @inject */
+	public $producerFacade;
 
 	/**
 	 * @return IRouter
@@ -176,6 +180,14 @@ class RouterFactory
 		]);
 
 		$slugs = '[0-9a-z/-]+';
+		$frontRouter[] = $routeBuyout = new FilterRoute(self::LOCALE_PARAM . 'vykup[/<id ' . $slugs . '>]', [
+			'presenter' => 'Buyout',
+			'action' => 'default',
+		]);
+		$frontRouter[] = $routeService = new FilterRoute(self::LOCALE_PARAM . 'servis[/<id ' . $slugs . '>]', [
+			'presenter' => 'Service',
+			'action' => 'default',
+		]);
 		$frontRouter[] = $routePage = new FilterRoute(self::LOCALE_PARAM . 'p/<id ' . $slugs . '>', [
 			'presenter' => 'Page',
 			'action' => 'default',
@@ -196,6 +208,8 @@ class RouterFactory
 		$routeProduct->addFilter('id', [$this->stockFacade, 'urlToId'], [$this->stockFacade, 'idToUrl']);
 		$routeCategory->addFilter('id', [$this->categoryFacade, 'urlToId'], [$this->categoryFacade, 'idToUrl']);
 		$routePage->addFilter('id', [$this->pageFacade, 'slugToId'], [$this->pageFacade, 'idToSlug']);
+		$routeBuyout->addFilter('id', [$this->producerFacade, 'urlToId'], [$this->producerFacade, 'idToUrl']);
+		$routeService->addFilter('id', [$this->producerFacade, 'urlToId'], [$this->producerFacade, 'idToUrl']);
 		$routeMain->addFilter('presenter', [$this->uriFacade, 'nameToPresenter'], [$this->uriFacade, 'presenterToName']);
 		$routeMain->addFilter('action', [$this->uriFacade, 'nameToAction'], [$this->uriFacade, 'actionToName']);
 		// </editor-fold>

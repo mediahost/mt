@@ -79,18 +79,38 @@ class Producer extends BaseTranslatable implements IProducer
 		return $this;
 	}
 	
-	public function getLinesArray()
+	public function getLines()
 	{
 		$array = [];
 		foreach ($this->lines as $line) {
-			$array[$line->id] = (string) $line;
+			$array[$line->priority] = $line;
 		}
+		ksort($array);
 		return $array;
 	}
 
-	public function getHasLines()
+	public function hasLines($withModels = FALSE)
 	{
-		return (bool) count($this->lines);
+		if ($withModels) {
+			return $this->hasLines() && $this->hasModels();
+		} else {
+			return (bool) count($this->lines);
+		}
+	}
+
+	public function hasModels()
+	{
+		foreach ($this->lines as $line) {
+			if ($line->hasModels()) {
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
+
+	public function getFullPath()
+	{
+		return $this->slug;
 	}
 
 	public function getSluggableFields()

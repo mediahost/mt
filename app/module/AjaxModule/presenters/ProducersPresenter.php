@@ -35,13 +35,13 @@ class ProducersPresenter extends BasePresenter
 				if ($item instanceof Producer) {
 					$id = Producer::ID . Producer::SEPARATOR . $item->id;
 					$name = $item->name;
-					$hasChildren = $item->hasLines;
+					$hasChildren = $item->hasLines();
 					$priority = $item->priority;
 					$type = 'producer';
 				} else if ($item instanceof ProducerLine) {
 					$id = ProducerLine::ID . Producer::SEPARATOR . $item->id;
 					$name = $item->name;
-					$hasChildren = $item->hasModels;
+					$hasChildren = $item->hasModels();
 					$priority = $item->priority;
 					$type = 'line';
 				} else if ($item instanceof ProducerModel) {
