@@ -46,6 +46,11 @@ trait StockQuantities
 		return $this;
 	}
 
+	public function getLocked()
+	{
+		return $this->getLock();
+	}
+
 	public function getLock()
 	{
 		return $this->locked;

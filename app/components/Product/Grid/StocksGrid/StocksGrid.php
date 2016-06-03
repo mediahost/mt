@@ -195,6 +195,7 @@ class StocksGrid extends BaseControl
 
 		/*		 * ************************************************ */
 		$grid->addColumnNumber('lock', 'Locked')
+				->setColumn('locked')
 				->setDisableExport()
 				->setNumberFormat(0, NULL, ' ')
 				->setSortable()
