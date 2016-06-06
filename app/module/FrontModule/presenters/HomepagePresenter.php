@@ -12,6 +12,7 @@ class HomepagePresenter extends BasePresenter
 	{
 		$this->showSlider = (bool) $slider;
 		$this->showBrands = (bool) $brands;
+		$this['modelSelector']->setAccessories();
 	}
 
 	public function renderDefault()

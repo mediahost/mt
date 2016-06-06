@@ -165,12 +165,6 @@ class RouterFactory
 			'text' => NULL,
 		]);
 
-		$frontRouter[] = new Route(self::LOCALE_PARAM . 'accessories[/<model>]', [
-			'presenter' => 'Category',
-			'action' => 'accessories',
-			'model' => NULL,
-		]);
-
 		$frontRouter[] = new Route(self::LOCALE_PARAM . 'producer[/<producer>[/<line>[/<model>]]]', [
 			'presenter' => 'Category',
 			'action' => 'producer',
@@ -180,6 +174,11 @@ class RouterFactory
 		]);
 
 		$slugs = '[0-9a-z/-]+';
+
+		$frontRouter[] = $routeAccessories = new FilterRoute(self::LOCALE_PARAM . 'accessories[/<id ' . $slugs . '>]', [
+			'presenter' => 'Category',
+			'action' => 'accessories',
+		]);
 		$frontRouter[] = $routeBuyout = new FilterRoute(self::LOCALE_PARAM . 'vykup[/<id ' . $slugs . '>]', [
 			'presenter' => 'Buyout',
 			'action' => 'default',
@@ -205,13 +204,18 @@ class RouterFactory
 			'action' => 'default',
 			'id' => NULL,
 		]);
+
 		$routeProduct->addFilter('id', [$this->stockFacade, 'urlToId'], [$this->stockFacade, 'idToUrl']);
 		$routeCategory->addFilter('id', [$this->categoryFacade, 'urlToId'], [$this->categoryFacade, 'idToUrl']);
 		$routePage->addFilter('id', [$this->pageFacade, 'slugToId'], [$this->pageFacade, 'idToSlug']);
+
+		$routeAccessories->addFilter('id', [$this->producerFacade, 'urlToId'], [$this->producerFacade, 'idToUrl']);
 		$routeBuyout->addFilter('id', [$this->producerFacade, 'urlToId'], [$this->producerFacade, 'idToUrl']);
 		$routeService->addFilter('id', [$this->producerFacade, 'urlToId'], [$this->producerFacade, 'idToUrl']);
+
 		$routeMain->addFilter('presenter', [$this->uriFacade, 'nameToPresenter'], [$this->uriFacade, 'presenterToName']);
 		$routeMain->addFilter('action', [$this->uriFacade, 'nameToAction'], [$this->uriFacade, 'actionToName']);
+
 		// </editor-fold>
 
 		return $router;

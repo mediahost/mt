@@ -2,6 +2,9 @@
 
 namespace App\Listeners\Model\Entity;
 
+use App\Components\Producer\Form\ModelSelector;
+use App\Model\Entity\ProducerModel;
+use App\Model\Facade\ProducerFacade;
 use Doctrine\ORM\Events;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Events\Subscriber;
@@ -22,7 +25,7 @@ class ProducerModelListener extends Object implements Subscriber
 	{
 		return array(
 			Events::prePersist,
-			Events::preUpdate,
+			Events::postUpdate,
 			Events::postRemove,
 		);
 	}
@@ -31,30 +34,63 @@ class ProducerModelListener extends Object implements Subscriber
 
 	public function prePersist()
 	{
-		$this->clearCache();
+		$this->clearModelSelectorCache();
 	}
 
-	public function preUpdate()
+	public function postUpdate($params)
 	{
-		$this->clearCache();
+		$model = $this->getProducerModelFromParams($params);
+		if ($model) {
+			if ($this->hasChangeName($params)) {
+				$this->clearProducerModelCache($model);
+			}
+		}
+		$this->clearModelSelectorCache();
 	}
 
 	public function postRemove()
 	{
-		$this->clearCache();
+		$this->clearModelSelectorCache();
 	}
 
 	// </editor-fold>
 
-	private function clearCache()
+	private function clearModelSelectorCache()
 	{
 		$cache = new Cache($this->cacheStorage);
 		$cache->clean([
 			Cache::TAGS => [
-				'model',
-				'models',
+				ModelSelector::CACHE_ID,
 			],
 		]);
+	}
+
+	private function clearProducerModelCache(ProducerModel $model)
+	{
+		$cache = new Cache($this->cacheStorage);
+		$cache->clean([
+			Cache::TAGS => [
+				ProducerFacade::TAG_MODEL . $model->id,
+			],
+		]);
+	}
+
+	private function hasChangeName($entity)
+	{
+		$uow = $this->em->getUnitOfWork();
+		$changes = $uow->getEntityChangeSet($entity);
+		if (is_array($changes) && array_key_exists('name', $changes)) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+	private function getProducerModelFromParams($params)
+	{
+		if ($params instanceof ProducerModel) {
+			return $params;
+		}
+		return NULL;
 	}
 
 }
