@@ -2,6 +2,8 @@
 
 namespace App\Listeners\Model\Entity;
 
+use App\Components\Producer\Form\ModelSelector;
+use App\Model\Entity\ProducerModel;
 use App\Model\Entity\Product;
 use App\Model\Entity\ProductTranslation;
 use App\Model\Facade\StockFacade;
@@ -42,11 +44,14 @@ class ProductListener extends Object implements Subscriber
 		$product = $this->getProductFromParams($params);
 		if ($product) {
 			if ($this->hasChangeName($params) || $this->hasChangeMainCategory($params)) {
-				$this->clearCache($product);
+				$this->clearProductCache($product);
 				$this->generateUrls($product);
 			}
 			if ($this->hasDeleted($params)) {
-				$this->clearCache($product);
+				$this->clearProductCache($product);
+			}
+			if ($this->hasChangeAccessories()) {
+				$this->clearModelSelectorCache($product);
 			}
 		}
 	}
@@ -73,6 +78,18 @@ class ProductListener extends Object implements Subscriber
 		return FALSE;
 	}
 
+	private function hasChangeAccessories()
+	{
+		$uow = $this->em->getUnitOfWork();
+		$changes = $uow->getScheduledCollectionUpdates();
+		foreach ($changes AS $col) {
+			if ($col->first() instanceof ProducerModel) {
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
+
 	private function hasDeleted($entity)
 	{
 		$uow = $this->em->getUnitOfWork();
@@ -83,11 +100,19 @@ class ProductListener extends Object implements Subscriber
 		return FALSE;
 	}
 
-	private function clearCache(Product $product)
+	private function clearProductCache(Product $product)
 	{
 		$cache = new Cache($this->cacheStorage);
 		$cache->clean([
 			Cache::TAGS => [StockFacade::TAG_PRODUCT . $product->id],
+		]);
+	}
+
+	private function clearModelSelectorCache()
+	{
+		$cache = new Cache($this->cacheStorage);
+		$cache->clean([
+			Cache::TAGS => [ModelSelector::CACHE_ID],
 		]);
 	}
 

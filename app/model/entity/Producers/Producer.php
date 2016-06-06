@@ -12,6 +12,7 @@ use Nette\Utils\Strings;
 
 /**
  * @ORM\Entity(repositoryClass="App\Model\Repository\ProducerRepository")
+ * @ORM\EntityListeners({"App\Listeners\Model\Entity\ProducerListener"})
  *
  * @property Producer $parent
  * @property array $children
@@ -106,6 +107,14 @@ class Producer extends BaseTranslatable implements IProducer
 			}
 		}
 		return FALSE;
+	}
+
+	public function hasProducts()
+	{
+		$hasProducts = function ($key, ProducerLine $item) {
+			return $item->hasProducts();
+		};
+		return $this->lines->exists($hasProducts);
 	}
 
 	public function getFullPath()

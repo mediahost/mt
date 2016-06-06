@@ -55,18 +55,18 @@ class ProducerFacade extends Object
 		$this->modelRepo = $this->em->getRepository(ProducerModel::getClassName());
 	}
 
-	public function getProducersList($onlyWithChildren = FALSE)
+	public function getProducersList($onlyWithChildren = FALSE, $onlyWithProducts = FALSE)
 	{
 		$producers = [];
 		foreach ($this->producerRepo->findBy([], ['priority' => 'ASC']) as $producer) {
-			if (!$onlyWithChildren || $producer->hasLines(TRUE)) {
+			if ((!$onlyWithChildren || $producer->hasLines(TRUE)) && (!$onlyWithProducts || $producer->hasProducts())) {
 				$producers[$producer->id] = (string)$producer;
 			}
 		}
 		return $producers;
 	}
 
-	public function getLinesList(Producer $producer = NULL, $fullPath = FALSE, $onlyWithChildren = FALSE)
+	public function getLinesList(Producer $producer = NULL, $fullPath = FALSE, $onlyWithChildren = FALSE, $onlyWithProducts = FALSE)
 	{
 		$lines = [];
 		if ($producer) {
@@ -75,14 +75,14 @@ class ProducerFacade extends Object
 			$finded = $this->lineRepo->findBy([], ['priority' => 'ASC']);
 		}
 		foreach ($finded as $line) {
-			if (!$onlyWithChildren || count($line->models)) {
+			if ((!$onlyWithChildren || $line->hasModels()) && (!$onlyWithProducts || $line->hasProducts())) {
 				$lines[$line->id] = $fullPath ? $line->getFullName() : (string)$line;
 			}
 		}
 		return $lines;
 	}
 
-	public function getModelsList(ProducerLine $line = NULL, $fullPath = FALSE)
+	public function getModelsList(ProducerLine $line = NULL, $fullPath = FALSE, $onlyWithProducts = FALSE)
 	{
 		$filter = [];
 		if ($line) {
@@ -93,7 +93,9 @@ class ProducerFacade extends Object
 
 		$models = [];
 		foreach ($finded as $model) {
-			$models[$model->id] = $fullPath ? $model->getFullName() : (string)$model;
+			if (!$onlyWithProducts || $model->hasProducts()) {
+				$models[$model->id] = $fullPath ? $model->getFullName() : (string)$model;
+			}
 		}
 
 		return $models;

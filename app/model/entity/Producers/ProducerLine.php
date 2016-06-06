@@ -11,6 +11,7 @@ use Knp\DoctrineBehaviors\Model;
 
 /**
  * @ORM\Entity(repositoryClass="App\Model\Repository\ProducerLineRepository")
+ * @ORM\EntityListeners({"App\Listeners\Model\Entity\ProducerLineListener"})
  *
  * @property string $name
  * @property int $priority
@@ -65,6 +66,14 @@ class ProducerLine extends BaseEntity implements IProducer
 	public function hasModels()
 	{
 		return (bool)count($this->models);
+	}
+
+	public function hasProducts()
+	{
+		$hasProducts = function ($key, ProducerModel $item) {
+			return $item->hasProducts();
+		};
+		return $this->models->exists($hasProducts);
 	}
 
 	public function getFullName($glue = ' / ')

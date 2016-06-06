@@ -10,10 +10,11 @@ use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
 use App\Model\Facade\ProducerFacade;
 use Nette\Utils\ArrayHash;
-use Tracy\Debugger;
 
 class ModelSelector extends BaseControl
 {
+
+	const CACHE_ID = 'model-selector';
 
 	/** @var Producer */
 	private $producer;
@@ -29,6 +30,9 @@ class ModelSelector extends BaseControl
 
 	/** @var boolean */
 	private $onlyWithChildren = TRUE;
+
+	/** @var boolean */
+	private $onlyWithProducts= TRUE;
 
 	// <editor-fold desc="events">
 
@@ -46,9 +50,9 @@ class ModelSelector extends BaseControl
 		$form->getElementPrototype()->class = [$this->isAjax ? 'ajax' : '', 'modelSelector'];
 		$form->getElementPrototype()->addAttributes(['data-target-loading' => '#loaded-content']);
 
-		$allProducers = $this->producerFacade->getProducersList($this->onlyWithChildren);
-		$allLines = $this->producerFacade->getLinesList(NULL, FALSE, $this->onlyWithChildren);
-		$allModels = $this->producerFacade->getModelsList();
+		$allProducers = $this->producerFacade->getProducersList($this->onlyWithChildren, $this->onlyWithProducts);
+		$allLines = $this->producerFacade->getLinesList(NULL, FALSE, $this->onlyWithChildren, $this->onlyWithProducts);
+		$allModels = $this->producerFacade->getModelsList(NULL, FALSE, $this->onlyWithProducts);
 
 		$form->addSelect2('producer', 'Producer', $allProducers)
 			->setPrompt('Select some producer');
@@ -57,7 +61,7 @@ class ModelSelector extends BaseControl
 			->setPrompt('Select some line');
 
 		if ($this->producer) {
-			$filteredLines = $this->producerFacade->getLinesList($this->producer, FALSE, $this->onlyWithChildren);
+			$filteredLines = $this->producerFacade->getLinesList($this->producer, FALSE, $this->onlyWithChildren, $this->onlyWithProducts);
 			$selectLine->setItems($filteredLines);
 		} else {
 			$selectLine->setDisabled();
@@ -67,7 +71,7 @@ class ModelSelector extends BaseControl
 			->setPrompt('Select some model');
 
 		if ($this->line) {
-			$filteredModels = $this->producerFacade->getModelsList($this->line);
+			$filteredModels = $this->producerFacade->getModelsList($this->line, FALSE, $this->onlyWithProducts);
 			$selectModel->setItems($filteredModels);
 		} else {
 			$selectModel->setDisabled();
@@ -90,7 +94,7 @@ class ModelSelector extends BaseControl
 		$this->onAfterSelect($this->producer, $this->line, $this->model);
 	}
 
-	public function getProducersTree($onlyWithChildren = TRUE)
+	public function getProducersTree($onlyWithChildren = FALSE, $onlyWithProducts = FALSE)
 	{
 		$producersTree = [];
 		$producerRepo = $this->em->getRepository(Producer::getClassName());
@@ -99,12 +103,14 @@ class ModelSelector extends BaseControl
 			foreach ($producer->lines as $line) {
 				$models = [];
 				foreach ($line->models as $model) {
-					$models[$model->id] = [
-						'name' => (string)$model,
-						'priority' => $model->priority,
-					];
+					if (!$onlyWithProducts || $model->hasProducts()) {
+						$models[$model->id] = [
+							'name' => (string)$model,
+							'priority' => $model->priority,
+						];
+					}
 				}
-				if (!$onlyWithChildren || count($models)) {
+				if ((!$onlyWithChildren || $line->hasModels()) && (!$onlyWithProducts || $line->hasProducts())) {
 					$lines[$line->id] = [
 						'name' => (string)$line,
 						'priority' => $line->priority,
@@ -112,7 +118,7 @@ class ModelSelector extends BaseControl
 					];
 				}
 			}
-			if (!$onlyWithChildren || count($lines)) {
+			if ((!$onlyWithChildren || $producer->hasLines(TRUE)) && (!$onlyWithProducts || $producer->hasProducts())) {
 				$producersTree[$producer->id] = [
 					'name' => (string)$producer,
 					'priority' => $producer->priority,
@@ -171,9 +177,15 @@ class ModelSelector extends BaseControl
 		return $this;
 	}
 
+	public function setAccessories($value = TRUE)
+	{
+		$this->onlyWithProducts = $value;
+		return $this;
+	}
+
 	public function render()
 	{
-		$this->template->producersTree = $this->getProducersTree($this->onlyWithChildren);
+		$this->template->producersTree = $this->getProducersTree($this->onlyWithChildren, $this->onlyWithProducts);
 		parent::render();
 	}
 

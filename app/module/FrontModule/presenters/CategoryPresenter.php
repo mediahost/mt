@@ -106,17 +106,18 @@ class CategoryPresenter extends BasePresenter
 		$this->sendResponse($response);
 	}
 
-	public function actionAccessories($model)
+	public function actionAccessories($id)
 	{
 		$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
-		if ($model) {
-			$modelEntity = $modelRepo->find($model);
+		if ($id) {
+			$modelEntity = $modelRepo->find($id);
 		}
-		if (isset($modelEntity)) {
+		if (isset($modelEntity) && $modelEntity) {
 			/* @var $products ProductList */
 			$products = $this['products'];
 			$products->addFilterAccessoriesFor($modelEntity);
 
+			$this['modelSelector']->setAccessories();
 			$this['modelSelector']->setModel($modelEntity);
 			$this->template->accessoriesFor = $modelEntity;
 			$this->setView('default');

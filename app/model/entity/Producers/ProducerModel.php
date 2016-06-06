@@ -115,6 +115,11 @@ class ProducerModel extends BaseTranslatable implements IProducer
 		return (bool)count($this->questions);
 	}
 
+	public function hasProducts()
+	{
+		return (bool)count($this->products);
+	}
+
 	public function __toString()
 	{
 		return (string)$this->name;

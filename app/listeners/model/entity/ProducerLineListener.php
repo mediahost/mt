@@ -3,7 +3,7 @@
 namespace App\Listeners\Model\Entity;
 
 use App\Components\Producer\Form\ModelSelector;
-use App\Model\Entity\ProducerModel;
+use App\Model\Entity\ProducerLine;
 use App\Model\Facade\ProducerFacade;
 use Doctrine\ORM\Events;
 use Kdyby\Doctrine\EntityManager;
@@ -12,7 +12,7 @@ use Nette\Caching\Cache;
 use Nette\Caching\IStorage;
 use Nette\Object;
 
-class ProducerModelListener extends Object implements Subscriber
+class ProducerLineListener extends Object implements Subscriber
 {
 
 	/** @var EntityManager @inject */
@@ -39,10 +39,10 @@ class ProducerModelListener extends Object implements Subscriber
 
 	public function postUpdate($params)
 	{
-		$model = $this->getProducerModelFromParams($params);
-		if ($model) {
+		$line = $this->getProducerLineFromParams($params);
+		if ($line) {
 			if ($this->hasChangeName($params)) {
-				$this->clearProducerModelCache($model);
+				$this->clearProducerLineCache($line);
 			}
 		}
 		$this->clearModelSelectorCache();
@@ -65,12 +65,12 @@ class ProducerModelListener extends Object implements Subscriber
 		]);
 	}
 
-	private function clearProducerModelCache(ProducerModel $model)
+	private function clearProducerLineCache(ProducerLine $line)
 	{
 		$cache = new Cache($this->cacheStorage);
 		$cache->clean([
 			Cache::TAGS => [
-				ProducerFacade::TAG_MODEL . $model->id,
+				ProducerFacade::TAG_LINE . $line->id,
 			],
 		]);
 	}
@@ -85,9 +85,9 @@ class ProducerModelListener extends Object implements Subscriber
 		return FALSE;
 	}
 
-	private function getProducerModelFromParams($params)
+	private function getProducerLineFromParams($params)
 	{
-		if ($params instanceof ProducerModel) {
+		if ($params instanceof ProducerLine) {
 			return $params;
 		}
 		return NULL;
