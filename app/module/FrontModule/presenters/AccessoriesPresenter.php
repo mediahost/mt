@@ -22,7 +22,7 @@ class AccessoriesPresenter extends BasePresenter
 			$this['modelSelector']->setAccessories();
 			$this['modelSelector']->setModel($modelEntity);
 			$this->getTemplate()->accessoriesFor = $modelEntity;
-			$this->setView('..\Category\default');
+			$this->setView('../Category/default');
 		} else {
 			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Model')]);
 			$this->flashMessage($message, 'warning');
