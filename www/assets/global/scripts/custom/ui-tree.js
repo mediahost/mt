@@ -440,8 +440,6 @@ var UITree = function () {
 					target: $(editBlockId),
 					animate: true
 				});
-				console.log(links['Producers:default']);
-				console.log(data.node.id);
 				$.post(links['Producers:default'], {producerId: data.node.id})
 					.done(function (payload) {
 						if (payload.redirect) {

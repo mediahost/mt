@@ -32,7 +32,7 @@ class ModelSelector extends BaseControl
 	private $onlyWithChildren = TRUE;
 
 	/** @var boolean */
-	private $onlyWithProducts= TRUE;
+	private $onlyWithProducts= FALSE;
 
 	// <editor-fold desc="events">
 
@@ -100,9 +100,9 @@ class ModelSelector extends BaseControl
 		$producerRepo = $this->em->getRepository(Producer::getClassName());
 		foreach ($producerRepo->findBy([], ['priority' => 'ASC']) as $producer) {
 			$lines = [];
-			foreach ($producer->lines as $line) {
+			foreach ($producer->getLines() as $line) {
 				$models = [];
-				foreach ($line->models as $model) {
+				foreach ($line->getModels() as $model) {
 					if (!$onlyWithProducts || $model->hasProducts()) {
 						$models[$model->id] = [
 							'name' => (string)$model,

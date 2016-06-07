@@ -67,13 +67,13 @@ class ProducerFacade extends Object
 
 	public function getLinesList(Producer $producer = NULL, $fullPath = FALSE, $onlyWithChildren = FALSE, $onlyWithProducts = FALSE)
 	{
-		$lines = [];
+		$conditions = [];
 		if ($producer) {
-			$finded = $this->lineRepo->findBy(['producer' => $producer], ['priority' => 'ASC']);
-		} else {
-			$finded = $this->lineRepo->findBy([], ['priority' => 'ASC']);
+			$conditions['producer'] = $producer;
 		}
-		foreach ($finded as $line) {
+
+		$lines = [];
+		foreach ($this->lineRepo->findBy($conditions, ['priority' => 'ASC']) as $line) {
 			if ((!$onlyWithChildren || $line->hasModels()) && (!$onlyWithProducts || $line->hasProducts())) {
 				$lines[$line->id] = $fullPath ? $line->getFullName() : (string)$line;
 			}
@@ -83,15 +83,13 @@ class ProducerFacade extends Object
 
 	public function getModelsList(ProducerLine $line = NULL, $fullPath = FALSE, $onlyWithProducts = FALSE)
 	{
-		$filter = [];
+		$conditions = [];
 		if ($line) {
-			$filter['line'] = $line;
+			$conditions['line'] = $line;
 		}
 
-		$finded = $this->modelRepo->findBy($filter, ['priority' => 'ASC']);
-
 		$models = [];
-		foreach ($finded as $model) {
+		foreach ($this->modelRepo->findBy($conditions, ['priority' => 'ASC']) as $model) {
 			if (!$onlyWithProducts || $model->hasProducts()) {
 				$models[$model->id] = $fullPath ? $model->getFullName() : (string)$model;
 			}

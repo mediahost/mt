@@ -190,7 +190,7 @@ class ProducersPresenter extends BasePresenter
 			default:
 				$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('Type')]);
 				$this->setError($message);
-				break;
+				return;
 		}
 
 		try {

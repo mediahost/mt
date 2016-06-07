@@ -11,6 +11,8 @@ services:
 	- {class: App\Listeners\Model\Entity\CategoryListener, inject: yes}
 	- {class: App\Listeners\Model\Entity\PageListener, inject: yes}
 	- {class: App\Listeners\Model\Entity\UserListener, inject: yes}
+	- {class: App\Listeners\Model\Entity\ProducerListener, inject: yes}
+	- {class: App\Listeners\Model\Entity\ProducerLineListener, inject: yes}
 	- {class: App\Listeners\Model\Entity\ProducerModelListener, inject: yes}
 	# Facade Listeners
 	- {class: App\Listeners\Model\Facade\OrderListener, tags: [kdyby.subscriber], inject: yes}
