@@ -3,28 +3,40 @@
 namespace App\Model\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
+use Kdyby\Doctrine\MemberAccessException;
 
 /**
  * @ORM\MappedSuperclass()
  * @method void setCurrentLocale(mixed $locale) the current locale
  */
-abstract class BaseTranslatable extends BaseEntity
+abstract class BaseTranslatableNoId extends BaseEntity
 {
 	
 	const DEFAULT_LOCALE = 'sk';
 	
 	protected $defaultLocale = self::DEFAULT_LOCALE;
 
-	use Identifier;
+	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 */
+	protected $id;
 
-	public function __construct($currentLocale = NULL)
+	public function __construct($currentLocale = NULL, $id = NULL)
 	{
+		if ($id) {
+			$this->id = $id;
+		}
 		parent::__construct();
 		if ($currentLocale) {
 			$this->setCurrentLocale($currentLocale);
 		}
+	}
+
+	public function setId($id)
+	{
+		throw MemberAccessException::propertyNotWritable('a read-only', $this, 'id');
 	}
 
 	public function __call($method, $arguments)
@@ -91,16 +103,6 @@ abstract class BaseTranslatable extends BaseEntity
 	static private function isBehaviorProperty($property)
 	{
 		return property_exists('Knp\DoctrineBehaviors\Model\Translatable\TranslationProperties', $property);
-	}
-
-}
-
-class BaseTranslatableException extends \Exception
-{
-
-	public function __construct()
-	{
-		parent::__construct('Requested property isn\'t in translation entity');
 	}
 
 }
