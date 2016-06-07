@@ -11,7 +11,6 @@ use Kdyby\Translation\Translator;
 use Nette\Caching\Cache;
 use Nette\Caching\IStorage;
 use Nette\Object;
-use Tracy\Debugger;
 
 class ProducerFacade extends Object
 {

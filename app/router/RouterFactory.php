@@ -184,8 +184,8 @@ class RouterFactory
 			'action' => 'default',
 		]);
 		$frontRouter[] = $routeAccessories = new FilterRoute(self::LOCALE_PARAM . 'accessories/<id ' . $slugs . '>', [
-			'presenter' => 'Category',
-			'action' => 'accessories',
+			'presenter' => 'Accessories',
+			'action' => 'default',
 		]);
 		$frontRouter[] = $routePage = new FilterRoute(self::LOCALE_PARAM . 'p/<id ' . $slugs . '>', [
 			'presenter' => 'Page',
