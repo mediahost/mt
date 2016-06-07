@@ -67,14 +67,32 @@ var Service = function () {
 			var item = $('<option></option>').attr('value', '');
 			select.prepend(item);
 
-			var elements = {};
+			var elements = [];
+			var entityCount = 0;
 			for (var id in entity['children']) {
+				entityCount++;
 				var priority = entity['children'][id]['priority'];
 				elements[priority] = {
 					'id': id,
 					'name': entity['children'][id]['name']
 				};
 			}
+
+			var elementCount = 0;
+			for (var i in elements) {
+				elementCount++;
+			}
+
+			if (elementCount != entityCount) {
+				elements = [];
+				for (var id in entity['children']) {
+					elements[id] = {
+						'id': id,
+						'name': entity['children'][id]['name']
+					};
+				}
+			}
+
 			for (var i in elements) {
 				item = $('<option></option>')
 					.attr('value', elements[i].id)

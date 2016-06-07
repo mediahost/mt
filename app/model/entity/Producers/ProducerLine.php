@@ -59,6 +59,11 @@ class ProducerLine extends BaseEntity implements IProducer
 		foreach ($this->models as $model) {
 			$array[$model->priority] = $model;
 		}
+		if (count($array) !== $this->models->count()) {
+			foreach ($this->models as $model) {
+				$array[$model->id] = $model;
+			}
+		}
 		ksort($array);
 		return $array;
 	}

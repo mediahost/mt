@@ -86,6 +86,11 @@ class Producer extends BaseTranslatable implements IProducer
 		foreach ($this->lines as $line) {
 			$array[$line->priority] = $line;
 		}
+		if (count($array) !== $this->lines->count()) {
+			foreach ($this->lines as $line) {
+				$array[$line->id] = $line;
+			}
+		}
 		ksort($array);
 		return $array;
 	}
