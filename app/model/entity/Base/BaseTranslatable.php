@@ -32,9 +32,9 @@ abstract class BaseTranslatable extends BaseEntity
 		return $this->proxyCurrentLocaleTranslation($method, $arguments);
 	}
 	
-	public function translateAdd($lang)
+	public function translateAdd($locale)
 	{
-		return $this->translate($lang, FALSE);
+		return $this->translate($locale, FALSE);
 	}
 
 	/**
@@ -69,7 +69,7 @@ abstract class BaseTranslatable extends BaseEntity
 		if (self::isTranslationProperty($name)) {
 			return static::__call('get' . ucfirst($name), []);
 		} else {
-			throw new BaseTranslatableException;
+			throw new BaseTranslatableException();
 		}
 	}
 
@@ -79,7 +79,7 @@ abstract class BaseTranslatable extends BaseEntity
 			$method = 'set' . ucfirst($name);
 			return $this->$method($value);
 		} else {
-			throw new BaseTranslatableException;
+			throw new BaseTranslatableException();
 		}
 	}
 

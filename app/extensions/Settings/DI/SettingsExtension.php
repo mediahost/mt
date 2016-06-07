@@ -98,6 +98,10 @@ class SettingsExtension extends CompilerExtension
 				'hideDelivery' => FALSE,
 				'denyCategoryId' => NULL,
 				'locales' => [],
+				'categoryImport' => [
+					'sk' => 'https://www.heureka.sk/direct/xml-export/shops/heureka-sekce.xml',
+					'cs' => 'https://www.heureka.cz/direct/xml-export/shops/heureka-sekce.xml',
+				],
 			],
 			'zbozi' => [
 				'enabled' => FALSE,
