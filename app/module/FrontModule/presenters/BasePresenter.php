@@ -326,7 +326,7 @@ abstract class BasePresenter extends BaseBasePresenter
 		$control->setAjax(FALSE);
 		$control->onAfterSelect = function ($producer, $line, $model) {
 			if ($model instanceof ProducerModel) {
-				$this->redirect('Category:accessories', $model->id);
+				$this->redirect('Accessories:', $model->id);
 			} else {
 				$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Model')]);
 				$this->flashMessage($message, 'warning');
