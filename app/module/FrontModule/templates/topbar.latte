@@ -26,12 +26,16 @@
 				<div class="langs-block-others">
 					{foreach $allowedLanguages as $locale}
 						{var $code = substr($locale,0,2)}
-						{if $user->loggedIn}
-							{var $args = [locale => $code, overwrite => yes]}
-						{else}
-							{var $args = [locale => $code]}
+						{if $code !== $lang}
+							{if $user->loggedIn}
+								{var $args = [locale => $code, overwrite => yes]}
+							{else}
+								{var $args = [locale => $code]}
+							{/if}
+							<a n:href="this (expand) $args">
+								<img src="{$basePath}/images/flags/{$code}.png" alt="{_locale_$code}"/>{_locale_$code}
+							</a>
 						{/if}
-						<a n:if="$code !== $lang" n:href="this (expand) $args">{_locale_$code}</a>
 					{/foreach}
 				</div>
 			</div>

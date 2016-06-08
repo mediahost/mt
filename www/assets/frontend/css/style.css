@@ -387,7 +387,7 @@ Pre-Header and pre-header elements
 	padding: 10px 10px 2px;
 	background: #F9F9F9;
 	z-index: 9999;
-	width: 100px;
+	width: 110px;
 	display: none;
 	margin-top: 12px;
 	border-top: solid 2px #ea4c1d;
@@ -416,6 +416,10 @@ Pre-Header and pre-header elements
 .langs-block-others a {
 	display: block;
 	margin-bottom: 8px;
+}
+.langs-block-others a img {
+	padding-bottom: 2px;
+	padding-right: 5px;
 }
 
 /***
