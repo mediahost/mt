@@ -494,6 +494,9 @@ msgstr "Filter"
 msgid "Select your accessories for..."
 msgstr "Vyberte si príslušenstvo pre..."
 
+msgid "Select your accessories for \"%model%\""
+msgstr "Vyberte si príslušenstvo pre \"%model%\""
+
 msgid "Access Denied"
 msgstr "Prístup zamietnutý"
 
