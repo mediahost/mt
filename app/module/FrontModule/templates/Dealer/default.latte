@@ -1,9 +1,9 @@
 {includeblock '../categories.latte'}
 
 {block breadcrumbItems}
-<li class="active">
-	<span>{$page}</span>
-</li>
+	<li class="active">
+		<span>{$page}</span>
+	</li>
 {/block}
 
 {block content}
@@ -22,7 +22,7 @@
 
 			<div class="margin-bottom-20">
 				<h1>{$page}</h1>
-				
+
 				{if $identity->isDealer()}
 					<div class="note note-info">
 						<h4 class="block">{_'You are a dealer.'}</h4>
@@ -34,17 +34,17 @@
 					<div class="note note-success">
 						<h4 class="block">{_'Your dealer request is waiting for approve.'}</h4>
 						<p>
-							 {_'After approving of your request we will inform you.'}
+							{_'After approving of your request we will inform you.'}
 						</p>
 					</div>
 				{/if}
-				
+
 				<div class="content-page" n:if="!$identity->isDealer()">
 					<div class="page-html-content">
 						{$page->html|noescape}
 					</div>
 				</div>
-				
+
 				<div class="content-page margin-top-20" n:if="!$identity->isDealer() && !$identity->wantBeDealer">
 					<div n:if="$user->loggedIn">
 						{control dealerRequest}

@@ -1,7 +1,7 @@
 {block breadcrumbItems}
-<li><a n:href="MyAccount:">{_'My Account'}</a></li>
-<li class="active">{_'My Orders'}</li>
-	{/block}
+	<li><a n:href="MyAccount:">{_'My Account'}</a></li>
+	<li class="active">{_'My Orders'}</li>
+{/block}
 
 {block content}
 <div class="container">
@@ -11,42 +11,42 @@
 
 		<!-- BEGIN CONTENT -->
 		<div class="col-md-9 col-sm-7">
-            <h1>{_'My Orders'}</h1>
-            <div class="content-page">
+			<h1>{_'My Orders'}</h1>
+			<div class="content-page">
 				<div n:if="!$orders || !count($orders)" class="alert alert-warning">
-					<strong>{_'You have no orders.'}</strong> 
+					<strong>{_'You have no orders.'}</strong>
 					{_'All future orders will be displayed here.'}
 				</div>
 
 				<table n:if="$orders && count($orders)" class="table">
 					<thead>
-						<tr>
-							<th>
-								{_'Order'}
-							</th>
-							<th>
-								{_'Date'}
-							</th>
-							<th>
-								{_'State'}
-							</th>
-						</tr>
+					<tr>
+						<th>
+							{_'Order'}
+						</th>
+						<th>
+							{_'Date'}
+						</th>
+						<th>
+							{_'State'}
+						</th>
+					</tr>
 					</thead>
 					<tbody>
-						<tr n:foreach="$orders as $order">
-							<td>
-								<a n:href="MyAccount:order $order->id">{$order}</a>
-							</td>
-							<td>
-								{$order->createdAt|date:'d.m.Y'}
-							</td>
-							<td>
-								<a n:href="MyAccount:order $order->id">{_'order.state.type.headline.type_' . $order->state->type->id}</a>
-							</td>
-						</tr>
+					<tr n:foreach="$orders as $order">
+						<td>
+							<a n:href="MyAccount:order $order->id">{$order}</a>
+						</td>
+						<td>
+							{$order->createdAt|date:'d.m.Y'}
+						</td>
+						<td>
+							<a n:href="MyAccount:order $order->id">{_'order.state.type.headline.type_' . $order->state->type->id}</a>
+						</td>
+					</tr>
 					</tbody>
 				</table>
-            </div>
+			</div>
 		</div>
 		<!-- END CONTENT -->
 	</div>

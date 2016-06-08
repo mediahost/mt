@@ -1,13 +1,13 @@
 {includeblock '../categories.latte'}
 
 {block breadcrumbItems}
-<li class="active">
-	{ifset $activeProducer}
-		<span>{_'%type% for %name%', NULL, ['type' => $page, 'name' => $activeProducer]}</span>
-	{else}
-		<span>{$page}</span>
-	{/ifset}
-</li>
+	<li class="active">
+		{ifset $activeProducer}
+			<span>{_'%type% for %name%', NULL, ['type' => $page, 'name' => $activeProducer]}</span>
+		{else}
+			<span>{$page}</span>
+		{/ifset}
+	</li>
 {/block}
 
 {block content}
@@ -43,7 +43,7 @@
 					<div class="panel" n:if="$model">
 						{var showPrices => count($model->parameterPrices)}
 						<div n:if="$showPrices" class="panel-body">
-							<img src="{$basePath}/foto/{$model->image|size:150:150}" class="thumbnail" />
+							<img src="{$basePath}/foto/{$model->image|size:150:150}" class="thumbnail"/>
 							<h4>{_'Post warranty, paid service interventions'}</h4>
 							<p class="block">
 								{$model->html|noescape}
@@ -51,49 +51,49 @@
 						</div>
 						<table n:if="$showPrices" class="table table-hover prices-list">
 							<thead>
-								<tr>
-									<th class="name">
-										{_'Repair'}
-									</th>
-									<th class="price">
-										{_'Price with vat'}
-									</th>
-									<th class="text">
-										{_'Description'}
-									</th>
-								</tr>
+							<tr>
+								<th class="name">
+									{_'Repair'}
+								</th>
+								<th class="price">
+									{_'Price with vat'}
+								</th>
+								<th class="text">
+									{_'Description'}
+								</th>
+							</tr>
 							</thead>
 							<tbody>
-								<tr n:foreach="$model->parameterPrices as $parameterPrice"
+							<tr n:foreach="$model->parameterPrices as $parameterPrice"
 									n:if="$parameterPrice->price->withoutVat > 0">
-									{var parameter => $parameterPrice->parameter}
-									{? $parameter->setCurrentLocale($lang)}
-									<td class="name">
-										{$parameter}
-									</td>
-									<td class="price">
-										<span class="value">{$parameterPrice->price|changeVat|asCurrency}</span>
-										<span class="symbol">{$currencySymbol}</span>
-									</td>
-									<td class="text">
-										{$parameter->text}
-									</td>
-								</tr>
+								{var parameter => $parameterPrice->parameter}
+								{? $parameter->setCurrentLocale($lang)}
+								<td class="name">
+									{$parameter}
+								</td>
+								<td class="price">
+									<span class="value">{$parameterPrice->price|changeVat|asCurrency}</span>
+									<span class="symbol">{$currencySymbol}</span>
+								</td>
+								<td class="text">
+									{$parameter->text}
+								</td>
+							</tr>
 							</tbody>
 							<tfoot>
-								<tr>
-									<td></td>
-									<th>
-										{_'Contact us:'}
-									</th>
-									<td>
-										<a href="mailto:servis@mobilnetelefony.sk">
-											<i class="fa fa-envelope-o"></i>
-											servis@mobilnetelefony.sk
-										</a> |
-										<i class="fa fa-phone"></i> +421 908 84 84 84
-									</td>
-								</tr>
+							<tr>
+								<td></td>
+								<th>
+									{_'Contact us:'}
+								</th>
+								<td>
+									<a href="mailto:servis@mobilnetelefony.sk">
+										<i class="fa fa-envelope-o"></i>
+										servis@mobilnetelefony.sk
+									</a> |
+									<i class="fa fa-phone"></i> +421 908 84 84 84
+								</td>
+							</tr>
 							</tfoot>
 						</table>
 						<div n:if="!$showPrices" class="panel-body">

@@ -9,7 +9,7 @@
 		{var translation => isset($translations[$locale]) ? $translations[$locale] : $translations[$defaultLocale]}
 		{var image => $product['image']}
 		{var producer => NULL}
-		{*var producer => $loadedStock->product->producer*}
+		{*{var producer => $loadedStock->product->producer}*}
 		{var vat => new App\Model\Entity\Vat(NULL, $stock['vat']['value'])}
 		{var price => new App\Model\Entity\Price($vat, $stock['defaultPrice'])}
 
@@ -42,7 +42,7 @@
 
 		<DELIVERY n:foreach="$shippings as $shipping" n:if="!$hideDelivery && $shipping->isForLocality($locale)">
 			<DELIVERY_ID>{_$shipping}</DELIVERY_ID>
-				{var shippingPrice => $shipping->getPriceByStocks([$loadedStock])}
+			{var shippingPrice => $shipping->getPriceByStocks([$loadedStock])}
 			<DELIVERY_PRICE>{$shippingPrice|changeVat:NULL,NULL,2}</DELIVERY_PRICE>
 			<DELIVERY_PRICE_COD n:if="$paymentOnDelivery && $paymentOnDelivery->containShipping($shipping)">
 				{var paymentPrice => $paymentOnDelivery->getPriceByStocks([$loadedStock])}
