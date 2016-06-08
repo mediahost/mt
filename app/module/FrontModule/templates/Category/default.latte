@@ -46,7 +46,7 @@
 		<!-- BEGIN CONTENT -->
 		<div class="col-md-9 col-sm-7">
 			{ifset $accessoriesFor}
-				<h2>{_'Select your accessories for "%model%"', ['model' => $accessoriesFor->getFullname('/')]}</h2>
+				<h2>{_'Accessories for "%model%"', ['model' => $accessoriesFor->getFullname('/')]}</h2>
 				{cache 'modelSelector' . $locale . $accessoriesFor->id,
                     tags => [App\Components\Producer\Form\ModelSelector::CACHE_ID]}
 					<div class="model-selector clearfix">
