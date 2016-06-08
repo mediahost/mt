@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Model\Repository\HeurekaCategoryRepository")
  * @ORM\Table(name="heureka_category")
  *
  * @property int $id

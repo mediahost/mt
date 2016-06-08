@@ -41,7 +41,7 @@ nette:
 		debugger: true
 
 	debugger:
-		email: 'pupe.dupe@gmail.com'
+		email: 'pupe.dupe@gmail.com,kapicak@kapicak.com'
 
 services:
 	- {class: App\Router\RouterFactory, inject: yes}

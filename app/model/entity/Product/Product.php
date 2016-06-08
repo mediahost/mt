@@ -3,6 +3,7 @@
 namespace App\Model\Entity;
 
 use App\Helpers;
+use App\Model\Entity\Heureka\Category as HeurekaCategory;
 use App\Model\Entity\Traits;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,6 +33,7 @@ use Nette\Utils\DateTime;
  * @property Category $mainCategory
  * @property array $categories
  * @property array $accessoriesFor
+ * @property HeurekaCategory $heurekaCategory
  * @property ArrayCollection $similars
  * @property ArrayCollection $similarsWithMe
  * @property ArrayCollection $stocks

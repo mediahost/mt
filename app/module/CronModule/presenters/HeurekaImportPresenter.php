@@ -17,16 +17,15 @@ class HeurekaImportPresenter extends BasePresenter
 
 	public function actionCategories()
 	{
-		ini_set('max_execution_time', 800);
 		$settings = $this->settings->modules->heureka;
 
 		if (!$settings->enabled) {
 			$this->message = 'This module is not allowed';
 		}
 
-		if (array_key_exists($this->locale, $settings->categoryImport)) {
-			$url = $settings->categoryImport[$this->locale];
-			$this->heurekaFacade->downloadCategories($url, $this->locale);
+		if (array_key_exists($this->locale, $settings->categoryImport->url)) {
+			$url = $settings->categoryImport->url[$this->locale];
+			$this->heurekaFacade->downloadCategories($url, $this->locale, (array)$settings->categoryImport->allowedIds);
 			$this->status = parent::STATUS_OK;
 		} else {
 			$this->message = 'This language is not allowed';

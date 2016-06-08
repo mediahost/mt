@@ -8,11 +8,13 @@ use App\Forms\Form;
 use App\Forms\Renderers\MetronicHorizontalFormRenderer;
 use App\Helpers;
 use App\Model\Entity\Category;
+use App\Model\Entity\Heureka\Category as HeurekaCategory;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
 use App\Model\Entity\Stock;
 use App\Model\Facade\CategoryFacade;
+use App\Model\Facade\HeurekaFacade;
 use App\Model\Facade\ProducerFacade;
 use Nette\Forms\Controls\SubmitButton;
 use Nette\Utils\ArrayHash;
@@ -26,6 +28,9 @@ class StockCategory extends StockBase
 
 	/** @var ProducerFacade @inject */
 	public $producerFacade;
+
+	/** @var HeurekaFacade @inject */
+	public $heurekaFacade;
 
 	// </editor-fold>
 
@@ -82,6 +87,9 @@ class StockCategory extends StockBase
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XL;
 		
 		$form->addMultiSelect2('accessoriesFor', 'Accessories for', $allModels);
+
+		$heurekaCategories = $this->heurekaFacade->getFullnames($this->translator->getLocale());
+		$form->addSelect2('heurekaCategory', 'Heureka Category', [NULL => '--- No Category ---'] + $heurekaCategories);
 
 		$form->addSubmit('save', 'Save');
 
@@ -218,6 +226,14 @@ class StockCategory extends StockBase
 		}
 		$this->stock->product->setAccessoriesFor($accesoryModels);
 
+		if ($values->heurekaCategory) {
+			$heurekaCategoryRepo = $this->em->getRepository(HeurekaCategory::getClassName());
+			$heurekaCategory = $heurekaCategoryRepo->find($values->heurekaCategory);
+			if ($heurekaCategory) {
+				$this->stock->product->heurekaCategory = $heurekaCategory;
+			}
+		}
+
 		return $this;
 	}
 
@@ -231,9 +247,13 @@ class StockCategory extends StockBase
 	/** @return array */
 	protected function getDefaults()
 	{
-		$values = [
-			'main_category' => $this->stock->product->mainCategory ? $this->stock->product->mainCategory->id : NULL,
-		];
+		$values = [];
+		if ($this->stock->product->mainCategory) {
+			$values['main_category'] = $this->stock->product->mainCategory->id;
+		}
+		if ($this->stock->product->heurekaCategory) {
+			$values['heurekaCategory'] = $this->stock->product->heurekaCategory->id;
+		}
 		foreach ($this->stock->product->categories as $category) {
 			$values['categories'][] = $category->id;
 		}

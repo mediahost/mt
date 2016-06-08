@@ -7,6 +7,7 @@ use App\Model\Entity\Category;
 use App\Model\Entity\Payment;
 use App\Model\Entity\Shipping;
 use App\Model\Entity\Stock;
+use App\Model\Facade\HeurekaFacade;
 use App\Model\Facade\StockFacade;
 use App\Model\Repository\StockRepository;
 use Nette\Application\ForbiddenRequestException;
@@ -19,6 +20,9 @@ class ExportGeneratorPresenter extends BasePresenter
 
 	/** @var StockFacade @inject */
 	public $stockFacade;
+
+	/** @var HeurekaFacade @inject */
+	public $heurekaFacade;
 
 	/** @var FilesManager @inject */
 	public $filesManager;
@@ -99,13 +103,14 @@ class ExportGeneratorPresenter extends BasePresenter
 		Debugger::timer('heureka-stocks');
 		Debugger::log('start', 'heureka-stocks-start');
 
+		$locale = $this->translator->getLocale();
 		if (!$this->settings->modules->heureka->enabled) {
 			throw new ForbiddenRequestException('Heureka module is not allowed');
-		} else if (!in_array($this->translator->getLocale(), (array) $this->settings->modules->heureka->locales)) {
+		} else if (!in_array($locale, (array) $this->settings->modules->heureka->locales)) {
 			throw new ForbiddenRequestException('This language is not supported');
 		}
 
-		switch ($this->translator->getLocale()) {
+		switch ($locale) {
 			case 'cs':
 				$this->exchange->setWeb('CZK');
 				break;
@@ -122,7 +127,7 @@ class ExportGeneratorPresenter extends BasePresenter
 			$denyCategory = $categoryRepo->find($this->settings->modules->heureka->denyCategoryId);
 		}
 
-		$stocks = $this->stockFacade->getExportStocksArray($showOnlyInStore, $denyCategory);
+		$stocks = $this->stockFacade->getExportStocksArray($showOnlyInStore, $denyCategory, NULL, TRUE);
 
 		$paymentRepo = $this->em->getRepository(Payment::getClassName());
 		$paymentOnDelivery = $paymentRepo->find(Payment::ON_DELIVERY);
@@ -136,7 +141,8 @@ class ExportGeneratorPresenter extends BasePresenter
 		$this->template->stockRepo = $stockRepo;
 		$this->template->shippings = $shippings;
 		$this->template->paymentOnDelivery = $paymentOnDelivery;
-		$this->template->locale = $this->translator->getLocale();
+		$this->template->heurekaCategories = $this->heurekaFacade->getFullnames($locale);
+		$this->template->locale = $locale;
 		$this->template->defaultLocale = $this->translator->getDefaultLocale();
 		$this->template->cpc = $this->settings->modules->heureka->cpc;
 		$this->template->deliveryStoreTime = $this->settings->modules->heureka->deliveryStoreTime;
@@ -146,7 +152,7 @@ class ExportGeneratorPresenter extends BasePresenter
 		$this->setView();
 
 		$output = (string) $this->template;
-		$filename = $this->filesManager->getExportFilename(FilesManager::EXPORT_HEUREKA_STOCKS, $this->translator->getLocale());
+		$filename = $this->filesManager->getExportFilename(FilesManager::EXPORT_HEUREKA_STOCKS, $locale);
 
 		file_put_contents($filename, $output);
 

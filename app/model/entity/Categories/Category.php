@@ -23,6 +23,7 @@ use Nette\Utils\Strings;
  * @property array $products
  * @property Image $image
  * @property Image $slider
+ * @property \App\Model\Entity\Heureka\Category $heurekaCategory
  */
 class Category extends BaseTranslatable
 {
@@ -45,6 +46,9 @@ class Category extends BaseTranslatable
 
 	/** @ORM\OneToOne(targetEntity="Image", cascade="all") */
 	protected $slider;
+
+	/** @ORM\ManyToOne(targetEntity="App\Model\Entity\Heureka\Category") */
+	protected $heurekaCategory;
 
 	public function __construct($name = NULL, $currentLocale = NULL)
 	{

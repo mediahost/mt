@@ -1542,3 +1542,9 @@ msgstr "Hlídání bylo uloženo."
 
 msgid "Export selected"
 msgstr "Exportovat vybrané"
+
+msgid "Heureka Category"
+msgstr "Heureka kategorie"
+
+msgid "--- No Category ---"
+msgstr "--- Bez kategorie ---"

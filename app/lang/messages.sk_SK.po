@@ -1543,3 +1543,9 @@ msgstr "Stráženie bolo uložené."
 
 msgid "Export selected"
 msgstr "Exportovať vybrané"
+
+msgid "Heureka Category"
+msgstr "Heureka kategória"
+
+msgid "--- No Category ---"
+msgstr "--- Bez kategórie ---"
