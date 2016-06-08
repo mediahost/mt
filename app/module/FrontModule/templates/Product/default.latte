@@ -50,33 +50,31 @@
                                 </a>
                             </h1>
                             <div class="price-availability-block">
-                                {cache 'stock-available_' . $stock->id . $locale . $priceLevel . $currency, tags => [$stockCacheTag]}
-                                    <div class="clearfix">
-                                        <div class="price">
-                                            <strong>{$stock->getPrice($priceLevel)|currencyVat}</strong>
-                                            <em n:if="$stock->oldPrice">
-                                                <span>{$stock->oldPrice|currency}</span>
-                                            </em>
-                                            <span class="vat">{_'include %value% VAT', NULL, ['value' => $stock->vat]}</span>
-                                        </div>
-                                        <div class="availability">
-                                            {_'Availability'}:
-                                            {if $stock->inStore > 10}
-                                                <strong>{_'In Stock'}</strong>
-                                            {elseif $stock->inStore > 0}
-                                                <strong>{$stock->inStore} {$product->unit}</strong>
-                                            {else}
-                                                <strong>{_'Temporarily Sold Out'}</strong>
-                                            {/if}
+                                <div class="clearfix">
+                                    <div class="price">
+                                        <strong>{$stock->getPrice($priceLevel)|currencyVat}</strong>
+                                        <em n:if="$stock->oldPrice">
+                                            <span>{$stock->oldPrice|currency}</span>
+                                        </em>
+                                        <span class="vat">{_'include %value% VAT', NULL, ['value' => $stock->vat]}</span>
+                                    </div>
+                                    <div class="availability">
+                                        {_'Availability'}:
+                                        {if $stock->inStore > 10}
+                                            <strong>{_'In Stock'}</strong>
+                                        {elseif $stock->inStore > 0}
+                                            <strong>{$stock->inStore} {$product->unit}</strong>
+                                        {else}
+                                            <strong>{_'Temporarily Sold Out'}</strong>
+                                        {/if}
                                             {*<div class="watchdog">*}
                                                 {*<a href="#watchdog" data-toggle="modal">*}
                                                     {*<span class="fa fa-bar-chart-o"></span>*}
                                                     {*{_'Watch Price'}*}
                                                 {*</a>*}
                                             {*</div>*}
-                                        </div>
                                     </div>
-                                {/cache}
+                                </div>
                                 <div n:if="$homecreditCalc" class="subimages">
                                     <a href="{$homecreditCalc}"
                                        id="homecreditCalc"
