@@ -484,6 +484,9 @@ msgstr "Filter"
 msgid "Select your accessories for..."
 msgstr "Select your accessories for..."
 
+msgid "Select your accessories for \"%model%\""
+msgstr "Select your accessories for \"%model%\""
+
 msgid "Access Denied"
 msgstr "Access Denied"
 
