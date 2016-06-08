@@ -7,6 +7,8 @@ use App\Components\BaseControlException;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Category;
+use App\Model\Entity\Heureka\Category as HeurekaCategory;
+use App\Model\Facade\HeurekaFacade;
 use Nette\Utils\ArrayHash;
 
 class CategoryEdit extends BaseControl
@@ -14,6 +16,9 @@ class CategoryEdit extends BaseControl
 
 	/** @var Category */
 	private $category;
+
+	/** @var HeurekaFacade @inject */
+	public $heurekaFacade;
 
 	// <editor-fold desc="events">
 
@@ -34,23 +39,26 @@ class CategoryEdit extends BaseControl
 		$defaultLanguage = $this->translator->getDefaultLocale();
 
 		$form->addText('name', 'Name')
-				->setRequired('Name is required')
-				->setAttribute('placeholder', $this->category->translate($defaultLanguage)->name);
+			->setRequired('Name is required')
+			->setAttribute('placeholder', $this->category->translate($defaultLanguage)->name);
+
+		$heurekaCategories = $this->heurekaFacade->getFullnames($this->translator->getLocale());
+		$form->addSelect2('heurekaCategory', 'Heureka Category', [NULL => '--- No Category ---'] + $heurekaCategories);
 
 		$form->addUploadImageWithPreview('image', 'Image')
-				->setPreview('/foto/200-150/' . ($this->category->image ? $this->category->image : 'default.png'), $this->category->name)
-				->setSize(200, 150)
-				->addCondition(Form::FILLED)
-				->addRule(Form::IMAGE, 'Image must be in valid image format');
+			->setPreview('/foto/200-150/' . ($this->category->image ? $this->category->image : 'default.png'), $this->category->name)
+			->setSize(200, 150)
+			->addCondition(Form::FILLED)
+			->addRule(Form::IMAGE, 'Image must be in valid image format');
 
 		$form->addUploadImageWithPreview('slider', 'Slider')
-				->setPreview('/foto/500-200/' . ($this->category->slider ? $this->category->slider : 'default.png'), $this->category->name)
-				->setSize(500, 200)
-				->addCondition(Form::FILLED)
-				->addRule(Form::IMAGE, 'Image must be in valid image format');
+			->setPreview('/foto/500-200/' . ($this->category->slider ? $this->category->slider : 'default.png'), $this->category->name)
+			->setSize(500, 200)
+			->addCondition(Form::FILLED)
+			->addRule(Form::IMAGE, 'Image must be in valid image format');
 
 		$form->addWysiHtml('html', 'Text', 10)
-						->getControlPrototype()->class[] = 'page-html-content';
+			->getControlPrototype()->class[] = 'page-html-content';
 
 		$form->addSubmit('save', 'Save');
 		if ($this->category->isNew()) {
@@ -66,8 +74,8 @@ class CategoryEdit extends BaseControl
 	{
 		$this->load($values);
 		$this->save();
-		
-		$componentsArray = (array) $form->getComponents();
+
+		$componentsArray = (array)$form->getComponents();
 		$isSubmitedByAdd = array_key_exists('saveAdd', $componentsArray) ? $form['saveAdd']->submittedBy : FALSE;
 		$this->onAfterSave($this->category, $isSubmitedByAdd);
 	}
@@ -78,6 +86,14 @@ class CategoryEdit extends BaseControl
 		$this->category->translateAdd($lang)->name = $values->name;
 		$this->category->translateAdd($lang)->html = $values->html;
 		$this->category->mergeNewTranslations();
+
+		if ($values->heurekaCategory) {
+			$heurekaCategoryRepo = $this->em->getRepository(HeurekaCategory::getClassName());
+			$heurekaCategory = $heurekaCategoryRepo->find($values->heurekaCategory);
+			if ($heurekaCategory) {
+				$this->category->heurekaCategory = $heurekaCategory;
+			}
+		}
 
 		if ($values->image->isImage()) {
 			$this->category->image = $values->image;
@@ -104,6 +120,9 @@ class CategoryEdit extends BaseControl
 			'image' => $this->category->image,
 			'slider' => $this->category->slider,
 		];
+		if ($this->category->heurekaCategory) {
+			$values['heurekaCategory'] = $this->category->heurekaCategory->id;
+		}
 		return $values;
 	}
 

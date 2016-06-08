@@ -1587,3 +1587,9 @@ msgstr "Watching was saved."
 
 msgid "Export selected"
 msgstr "Export selected"
+
+msgid "Heureka Category"
+msgstr "Heureka Category"
+
+msgid "--- No Category ---"
+msgstr "--- No Category ---"

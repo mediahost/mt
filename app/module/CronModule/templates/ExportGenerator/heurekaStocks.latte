@@ -1,7 +1,8 @@
 {layout none}
 <?xml version="1.0" encoding="utf-8"?>
 <SHOP>
-	<SHOPITEM n:foreach="$stocks as $stock">
+	<SHOPITEM n:foreach="$stocks as $stockItem" n:ifset="$stockItem[0]">
+		{var stock => $stockItem[0]}
 		{var loadedStock => $stockRepo->find($stock['id'])}
 		{var product => $stock['product']}
 		{var translations => $product['translations']}
@@ -12,6 +13,11 @@
 		{var vat => new App\Model\Entity\Vat(NULL, $stock['vat']['value'])}
 		{var price => new App\Model\Entity\Price($vat, $stock['defaultPrice'])}
 
+		{var heurekaCatIdProduct => $stockItem['p_heurekaCategoryId']}
+		{var heurekaCatIdCategory => $stockItem['c_heurekaCategoryId']}
+		{var heurekaCatProduct => isset($heurekaCategories[$heurekaCatIdProduct]) ? $heurekaCategories[$heurekaCatIdProduct] : NULL}
+		{var heurekaCatCategory => isset($heurekaCategories[$heurekaCatIdCategory]) ? $heurekaCategories[$heurekaCatIdCategory] : NULL}
+
 		<ITEM_ID>{$stock['id']}</ITEM_ID>
 		<PRODUCTNAME>{if $producer}<![CDATA[{$producer}]]> | {/if}<![CDATA[{$translation['name']}]]></PRODUCTNAME>
 		<PRODUCT><![CDATA[{$translation['name']}]]></PRODUCT>
@@ -21,7 +27,15 @@
 		<PRICE_VAT>{$price|changeVat:NULL,NULL,2}</PRICE_VAT>
 		<HEUREKA_CPC n:if="$cpc">{$cpc}</HEUREKA_CPC>
 		<MANUFACTURER n:if="$producer"><![CDATA[{$producer}]]></MANUFACTURER>
-		<CATEGORYTEXT>{_'categoryText'}</CATEGORYTEXT>
+		<CATEGORYTEXT>
+			{if $heurekaCatProduct}
+				{$heurekaCatProduct}
+			{elseif $heurekaCatCategory}
+				{$heurekaCatCategory}
+			{else}
+				{_'categoryText'}
+			{/if}
+		</CATEGORYTEXT>
 		<EAN n:if="$stock['barcode']">{$stock['barcode']}</EAN>
 
 		<DELIVERY_DATE>{$stock['inStore'] ? $deliveryStoreTime : $deliveryNotInStoreTime}</DELIVERY_DATE>

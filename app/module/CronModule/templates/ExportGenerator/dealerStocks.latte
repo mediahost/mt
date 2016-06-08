@@ -1,7 +1,8 @@
 {layout none}
 <?xml version="1.0" encoding="utf-8"?>
 <STORE>
-	<ITEM n:foreach="$stocks as $stock">
+	<ITEM n:foreach="$stocks as $stockItem" n:ifset="$stockItem[0]">
+		{var stock => $stockItem[0]}
 		{var loadedStock => $stockRepo->find($stock['id'])}
 		{var product => $stock['product']}
 		{var translations => $product['translations']}
@@ -16,7 +17,7 @@
 		<DESCRIPTION><![CDATA[{$translation['description']}]]></DESCRIPTION>
 		<URL>{link '//:Front:Product:', 'id' => $product['id'], 'locale' => $locale}</URL>
 		<IMGURL>{link '//:Foto:Foto:', '400-400', $image['filename']}</IMGURL>
-		<CATEGORY_ID>{$product['mainCategory']['id']}</CATEGORY_ID>
+		<CATEGORY_ID>{$stockItem['mainCategoryId']}</CATEGORY_ID>
 		<EAN n:if="$stock['barcode']">{$stock['barcode']}</EAN>
 	</ITEM>
 </STORE>

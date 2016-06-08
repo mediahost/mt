@@ -234,14 +234,17 @@ class StockFacade extends Object
 		return $locale;
 	}
 
-	public function getExportStocksArray($onlyInStore = TRUE, Category $denyCategory = NULL, $limit = NULL)
+	public function getExportStocksArray($onlyInStore = TRUE, Category $denyCategory = NULL, $limit = NULL, $withHeureka = FALSE)
 	{
 		$qb = $this->stockRepo->createQueryBuilder('s')
-			->select('s, p, i, c, t, v')
+			->select('v')
+			->addSelect('partial s.{id, barcode, defaultPrice, inStore}')
+			->addSelect('partial t.{id, name, description, locale}')
+			->addSelect('partial i.{id, filename}')
+			->addSelect('partial p.{id}')
 			->innerJoin('s.product', 'p')
 			->leftJoin('p.translations', 't')
 			->innerJoin('p.image', 'i')
-			->innerJoin('p.mainCategory', 'c')
 			->innerJoin('s.vat', 'v')
 			->andWhere('(t.locale = :locale OR t.locale = :defaultLocale)')
 			->setParameter('locale', $this->translator->getLocale())
@@ -252,6 +255,14 @@ class StockFacade extends Object
 			->andWhere('s.active = :active')
 			->andWhere('p.active = :active')
 			->setParameter('active', TRUE);
+
+		if ($withHeureka) {
+			$qb->addSelect('partial c.{id}')
+				->addSelect('IDENTITY(p.heurekaCategory) as p_heurekaCategoryId')
+				->addSelect('IDENTITY(c.heurekaCategory) as c_heurekaCategoryId')
+				->innerJoin('p.mainCategory', 'c');
+		}
+		
 		if ($onlyInStore) {
 			$qb
 				->andWhere("s.inStore >= :inStore")
@@ -274,11 +285,12 @@ class StockFacade extends Object
 	public function getExportShortStocksArray($onlyInStore = TRUE, Category $denyCategory = NULL, $limit = NULL)
 	{
 		$qb = $this->stockRepo->createQueryBuilder('s')
-			->select('s, p, i, c, t')
-			->innerJoin('s.product', 'p')
-			->leftJoin('p.translations', 't')
-			->innerJoin('p.image', 'i')
-			->innerJoin('p.mainCategory', 'c')
+			->select('v')
+			->addSelect('partial s.{id, barcode, defaultPrice, inStore}')
+			->addSelect('partial t.{id, name, description, locale}')
+			->addSelect('partial i.{id, filename}')
+			->addSelect('partial p.{id}')
+			->addSelect('IDENTITY(p.mainCategory) as mainCategoryId')
 			->andWhere('(t.locale = :locale OR t.locale = :defaultLocale)')
 			->setParameter('locale', $this->translator->getLocale())
 			->setParameter('defaultLocale', $this->translator->getDefaultLocale())

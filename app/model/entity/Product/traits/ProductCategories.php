@@ -34,6 +34,9 @@ trait ProductCategories
 
 	/** @ORM\ManyToMany(targetEntity="ProducerModel", inversedBy="products") */
 	protected $accessoriesFor;
+
+	/** @ORM\ManyToOne(targetEntity="App\Model\Entity\Heureka\Category") */
+	protected $heurekaCategory;
 	
 	public function setMainCategory(Category $category)
 	{

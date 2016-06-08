@@ -99,8 +99,13 @@ class SettingsExtension extends CompilerExtension
 				'denyCategoryId' => NULL,
 				'locales' => [],
 				'categoryImport' => [
-					'sk' => 'https://www.heureka.sk/direct/xml-export/shops/heureka-sekce.xml',
-					'cs' => 'https://www.heureka.cz/direct/xml-export/shops/heureka-sekce.xml',
+					'allowedIds' => [
+						'659',
+					],
+					'url' => [
+						'sk' => 'https://www.heureka.sk/direct/xml-export/shops/heureka-sekce.xml',
+						'cs' => 'https://www.heureka.cz/direct/xml-export/shops/heureka-sekce.xml',
+					],
 				],
 			],
 			'zbozi' => [
