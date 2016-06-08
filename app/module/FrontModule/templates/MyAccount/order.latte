@@ -1,7 +1,7 @@
 {block breadcrumbItems}
-<li><a n:href="MyAccount:">{_'My Account'}</a></li>
-<li class="active">{_'My Orders'}</li>
-	{/block}
+	<li><a n:href="MyAccount:">{_'My Account'}</a></li>
+	<li class="active">{_'My Orders'}</li>
+{/block}
 
 {block content}
 <div class="container">
@@ -30,7 +30,7 @@
 						<div class="row">
 							{var existBilling => $order->billingAddress && $order->billingAddress->isFilled()}
 							{var existShipping => $order->shippingAddress || $existBilling}
-							<div class="col-md-4 col-sm-6 block"  n:if="$existBilling">
+							<div class="col-md-4 col-sm-6 block" n:if="$existBilling">
 								<h5>{_'cart.order.invoiceAddress'}</h5>
 								<p>
 									{$order->billingAddress->format()|noescape}
@@ -49,7 +49,7 @@
 							<div class="col-md-4 col-sm-6 block">
 								<h5>{_'cart.order.contact'}</h5>
 								<p>
-									{_'Phone'}: {$order->phone}<br />
+									{_'Phone'}: {$order->phone}<br/>
 									{_'Mail'}: {$order->mail}
 								</p>
 							</div>
@@ -75,7 +75,7 @@
 								<tr>
 									<td class="goods-page-image">
 										<a n:href="Product: $product->id" n:tag-if="$isActive">
-											<img src="{$basePath}/foto/{$product->image|size:55,55}" alt="{$product}" />
+											<img src="{$basePath}/foto/{$product->image|size:55,55}" alt="{$product}"/>
 										</a>
 									</td>
 									<td class="goods-page-description">
@@ -101,7 +101,7 @@
 							{foreach $order->vouchers as $voucher}
 								<tr>
 									<td class="goods-page-image">
-										<img src="{$basePath}/images/logo/logo_cart.png" alt="logo" />
+										<img src="{$basePath}/images/logo/logo_cart.png" alt="logo"/>
 									</td>
 									<td class="goods-page-description">
 										<h3>{_'Discount'} - {$voucher->code}</h3>
@@ -121,7 +121,7 @@
 							{/foreach}
 							<tr>
 								<td class="goods-page-image">
-									<img src="{$basePath}/images/logo/logo_cart.png" alt="logo" />
+									<img src="{$basePath}/images/logo/logo_cart.png" alt="logo"/>
 								</td>
 								<td class="goods-page-description">
 									<h3>{_'Shipping'}: {_$order->shipping}</h3>
@@ -141,7 +141,7 @@
 							</tr>
 							<tr>
 								<td class="goods-page-image">
-									<img src="{$basePath}/images/logo/logo_cart.png" alt="logo" />
+									<img src="{$basePath}/images/logo/logo_cart.png" alt="logo"/>
 								</td>
 								<td class="goods-page-description">
 									<h3>{_'Payment'}: {_$order->payment}</h3>

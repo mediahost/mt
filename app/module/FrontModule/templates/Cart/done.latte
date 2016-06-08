@@ -3,59 +3,59 @@
 {block breadcrumb}{/block}
 
 {block content}
-<div class="container">
-	<!-- BEGIN CONTENT -->
-	<div class="row margin-bottom-20">
-		<div class="col-md-12 col-sm-12">
-			<div class="cart-page">
-				{var paymentError => $order->isCardPayment() && !$order->isPayed()}
-				<div n:class="note, $paymentError ? note-warning : note-success">
-					<h4 class="block">
-						{if $order->isCardPayment() && $order->isPayed()}
-							{_'cart.orderWasPayed'}
-						{elseif $order->isCardPayment() && !$order->isPayed()}
-							{_'cart.orderWasNotPayed'}
-						{else}
-							{_'cart.orderWasSend'}
-						{/if}
-					</h4>
-					<p>
-						{if $paymentError}
-							{_$order->payment->origin->errorHtml, NULL, ['order_number' => $order->id]|noescape}
-						{else}
-							{_'cart.moreInfoInMail'}
-						{/if}
-					</p>
-					<p>
-						<a n:href="Homepage:">{_'cart.continueShopping'}</a>
-					</p>
+	<div class="container">
+		<!-- BEGIN CONTENT -->
+		<div class="row margin-bottom-20">
+			<div class="col-md-12 col-sm-12">
+				<div class="cart-page">
+					{var paymentError => $order->isCardPayment() && !$order->isPayed()}
+					<div n:class="note, $paymentError ? note-warning : note-success">
+						<h4 class="block">
+							{if $order->isCardPayment() && $order->isPayed()}
+								{_'cart.orderWasPayed'}
+							{elseif $order->isCardPayment() && !$order->isPayed()}
+								{_'cart.orderWasNotPayed'}
+							{else}
+								{_'cart.orderWasSend'}
+							{/if}
+						</h4>
+						<p>
+							{if $paymentError}
+								{_$order->payment->origin->errorHtml, NULL, ['order_number' => $order->id]|noescape}
+							{else}
+								{_'cart.moreInfoInMail'}
+							{/if}
+						</p>
+						<p>
+							<a n:href="Homepage:">{_'cart.continueShopping'}</a>
+						</p>
+					</div>
 				</div>
 			</div>
 		</div>
+		<!-- END CONTENT -->
 	</div>
-	<!-- END CONTENT -->
-</div>
-{include heurekaScript}
+	{include heurekaScript}
 {/block}
 
 {define heurekaScript}
-<script type="text/javascript" n:if="isset($heurekaConversionKey)" n:syntax="double">
-	var _hrq = _hrq || [];
-	_hrq.push(['setKey', {{$heurekaConversionKey}}]);
-	_hrq.push(['setOrderId', {{$order->id}}]);
-	{{foreach $order->items as $item}}
-	_hrq.push(['addProduct', {{$item->name}}, {{$item->price->withVat}}, {{$item->quantity}}]);
-    {{/foreach}}
+	<script type="text/javascript" n:if="isset($heurekaConversionKey)" n:syntax="double">
+		var _hrq = _hrq || [];
+		_hrq.push(['setKey', {{$heurekaConversionKey}}]);
+		_hrq.push(['setOrderId', {{$order->id}}]);
+		{{foreach $order->items as $item}}
+		_hrq.push(['addProduct', {{$item->name}}, {{$item->price->withVat}}, {{$item->quantity}}]);
+		{{/foreach}}
 
-	_hrq.push(['trackOrder']);
+		_hrq.push(['trackOrder']);
 
-	(function () {
-		var ho = document.createElement('script');
-		ho.type = 'text/javascript';
-		ho.async = true;
-		ho.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.heureka.sk/direct/js/ext/2-roi-async.js';
-		var s = document.getElementsByTagName('script')[0];
-		s.parentNode.insertBefore(ho, s);
-	})();
-</script>
+		(function () {
+			var ho = document.createElement('script');
+			ho.type = 'text/javascript';
+			ho.async = true;
+			ho.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.heureka.sk/direct/js/ext/2-roi-async.js';
+			var s = document.getElementsByTagName('script')[0];
+			s.parentNode.insertBefore(ho, s);
+		})();
+	</script>
 {/define}

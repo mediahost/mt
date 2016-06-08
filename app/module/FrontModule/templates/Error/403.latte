@@ -1,26 +1,27 @@
 {var $robots = noindex}
 
 {block content}
-<div class="col-md-12 col-sm-12">
-	<div class="content-page page-404">
-		<div class="number">
-			403
-		</div>
-		<div class="details">
-			<h3>{_'Access Denied'}</h3>
-			<p>
-				{_'You do not have permission to view this page.'}<br>
-				{_'Please try contact the web site administrator if you believe you should be able to view this page.'}<br>
-				<a n:href="Homepage:" class="link">{_'Return home'}</a> |
-				<a n:href=":Front:Sign:out" class="link">{_'Logout'}</a>
-			</p>
+	<div class="col-md-12 col-sm-12">
+		<div class="content-page page-404">
+			<div class="number">
+				403
+			</div>
+			<div class="details">
+				<h3>{_'Access Denied'}</h3>
+				<p>
+					{_'You do not have permission to view this page.'}<br>
+					{_'Please try contact the web site administrator if you believe you should be able to view this page.'}
+					<br>
+					<a n:href="Homepage:" class="link">{_'Return home'}</a> |
+					<a n:href=":Front:Sign:out" class="link">{_'Logout'}</a>
+				</p>
+			</div>
 		</div>
 	</div>
-</div>
 {/block}
 
 {block title}
-{_'Access Denied'}
+	{_'Access Denied'}
 {/block}
 
 {block breadcrumb}{/block}

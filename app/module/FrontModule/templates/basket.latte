@@ -3,8 +3,8 @@
 	{if $basket->isEmpty()}
 		{_'cart.isEmpty'}
 	{else}
-	<a n:href="Cart:" class="top-cart-info-count">{_'cart.countItem', $basket->getProductsCount()}</a>
-	<a n:href="Cart:" class="top-cart-info-value">{$basket->getProductsTotalPrice($priceLevel)|asCurrency:TRUE}</a>
+		<a n:href="Cart:" class="top-cart-info-count">{_'cart.countItem', $basket->getProductsCount()}</a>
+		<a n:href="Cart:" class="top-cart-info-value">{$basket->getProductsTotalPrice($priceLevel)|asCurrency:TRUE}</a>
 	{/if}
 </div>
 <i class="fa fa-shopping-cart"></i>
@@ -17,7 +17,7 @@
 				{var product => $stock->product}
 				{? $product->setCurrentLocale($lang)}
 				<a n:href="Product: $product->id">
-					<img src="{$basePath}/foto/{$product->image|size:'37','34'}" alt="{$product->name}" />
+					<img src="{$basePath}/foto/{$product->image|size:'37','34'}" alt="{$product->name}"/>
 				</a>
 				<span class="cart-content-count">x {$item->quantity}</span>
 				<strong>

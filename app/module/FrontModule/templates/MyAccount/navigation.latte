@@ -34,7 +34,7 @@
 			</a>
 		</li>
 		<li n:if="$user->identity->isDealer()"
-			n:class="list-group-item, clearfix, $presenter->isLinkCurrent('MyAccount:dealer') ? active">
+				n:class="list-group-item, clearfix, $presenter->isLinkCurrent('MyAccount:dealer') ? active">
 			<a n:href="MyAccount:dealer">
 				<i class="fa fa-angle-right"></i>
 				{_'Dealer API'}

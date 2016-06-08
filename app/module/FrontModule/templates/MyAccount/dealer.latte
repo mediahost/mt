@@ -1,249 +1,249 @@
 {block breadcrumbItems}
-<li><a n:href="MyAccount:">{_'My Account'}</a></li>
-<li class="active">{_'Dealer API'}</li>
+	<li><a n:href="MyAccount:">{_'My Account'}</a></li>
+	<li class="active">{_'Dealer API'}</li>
 {/block}
 
 {block content}
-<div class="container">
-	<div class="row">
+	<div class="container">
+		<div class="row">
 
-		{include 'navigation.latte'}
+			{include 'navigation.latte'}
 
-		<!-- BEGIN CONTENT -->
-		<div class="col-md-9 col-sm-7">
-            <h1>{_'Dealer API'}</h1>
-			<div n:class="panel, $user->identity->clientId ? panel-success : panel-warning">
-				<div class="panel-heading">
-					<h3 class="panel-title">{_'Client ID'}</h3>
+			<!-- BEGIN CONTENT -->
+			<div class="col-md-9 col-sm-7">
+				<h1>{_'Dealer API'}</h1>
+				<div n:class="panel, $user->identity->clientId ? panel-success : panel-warning">
+					<div class="panel-heading">
+						<h3 class="panel-title">{_'Client ID'}</h3>
+					</div>
+					<div class="panel-body">
+						{if $user->identity->clientId}
+							<p>
+								<label for="client_token">{_'Your token'}:</label>
+								<strong id="client_token">{$user->identity->clientId}</strong>
+							</p>
+							<a class="btn btn-default" n:href="resetToken!">{_'Reset token'}</a>
+						{else}
+							<a class="btn btn-default" n:href="resetToken!">{_'Create token'}</a>
+						{/if}
+					</div>
 				</div>
-				<div class="panel-body">
-					{if $user->identity->clientId}
+
+				{var clientId => $user->identity->clientId ? $user->identity->clientId : '<CLIENT_ID>'}
+				{var clientIdParam => App\ApiModule\Presenters\DealerPresenter::CLIENT_ID . '=' . $clientId}
+				{var clientIdParamText => App\ApiModule\Presenters\DealerPresenter::CLIENT_ID . '=<CLIENT_ID>'}
+				{var baseUrl => $_control->link('//:Front:Homepage:', ['backlink' => NULL])}
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">{_'XML for categories list'}</h3>
+					</div>
+					<div class="panel-body">
+						{var categoriesLink => 'export/dealer/categories'}
 						<p>
-							<label for="client_token">{_'Your token'}:</label>
-							<strong id="client_token">{$user->identity->clientId}</strong>
+							<a href="{$baseUrl}{$lang}/{$categoriesLink}?{$clientIdParam}">
+								{$baseUrl}&lt;LOCALE&gt;/{$categoriesLink}?{$clientIdParamText}
+							</a>
 						</p>
-						<a class="btn btn-default" n:href="resetToken!">{_'Reset token'}</a>
-					{else}
-						<a class="btn btn-default" n:href="resetToken!">{_'Create token'}</a>
-					{/if}
+						<dl>
+							<dt>LOCALE</dt>
+							<dd>{$allLocales}</dd>
+							<dt>CLIENT_ID</dt>
+							<dd>{$clientId}</dd>
+						</dl>
+					</div>
 				</div>
-			</div>
 
-			{var clientId => $user->identity->clientId ? $user->identity->clientId : '<CLIENT_ID>'}
-			{var clientIdParam => App\ApiModule\Presenters\DealerPresenter::CLIENT_ID . '=' . $clientId}
-			{var clientIdParamText => App\ApiModule\Presenters\DealerPresenter::CLIENT_ID . '=<CLIENT_ID>'}
-			{var baseUrl => $_control->link('//:Front:Homepage:', ['backlink' => NULL])}
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">{_'XML for stocks list'}</h3>
+					</div>
+					<div class="panel-body">
+						{var stocksLink => 'export/dealer/stocks'}
+						<p>
+							<a href="{$baseUrl}{$lang}/{$stocksLink}?{$clientIdParam}">
+								{$baseUrl}&lt;LOCALE&gt;/{$stocksLink}?{$clientIdParamText}
+							</a>
+						</p>
+						<dl>
+							<dt>LOCALE</dt>
+							<dd>{$allLocales}</dd>
+							<dt>CLIENT_ID</dt>
+							<dd>{$clientId}</dd>
+						</dl>
+					</div>
+				</div>
 
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title">{_'XML for categories list'}</h3>
-				</div>
-				<div class="panel-body">
-					{var categoriesLink => 'export/dealer/categories'}
-					<p>
-						<a href="{$baseUrl}{$lang}/{$categoriesLink}?{$clientIdParam}">
-							{$baseUrl}&lt;LOCALE&gt;/{$categoriesLink}?{$clientIdParamText}
-						</a>
-					</p>
-					<dl>
-						<dt>LOCALE</dt>
-						<dd>{$allLocales}</dd>
-						<dt>CLIENT_ID</dt>
-						<dd>{$clientId}</dd>
-					</dl>
-				</div>
-			</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">{_'XML for availiblity list'}</h3>
+					</div>
+					<div class="panel-body">
+						{var availabilityLink => 'export/dealer/availability'}
+						<p>
+							<a href="{$baseUrl}{$lang}/{$availabilityLink}?{$clientIdParam}">
+								{$baseUrl}&lt;LOCALE&gt;/{$availabilityLink}?{$clientIdParamText}[&id=&lt;PRODUCT_ID&gt;]
+							</a>
+						</p>
 
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title">{_'XML for stocks list'}</h3>
+						<dl>
+							<dt>LOCALE</dt>
+							<dd>{$allLocales}</dd>
+							<dt>CLIENT_ID</dt>
+							<dd>{$clientId}</dd>
+							<dt>id</dt>
+							<dd>{_'Optional parameter for product ID'}</dd>
+						</dl>
+					</div>
 				</div>
-				<div class="panel-body">
-					{var stocksLink => 'export/dealer/stocks'}
-					<p>
-						<a href="{$baseUrl}{$lang}/{$stocksLink}?{$clientIdParam}">
-							{$baseUrl}&lt;LOCALE&gt;/{$stocksLink}?{$clientIdParamText}
-						</a>
-					</p>
-					<dl>
-						<dt>LOCALE</dt>
-						<dd>{$allLocales}</dd>
-						<dt>CLIENT_ID</dt>
-						<dd>{$clientId}</dd>
-					</dl>
-				</div>
-			</div>
 
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title">{_'XML for availiblity list'}</h3>
-				</div>
-				<div class="panel-body">
-					{var availabilityLink => 'export/dealer/availability'}
-					<p>
-						<a href="{$baseUrl}{$lang}/{$availabilityLink}?{$clientIdParam}">
-							{$baseUrl}&lt;LOCALE&gt;/{$availabilityLink}?{$clientIdParamText}[&id=&lt;PRODUCT_ID&gt;]
-						</a>
-					</p>
-
-					<dl>
-						<dt>LOCALE</dt>
-						<dd>{$allLocales}</dd>
-						<dt>CLIENT_ID</dt>
-						<dd>{$clientId}</dd>
-						<dt>id</dt>
-						<dd>{_'Optional parameter for product ID'}</dd>
-					</dl>
-				</div>
-			</div>
-
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title">{_'Create order'}</h3>
-				</div>
-				<div class="panel-body">
-					{var createOrderLink => 'insert/order'}
-					<p>
-						<a href="{$baseUrl}{$createOrderLink}">
-							{$baseUrl}{$createOrderLink}
-						</a>
-					</p>
-					<dl>
-						<dt>client_id</dt>
-						<dd>{$clientId}</dd>
-						<dt>locale</dt>
-						<dd>{$allLocales}</dd>
-						<dt>currency</dt>
-						<dd>{$allCurrencies}</dd>
-						<dt>stocks</dt>
-						<dd>{_'Array of pairs Stock Id & Quantity'}</dd>
-						<dt>shipping</dt>
-						<dd>{_'ID of Shipping'}</dd>
-						<dt>payment</dt>
-						<dd>{_'ID of Payment'}</dd>
-					</dl>
-					<table class="table">
-						<thead>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">{_'Create order'}</h3>
+					</div>
+					<div class="panel-body">
+						{var createOrderLink => 'insert/order'}
+						<p>
+							<a href="{$baseUrl}{$createOrderLink}">
+								{$baseUrl}{$createOrderLink}
+							</a>
+						</p>
+						<dl>
+							<dt>client_id</dt>
+							<dd>{$clientId}</dd>
+							<dt>locale</dt>
+							<dd>{$allLocales}</dd>
+							<dt>currency</dt>
+							<dd>{$allCurrencies}</dd>
+							<dt>stocks</dt>
+							<dd>{_'Array of pairs Stock Id & Quantity'}</dd>
+							<dt>shipping</dt>
+							<dd>{_'ID of Shipping'}</dd>
+							<dt>payment</dt>
+							<dd>{_'ID of Payment'}</dd>
+						</dl>
+						<table class="table">
+							<thead>
 							<tr>
 								<th>{_'Shipping ID'}</th>
 								<th>{_'Shipping Name'}</th>
 								<th>{_'Allowed Payments'}</th>
 							</tr>
-						</thead>
-						<tbody>
+							</thead>
+							<tbody>
 							{foreach $shippings as $shipping}
-								{var shippingPayments = []}
-								{foreach $shipping->payments as $payment}
-									{if $payment->active}
-										{? $shippingPayments[] = $_control->translator->translate($payment)}
-									{/if}
-								{/foreach}
-								<tr n:if="count($shippingPayments)">
-									<td>{$shipping->id}</td>
-									<td>{_$shipping->name}</td>
-									<td>{$shippingPayments|implode:', '}</td>
-								</tr>
+							{var shippingPayments = []}
+							{foreach $shipping->payments as $payment}
+								{if $payment->active}
+									{? $shippingPayments[] = $_control->translator->translate($payment)}
+								{/if}
+							{/foreach}
+							<tr n:if="count($shippingPayments)">
+								<td>{$shipping->id}</td>
+								<td>{_$shipping->name}</td>
+								<td>{$shippingPayments|implode:', '}</td>
+							</tr>
 							</tbody>
-						{/foreach}
-						<thead>
+							{/foreach}
+							<thead>
 							<tr>
 								<th>{_'Payment ID'}</th>
 								<th>{_'Payment Name'}</th>
 								<th></th>
 							</tr>
-						</thead>
-						<tbody>
+							</thead>
+							<tbody>
 							<tr n:foreach="$payments as $payment">
 								<td>{$payment->id}</td>
 								<td>{_$payment->name}</td>
 								<td></td>
 							</tr>
-						</tbody>
-					</table>
+							</tbody>
+						</table>
 					<pre class="src-html">
 						{include insertOrderCode, baseUrl => $baseUrl, createOrderLink => $createOrderLink, clientId => $clientId, stocks => $exampleStocks}
 					</pre>
-					<h5>{_'Example of succesfully response'} (JSON)</h5>
+						<h5>{_'Example of succesfully response'} (JSON)</h5>
 					<pre class="src-html">
 						{include sucessfullResponse}
 					</pre>
-					<h5>{_'Example of error response'} (JSON)</h5>
+						<h5>{_'Example of error response'} (JSON)</h5>
 					<pre class="src-html">
 						{include errorResponse}
 					</pre>
+					</div>
 				</div>
 			</div>
+			<!-- END CONTENT -->
 		</div>
-		<!-- END CONTENT -->
 	</div>
-</div>
 {/block}
 
 {define sucessfullResponse}
-{
+	{
 	"state": "ok",
 	"message": "Order was created",
 	"order_id": 123456,
 	"total_price": 123.45
-}
+	}
 {/define}
 
 {define errorResponse}
-{
+	{
 	"state": "error",
 	"message": "No products to order"
-}
+	}
 {/define}
 
 {define insertOrderCode}
-&lt;?php
+	&lt;?php
 
-//set POST variables
-$url = '{$baseUrl}{$createOrderLink}';
-$clientId = '{$clientId}';
-$currency = '{$currency->getCode()}';
-$locale = '{$lang}';
-$shippingId = '{App\Model\Entity\Shipping::PERSONAL}'; 
-$paymentId = '{App\Model\Entity\Payment::PERSONAL}'; 
+	//set POST variables
+	$url = '{$baseUrl}{$createOrderLink}';
+	$clientId = '{$clientId}';
+	$currency = '{$currency->getCode()}';
+	$locale = '{$lang}';
+	$shippingId = '{App\Model\Entity\Shipping::PERSONAL}';
+	$paymentId = '{App\Model\Entity\Payment::PERSONAL}';
 
-// STOCK_ID => QUANTITY
-$stocks = array(
-{foreach $stocks as $stockId => $quantity}
-	'{$stockId}' => '{$quantity}',
-{/foreach}
-);
+	// STOCK_ID => QUANTITY
+	$stocks = array(
+	{foreach $stocks as $stockId => $quantity}
+		'{$stockId}' => '{$quantity}',
+	{/foreach}
+	);
 
-$data = array(
+	$data = array(
 	'client_id' => urlencode($clientId),
 	'locale' => urlencode($locale),
 	'currency' => urlencode($currency),
 	'shipping' => urlencode($shippingId),
 	'payment' => urlencode($paymentId),
-);
-foreach ($stocks as $stockId => $quantity) {
+	);
+	foreach ($stocks as $stockId => $quantity) {
 	$data['stocks[' . $stockId . ']'] = urlencode($quantity);
-}
+	}
 
-//url-ify the data for the POST
-$dataString = NULL;
-foreach ($data as $key => $value) {
+	//url-ify the data for the POST
+	$dataString = NULL;
+	foreach ($data as $key => $value) {
 	$dataString .= $key . '=' . $value . '&';
-}
-rtrim($dataString, '&');
+	}
+	rtrim($dataString, '&');
 
-//open connection
-$connection = curl_init();
+	//open connection
+	$connection = curl_init();
 
-//set the url, number of POST vars, POST data
-curl_setopt($connection, CURLOPT_URL, $url);
-curl_setopt($connection, CURLOPT_POST, count($data));
-curl_setopt($connection, CURLOPT_POSTFIELDS, $dataString);
+	//set the url, number of POST vars, POST data
+	curl_setopt($connection, CURLOPT_URL, $url);
+	curl_setopt($connection, CURLOPT_POST, count($data));
+	curl_setopt($connection, CURLOPT_POSTFIELDS, $dataString);
 
-//execute post
-$result = curl_exec($connection);
+	//execute post
+	$result = curl_exec($connection);
 
-//close connection
-curl_close($connection);
+	//close connection
+	curl_close($connection);
 
-?&gt;
+	?&gt;
 {/define}

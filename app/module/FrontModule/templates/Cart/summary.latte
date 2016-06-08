@@ -30,7 +30,7 @@
 							<div class="col-md-4 col-sm-6 block">
 								<h5>{_'cart.order.contact'}</h5>
 								<p>
-									{_'Phone'}: {$basket->basket->phone}<br />
+									{_'Phone'}: {$basket->basket->phone}<br/>
 									{_'Mail'}: {$basket->basket->mail}
 								</p>
 							</div>
@@ -52,7 +52,7 @@
 								<tr>
 									<td class="goods-page-image">
 										<a href="{plink Product: $product->id}">
-											<img src="{$basePath}/foto/{$product->image|size:55,55}" alt="{$product}" />
+											<img src="{$basePath}/foto/{$product->image|size:55,55}" alt="{$product}"/>
 										</a>
 									</td>
 									<td class="goods-page-description">
@@ -79,7 +79,7 @@
 							{foreach $basket->vouchers as $voucher}
 								<tr>
 									<td class="goods-page-image">
-										<img src="{$basePath}/images/logo/logo_cart.png" alt="logo" />
+										<img src="{$basePath}/images/logo/logo_cart.png" alt="logo"/>
 									</td>
 									<td class="goods-page-description">
 										<h3>{_'Discount'} - {$voucher->code}</h3>
@@ -99,7 +99,7 @@
 							{/foreach}
 							<tr>
 								<td class="goods-page-image">
-									<img src="{$basePath}/images/logo/logo_cart.png" alt="logo" />
+									<img src="{$basePath}/images/logo/logo_cart.png" alt="logo"/>
 								</td>
 								<td class="goods-page-description">
 									<h3>{_'Shipping'}: {_$basket->shipping}</h3>
@@ -119,7 +119,7 @@
 							</tr>
 							<tr>
 								<td class="goods-page-image">
-									<img src="{$basePath}/images/logo/logo_cart.png" alt="logo" />
+									<img src="{$basePath}/images/logo/logo_cart.png" alt="logo"/>
 								</td>
 								<td class="goods-page-description">
 									<h3>{_'Payment'}: {_$basket->payment}</h3>

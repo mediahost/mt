@@ -16,7 +16,7 @@
 		<meta name="description" content="{$pageDescription|striptags}"/>
 		<meta name="keywords" content="{$pageKeywords}">
 		<meta name="author" content="{$pageInfo->author}"/>
-		
+
 		<meta name="robots" content="index,follow">
 		<meta n:ifset="$googleSiteVerification" name="google-site-verification" content="{$googleSiteVerification}">
 
@@ -57,7 +57,7 @@
 				<ul class="breadcrumb" n:block="breadcrumb">
 					{var breadcrumb => ['Home' => '']}
 					<li><a n:href=":Front:Homepage:">{_'Home'}</a></li>
-						{block breadcrumbItems}{/block}
+					{block breadcrumbItems}{/block}
 				</ul>
 				<!-- END BREADCRUMBS -->
 
@@ -67,7 +67,7 @@
 					<!-- BEGIN FLASH MESSAGES-->
 					<div n:snippet="flashMessages">
 						<div n:foreach="$flashes as $flash"
-							 class="alert alert-{$flash->type} fade in">
+								class="alert alert-{$flash->type} fade in">
 							<button type="button" class="close" data-dismiss="alert"></button>
 							{$flash->message}
 						</div>
@@ -85,10 +85,10 @@
 		{include 'footer.latte'}
 
 		{block scripts}
-		<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
-		{include jsMetronicCore}
-		{include jsFrontApp}
-		<!-- END JAVASCRIPTS -->
+			<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+			{include jsMetronicCore}
+			{include jsFrontApp}
+			<!-- END JAVASCRIPTS -->
 		{/block}
 	</body>
 	<!-- END BODY -->

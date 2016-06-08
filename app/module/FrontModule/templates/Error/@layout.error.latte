@@ -34,15 +34,15 @@
 
 	<!-- BEGIN BODY -->
 	<body class="{block bodyClass}{/block}">
-		
-		{include #content}
 
-		{block scripts}
+	{include #content}
+
+	{block scripts}
 		<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 		{include jsMetronicCore}
 		{include jsMetronicPlugins}
 		{include jsAdminApp}
 		<!-- END JAVASCRIPTS -->
-		{/block}
+	{/block}
 	</body>
 </html>

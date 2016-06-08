@@ -1,189 +1,191 @@
 {block slider}
-<!-- BEGIN SLIDER -->
-<div n:if="$showSlider"
-	 class="page-slider">
-	<!-- LayerSlider start -->
-	<div id="layerslider" style="width: 100%; height: 240px; margin: 0 auto;">
+	<!-- BEGIN SLIDER -->
+	<div n:if="$showSlider"
+			class="page-slider">
+		<!-- LayerSlider start -->
+		<div id="layerslider" style="width: 100%; height: 240px; margin: 0 auto;">
 
-        <!-- slide one start -->
-        <div class="ls-slide ls-slide1" data-ls="offsetxin: right; slidedelay: 7000; transition2d: 24,25,27,28;">
+			<!-- slide one start -->
+			<div class="ls-slide ls-slide1" data-ls="offsetxin: right; slidedelay: 7000; transition2d: 24,25,27,28;">
 
-			<img src="{$basePath}/images/sliders/slide1/bg.jpg" class="ls-bg" alt="Slide background">
+				<img src="{$basePath}/images/sliders/slide1/bg.jpg" class="ls-bg" alt="Slide background">
 
-			<div class="ls-l ls-title" 
-				 style="top: 16px; left: 35%; white-space: nowrap;" 
-				 data-ls="
-				 fade: true; 
-				 fadeout: true; 
-				 durationin: 750; 
-				 durationout: 750; 
-				 easingin: easeOutQuint; 
-				 rotatein: 90; 
-				 rotateout: -90; 
-				 scalein: .5; 
-				 scaleout: .5;
-				 ">
-				{_'Discounted shipping for'} <strong>{1.9|currency}</strong>
-			</div>
+				<div class="ls-l ls-title"
+					 style="top: 16px; left: 35%; white-space: nowrap;"
+					 data-ls="
+							fade: true;
+							fadeout: true;
+							durationin: 750;
+							durationout: 750;
+							easingin: easeOutQuint;
+							rotatein: 90;
+							rotateout: -90;
+							scalein: .5;
+							scaleout: .5;
+							">
+					{_'Discounted shipping for'} <strong>{1.9|currency}</strong>
+				</div>
 
-			<div class="ls-l ls-mini-text" style="top: 130px; left: 35%; white-space: nowrap;" data-ls="
-				 fade: true; 
-				 fadeout: true; 
-				 durationout: 750; 
-				 easingin: easeOutQuint; 
-				 delayin: 300;
-				 ">
-				Pre Příslušenstvo, Náhradné diely, USB klúče, Tovar pre servis.<br/>
-				Pri nákupe <strong>nad {50|currency} doprava úplne zdarma.</strong>
-			</div>
-        </div>
-        <!-- slide one end -->
-
-        <!-- slide two start -->
-        <div class="ls-slide ls-slide2" data-ls="offsetxin: right; slidedelay: 7000; transition2d: 110,111,112,113;">
-
-			<img src="{$basePath}/images/sliders/slide2/bg.jpg" class="ls-bg" alt="Slide background">
-
-			<div class="ls-l ls-title" 
-				 style="top: 35%; left: 21%; white-space: nowrap;" 
-				 data-ls="
-				 fade: true; 
-				 fadeout: true;  
-				 durationin: 750; 
-				 durationout: 109750; 
-				 easingin: easeOutQuint; 
-				 easingout: easeInOutQuint; 
-				 delayin: 0; 
-				 delayout: 0; 
-				 rotatein: 90; 
-				 rotateout: -90; 
-				 scalein: .5; 
-				 scaleout: .5;
-				 ">
-				<strong>Unlimted</strong> 
-				<em>Fully Responsive</em>
-            </div>
-
-			<div class="ls-l ls-price" 
-				 style="top: 45%; left: 45%; white-space: nowrap;" 
-				 data-ls="
-				 fade: true; 
-				 fadeout: true;  
-				 durationout: 109750; 
-				 easingin: easeOutQuint; 
-				 delayin: 300; 
-				 scalein: .8; 
-				 scaleout: .8;
-				 ">
-				<b>from</b> <strong>{24|change}€</strong>
-			</div>
-
-			<a n:href="this" class="ls-l ls-more" 
-			   style="top: 72%; left: 21%; display: inline-block; white-space: nowrap;" 
-			   data-ls="
-			   fade: true; 
-			   fadeout: true; 
-			   durationin: 750; 
-			   durationout: 750; 
-			   easingin: easeOutQuint; 
-			   easingout: easeInOutQuint; 
-			   delayin: 0; 
-			   delayout: 0; 
-			   rotatein: 90; 
-			   rotateout: -90; 
-			   scalein: .5; 
-			   scaleout: .5;
-			   ">
-				See More Details
-			</a>
-        </div>
-        <!-- slide two end -->
-
-        <!-- slide three start -->
-        <div class="ls-slide ls-slide3" data-ls="offsetxin: right; slidedelay: 7000; transition2d: 92,93,105;">
-
-			<img src="{$basePath}/images/sliders/slide3/bg.jpg" class="ls-bg" alt="Slide background">
-
-			<div class="ls-l ls-title" 
-				 style="top: 33px; left: 33%; white-space: nowrap;" 
-				 data-ls="
-				 fade: true; 
-				 fadeout: true; 
-				 durationin: 750; 
-				 durationout: 750; 
-				 easingin: easeOutQuint; 
-				 rotatein: 90; 
-				 rotateout: -90; 
-				 scalein: .5; 
-				 scaleout: .5;
-				 ">
-				Full Admin &amp; Frontend 
-				<strong>eCommerce UI</strong> 
-				Is Ready For Your Project
-			</div>
-			<div class="ls-l" 
-				 style="top: 133px; left: 33%; white-space: nowrap; font-size: 20px; font: 20px 'Open Sans Light', sans-serif;" 
-				 data-ls="
-				 fade: true; 
-				 fadeout: true; 
-				 durationout: 750; 
-				 easingin: easeOutQuint; 
-				 delayin: 300; 
-				 scalein: .8; 
-				 scaleout: .8;
-				 ">
-				<a n:href="this" class="ls-buy">
-					Buy It Now!
-				</a>
-				<div class="ls-price">
-					<span>All these for only:</span>
-					<strong>{25|change}<sup>€</sup></strong>
+				<div class="ls-l ls-mini-text" style="top: 130px; left: 35%; white-space: nowrap;" data-ls="
+							fade: true;
+							fadeout: true;
+							durationout: 750;
+							easingin: easeOutQuint;
+							delayin: 300;
+							">
+					Pre Příslušenstvo, Náhradné diely, USB klúče, Tovar pre servis.<br/>
+					Pri nákupe <strong>nad {50|currency} doprava úplne zdarma.</strong>
 				</div>
 			</div>
-        </div>
-        <!-- slide three end -->
+			<!-- slide one end -->
 
-        <!-- slide four start -->
-        <div class="ls-slide ls-slide4" data-ls="offsetxin: right; slidedelay: 7000; transition2d: 110,111,112,113;">
+			<!-- slide two start -->
+			<div class="ls-slide ls-slide2"
+				 data-ls="offsetxin: right; slidedelay: 7000; transition2d: 110,111,112,113;">
 
-			<img src="{$basePath}/images/sliders/slide5/bg.jpg" class="ls-bg" alt="Slide background">
+				<img src="{$basePath}/images/sliders/slide2/bg.jpg" class="ls-bg" alt="Slide background">
 
-			<div class="ls-l ls-title" 
-				 style="top: 25%; left: 60%; white-space: nowrap;" 
-				 data-ls="
-				 fade: true; 
-				 fadeout: true; 
-				 durationin: 750; 
-				 durationout: 750; 
-				 easingin: easeOutQuint; 
-				 rotatein: 90; 
-				 rotateout: -90; 
-				 scalein: .5; 
-				 scaleout: .5;
-				 ">
-				The most<br>
-				wanted bijouterie
+				<div class="ls-l ls-title"
+					 style="top: 35%; left: 21%; white-space: nowrap;"
+					 data-ls="
+							fade: true;
+							fadeout: true;
+							durationin: 750;
+							durationout: 109750;
+							easingin: easeOutQuint;
+							easingout: easeInOutQuint;
+							delayin: 0;
+							delayout: 0;
+							rotatein: 90;
+							rotateout: -90;
+							scalein: .5;
+							scaleout: .5;
+							">
+					<strong>Unlimted</strong>
+					<em>Fully Responsive</em>
+				</div>
+
+				<div class="ls-l ls-price"
+					 style="top: 45%; left: 45%; white-space: nowrap;"
+					 data-ls="
+							fade: true;
+							fadeout: true;
+							durationout: 109750;
+							easingin: easeOutQuint;
+							delayin: 300;
+							scalein: .8;
+							scaleout: .8;
+							">
+					<b>from</b> <strong>{24|change}€</strong>
+				</div>
+
+				<a n:href="this" class="ls-l ls-more"
+								 style="top: 72%; left: 21%; display: inline-block; white-space: nowrap;"
+								 data-ls="
+							fade: true;
+							fadeout: true;
+							durationin: 750;
+							durationout: 750;
+							easingin: easeOutQuint;
+							easingout: easeInOutQuint;
+							delayin: 0;
+							delayout: 0;
+							rotatein: 90;
+							rotateout: -90;
+							scalein: .5;
+							scaleout: .5;
+							">
+					See More Details
+				</a>
 			</div>
+			<!-- slide two end -->
 
-			<div class="ls-l ls-mini-text" 
-				 style="top: 70%; left: 60%; white-space: nowrap;" 
-				 data-ls="
-				 fade: true; 
-				 fadeout: true;  
-				 durationout: 750; 
-				 easingin: easeOutQuint; 
-				 delayin: 300; 
-				 scalein: .8; 
-				 scaleout: .8;
-				 ">
-				<span>Lorem ipsum and</span>
-				<a n:href="this">Buy It Now!</a>
+			<!-- slide three start -->
+			<div class="ls-slide ls-slide3" data-ls="offsetxin: right; slidedelay: 7000; transition2d: 92,93,105;">
+
+				<img src="{$basePath}/images/sliders/slide3/bg.jpg" class="ls-bg" alt="Slide background">
+
+				<div class="ls-l ls-title"
+					 style="top: 33px; left: 33%; white-space: nowrap;"
+					 data-ls="
+							fade: true;
+							fadeout: true;
+							durationin: 750;
+							durationout: 750;
+							easingin: easeOutQuint;
+							rotatein: 90;
+							rotateout: -90;
+							scalein: .5;
+							scaleout: .5;
+							">
+					Full Admin &amp; Frontend
+					<strong>eCommerce UI</strong>
+					Is Ready For Your Project
+				</div>
+				<div class="ls-l"
+					 style="top: 133px; left: 33%; white-space: nowrap; font-size: 20px; font: 20px 'Open Sans Light', sans-serif;"
+					 data-ls="
+							fade: true;
+							fadeout: true;
+							durationout: 750;
+							easingin: easeOutQuint;
+							delayin: 300;
+							scalein: .8;
+							scaleout: .8;
+							">
+					<a n:href="this" class="ls-buy">
+						Buy It Now!
+					</a>
+					<div class="ls-price">
+						<span>All these for only:</span>
+						<strong>{25|change}<sup>€</sup></strong>
+					</div>
+				</div>
 			</div>
+			<!-- slide three end -->
 
-        </div>
-        <!-- slide four end -->
+			<!-- slide four start -->
+			<div class="ls-slide ls-slide4"
+				 data-ls="offsetxin: right; slidedelay: 7000; transition2d: 110,111,112,113;">
+
+				<img src="{$basePath}/images/sliders/slide5/bg.jpg" class="ls-bg" alt="Slide background">
+
+				<div class="ls-l ls-title"
+					 style="top: 25%; left: 60%; white-space: nowrap;"
+					 data-ls="
+							fade: true;
+							fadeout: true;
+							durationin: 750;
+							durationout: 750;
+							easingin: easeOutQuint;
+							rotatein: 90;
+							rotateout: -90;
+							scalein: .5;
+							scaleout: .5;
+							">
+					The most<br>
+					wanted bijouterie
+				</div>
+
+				<div class="ls-l ls-mini-text"
+					 style="top: 70%; left: 60%; white-space: nowrap;"
+					 data-ls="
+							fade: true;
+							fadeout: true;
+							durationout: 750;
+							easingin: easeOutQuint;
+							delayin: 300;
+							scalein: .8;
+							scaleout: .8;
+							">
+					<span>Lorem ipsum and</span>
+					<a n:href="this">Buy It Now!</a>
+				</div>
+
+			</div>
+			<!-- slide four end -->
+		</div>
+		<!-- LayerSlider end -->
 	</div>
-	<!-- LayerSlider end -->
-</div>
-<!-- END SLIDER -->
+	<!-- END SLIDER -->
 {/block}

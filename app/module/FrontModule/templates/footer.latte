@@ -2,7 +2,7 @@
 
 <!-- BEGIN BRANDS -->
 <div class="brands"
-	 n:if="$showBrands">
+		n:if="$showBrands">
 	{cache 'brands' . $lang, expire => '1 day', tags => ['producers']}
 		<div class="container">
 			<div class="owl-carousel owl-carousel6-brands">
@@ -17,9 +17,9 @@
 
 <!-- BEGIN STEPS -->
 <div class="steps-block steps-block-red"
-	 n:if="$showSteps">
+		n:if="$showSteps">
 	<div class="container">
-        <div class="row">
+		<div class="row">
 			<div class="col-md-4 steps-block-col">
 				<i class="fa fa-truck"></i>
 				<div>
@@ -43,7 +43,7 @@
 					<em>{_'footer.prefooter.orderByPhone'}</em>
 				</div>
 			</div>
-        </div>
+		</div>
 	</div>
 </div>
 <!-- END STEPS -->
@@ -89,7 +89,7 @@
 						<th>Sviatky:</th>
 						<td>Zatvorené</td>
 					</tr>
-				</table>   
+				</table>
 
 				{if $footerPages->page2}
 					{var $footerPage => $footerPages->page2}
@@ -127,18 +127,18 @@
 			</div>
 			<!-- END BOTTOM CONTACTS -->
 
-			<!-- BEGIN TWITTER BLOCK --> 
+			<!-- BEGIN TWITTER BLOCK -->
 			<div class="col-md-4 col-sm-6 pre-footer-col">
 				<h2 class="margin-bottom-20">{_'Our Facebook'}</h2>
 
 				{var fbURL => 'https://www.facebook.com/mobilnetelefony.sk'}
 				<div id="fb-root"></div>
 				<div class="fb-page"
-					 data-href="{$fbURL}" 
-					 data-small-header="false" 
-					 data-adapt-container-width="true" 
-					 data-hide-cover="false" 
-					 data-show-facepile="true" 
+					 data-href="{$fbURL}"
+					 data-small-header="false"
+					 data-adapt-container-width="true"
+					 data-hide-cover="false"
+					 data-show-facepile="true"
 					 data-show-posts="false">
 					<div class="fb-xfbml-parse-ignore">
 						<blockquote cite="{$fbURL}">
@@ -150,8 +150,8 @@
 			</div>
 			<!-- END TWITTER BLOCK -->
 		</div>
-        <hr>
-        <div class="row">
+		<hr>
+		<div class="row">
 			<!-- BEGIN SOCIAL ICONS -->
 			<div class="col-md-6 col-sm-6">
 				<ul class="social-icons">
@@ -169,10 +169,10 @@
 				<div class="pre-footer-subscribe-box pull-right">
 					<h2>Newsletter</h2>
 					{control subscribe}
-				</div> 
+				</div>
 			</div>
 			<!-- END NEWLETTER -->
-        </div>
+		</div>
 	</div>
 </div>
 <!-- END PRE-FOOTER -->
@@ -184,11 +184,11 @@
 			<div class="row">
 				<!-- BEGIN COPYRIGHT -->
 				<div class="col-md-6 col-sm-6 padding-top-10">
-					{!= date('Y')} &copy; {$pageInfo->projectName} {_'by Mediahost'} | 
+					{!= date('Y')} &copy; {$pageInfo->projectName} {_'by Mediahost'} |
 					{if $footerPages->page1}
 						{var $footerPage => $footerPages->page1}
 						{? $footerPage->setCurrentLocale($lang)}
-						<a n:href="Page:, $footerPage->id">{$footerPage}</a> | 
+						<a n:href="Page:, $footerPage->id">{$footerPage}</a> |
 					{/if}
 					{if $footerPages->page2}
 						{var $footerPage => $footerPages->page2}

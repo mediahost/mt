@@ -12,9 +12,9 @@
 		</li>
 		<!-- BEGIN CURRENCIES -->
 		<li class="shop-currencies">
-			<a n:foreach="$exchange as $currCode => $curr" 
-			   n:href="setCurrency! $currCode"
-			   n:class="$currCode == $currency->getCode() ? current">
+			<a n:foreach="$exchange as $currCode => $curr"
+					n:href="setCurrency! $currCode"
+					n:class="$currCode == $currency->getCode() ? current">
 				{$curr->getFormat()->getSymbol()}
 			</a>
 		</li>
@@ -54,7 +54,7 @@
 	</ul>
 	<ul n:if="$user->loggedIn" class="list-unstyled list-inline pull-right">
 		<li n:if="$user->isAllowed('myAccount') && !$user->identity->isDealer()"
-			class="visible-lg-inline-block bonus-account">
+				class="visible-lg-inline-block bonus-account">
 			<a n:href="MyAccount:bonus">
 				<i class="fa fa-database"></i>{$user->identity->bonusCount}
 			</a>
@@ -79,9 +79,9 @@
 			</div>
 			<div class="modal-body">
 				<div class="row">
-					<div class="col-md-7 col-sm-7">				
+					<div class="col-md-7 col-sm-7">
 
-						{control signInModal:login}	
+						{control signInModal:login}
 
 						<div class="row">
 							<div class="col-lg-8 col-md-offset-4 padding-left-10 padding-top-10">
