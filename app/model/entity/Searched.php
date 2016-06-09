@@ -8,7 +8,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
 use Knp\DoctrineBehaviors\Model;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Model\Repository\SearchedRepository")
  *
  * @property string $text
  * @property string $ip
@@ -28,5 +28,10 @@ class Searched extends BaseEntity
 
 	/** @ORM\ManyToOne(targetEntity="Product") */
 	protected $product;
+
+	public function __toString()
+	{
+		return (string) $this->text;
+	}
 
 }

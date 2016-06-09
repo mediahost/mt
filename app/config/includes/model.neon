@@ -28,6 +28,7 @@ services:
 	- {class: App\Model\Facade\VisitFacade, inject: yes}
 	- {class: App\Model\Facade\WatchDogFacade, inject: yes}
 	- {class: App\Model\Facade\HeurekaFacade, inject: yes}
+	- {class: App\Model\Facade\SearchedFacade, inject: yes}
 
 	# Storages
 	- {class: App\Model\Storage\SignUpStorage, inject: yes}

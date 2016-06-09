@@ -165,6 +165,11 @@ class RouterFactory
 			'text' => NULL,
 		]);
 
+		$frontRouter[] = new Route(self::LOCALE_PARAM . 'most-searched', [
+			'presenter' => 'MostSearched',
+			'action' => 'default',
+		]);
+
 		$frontRouter[] = new Route(self::LOCALE_PARAM . 'producer[/<producer>[/<line>[/<model>]]]', [
 			'presenter' => 'Category',
 			'action' => 'producer',

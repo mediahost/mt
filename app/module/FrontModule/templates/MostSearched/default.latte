@@ -1,0 +1,51 @@
+{includeblock '../categories.latte'}
+
+{block breadcrumbItems}
+	<li class="active">
+		<span>{_'Most searched'}</span>
+	</li>
+{/block}
+
+{block content}
+	<div class="container">
+		<!-- BEGIN SIDEBAR & CONTENT -->
+		<div class="row">
+
+			<!-- BEGIN SIDEBAR -->
+			<div class="sidebar col-md-3 col-sm-5">
+				{include categories}
+			</div>
+			<!-- END SIDEBAR -->
+
+			<!-- BEGIN CONTENT -->
+			<div class="col-md-9 col-sm-7">
+
+				<div class="margin-bottom-20">
+					<h1>{_'Most searched'}</h1>
+					<div class="content-page">
+						<div class="page-html-content">
+							<h4>{_'Searched products'}</h4>
+							<ul>
+								<li n:foreach="$products as $searchedItem">
+									{var $searched => $searchedItem[0]}
+									<a n:href="Product: $searched->product->id">{$searched->product}</a>
+								</li>
+							</ul>
+							<h4>{_'Searched terms'}</h4>
+							<ul>
+								<li n:foreach="$terms as $searchedItem">
+									{var $searched => $searchedItem[0]}
+									<a n:href="Category:search $searched">{$searched}</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!-- END CONTENT -->
+
+		</div>
+		<!-- END SIDEBAR & CONTENT -->
+	</div>
+{/block}

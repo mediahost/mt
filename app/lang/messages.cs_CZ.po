@@ -1551,3 +1551,12 @@ msgstr "Heureka kategorie"
 
 msgid "--- No Category ---"
 msgstr "--- Bez kategorie ---"
+
+msgid "Most searched"
+msgstr "Nejhledanější"
+
+msgid "Searched products"
+msgstr "Hledané produkty"
+
+msgid "Searched terms"
+msgstr "Hledané výrazy"
