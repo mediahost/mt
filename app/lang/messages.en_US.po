@@ -1596,3 +1596,12 @@ msgstr "Heureka Category"
 
 msgid "--- No Category ---"
 msgstr "--- No Category ---"
+
+msgid "Most searched"
+msgstr "Most searched"
+
+msgid "Searched products"
+msgstr "Searched products"
+
+msgid "Searched terms"
+msgstr "Searched terms"
