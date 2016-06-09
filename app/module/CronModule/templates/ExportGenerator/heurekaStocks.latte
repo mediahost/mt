@@ -27,15 +27,13 @@
 		<PRICE_VAT>{$price|changeVat:NULL,NULL,2}</PRICE_VAT>
 		<HEUREKA_CPC n:if="$cpc">{$cpc}</HEUREKA_CPC>
 		<MANUFACTURER n:if="$producer"><![CDATA[{$producer}]]></MANUFACTURER>
-		<CATEGORYTEXT>
-			{if $heurekaCatProduct}
-				{$heurekaCatProduct}
-			{elseif $heurekaCatCategory}
-				{$heurekaCatCategory}
-			{else}
-				{_'categoryText'}
-			{/if}
-		</CATEGORYTEXT>
+		{if $heurekaCatProduct}
+			<CATEGORYTEXT>{$heurekaCatProduct}</CATEGORYTEXT>
+		{elseif $heurekaCatCategory}
+			<CATEGORYTEXT>{$heurekaCatCategory}</CATEGORYTEXT>
+		{else}
+			<CATEGORYTEXT>{_'categoryText'}</CATEGORYTEXT>
+		{/if}
 		<EAN n:if="$stock['barcode']">{$stock['barcode']}</EAN>
 
 		<DELIVERY_DATE>{$stock['inStore'] ? $deliveryStoreTime : $deliveryNotInStoreTime}</DELIVERY_DATE>
