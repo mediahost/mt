@@ -121,7 +121,7 @@ class RouterFactory
 		// </editor-fold>
 		// <editor-fold desc="Ajax">
 
-		$ajaxRouter[] = new Route('ajax/<presenter>/<action>', [
+		$ajaxRouter[] = new Route('ajax[/<presenter>[/<action>]]', [
 			'presenter' => 'Default',
 			'action' => 'default',
 		]);
@@ -129,7 +129,7 @@ class RouterFactory
 		// </editor-fold>
 		// <editor-fold desc="Cron">
 
-		$cronRouter[] = new Route('cron/<presenter>/<action>', [
+		$cronRouter[] = new Route('cron[/<presenter>[/<action>]]', [
 			'presenter' => 'Default',
 			'action' => 'default',
 		]);
@@ -137,7 +137,7 @@ class RouterFactory
 		// </editor-fold>
 		// <editor-fold desc="Notification">
 
-		$notificationRouter[] = new Route('notification/<presenter>/<action>', [
+		$notificationRouter[] = new Route('notification[/<presenter>[/<action>]]', [
 			'presenter' => 'Default',
 			'action' => 'default',
 		]);
@@ -145,7 +145,7 @@ class RouterFactory
 		// </editor-fold>
 		// <editor-fold desc="App">
 
-		$adminRouter[] = new Route(self::LOCALE_PARAM . 'app/<presenter>/<action>[/<id>]', [
+		$adminRouter[] = new Route(self::LOCALE_PARAM . 'app[/<presenter>[/<action>[/<id>]]]', [
 			'presenter' => 'Dashboard',
 			'action' => 'default',
 			'id' => NULL,
