@@ -7,10 +7,9 @@ use App\Model\Entity\Category;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
+use App\Model\Entity\Searched;
 use App\Model\Entity\Stock;
-use Nette\Application\Responses\JsonResponse;
 use Nette\Utils\Strings;
-use Tracy\Debugger;
 
 class CategoryPresenter extends BasePresenter
 {
@@ -61,14 +60,18 @@ class CategoryPresenter extends BasePresenter
 
 	public function actionSearch($text)
 	{
+		$searchedRepo = $this->em->getRepository(Searched::getClassName());
+		$searched = new Searched();
+		$searched->text = $text;
+		$searched->ip = $this->getHttpRequest()->getRemoteAddress();
+		$searchedRepo->save($searched);
+
 		$this->searched = $text;
 		$this->setView('default');
 	}
 
 	public function actionSearchJson($text, $page = 1, $perPage = 10)
 	{
-		Debugger::log($text, 'searched-words');
-
 		/* @var $list ProductList */
 		$list = $this['products'];
 		$list->setPage($page);
@@ -95,7 +98,7 @@ class CategoryPresenter extends BasePresenter
 			$item['priceNoVatFormated'] = $this->exchange->format($price->withoutVat);
 			$item['priceWithVat'] = $price->withVat;
 			$item['priceWithVatFormated'] = $this->exchange->format($price->withVat);
-			$item['url'] = $this->link('//:Front:Product:', ['id' => $product->id]);
+			$item['url'] = $this->link('//:Front:Product:', ['id' => $product->id, 'searched' => $text]);
 			$item['image_original'] = $this->link('//:Foto:Foto:', ['name' => $product->image]);
 			$item['image_thumbnail_100'] = $this->link('//:Foto:Foto:', ['size' => '100-0', 'name' => $product->image]);
 			$items[] = $item;
