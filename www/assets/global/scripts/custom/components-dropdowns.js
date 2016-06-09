@@ -45,7 +45,7 @@ var ComponentsDropdowns = function () {
 			if ($(this).hasClass('autocompleteProducts') || $(this).hasClass('autocompleteStocks')) {
 				var getProductId = $(this).hasClass('autocompleteProducts');
 				params.ajax = {
-					url: basePath + '/product/search-json',
+					url: links['Product:searchJson'],
 					dataType: 'json',
 					delay: 250,
 					data: function (params) {
@@ -113,7 +113,7 @@ var ComponentsDropdowns = function () {
 			datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
 			queryTokenizer: Bloodhound.tokenizers.whitespace,
 			remote: {
-				url: basePath + '/category/search-json/?text=%QUERY&currency=' + currencyName + '&locale=' + lang,
+				url: links['Category:searchJson'] + '?text=%QUERY&currency=' + currencyName + '&locale=' + lang,
 				wildcard: '%QUERY',
 				transform: transformFinded
 			}

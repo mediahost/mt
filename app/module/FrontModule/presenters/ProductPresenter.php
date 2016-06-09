@@ -124,12 +124,11 @@ class ProductPresenter extends BasePresenter
 			$item['image_thumbnail_100'] = $this->link('//:Foto:Foto:', ['size' => '100-0', 'name' => $product->image]);
 			$items[] = $item;
 		}
-		$payload = [
+		$data = [
 			'items' => $items,
 			'total_count' => $list->getCount(),
 		];
-		$response = new JsonResponse($payload, 'application/json; charset=utf-8');
-		$this->sendResponse($response);
+		$this->sendJson($data);
 	}
 
 	// <editor-fold desc="forms">

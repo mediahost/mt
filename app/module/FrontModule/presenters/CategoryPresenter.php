@@ -10,6 +10,7 @@ use App\Model\Entity\ProducerModel;
 use App\Model\Entity\Stock;
 use Nette\Application\Responses\JsonResponse;
 use Nette\Utils\Strings;
+use Tracy\Debugger;
 
 class CategoryPresenter extends BasePresenter
 {
@@ -66,6 +67,8 @@ class CategoryPresenter extends BasePresenter
 
 	public function actionSearchJson($text, $page = 1, $perPage = 10)
 	{
+		Debugger::log($text, 'searched-words');
+
 		/* @var $list ProductList */
 		$list = $this['products'];
 		$list->setPage($page);
@@ -97,13 +100,11 @@ class CategoryPresenter extends BasePresenter
 			$item['image_thumbnail_100'] = $this->link('//:Foto:Foto:', ['size' => '100-0', 'name' => $product->image]);
 			$items[] = $item;
 		}
-		$payload = [
+		$data = [
 			'items' => $items,
 			'total_count' => $list->getCount(),
 		];
-
-		$response = new JsonResponse($payload, 'application/json; charset=utf-8');
-		$this->sendResponse($response);
+		$this->sendJson($data);
 	}
 
 	public function actionAccessories($id)
