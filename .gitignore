@@ -3,6 +3,7 @@
 #################
 /log/*
 !/log/.htaccess
+/www/adminer/database-log.sql
 
 #################
 ## Temp
@@ -70,7 +71,6 @@
 #################
 ## Installer
 ################
-/www/adminer/database-log.sql
 /bin/testInstaller.bat
 
 #################

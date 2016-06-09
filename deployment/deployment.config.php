@@ -36,6 +36,7 @@ return array(
 			!www/webtemp/.htaccess
 			www/foto/*
 			!www/foto/original/default.png
+			www/adminer/database-log.sql
 			*.local.neon
 			*.server.neon
 			*.server_dev.neon
