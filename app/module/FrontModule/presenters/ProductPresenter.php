@@ -10,12 +10,11 @@ use App\Extensions\HomeCredit;
 use App\Extensions\Products\ProductList;
 use App\Model\Entity\Category;
 use App\Model\Entity\Parameter;
+use App\Model\Entity\Searched;
 use App\Model\Entity\Stock;
 use App\Model\Facade\StockFacade;
 use App\Model\Facade\VisitFacade;
 use Nette\Application\BadRequestException;
-use Nette\Application\Responses\JsonResponse;
-use Nette\Caching\Cache;
 use Nette\Caching\IStorage;
 use Nette\Utils\Strings;
 
@@ -40,8 +39,23 @@ class ProductPresenter extends BasePresenter
 	/** @var Stock */
 	public $stock;
 
-	public function actionDefault($id)
+	public function actionDefault($id, $searched = NULL)
 	{
+		if ($searched) {
+			$searchedRepo = $this->em->getRepository(Searched::getClassName());
+			$searchedEntity = new Searched();
+			$searchedEntity->text = $searched;
+			$searchedEntity->ip = $this->getHttpRequest()->getRemoteAddress();
+			if ($id) {
+				$product = $this->productRepo->find($id);
+				if ($product) {
+					$searchedEntity->product = $product;
+				}
+			}
+			$searchedRepo->save($searchedEntity);
+			$this->redirect('this', ['searched' => NULL]);
+		}
+		
 		if ($id) {
 			$product = $this->productRepo->find($id);
 		}
