@@ -109,12 +109,28 @@ var ComponentsDropdowns = function () {
 			return response.items;
 		};
 
+		var urlParams = function (url, params) {
+			var glue = '?';
+			if (url.match(/\?/)) {
+				glue = '&';
+			}
+			return url + glue + $.param(params);
+		};
+
+		var url = links['Category:searchJson'];
+		var wildcard = '-QUERY-';
+		var params = {
+			'text': wildcard,
+			'currency': currencyName,
+			'locale': lang
+		};
+
 		var options = {
 			datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
 			queryTokenizer: Bloodhound.tokenizers.whitespace,
 			remote: {
-				url: links['Category:searchJson'] + '?text=%QUERY&currency=' + currencyName + '&locale=' + lang,
-				wildcard: '%QUERY',
+				url: urlParams(url, params),
+				wildcard: wildcard,
 				transform: transformFinded
 			}
 		};
