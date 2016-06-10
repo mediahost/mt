@@ -25,7 +25,9 @@ class SearchedFacade extends Object
 
 	public function getMostSearched($limit)
 	{
-		return $this->searchedRepo->findMostBy([], $limit);
+		return $this->searchedRepo->findMostBy([
+			'product' => NULL,
+		], $limit);
 	}
 
 	public function getMostSearchedWithProducts($limit)
