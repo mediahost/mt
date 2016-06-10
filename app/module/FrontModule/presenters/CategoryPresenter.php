@@ -60,14 +60,18 @@ class CategoryPresenter extends BasePresenter
 
 	public function actionSearch($text)
 	{
-		$searchedRepo = $this->em->getRepository(Searched::getClassName());
-		$searched = new Searched();
-		$searched->text = $text;
-		$searched->ip = $this->getHttpRequest()->getRemoteAddress();
-		$searchedRepo->save($searched);
+		if ($text) {
+			$searchedRepo = $this->em->getRepository(Searched::getClassName());
+			$searched = new Searched();
+			$searched->text = $text;
+			$searched->ip = $this->getHttpRequest()->getRemoteAddress();
+			$searchedRepo->save($searched);
 
-		$this->searched = $text;
-		$this->setView('default');
+			$this->searched = $text;
+			$this->setView('default');
+		} else {
+			$this->redirect('Homepage:');
+		}
 	}
 
 	public function actionSearchJson($text, $page = 1, $perPage = 10)
