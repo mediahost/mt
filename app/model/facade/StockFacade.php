@@ -285,7 +285,6 @@ class StockFacade extends Object
 	public function getExportShortStocksArray($onlyInStore = TRUE, Category $denyCategory = NULL, $limit = NULL)
 	{
 		$qb = $this->stockRepo->createQueryBuilder('s')
-			->select('v')
 			->addSelect('partial s.{id, barcode, defaultPrice, inStore}')
 			->addSelect('partial t.{id, name, description, locale}')
 			->addSelect('partial i.{id, filename}')
