@@ -111,7 +111,7 @@ var ComponentsDropdowns = function () {
 
 		var urlParams = function (url, params) {
 			var glue = '?';
-			if (url.match(/\?/)) {
+			if (url && url.match(/\?/)) {
 				glue = '&';
 			}
 			return url + glue + $.param(params);
