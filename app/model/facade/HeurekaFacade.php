@@ -24,9 +24,9 @@ class HeurekaFacade extends Object
 		$this->categoryRepo = $this->em->getRepository(Category::getClassName());
 	}
 
-	public function getFullnames($locale)
+	public function getFullnames($locale, $order = 'ASC')
 	{
-		$pairs = $this->categoryRepo->findPairs($locale, 't.fullname');
+		$pairs = $this->categoryRepo->findPairs($locale, 't.fullname', ['t.fullname' => $order]);
 		return $pairs;
 	}
 
