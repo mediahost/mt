@@ -10,3 +10,13 @@ producer:
 	        message:
 	            fill: 'Zanechte zprávu'
 	            min: 'Zadejte alespoň %d znaků'
+recommend:
+	to: 'Komu'
+	message: 'Vzkaz'
+	send: 'Odeslat'
+	verification:
+		mail:
+			fill: 'Zadejte e-mail'
+			format: 'Zadejte správný e-mail'
+		message:
+			fill: 'Zadejte vzkaz'

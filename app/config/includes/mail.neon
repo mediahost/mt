@@ -2,20 +2,21 @@ services:
 	- {implement: App\Mail\Messages\Auth\ICreateRegistrationMessageFactory, inject: yes}
 	- {implement: App\Mail\Messages\Auth\IForgottenMessageFactory, inject: yes}
 	- {implement: App\Mail\Messages\Auth\IVerificationMessageFactory, inject: yes}
-	- {implement: App\Mail\Messages\Order\ICreateOrderToShopFactory, inject: yes}
-	- {implement: App\Mail\Messages\Order\ICreateOrderToCustomerFactory, inject: yes}
-	- {implement: App\Mail\Messages\Order\ChangeState\IExpededFactory, inject: yes}
-	- {implement: App\Mail\Messages\Order\ChangeState\IDoneFactory, inject: yes}
-	- {implement: App\Mail\Messages\Order\ChangeState\IStornoFactory, inject: yes}
-	- {implement: App\Mail\Messages\Order\Payment\ISuccessPaymentFactory, inject: yes}
-	- {implement: App\Mail\Messages\Order\Payment\IErrorPaymentFactory, inject: yes}
+	- {implement: App\Mail\Messages\Basket\IUnfinishedMessageFactory, inject: yes}
 	- {implement: App\Mail\Messages\Buyout\IOurMessageFactory, inject: yes}
 	- {implement: App\Mail\Messages\Buyout\ITheirMessageFactory, inject: yes}
+	- {implement: App\Mail\Messages\Dealer\IDealerWantBeOurMessageFactory, inject: yes}
+	- {implement: App\Mail\Messages\Newsletter\INewsletterMessageFactory, inject: yes}
+	- {implement: App\Mail\Messages\Newsletter\IUnsubscribeMessageFactory, inject: yes}
+	- {implement: App\Mail\Messages\Order\ICreateOrderToCustomerFactory, inject: yes}
+	- {implement: App\Mail\Messages\Order\ICreateOrderToShopFactory, inject: yes}
+	- {implement: App\Mail\Messages\Order\ChangeState\IDoneFactory, inject: yes}
+	- {implement: App\Mail\Messages\Order\ChangeState\IExpededFactory, inject: yes}
+	- {implement: App\Mail\Messages\Order\ChangeState\IStornoFactory, inject: yes}
+	- {implement: App\Mail\Messages\Order\Payment\IErrorPaymentFactory, inject: yes}
+	- {implement: App\Mail\Messages\Order\Payment\ISuccessPaymentFactory, inject: yes}
 	- {implement: App\Mail\Messages\Service\IOurMessageFactory, inject: yes}
 	- {implement: App\Mail\Messages\Service\ITheirMessageFactory, inject: yes}
-	- {implement: App\Mail\Messages\Dealer\IDealerWantBeOurMessageFactory, inject: yes}
-	- {implement: App\Mail\Messages\Newsletter\IUnsubscribeMessageFactory, inject: yes}
-	- {implement: App\Mail\Messages\Newsletter\INewsletterMessageFactory, inject: yes}
-	- {implement: App\Mail\Messages\Basket\IUnfinishedMessageFactory, inject: yes}
+	- {implement: App\Mail\Messages\Recommend\IRecommendationFactory, inject: yes}
 	- {implement: App\Mail\Messages\WatchDog\IAvailableFactory, inject: yes}
 	- {implement: App\Mail\Messages\WatchDog\ILoweredPriceFactory, inject: yes}

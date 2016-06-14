@@ -9,6 +9,7 @@ subject:
 	unfinished: 'Unfinished order'
 	available: 'Stored product'
 	loweredPrice: 'Change price of product'
+	recommend: 'I have great tip for you on %name%'
 basket:
 	salutation: 'Hello...'
 	unfinished: 'They say that in life we do not regret the things that we have done, but those we do not tried. Perhaps your incomplete order is not one of them. But you can still change it!'
@@ -36,4 +37,6 @@ watchdog:
 	salutation: 'Hello...'
 	available: 'just now has been placed in storage product for which you have expressed interest. We are happy to allow you purchase on our website.'
 	loweredPrice: 'just now there was a reduction in prices below the price you want. We are happy to allow the purchase at this price.'
+	visit: 'Go to product'
+recommend:
 	visit: 'Go to product'

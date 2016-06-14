@@ -102,6 +102,12 @@
 									   href="https://plus.google.com/share?url={link //this}"></a>
 								</li>
 							</ul>
+							<div class="recommend">
+								<a href="#recommend" data-toggle="modal">
+									<span class="fa fa-send"></span>
+									{_'Recommend'}
+								</a>
+							</div>
 						</div>
 
 						<div class="product-page-content">
@@ -171,6 +177,18 @@
 					<h4 class="modal-title">{_'Set Reminder'}</h4>
 				</div>
 				{control watchDog:modal}
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="recommend" tabindex="-1" role="basic" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">{_'Recommend'}</h4>
+				</div>
+				{control recommend:modal}
 			</div>
 		</div>
 	</div>

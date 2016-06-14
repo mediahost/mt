@@ -9,6 +9,7 @@ subject:
 	unfinished: 'Nedokončená objednávka'
 	available: 'Naskladněný produkt'
 	loweredPrice: 'Změna ceny produktu'
+	recommend: 'Mám pro tebe skvělý tip na nákup v %name%'
 basket:
 	salutation: 'Pekný den,'
 	unfinished: 'Říká se, že v životě nelitujeme věcí, které jsme udělali, ale těch, které jsme nezkusili. Snad vaše nedokončená objednávka nebude jednou z nich. To však lze ještě změnit!'
@@ -37,4 +38,6 @@ watchdog:
 	salutation: 'Pekný den,'
 	available: 'právě byl naskladněn produkt, o který jste projevili zájem. Rádi vám umožníme jeho nákup na našich stránkách.'
 	loweredPrice: 'právě došlo ke snížení ceny produktu pod cenu, kterou jste si přáli. Rádi vám umožníme nákup za tuto cenu.'
-	visit: 'Prejsť na tovar'
+	visit: 'Navštívit produkt'
+recommend:
+	visit: 'Navštívit produkt'
