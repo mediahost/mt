@@ -11,6 +11,7 @@ producer:
 	            fill: 'Zanechajte správu'
 	            min: 'Zadajte aspoň %d znakov'
 recommend:
+	from: 'Váš e-mail'
 	to: 'Komu'
 	message: 'Vzkaz'
 	send: 'Odoslať'

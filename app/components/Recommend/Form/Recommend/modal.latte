@@ -2,11 +2,20 @@
 	<div class="modal-body">
 
 		<div class="form-group">
-			{var label = $form->renderer->renderPureLabel($form['mail'])}
+			{var label = $form->renderer->renderPureLabel($form['from'])}
 			{var label->class[] = 'control-label'}
 			{$label}
 			<div>
-				{input mail, class => 'form-control'}
+				{input from, class => 'form-control'}
+			</div>
+		</div>
+
+		<div class="form-group">
+			{var label = $form->renderer->renderPureLabel($form['to'])}
+			{var label->class[] = 'control-label'}
+			{$label}
+			<div>
+				{input to, class => 'form-control'}
 			</div>
 		</div>
 

@@ -1608,3 +1608,6 @@ msgstr "Searched terms"
 
 msgid "Recommend"
 msgstr "Recommend"
+
+msgid "Recommend has been send."
+msgstr "Recommend has been send."

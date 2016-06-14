@@ -11,6 +11,7 @@ producer:
 	            fill: 'Fill message'
 	            min: 'Insert at least %d chars'
 recommend:
+	from: 'Your mail'
 	to: 'To'
 	message: 'Message'
 	send: 'Send'
