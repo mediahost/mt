@@ -22,9 +22,6 @@ class ExportProductsPresenter extends BasePresenter
 	public function actionReadHeureka()
 	{
 		proc_nice(19);
-		
-		Debugger::timer('read-heureka');
-		Debugger::log('start', 'read-heureka-start');
 
 		if (!$this->settings->modules->heureka->enabled) {
 			$this->resource->state = 'error';
@@ -49,18 +46,12 @@ class ExportProductsPresenter extends BasePresenter
 				$this->resource->message = 'Missing \'' . $locale . '\' translation for this export';
 			}
 		}
-
-		$timer = Debugger::timer('read-heureka');
-		Debugger::log($timer, 'read-heureka-stop');
 	}
 
 	/** Priority CPU using */
 	public function actionReadZbozi()
 	{
 		proc_nice(19);
-
-		Debugger::timer('read-zbozi');
-		Debugger::log('start', 'read-zbozi-start');
 
 		if (!$this->settings->modules->zbozi->enabled) {
 			$this->resource->state = 'error';
@@ -84,9 +75,6 @@ class ExportProductsPresenter extends BasePresenter
 				$this->resource->message = 'Missing \'' . $locale . '\' translation for this export';
 			}
 		}
-
-		$timer = Debugger::timer('read-zbozi');
-		Debugger::log($timer, 'read-zbozi-stop');
 	}
 
 }
