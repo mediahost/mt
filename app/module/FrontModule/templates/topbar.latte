@@ -21,12 +21,14 @@
 		<!-- END CURRENCIES -->
 		<!-- BEGIN LANGS -->
 		<li class="langs-block">
-			<a href="javascript:void(0);" class="current">{_locale_$lang}</a>
+			<a href="javascript:void(0);" class="current">
+				<img src="{$basePath}/images/flags/{$locale}.png" alt="{_locale_$locale}"/>{_locale_$locale}
+			</a>
 			<div class="langs-block-others-wrapper">
 				<div class="langs-block-others">
-					{foreach $allowedLanguages as $locale}
-						{var $code = substr($locale,0,2)}
-						{if $code !== $lang}
+					{foreach $allowedLanguages as $allowedLang}
+						{var $code = substr($allowedLang,0,2)}
+						{if $code !== $locale}
 							{if $user->loggedIn}
 								{var $args = [locale => $code, overwrite => yes]}
 							{else}
