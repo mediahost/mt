@@ -105,5 +105,8 @@ services:
 	# WatchDog
 	- {implement: App\Components\WatchDog\Form\IWatchDogFactory, inject: yes}
 
+	# Recommend
+	- {implement: App\Components\Recommend\Form\IRecommendFactory, inject: yes}
+
 	# Example
 	- {implement: App\Components\Example\Form\IExampleFormFactory, inject: yes}

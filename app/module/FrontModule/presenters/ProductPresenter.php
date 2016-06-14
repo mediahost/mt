@@ -4,6 +4,8 @@ namespace App\FrontModule\Presenters;
 
 use App\Components\Basket\Form\AddToCart;
 use App\Components\Basket\Form\IAddToCartFactory;
+use App\Components\Recommend\Form\IRecommendFactory;
+use App\Components\Recommend\Form\Recommend;
 use App\Components\WatchDog\Form\IWatchDogFactory;
 use App\Components\WatchDog\Form\WatchDog;
 use App\Extensions\HomeCredit;
@@ -26,6 +28,9 @@ class ProductPresenter extends BasePresenter
 
 	/** @var IWatchDogFactory @inject */
 	public $iWatchDogFactory;
+
+	/** @var IRecommendFactory @inject */
+	public $iRecommendFactory;
 
 	/** @var VisitFacade @inject */
 	public $visitFacade;
@@ -169,6 +174,23 @@ class ProductPresenter extends BasePresenter
 		$control->setAjax(TRUE);
 		$control->onAfterSubmit = function () {
 			$this->flashMessage($this->translator->translate('Watching was saved.'));
+			if ($this->isAjax()) {
+				$this->redrawControl();
+			} else {
+				$this->redirect('this');
+			}
+		};
+		return $control;
+	}
+
+	/** @return Recommend */
+	public function createComponentRecommend()
+	{
+		$control = $this->iRecommendFactory->create();
+		$control->setStock($this->stock);
+		$control->setAjax(TRUE);
+		$control->onAfterSend = function () {
+			$this->flashMessage($this->translator->translate('Recommend has been send.'));
 			if ($this->isAjax()) {
 				$this->redrawControl();
 			} else {

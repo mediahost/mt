@@ -1605,3 +1605,6 @@ msgstr "Searched products"
 
 msgid "Searched terms"
 msgstr "Searched terms"
+
+msgid "Recommend"
+msgstr "Recommend"

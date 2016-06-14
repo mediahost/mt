@@ -1,0 +1,27 @@
+{form form}
+	<div class="modal-body">
+
+		<div class="form-group">
+			{var label = $form->renderer->renderPureLabel($form['mail'])}
+			{var label->class[] = 'control-label'}
+			{$label}
+			<div>
+				{input mail, class => 'form-control'}
+			</div>
+		</div>
+
+		<div class="form-group">
+			{var label = $form->renderer->renderPureLabel($form['message'])}
+			{var label->class[] = 'control-label'}
+			{$label}
+			<div>
+				{input message, class => 'form-control'}
+			</div>
+		</div>
+			
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn default" data-dismiss="modal">{_'Cancel'}</button>
+		{button submit, class => 'btn blue', data-dismiss-after => 'true'}{caption}{/button}
+	</div>
+{/form}

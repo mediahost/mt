@@ -1560,3 +1560,6 @@ msgstr "Hledané produkty"
 
 msgid "Searched terms"
 msgstr "Hledané výrazy"
+
+msgid "Recommend"
+msgstr "Doporučit"
