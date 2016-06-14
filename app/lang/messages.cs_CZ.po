@@ -1562,4 +1562,7 @@ msgid "Searched terms"
 msgstr "Hledané výrazy"
 
 msgid "Recommend"
-msgstr "Doporučit"
+msgstr "Doporučit známému"
+
+msgid "Recommend has been send."
+msgstr "Doporučení bylo odesláno."

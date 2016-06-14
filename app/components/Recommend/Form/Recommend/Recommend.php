@@ -8,9 +8,13 @@ use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Mail\Messages\Recommend\IRecommendationFactory;
 use App\Model\Entity\Stock;
+use Nette\Security\User;
 
 class Recommend extends BaseControl
 {
+
+	/** @var User @inject */
+	public $user;
 
 	/** @var IRecommendationFactory @inject */
 	public $iRecommendFactory;
@@ -33,9 +37,14 @@ class Recommend extends BaseControl
 			$form->getElementPrototype()->class('ajax loadingNoOverlay');
 		}
 
-		$form->addText('mail', 'to', NULL, 255)
-				->setRequired('verification.mail.fill')
-				->addRule(Form::EMAIL, 'verification.mail.format');
+		$form->addText('from', 'from', NULL, 255)
+			->setRequired('verification.mail.fill')
+			->addRule(Form::EMAIL, 'verification.mail.format')
+			->setDisabled($this->user->isLoggedIn());
+
+		$form->addText('to', 'to', NULL, 255)
+			->setRequired('verification.mail.fill')
+			->addRule(Form::EMAIL, 'verification.mail.format');
 
 		$form->addTextArea('message', 'message', NULL, 5)
 			->setRequired('verification.message.fill');
@@ -50,7 +59,12 @@ class Recommend extends BaseControl
 	public function formSucceeded(Form $form, $values)
 	{
 		$message = $this->iRecommendFactory->create();
-		$message->setFrom($values->mail);
+		if ($this->user->isLoggedIn() && $this->user->getIdentity()->getMail()) {
+			$message->setFrom($this->user->getIdentity()->getMail());
+		} else {
+			$message->setFrom($values->from);
+		}
+		$message->addTo($values->to);
 		$message->addParameter('text', $values->message);
 		$message->addParameter('stock', $this->stock);
 		$message->send();
@@ -62,6 +76,9 @@ class Recommend extends BaseControl
 	protected function getDefaults()
 	{
 		$values = [];
+		if ($this->user->isLoggedIn()) {
+			$values['from'] = $this->user->getIdentity()->getMail();
+		}
 		return $values;
 	}
 
