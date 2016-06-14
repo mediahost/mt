@@ -54,7 +54,7 @@ var HtmlEditors = function () {
 			};
 			if ($('.wysihtml5').hasClass('page-html-content')) {
 				options.stylesheets = [];
-				options.stylesheets.push('http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all');
+				options.stylesheets.push('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all');
 				options.stylesheets.push(basePath + '/assets/frontend/css/style.css');
 				options.stylesheets.push(basePath + '/assets/frontend/css/style-shop.css');
 			}
