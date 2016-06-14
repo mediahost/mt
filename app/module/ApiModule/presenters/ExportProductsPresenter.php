@@ -7,7 +7,6 @@ use App\Model\Facade\StockFacade;
 use Drahak\Restful\Application\Responses\TextResponse;
 use Drahak\Restful\IResource;
 use Drahak\Restful\Mapping\NullMapper;
-use Tracy\Debugger;
 
 class ExportProductsPresenter extends BasePresenter
 {
@@ -37,9 +36,6 @@ class ExportProductsPresenter extends BasePresenter
 				$content = file_get_contents($filename);
 				$response = new TextResponse($content, new NullMapper(), IResource::XML);
 
-				$timer = Debugger::timer('read-heureka');
-				Debugger::log($timer, 'read-heureka-stop');
-
 				$this->sendResponse($response);
 			} else {
 				$this->resource->state = 'error';
@@ -65,9 +61,6 @@ class ExportProductsPresenter extends BasePresenter
 			if (is_file($filename)) {
 				$content = file_get_contents($filename);
 				$response = new TextResponse($content, new NullMapper(), IResource::XML);
-
-				$timer = Debugger::timer('read-zbozi');
-				Debugger::log($timer, 'read-zbozi-stop');
 
 				$this->sendResponse($response);
 			} else {
