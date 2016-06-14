@@ -12,7 +12,6 @@ use Kdyby\Doctrine\EntityManager;
 use Kdyby\Translation\Translator;
 use Nette\Object;
 use Nette\Utils\DateTime;
-use Tracy\Debugger;
 
 class TodoQueue extends Object
 {
@@ -79,8 +78,6 @@ class TodoQueue extends Object
 
 	private function doRefreshCategoryCache()
 	{
-		Debugger::log('START', 'doRefreshCategoryCache');
-
 		$categoryRepo = $this->em->getRepository(Category::getClassName());
 		$categoryRepo->clearResultCache(CategoryRepository::ALL_CATEGORIES_CACHE_ID);
 

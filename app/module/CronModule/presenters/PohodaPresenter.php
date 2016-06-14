@@ -19,9 +19,6 @@ class PohodaPresenter extends BasePresenter
 		proc_nice(19);
 		ini_set('max_execution_time', 120);
 		
-		Debugger::timer('pohoda-synchronize');
-		Debugger::log('start', 'pohoda-synchronize-start');
-		
 		if (!$this->settings->modules->pohoda->enabled) {
 			throw new ForbiddenRequestException('Pohoda module is not allowed');
 		}
@@ -43,9 +40,6 @@ class PohodaPresenter extends BasePresenter
 			$this->status = parent::STATUS_OK;
 			$this->message = 'No change from last import';
 		}
-
-		$timer = Debugger::timer('pohoda-synchronize');
-		Debugger::log($timer, 'pohoda-synchronize-stop');
 	}
 
 }
