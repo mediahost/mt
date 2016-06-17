@@ -40,6 +40,8 @@ class CategoryRepository extends BaseRepository
 		if ($parent) {
 			$qb->andWhere('c.parent = :parent')
 				->setParameter('parent', $parent);
+		} else {
+			$qb->andWhere('c.parent IS NULL');
 		}
 		if ($locale) {
 			$this->extendQbWhereLocale($qb, $locale);
