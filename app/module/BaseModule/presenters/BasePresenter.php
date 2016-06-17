@@ -93,7 +93,8 @@ abstract class BasePresenter extends Presenter
 		$this->template->allowedLanguages = $this->translator->getAvailableLocales();
 
 		$this->template->designSettings = $this->settings->design;
-		$this->template->pageInfo = $this->settings->pageInfo;
+		$this->template->pageInfo = $this->settings->getPageInfo();
+		$this->template->companyInfo = $this->settings->getCompanyInfo();
 		$this->template->exchange = $this->exchange;
 
 		$currency = $this->exchange[$this->exchange->getWeb()];

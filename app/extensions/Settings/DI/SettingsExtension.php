@@ -179,11 +179,17 @@ class SettingsExtension extends CompilerExtension
 			],
 			'contact' => [
 				'phone' => '+420 123 456 789',
+				'phone2' => '+420 123 456 789',
 				'email' => 'contact@company.sk',
+				'email2' => 'contact@company.sk',
 			],
 			'bank' => [
 				'sk' => 'SK1234567890123456789012',
 				'cz' => 'CZ1234567890123456789012',
+			],
+			'company' => [
+				'ico' => '12345678',
+				'dic' => 'SK12345678',
 			],
 		],
 		'expiration' => [

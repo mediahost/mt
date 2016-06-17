@@ -107,21 +107,21 @@
 				<h2>{_'Our Contacts'}</h2>
 				<address class="margin-bottom-40">
 					<address class="margin-bottom-10">
-						<strong>GRIFIN, s.r.o.</strong><br>
-						Hviezdoslavova 10<br>
-						01001 Žilina<br>
-						IČO: 45654433<br>
-						DIČ: SK2023102268<br>
+						<strong>{$companyInfo->address->company}</strong><br>
+						{$companyInfo->address->street}<br>
+						{$companyInfo->address->zip} {$companyInfo->address->city}<br>
+						IČO: {$companyInfo->company->ico}<br>
+						DIČ: {$companyInfo->company->dic}<br>
 					</address>
 					<address class="margin-bottom-10">
 						<strong>Konzultácie ohľadom spracovania objednávok</strong><br>
-						{_'Phone'}: +421 908 84 84 84<br>
-						{_'Email'}: <a href="mailto:obchod@mobilnetelefony.sk">obchod@mobilnetelefony.sk</a><br>
+						{_'Phone'}: {$companyInfo->contact->phone}<br>
+						{_'Email'}: <a href="mailto:{$companyInfo->contact->email}">{$companyInfo->contact->email}</a><br>
 					</address>
 					<address class="margin-bottom-40">
 						<strong>Reklamácie, servis</strong><br>
-						{_'Phone'}: +421 908 78 00 62<br>
-						{_'Email'}: <a href="mailto:servis@mobilnetelefony.sk">servis@mobilnetelefony.sk</a><br>
+						{_'Phone'}: {$companyInfo->contact->phone2}<br>
+						{_'Email'}: <a href="mailto:{$companyInfo->contact->email2}">{$companyInfo->contact->email2}</a><br>
 					</address>
 				</address>
 			</div>

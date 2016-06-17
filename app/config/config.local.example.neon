@@ -78,15 +78,20 @@ settings:
 	companyInfo:
 		address:
 			company: 'Grifin s.r.o.'
-			street: 'Hviezdoslavova 10'
+			street: 'Hviezdoslavova 14'
 			zip: '010 01'
 			city: 'Žilina'
 		contact:
-			phone: '+421 908 848 484'
+			phone: '+421 908 84 84 84'
 			email: 'obchod@mobilnetelefony.sk'
+			phone2: '+421 908 78 00 62'
+			email2: 'servis@mobilnetelefony.sk'
 		bank:
 			cz: 'CZ3108000000003627894339'
 			sk: 'SK0475000000004020234814'
+		company:
+			ico: '45654433'
+			dic: 'SK2023102268'
 	expiration:
 		remember: 14 days
 		notRemember: 30 minutes
