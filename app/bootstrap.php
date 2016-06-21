@@ -7,13 +7,12 @@ $configurator = new Nette\Configurator;
 // Enable Nette Debugger for error visualisation & logging
 $configurator->setDebugMode([
 	'94.113.177.5', // Petr - Brno
-	'149.62.146.153', //Petr - Brno TMP1
 	'37.221.251.254', // Petr - Svetla n.S.
-	'147.229.204.31', // Kapco
-	'188.121.172.183', // Samo
-	'31.10.57.18', // Martin - Rudoltice
-	'193.86.138.194', // Martin - Brno
-	'89.102.207.157', //Simple Dino
+	'147.229.204.31', // Kapco 1
+	'213.81.220.67', // Kapco 2
+	// TMPs
+	'149.62.146.153', // Brno TMP1
+	'94.113.216.110', // Brno TMP2
 ]);
 
 $configurator->enableDebugger(__DIR__ . '/../log');
