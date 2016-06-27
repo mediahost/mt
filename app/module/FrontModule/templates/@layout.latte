@@ -1,95 +1,87 @@
 <!DOCTYPE html>
-<!--[if IE 8]> <html lang="{$lang}" class="ie8 no-js"> <![endif]-->
-<!--[if IE 9]> <html lang="{$lang}" class="ie9 no-js"> <![endif]-->
-<!--[if !IE]><!-->
-<html lang="{$lang}">
-	<!--<![endif]-->
-	{includeblock '../../BaseModule/templates/metronic.defines.latte'}
+<html lang="{$locale}">
+{includeblock '../../BaseModule/templates/metronic.defines.latte'}
 
-	<!-- BEGIN HEAD -->
-	<head>
-		<title>{ifset $pageTitle}{$pageTitle} | {/ifset}{block title|striptags}{$pageInfo->projectName}{/block}</title>
+<!-- BEGIN HEAD -->
+<head>
+	<title>{ifset $pageTitle}{$pageTitle} | {/ifset}{block title|striptags}{$pageInfo->projectName}{/block}</title>
+	<meta http-equiv="encoding" charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta name="description" content="{$pageDescription|striptags}"/>
+	<meta name="keywords" content="{$pageKeywords}">
+	<meta name="author" content="{$pageInfo->author}"/>
 
-		<meta charset="utf-8"/>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-		<meta name="description" content="{$pageDescription|striptags}"/>
-		<meta name="keywords" content="{$pageKeywords}">
-		<meta name="author" content="{$pageInfo->author}"/>
+	<meta name="robots" content="index,follow">
+	<meta n:ifset="$googleSiteVerification" name="google-site-verification" content="{$googleSiteVerification}">
 
-		<meta name="robots" content="index,follow">
-		<meta n:ifset="$googleSiteVerification" name="google-site-verification" content="{$googleSiteVerification}">
+	<meta property="og:type" content="website">
+	<meta property="og:site_name" content="{$pageInfo->projectName}">
+	<meta property="og:title" content="{include title}">
+	<meta property="og:description" content="{$pageDescription|striptags}">
+	<meta property="og:image" content="{link //Homepage:}favicon.png">
+	<meta property="og:url" content="{link //this}">
 
-		<meta property="og:type" content="website">
-		<meta property="og:site_name" content="{$pageInfo->projectName}">
-		<meta property="og:title" content="{include title}">
-		<meta property="og:description" content="{$pageDescription|striptags}">
-		<meta property="og:image" content="{link //Homepage:}favicon.png">
-		<meta property="og:url" content="{link //this}">
+	<link href="{$basePath}/favicon.ico" rel="shortcut icon">
 
-		{include cssMetronicCore}
-		{include cssMetronicFrontTheme}
+	{include cssBox}
 
-		{control cssFront}
-		{control cssPrint}
+	{control cssFront2}
+	{control cssPrint}
 
-		<link href="{$basePath}/favicon.ico" rel="shortcut icon">
+	{block head}{/block}
+</head>
+<!-- END HEAD -->
 
-		{block head}{/block}
-	</head>
-	<!-- END HEAD -->
+<body class="{block bodyClass}{/block}">
 
-	<!-- Body BEGIN -->
-	<body class="{block bodyClass}ecommerce{/block}">
-		<script> document.documentElement.className += ' js'</script>
+<div class="global-wrapper clearfix" id="global-wrapper">
 
-		{snippetArea header}
-			{include 'header.latte'}
-		{/snippetArea}
+	{include 'topbar.latte'}
+	{include 'header.latte'}
 
-		{include 'slider.latte'}
+	<div class="container">
 
-		<div class="main">
-			<div class="container">
-
-				<!-- BEGIN BREADCRUMBS -->
-
-				<ul class="breadcrumb" n:block="breadcrumb">
-					{var breadcrumb => ['Home' => '']}
-					<li><a n:href=":Front:Homepage:">{_'Home'}</a></li>
-					{block breadcrumbItems}{/block}
-				</ul>
-				<!-- END BREADCRUMBS -->
-
-				<!-- CONTENT -->
-				<div n:class="row, !$showBrands ? margin-bottom-40">
-
-					<!-- BEGIN FLASH MESSAGES-->
-					<div n:snippet="flashMessages">
-						<div n:foreach="$flashes as $flash"
-								class="alert alert-{$flash->type} fade in">
-							<button type="button" class="close" data-dismiss="alert"></button>
-							{$flash->message}
-						</div>
-					</div>
-					<!-- END FLASH MESSAGES-->
-
-					<!-- BEGIN CONTENT -->
-					{include content}
-					<!-- END CONTENT -->
-				</div>
-				<!-- END SIDEBAR & CONTENT -->
+		<!-- BEGIN FLASH MESSAGES-->
+		<div n:snippet="flashMessages">
+			<div n:foreach="$flashes as $flash"
+					class="alert alert-{$flash->type} fade in">
+				<button type="button" class="close" data-dismiss="alert"></button>
+				{$flash->message}
 			</div>
+			{*TODO: stylovat*}
+			{*<div class="alert alert-success fade in">*}
+				{*<button type="button" class="close" data-dismiss="alert"></button>*}
+				{*ahoj*}
+			{*</div>*}
 		</div>
+		<!-- END FLASH MESSAGES-->
 
-		{include 'footer.latte'}
+		<!-- BEGIN BREADCRUMBS -->
+		<header class="page-header">
+			<ol class="breadcrumb page-breadcrumb" n:block="breadcrumb">
+				<li><a n:href=":Front:Homepage:">{_'Home'}</a></li>
+				{block breadcrumbItems}{/block}
+			</ol>
+		</header>
+		<!-- END BREADCRUMBS -->
 
-		{block scripts}
-			<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
-			{include jsMetronicCore}
-			{include jsFrontApp}
-			<!-- END JAVASCRIPTS -->
-		{/block}
-	</body>
-	<!-- END BODY -->
+		<!-- BEGIN CONTENT -->
+		{include content}
+		<!-- END CONTENT -->
+
+	</div>
+	<div class="gap gap-small"></div>
+
+	{include 'footer.latte'}
+</div>
+
+{block scripts}
+	<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+	{include jsBoxCore}
+	{include jsFrontApp2}
+	<!-- END JAVASCRIPTS -->
+{/block}
+</body>
 </html>

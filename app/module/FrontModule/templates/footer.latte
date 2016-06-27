@@ -1,204 +1,132 @@
 {block footer}
-
-<!-- BEGIN BRANDS -->
-<div class="brands"
-		n:if="$showBrands">
-	{cache 'brands' . $lang, expire => '1 day', tags => ['producers']}
+	<!-- BEGIN FOOTER -->
+	<footer class="main-footer">
 		<div class="container">
-			<div class="owl-carousel owl-carousel6-brands">
-				<a n:foreach="$producers as $producer" n:href="Category:producer, $producer->slug">
-					<img src="{$basePath}/foto/{$producer->image|size:169:100}" alt="{$producer}" title="{$producer}">
-				</a>
+			<div class="row row-col-gap" data-gutter="60">
+				<div class="col-md-3">
+					<h4 class="widget-title-sm">TheBox Shop</h4>
+					<p>Cubilia etiam metus libero elit euismod quisque quisque eleifend dapibus fames ultrices</p>
+					<ul class="main-footer-social-list">
+						<li>
+							<a class="fa fa-facebook" href="#"></a>
+						</li>
+						<li>
+							<a class="fa fa-twitter" href="#"></a>
+						</li>
+						<li>
+							<a class="fa fa-pinterest" href="#"></a>
+						</li>
+						<li>
+							<a class="fa fa-instagram" href="#"></a>
+						</li>
+						<li>
+							<a class="fa fa-google-plus" href="#"></a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-md-3">
+					<h4 class="widget-title-sm">Popular Tags</h4>
+					<ul class="main-footer-tag-list">
+						<li><a href="#">New Season</a>
+						</li>
+						<li><a href="#">Watches</a>
+						</li>
+						<li><a href="#">woman</a>
+						</li>
+						<li><a href="#">classic</a>
+						</li>
+						<li><a href="#">modern</a>
+						</li>
+						<li><a href="#">blue</a>
+						</li>
+						<li><a href="#">shoes</a>
+						</li>
+						<li><a href="#">running</a>
+						</li>
+						<li><a href="#">jeans</a>
+						</li>
+						<li><a href="#">sports</a>
+						</li>
+						<li><a href="#">laptops</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-md-3">
+					<h4 class="widget-title-sm">Newsletter</h4>
+					<form>
+						<div class="form-group">
+							<label>Sign up to the newsletter</label>
+							<input class="newsletter-input form-control" placeholder="Your e-mail address" type="text"/>
+						</div>
+						<input class="btn btn-primary" type="submit" value="Sign up"/>
+					</form>
+				</div>
 			</div>
+			<ul class="main-footer-links-list">
+				<li><a href="#">About Us</a>
+				</li>
+				<li><a href="#">Jobs</a>
+				</li>
+				<li><a href="#">Legal</a>
+				</li>
+				<li><a href="#">Support & Customer Service</a>
+				</li>
+				<li><a href="#">Blog</a>
+				</li>
+				<li><a href="#">Privacy</a>
+				</li>
+				<li><a href="#">Terms</a>
+				</li>
+				<li><a href="#">Press</a>
+				</li>
+				<li><a href="#">Shipping</a>
+				</li>
+				<li><a href="#">Payments & Refunds</a>
+				</li>
+			</ul>
+			<img class="main-footer-img" src="{$basePath}/foto/100-100/default.png" alt="Image Alternative text" title="Image Title"/>
 		</div>
-	{/cache}
-</div>
-<!-- END BRANDS -->
+	</footer>
+	<!-- END FOOTER -->
 
-<!-- BEGIN STEPS -->
-<div class="steps-block steps-block-red"
-		n:if="$showSteps">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-4 steps-block-col">
-				<i class="fa fa-truck"></i>
-				<div>
-					<h2>{_'footer.prefooter.freeShipping'}</h2>
-					<em>{_'footer.prefooter.whenBuyOver'} {300|currency}</em>
-				</div>
-				<span>&nbsp;</span>
-			</div>
-			<div class="col-md-4 steps-block-col">
-				<i class="fa fa-gift"></i>
-				<div>
-					<h2>{_'footer.prefooter.extraGifts'}</h2>
-					<em>{_'footer.prefooter.freeGiftsForSelectedProducts'}</em>
-				</div>
-				<span>&nbsp;</span>
-			</div>
-			<div class="col-md-4 steps-block-col">
-				<i class="fa fa-phone"></i>
-				<div>
-					<h2>0908 84 84 84</h2>
-					<em>{_'footer.prefooter.orderByPhone'}</em>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- END STEPS -->
-
-<!-- BEGIN PRE-FOOTER -->
-<div class="pre-footer">
-	<div class="container">
-		<div class="row">
-			<!-- BEGIN BOTTOM ABOUT BLOCK -->
-			<div class="col-md-4 col-sm-6 pre-footer-col">
-				<h2>{$pageInfo->projectName}</h2>
-				<p>
-					{$pageInfo->description}
-				</p>
-
-				<h2>{_'Open hours'}</h2>
-				<table>
-					<tr>
-						<th style="width:150px">Pondelok:</th>
-						<td>9:00 - 17:00</td>
-					</tr>
-					<tr>
-						<th>Utorok:</th>
-						<td>9:00 - 17:00</td>
-					</tr>
-					<tr>
-						<th>Streda:</th>
-						<td>9:00 - 17:00</td>
-					</tr>
-					<tr>
-						<th>Štvrtok:</th>
-						<td>9:00 - 17:00</td>
-					</tr>
-					<tr>
-						<th>Piatok:</th>
-						<td>9:00 - 17:00</td>
-					</tr>
-					<tr>
-						<th>Sobota – Nedeľa:</th>
-						<td>Zatvorené</td>
-					</tr>
-					<tr>
-						<th>Sviatky:</th>
-						<td>Zatvorené</td>
-					</tr>
-				</table>
-
-				{if $footerPages->page2}
-					{var $footerPage => $footerPages->page2}
-					{? $footerPage->setCurrentLocale($lang)}
-					<h2 class="margin-top-20">{$footerPage}</h2>
-					<a n:href="Page:, $footerPage->id">{$footerPage}</a>
-				{/if}
-			</div>
-
-			<!-- END BOTTOM ABOUT BLOCK -->
-
-			<!-- BEGIN BOTTOM CONTACTS -->
-			<div class="col-md-4 col-sm-6 pre-footer-col">
-
-				<h2>{_'Our Contacts'}</h2>
-				<address class="margin-bottom-40">
-					<address class="margin-bottom-10">
-						<strong>{$companyInfo->address->company}</strong><br>
-						{$companyInfo->address->street}<br>
-						{$companyInfo->address->zip} {$companyInfo->address->city}<br>
-						IČO: {$companyInfo->company->ico}<br>
-						DIČ: {$companyInfo->company->dic}<br>
-					</address>
-					<address class="margin-bottom-10">
-						<strong>Konzultácie ohľadom spracovania objednávok</strong><br>
-						{_'Phone'}: {$companyInfo->contact->phone}<br>
-						{_'Email'}: <a href="mailto:{$companyInfo->contact->email}">{$companyInfo->contact->email}</a><br>
-					</address>
-					<address class="margin-bottom-40">
-						<strong>Reklamácie, servis</strong><br>
-						{_'Phone'}: {$companyInfo->contact->phone2}<br>
-						{_'Email'}: <a href="mailto:{$companyInfo->contact->email2}">{$companyInfo->contact->email2}</a><br>
-					</address>
-				</address>
-			</div>
-			<!-- END BOTTOM CONTACTS -->
-
-			<!-- BEGIN TWITTER BLOCK -->
-			<div class="col-md-4 col-sm-6 pre-footer-col">
-				<h2 class="margin-bottom-20">{_'Our Facebook'}</h2>
-
-				{var fbURL => 'https://www.facebook.com/mobilnetelefony.sk'}
-				<div id="fb-root"></div>
-				<div class="fb-page"
-					 data-href="{$fbURL}"
-					 data-small-header="false"
-					 data-adapt-container-width="true"
-					 data-hide-cover="false"
-					 data-show-facepile="true"
-					 data-show-posts="false">
-					<div class="fb-xfbml-parse-ignore">
-						<blockquote cite="{$fbURL}">
-							<a href="{$fbURL}">{$pageInfo->projectName}</a>
-						</blockquote>
-					</div>
-				</div>
-
-			</div>
-			<!-- END TWITTER BLOCK -->
-		</div>
-		<hr>
-		<div class="row">
-			<!-- BEGIN SOCIAL ICONS -->
-			<div class="col-md-6 col-sm-6">
-				<ul class="social-icons">
-					<li><a class="facebook" data-original-title="facebook" href="#"></a></li>
-					<li><a class="twitter" data-original-title="twitter" href="#"></a></li>
-					<li><a class="googleplus" data-original-title="googleplus" href="#"></a></li>
-					<li><a class="linkedin" data-original-title="linkedin" href="#"></a></li>
-					<li><a class="youtube" data-original-title="youtube" href="#"></a></li>
-					<li><a class="skype" data-original-title="skype" href="#"></a></li>
-				</ul>
-			</div>
-			<!-- END SOCIAL ICONS -->
-			<!-- BEGIN NEWLETTER -->
-			<div class="col-md-6 col-sm-6">
-				<div class="pre-footer-subscribe-box pull-right">
-					<h2>Newsletter</h2>
-					{control subscribe}
-				</div>
-			</div>
-			<!-- END NEWLETTER -->
-		</div>
-	</div>
-</div>
-<!-- END PRE-FOOTER -->
-
-<!-- BEGIN FOOTER -->
-<div class="footer">
-	{cache 'footer' . $lang, expire => '1 day', tags => ['pages']}
+	<!-- BEGIN COPYRIGHT -->
+	<div class="copyright-area">
 		<div class="container">
 			<div class="row">
-				<!-- BEGIN COPYRIGHT -->
-				<div class="col-md-6 col-sm-6 padding-top-10">
-					{!= date('Y')} &copy; {$pageInfo->projectName} {_'by Mediahost'} |
-					{if $footerPages->page1}
-						{var $footerPage => $footerPages->page1}
-						{? $footerPage->setCurrentLocale($lang)}
-						<a n:href="Page:, $footerPage->id">{$footerPage}</a> |
-					{/if}
-					{if $footerPages->page2}
-						{var $footerPage => $footerPages->page2}
-						{? $footerPage->setCurrentLocale($lang)}
-						<a n:href="Page:, $footerPage->id">{$footerPage}</a>
-					{/if}
+				<div class="col-md-6">
+					<p class="copyright-text">Copyright &copy; <a href="#">TheBox</a> 2014. Designed my remtsoy. All
+						rights reseved</p>
 				</div>
-				<!-- END COPYRIGHT -->
+				<div class="col-md-6">
+					<ul class="payment-icons-list">
+						<li>
+							<img src="{$basePath}/foto/32-32/default.png" alt="Image Alternative text"
+								 title="Pay with Visa"/>
+						</li>
+						<li>
+							<img src="{$basePath}/foto/32-32/default.png" alt="Image Alternative text"
+								 title="Pay with Mastercard"/>
+						</li>
+						<li>
+							<img src="{$basePath}/foto/32-32/default.png" alt="Image Alternative text"
+								 title="Pay with Paypal"/>
+						</li>
+						<li>
+							<img src="{$basePath}/foto/32-32/default.png" alt="Image Alternative text"
+								 title="Pay with Visa-electron"/>
+						</li>
+						<li>
+							<img src="{$basePath}/foto/32-32/default.png" alt="Image Alternative text"
+								 title="Pay with Maestro"/>
+						</li>
+						<li>
+							<img src="{$basePath}/foto/32-32/default.png" alt="Image Alternative text"
+								 title="Pay with Discover"/>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
-	{/cache}
-</div>
-<!-- END FOOTER -->
+	</div>
+	<!-- END COPYRIGHT -->
+{/block}

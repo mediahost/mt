@@ -1,0 +1,46 @@
+{block header}
+	<!-- BEGIN TOP BAR -->
+	<div class="pre-header">
+		<div class="container">
+			<div class="row">
+				{include 'topbar.latte'}
+			</div>
+		</div>
+	</div>
+	<!-- END TOP BAR -->
+
+	<!-- BEGIN HEADER -->
+	<div class="header">
+		<div class="container">
+			<a class="site-logo" n:href=":Front:Homepage:">
+				<img src="{$basePath}/images/logo/logo_sk.png" alt="{_'Logo'}">
+			</a>
+			<a href="javascript:void(0);" class="mobi-toggler">
+				<i class="fa fa-search"></i>
+			</a>
+			<!-- BEGIN CART -->
+			<div class="top-cart-block" n:snippet="basket">
+				{include 'basket.latte'}
+			</div>
+			<!--END CART -->
+
+			<!-- BEGIN TOP SEARCH -->
+			<div class="search-box">
+				{form search}
+					{? $form->render('begin')}
+					<div class="input-group">
+						{input search}
+						<span class="input-group-btn">
+						{input send}
+					</span>
+					</div>
+					{? $form->render('end')}
+				{/form}
+			</div>
+			<!-- END TOP SEARCH -->
+
+			{include 'menu.latte'}
+		</div>
+	</div>
+	<!-- Header END -->
+{/block}

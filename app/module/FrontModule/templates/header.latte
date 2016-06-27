@@ -1,46 +1,772 @@
 {block header}
-	<!-- BEGIN TOP BAR -->
-	<div class="pre-header">
-		<div class="container">
-			<div class="row">
-				{include 'topbar.latte'}
+	<div class="mfp-with-anim mfp-hide mfp-dialog clearfix" id="nav-login-dialog">
+		<h3 class="widget-title">Member Login</h3>
+		<p>Welcome back, friend. Login to get started</p>
+		<hr/>
+		<form>
+			<div class="form-group">
+				<label>Email or Username</label>
+				<input class="form-control" type="text"/>
 			</div>
-		</div>
+			<div class="form-group">
+				<label>Password</label>
+				<input class="form-control" type="text"/>
+			</div>
+			<div class="checkbox">
+				<label>
+					<input class="i-check" type="checkbox"/>Remeber Me</label>
+			</div>
+			<input class="btn btn-primary" type="submit" value="Sign In"/>
+		</form>
+		<div class="gap gap-small"></div>
+		<ul class="list-inline">
+			<li><a href="#nav-account-dialog" class="popup-text">Not Member Yet</a>
+			</li>
+			<li><a href="#nav-pwd-dialog" class="popup-text">Forgot Password?</a>
+			</li>
+		</ul>
 	</div>
-	<!-- END TOP BAR -->
-
-	<!-- BEGIN HEADER -->
-	<div class="header">
-		<div class="container">
-			<a class="site-logo" n:href=":Front:Homepage:">
-				<img src="{$basePath}/images/logo/logo_sk.png" alt="{_'Logo'}">
-			</a>
-			<a href="javascript:void(0);" class="mobi-toggler">
-				<i class="fa fa-search"></i>
-			</a>
-			<!-- BEGIN CART -->
-			<div class="top-cart-block" n:snippet="basket">
-				{include 'basket.latte'}
+	<div class="mfp-with-anim mfp-hide mfp-dialog clearfix" id="nav-account-dialog">
+		<h3 class="widget-title">Create TheBox Account</h3>
+		<p>Ready to get best offers? Let's get started!</p>
+		<hr/>
+		<form>
+			<div class="form-group">
+				<label>Email</label>
+				<input class="form-control" type="text"/>
 			</div>
-			<!--END CART -->
-
-			<!-- BEGIN TOP SEARCH -->
-			<div class="search-box">
-				{form search}
-					{? $form->render('begin')}
-					<div class="input-group">
-						{input search}
-						<span class="input-group-btn">
-						{input send}
-					</span>
+			<div class="form-group">
+				<label>Password</label>
+				<input class="form-control" type="text"/>
+			</div>
+			<div class="form-group">
+				<label>Repeat Password</label>
+				<input class="form-control" type="text"/>
+			</div>
+			<div class="form-group">
+				<label>Phone Number</label>
+				<input class="form-control" type="text"/>
+			</div>
+			<div class="checkbox">
+				<label>
+					<input class="i-check" type="checkbox"/>Subscribe to the Newsletter</label>
+			</div>
+			<input class="btn btn-primary" type="submit" value="Create Account"/>
+		</form>
+		<div class="gap gap-small"></div>
+		<ul class="list-inline">
+			<li><a href="#nav-login-dialog" class="popup-text">Already Memeber</a>
+			</li>
+		</ul>
+	</div>
+	<div class="mfp-with-anim mfp-hide mfp-dialog clearfix" id="nav-pwd-dialog">
+		<h3 class="widget-title">Password Recovery</h3>
+		<p>Enter Your Email and We Will Send the Instructions</p>
+		<hr/>
+		<form>
+			<div class="form-group">
+				<label>Your Email</label>
+				<input class="form-control" type="text"/>
+			</div>
+			<input class="btn btn-primary" type="submit" value="Recover Password"/>
+		</form>
+	</div>
+	<nav class="navbar navbar-inverse navbar-main navbar-pad">
+		<div class="container">
+			<div class="navbar-header">
+				<button class="navbar-toggle collapsed" type="button" data-toggle="collapse"
+						data-target="#main-nav-collapse" area_expanded="false"><span
+							class="sr-only">Main Menu</span><span class="icon-bar"></span><span class="icon-bar"></span><span
+							class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="index.html">
+					<img src="{$basePath}/assets/frontend/img/logos/logo-w.png" alt="Image Alternative text" title="Image Title"/>
+				</a>
+			</div>
+			<div class="rel">
+				<form class="navbar-form navbar-left navbar-main-search navbar-main-search-category" role="search">
+					<select class="navbar-main-search-category-select">
+						<option>All Departmens</option>
+						<option>Appilances</option>
+						<option>Apps & Games</option>
+						<option>Arts, Crafts & Sewing</option>
+						<option>Automotive</option>
+						<option>Baby</option>
+						<option>Books</option>
+						<option>CDs & Vinyl</option>
+						<option>Cell Phones & Accessories</option>
+						<option>Clothing, Shoes & Jewelry</option>
+						<option>&nbsp;&nbsp;&nbsp;Woman</option>
+						<option>&nbsp;&nbsp;&nbsp;Men</option>
+						<option>&nbsp;&nbsp;&nbsp;Girls</option>
+						<option>&nbsp;&nbsp;&nbsp;Baby</option>
+						<option>Collectibles & Fine Art</option>
+						<option>Computers</option>
+						<option>Credit and Payment Cards</option>
+						<option>Digital Music</option>
+						<option>Electronics</option>
+						<option>Gift Cards</option>
+						<option>Grocery & Gourmet</option>
+						<option>Health & Personal Care</option>
+						<option>Home & Kitchen</option>
+						<option>Industrial & Scientific</option>
+						<option>Luggage & Travel</option>
+						<option>Luxury Beauty</option>
+						<option>Magazine Subscribtions</option>
+						<option>Movies & TV</option>
+						<option>Musical Instuments</option>
+						<option>Office Products</option>
+						<option>Patio, Lawn & Garden</option>
+						<option>Pet Supplies</option>
+						<option>Software</option>
+						<option>Sports & Outdoors</option>
+						<option>Tools & Home Improvement</option>
+						<option>Toys & Games</option>
+						<option>Video Games</option>
+						<option>Wine</option>
+					</select>
+					<div class="form-group">
+						<input class="form-control" type="text" placeholder="Search the Entire Store..."/>
 					</div>
-					{? $form->render('end')}
-				{/form}
+					<a class="fa fa-search navbar-main-search-submit" href="#"></a>
+				</form>
+				<a class="navbar-theme-img" href="#">
+					<img src="{$basePath}/foto/373-92/default.png" alt="Image Alternative text" title="Image Title"/>
+				</a>
 			</div>
-			<!-- END TOP SEARCH -->
-
-			{include 'menu.latte'}
 		</div>
-	</div>
-	<!-- Header END -->
+	</nav>
+	<nav class="navbar-inverse navbar-main yamm">
+		<div class="container">
+			<div class="collapse navbar-collapse navbar-collapse-no-pad" id="main-nav-collapse">
+				<ul class="nav navbar-nav navbar-nav-lg">
+					<li class="dropdown yamm-fw"><a href="#"><span>Explore</span>Pages<i class="drop-caret"
+																						 data-toggle="dropdown"></i></a>
+						<ul class="dropdown-menu">
+							<li class="yamm-content">
+								<div class="row row-eq-height row-col-border">
+									<div class="col-md-2">
+										<h5>Homepages</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="index.html">Layout 1</a>
+												<p class="dropdown-menu-items-list-desc">Default Layout</p>
+											</li>
+											<li><a href="index-layout-2.html">Layout 2</a>
+												<p class="dropdown-menu-items-list-desc">Banners Area + Product
+													Carousel</p>
+											</li>
+											<li><a href="index-layout-3.html">Layout 3</a>
+												<p class="dropdown-menu-items-list-desc">Aside Departmens</p>
+											</li>
+											<li><a href="index-layout-4.html">Layout 4</a>
+												<p class="dropdown-menu-items-list-desc">Sidebar Right</p>
+											</li>
+											<li><a href="index-layout-5.html">Layout 5</a>
+												<p class="dropdown-menu-items-list-desc">Small Aside Departmens +
+													Sidebar</p>
+											</li>
+											<li><a href="index-layout-6.html">Layout 6</a>
+												<p class="dropdown-menu-items-list-desc">Full Banners + Product Tabs</p>
+											</li>
+											<li><a href="index-layout-7.html">Layout 7</a>
+												<p class="dropdown-menu-items-list-desc">Small Aside Departmens +
+													Slider</p>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-2">
+										<h5>Category Pages</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="category.html">Layout 1</a>
+												<p class="dropdown-menu-items-list-desc">Default Layout</p>
+											</li>
+											<li><a href="category-layout-2.html">Layout 2</a>
+												<p class="dropdown-menu-items-list-desc">Banner Title</p>
+											</li>
+											<li><a href="category-layout-3.html">Layout 3</a>
+												<p class="dropdown-menu-items-list-desc">4 Columns Thumbs</p>
+											</li>
+											<li><a href="category-layout-4.html">Layout 4</a>
+												<p class="dropdown-menu-items-list-desc">6 Columns Small Thumbs</p>
+											</li>
+											<li><a href="category-layout-5.html">Layout 5</a>
+												<p class="dropdown-menu-items-list-desc">3 Columns Horizontal Thumbs</p>
+											</li>
+											<li><a href="category-layout-6.html">Layout 6</a>
+												<p class="dropdown-menu-items-list-desc">4 Columns Horizontal Thumbs</p>
+											</li>
+											<li><a href="category-layout-7.html">Layout 7</a>
+												<p class="dropdown-menu-items-list-desc">No Filters</p>
+											</li>
+											<li><a href="category-layout-8.html">Layout 8</a>
+												<p class="dropdown-menu-items-list-desc">Sidebar Right</p>
+											</li>
+											<li><a href="category-layout-9.html">Layout 9</a>
+												<p class="dropdown-menu-items-list-desc">Sidebar Inverse</p>
+											</li>
+											<li><a href="category-layout-10.html">Layout 10</a>
+												<p class="dropdown-menu-items-list-desc">Sidebar Color</p>
+											</li>
+											<li><a href="category-layout-11.html">Layout 11</a>
+												<p class="dropdown-menu-items-list-desc">Horizontal Thumbs</p>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-2">
+										<h5>Product Pages</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="product-page.html">Layout 1</a>
+												<p class="dropdown-menu-items-list-desc">Default Layout</p>
+											</li>
+											<li><a href="product-layout-2.html">Layout 2</a>
+												<p class="dropdown-menu-items-list-desc">No Sidebar</p>
+											</li>
+											<li><a href="product-layout-3.html">Layout 3</a>
+												<p class="dropdown-menu-items-list-desc">Full Area Layout + Banners</p>
+											</li>
+											<li><a href="product-layout-4.html">Layout 4</a>
+												<p class="dropdown-menu-items-list-desc">Gallery Style</p>
+											</li>
+											<li><a href="product-layout-5.html">Layout 5</a>
+												<p class="dropdown-menu-items-list-desc">Sidebar Right</p>
+											</li>
+											<li><a href="product-layout-6.html">Layout 6</a>
+												<p class="dropdown-menu-items-list-desc">Sidebar Left</p>
+											</li>
+											<li><a href="product-layout-7.html">Layout 7</a>
+												<p class="dropdown-menu-items-list-desc">Product Gallery Left</p>
+											</li>
+											<li><a href="product-layout-8.html">Layout 8</a>
+												<p class="dropdown-menu-items-list-desc">Product Gallery Right</p>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-2">
+										<h5>Header Layouts</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="index.html">Layout 1</a>
+												<p class="dropdown-menu-items-list-desc">Default Layout</p>
+											</li>
+											<li><a href="index-nav-layout-2.html">Layout 2</a>
+												<p class="dropdown-menu-items-list-desc">Center Logo + Category Nav</p>
+											</li>
+											<li><a href="index-nav-layout-3.html">Layout 3</a>
+												<p class="dropdown-menu-items-list-desc">Special Area + Extended
+													Search</p>
+											</li>
+											<li><a href="index-nav-layout-4.html">Layout 4</a>
+												<p class="dropdown-menu-items-list-desc">White Area + Extended
+													Search</p>
+											</li>
+										</ul>
+										<hr/>
+										<h5>Footer Layouts</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="index.html">Layout 1</a>
+												<p class="dropdown-menu-items-list-desc">Default Layout</p>
+											</li>
+											<li><a href="index-footer-layout-2.html">Layout 2</a>
+												<p class="dropdown-menu-items-list-desc">Minimal</p>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-2">
+										<h5>Misc</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="shopping-cart.html">Shopping Cart</a>
+											</li>
+											<li><a href="shopping-cart-empty.html">Cart Empty</a>
+											</li>
+											<li><a href="checkout.html">Checkout</a>
+											</li>
+											<li><a href="order-summary.html">Summary</a>
+											</li>
+											<li><a href="about-us.html">About Us</a>
+											</li>
+											<li><a href="contact.html">Contact</a>
+											</li>
+											<li><a href="404.html">404</a>
+											</li>
+											<li><a href="blog.html">Blog</a>
+											</li>
+											<li><a href="blog-post.html">Blog Post</a>
+											</li>
+											<li><a href="login-register.html">Login/Register</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown yamm-fw"><a href="#"><span>Best of</span>Fashion<i class="drop-caret"
+																						   data-toggle="dropdown"></i></a>
+						<ul class="dropdown-menu">
+							<li class="yamm-content">
+								<div class="row row-eq-height row-col-border">
+									<div class="col-md-2">
+										<h5>Top Categories</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="#">Mans</a>
+												<p class="dropdown-menu-items-list-desc">Sociis erat nunc</p>
+											</li>
+											<li><a href="#">Womans</a>
+												<p class="dropdown-menu-items-list-desc">Adipiscing enim inceptos</p>
+											</li>
+											<li><a href="#">Kids & Baby</a>
+												<p class="dropdown-menu-items-list-desc">Posuere pellentesque
+													egestas</p>
+											</li>
+											<li><a href="#">Shoes</a>
+												<p class="dropdown-menu-items-list-desc">Ut vulputate urna</p>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-2">
+										<h5>Shop For</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="#">Designer Collective</a>
+												<p class="dropdown-menu-items-list-desc">Vel posuere lorem</p>
+											</li>
+											<li><a href="#">Jewelry & Watches</a>
+												<p class="dropdown-menu-items-list-desc">Lacinia cursus auctor</p>
+											</li>
+											<li><a href="#">Handbags & Accessories</a>
+												<p class="dropdown-menu-items-list-desc">Nisl elementum bibendum</p>
+											</li>
+											<li><a href="#">Health & Beauty</a>
+												<p class="dropdown-menu-items-list-desc">Suspendisse hac venenatis</p>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-2">
+										<h5>Top Brands</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="#">Vera Bradley</a>
+											</li>
+											<li><a href="#">Rolex</a>
+											</li>
+											<li><a href="#">Nike</a>
+											</li>
+											<li><a href="#">Michael Kors</a>
+											</li>
+											<li><a href="#">Coach</a>
+											</li>
+											<li><a href="#">Adidas</a>
+											</li>
+											<li><a href="#">Zara</a>
+											</li>
+											<li><a href="#">Fossil</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<img class="dropdown-menu-theme-image" src="{$basePath}/foto/600-317/default.png"
+									 alt="Image Alternative text" title="Image Title"/>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown yamm-fw"><a href="#"><span>Your Ride</span>Motors<i class="drop-caret"
+																							data-toggle="dropdown"></i></a>
+						<ul class="dropdown-menu">
+							<li class="yamm-content">
+								<div class="row row-eq-height row-col-border">
+									<div class="col-md-2">
+										<h5>Top Categories</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="#">Cars & Trucks</a>
+												<p class="dropdown-menu-items-list-desc">Ipsum justo dolor</p>
+											</li>
+											<li><a href="#">Motorcycles</a>
+												<p class="dropdown-menu-items-list-desc">Platea imperdiet nibh</p>
+											</li>
+											<li><a href="#">Parts & Accessories</a>
+												<p class="dropdown-menu-items-list-desc">Congue adipiscing praesent</p>
+											</li>
+											<li><a href="#">Auto Tools & Supplies</a>
+												<p class="dropdown-menu-items-list-desc">Primis montes ante</p>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-2">
+										<h5>Additional Categories</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="#">Boats</a>
+												<p class="dropdown-menu-items-list-desc">Nullam penatibus luctus</p>
+											</li>
+											<li><a href="#">Motors Blog</a>
+												<p class="dropdown-menu-items-list-desc">Hac sit quam</p>
+											</li>
+											<li><a href="#">Other Vehicles</a>
+												<p class="dropdown-menu-items-list-desc">Id ante montes</p>
+											</li>
+											<li><a href="#">Powersports</a>
+												<p class="dropdown-menu-items-list-desc">Senectus dui praesent</p>
+											</li>
+											<li><a href="#">RVs & Campers</a>
+												<p class="dropdown-menu-items-list-desc">Magnis eget ligula</p>
+											</li>
+											<li><a href="#">Sales & Events</a>
+												<p class="dropdown-menu-items-list-desc">Libero torquent semper</p>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-2">
+										<h5>Top Models</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="#">Audi</a>
+											</li>
+											<li><a href="#">BMW</a>
+											</li>
+											<li><a href="#">Mercedes-Benz</a>
+											</li>
+											<li><a href="#">Mitubishi</a>
+											</li>
+											<li><a href="#">Porsche</a>
+											</li>
+											<li><a href="#">Ford</a>
+											</li>
+											<li><a href="#">Chevrolete</a>
+											</li>
+											<li><a href="#">Toyota</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<img class="dropdown-menu-theme-image" src="{$basePath}/foto/712-350/default.png"
+									 alt="Image Alternative text" title="Image Title"/>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown yamm-fw"><a href="#"><span>Make it Yours</span>Home & Garden<i
+									class="drop-caret" data-toggle="dropdown"></i></a>
+						<ul class="dropdown-menu">
+							<li class="yamm-content">
+								<div class="row row-eq-height row-col-border">
+									<div class="col-md-2">
+										<h5>Top Categories</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="#">Cycling</a>
+												<p class="dropdown-menu-items-list-desc">Sociis id porta</p>
+											</li>
+											<li><a href="#">Golf</a>
+												<p class="dropdown-menu-items-list-desc">Quisque dictum aliquet</p>
+											</li>
+											<li><a href="#">Hunting</a>
+												<p class="dropdown-menu-items-list-desc">Nec cum parturient</p>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-2">
+										<h5>Shop For</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="#">Action Figures</a>
+												<p class="dropdown-menu-items-list-desc">Congue id scelerisque</p>
+											</li>
+											<li><a href="#">Bilding Toys</a>
+												<p class="dropdown-menu-items-list-desc">Praesent placerat feugiat</p>
+											</li>
+											<li><a href="#">Dolls & Bears</a>
+												<p class="dropdown-menu-items-list-desc">Natoque gravida hac</p>
+											</li>
+											<li><a href="#">Railroads & Trains</a>
+												<p class="dropdown-menu-items-list-desc">Conubia sapien vulputate</p>
+											</li>
+											<li><a href="#">RC & Control Line</a>
+												<p class="dropdown-menu-items-list-desc">Egestas a feugiat</p>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-2">
+										<h5>Shops</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="#">Martha Stewart American Made</a>
+												<p class="dropdown-menu-items-list-desc">Ornare tempus per</p>
+											</li>
+											<li><a href="#">Refurbished Shop</a>
+												<p class="dropdown-menu-items-list-desc">Massa rhoncus ipsum</p>
+											</li>
+										</ul>
+										<hr/>
+										<h5>Inspiration</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="#">Buying Guides & DIY Tips</a>
+												<p class="dropdown-menu-items-list-desc">Habitasse dapibus fermentum</p>
+											</li>
+											<li><a href="#">Home Center</a>
+												<p class="dropdown-menu-items-list-desc">Lacinia ridiculus pharetra</p>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-2">
+										<h5>Sales & Events</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="#">DeWalt Tools</a>
+												<p class="dropdown-menu-items-list-desc">Rutrum ac cubilia</p>
+											</li>
+											<li><a href="#">Daily Deals</a>
+												<p class="dropdown-menu-items-list-desc">Suscipit consectetur purus</p>
+											</li>
+											<li><a href="#">Halloween Ideas</a>
+												<p class="dropdown-menu-items-list-desc">Dictum aptent sagittis</p>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-2">
+										<h5>Top Brands</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="#">Black + Decker</a>
+											</li>
+											<li><a href="#">DeWalt</a>
+											</li>
+											<li><a href="#">Worx</a>
+											</li>
+											<li><a href="#">Dyson</a>
+											</li>
+											<li><a href="#">Kitchen Aid</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<img class="dropdown-menu-theme-image" src="{$basePath}/foto/300-468/default.png"
+									 alt="Image Alternative text" title="Image Title"/>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown yamm-fw"><a href="#"><span>Like a Champion</span>Sporting Goods<i
+									class="drop-caret" data-toggle="dropdown"></i></a>
+						<ul class="dropdown-menu">
+							<li class="yamm-content">
+								<div class="row row-eq-height row-col-border">
+									<div class="col-md-2">
+										<h5>Top Categories</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="#">Cycling</a>
+												<p class="dropdown-menu-items-list-desc">Ridiculus pellentesque
+													natoque</p>
+											</li>
+											<li><a href="#">Golf</a>
+												<p class="dropdown-menu-items-list-desc">Interdum placerat sodales</p>
+											</li>
+											<li><a href="#">Hunting</a>
+												<p class="dropdown-menu-items-list-desc">Pretium velit erat</p>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-2">
+										<h5>Additional Categories</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="#">Exrecise & Fitness</a>
+												<p class="dropdown-menu-items-list-desc">Gravida nec ut</p>
+											</li>
+											<li><a href="#">Fishing</a>
+												<p class="dropdown-menu-items-list-desc">Leo quis sollicitudin</p>
+											</li>
+											<li><a href="#">PGA Sports</a>
+												<p class="dropdown-menu-items-list-desc">Phasellus primis diam</p>
+											</li>
+											<li><a href="#">Outdoor Sports</a>
+												<p class="dropdown-menu-items-list-desc">Quisque amet augue</p>
+											</li>
+											<li><a href="#">Team Sports</a>
+												<p class="dropdown-menu-items-list-desc">Dignissim aenean hendrerit</p>
+											</li>
+											<li><a href="#">Sales & Events</a>
+												<p class="dropdown-menu-items-list-desc">Vehicula tristique tempor</p>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-2">
+										<h5>Top Brands</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="#">Callaway Golf</a>
+											</li>
+											<li><a href="#">Johnson</a>
+											</li>
+											<li><a href="#">Quicksilver</a>
+											</li>
+											<li><a href="#">Sports Authority</a>
+											</li>
+											<li><a href="#">Nike</a>
+											</li>
+											<li><a href="#">Mizuno</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<img class="dropdown-menu-theme-image" src="{$basePath}/foto/897-450/default.png"
+									 alt="Image Alternative text" title="Image Title"/>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown yamm-fw"><a href="#"><span>Have Fun</span>Toys & Hobbies<i class="drop-caret"
+																								   data-toggle="dropdown"></i></a>
+						<ul class="dropdown-menu">
+							<li class="yamm-content">
+								<div class="row row-eq-height row-col-border">
+									<div class="col-md-2">
+										<h5>Top Categories</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="#">Collectors & Hobby Toys</a>
+												<p class="dropdown-menu-items-list-desc">Cubilia inceptos placerat</p>
+											</li>
+											<li><a href="#">Kids & Family Toys</a>
+												<p class="dropdown-menu-items-list-desc">Morbi vivamus euismod</p>
+											</li>
+											<li><a href="#">Toys "R" Us Toys</a>
+												<p class="dropdown-menu-items-list-desc">Gravida enim dapibus</p>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-2">
+										<h5>Additional Categories</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="#">Exrecise & Fitness</a>
+												<p class="dropdown-menu-items-list-desc">Facilisi potenti eleifend</p>
+											</li>
+											<li><a href="#">Fishing</a>
+												<p class="dropdown-menu-items-list-desc">Sed nulla nunc</p>
+											</li>
+											<li><a href="#">PGA Sports</a>
+												<p class="dropdown-menu-items-list-desc">Lobortis lorem vulputate</p>
+											</li>
+											<li><a href="#">Outdoor Sports</a>
+												<p class="dropdown-menu-items-list-desc">Libero ipsum etiam</p>
+											</li>
+											<li><a href="#">Team Sports</a>
+												<p class="dropdown-menu-items-list-desc">Nunc ac amet</p>
+											</li>
+											<li><a href="#">Sales & Events</a>
+												<p class="dropdown-menu-items-list-desc">Scelerisque erat parturient</p>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<img class="dropdown-menu-theme-image" src="{$basePath}/foto/1200-472/default.png"
+									 alt="Image Alternative text" title="Image Title"/>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown yamm-fw"><a href="#"><span>Save Money on</span>Deals & Gifts<i
+									class="drop-caret" data-toggle="dropdown"></i></a>
+						<ul class="dropdown-menu">
+							<li class="yamm-content">
+								<div class="row row-eq-height row-col-border">
+									<div class="col-md-2">
+										<h5>Top Categories</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="#">Daily Delas</a>
+												<p class="dropdown-menu-items-list-desc">Sociis cum augue</p>
+											</li>
+											<li><a href="#">Vacation Specials</a>
+												<p class="dropdown-menu-items-list-desc">Duis purus tristique</p>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-2">
+										<h5>Gift Ideas</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="#">Gift Cards</a>
+												<p class="dropdown-menu-items-list-desc">Semper arcu elit</p>
+											</li>
+											<li><a href="#">Innovation Collections</a>
+												<p class="dropdown-menu-items-list-desc">Cursus porta ad</p>
+											</li>
+											<li><a href="#">Group Gifts</a>
+												<p class="dropdown-menu-items-list-desc">Fames mi laoreet</p>
+											</li>
+											<li><a href="#">Wish List</a>
+												<p class="dropdown-menu-items-list-desc">Laoreet inceptos bibendum</p>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md-2">
+										<h5>Top Deals</h5>
+										<ul class="dropdown-menu-items-list">
+											<li><a href="#">Trending Now</a>
+											</li>
+											<li><a href="#">Editors Pick</a>
+											</li>
+											<li><a href="#">Best of Tech</a>
+											</li>
+											<li><a href="#">Best of Fasion</a>
+											</li>
+											<li><a href="#">Best of Toys</a>
+											</li>
+											<li><a href="#">Cell Phones Under $200</a>
+											</li>
+											<li><a href="#">Hunting Favorites</a>
+											</li>
+											<li><a href="#">Deals Under $50</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<img class="dropdown-menu-theme-image" src="{$basePath}/foto/600-366/default.png"
+									 alt="Image Alternative text" title="Image Title"/>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right navbar-right-no-mar navbar-nav-lg">
+					<li><a href="#nav-login-dialog" data-effect="mfp-move-from-top" class="popup-text"><span>Hello, Sign in</span>Your
+							Account</a>
+					</li>
+					<li class="dropdown"><a href="shopping-cart.html"><span></span><i
+									class="fa fa-shopping-cart"></i></a>
+						<ul class="dropdown-menu dropdown-menu-shipping-cart">
+							<li>
+								<a class="dropdown-menu-shipping-cart-img" href="#">
+									<img src="{$basePath}/foto/100-100/default.png" alt="Image Alternative text" title="Image Title"/>
+								</a>
+								<div class="dropdown-menu-shipping-cart-inner">
+									<p class="dropdown-menu-shipping-cart-price">$35</p>
+									<p class="dropdown-menu-shipping-cart-item"><a href="#">Gucci Patent Leather Open
+											Toe Platform</a>
+									</p>
+								</div>
+							</li>
+							<li>
+								<a class="dropdown-menu-shipping-cart-img" href="#">
+									<img src="{$basePath}/foto/100-100/default.png" alt="Image Alternative text" title="Image Title"/>
+								</a>
+								<div class="dropdown-menu-shipping-cart-inner">
+									<p class="dropdown-menu-shipping-cart-price">$20</p>
+									<p class="dropdown-menu-shipping-cart-item"><a href="#">Nikon D5200 24.1 MP Digital
+											SLR Camera</a>
+									</p>
+								</div>
+							</li>
+							<li>
+								<a class="dropdown-menu-shipping-cart-img" href="#">
+									<img src="{$basePath}/foto/100-100/default.png" alt="Image Alternative text" title="Image Title"/>
+								</a>
+								<div class="dropdown-menu-shipping-cart-inner">
+									<p class="dropdown-menu-shipping-cart-price">$81</p>
+									<p class="dropdown-menu-shipping-cart-item"><a href="#">Apple 11.6" MacBook Air
+											Notebook </a>
+									</p>
+								</div>
+							</li>
+							<li>
+								<a class="dropdown-menu-shipping-cart-img" href="#">
+									<img src="{$basePath}/foto/100-100/default.png" alt="Image Alternative text" title="Image Title"/>
+								</a>
+								<div class="dropdown-menu-shipping-cart-inner">
+									<p class="dropdown-menu-shipping-cart-price">$98</p>
+									<p class="dropdown-menu-shipping-cart-item"><a href="#">Fossil Women's Original
+											Boyfriend</a>
+									</p>
+								</div>
+							</li>
+							<li>
+								<p class="dropdown-menu-shipping-cart-total">Total: $150</p>
+								<button class="dropdown-menu-shipping-cart-checkout btn btn-primary">Checkout</button>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
 {/block}

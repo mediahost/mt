@@ -191,7 +191,15 @@ abstract class BasePresenter extends Presenter
 	protected function createComponentCssFront()
 	{
 		$css = $this->webLoader->createCssLoader('front')
-				->setMedia('screen,projection,tv');
+			->setMedia('screen,projection,tv');
+		return $css;
+	}
+
+	/** @return CssLoader */
+	protected function createComponentCssFront2()
+	{
+		$css = $this->webLoader->createCssLoader('front2')
+			->setMedia('screen,projection,tv');
 		return $css;
 	}
 

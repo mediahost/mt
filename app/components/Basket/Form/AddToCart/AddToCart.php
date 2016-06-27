@@ -11,6 +11,7 @@ use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Stock;
 use App\Model\Facade\BasketFacade;
 use App\Model\Facade\Exception\InsufficientQuantityException;
+use Tracy\Debugger;
 
 class AddToCart extends BaseControl
 {
@@ -53,16 +54,16 @@ class AddToCart extends BaseControl
 		}
 
 		$form->addSpinner('quantity')
-				->setDisabled($this->isDisabled())
-				->setPlusButton('default', 'fa fa-angle-up')
-				->setMinusButton('default', 'fa fa-angle-down')
-				->setMin(self::MIN)
-				->setMax($this->max)
-				->setType(Spinner::TYPE_UP_DOWN)
-				->setSize(MetronicTextInputBase::SIZE_XS);
+			->setDisabled($this->isDisabled())
+			->setPlusButton('default', 'fa fa-angle-up')
+			->setMinusButton('default', 'fa fa-angle-down')
+			->setMin(self::MIN)
+			->setMax($this->max)
+			->setType(Spinner::TYPE_UP_DOWN)
+			->setSize(MetronicTextInputBase::SIZE_XS);
 
 		$form->addSubmit('add', 'Add to cart')
-				->setDisabled($this->isDisabled());
+			->setDisabled($this->isDisabled());
 
 		$form->setDefaults($this->getDefaults());
 		$form->onSuccess[] = $this->formSucceeded;
@@ -72,7 +73,7 @@ class AddToCart extends BaseControl
 	public function formSucceeded(Form $form, $values)
 	{
 		try {
-			$quantity = isset($values->quantity) ? $values->quantity : 0;
+			$quantity = isset($values->quantity) && is_numeric($values->quantity) ? $values->quantity : 1;
 			$newQuantity = $this->basketFacade->add($this->stock, $quantity);
 			$this->alreadyInBasket = $newQuantity;
 			if ($this->alreadyInBasket === $this->stock->inStore) {
@@ -87,8 +88,8 @@ class AddToCart extends BaseControl
 			$message1 = $this->translator->translate('cart.product.onlyCountOnStore', $this->stock->inStore);
 			$message2 = $this->translator->translate('cart.product.alreadyInBasket', $this->alreadyInBasket);
 			$message3 = $this->canAddToBasket ?
-					$this->translator->translate('cart.product.youCanAddOnly', $this->canAddToBasket) :
-					$this->translator->translate('cart.product.youCannotAdd');
+				$this->translator->translate('cart.product.youCanAddOnly', $this->canAddToBasket) :
+				$this->translator->translate('cart.product.youCannotAdd');
 			$form->addError($message1);
 			$form->addError($message2);
 			$form->addError($message3);
@@ -116,6 +117,12 @@ class AddToCart extends BaseControl
 	{
 		$this->template->alreadyInBasket = $this->alreadyInBasket;
 		parent::render();
+	}
+
+	public function renderButton()
+	{
+		$this->setTemplateFile('button');
+		$this->render();
 	}
 
 	// <editor-fold desc="setters & getters">
