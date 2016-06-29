@@ -696,6 +696,9 @@ msgstr "Vytvořit účet"
 msgid "Forgot Your Password?"
 msgstr "Zapomněli jste své heslo?"
 
+msgid "Already Memeber"
+msgstr "Mám svůj účet"
+
 msgid "Enter your e-mail address below to set new one."
 msgstr "Zadejte svou emailovou adresu pro nastavení nového."
 

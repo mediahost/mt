@@ -13,7 +13,7 @@ class SignPresenter extends BasePresenter
 {
 
 	const REDIRECT_AFTER_LOG = ':Front:Homepage:';
-	const REDIRECT_NOT_LOGGED = ':Front:Sign:in';
+	const REDIRECT_NOT_LOGGED = ':Front:Sign:';
 	const REDIRECT_IS_LOGGED = ':Front:Homepage:';
 
 	// <editor-fold desc="events">
@@ -67,16 +67,7 @@ class SignPresenter extends BasePresenter
 
 	// <editor-fold desc="Actions & renders">
 
-	/** @param string $role */
-	public function actionIn()
-	{
-		$this->session->wipe();
-	}
-
-	/**
-	 * @param string $role
-	 */
-	public function actionUp()
+	public function actionDefault()
 	{
 		$this->session->wipe();
 	}
@@ -94,7 +85,7 @@ class SignPresenter extends BasePresenter
 		} else {
 			$message = $this->translator->translate('Verification token is incorrect.');
 			$this->flashMessage($message, 'warning');
-			$this->redirect('in');
+			$this->redirect('default');
 		}
 	}
 
@@ -136,7 +127,7 @@ class SignPresenter extends BasePresenter
 
 			$flash = $this->translator->translate('Recovery link has been sent to your mail.');
 			$this->flashMessage($flash);
-			$this->redirect(':Front:Sign:in');
+			$this->redirect(self::REDIRECT_NOT_LOGGED);
 		};
 		$control->onMissingUser[] = function ($mail) {
 			$message = $this->translator->translate('We do not register any user with mail \'%mail%\'.', NULL, ['mail' => $mail]);

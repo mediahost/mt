@@ -51,7 +51,7 @@
 	<ul n:if="!$user->loggedIn" class="list-unstyled list-inline pull-right">
 		<li>
 			{if isset($isErrorPresenter) && $isErrorPresenter}
-				<a n:href="Sign:in">{_'Sign In'}</a>
+				<a n:href="Sign:">{_'Sign In'}</a>
 			{else}
 				<a n:href="this#signInModal" data-toggle="modal">{_'Sign In'}</a>
 			{/if}

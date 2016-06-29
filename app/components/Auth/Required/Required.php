@@ -57,12 +57,6 @@ class Required extends BaseControl
 		$this->onSuccess($this, $this->session->user);
 	}
 
-	public function renderLogin()
-	{
-		$this->setTemplateFile('login');
-		parent::render();
-	}
-
 }
 
 interface IRequiredFactory

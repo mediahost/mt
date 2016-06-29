@@ -41,26 +41,20 @@
 	{include 'topbar.latte'}
 	{include 'header.latte'}
 
+	<!-- BEGIN FLASH MESSAGES-->
+	<div class="container" n:snippet="flashMessages">
+		<div n:foreach="$flashes as $flash"
+				class="alert alert-{$flash->type} fade in">
+			{$flash->message}
+		</div>
+	</div>
+	<!-- END FLASH MESSAGES-->
+
 	<div class="container">
 
-		<!-- BEGIN FLASH MESSAGES-->
-		<div n:snippet="flashMessages">
-			<div n:foreach="$flashes as $flash"
-					class="alert alert-{$flash->type} fade in">
-				<button type="button" class="close" data-dismiss="alert"></button>
-				{$flash->message}
-			</div>
-			{*TODO: stylovat*}
-			{*<div class="alert alert-success fade in">*}
-				{*<button type="button" class="close" data-dismiss="alert"></button>*}
-				{*ahoj*}
-			{*</div>*}
-		</div>
-		<!-- END FLASH MESSAGES-->
-
 		<!-- BEGIN BREADCRUMBS -->
-		<header class="page-header">
-			<ol class="breadcrumb page-breadcrumb" n:block="breadcrumb">
+		<header class="page-header" n:block="breadcrumb">
+			<ol class="breadcrumb page-breadcrumb">
 				<li><a n:href=":Front:Homepage:">{_'Home'}</a></li>
 				{block breadcrumbItems}{/block}
 			</ol>

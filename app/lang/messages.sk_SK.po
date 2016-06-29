@@ -690,13 +690,16 @@ msgid "your account"
 msgstr "svoj účet"
 
 msgid "Create account and gain an advantage in bonus program."
-msgstr "Vytvoriť účet a získajte výhodu v bonusovom programe."
+msgstr "Vytvorte si účet a získajte výhodu v bonusovom programe."
 
 msgid "Create an account"
 msgstr "Vytvoriť účet"
 
 msgid "Forgot Your Password?"
 msgstr "Zabudli ste heslo?"
+
+msgid "Already Memeber"
+msgstr "Mám svoj účet"
 
 msgid "Enter your e-mail address below to set new one."
 msgstr "Zadajte e-mailovú adresu pre nastavenie nového hesla"
