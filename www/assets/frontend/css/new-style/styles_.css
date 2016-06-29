@@ -212,7 +212,7 @@ hr {
 	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 	position: relative;
-	z-index: 1000;
+	z-index: 10;
 }
 
 .navbar-main .navbar-nav > li:hover > a {
@@ -484,7 +484,7 @@ hr {
 .dropdown-menu-category > li > a:after {
 	position: absolute;
 	display: block;
-	content: '\f105';
+	/*content: '\f105';*/
 	font-family: 'FontAwesome';
 	top: 0;
 	right: 0;
@@ -526,6 +526,8 @@ hr {
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
 	margin-bottom: 25px;
+	z-index: 9999;
+
 }
 
 .dropdown-menu-category-hold > li > a {

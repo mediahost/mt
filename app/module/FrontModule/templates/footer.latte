@@ -4,51 +4,50 @@
 		<div class="container">
 			<div class="row row-col-gap" data-gutter="60">
 				<div class="col-md-3">
-					<h4 class="widget-title-sm">TheBox Shop</h4>
-					<p>Cubilia etiam metus libero elit euismod quisque quisque eleifend dapibus fames ultrices</p>
-					<ul class="main-footer-social-list">
-						<li>
-							<a class="fa fa-facebook" href="#"></a>
-						</li>
-						<li>
-							<a class="fa fa-twitter" href="#"></a>
-						</li>
-						<li>
-							<a class="fa fa-pinterest" href="#"></a>
-						</li>
-						<li>
-							<a class="fa fa-instagram" href="#"></a>
-						</li>
-						<li>
-							<a class="fa fa-google-plus" href="#"></a>
-						</li>
-					</ul>
+					<h4 class="widget-title-sm">{$pageInfo->projectName}</h4>
+					<address class="margin-bottom-40">
+						<strong>{$companyInfo->address->company}</strong><br>
+						{$companyInfo->address->street}<br>
+						{$companyInfo->address->zip} {$companyInfo->address->city}<br>
+						{_'IČO'}: {$companyInfo->company->ico}<br>
+						{_'DIČ'}: {$companyInfo->company->dic}
+					</address>
+					<h4 class="widget-title-sm">{_'Open hours'}</h4>
+					<table>
+						<tbody>
+						<tr>
+							<th style="width:150px">Pondelok - Piatok:</th>
+							<td>9:00 - 17:00</td>
+						</tr>
+						<tr>
+							<th>Sobota, Nedeľa, sviatky:</th>
+							<td>Zatvorené</td>
+						</tr>
+						</tbody>
+					</table>
 				</div>
 				<div class="col-md-3">
-					<h4 class="widget-title-sm">Popular Tags</h4>
-					<ul class="main-footer-tag-list">
-						<li><a href="#">New Season</a>
-						</li>
-						<li><a href="#">Watches</a>
-						</li>
-						<li><a href="#">woman</a>
-						</li>
-						<li><a href="#">classic</a>
-						</li>
-						<li><a href="#">modern</a>
-						</li>
-						<li><a href="#">blue</a>
-						</li>
-						<li><a href="#">shoes</a>
-						</li>
-						<li><a href="#">running</a>
-						</li>
-						<li><a href="#">jeans</a>
-						</li>
-						<li><a href="#">sports</a>
-						</li>
-						<li><a href="#">laptops</a>
-						</li>
+					<h4 class="widget-title-sm">Naše kontakty</h4>
+					<address class="margin-bottom-40">
+						<address class="margin-bottom-10">
+							<strong>Konzultácie ohľadom spracovania objednávok</strong><br>
+							{_'Phone'}: {$companyInfo->contact->phone}<br>
+							{_'Email'}: <a
+									href="mailto:{$companyInfo->contact->email}">{$companyInfo->contact->email}</a><br>
+						</address>
+						<address class="margin-bottom-40">
+							<strong>Reklamácie, servis</strong><br>
+							{_'Phone'}: {$companyInfo->contact->phone2}<br>
+							{_'Email'}: <a
+									href="mailto:{$companyInfo->contact->email2}">{$companyInfo->contact->email2}</a><br>
+						</address>
+					</address>
+					<ul class="main-footer-social-list">
+						<li><a class="fa fa-facebook" href="#"></a></li>
+						<li><a class="fa fa-twitter" href="#"></a></li>
+						<li><a class="fa fa-pinterest" href="#"></a></li>
+						<li><a class="fa fa-instagram" href="#"></a></li>
+						<li><a class="fa fa-google-plus" href="#"></a></li>
 					</ul>
 				</div>
 				<div class="col-md-3">
@@ -63,28 +62,15 @@
 				</div>
 			</div>
 			<ul class="main-footer-links-list">
-				<li><a href="#">About Us</a>
-				</li>
-				<li><a href="#">Jobs</a>
-				</li>
-				<li><a href="#">Legal</a>
-				</li>
-				<li><a href="#">Support & Customer Service</a>
-				</li>
-				<li><a href="#">Blog</a>
-				</li>
-				<li><a href="#">Privacy</a>
-				</li>
-				<li><a href="#">Terms</a>
-				</li>
-				<li><a href="#">Press</a>
-				</li>
-				<li><a href="#">Shipping</a>
-				</li>
-				<li><a href="#">Payments & Refunds</a>
-				</li>
+				<li><a href="#">Hlavne menu links</a></li>
+				<li><a href="#">MObilne telefony</a></li>
+				<li><a href="#">PRislus</a></li>
+				<li><a href="#">Nahradne diley</a></li>
+				<li><a href="#">Navigacie</a></li>
+				<li><a href="#">Vyggety</a></li>
 			</ul>
-			<img class="main-footer-img" src="{$basePath}/foto/100-100/default.png" alt="Image Alternative text" title="Image Title"/>
+			<img class="main-footer-img" src="{$basePath}/assets/frontend/img/test_footer2-i.png"
+				 alt="Image Alternative text" title="Image Title"/>
 		</div>
 	</footer>
 	<!-- END FOOTER -->
@@ -94,34 +80,32 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-6">
-					<p class="copyright-text">Copyright &copy; <a href="#">TheBox</a> 2014. Designed my remtsoy. All
-						rights reseved</p>
+					<p class="copyright-text">
+						Copyright &copy; <a href="http://mediahost.sk/">Mediahost.sk </a> 2016.
+						Designed my remtsoy. All rights reseved
+					</p>
 				</div>
 				<div class="col-md-6">
 					<ul class="payment-icons-list">
 						<li>
-							<img src="{$basePath}/foto/32-32/default.png" alt="Image Alternative text"
-								 title="Pay with Visa"/>
+							<img src="{$basePath}/assets/frontend/img/payments/visa-straight-32px.png"
+								 alt="Image Alternative text" title="Pay with Visa"/>
 						</li>
 						<li>
-							<img src="{$basePath}/foto/32-32/default.png" alt="Image Alternative text"
-								 title="Pay with Mastercard"/>
+							<img src="{$basePath}/assets/frontend/img/payments/mastercard-straight-32px.png"
+								 alt="Image Alternative text" title="Pay with Mastercard"/>
 						</li>
 						<li>
-							<img src="{$basePath}/foto/32-32/default.png" alt="Image Alternative text"
-								 title="Pay with Paypal"/>
+							<img src="{$basePath}/assets/frontend/img/payments/paypal-straight-32px.png"
+								 alt="Image Alternative text" title="Pay with Paypal"/>
 						</li>
 						<li>
-							<img src="{$basePath}/foto/32-32/default.png" alt="Image Alternative text"
-								 title="Pay with Visa-electron"/>
+							<img src="{$basePath}/assets/frontend/img/payments/visa-electron-straight-32px.png"
+								 alt="Image Alternative text" title="Pay with Visa-electron"/>
 						</li>
 						<li>
-							<img src="{$basePath}/foto/32-32/default.png" alt="Image Alternative text"
-								 title="Pay with Maestro"/>
-						</li>
-						<li>
-							<img src="{$basePath}/foto/32-32/default.png" alt="Image Alternative text"
-								 title="Pay with Discover"/>
+							<img src="{$basePath}/assets/frontend/img/payments/maestro-straight-32px.png"
+								 alt="Image Alternative text" title="Pay with Maestro"/>
 						</li>
 					</ul>
 				</div>
