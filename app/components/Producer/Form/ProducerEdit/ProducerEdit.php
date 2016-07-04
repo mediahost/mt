@@ -155,7 +155,7 @@ class ProducerEdit extends BaseControl
 		$paramRepo = $this->em->getRepository(ModelParameter::getClassName());
 		foreach ($values->prices as $parameterId => $price) {
 			$parameter = $paramRepo->find($parameterId);
-			if ($parameter) {
+			if ($parameter && $price > 0) {
 				$parameterPrice = $this->entity->getParameterPriceByParameter($parameter, TRUE);
 				$parameterPrice->vat = $vat;
 				$parameterPrice->setPrice($price, $values->with_vat);

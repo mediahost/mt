@@ -60,6 +60,7 @@ class ProducerLine extends BaseEntity implements IProducer
 			$array[$model->priority] = $model;
 		}
 		if (count($array) !== $this->models->count()) {
+			$array = [];
 			foreach ($this->models as $model) {
 				$array[$model->id] = $model;
 			}
