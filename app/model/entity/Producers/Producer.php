@@ -87,6 +87,7 @@ class Producer extends BaseTranslatable implements IProducer
 			$array[$line->priority] = $line;
 		}
 		if (count($array) !== $this->lines->count()) {
+			$array = [];
 			foreach ($this->lines as $line) {
 				$array[$line->id] = $line;
 			}
