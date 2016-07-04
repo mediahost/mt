@@ -7,6 +7,8 @@ use App\Model\Entity\ProducerLine;
 
 class ProducerRepository extends BaseRepository
 {
+	const ALL_PRODUCERS_CACHE_ID = 'all-producers';
+
 	public function findOneByUrl($url)
 	{
 		if (is_string($url)) {
@@ -34,6 +36,21 @@ class ProducerRepository extends BaseRepository
 		}
 
 		return parent::delete($entity);
+	}
+
+	public function findAllWithPriority(array $criteria = [], $limit = null, $offset = null)
+	{
+		$orderBy = ['priority' => 'ASC'];
+
+		$qb = $this->createQueryBuilder('e')
+			->whereCriteria($criteria)
+			->autoJoinOrderBy((array) $orderBy);
+
+		return $qb->getQuery()
+			->useResultCache(TRUE, self::CACHE_LIFETIME, self::ALL_PRODUCERS_CACHE_ID)
+			->setMaxResults($limit)
+			->setFirstResult($offset)
+			->getResult();
 	}
 
 }

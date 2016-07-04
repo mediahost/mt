@@ -1,79 +1,91 @@
-{ifset $model}
-	{form form, class => 'form-horizontal buyout'}
-
-        {var labelCol => 'col-md-5'}
-        {var inputCol => 'col-md-7'}
-
-        <div class="is-new-question">
-            <a n:href="this#" class="new active">{_'buyout.request.template.new'}</a>
-            <a n:href="this#" class="old">{_'buyout.request.template.used'}</a>
-        </div>
-
+{form form}
+	<div class="tabbable product-tabs">
+		<ul class="nav nav-tabs is-new-question">
+			<li class="old active">
+				<a href="#" data-toggle="tab">{_'buyout.request.template.used'}</a>
+			</li>
+			<li class="new">
+				<a href="#" data-toggle="tab">{_'buyout.request.template.new'}</a>
+			</li>
+		</ul>
 		<div class="is-new-checker">
-            {input isNew}
+			{input isNew}
 		</div>
+		<div class="tab-content">
 
-        <div class="question-block">
-		{formContainer questions}
-			{foreach $_form->getComponents(FALSE, '\Nette\Forms\IControl') as $i}
-				<div class="form-group">
-					{label $i class => $labelCol . ' control-label' /}
-					<div class="{$inputCol}">
-						<div class="radio-list">
-							{var $name = $i->name}
-							{foreach $form[questions][$name]->items as $key => $label}
-								{label $name:$key}
-									{input $name:$key} {$label}
-								{/label}
-							{/foreach}
-						</div>
-					</div>
+			<div class="only-for-questions">
+				<h2>{_'buyout.request.page.questions'}</h2>
+				<p>{_'buyout.request.page.questionsDescribe'}</p>
+
+				{formContainer questions}
+					<table class="table table-striped product-page-features-table questions">
+						<tbody>
+						{foreach $_form->getComponents(FALSE, '\Nette\Forms\IControl') as $i}
+							<tr class="question">
+								<th class="question-label">{label $i /}</th>
+								{var $name = $i->name}
+								{var $question = $model->questions[$name]}
+								<td n:foreach="$form[questions][$name]->items as $key => $label"
+										class="question-answer"
+										data-question-value="{if $key == 'y'}{$question->priceA}{elseif $key == 'n'}{$question->priceB}{/if}">
+									{label $name:$key}
+										{input $name:$key class=>'i-radio'} {$label}
+									{/label}
+								</td>
+							</tr>
+						{/foreach}
+						</tbody>
+						<tfoot>
+						<tr>
+							<th>
+								{_'buyout.request.page.usedPhonePrice'}:
+							</th>
+							<td colspan="2">
+								<p class="product-page-price price" data-fullPrice="{$model->buyoutPrice}">
+									{$model->buyoutPrice|currency}
+								</p>
+							</td>
+						</tr>
+						</tfoot>
+					</table>
+				{/formContainer}
+			</div>
+
+			<h2>{_'buyout.request.page.sellUsPhone'}</h2>
+			<div class="row only-for-new price-box">
+				<div class="col-md-8 text">
+					{_'buyout.request.page.newPhonePrice', ['name' => $model]}:
 				</div>
-			{/foreach}
-		{/formContainer}
-        </div>
+				<div class="col-md-4 product-page-price price">
+					{$model->buyoutPrice|currency}
+				</div>
+			</div>
+			<p>
+				{_'buyout.request.page.ifAgree'}<br/>
+				{_'buyout.request.page.fillForm'}
+			</p>
 
-        <div class="form-group part-price">
-            <label class="{$labelCol} control-label">{_'buyout.request.template.total'}:</label>
-            <div class="{$inputCol}">
-                <p class="final-price" n:snippet="price">
-                    {ifset $summary}
-                        {$summary|currency}
-                    {else}
-                        {$model->buyoutPrice|currency}
-                    {/ifset}
-                </p>
-            </div>
-        </div>
-
-        <div class="form-group full-price">
-            <label class="{$labelCol} control-label">{_'buyout.request.template.total'}:</label>
-            <div class="{$inputCol}">
-                <p class="final-price">
-                    {$model->buyoutPrice|currency}
-                </p>
-            </div>
-        </div>
-
-		<div class="form-group">
-			{$form->renderer->renderLabel($form['email'])}
-			<div class="{$inputCol}">
-				{input email}
+			<div class="form-body">
+				<div class="form-group required">
+					{$form->renderer->renderLabel($form['email'])}
+					{input email}
+				</div>
+				<div class="form-group">
+					{$form->renderer->renderLabel($form['fullname'])}
+					{input fullname}
+				</div>
+				<div class="form-group">
+					{$form->renderer->renderLabel($form['phone'])}
+					{input phone}
+				</div>
+				<div class="form-group">
+					{$form->renderer->renderLabel($form['text'])}
+					{input text}
+				</div>
+				<div class="form-group">
+					{input send class=>"btn btn-primary button"}
+				</div>
 			</div>
 		</div>
-
-		<div class="form-group">
-			{$form->renderer->renderLabel($form['fullname'])}
-			<div class="{$inputCol}">
-				{input fullname}
-			</div>
-		</div>
-
-		<div class="form-group">
-			<div class="{$labelCol}"></div>
-			<div class="{$inputCol}">
-				{input send} {input recalculate}
-			</div>
-		</div>
-	{/form}
-{/ifset}
+	</div>
+{/form}

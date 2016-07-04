@@ -1,8 +1,20 @@
 {block menu}
 	<!-- BEGIN NAVIGATION -->
+	{var topCount => 5}
+	{var maxMenuItemsInCol => 12}
+
+	{var topColCnt => (0 * $maxMenuItemsInCol) + $topCount}
+	{var firstColCnt => (1 * $maxMenuItemsInCol) + $topCount}
+	{var secondColCnt => (2 * $maxMenuItemsInCol) + $topCount}
+	{var thirdColCnt => (3 * $maxMenuItemsInCol) + $topCount}
+
+	{var firstColCond => count($producers) > $topColCnt}
+	{var secondColCond => count($producers) > $firstColCnt}
+	{var thirdColCond => count($producers) > $secondColCnt}
+
 	<ul class="nav navbar-nav navbar-nav-lg">
 		<li class="dropdown yamm-fw">
-			<a href="#">
+			<a n:href="this">
 				<span>Vsetko pre</span>
 				Môj telefon
 				<i class="drop-caret" data-toggle="dropdown"></i>
@@ -13,64 +25,64 @@
 						<div class="col-md-2">
 							<h5>Top znacky</h5>
 							<ul class="dropdown-menu-items-list">
-								<li><a href="#">Apple</a></li>
-								<li><a href="#">Samsung</a></li>
-								<li><a href="#">Huawei</a></li>
-								<li><a href="#">Sony</a></li>
-								<li><a href="#">LG</a></li>
+								<li><a n:href="this">Apple</a></li>
+								<li><a n:href="this">Samsung</a></li>
+								<li><a n:href="this">Huawei</a></li>
+								<li><a n:href="this">Sony</a></li>
+								<li><a n:href="this">LG</a></li>
 							</ul>
 						</div>
 						<div class="col-md-2" style="border:0px">
 							<h5>Ďalsie znacky</h5>
 							<ul class="dropdown-menu-items-list">
-								<li><a href="#">Lenovo</a></li>
-								<li><a href="#">Microsoft</a></li>
-								<li><a href="#">HTC</a></li>
-								<li><a href="#">Microsoft</a></li>
-								<li><a href="#">HTC</a></li>
-								<li><a href="#">Sony</a></li>
-								<li><a href="#">Lenovo</a></li>
-								<li><a href="#">Sony</a></li>
-								<li><a href="#">HTC</a></li>
-								<li><a href="#">Sony</a></li>
-								<li><a href="#">Lenovo</a></li>
-								<li><a href="#">Microsoft</a></li>
-								<li><a href="#">HTC</a></li>
-								<li><a href="#">Sony</a></li>
-								<li><a href="#">Lenovo</a></li>
-								<li><a href="#">Microsoft</a></li>
-								<li><a href="#">HTC</a></li>
-								<li><a href="#">Sony</a></li>
+								<li><a n:href="this">Lenovo</a></li>
+								<li><a n:href="this">Microsoft</a></li>
+								<li><a n:href="this">HTC</a></li>
+								<li><a n:href="this">Microsoft</a></li>
+								<li><a n:href="this">HTC</a></li>
+								<li><a n:href="this">Sony</a></li>
+								<li><a n:href="this">Lenovo</a></li>
+								<li><a n:href="this">Sony</a></li>
+								<li><a n:href="this">HTC</a></li>
+								<li><a n:href="this">Sony</a></li>
+								<li><a n:href="this">Lenovo</a></li>
+								<li><a n:href="this">Microsoft</a></li>
+								<li><a n:href="this">HTC</a></li>
+								<li><a n:href="this">Sony</a></li>
+								<li><a n:href="this">Lenovo</a></li>
+								<li><a n:href="this">Microsoft</a></li>
+								<li><a n:href="this">HTC</a></li>
+								<li><a n:href="this">Sony</a></li>
 							</ul>
 						</div>
 						<div class="col-md-2"><h5>&nbsp;</h5>
 							<ul class="dropdown-menu-items-list">
-								<li><a href="#">Lenovo</a></li>
-								<li><a href="#">Microsoft</a></li>
-								<li><a href="#">HTC</a></li>
-								<li><a href="#">Sony</a></li>
-								<li><a href="#">Lenovo</a></li>
-								<li><a href="#">Microsoft</a></li>
-								<li><a href="#">HTC</a></li>
-								<li><a href="#">Sony</a></li>
-								<li><a href="#">Lenovo</a></li>
-								<li><a href="#">Microsoft</a></li>
-								<li><a href="#">HTC</a></li>
-								<li><a href="#">Sony</a></li>
-								<li><a href="#">Lenovo</a></li>
+								<li><a n:href="this">Lenovo</a></li>
+								<li><a n:href="this">Microsoft</a></li>
+								<li><a n:href="this">HTC</a></li>
+								<li><a n:href="this">Sony</a></li>
+								<li><a n:href="this">Lenovo</a></li>
+								<li><a n:href="this">Microsoft</a></li>
+								<li><a n:href="this">HTC</a></li>
+								<li><a n:href="this">Sony</a></li>
+								<li><a n:href="this">Lenovo</a></li>
+								<li><a n:href="this">Microsoft</a></li>
+								<li><a n:href="this">HTC</a></li>
+								<li><a n:href="this">Sony</a></li>
+								<li><a n:href="this">Lenovo</a></li>
 							</ul>
 						</div>
 						<div class="col-md-4">
 							<h5>Najčastejsie hladané</h5>
 							<ul class="dropdown-menu-items-list">
-								<li><a href="#">Apple iPhone 5S 16GB</a></li>
-								<li><a href="#">Huawei P9 Lite Dual SIM</a></li>
-								<li><a href="#">Huawei P8 Lite Dual SIM</a></li>
-								<li><a href="#">Samsung Galaxy S7 G930F 32GB</a></li>
-								<li><a href="#">Apple iPhone SE 16GB</a></li>
-								<li><a href="#">Samsung Galaxy S7 Edge G935F 32GB</a></li>
-								<li><a href="#">Sony Xperia Z5 Compact</a></li>
-								<li><a href="#">Apple iPhone 6S 64GB</a></li>
+								<li><a n:href="this">Apple iPhone 5S 16GB</a></li>
+								<li><a n:href="this">Huawei P9 Lite Dual SIM</a></li>
+								<li><a n:href="this">Huawei P8 Lite Dual SIM</a></li>
+								<li><a n:href="this">Samsung Galaxy S7 G930F 32GB</a></li>
+								<li><a n:href="this">Apple iPhone SE 16GB</a></li>
+								<li><a n:href="this">Samsung Galaxy S7 Edge G935F 32GB</a></li>
+								<li><a n:href="this">Sony Xperia Z5 Compact</a></li>
+								<li><a n:href="this">Apple iPhone 6S 64GB</a></li>
 							</ul>
 						</div>
 					</div>
@@ -78,60 +90,65 @@
 				</li>
 			</ul>
 		</li>
-		<li class="dropdown yamm-fw">
-			<a href="#">
+		<li n:class="count($producers) ? dropdown, yamm-fw">
+			<a n:href="Buyout:">
 				<span>Bezkonkurencny</span>
 				Výkup telefonov
 				<i class="drop-caret" data-toggle="dropdown"></i>
 			</a>
-			<ul class="dropdown-menu">
+			<ul n:if="count($producers)" class="dropdown-menu">
 				<li class="yamm-content">
 					<div class="row row-eq-height row-col-border">
 						<div class="col-md-2">
 							<h5>Top znacky</h5>
 							<ul class="dropdown-menu-items-list">
-								<li><a href="#">Apple</a></li>
-								<li><a href="#">Samsung</a></li>
-								<li><a href="#">Huawei</a></li>
-								<li><a href="#">Sony</a></li>
-								<li><a href="#">LG</a></li>
+								{foreach $producers as $producer}
+									<li><a n:href="Buyout: 'producer' => $producer->slug">{$producer}</a></li>
+									{breakIf $iterator->counter >= $topColCnt}
+								{/foreach}
 							</ul>
 						</div>
-						<div class="col-md-2" style="border:0px">
+						<div n:class="col-md-2, $secondColCond ? no-border" n:if="$firstColCond">
 							<h5>Ďalsie znacky</h5>
 							<ul class="dropdown-menu-items-list">
-								<li><a href="#">Microsoft</a></li>
-								<li><a href="#">HTC</a></li>
-								<li><a href="#">Sony</a></li>
-								<li><a href="#">Lenovo</a></li>
-								<li><a href="#">Microsoft</a></li>
-								<li><a href="#">HTC</a></li>
-								<li><a href="#">Lenovo</a></li>
-								<li><a href="#">Sony</a></li>
+								{foreach $producers as $producer}
+									{continueIf $iterator->counter <= $topColCnt}
+									<li><a n:href="Buyout: 'producer' => $producer->slug">{$producer}</a></li>
+									{breakIf $iterator->counter >= $firstColCnt}
+								{/foreach}
 							</ul>
 						</div>
-						<div class="col-md-2"><h5>&nbsp;</h5>
+						<div n:class="col-md-2, $thirdColCond ? no-border" n:if="$secondColCond">
+							<h5>&nbsp;</h5>
 							<ul class="dropdown-menu-items-list">
-								<li><a href="#">Lenovo</a></li>
-								<li><a href="#">Microsoft</a></li>
-								<li><a href="#">HTC</a></li>
-								<li><a href="#">Sony</a></li>
-								<li><a href="#">HTC</a></li>
-								<li><a href="#">Sony</a></li>
-								<li><a href="#">Lenovo</a></li>
+								{foreach $producers as $producer}
+									{continueIf $iterator->counter <= $firstColCnt}
+									<li><a n:href="Buyout: 'producer' => $producer->slug">{$producer}</a></li>
+									{breakIf $iterator->counter >= $secondColCnt}
+								{/foreach}
+							</ul>
+						</div>
+						<div n:class="col-md-2" n:if="$thirdColCond">
+							<h5>&nbsp;</h5>
+							<ul class="dropdown-menu-items-list">
+								{foreach $producers as $producer}
+									{continueIf $iterator->counter <= $secondColCnt}
+									<li><a n:href="Buyout: 'producer' => $producer->slug">{$producer}</a></li>
+									{breakIf $iterator->counter >= $thirdColCnt}
+								{/foreach}
 							</ul>
 						</div>
 						<div class="col-md-4">
 							<h5>Najčastejsie hladané</h5>
 							<ul class="dropdown-menu-items-list">
-								<li><a href="#">Samsung Galaxy S7 Edge G935F 32GB</a></li>
-								<li><a href="#">Sony Xperia Z5 Compact</a></li>
-								<li><a href="#">Apple iPhone 6S 64GB</a>
-								<li><a href="#">Apple iPhone 5S 16GB</a></li>
-								<li><a href="#">Huawei P9 Lite Dual SIM</a></li>
-								<li><a href="#">Huawei P8 Lite Dual SIM</a></li>
-								<li><a href="#">Samsung Galaxy S7 G930F 32GB</a></li>
-								<li><a href="#">Apple iPhone SE 16GB</a></li>
+								<li><a n:href="this">Samsung Galaxy S7 Edge G935F 32GB</a></li>
+								<li><a n:href="this">Sony Xperia Z5 Compact</a></li>
+								<li><a n:href="this">Apple iPhone 6S 64GB</a></li>
+								<li><a n:href="this">Apple iPhone 5S 16GB</a></li>
+								<li><a n:href="this">Huawei P9 Lite Dual SIM</a></li>
+								<li><a n:href="this">Huawei P8 Lite Dual SIM</a></li>
+								<li><a n:href="this">Samsung Galaxy S7 G930F 32GB</a></li>
+								<li><a n:href="this">Apple iPhone SE 16GB</a></li>
 							</ul>
 						</div>
 					</div>
@@ -139,66 +156,65 @@
 				</li>
 			</ul>
 		</li>
-		<li class="dropdown yamm-fw">
-			<a href="#">
+		<li n:class="count($producers) ? dropdown, yamm-fw">
+			<a n:href="Service:">
 				<span>Aj pozarucny</span>
 				Servis telefonov
 				<i class="drop-caret" data-toggle="dropdown"></i>
 			</a>
-			<ul class="dropdown-menu">
+			<ul n:if="count($producers)" class="dropdown-menu">
 				<li class="yamm-content">
 					<div class="row row-eq-height row-col-border">
 						<div class="col-md-2">
 							<h5>Top znacky</h5>
 							<ul class="dropdown-menu-items-list">
-								<li><a href="#">Apple</a></li>
-								<li><a href="#">Samsung</a></li>
-								<li><a href="#">Huawei</a></li>
-								<li><a href="#">Sony</a></li>
-								<li><a href="#">LG</a></li>
+								{foreach $producers as $producer}
+									<li><a n:href="Service: 'producer' => $producer->slug">{$producer}</a></li>
+									{breakIf $iterator->counter >= $topColCnt}
+								{/foreach}
 							</ul>
 						</div>
-						<div class="col-md-2" style="border:0px">
+						<div n:class="col-md-2, $secondColCond ? no-border" n:if="$firstColCond">
 							<h5>Ďalsie znacky</h5>
 							<ul class="dropdown-menu-items-list">
-								<li><a href="#">Lenovo</a></li>
-								<li><a href="#">Microsoft</a></li>
-								<li><a href="#">HTC</a></li>
-								<li><a href="#">Sony</a></li>
-								<li><a href="#">Lenovo</a></li>
-								<li><a href="#">Microsoft</a></li>
-								<li><a href="#">HTC</a></li>
-								<li><a href="#">HTC</a></li>
-								<li><a href="#">Sony</a></li>
-								<li><a href="#">HTC</a></li>
-								<li><a href="#">Sony</a></li>
-								<li><a href="#">Sony</a></li>
+								{foreach $producers as $producer}
+									{continueIf $iterator->counter <= $topColCnt}
+									<li><a n:href="Service: 'producer' => $producer->slug">{$producer}</a></li>
+									{breakIf $iterator->counter >= $firstColCnt}
+								{/foreach}
 							</ul>
 						</div>
-						<div class="col-md-2"><h5>&nbsp;</h5>
+						<div n:class="col-md-2, $thirdColCond ? no-border" n:if="$secondColCond">
+							<h5>&nbsp;</h5>
 							<ul class="dropdown-menu-items-list">
-								<li><a href="#">Lenovo</a></li>
-								<li><a href="#">Microsoft</a></li>
-								<li><a href="#">HTC</a></li>
-								<li><a href="#">Sony</a></li>
-								<li><a href="#">Lenovo</a></li>
-								<li><a href="#">Lenovo</a></li>
-								<li><a href="#">Microsoft</a></li>
+								{foreach $producers as $producer}
+									{continueIf $iterator->counter <= $firstColCnt}
+									<li><a n:href="Service: 'producer' => $producer->slug">{$producer}</a></li>
+									{breakIf $iterator->counter >= $secondColCnt}
+								{/foreach}
+							</ul>
+						</div>
+						<div n:class="col-md-2" n:if="$thirdColCond">
+							<h5>&nbsp;</h5>
+							<ul class="dropdown-menu-items-list">
+								{foreach $producers as $producer}
+									{continueIf $iterator->counter <= $secondColCnt}
+									<li><a n:href="Service: 'producer' => $producer->slug">{$producer}</a></li>
+									{breakIf $iterator->counter >= $thirdColCnt}
+								{/foreach}
 							</ul>
 						</div>
 						<div class="col-md-4">
 							<h5>Najčastejsie hladané</h5>
 							<ul class="dropdown-menu-items-list">
-								<li><a href="#">Huawei P9 Lite Dual SIM</a></li>
-								<li><a href="#">Huawei P8 Lite Dual SIM</a></li>
-								<li><a href="#">Huawei P9 Lite Dual SIM</a></li>
-								<li><a href="#">Huawei P8 Lite Dual SIM</a></li>
-								<li><a href="#">Samsung Galaxy S7 G930F 32GB</a></li>
-								<li><a href="#">Apple iPhone SE 16GB</a></li>
-								<li><a href="#">Samsung Galaxy S7 Edge G935F 32GB</a></li>
-								<li><a href="#">Sony Xperia Z5 Compact</a></li>
-								<li><a href="#">Apple iPhone 6S 64GB</a></li>
-								<li><a href="#">Apple iPhone 5S 16GB</a></li>
+								</li><li><a n:href="this">Huawei P9 Lite Dual SIM</a></li>
+								<li><a n:href="this">Huawei P8 Lite Dual SIM</a></li>
+								<li><a n:href="this">Samsung Galaxy S7 G930F 32GB</a></li>
+								<li><a n:href="this">Apple iPhone SE 16GB</a></li>
+								<li><a n:href="this">Samsung Galaxy S7 Edge G935F 32GB</a></li>
+								<li><a n:href="this">Sony Xperia Z5 Compact</a></li>
+								<li><a n:href="this">Apple iPhone 6S 64GB</a></li>
+								<li><a n:href="this">Apple iPhone 5S 16GB</a></li>
 							</ul>
 						</div>
 					</div>
@@ -206,9 +222,9 @@
 				</li>
 			</ul>
 		</li>
-		<li><a href="#"><span>Získajte odmeny</span>Vernostný program</a></li>
-		<li><a href="#"><span>Nakupujte vo velkom</span>Velkoobchod</a></li>
-		<li><a href="#"><span>Všetko o nás</span>Kontakt</a></li>
+		<li><a n:href="this"><span>Získajte odmeny</span>Vernostný program</a></li>
+		<li><a n:href="this"><span>Nakupujte vo velkom</span>Velkoobchod</a></li>
+		<li><a n:href="this"><span>Všetko o nás</span>Kontakt</a></li>
 	</ul>
 	<!-- END NAVIGATION -->
 {/block}

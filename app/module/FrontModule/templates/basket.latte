@@ -70,7 +70,7 @@
 				<span n:if="$basket->isEmpty()">{_'cart.isEmpty'}</span>
 				<span n:if="!$basket->isEmpty()">{_'cart.countItem', $basket->getProductsCount()}</span>
 				<i class="fa fa-shopping-cart"></i>
-				{if !$basket->isEmpty()}{$basket->getProductsTotalPrice($priceLevel)|asCurrency:TRUE}{/if}
+				{$basket->getProductsTotalPrice($priceLevel)|asCurrency:TRUE}
 			</a>
 			<ul class="dropdown-menu dropdown-menu-shipping-cart" n:if="!$basket->isEmpty()">
 				<li n:foreach="$basket->items as $item">
@@ -108,8 +108,7 @@
 		</li>
 	</ul>
 
-
-	<div class="mfp-with-anim mfp-hide mfp-dialog clearfix" id="nav-login-dialog">
+	<div n:if="!$user->loggedIn" class="mfp-with-anim mfp-hide mfp-dialog clearfix" id="nav-login-dialog">
 		<h3 class="widget-title">{_'My Account'}</h3>
 		<hr/>
 		{control signInModal}
@@ -126,7 +125,7 @@
 		{control signInModal:social}
 	</div>
 
-	<div class="mfp-with-anim mfp-hide mfp-dialog clearfix" id="nav-account-dialog">
+	<div n:if="!$user->loggedIn" class="mfp-with-anim mfp-hide mfp-dialog clearfix" id="nav-account-dialog">
 		<h3 class="widget-title">{_'Registration'}</h3>
 		<p>{_'Create account and gain an advantage in bonus program.'}</p>
 		<hr/>

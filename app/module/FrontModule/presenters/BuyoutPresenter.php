@@ -6,11 +6,10 @@ use App\Components\Buyout\Form\IRequestFactory;
 use App\Components\Buyout\Form\Request;
 use App\Components\Producer\Form\ContactShop;
 use App\Components\Producer\Form\IContactShopFactory;
-use App\Components\Producer\Form\IModelSelectorFactory;
-use App\Components\Producer\Form\ModelSelector;
 use App\Model\Entity\Page;
+use App\Model\Entity\Producer;
+use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
-use Nette\Http\Session;
 
 class BuyoutPresenter extends BasePresenter
 {
@@ -18,11 +17,14 @@ class BuyoutPresenter extends BasePresenter
 	/** @var Page */
 	private $page;
 
-	/** @var Session @inject */
-	public $session;
+	/** @var Producer */
+	private $producer;
 
-	/** @var IModelSelectorFactory @inject */
-	public $iModelSelectorFactory;
+	/** @var ProducerLine */
+	private $line;
+
+	/** @var ProducerModel */
+	private $model;
 
 	/** @var IRequestFactory @inject */
 	public $iRequestFactory;
@@ -30,28 +32,57 @@ class BuyoutPresenter extends BasePresenter
 	/** @var IContactShopFactory @inject */
 	public $iContactShopFactory;
 
-	/** @var ProducerModel */
-	private $model;
-
-	public function actionDefault($id = NULL)
+	public function actionDefault($producer = NULL, $line = NULL, $model = NULL)
 	{
-		if ($id !== NULL) {
-			$this->model = $this->em->getRepository(ProducerModel::getClassName())->find($id);
-		}
-
 		$settings = $this->settings->modules->buyout;
-
 		if (!$settings->enabled) {
-			$this->flashMessage($this->translator->translate('This module isn\'t allowed.'), 'warning');
+			$message = $this->translator->translate('This module isn\'t allowed.');
+			$this->flashMessage($message, 'warning');
 			$this->redirect('Homepage:');
 		}
 
-		$pages = $this->em->getRepository(Page::getClassName());
-		$this->page = $pages->find($settings->pageId);
+		$pageRepo = $this->em->getRepository(Page::getClassName());
+		$this->page = $pageRepo->find($settings->pageId);
 
 		if (!$this->page) {
-			$this->flashMessage($this->translator->translate('wasntFoundShe', NULL, ['name' => $this->translator->translate('Page')]), 'warning');
+			$message = $this->translator->translate('wasntFoundShe', NULL, ['name' => $this->translator->translate('Page')]);
+			$this->flashMessage($message, 'warning');
 			$this->redirect('Homepage:');
+		}
+
+		if ($producer && $line && $model) {
+			$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
+			$this->model = $modelRepo->findOneByUrl([$producer, $line, $model]);
+			if ($this->model) {
+				$this->model->setCurrentLocale($this->locale);
+				$this->line = $this->model->line;
+				$this->producer = $this->line->producer;
+				$this->setView('model');
+			} else {
+				$message = $this->translator->translate('wasntFoundHe', NULL, ['name' => $this->translator->translate('Model')]);
+			}
+		} else if ($producer && $line) {
+			$lineRepo = $this->em->getRepository(ProducerLine::getClassName());
+			$this->line = $lineRepo->findOneByUrl([$producer, $line]);
+			if ($this->line) {
+				$this->producer = $this->line->producer;
+				$this->setView('line');
+			} else {
+				$message = $this->translator->translate('wasntFoundShe', NULL, ['name' => $this->translator->translate('Line')]);
+			}
+		} else if ($producer) {
+			$producerRepo = $this->em->getRepository(Producer::getClassName());
+			$this->producer = $producerRepo->findOneByUrl([$producer]);
+			if ($this->producer) {
+				$this->setView('producer');
+			} else {
+				$message = $this->translator->translate('wasntFoundHe', NULL, ['name' => $this->translator->translate('Producer')]);
+			}
+		}
+
+		if (isset($message)) {
+			$this->flashMessage($message, 'warning');
+			$this->redirect('this', ['producer' => NULL, 'line' => NULL, 'model' => NULL]);
 		}
 
 		$this->page->setCurrentLocale($this->locale);
@@ -59,30 +90,34 @@ class BuyoutPresenter extends BasePresenter
 
 	public function renderDefault()
 	{
-		$this->template->page = $this->page;
-		$this->template->model = $this->model;
-		
-		$this->changePageInfo(self::PAGE_INFO_TITLE, $this->page);
-		$this->changePageInfo(self::PAGE_INFO_KEYWORDS, $this->page);
-		$this->changePageInfo(self::PAGE_INFO_DESCRIPTION, $this->page);
+		$this->renderAll($this->page);
 	}
 
-	/** @return ModelSelector */
-	public function createComponentModelSelector()
+	public function renderProducer()
 	{
-		$control = $this->iModelSelectorFactory->create();
-		if ($this->model) {
-			$control->setModel($this->model);
-		}
+		$this->renderAll($this->page . ' ' . $this->producer);
+	}
 
-		$control->onAfterSelect = function ($producer, $line, $model) {
-			if ($this->isAjax()) {
-				$this->redrawControl();
-			} else {
-				$this->redirect('this', ['id' => $model->id]);
-			}
-		};
-		return $control;
+	public function renderLine()
+	{
+		$this->renderAll($this->page . ' ' . $this->line);
+	}
+
+	public function renderModel()
+	{
+		$this->renderAll($this->page . ' ' . $this->model);
+	}
+
+	private function renderAll($seoText)
+	{
+		$this->changePageInfo(self::PAGE_INFO_TITLE, $seoText);
+		$this->changePageInfo(self::PAGE_INFO_KEYWORDS, $seoText);
+		$this->changePageInfo(self::PAGE_INFO_DESCRIPTION, $seoText);
+
+		$this->template->page = $this->page;
+		$this->template->producer = $this->producer;
+		$this->template->line = $this->line;
+		$this->template->model = $this->model;
 	}
 
 	/** @return Request */
@@ -91,7 +126,7 @@ class BuyoutPresenter extends BasePresenter
 		$control = $this->iRequestFactory->create();
 		$control->onSend = function () {
 			$this->flashMessage($this->translator->translate('Your request has been sent.'), 'success');
-			$this->redirect('this', ['id' => NULL]);
+			$this->redirect('this', ['producer' => NULL, 'line' => NULL, 'model' => NULL]);
 		};
 
 		if ($this->model) {
@@ -111,7 +146,7 @@ class BuyoutPresenter extends BasePresenter
 		}
 		$control->onSend = function () {
 			$this->flashMessage($this->translator->translate('Your request has been sent.'), 'success');
-			$this->redirect('this', ['id' => NULL]);
+			$this->redirect('this', ['producer' => NULL, 'line' => NULL, 'model' => NULL]);
 		};
 		return $control;
 	}

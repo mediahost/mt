@@ -16,8 +16,19 @@ request:
 		no: 'No'
 		email: 'E-mail'
 		fullname: 'Full name'
-		recapculate: 'Recalculate'
+		phone: 'Phone'
+		message: 'Message'
 		send: 'Agree with price'
+		placeholder:
+			message: 'Optionaly insert additional informations'
+	page:
+		questions: 'Buyout questions'
+		questionsDescribe: 'Aswer for this questions and we show You buyout price'
+		sellUsPhone: 'Sell us Your phone'
+		usedPhonePrice: 'Suggested price of buyout'
+		newPhonePrice: 'New phone %name% we can buy for price'
+		ifAgree: 'If you agree with price then we can buy your phone.'
+		fillForm: 'Fill form bellow and we will contact you.'
 	required:
 		fullname: 'Enter your first name and last name'
 		email: 'Enter your e-mail'

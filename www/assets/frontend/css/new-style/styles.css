@@ -61,7 +61,7 @@ label {
 }
 
 .page-title {
-	font-size: 70px;
+	font-size: 50px;
 	line-height: 1em;
 	margin-bottom: 15px;
 }
@@ -766,11 +766,11 @@ hr {
 }
 
 .navbar-main-search-category {
-	width: 770px;
+	width: 670px;
 }
 
 .navbar-main-search-category .form-control {
-	padding-left: 150px;
+	padding-left: 10px;
 }
 
 @media (max-width: 992px) {

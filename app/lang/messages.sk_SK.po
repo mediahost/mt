@@ -1570,3 +1570,30 @@ msgstr "Doporučiť známému"
 
 msgid "Recommend has been send."
 msgstr "Doporučenie bolo odosláno."
+
+msgid "Service"
+msgstr "Servis"
+
+msgid "Phone Service"
+msgstr "Servis telefonu"
+
+msgid "Order your phone service"
+msgstr "Objednajte si servis telefónu"
+
+msgid "Buyout"
+msgstr "Výkup"
+
+msgid "Phone Buyout"
+msgstr "Výkup telefonu"
+
+msgid "Select producer"
+msgstr "Vyberte výrobcu"
+
+msgid "Select line"
+msgstr "Vyberte radu"
+
+msgid "Select model"
+msgstr "Vyberte model"
+
+msgid "Back to main page"
+msgstr "Späť na hlavnú stranu"

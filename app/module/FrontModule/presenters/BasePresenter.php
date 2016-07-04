@@ -18,13 +18,13 @@ use App\Forms\Form;
 use App\Helpers;
 use App\Model\Entity\Category;
 use App\Model\Entity\Page;
-use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerModel;
 use App\Model\Entity\Product;
 use App\Model\Entity\Sign;
 use App\Model\Entity\Stock;
 use App\Model\Entity\Voucher;
 use App\Model\Facade\CategoryFacade;
+use App\Model\Facade\ProducerFacade;
 use App\Model\Repository\CategoryRepository;
 use App\Model\Repository\ProductRepository;
 use App\Model\Repository\StockRepository;
@@ -244,11 +244,7 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	protected function loadTemplateProducers()
 	{
-		$producerRepo = $this->em->getRepository(Producer::getClassName());
-		$producers = $producerRepo->findBy([
-			'image NOT' => NULL,
-		]);
-		$this->template->producers = $producers;
+		$this->template->producers = $this->producerFacade->getProducers(TRUE, TRUE);
 	}
 
 	protected function loadTemplateApplets()

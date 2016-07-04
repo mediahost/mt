@@ -1,5 +1,22 @@
 @import "../definitions.less";
 
+.global-wrapper {
+	background-image: url("http://subtlepatterns2015.subtlepatterns.netdna-cdn.com/patterns/light_grey.png");
+}
+
+.navbar-brand {
+	color: white !important;
+	font-size: 35px;
+}
+
+.navbar-main {
+	background: #11304F;
+}
+
+.navbar-before {
+	background: #000000;
+}
+
 #snippet--flashMessages {
 	:first-child {
 		margin-top: 10px;
@@ -9,9 +26,18 @@
 	}
 }
 
+@media (min-width: 992px) {
+	.navbar {
+		.rel {
+			float: right;
+		}
+	}
+}
+
 header {
 	&.page-header {
 		margin-top: 20px;
+		margin-bottom: 20px;
 	}
 }
 
@@ -56,6 +82,10 @@ form {
 	}
 }
 
+.no-border {
+	border: none !important;
+}
+
 .product-page-price {
 	em {
 		font-size: 20px;
@@ -92,4 +122,65 @@ form {
 	font-weight: 500;
 	font-size: 17px;
 	margin-top: 5px;
+}
+
+.service, .buyout {
+	.blog-post-body {
+		margin-bottom: 20px;
+		p {
+			line-height: 1.2em;
+			margin-bottom: 0px;
+		}
+	}
+	.product {
+		margin-top: 15px;
+		margin-bottom: 15px;
+		&.line {
+			padding-left: 50px;
+		}
+		.product-caption {
+			width: inherit;
+			padding-top: 25px;
+			padding-right: 0px;
+			&.model {
+				padding-top: 30px;
+				width: 144px;
+			}
+		}
+	}
+}
+
+.buyout {
+	.is-new-checker, .only-for-new {
+		display: none;
+	}
+	table {
+		th {
+			width: 70%;
+		}
+		tfoot {
+			background-color: #e9e9eb;
+			color: green;
+			th {
+				line-height: 25px;
+			}
+			.price {
+				font-size: 25px;
+				text-align: right;
+			}
+		}
+		margin-bottom: 20px;
+	}
+	.price-box {
+		padding-top: 10px;
+		padding-bottom: 20px;
+		.text {
+			line-height: 25px;
+		}
+		.price {
+			text-align: right;
+			color: green;
+			font-size: 25px;
+		}
+	}
 }

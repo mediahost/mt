@@ -67,7 +67,7 @@
 						</div>
 					</div>
 					<p class="product-page-desc-lg" n:if="$product->perex">
-						{$product->perex|stripTags}
+						{$product->perex|stripTags|noescape}
 					</p>
 					<div class="row">
 						<div class="col-md-5 product-page-cart">

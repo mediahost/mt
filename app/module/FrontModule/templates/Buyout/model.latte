@@ -1,0 +1,63 @@
+{block pageJavascript}
+	<script src="{$basePath}/assets/frontend/scripts/buyout.js" type="text/javascript"></script>
+{/block}
+
+{block breadcrumb}
+	<header class="page-header">
+		<h1 class="page-title">
+			{_'Phone Buyout'} {$model}
+		</h1>
+		<ol class="breadcrumb page-breadcrumb">
+			<li><a n:href=":Front:Homepage:">{$pageInfo->projectName}</a></li>
+			<li><a n:href="Buyout:">{$page}</a></li>
+			<li><a n:href="Buyout: 'producer' => $producer->slug">{$producer}</a></li>
+			<li><a n:href="Buyout: 'producer' => $producer->slug, 'line' => $line->slug">{$line}</a></li>
+			<li class="active"><span>{$model}</span></li>
+		</ol>
+	</header>
+{/block}
+
+{block content}
+	<div class="row buyout" id="buyout">
+		<div class="col-md-7">
+			{if $model->hasQuestions()}
+				{control requestForm}
+			{else}
+				<div class="box">
+					<h2>{_'Please describe your device and we will contact you back with price options'}</h2>
+					{control contactBuyout}
+				</div>
+			{/if}
+		</div>
+		<div class="col-md-5">
+			{include image}
+		</div>
+	</div>
+{/block}
+
+{define image}
+	<div class="product-page-product-wrap">
+		<div class="clearfix">
+			<div class="zoomPad">
+				<img src="{$basePath}/foto/{$model->image|size}"
+					 alt="{$model->getFullName()}" title="{$model->getFullName()}"/>
+			</div>
+		</div>
+	</div>
+	{if $model->html}
+		<div class="gap-small"></div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="box">
+					<p n:if="$model->html" class="product-page-desc">{$model->html|noescape}</p>
+				</div>
+			</div>
+		</div>
+	{/if}
+	<div class="gap-small"></div>
+	<div class="row">
+		<div class="col-md-12 text-right">
+			<a n:href="Homepage:" class="btn btn-default">{_'Back to main page'}</a>
+		</div>
+	</div>
+{/define}

@@ -55,7 +55,7 @@
 		<!-- BEGIN BREADCRUMBS -->
 		<header class="page-header" n:block="breadcrumb">
 			<ol class="breadcrumb page-breadcrumb">
-				<li><a n:href=":Front:Homepage:">{_'Home'}</a></li>
+				<li><a n:href=":Front:Homepage:">{$pageInfo->projectName}</a></li>
 				{block breadcrumbItems}{/block}
 			</ol>
 		</header>
@@ -75,6 +75,7 @@
 	<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 	{include jsBoxCore}
 	{include jsFrontApp2}
+	{block pageJavascript}{/block}
 	<!-- END JAVASCRIPTS -->
 {/block}
 </body>

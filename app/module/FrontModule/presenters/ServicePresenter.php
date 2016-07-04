@@ -4,10 +4,9 @@ namespace App\FrontModule\Presenters;
 
 use App\Components\Producer\Form\ContactShop;
 use App\Components\Producer\Form\IContactShopFactory;
-use App\Components\Producer\Form\IModelSelectorFactory;
-use App\Components\Producer\Form\ModelSelector;
 use App\Model\Entity\Page;
 use App\Model\Entity\Producer;
+use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
 
 class ServicePresenter extends BasePresenter
@@ -16,30 +15,33 @@ class ServicePresenter extends BasePresenter
 	/** @var Page */
 	private $page;
 
+	/** @var Producer */
+	private $producer;
+
+	/** @var ProducerLine */
+	private $line;
+
 	/** @var ProducerModel */
 	private $model;
 
 	// <editor-fold desc="injects">
-
-	/** @var IModelSelectorFactory @inject */
-	public $iModelSelectorFactory;
 
 	/** @var IContactShopFactory @inject */
 	public $iContactShopFactory;
 
 	// </editor-fold>
 
-	public function actionDefault($id = NULL)
+	public function actionDefault($producer = NULL, $line = NULL, $model = NULL)
 	{
-		$service = $this->settings->modules->service;
-		if (!$service->enabled) {
+		$settings = $this->settings->modules->service;
+		if (!$settings->enabled) {
 			$message = $this->translator->translate('This module isn\'t allowed.');
 			$this->flashMessage($message, 'warning');
 			$this->redirect('Homepage:');
 		}
 
 		$pageRepo = $this->em->getRepository(Page::getClassName());
-		$this->page = $pageRepo->find($service->pageId);
+		$this->page = $pageRepo->find($settings->pageId);
 
 		if (!$this->page) {
 			$message = $this->translator->translate('wasntFoundShe', NULL, ['name' => $this->translator->translate('Page')]);
@@ -47,64 +49,77 @@ class ServicePresenter extends BasePresenter
 			$this->redirect('Homepage:');
 		}
 
-		if ($id) {
+		if ($producer && $line && $model) {
 			$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
-			$this->model = $modelRepo->find($id);
-			if (!$this->model) {
+			$this->model = $modelRepo->findOneByUrl([$producer, $line, $model]);
+			if ($this->model) {
+				$this->model->setCurrentLocale($this->locale);
+				$this->line = $this->model->line;
+				$this->producer = $this->line->producer;
+				$this->setView('model');
+			} else {
 				$message = $this->translator->translate('wasntFoundHe', NULL, ['name' => $this->translator->translate('Model')]);
-				$this->flashMessage($message, 'warning');
-				$this->redirect('this', ['id' => NULL]);
 			}
+		} else if ($producer && $line) {
+			$lineRepo = $this->em->getRepository(ProducerLine::getClassName());
+			$this->line = $lineRepo->findOneByUrl([$producer, $line]);
+			if ($this->line) {
+				$this->producer = $this->line->producer;
+				$this->setView('line');
+			} else {
+				$message = $this->translator->translate('wasntFoundShe', NULL, ['name' => $this->translator->translate('Line')]);
+			}
+		} else if ($producer) {
+			$producerRepo = $this->em->getRepository(Producer::getClassName());
+			$this->producer = $producerRepo->findOneByUrl([$producer]);
+			if ($this->producer) {
+				$this->setView('producer');
+			} else {
+				$message = $this->translator->translate('wasntFoundHe', NULL, ['name' => $this->translator->translate('Producer')]);
+			}
+		}
+
+		if (isset($message)) {
+			$this->flashMessage($message, 'warning');
+			$this->redirect('this', ['producer' => NULL, 'line' => NULL, 'model' => NULL]);
 		}
 
 		$this->page->setCurrentLocale($this->locale);
 	}
 
-	public function renderDefault($id = NULL)
+	public function renderDefault()
 	{
-		if ($id) {
-			$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
-			$this->model = $modelRepo->find($id);
-		}
-		if ($this->model) {
-			$this->model->setCurrentLocale($this->locale);
-		}
+		$this->renderAll($this->page);
+	}
 
-		$producerRepo = $this->em->getRepository(Producer::getClassName());
-		$producers = $producerRepo->findAll();
+	public function renderProducer()
+	{
+		$this->renderAll($this->page . ' ' . $this->producer);
+	}
+
+	public function renderLine()
+	{
+		$this->renderAll($this->page . ' ' . $this->line);
+	}
+
+	public function renderModel()
+	{
+		$this->renderAll($this->page . ' ' . $this->model);
+	}
+
+	private function renderAll($seoText)
+	{
+		$this->changePageInfo(self::PAGE_INFO_TITLE, $seoText);
+		$this->changePageInfo(self::PAGE_INFO_KEYWORDS, $seoText);
+		$this->changePageInfo(self::PAGE_INFO_DESCRIPTION, $seoText);
 
 		$this->template->page = $this->page;
-		$this->template->producersTree = $this['modelSelector']->getProducersTree();
-		$this->template->producers = $producers;
+		$this->template->producer = $this->producer;
+		$this->template->line = $this->line;
 		$this->template->model = $this->model;
-
-		$this->changePageInfo(self::PAGE_INFO_TITLE, $this->page);
-		$this->changePageInfo(self::PAGE_INFO_KEYWORDS, $this->page);
-		$this->changePageInfo(self::PAGE_INFO_DESCRIPTION, $this->page);
-
-		if ($this->isAjax()) {
-			$this->redrawControl();
-		}
 	}
 
 	// <editor-fold desc="forms">
-
-	/** @return ModelSelector */
-	public function createComponentModelSelector()
-	{
-		$control = $this->iModelSelectorFactory->create();
-		if ($this->model) {
-			$control->setModel($this->model);
-		}
-		$control->onAfterSelect = function ($producer, $line, $model) {
-			if ($this->isAjax()) {
-				$this->redrawControl();
-			} else {
-				$this->redirect('this', ['id' => $model->id]);
-			}
-		};
-		return $control;
-	}
 
 	/** @return ContactShop */
 	public function createComponentContactService()
@@ -116,7 +131,7 @@ class ServicePresenter extends BasePresenter
 		}
 		$control->onSend = function () {
 			$this->flashMessage($this->translator->translate('Your request has been sent.'), 'success');
-			$this->redirect('this', ['id' => NULL]);
+			$this->redirect('this', ['producer' => NULL, 'line' => NULL, 'model' => NULL]);
 		};
 		return $control;
 	}
