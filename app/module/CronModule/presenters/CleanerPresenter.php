@@ -37,13 +37,10 @@ class CleanerPresenter extends BasePresenter
 		if ($signsSetting->enabled) {
 			$sign = $signRepo->find($signsSetting->values->new);
 			if ($sign) {
-				$signs = $productSignRepo->findBy([
+				$productSignRepo->deleteBy([
 					'sign' => $sign,
 					'createdAt <=' => DateTime::from('-' . $signsSetting->clearOlder),
 				]);
-				foreach ($signs as $item) {
-					$productSignRepo->delete($item);
-				}
 			}
 		}
 
