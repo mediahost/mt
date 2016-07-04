@@ -7,7 +7,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
 use Knp\DoctrineBehaviors\Model;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Model\Repository\ProductSignRepository")
  */
 class ProductSign extends BaseEntity
 {
