@@ -111,11 +111,6 @@ class CategoriesPresenter extends BasePresenter
 	{
 		$categoryRepo = $this->em->getRepository(Category::getClassName());
 
-		if (!$id) {
-			$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('Id')]);
-			$this->setError($message);
-		}
-
 		try {
 			$entity = $categoryRepo->find($id);
 			$this->categoryFacade->reorder($entity, $new, $old);
