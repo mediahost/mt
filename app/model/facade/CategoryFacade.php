@@ -15,6 +15,8 @@ use Nette\Object;
 class CategoryFacade extends Object
 {
 
+	const ORDER_DIR_UP = 'up';
+	const ORDER_DIR_DOWN = 'down';
 	const TAG_ALL_CATEGORIES = 'all-categories';
 	const TAG_CATEGORY = 'category_';
 
@@ -55,6 +57,23 @@ class CategoryFacade extends Object
 		}
 		@uasort($categories, 'strcoll');
 		return $categories;
+	}
+
+	public function reorder(Category $category, $new, $old)
+	{
+		$dir = $new > $old ? self::ORDER_DIR_UP : self::ORDER_DIR_DOWN;
+
+		$categories = $this->categoryRepo->findByParent($category->parent, ['priority' => 'ASC']);
+		foreach ($categories as $i => $categoryItem) {
+			if ($categoryItem->id === $category->id) {
+				$categoryItem->priority = $new;
+			} else if (in_array($i, range($new, $old))) {
+				$categoryItem->priority = $dir == self::ORDER_DIR_UP ? $i - 1 : $i + 1;
+			} else {
+				$categoryItem->priority = $i;
+			}
+			$this->categoryRepo->save($categoryItem);
+		}
 	}
 
 	public function urlToId($uri, Request $request = NULL, $locale = NULL, Category $category = NULL)

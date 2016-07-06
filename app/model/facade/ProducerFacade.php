@@ -15,6 +15,8 @@ use Nette\Object;
 class ProducerFacade extends Object
 {
 
+	const ORDER_DIR_UP = 'up';
+	const ORDER_DIR_DOWN = 'down';
 	const TAG_ALL_PRODUCERS = 'all-producers';
 	const TAG_ALL_LINES = 'all-lines';
 	const TAG_ALL_MODELS = 'all-models';
@@ -98,60 +100,48 @@ class ProducerFacade extends Object
 		return $models;
 	}
 
-	public function reorder($entity, $position)
+	public function reorder($entity, $new, $old)
 	{
 		if ($entity instanceof Producer) {
-			return $this->reorderProducer($entity, $position);
+			return $this->reorderProducer($entity, $new, $old);
 		} else if ($entity instanceof ProducerLine) {
-			return $this->reorderLine($entity, $position);
+			return $this->reorderLine($entity, $new, $old);
 		} else if ($entity instanceof ProducerModel) {
-			return $this->reorderModel($entity, $position);
+			return $this->reorderModel($entity, $new, $old);
 		}
 		return FALSE;
 	}
 
-	private function reorderProducer(Producer $producer, $position)
+	private function reorderProducer(Producer $producer, $new, $old)
 	{
 		$allProducers = $this->producerRepo->findBy([], ['priority' => 'ASC']);
-		foreach ($allProducers as $i => $producerItem) {
-			if ($producerItem->id === $producer->id) {
-				$producerItem->priority = $position;
-			} else if ($i < $position) {
-				$producerItem->priority = $i;
-			} else {
-				$producerItem->priority = $i + 1;
-			}
-			$this->producerRepo->save($producerItem);
-		}
+		$this->rebasePriorities($allProducers, $producer, $new, $old);
 	}
 
-	private function reorderLine(ProducerLine $line, $position)
+	private function reorderLine(ProducerLine $line, $new, $old)
 	{
-		$lines = $this->lineRepo->findBy(['producer' => $line->producer], ['priority' => 'ASC']);
-		foreach ($lines as $i => $lineItem) {
-			if ($lineItem->id === $line->id) {
-				$lineItem->priority = $position;
-			} else if ($i < $position) {
-				$lineItem->priority = $i;
-			} else {
-				$lineItem->priority = $i + 1;
-			}
-			$this->lineRepo->save($lineItem);
-		}
+		$lines = $this->lineRepo->findByProducer($line->producer, ['priority' => 'ASC']);
+		$this->rebasePriorities($lines, $line, $new, $old);
 	}
 
-	private function reorderModel(ProducerModel $model, $position)
+	private function reorderModel(ProducerModel $model, $new, $old)
 	{
-		$models = $this->modelRepo->findBy(['line' => $model->line], ['priority' => 'ASC']);
-		foreach ($models as $i => $modelItem) {
-			if ($modelItem->id === $model->id) {
-				$modelItem->priority = $position;
-			} else if ($i < $position) {
-				$modelItem->priority = $i;
+		$models = $this->modelRepo->findByLine($model->line, ['priority' => 'ASC']);
+		$this->rebasePriorities($models, $model, $new, $old);
+	}
+
+	private function rebasePriorities($entities, $entity, $new, $old)
+	{
+		$dir = $new > $old ? self::ORDER_DIR_UP : self::ORDER_DIR_DOWN;
+		foreach ($entities as $i => $entityItem) {
+			if ($entityItem->id === $entity->id) {
+				$entityItem->priority = $new;
+			} else if (in_array($i, range($new, $old))) {
+				$entityItem->priority = $dir == self::ORDER_DIR_UP ? $i - 1 : $i + 1;
 			} else {
-				$modelItem->priority = $i + 1;
+				$entityItem->priority = $i;
 			}
-			$this->modelRepo->save($modelItem);
+			$this->producerRepo->save($entityItem);
 		}
 	}
 

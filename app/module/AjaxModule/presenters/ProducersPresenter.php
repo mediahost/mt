@@ -231,7 +231,7 @@ class ProducersPresenter extends BasePresenter
 
 		try {
 			$entity = $repo->find($itemId);
-			$this->producerFacade->reorder($entity, $new);
+			$this->producerFacade->reorder($entity, $new, $old);
 			$this->addData('order', $entity->priority);
 		} catch (ORMException $e) {
 			$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('ID')]);
