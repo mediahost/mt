@@ -14,7 +14,7 @@ class CategoriesPresenter extends BasePresenter
 		$parentId = $parent === '#' ? NULL : $parent;
 
 		$categoryRepo = $this->em->getRepository(Category::getClassName());
-		$categories = $categoryRepo->findBy(['parent' => $parentId]);
+		$categories = $categoryRepo->findBy(['parent' => $parentId], ['priority' => 'ASC']);
 
 		if (count($categories)) {
 			foreach ($categories as $category) {
@@ -25,6 +25,7 @@ class CategoriesPresenter extends BasePresenter
 				$item['text'] = (string) $category;
 				$item['children'] = $category->hasChildren;
 				$item['type'] = 'loaded';
+				$item['order'] = $category->priority;
 				$this->addRawData(NULL, $item);
 			}
 		} else {
@@ -97,6 +98,30 @@ class CategoriesPresenter extends BasePresenter
 			$this->addData('name', $category->translate($this->locale)->name);
 		} catch (ORMException $e) {
 			$message = $this->translator->translate('cantBeEmptyIt', NULL, ['name' => $this->translator->translate('ID')]);
+			$this->setError($message);
+		}
+	}
+
+	/**
+	 * @secured
+	 * @resource('categories')
+	 * @privilege('reorder')
+	 */
+	public function actionReorderCategory($id, $old, $new)
+	{
+		$categoryRepo = $this->em->getRepository(Category::getClassName());
+
+		if (!$id) {
+			$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('Id')]);
+			$this->setError($message);
+		}
+
+		try {
+			$entity = $categoryRepo->find($id);
+			$this->categoryFacade->reorder($entity, $new, $old);
+			$this->addData('order', $entity->priority);
+		} catch (ORMException $e) {
+			$message = $this->translator->translate('cantBeEmpty', NULL, ['name' => $this->translator->translate('ID')]);
 			$this->setError($message);
 		}
 	}

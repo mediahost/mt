@@ -16,6 +16,7 @@ use Nette\Utils\Strings;
  * @property Category $parent
  * @property array $children
  * @property-read bool $hasChildren
+ * @property int $priority
  * @property string $name
  * @property string $html
  * @property array $path
@@ -37,6 +38,9 @@ class Category extends BaseTranslatable
 
 	/** @ORM\OneToMany(targetEntity="Category", mappedBy="parent") */
 	protected $children;
+
+	/** @ORM\Column(type="smallint") */
+	protected $priority = 0;
 	
 	/** @ORM\ManyToMany(targetEntity="Product", mappedBy="categories") */
 	protected $products;

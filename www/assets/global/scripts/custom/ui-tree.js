@@ -62,6 +62,10 @@ var UITree = function () {
 						case 'delete_node':
 							return true;
 						case 'move_node':
+							if (more && more.dnd) {
+								return more.pos !== "i" && node_parent.id == node.parent;
+							}
+							return true;
 						case 'copy_node':
 						default:
 							return false;
@@ -108,8 +112,12 @@ var UITree = function () {
 					};
 				}
 			},
+			'dnd': {
+				'drop_target': false,
+				'drag_target': false
+			},
 			'state': {'key': stateKey},
-			'plugins': ['state', 'contextmenu', 'types', 'checkbox']
+			'plugins': ['state', 'contextmenu', 'types', 'checkbox', 'dnd']
 		});
 		jstree.on('create_node.jstree', function (e, data) {
 			var instance = data.instance;
@@ -164,6 +172,13 @@ var UITree = function () {
 					instance.refresh();
 				});
 			}
+		});
+		jstree.on('move_node.jstree', function (e, data) {
+			var node = data.node;
+			var request = $.get(
+				links['Categories:reorderCategory'],
+				{id: node.id, old: data.old_position, new: data.position}
+			);
 		});
         jstree.on('changed.jstree', function (e, data) {
             if (data.event) {

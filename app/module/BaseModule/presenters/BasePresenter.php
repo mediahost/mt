@@ -6,6 +6,7 @@ use App\ExchangeHelper;
 use App\Extensions\Settings\SettingsStorage;
 use App\Model\Entity\Rate;
 use App\Model\Facade\BasketFacade;
+use App\Model\Facade\CategoryFacade;
 use App\Model\Facade\GroupFacade;
 use App\Model\Facade\OrderFacade;
 use App\Model\Facade\ParameterFacade;
@@ -64,6 +65,9 @@ abstract class BasePresenter extends Presenter
 
 	/** @var ProducerFacade @inject */
 	public $producerFacade;
+
+	/** @var CategoryFacade @inject */
+	public $categoryFacade;
 
 	/** @var BasketFacade @inject */
 	public $basketFacade;
