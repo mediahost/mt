@@ -5,7 +5,6 @@ namespace App\Router;
 use App\Model\Facade\CategoryFacade;
 use App\Model\Facade\PageFacade;
 use App\Model\Facade\ProducerFacade;
-use App\Model\Facade\StockFacade;
 use App\Model\Facade\UriFacade;
 use Drahak\Restful\Application\Routes\ResourceRoute;
 use Nette\Application\IRouter;
@@ -21,9 +20,6 @@ class RouterFactory
 	const LOCALE_PARAM = '[<locale=sk cs|sk|en>/]'; // TODO: remove on PHP 5.6
 	// TODO: PHP 5.6 can concat strings
 //	const LOCALE_PARAM = '[<' . self::LOCALE_PARAM_NAME . '=' . self::LOCALE_DEFAULT_LANG . ' cs|sk|en>/]';
-
-	/** @var StockFacade @inject */
-	public $stockFacade;
 
 	/** @var CategoryFacade @inject */
 	public $categoryFacade;
@@ -196,11 +192,12 @@ class RouterFactory
 			'presenter' => 'Page',
 			'action' => 'default',
 		]);
+//		$frontRouter[] = $routeCategory = new FilterRoute(self::LOCALE_PARAM . 'c/[<slug ' . $slugs . '>/]<id>.htm', [
 		$frontRouter[] = $routeCategory = new FilterRoute(self::LOCALE_PARAM . 'c/<id ' . $slugs . '>', [
 			'presenter' => 'Category',
 			'action' => 'default',
 		]);
-		$frontRouter[] = $routeProduct = new FilterRoute(self::LOCALE_PARAM . '<id ' . $slugs . '>', [
+		$frontRouter[] = $routeProduct = new FilterRoute(self::LOCALE_PARAM . '[<slug>-]<id>.htm', [
 			'presenter' => 'Product',
 			'action' => 'default',
 		]);
@@ -210,7 +207,6 @@ class RouterFactory
 			'id' => NULL,
 		]);
 
-		$routeProduct->addFilter('id', [$this->stockFacade, 'urlToId'], [$this->stockFacade, 'idToUrl']);
 		$routeCategory->addFilter('id', [$this->categoryFacade, 'urlToId'], [$this->categoryFacade, 'idToUrl']);
 		$routePage->addFilter('id', [$this->pageFacade, 'slugToId'], [$this->pageFacade, 'idToSlug']);
 

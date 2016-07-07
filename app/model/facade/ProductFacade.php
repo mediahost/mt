@@ -10,6 +10,7 @@ use Nette\Object;
 
 class ProductFacade extends Object
 {
+	const TAG_PRODUCT = 'product_';
 
 	/** @var EntityManager @inject */
 	public $em;

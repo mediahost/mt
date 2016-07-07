@@ -54,10 +54,10 @@ class Product extends BaseTranslatable
 
 	/** @ORM\Column(type="boolean") */
 	protected $active = TRUE;
-	
-    /** @ORM\ManyToOne(targetEntity="Unit") */
+
+	/** @ORM\ManyToOne(targetEntity="Unit") */
 	protected $unit;
-	
+
 	/** @ORM\OneToMany(targetEntity="Stock", mappedBy="product") */
 	protected $stocks;
 
@@ -72,12 +72,12 @@ class Product extends BaseTranslatable
 		$this->signs = new ArrayCollection();
 		parent::__construct($currentLocale);
 	}
-	
+
 	public function getStock()
 	{
 		return $this->stocks->first();
 	}
-	
+
 	public function getUrl()
 	{
 		$url = NULL;
@@ -88,9 +88,14 @@ class Product extends BaseTranslatable
 		return $url;
 	}
 
+	public function getUrlId()
+	{
+		return $this->getId();
+	}
+
 	public function __toString()
 	{
-		return (string) $this->name;
+		return (string)$this->name;
 	}
 
 	public function &__get($name)
