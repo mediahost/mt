@@ -5,6 +5,9 @@ namespace App\Model\Facade;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
+use App\Model\Repository\ProducerLineRepository;
+use App\Model\Repository\ProducerModelRepository;
+use App\Model\Repository\ProducerRepository;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\EntityRepository;
 use Kdyby\Translation\Translator;
@@ -17,9 +20,6 @@ class ProducerFacade extends Object
 
 	const ORDER_DIR_UP = 'up';
 	const ORDER_DIR_DOWN = 'down';
-	const TAG_ALL_PRODUCERS = 'all-producers';
-	const TAG_ALL_LINES = 'all-lines';
-	const TAG_ALL_MODELS = 'all-models';
 	const TAG_PRODUCER = 'producer_';
 	const TAG_LINE = 'producer-line_';
 	const TAG_MODEL = 'producer-model_';
@@ -33,13 +33,13 @@ class ProducerFacade extends Object
 	/** @var IStorage @inject */
 	public $cacheStorage;
 
-	/** @var EntityRepository */
+	/** @var ProducerRepository */
 	private $producerRepo;
 
-	/** @var EntityRepository */
+	/** @var ProducerLineRepository */
 	private $lineRepo;
 
-	/** @var EntityRepository */
+	/** @var ProducerModelRepository */
 	private $modelRepo;
 
 	/** @var array */
@@ -56,12 +56,17 @@ class ProducerFacade extends Object
 		$this->modelRepo = $this->em->getRepository(ProducerModel::getClassName());
 	}
 
-	public function getProducersList($onlyWithChildren = FALSE, $onlyWithProducts = FALSE)
+	public function getProducers($onlyWithChildren = FALSE, $onlyWithProducts = FALSE)
+	{
+		return $this->getProducersList($onlyWithChildren, $onlyWithProducts, FALSE);
+	}
+
+	public function getProducersList($onlyWithChildren = FALSE, $onlyWithProducts = FALSE, $toString = TRUE)
 	{
 		$producers = [];
-		foreach ($this->producerRepo->findBy([], ['priority' => 'ASC']) as $producer) {
+		foreach ($this->producerRepo->findAllWithPriority() as $producer) {
 			if ((!$onlyWithChildren || $producer->hasLines(TRUE)) && (!$onlyWithProducts || $producer->hasProducts())) {
-				$producers[$producer->id] = (string)$producer;
+				$producers[$producer->id] = $toString ? (string)$producer : $producer;
 			}
 		}
 		return $producers;
@@ -202,11 +207,8 @@ class ProducerFacade extends Object
 	private function getModelTags(ProducerModel $model)
 	{
 		return [
-			self::TAG_ALL_PRODUCERS,
 			self::TAG_PRODUCER . $model->line->producer->id,
-			self::TAG_ALL_LINES,
 			self::TAG_LINE . $model->line->id,
-			self::TAG_ALL_MODELS,
 			self::TAG_MODEL . $model->id,
 		];
 	}
