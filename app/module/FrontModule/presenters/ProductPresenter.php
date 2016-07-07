@@ -14,6 +14,7 @@ use App\Model\Entity\Category;
 use App\Model\Entity\Parameter;
 use App\Model\Entity\Searched;
 use App\Model\Entity\Stock;
+use App\Model\Facade\ProductFacade;
 use App\Model\Facade\StockFacade;
 use App\Model\Facade\VisitFacade;
 use Nette\Application\BadRequestException;
@@ -89,7 +90,7 @@ class ProductPresenter extends BasePresenter
 		$this->template->params = $allParams;
 		$this->template->actualVisits = $this->visitFacade->getVisitsCount($this->stock);
 		$this->template->homecreditCalc = $this->homecredit->getCalcLink();
-		$this->template->productCacheTag = StockFacade::TAG_PRODUCT . $product->id;
+		$this->template->productCacheTag = ProductFacade::TAG_PRODUCT . $product->id;
 		$this->template->stockCacheTag = StockFacade::TAG_STOCK . $product->stock->id;
 
 		// Last visited

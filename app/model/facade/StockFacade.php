@@ -15,12 +15,9 @@ use App\Model\Repository\CategoryRepository;
 use App\Model\Repository\ProductRepository;
 use App\Model\Repository\SignRepository;
 use App\Model\Repository\StockRepository;
-use App\Router\RouterFactory;
 use Doctrine\ORM\AbstractQuery;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Translation\Translator;
-use Nette\Application\Request;
-use Nette\Caching\Cache;
 use Nette\Caching\IStorage;
 use Nette\Object;
 use Nette\Utils\DateTime;
@@ -28,9 +25,6 @@ use Nette\Utils\DateTime;
 class StockFacade extends Object
 {
 
-	const KEY_ALL_PRODUCTS_URLS = 'product-urls';
-	const TAG_ALL_PRODUCTS = 'all-products';
-	const TAG_PRODUCT = 'product_';
 	const TAG_STOCK = 'stock_';
 
 	/** @var EntityManager @inject */
@@ -56,12 +50,6 @@ class StockFacade extends Object
 
 	/** @var SignRepository */
 	private $signRepo;
-
-	/** @var array */
-	private $ids = [];
-
-	/** @var array */
-	private $urls = [];
 
 	public function __construct(EntityManager $em)
 	{
@@ -147,91 +135,6 @@ class StockFacade extends Object
 	public function getBestSellers()
 	{
 		return [];
-	}
-
-	public function urlToId($uri, Request $request = NULL, $locale = NULL, Product $product = NULL)
-	{
-		$locale = $this->getLocale($request, $locale);
-		$hash = $this->createCacheHash($uri, $locale);
-
-		if (!$product && isset($this->ids[$hash])) {
-			return $this->ids[$hash];
-		}
-
-		$cache = $this->getCache();
-		$id = $cache->load($hash);
-		if (!$id) {
-			$localeArr = $locale == $this->translator->getDefaultLocale() ? $locale : [$locale, $this->translator->getDefaultLocale()];
-			$product = $product ? $product : $this->productRepo->findOneByUrl($uri, $localeArr);
-			if ($product) {
-				$id = $product->id;
-				$categoryTags = $this->getCategoryTags($product->mainCategory);
-				$this->ids[$hash] = $id;
-				$cache->save($hash, $id, [Cache::TAGS => [
-						self::TAG_ALL_PRODUCTS,
-						self::TAG_PRODUCT . $id,
-					] + $categoryTags]);
-			}
-		}
-		return $id;
-	}
-
-	public function idToUrl($id, Request $request = NULL, $locale = NULL, Product $product = NULL)
-	{
-		$locale = $this->getLocale($request, $locale);
-		$hash = $this->createCacheHash($id, $locale);
-
-		if (!$product && isset($this->urls[$hash])) {
-			return $this->urls[$hash];
-		}
-
-		$cache = $this->getCache();
-		$url = $cache->load($hash);
-		if (!$url) {
-			$product = $product ? $product : $this->productRepo->find($id);
-			if ($product) {
-				$product->setCurrentLocale($locale);
-				$url = $product->getUrl();
-				$categoryTags = $this->getCategoryTags($product->mainCategory);
-
-				$this->urls[$hash] = $url;
-				$cache->save($hash, $url, [Cache::TAGS => [
-						self::TAG_ALL_PRODUCTS,
-						self::TAG_PRODUCT . $id,
-					] + $categoryTags]);
-			}
-		}
-		return $url;
-	}
-
-	/** @return Cache */
-	public function getCache()
-	{
-		$cache = new Cache($this->cacheStorage, get_class($this));
-		return $cache;
-	}
-
-	private function createCacheHash($value, $locale)
-	{
-		return md5($locale . $value);
-	}
-
-	private function getCategoryTags(Category $category)
-	{
-		$tags = [];
-		foreach ($category->getPathWithThis() as $item) {
-			$tags[] = CategoryFacade::TAG_CATEGORY . $item->id;
-		}
-		return $tags;
-	}
-
-	private function getLocale(Request $request = NULL, $locale = NULL)
-	{
-		$locale = $request ? $request->getParameter(RouterFactory::LOCALE_PARAM_NAME) : $locale;
-		if (!$locale) {
-			$locale = $this->translator->getDefaultLocale();
-		}
-		return $locale;
 	}
 
 	public function getExportStocksArray($onlyInStore = TRUE, Category $denyCategory = NULL, $limit = NULL, $withHeureka = FALSE)
