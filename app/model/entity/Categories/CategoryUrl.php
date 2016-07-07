@@ -22,4 +22,9 @@ trait CategoryUrl
 		return Helpers::concatStrings($glue, $urlPath);
 	}
 
+	public function getUrlId()
+	{
+		return $this->id;
+	}
+
 }

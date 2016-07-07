@@ -3,7 +3,7 @@
 {block breadcrumbItems}
 	{ifset $category}
 		<li n:foreach="$category->path as $parent">
-			<a n:href="Category: $parent->id">{$parent}</a>
+			<a n:href="Category: 'c' => $parent->getUrlId(), 'slug' => $parent->getSlug()">{$parent}</a>
 		</li>
 		<li class="active">{$category}</li>
 		{elseifset $searched}
@@ -80,7 +80,8 @@
 							<div class="col-md-3" n:foreach="$subcategories as $subcategory">
 								{cache 'subcategory_' . $subcategory->id, tags => [$categoryCacheTag . $subcategory->id]}
 									{? $subcategory->setCurrentLocale($locale)}
-									<a n:href="Category: $subcategory->id" class="subcategory">
+									<a n:href="Category: 'c' => $subcategory->getUrlId(), 'slug' => $subcategory->getSlug()"
+											class="subcategory">
 										<div class="pull-right" n:if="$subcategory->image">
 											<img src="{$basePath}/foto/{$subcategory->image|size:32:32}" alt="64x64"
 												 data-src="holder.js/32x32">

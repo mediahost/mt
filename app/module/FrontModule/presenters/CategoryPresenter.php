@@ -20,14 +20,21 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 	/** @var array */
 	private $subcategories = [];
 
-	public function actionDefault($id)
+	public function actionDefault($c, $slug = NULL)
 	{
-		$this->category = $this->categoryRepo->find($id);
+		$this->category = $this->categoryRepo->find($c);
 		if (!$this->category) {
 			$message = $this->translator->translate('Requested category doesn\'t exist. Try to choose another from list.');
 			$this->flashMessage($message, 'warning');
 			$this->redirect('Homepage:');
 		}
+
+		$this->category->setCurrentLocale($this->locale);
+
+		if ($slug !== $this->category->getUrl()) {
+			$this->redirect('this', ['slug' => $this->category->getUrl()]);
+		}
+
 		$this->setActiveCategory($this->category);
 		$this->subcategories = $this->category->children;
 	}

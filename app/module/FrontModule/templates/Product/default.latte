@@ -2,7 +2,7 @@
 
 {block breadcrumbItems}
 	<li n:foreach="$product->mainCategory->pathWithThis as $category">
-		<a n:href="Category: $category->id">{$category}</a>
+		<a n:href="Category: 'c' => $category->getUrlId(), 'slug' => $category->getSlug()">{$category}</a>
 	</li>
 	<li class="active">{$product}</li>
 {/block}

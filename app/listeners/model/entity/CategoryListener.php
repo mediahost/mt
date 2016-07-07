@@ -56,7 +56,6 @@ class CategoryListener extends Object implements Subscriber
 		if ($category) {
 			if ($this->hasChange($params)) {
 				$this->clearCache($category);
-				$this->generateUrls($category);
 			}
 		}
 	}
@@ -99,12 +98,6 @@ class CategoryListener extends Object implements Subscriber
 		$categoryRepo->clearResultCache(CategoryRepository::CATEGORY_CACHE_ID . $category->id);
 
 		$this->todoQueue->todo(TodoQueue::REFRESH_CATEGORY_CACHE, TodoQueue::DO_IT_MORE_LATER);
-	}
-
-	private function generateUrls(Category $category)
-	{
-		$this->categoryFacade->idToUrl($category->id, NULL, NULL, $category);
-		$this->categoryFacade->urlToId($category->getUrl(), NULL, NULL, $category);
 	}
 
 	/** @return Category|NULL */
