@@ -214,7 +214,7 @@ class StocksGrid extends BaseControl
 				->setCustomRender(function ($item) {
 					$icon = Html::el('i class="fa fa-eye"');
 					return Html::el('a class="grid-action-view btn btn-xs btn-mini"')
-							->href($this->presenter->link(':Front:Product:', $item->product->id))
+							->href($this->presenter->link(':Front:Product:', ['id' => $item->getUrlId(), 'slug' => $item->getSlug()]))
 							->setHtml($icon . ' ' . $this->translator->translate('View on web'));
 				});
 

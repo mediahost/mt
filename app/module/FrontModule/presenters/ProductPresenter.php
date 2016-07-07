@@ -21,7 +21,7 @@ use Nette\Application\BadRequestException;
 use Nette\Caching\IStorage;
 use Nette\Utils\Strings;
 
-class ProductPresenter extends BasePresenter
+class ProductPresenter extends ProductCategoryBasePresenter
 {
 
 	/** @var IAddToCartFactory @inject */
@@ -45,7 +45,7 @@ class ProductPresenter extends BasePresenter
 	/** @var Stock */
 	public $stock;
 
-	public function actionDefault($id, $searched = NULL)
+	public function actionDefault($id, $slug = NULL, $searched = NULL)
 	{
 		if ($searched) {
 			$searchedRepo = $this->em->getRepository(Searched::getClassName());
@@ -61,7 +61,7 @@ class ProductPresenter extends BasePresenter
 			$searchedRepo->save($searchedEntity);
 			$this->redirect('this', ['searched' => NULL]);
 		}
-		
+
 		if ($id) {
 			$product = $this->productRepo->find($id);
 		}
@@ -69,6 +69,12 @@ class ProductPresenter extends BasePresenter
 			$message = $this->translator->translate('Requested product doesn\'t exist. Try to choose another from list.');
 			$this->flashMessage($message, 'warning');
 			throw new BadRequestException();
+		}
+
+		$product->setCurrentLocale($this->locale);
+
+		if ($slug != $product->getSlug()) {
+			$this->redirect('this', ['slug' => $product->getSlug()]);
 		}
 
 		$allParams = FALSE;
@@ -79,12 +85,17 @@ class ProductPresenter extends BasePresenter
 			$allParams = $paramRepo->findAll();
 		}
 
-		$product->setCurrentLocale($this->locale);
 
 		$this->stock = $product->stock;
 		$this->homecredit->setProduct($this->stock->getPrice($this->priceLevel)->withVat);
 
-		$this->activeCategory = $product->mainCategory;
+		/** @var $category Category */
+		if ($this->c && $category = $categoryRepo->find($this->c)) {
+			$this->setActiveCategory($category);
+		} else {
+			$this->setActiveCategory($product->mainCategory);
+		}
+
 		$this->template->product = $product;
 		$this->template->stock = $this->stock;
 		$this->template->params = $allParams;
@@ -96,7 +107,7 @@ class ProductPresenter extends BasePresenter
 		// Last visited
 		$this->user->storage->addVisit($this->stock);
 	}
-	
+
 	public function renderDefault()
 	{
 		$name = $this->template->product->seo->name ? $this->template->product->seo->name : $this->template->product;
@@ -129,17 +140,17 @@ class ProductPresenter extends BasePresenter
 			$price = $stock->getPrice($this->priceLevel);
 			$item = [];
 			$item['id'] = $getProductId ? $product->id : $stock->id;
-			$item['text'] = (string) $product;
+			$item['text'] = (string)$product;
 			$item['shortText'] = Strings::truncate($item['text'], 30);
 			$item['description'] = $product->description;
 			$item['perex'] = $product->perex;
 			$item['inStore'] = $stock->inStore;
-			$item['unit'] = $stock->product->unit ? (string) $stock->product->unit : '';
+			$item['unit'] = $stock->product->unit ? (string)$stock->product->unit : '';
 			$item['priceNoVat'] = $price->withoutVat;
 			$item['priceNoVatFormated'] = $this->exchange->format($price->withoutVat);
 			$item['priceWithVat'] = $price->withVat;
 			$item['priceWithVatFormated'] = $this->exchange->format($price->withVat);
-			$item['url'] = $this->link('//:Front:Product:', ['id' => $product->id]);
+			$item['url'] = $this->link('//:Front:Product:', ['id' => $stock->getUrlId(), 'slug' => $stock->getSlug()]);
 			$item['image_original'] = $this->link('//:Foto:Foto:', ['name' => $product->image]);
 			$item['image_thumbnail_100'] = $this->link('//:Foto:Foto:', ['size' => '100-0', 'name' => $product->image]);
 			$items[] = $item;

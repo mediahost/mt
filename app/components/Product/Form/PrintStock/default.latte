@@ -22,14 +22,14 @@
 					   class="btn btn-default fancybox-button">
 						{_'Zoom'}
 					</a>
-					<a href="{plink Product: $product->id}" 
+					<a href="{plink Product: 'id' => $stock->getUrlId(), 'slug' => $stock->getSlug()}"
 					   class="btn btn-default fancybox-fast-view">
 						{_'View'}
 					</a>
 				</div>
 			</div>
 			<h3>
-				<a href="{plink Product: $product->id}">
+				<a href="{plink Product: 'id' => $stock->getUrlId(), 'slug' => $stock->getSlug()}">
 					{$product}
 				</a>
 			</h3>

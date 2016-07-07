@@ -17,7 +17,7 @@
 		<PRODUCTNAME><![CDATA[{if $producer}{$producer} {/if}{$translation['name']}]]></PRODUCTNAME>
 		<PRODUCT><![CDATA[{$translation['name']}]]></PRODUCT>
 		<DESCRIPTION><![CDATA[{$translation['description']}]]></DESCRIPTION>
-		<URL>{link '//:Front:Product:', 'id' => $product['id'], 'locale' => $locale, 'currency' => 'CZK'}</URL>
+		<URL>{link '//:Front:Product:', 'id' => $product['id'], 'slug' => $translation['slug'], 'locale' => $locale, 'currency' => 'CZK'}</URL>
 		<IMGURL>{link '//:Foto:Foto:', '400-400', $image['filename']}</IMGURL>
 		<PRICE_VAT>{$price|changeVat:NULL,NULL,2}</PRICE_VAT>
 		<MANUFACTURER n:if="$producer"><![CDATA[{$producer}]]></MANUFACTURER>

@@ -66,9 +66,6 @@ abstract class BasePresenter extends BaseBasePresenter
 	/** @var array */
 	protected $rootCategoriesIds;
 
-	/** @var Category */
-	protected $activeCategory;
-
 	/** @var bool */
 	protected $showSlider = FALSE;
 
@@ -97,7 +94,6 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->template->backlink = $this->currentBacklink;
 		$this->template->rootCategoriesIds = $this->rootCategoriesIds;
 		$this->template->categoryRepo = $this->categoryRepo;
-		$this->template->activeCategory = $this->activeCategory;
 		$this->template->showSlider = $this->showSlider;
 		$this->template->showBrands = $this->showBrands;
 		$this->template->showSteps = $this->showSteps;

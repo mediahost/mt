@@ -71,13 +71,13 @@ class Stock extends BaseEntity
 
 	/** @ORM\Column(type="string", length=20, nullable=true) */
 	protected $importedFrom;
-	
+
 	/** @ORM\Column(type="datetime", nullable=true) */
-    protected $updatedPohodaDataAt;
-	
+	protected $updatedPohodaDataAt;
+
 	/** @ORM\OneToMany(targetEntity="WatchDog", mappedBy="stock") */
 	protected $watchDogs;
-	
+
 	/** @ORM\OneToMany(targetEntity="Visit", mappedBy="stock") */
 	protected $visits;
 
@@ -92,25 +92,35 @@ class Stock extends BaseEntity
 
 	public function __toString()
 	{
-		return (string) $this->product;
+		return (string)$this->product;
 	}
 
 	public function isNew()
 	{
 		return $this->id === NULL;
 	}
-	
+
 	public function setActive($value = TRUE)
 	{
 		$this->active = $value;
 		$this->product->active = $value;
 	}
-	
+
 	public function setChangePohodaData($time = 'now')
 	{
 		$datetime = $time instanceof DateTime ? $time : DateTime::from($time);
 		$this->updatedPohodaDataAt = $datetime;
 		return $this;
+	}
+
+	public function getUrlId()
+	{
+		return $this->product->getUrlId();
+	}
+
+	public function getSlug()
+	{
+		return $this->product->getSlug();
 	}
 
 	public function &__get($name)

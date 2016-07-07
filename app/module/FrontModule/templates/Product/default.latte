@@ -207,14 +207,14 @@
 				   class="btn btn-default fancybox-button">
 					{_'Zoom'}
 				</a>
-				<a n:href="Product: $product->id"
+				<a n:href="Product: 'id' => $product->getUrlId(), 'slug' => $product->getSlug()"
 						class="btn btn-default fancybox-fast-view">
 					{_'View'}
 				</a>
 			</div>
 		</div>
 		<h3>
-			<a n:href="Product: $product->id">{$product}</a>
+			<a n:href="Product: 'id' => $product->getUrlId(), 'slug' => $product->getSlug()">{$product}</a>
 		</h3>
 		<div class="pi-price">{$stock->price|currencyVat}</div>
 		<a n:href="this" class="btn btn-default add2cart">{_'Add to cart'}</a>

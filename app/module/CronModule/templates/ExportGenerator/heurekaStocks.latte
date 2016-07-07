@@ -22,7 +22,7 @@
 		<PRODUCTNAME>{if $producer}<![CDATA[{$producer}]]> | {/if}<![CDATA[{$translation['name']}]]></PRODUCTNAME>
 		<PRODUCT><![CDATA[{$translation['name']}]]></PRODUCT>
 		<DESCRIPTION><![CDATA[{$translation['description']}]]></DESCRIPTION>
-		<URL>{link '//:Front:Product:', 'id' => $product['id'], 'locale' => $locale}</URL>
+		<URL>{link '//:Front:Product:', 'id' => $product['id'], 'slug' => $translation['slug'], 'locale' => $locale}</URL>
 		<IMGURL>{link '//:Foto:Foto:', '400-400', $image['filename']}</IMGURL>
 		<PRICE_VAT>{$price|changeVat:NULL,NULL,2}</PRICE_VAT>
 		<HEUREKA_CPC n:if="$cpc">{$cpc}</HEUREKA_CPC>
