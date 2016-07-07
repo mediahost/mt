@@ -38,7 +38,7 @@ class RouterFactory
 		if (!Configurator::detectDebugMode()) {
 			Route::$defaultFlags = Route::SECURED;
 		}
-		
+
 		$router = new RouteList();
 
 		$router[] = $fotoRouter = new RouteList('Foto');
@@ -64,52 +64,52 @@ class RouterFactory
 		$apiRouter[] = new ResourceRoute('xml_pohoda/objednavky.php', [
 			'presenter' => 'PohodaConnector',
 			'action' => 'readOrders',
-				], ResourceRoute::GET | ResourceRoute::POST);
+		], ResourceRoute::GET | ResourceRoute::POST);
 
 		$apiRouter[] = new ResourceRoute('xml_pohoda/download_stock.php', [
 			'presenter' => 'PohodaConnector',
 			'action' => 'readStorageCart'
-				], ResourceRoute::GET | ResourceRoute::POST);
+		], ResourceRoute::GET | ResourceRoute::POST);
 
 		$apiRouter[] = new ResourceRoute('xml_pohoda/zasoby.php', [
 			'presenter' => 'PohodaConnector',
 			'action' => 'createStore'
-				], ResourceRoute::GET | ResourceRoute::POST);
+		], ResourceRoute::GET | ResourceRoute::POST);
 
 		$apiRouter[] = new ResourceRoute('xml_pohoda/zasoby_short.php', [
 			'presenter' => 'PohodaConnector',
 			'action' => 'createShortStock'
-				], ResourceRoute::GET | ResourceRoute::POST);
+		], ResourceRoute::GET | ResourceRoute::POST);
 
 		$apiRouter[] = new ResourceRoute('<locale \w{2}>/export/heureka/products', [
 			'presenter' => 'ExportProducts',
 			'action' => 'readHeureka'
-				], ResourceRoute::GET | ResourceRoute::POST | ResourceRoute::PUT | ResourceRoute::HEAD);
+		], ResourceRoute::GET | ResourceRoute::POST | ResourceRoute::PUT | ResourceRoute::HEAD);
 
 		$apiRouter[] = new ResourceRoute('<locale \w{2}>/export/zbozi/products', [
 			'presenter' => 'ExportProducts',
 			'action' => 'readZbozi'
-				], ResourceRoute::GET | ResourceRoute::POST | ResourceRoute::PUT | ResourceRoute::HEAD);
+		], ResourceRoute::GET | ResourceRoute::POST | ResourceRoute::PUT | ResourceRoute::HEAD);
 
 		$apiRouter[] = new ResourceRoute('<locale \w{2}>/export/dealer/stocks', [
 			'presenter' => 'Dealer',
 			'action' => 'readStocks'
-				], ResourceRoute::GET | ResourceRoute::POST);
+		], ResourceRoute::GET | ResourceRoute::POST);
 
 		$apiRouter[] = new ResourceRoute('<locale \w{2}>/export/dealer/availability', [
 			'presenter' => 'Dealer',
 			'action' => 'readAvailability'
-				], ResourceRoute::GET | ResourceRoute::POST);
+		], ResourceRoute::GET | ResourceRoute::POST);
 
 		$apiRouter[] = new ResourceRoute('<locale \w{2}>/export/dealer/categories', [
 			'presenter' => 'Dealer',
 			'action' => 'readCategories'
-				], ResourceRoute::GET | ResourceRoute::POST);
+		], ResourceRoute::GET | ResourceRoute::POST);
 
 		$apiRouter[] = new ResourceRoute('insert/order', [
 			'presenter' => 'Dealer',
 			'action' => 'createOrder'
-				], ResourceRoute::GET | ResourceRoute::POST);
+		], ResourceRoute::GET | ResourceRoute::POST);
 
 		// </editor-fold>
 		// <editor-fold desc="Ajax">
@@ -171,21 +171,25 @@ class RouterFactory
 			'model' => NULL,
 		]);
 
-		$slug = '[0-9a-z-]+';
-		$slugs = '[0-9a-z/-]+';
-
-		$frontRouter[] = $routeBuyout = new FilterRoute(self::LOCALE_PARAM . 'vykup[/<id ' . $slugs . '>]', [
+		$frontRouter[] = new Route(self::LOCALE_PARAM . 'vykup[/<producer>[/<line>]]', [
 			'presenter' => 'Buyout',
 			'action' => 'default',
 		]);
-		$frontRouter[] = $routeService = new FilterRoute(self::LOCALE_PARAM . 'servis[/<id ' . $slugs . '>]', [
+		$frontRouter[] = new Route(self::LOCALE_PARAM . 'kupim/<model>', [
+			'presenter' => 'Buyout',
+			'action' => 'model',
+		]);
+		$frontRouter[] = new Route(self::LOCALE_PARAM . 'servis[/<producer>[/<line>]]', [
 			'presenter' => 'Service',
 			'action' => 'default',
 		]);
-		$frontRouter[] = $routeAccessories = new FilterRoute(self::LOCALE_PARAM . 'accessories/<id ' . $slugs . '>', [
-			'presenter' => 'Accessories',
-			'action' => 'default',
+		$frontRouter[] = new Route(self::LOCALE_PARAM . 'oprava/<model>', [
+			'presenter' => 'Service',
+			'action' => 'model',
 		]);
+
+		$slugs = '[0-9a-z/-]+';
+
 		$frontRouter[] = $routePage = new FilterRoute(self::LOCALE_PARAM . 'p/<id ' . $slugs . '>', [
 			'presenter' => 'Page',
 			'action' => 'default',
@@ -194,7 +198,7 @@ class RouterFactory
 			'presenter' => 'Category',
 			'action' => 'default',
 		]);
-		$frontRouter[] = $routeProduct = new FilterRoute(self::LOCALE_PARAM . '[<slug ' . $slug . '>-]<id [0-9a-z]+>.htm[l]', [
+		$frontRouter[] = $routeProduct = new FilterRoute(self::LOCALE_PARAM . '[<slug [0-9a-z-]+>-]<id [0-9a-z]+>.htm[l]', [
 			'presenter' => 'Product',
 			'action' => 'default',
 		]);
@@ -205,11 +209,6 @@ class RouterFactory
 		]);
 
 		$routePage->addFilter('id', [$this->pageFacade, 'slugToId'], [$this->pageFacade, 'idToSlug']);
-
-		$routeBuyout->addFilter('id', [$this->producerFacade, 'urlToId'], [$this->producerFacade, 'idToUrl']);
-		$routeService->addFilter('id', [$this->producerFacade, 'urlToId'], [$this->producerFacade, 'idToUrl']);
-		$routeAccessories->addFilter('id', [$this->producerFacade, 'urlToId'], [$this->producerFacade, 'idToUrl']);
-
 		$routeMain->addFilter('presenter', [$this->uriFacade, 'nameToPresenter'], [$this->uriFacade, 'presenterToName']);
 		$routeMain->addFilter('action', [$this->uriFacade, 'nameToAction'], [$this->uriFacade, 'actionToName']);
 
