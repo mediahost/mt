@@ -189,7 +189,7 @@ class StockFacade extends Object
 	{
 		$qb = $this->stockRepo->createQueryBuilder('s')
 			->addSelect('partial s.{id, barcode, defaultPrice, inStore}')
-			->addSelect('partial t.{id, name, description, locale}')
+			->addSelect('partial t.{id, name, description, slug, locale}')
 			->addSelect('partial i.{id, filename}')
 			->addSelect('partial p.{id}')
 			->addSelect('IDENTITY(p.mainCategory) as mainCategoryId')

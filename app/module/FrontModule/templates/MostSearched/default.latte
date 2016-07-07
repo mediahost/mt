@@ -28,7 +28,9 @@
 							<ul>
 								<li n:foreach="$products as $searchedItem">
 									{var $searched => $searchedItem[0]}
-									<a n:href="Product: $searched->product->id">{$searched->product}</a>
+									<a n:href="Product: 'id' => $searched->product->getUrlId(), 'slug' => $searched->product->getSlug()">
+										{$searched->product}
+									</a>
 								</li>
 							</ul>
 							<h4>{_'Searched terms'}</h4>

@@ -1,7 +1,7 @@
 {block pageTitle}
 {$stock}
 <small>
-	<a n:href=":Front:Product: $stock->product->id">
+	<a n:href=":Front:Product: 'id' => $stock->getUrlId(), 'slug' => $stock->getSlug()">
 		<i class="fa fa-eye"></i>
 		{_'View on web'}
 	</a>

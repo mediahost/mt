@@ -174,6 +174,7 @@ class RouterFactory
 			'model' => NULL,
 		]);
 
+		$slug = '[0-9a-z-]+';
 		$slugs = '[0-9a-z/-]+';
 
 		$frontRouter[] = $routeBuyout = new FilterRoute(self::LOCALE_PARAM . 'vykup[/<id ' . $slugs . '>]', [
@@ -197,7 +198,7 @@ class RouterFactory
 			'presenter' => 'Category',
 			'action' => 'default',
 		]);
-		$frontRouter[] = $routeProduct = new FilterRoute(self::LOCALE_PARAM . '[<slug>-]<id>.htm', [
+		$frontRouter[] = $routeProduct = new FilterRoute(self::LOCALE_PARAM . '[<slug ' . $slug . '>-]<id [0-9a-z]+>.htm', [
 			'presenter' => 'Product',
 			'action' => 'default',
 		]);

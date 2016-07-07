@@ -24,7 +24,7 @@
 							<img src="{$basePath}/foto/{$product->image|size:'100'}" alt="{$product->name}" border="0">
 						</td>
 						<td style="padding:5px 0px">
-							<a n:href="{$colon}Front:Product: id => $stock->product->id" style="text-decoration:none!important" target="_blank">
+							<a n:href="{$colon}Front:Product: 'id' => $stock->getUrlId(), 'slug' => $stock->getSlug()" style="text-decoration:none!important" target="_blank">
 								<font color="#00275A"><b>{$product->name}</b></font>
 							</a>
 						</td>
@@ -45,7 +45,7 @@
 							  <v:roundrect
 								xmlns:v="urn:schemas-microsoft-com:vml"
 								xmlns:w="urn:schemas-microsoft-com:office:word"
-								n:href="{$colon}Front:Product: id => $stock->product->id"
+								n:href="{$colon}Front:Product: 'id' => $stock->getUrlId(), 'slug' => $stock->getSlug()"
 								style="height:36px;v-text-anchor:middle;width:250px;"
 								arcsize="5%"
 								strokecolor="#2795D4"
@@ -54,7 +54,7 @@
 								<center style="color:#ffffff;font-family: arial,sans-serif;font-size:16px;">{_'mail.watchdog.visit'}</center>
 							  </v:roundrect>
 							<![endif]-->
-							<a n:href="{$colon}Front:Product: id => $stock->product->id"
+							<a n:href="{$colon}Front:Product: 'id' => $stock->getUrlId(), 'slug' => $stock->getSlug()"
 							   style="background-color:#2795D4;
 							   border:1px solid #2795D4;
 							   border-radius:3px;

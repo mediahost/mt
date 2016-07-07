@@ -11,7 +11,7 @@ use App\Model\Entity\Searched;
 use App\Model\Entity\Stock;
 use Nette\Utils\Strings;
 
-class CategoryPresenter extends BasePresenter
+class CategoryPresenter extends ProductCategoryBasePresenter
 {
 	
 	/** @var Category */
@@ -28,7 +28,7 @@ class CategoryPresenter extends BasePresenter
 			$this->flashMessage($message, 'warning');
 			$this->redirect('Homepage:');
 		}
-		$this->activeCategory = $this->category;
+		$this->setActiveCategory($this->category);
 		$this->subcategories = $this->category->children;
 	}
 	
@@ -102,7 +102,7 @@ class CategoryPresenter extends BasePresenter
 			$item['priceNoVatFormated'] = $this->exchange->format($price->withoutVat);
 			$item['priceWithVat'] = $price->withVat;
 			$item['priceWithVatFormated'] = $this->exchange->format($price->withVat);
-			$item['url'] = $this->link('//:Front:Product:', ['id' => $product->id, 'searched' => $text]);
+			$item['url'] = $this->link('//:Front:Product:', ['id' => $stock->getUrlId(), 'slug' => $stock->getSlug(), 'searched' => $text]);
 			$item['image_original'] = $this->link('//:Foto:Foto:', ['name' => $product->image]);
 			$item['image_thumbnail_100'] = $this->link('//:Foto:Foto:', ['size' => '100-0', 'name' => $product->image]);
 			$items[] = $item;

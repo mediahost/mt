@@ -15,7 +15,7 @@
 		<PRODUCT><![CDATA[{$translation['name']}]]></PRODUCT>
 		<PRODUCER n:if="$producer"><![CDATA[{$producer}]]></PRODUCER>
 		<DESCRIPTION><![CDATA[{$translation['description']}]]></DESCRIPTION>
-		<URL>{link '//:Front:Product:', 'id' => $product['id'], 'locale' => $locale}</URL>
+		<URL>{link '//:Front:Product:', 'id' => $product['id'], 'slug' => $translation['slug'], 'locale' => $locale}</URL>
 		<IMGURL>{link '//:Foto:Foto:', '400-400', $image['filename']}</IMGURL>
 		<CATEGORY_ID>{$stockItem['mainCategoryId']}</CATEGORY_ID>
 		<EAN n:if="$stock['barcode']">{$stock['barcode']}</EAN>
