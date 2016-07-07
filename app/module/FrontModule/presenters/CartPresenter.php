@@ -63,7 +63,7 @@ class CartPresenter extends BasePresenter
 			$specialCategory = $categoryRepo->find($specialCategoryId);
 			if ($specialCategory) {
 				$specialCategory->setCurrentLocale($this->locale);
-				$link = $this->link('Category:', $specialCategory->id);
+				$link = $this->link('Category:', ['c' => $specialCategory->getUrlId(), 'slug' => $specialCategory->getSlug()]);
 				$specialCategoryLink = Html::el('a')->href($link)->setText($specialCategory->name);
 				$specialCategoriesLinks = Helpers::concatStrings(', ', $specialCategoriesLinks, $specialCategoryLink);
 			}

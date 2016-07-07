@@ -28,6 +28,6 @@
 {define categoryLink}
 	{? $category->setCurrentLocale($lang)}
 	<li>
-		<a n:href="Category: $category->id">{$category}</a>
+		<a n:href="Category: 'c' => $category->getUrlId(), 'slug' => $category->getSlug()">{$category}</a>
 	</li>
 {/define}

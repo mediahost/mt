@@ -21,9 +21,6 @@ class RouterFactory
 	// TODO: PHP 5.6 can concat strings
 //	const LOCALE_PARAM = '[<' . self::LOCALE_PARAM_NAME . '=' . self::LOCALE_DEFAULT_LANG . ' cs|sk|en>/]';
 
-	/** @var CategoryFacade @inject */
-	public $categoryFacade;
-
 	/** @var PageFacade @inject */
 	public $pageFacade;
 
@@ -193,12 +190,11 @@ class RouterFactory
 			'presenter' => 'Page',
 			'action' => 'default',
 		]);
-//		$frontRouter[] = $routeCategory = new FilterRoute(self::LOCALE_PARAM . 'c/[<slug ' . $slugs . '>/]<id>.htm', [
-		$frontRouter[] = $routeCategory = new FilterRoute(self::LOCALE_PARAM . 'c/<id ' . $slugs . '>', [
+		$frontRouter[] = $routeCategory = new FilterRoute(self::LOCALE_PARAM . 'c/[<slug ' . $slugs . '>/]<c>.htm[l]', [
 			'presenter' => 'Category',
 			'action' => 'default',
 		]);
-		$frontRouter[] = $routeProduct = new FilterRoute(self::LOCALE_PARAM . '[<slug ' . $slug . '>-]<id [0-9a-z]+>.htm', [
+		$frontRouter[] = $routeProduct = new FilterRoute(self::LOCALE_PARAM . '[<slug ' . $slug . '>-]<id [0-9a-z]+>.htm[l]', [
 			'presenter' => 'Product',
 			'action' => 'default',
 		]);
@@ -208,7 +204,6 @@ class RouterFactory
 			'id' => NULL,
 		]);
 
-		$routeCategory->addFilter('id', [$this->categoryFacade, 'urlToId'], [$this->categoryFacade, 'idToUrl']);
 		$routePage->addFilter('id', [$this->pageFacade, 'slugToId'], [$this->pageFacade, 'idToSlug']);
 
 		$routeBuyout->addFilter('id', [$this->producerFacade, 'urlToId'], [$this->producerFacade, 'idToUrl']);
