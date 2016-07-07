@@ -4,7 +4,9 @@ namespace App\FrontModule\Presenters;
 
 use App\BaseModule\Presenters\BasePresenter as BaseBasePresenter;
 use App\Components\Auth\ISignInFactory;
+use App\Components\Auth\ISignUpFactory;
 use App\Components\Auth\SignIn;
+use App\Components\Auth\SignUp;
 use App\Components\Newsletter\Form\ISubscribeFactory;
 use App\Components\Newsletter\Form\Subscribe;
 use App\Components\Producer\Form\IModelSelectorFactory;
@@ -16,13 +18,13 @@ use App\Forms\Form;
 use App\Helpers;
 use App\Model\Entity\Category;
 use App\Model\Entity\Page;
-use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerModel;
 use App\Model\Entity\Product;
 use App\Model\Entity\Sign;
 use App\Model\Entity\Stock;
 use App\Model\Entity\Voucher;
 use App\Model\Facade\CategoryFacade;
+use App\Model\Facade\ProducerFacade;
 use App\Model\Repository\CategoryRepository;
 use App\Model\Repository\ProductRepository;
 use App\Model\Repository\StockRepository;
@@ -47,6 +49,9 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	/** @var ISignInFactory @inject */
 	public $iSignInFactory;
+
+	/** @var ISignUpFactory @inject */
+	public $iSignUpFactory;
 
 	/** @var IPrintStockFactory @inject */
 	public $iStockPrint;
@@ -235,11 +240,7 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	protected function loadTemplateProducers()
 	{
-		$producerRepo = $this->em->getRepository(Producer::getClassName());
-		$producers = $producerRepo->findBy([
-			'image NOT' => NULL,
-		]);
-		$this->template->producers = $producers;
+		$this->template->producers = $this->producerFacade->getProducers(TRUE, TRUE);
 	}
 
 	protected function loadTemplateApplets()
@@ -342,6 +343,14 @@ abstract class BasePresenter extends BaseBasePresenter
 	protected function createComponentSignInModal()
 	{
 		$control = $this->iSignInFactory->create();
+		$control->setBacklink($this->currentBacklink);
+		return $control;
+	}
+
+	/** @return SignUp */
+	protected function createComponentSignUpModal()
+	{
+		$control = $this->iSignUpFactory->create();
 		$control->setBacklink($this->currentBacklink);
 		return $control;
 	}

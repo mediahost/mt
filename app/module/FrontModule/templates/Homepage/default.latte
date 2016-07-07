@@ -3,100 +3,786 @@
 {block breadcrumb}{/block}
 
 {block content}
-	<div class="container">
-		<div class="homepage">
-
-			<div class="row margin-bottom-40">
-				<div class="sidebar col-md-3 col-sm-4">
-					{include categories}
+	<div class="gap gap-small"></div>
+	<div class="row row-col-gap">
+		<div class="col-md-3">
+			{include categories}
+		</div>
+		<div class="col-md-9">
+			<div class="banner banner-o-hid banner-xl" style="background-color:#D2D2D2; height:490px;">
+				<a class="banner-link" href="#"></a>
+				<div class="banner-caption-left banner-caption-dark">
+					<h5 class="banner-title">Vsetko pre Vas telefon</h5>
+					<p class="banner-desc">Zadajte typ Vasho telefonu a zobrazime mam tovar vhodny pre tento
+						telefon</p>
+					<p class="banner-shop-now">Vyberte si svoj telefon<i class="fa fa-caret-right"></i>
+					</p>
 				</div>
-				<div class="col-md-9 col-sm-8">
-					{include accessories}
-
-					{snippet topProducts}
-						{include topProducts}
-					{/snippet}
+				<img class="banner-img" src="img/test_banner/25-i.png" alt="Image Alternative text"
+					 title="Image Title" style="bottom: -25px; right: -10px; width: 500px;"/>
+			</div>
+		</div>
+	</div>
+	<div class="row row-col-gap">
+		<div class="col-md-4">
+			<div class="banner banner-o-hid" style="background-color:#D2D2D2;">
+				<a class="banner-link" href="#"></a>
+				<div class="banner-caption-left banner-caption-dark">
+					<h5 class="banner-title">Mobilne Telefony</h5>
+					<p class="banner-desc">aj bez DPH a so zarukou!</p>
+					<p class="banner-shop-now">Zobrazit ponuku <i class="fa fa-caret-right"></i>
+					</p>
+				</div>
+				<img class="banner-img" src="img/test_banner/27-i.png" alt="Image Alternative text"
+					 title="Image Title" style="top: 5px; right: 10px; width: 120px;"/>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="banner banner-o-hid" style="background-color:#D2D2D2;">
+				<a class="banner-link" href="#"></a>
+				<div class="banner-caption-left banner-caption-dark">
+					<h5 class="banner-title">Prislusenstvo</h5>
+					<p class="banner-desc">pre kazdy telefon</p>
+					<p class="banner-shop-now">Zobrazit ponuku <i class="fa fa-caret-right"></i>
+					</p>
+				</div>
+				<img class="banner-img" src="img/test_banner/26-i.png" alt="Image Alternative text"
+					 title="Image Title" style="top: 5px; right: -30px; width: 180px;"/>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="banner banner-o-hid" style="background-color:#D2D2D2;">
+				<a class="banner-link" href="#"></a>
+				<div class="banner-caption-left banner-caption-dark">
+					<h5 class="banner-title">Nahradne diely</h5>
+					<p class="banner-desc">Kvalitne so zarukou</p>
+					<p class="banner-shop-now">Zobrazit ponuku <i class="fa fa-caret-right"></i>
+					</p>
+				</div>
+				<img class="banner-img" src="img/test_banner/29-i.png" alt="Image Alternative text"
+					 title="Image Title" style="top: 33px; right: -85px; width: 240px;"/>
+			</div>
+		</div>
+	</div>
+	<h3 class="widget-title">Novinky na našom eshope</h3>
+	<div class="owl-carousel owl-loaded owl-nav-out" data-options='{"items":7,"loop":true,"nav":true}'>
+		<div class="owl-item">
+			<div class="product product-sm owl-item-slide">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">Dooney & Bourke Claremont Field Bag</h5>
+					<div class="product-caption-price"><span class="product-caption-price-old">$78</span><span
+								class="product-caption-price-new">$63</span>
+					</div>
 				</div>
 			</div>
-
-			<div class="row margin-bottom-40">
-				{snippet sales}
-					{include sales}
-				{/snippet}
-
-				{include promo}
+		</div>
+		<div class="owl-item">
+			<div class="product product-sm owl-item-slide">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">Motorola XT1096 Moto X 2nd Generation 16GB Verizon Wireless
+						gsm unlocked</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$106</span>
+					</div>
+				</div>
 			</div>
-
-			{snippet news}
-				{include news}
-			{/snippet}
-
-			{snippet lastVisited}
-				{include lastVisited}
-			{/snippet}
-
+		</div>
+		<div class="owl-item">
+			<div class="product product-sm owl-item-slide">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">PUMA Cell Riaze Mesh Women's Running Shoes</h5>
+					<div class="product-caption-price"><span class="product-caption-price-old">$52</span><span
+								class="product-caption-price-new">$42</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="owl-item">
+			<div class="product product-sm owl-item-slide">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">Samsung Chromebook 11.6" LED HD 16GB 1.7GHz Webcam Notebook
+						Laptop -XE303C12-A01</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$147</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="owl-item">
+			<div class="product product-sm owl-item-slide">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">Sierra Mission End Medium Oak Table</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$67</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="owl-item">
+			<div class="product product-sm owl-item-slide">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">LG G Flex D959 - 32GB - Titan Silver GSM Unlocked Android
+						Smartphone (B)</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$91</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="owl-item">
+			<div class="product product-sm owl-item-slide">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">Sterling Tools 31 Piece Ratchet Screwdriver Wrench Set</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$139</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="owl-item">
+			<div class="product product-sm owl-item-slide">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">New Asus X551MAV 15.6" HD N2830 2.16GHz 4GB 500GB Windows 8
+						Laptop Notebook</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$58</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="owl-item">
+			<div class="product product-sm owl-item-slide">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">Hanes Women's Relaxed Fit Jersey ComfortSoft&reg; Crewneck
+						T-Shirt style 5680</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$112</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="owl-item">
+			<div class="product product-sm owl-item-slide">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">Cobra Fly-Z Mens Golf Driver - 6 Colors - 4 Flex Options -
+						Right Hand - 2015</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$56</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="gap gap-small"></div>
+	<div class="row row-col-gap">
+		<div class="col-md-6">
+			<div class="banner banner-o-hid" style="background-color:#D2D2D2;">
+				<a class="banner-link" href="#"></a>
+				<div class="banner-caption-left banner-caption-dark">
+					<h5 class="banner-title">Servis telefonov</h5>
+					<p class="banner-desc">Garancia najlacnejsieho servisu</p>
+					<p class="banner-shop-now">Zobrazit cennik oprav <i class="fa fa-caret-right"></i>
+					</p>
+				</div>
+				<img class="banner-img" src="img/test_banner/28-i.png" alt="Image Alternative text"
+					 title="Image Title" style="bottom: 0px; right: 0px; width: 240px;"/>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="banner banner-o-hid" style="background-color:#D2D2D2;">
+				<a class="banner-link" href="#"></a>
+				<div class="banner-caption-left banner-caption-dark">
+					<h5 class="banner-title">Vykup telefonov</h5>
+					<p class="banner-desc">Najlepsie ceny na trhu</p>
+					<p class="banner-shop-now">Zistit cenu <i class="fa fa-caret-right"></i>
+					</p>
+				</div>
+				<img class="banner-img" src="img/test_banner/32-i.png" alt="Image Alternative text"
+					 title="Image Title" style="bottom: 0; right: 0; width: 260px;"/>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3">
+			<h3 class="widget-title-sm">Weekly Featured</h3>
+			<div class="row row-sm-gap" data-gutter="10">
+				<div class="col-md-12">
+					<div class="product product-sm-left ">
+						<ul class="product-labels"></ul>
+						<div class="product-img-wrap">
+							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+								 title="Image Title"/>
+						</div>
+						<a class="product-link" href="#"></a>
+						<div class="product-caption">
+							<ul class="product-caption-rating">
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+							</ul>
+							<h5 class="product-caption-title">Cobra Fly-Z Mens Golf Driver - 6 Colors - 4 Flex
+								Options - Right Hand - 2015</h5>
+							<div class="product-caption-price"><span class="product-caption-price-new">$85</span>
+							</div>
+							<ul class="product-caption-feature-list">
+								<li>Free Shipping</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row row-sm-gap" data-gutter="10">
+				<div class="col-md-12">
+					<div class="product product-sm-left ">
+						<ul class="product-labels"></ul>
+						<div class="product-img-wrap">
+							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+								 title="Image Title"/>
+						</div>
+						<a class="product-link" href="#"></a>
+						<div class="product-caption">
+							<ul class="product-caption-rating">
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li><i class="fa fa-star"></i>
+								</li>
+							</ul>
+							<h5 class="product-caption-title">Fossil Women's Original Boyfriend ES3380 Rose-Gold
+								Stainless-Steel Quartz Watch</h5>
+							<div class="product-caption-price"><span class="product-caption-price-new">$83</span>
+							</div>
+							<ul class="product-caption-feature-list">
+								<li>Free Shipping</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row row-sm-gap" data-gutter="10">
+				<div class="col-md-12">
+					<div class="product product-sm-left ">
+						<ul class="product-labels"></ul>
+						<div class="product-img-wrap">
+							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+								 title="Image Title"/>
+						</div>
+						<a class="product-link" href="#"></a>
+						<div class="product-caption">
+							<ul class="product-caption-rating">
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li><i class="fa fa-star"></i>
+								</li>
+							</ul>
+							<h5 class="product-caption-title">HomCom Leather Rocking Sofa Single Recliner Chair
+								Black Cushion</h5>
+							<div class="product-caption-price"><span class="product-caption-price-new">$51</span>
+							</div>
+							<ul class="product-caption-feature-list">
+								<li>2 left</li>
+								<li>Free Shipping</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<h3 class="widget-title-sm">On Sale</h3>
+			<div class="row row-sm-gap" data-gutter="10">
+				<div class="col-md-12">
+					<div class="product product-sm-left ">
+						<ul class="product-labels"></ul>
+						<div class="product-img-wrap">
+							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+								 title="Image Title"/>
+						</div>
+						<a class="product-link" href="#"></a>
+						<div class="product-caption">
+							<ul class="product-caption-rating">
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+							</ul>
+							<h5 class="product-caption-title">Apple iPhone 4S 16GB Factory Unlocked Black and White
+								Smartphone</h5>
+							<div class="product-caption-price"><span class="product-caption-price-new">$61</span>
+							</div>
+							<ul class="product-caption-feature-list">
+								<li>Free Shipping</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row row-sm-gap" data-gutter="10">
+				<div class="col-md-12">
+					<div class="product product-sm-left ">
+						<ul class="product-labels"></ul>
+						<div class="product-img-wrap">
+							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+								 title="Image Title"/>
+						</div>
+						<a class="product-link" href="#"></a>
+						<div class="product-caption">
+							<ul class="product-caption-rating">
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li><i class="fa fa-star"></i>
+								</li>
+								<li><i class="fa fa-star"></i>
+								</li>
+							</ul>
+							<h5 class="product-caption-title">Samsung Galaxy S6 Edge+ Factory Unlocked GSM 32GB</h5>
+							<div class="product-caption-price"><span class="product-caption-price-new">$119</span>
+							</div>
+							<ul class="product-caption-feature-list">
+								<li>5 left</li>
+								<li>Free Shipping</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row row-sm-gap" data-gutter="10">
+				<div class="col-md-12">
+					<div class="product product-sm-left ">
+						<ul class="product-labels"></ul>
+						<div class="product-img-wrap">
+							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+								 title="Image Title"/>
+						</div>
+						<a class="product-link" href="#"></a>
+						<div class="product-caption">
+							<ul class="product-caption-rating">
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li><i class="fa fa-star"></i>
+								</li>
+								<li><i class="fa fa-star"></i>
+								</li>
+							</ul>
+							<h5 class="product-caption-title">Dooney & Bourke Pebble Grain Hobo</h5>
+							<div class="product-caption-price"><span class="product-caption-price-new">$144</span>
+							</div>
+							<ul class="product-caption-feature-list">
+								<li>Free Shipping</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<h3 class="widget-title-sm">New Arrivals</h3>
+			<div class="row row-sm-gap" data-gutter="10">
+				<div class="col-md-12">
+					<div class="product product-sm-left ">
+						<ul class="product-labels"></ul>
+						<div class="product-img-wrap">
+							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+								 title="Image Title"/>
+						</div>
+						<a class="product-link" href="#"></a>
+						<div class="product-caption">
+							<ul class="product-caption-rating">
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li><i class="fa fa-star"></i>
+								</li>
+								<li><i class="fa fa-star"></i>
+								</li>
+							</ul>
+							<h5 class="product-caption-title">Magnum Precision UltraLite II Waterproof Composite Toe
+								Slip Resistant Work Boots</h5>
+							<div class="product-caption-price"><span class="product-caption-price-new">$135</span>
+							</div>
+							<ul class="product-caption-feature-list">
+								<li>1 left</li>
+								<li>Free Shipping</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row row-sm-gap" data-gutter="10">
+				<div class="col-md-12">
+					<div class="product product-sm-left ">
+						<ul class="product-labels"></ul>
+						<div class="product-img-wrap">
+							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+								 title="Image Title"/>
+						</div>
+						<a class="product-link" href="#"></a>
+						<div class="product-caption">
+							<ul class="product-caption-rating">
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li><i class="fa fa-star"></i>
+								</li>
+								<li><i class="fa fa-star"></i>
+								</li>
+							</ul>
+							<h5 class="product-caption-title">WENGER WOMEN'S STAINLESS STEEL DATE NEW WATCH
+								0721.102</h5>
+							<div class="product-caption-price"><span class="product-caption-price-new">$125</span>
+							</div>
+							<ul class="product-caption-feature-list">
+								<li>Free Shipping</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row row-sm-gap" data-gutter="10">
+				<div class="col-md-12">
+					<div class="product product-sm-left ">
+						<ul class="product-labels"></ul>
+						<div class="product-img-wrap">
+							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+								 title="Image Title"/>
+						</div>
+						<a class="product-link" href="#"></a>
+						<div class="product-caption">
+							<ul class="product-caption-rating">
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li><i class="fa fa-star"></i>
+								</li>
+							</ul>
+							<h5 class="product-caption-title">RK3441K 4-1/2" Compact Circular Saw by Rockwell</h5>
+							<div class="product-caption-price"><span class="product-caption-price-new">$115</span>
+							</div>
+							<ul class="product-caption-feature-list">
+								<li>5 left</li>
+								<li>Free Shipping</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<h3 class="widget-title-sm">Hot Now</h3>
+			<div class="row row-sm-gap" data-gutter="10">
+				<div class="col-md-12">
+					<div class="product product-sm-left ">
+						<ul class="product-labels"></ul>
+						<div class="product-img-wrap">
+							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+								 title="Image Title"/>
+						</div>
+						<a class="product-link" href="#"></a>
+						<div class="product-caption">
+							<ul class="product-caption-rating">
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+							</ul>
+							<h5 class="product-caption-title">Fitbit Flex Black w/ Teal Bands Activity & Sleep
+								Tracker (Teal)</h5>
+							<div class="product-caption-price"><span class="product-caption-price-new">$105</span>
+							</div>
+							<ul class="product-caption-feature-list">
+								<li>Free Shipping</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row row-sm-gap" data-gutter="10">
+				<div class="col-md-12">
+					<div class="product product-sm-left ">
+						<ul class="product-labels"></ul>
+						<div class="product-img-wrap">
+							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+								 title="Image Title"/>
+						</div>
+						<a class="product-link" href="#"></a>
+						<div class="product-caption">
+							<ul class="product-caption-rating">
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li><i class="fa fa-star"></i>
+								</li>
+							</ul>
+							<h5 class="product-caption-title">Hanes TAGLESS&reg; Nano-T&reg; Men's Long-Sleeve Tee
+								style 498L</h5>
+							<div class="product-caption-price"><span class="product-caption-price-new">$51</span>
+							</div>
+							<ul class="product-caption-feature-list">
+								<li>Free Shipping</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row row-sm-gap" data-gutter="10">
+				<div class="col-md-12">
+					<div class="product product-sm-left ">
+						<ul class="product-labels"></ul>
+						<div class="product-img-wrap">
+							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
+								 title="Image Title"/>
+						</div>
+						<a class="product-link" href="#"></a>
+						<div class="product-caption">
+							<ul class="product-caption-rating">
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+								<li class="rated"><i class="fa fa-star"></i>
+								</li>
+							</ul>
+							<h5 class="product-caption-title">FootJoy FJ Sport Golf Shoes White Mens Closeout 53255
+								New</h5>
+							<div class="product-caption-price"><span class="product-caption-price-new">$140</span>
+							</div>
+							<ul class="product-caption-feature-list">
+								<li>Free Shipping</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 {/block}
-
-{define topProducts}
-	<h2>{_'Top products'}</h2>
-	<div class="owl-carousel owl-carousel3">
-		<div n:foreach="$topStocks as $stock">
-			{control stock-$stock->id}
-		</div>
-	</div>
-{/define}
-
-{define accessories}
-	<h2>{_'Select your accessories for...'}</h2>
-	{cache 'modelSelector' . $locale, tags => [App\Components\Producer\Form\ModelSelector::CACHE_ID]}
-		<div class="model-selector clearfix">
-			{control modelSelector}
-		</div>
-	{/cache}
-{/define}
-
-{define sales}
-	<div class="col-md-6 two-items-bottom-items" n:ifset="$saleSign">
-		<h2>{$saleSign}</h2>
-		<div class="owl-carousel owl-carousel2">
-			<div n:foreach="$saleStocks as $stock">
-				{control stock-$stock->id}
-			</div>
-		</div>
-	</div>
-{/define}
-
-{define promo}
-	<div class="col-md-6">
-		<img src="{$basePath}/images/banners/why_us.png" style="width: 100%" alt="{_'Why us'}"/>
-	</div>
-{/define}
-
-{define news}
-	<div class="row margin-bottom-35" n:ifset="$newSign">
-		<div class="col-md-12 sale-product">
-			<h2>{$newSign}</h2>
-			<div class="owl-carousel owl-carousel5">
-				<div n:foreach="$newStocks as $stock">
-					{control stock-$stock->id}
-				</div>
-			</div>
-		</div>
-	</div>
-{/define}
-
-{define lastVisited}
-	<div class="row margin-bottom-35" n:if="count($visitedStocks)">
-		<div class="col-md-12 sale-product">
-			<h2>{_'Last visited'}</h2>
-
-			<div class="owl-carousel owl-carousel5">
-				<div n:foreach="$visitedStocks as $stock">
-					{control stock-$stock->id}
-				</div>
-			</div>
-		</div>
-	</div>
-{/define}

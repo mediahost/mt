@@ -1,52 +1,43 @@
-{includeblock '../categories.latte'}
-
-{block breadcrumb}{/block}
+{block breadcrumb}
+	<header class="page-header">
+		<h1 class="page-title">
+			{$page}
+		</h1>
+		<ol class="breadcrumb page-breadcrumb">
+			<li><a n:href=":Front:Homepage:">{$pageInfo->projectName}</a></li>
+			<li class="active"><span>{$page}</span></li>
+		</ol>
+	</header>
+{/block}
 
 {block content}
-	<div class="container">
-		<!-- BEGIN SIDEBAR & CONTENT -->
-		<div class="row">
-
-			<!-- BEGIN SIDEBAR -->
-			<div class="sidebar col-md-3 col-sm-5">
-				{include categories}
-			</div>
-			<!-- END SIDEBAR -->
-
-			<!-- BEGIN CONTENT -->
-			<div class="col-md-9 col-sm-7" id="buyout">
-
-				<div class="margin-bottom-20">
-					<h1>{$page->name}</h1>
-					<div class="content-page" n:if="$page->html">
-						<div class="page-html-content">
-							{$page->html|noescape}
-						</div>
+<div class="row row-sm-gap service">
+	<div class="col-md-12">
+		<div n:if="$page->html" class="blog-post-body">
+			{$page->html|noescape}
+		</div>
+		<h2 class="widget-title">{_'Select producer'}</h2>
+		<hr>
+		<div class="row products">
+			<div n:foreach="$producers as $producer" n:if="$producer->hasLines(TRUE)" class="col-md-3 col-sm-6">
+				<div class="product product-sm-left">
+					<div class="product-img-wrap">
+						<img class="product-img" src="{$basePath}/foto/{$producer->image|size:200}"
+							 alt="{$producer}"
+							 title="{$producer}"/>
 					</div>
-				</div>
-
-				<div id="loaded-content" class="loadingNoOverlay">
-					<div class="panel">
-						<div class="panel-body">
-							<div class="model-selector">
-								{control modelSelector}
-							</div>
+					<a n:href="Buyout: 'producer' => $producer->slug"
+							class="product-link"></a>
+					<div class="product-caption">
+						<div class="product-caption-subtitle">
+							{_'Buyout'}
 						</div>
+						<h3 class="product-caption-title">
+							{$producer}
+						</h3>
 					</div>
-					{snippet request}
-						<div class="panel" id="request-form-loading" n:if="$model">
-							<div class="panel-body" n:if="$model->hasQuestions()">
-								{control requestForm}
-							</div>
-							<div class="panel-body" n:if="!$model->hasQuestions()">
-								<h4>{_'Please describe your device and we will contact you back with price options'}</h4>
-								<p>&nbsp;</p>
-								{control contactBuyout}
-							</div>
-						</div>
-					{/snippet}
 				</div>
 			</div>
 		</div>
 	</div>
-{/block}
+</div>

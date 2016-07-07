@@ -1,35 +1,63 @@
+var Buyout = function () {
 
-var Buyout = Buyout || {};
+	var $isNewCheckbox = $('#buyout .is-new-checker input');
+	var $onlyForQuestionsBlock = $('#buyout .only-for-questions');
+	var $onlyForNewBlock = $('#buyout .only-for-new');
+	var $questionBlock = $('#buyout .questions .question');
+	var $priceBlock = $('#buyout .questions .price');
 
-Buyout.init = function () {
-	$(document).on('click', '#buyout input[type="radio"]', function () {
-		$('#buyout input[name=recalculate]').click();
-	});
+	var recalculatePrice = function () {
+		var fullPriceValue = parseFloat($priceBlock.attr('data-fullPrice'));
 
-	$(document).on('click', '#buyout .is-new-question a', function (e) {
-		e.preventDefault();
+		$questionBlock.each(function (i, question) {
+			var $question = $(question);
+			var radios = $question.find('input:radio');
+			radios.each(function (i, radio) {
+				var $radio = $(radio);
+				if ($radio.is(':checked')) {
+					var $answer = $radio.closest('.question-answer');
+					var answerValue = parseFloat($answer.attr('data-question-value'));
+					fullPriceValue += answerValue;
+				}
+			});
+		});
 
-		var checkbox = $('#buyout .is-new-checker input');
-		var questionBlock = $('#buyout .question-block');
-		var partPriceBlock = $('#buyout .part-price');
-		var fullPriceBlock = $('#buyout .full-price');
+		fullPriceValue = fullPriceValue < 0 ? 0 : fullPriceValue;
+		var formated = number_format(fullPriceValue, 2, ',', ' ') + ' ' + currencySymbol;
+		$priceBlock.html(formated);
+	};
 
-		var isNew = $(this).hasClass('new');
+	var handleForm = function () {
+		$(document).on('ifChecked', '#buyout div.i-radio', function () {
+			recalculatePrice();
+		});
 
-		checkbox.prop('checked', isNew);
-		$.uniform.update();
+		$(document).on('click', '#buyout .is-new-question li', function () {
+			var isNew = $(this).hasClass('new');
 
-		if (isNew) {
-			questionBlock.hide();
-			partPriceBlock.hide();
-			fullPriceBlock.show();
-		} else {
-			questionBlock.show();
-			partPriceBlock.show();
-			fullPriceBlock.hide();
+			$isNewCheckbox.prop('checked', isNew);
+			$.uniform.update();
+
+			if (isNew) {
+				$onlyForQuestionsBlock.hide();
+				$onlyForNewBlock.show();
+			} else {
+				$onlyForQuestionsBlock.show();
+				$onlyForNewBlock.hide();
+			}
+
+			recalculatePrice();
+		});
+	};
+
+	return {
+		init: function () {
+			handleForm();
 		}
+	};
 
-		$('#buyout .is-new-question a').removeClass('active');
-		$(this).addClass('active');
-	});
-};
+}();
+
+jQuery(document).ready(function () {
+	Buyout.init();
+});

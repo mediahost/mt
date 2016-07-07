@@ -5,6 +5,7 @@ namespace App\Listeners\Model\Entity;
 use App\Components\Producer\Form\ModelSelector;
 use App\Model\Entity\Producer;
 use App\Model\Facade\ProducerFacade;
+use App\Model\Repository\ProducerRepository;
 use Doctrine\ORM\Events;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Events\Subscriber;
@@ -35,6 +36,7 @@ class ProducerListener extends Object implements Subscriber
 	public function prePersist()
 	{
 		$this->clearModelSelectorCache();
+		$this->clearProducersCache();
 	}
 
 	public function postUpdate($params)
@@ -46,11 +48,13 @@ class ProducerListener extends Object implements Subscriber
 			}
 		}
 		$this->clearModelSelectorCache();
+		$this->clearProducersCache();
 	}
 
 	public function postRemove()
 	{
 		$this->clearModelSelectorCache();
+		$this->clearProducersCache();
 	}
 
 	// </editor-fold>
@@ -71,6 +75,16 @@ class ProducerListener extends Object implements Subscriber
 		$cache->clean([
 			Cache::TAGS => [
 				ProducerFacade::TAG_PRODUCER . $producer->id,
+			],
+		]);
+	}
+	
+	private function clearProducersCache()
+	{
+		$cache = new Cache($this->cacheStorage);
+		$cache->clean([
+			Cache::TAGS => [
+				ProducerRepository::ALL_PRODUCERS_CACHE_ID,
 			],
 		]);
 	}

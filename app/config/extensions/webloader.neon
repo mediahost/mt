@@ -18,6 +18,15 @@ webloader:
 			fileFilters:
 				- @lessFilter
 
+		front2:
+			files:
+				- {files: ["*.less"], from: %wwwDir%/less/front2/includes}
+			filters:
+				- @cssUrlFilter
+				- @cssMinFilter
+			fileFilters:
+				- @lessFilter
+
 		app:
 			files:
 				- {files: ["*.less"], from: %wwwDir%/less/app/includes}

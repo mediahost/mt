@@ -16,8 +16,19 @@ request:
 		no: 'Nie'
 		email: 'E-mail'
 		fullname: 'Meno a priezvisko'
-		recapculate: 'Prepočítať'
+		phone: 'Telefón'
+		message: 'Správa'
 		send: 'Súhlasím s cenou'
+		placeholder:
+			message: 'Vložte prípadné doplňujúce informácie'
+	page:
+		questions: 'Výkupné otázky'
+		questionsDescribe: 'Zodpovedzte tieto otázky a zobrazí sa Vám výkupná cena'
+		sellUsPhone: 'Predajte nám Váš telefón'
+		usedPhonePrice: 'Navrhovaná cena výkupu'
+		newPhonePrice: 'Nový telefón %name% vykúpime za cenu'
+		ifAgree: 'Pokiaľ je naša navrhovaná cena výkupu pre Vás prijateľná, tak telefón vykupime.'
+		fillForm: 'Vyplnte formulár nižšie a budeme Vás kontaktovať.'
 	required:
 		fullname: 'Zadajte svoje meno a priezvisko'
 		email: 'Zadajte svoj e-mail'
@@ -26,6 +37,7 @@ request:
 		total: 'Celková cena'
 		new: 'Nový'
 		used: 'Používaný'
+
 
 # E-mail messages
 email:

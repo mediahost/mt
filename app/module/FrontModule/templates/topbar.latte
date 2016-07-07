@@ -1,118 +1,29 @@
 {block topbar}
-<!-- BEGIN TOP BAR LEFT PART -->
-<div class="col-md-6 col-sm-6 col-xs-6 additional-shop-info">
-	<ul class="list-unstyled list-inline">
-		<li class="visible-lg-inline-block">
-			<i class="fa fa-envelope-o"></i>
-			<span>obchod@mobilnetelefony.sk</span>
-		</li>
-		<li class="visible-md-inline-block visible-lg-inline-block">
-			<i class="fa fa-phone"></i>
-			<span>+421 908 84 84 84</span>
-		</li>
-		<!-- BEGIN CURRENCIES -->
-		<li class="shop-currencies">
-			<a n:foreach="$exchange as $currCode => $curr"
-					n:href="setCurrency! $currCode"
-					n:class="$currCode == $currency->getCode() ? current">
-				{$curr->getFormat()->getSymbol()}
-			</a>
-		</li>
-		<!-- END CURRENCIES -->
-		<!-- BEGIN LANGS -->
-		<li class="langs-block">
-			<a href="javascript:void(0);" class="current">
-				<img src="{$basePath}/images/flags/{$locale}.png" alt="{_locale_$locale}"/>{_locale_$locale}
-			</a>
-			<div class="langs-block-others-wrapper">
-				<div class="langs-block-others">
-					{foreach $allowedLanguages as $allowedLang}
-						{var $code = substr($allowedLang,0,2)}
-						{if $code !== $locale}
-							{if $user->loggedIn}
-								{var $args = [locale => $code, overwrite => yes]}
-							{else}
-								{var $args = [locale => $code]}
-							{/if}
-							<a n:href="this (expand) $args">
-								<img src="{$basePath}/images/flags/{$code}.png" alt="{_locale_$code}"/>{_locale_$code}
-							</a>
-						{/if}
-					{/foreach}
+	<div class="navbar-before mobile-hidden">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6">
+					<p class="navbar-before-sign">
+						Infolinka {$companyInfo->contact->phone} (Po - Pia: 9:00 - 17:00)
+					</p>
 				</div>
-			</div>
-		</li>
-		<!-- END LANGS -->
-	</ul>
-</div>
-<!-- END TOP BAR LEFT PART -->
-<!-- BEGIN TOP BAR MENU -->
-<div class="col-md-6 col-sm-6 col-xs-6 additional-nav">
-	<ul n:if="!$user->loggedIn" class="list-unstyled list-inline pull-right">
-		<li>
-			{if isset($isErrorPresenter) && $isErrorPresenter}
-				<a n:href="Sign:in">{_'Sign In'}</a>
-			{else}
-				<a n:href="this#signInModal" data-toggle="modal">{_'Sign In'}</a>
-			{/if}
-		</li>
-		<li><a n:href="Sign:up">{_'Registration'}</a></li>
-	</ul>
-	<ul n:if="$user->loggedIn" class="list-unstyled list-inline pull-right">
-		<li n:if="$user->isAllowed('myAccount') && !$user->identity->isDealer()"
-				class="visible-lg-inline-block bonus-account">
-			<a n:href="MyAccount:bonus">
-				<i class="fa fa-database"></i>{$user->identity->bonusCount}
-			</a>
-		</li>
-		<li class="visible-lg-inline-block">{$user->identity}</li>
-		<li n:if="$user->isAllowed('dashboard')" class="visible-lg-inline-block visible-md-inline-block">
-			<a n:href=":App:Dashboard:">{_'Admin'}</a>
-		</li>
-		<li n:if="$user->isAllowed('myAccount')"><a n:href="MyAccount:">{_'My Account'}</a></li>
-		<li>
-			<a n:href="signOut!"><i class="fa fa-sign-out"></i> {_'Sign out'}</a>
-		</li>
-	</ul>
-</div>
-<!-- END TOP BAR MENU -->
-<div class="modal fade" id="signInModal" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-				<h4 class="modal-title">{_'Sign In'}</h4>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-md-7 col-sm-7">
-
-						{control signInModal:login}
-
-						<div class="row">
-							<div class="col-lg-8 col-md-offset-4 padding-left-10 padding-top-10">
-								<a n:href="Sign:lostPassword backlink => $backlink">{_'Forget Password?'}</a>
-							</div>
-						</div>
-
-					</div>
-					<div class="col-md-5 col-sm-5">
-						<div class="form-info">
-							<h2>{_"Don't you have"} <em>{_'your account'}</em>?</h2>
-							<p>{_'Create account and gain an advantage in bonus program.'}</p>
-
-							<a n:href="Sign:up backlink => $backlink" class="btn btn-default">
-								{_'Create an account'}
-							</a>
-						</div>
-					</div>
+				<div class="col-md-6">
+					<ul class="nav navbar-nav navbar-right navbar-right-no-mar">
+						<li>
+							<a href="#">Objednavka cez telefon</a>
+						</li>
+						<li>
+							<a href="#">Obchodne podmienky</a>
+						</li>
+						<li>
+							<a href="#">Reklamacie</a>
+						</li>
+						<li>
+							<a href="#">Kontakt</a>
+						</li>
+					</ul>
 				</div>
-			</div>
-			<div class="modal-footer">
-				{control signInModal:social}
 			</div>
 		</div>
-		<!-- /.modal-content -->
 	</div>
-	<!-- /.modal-dialog -->
-</div>
+{/block}

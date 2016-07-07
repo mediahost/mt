@@ -5,10 +5,10 @@ namespace App\Model\Facade;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
+use App\Model\Repository\ProducerRepository;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\EntityRepository;
 use Kdyby\Translation\Translator;
-use Nette\Caching\Cache;
 use Nette\Caching\IStorage;
 use Nette\Object;
 
@@ -33,7 +33,7 @@ class ProducerFacade extends Object
 	/** @var IStorage @inject */
 	public $cacheStorage;
 
-	/** @var EntityRepository */
+	/** @var ProducerRepository */
 	private $producerRepo;
 
 	/** @var EntityRepository */
@@ -41,12 +41,6 @@ class ProducerFacade extends Object
 
 	/** @var EntityRepository */
 	private $modelRepo;
-
-	/** @var array */
-	private $ids = [];
-
-	/** @var array */
-	private $urls = [];
 
 	public function __construct(EntityManager $em)
 	{
@@ -56,12 +50,17 @@ class ProducerFacade extends Object
 		$this->modelRepo = $this->em->getRepository(ProducerModel::getClassName());
 	}
 
-	public function getProducersList($onlyWithChildren = FALSE, $onlyWithProducts = FALSE)
+	public function getProducers($onlyWithChildren = FALSE, $onlyWithProducts = FALSE)
+	{
+		return $this->getProducersList($onlyWithChildren, $onlyWithProducts, FALSE);
+	}
+
+	public function getProducersList($onlyWithChildren = FALSE, $onlyWithProducts = FALSE, $toString = TRUE)
 	{
 		$producers = [];
-		foreach ($this->producerRepo->findBy([], ['priority' => 'ASC']) as $producer) {
+		foreach ($this->producerRepo->findAllWithPriority() as $producer) {
 			if ((!$onlyWithChildren || $producer->hasLines(TRUE)) && (!$onlyWithProducts || $producer->hasProducts())) {
-				$producers[$producer->id] = (string)$producer;
+				$producers[$producer->id] = $toString ? (string)$producer : $producer;
 			}
 		}
 		return $producers;
@@ -143,72 +142,6 @@ class ProducerFacade extends Object
 			}
 			$this->producerRepo->save($entityItem);
 		}
-	}
-
-	public function urlToId($uri)
-	{
-		$hash = $this->createCacheHash($uri);
-
-		if (isset($this->ids[$hash])) {
-			return $this->ids[$hash];
-		}
-
-		$cache = $this->getCache();
-		$id = $cache->load($hash);
-		if (!$id) {
-			$model = $this->modelRepo->findOneByUrl($uri);
-			if ($model) {
-				$this->ids[$hash] = $model->id;
-				$cache->save($hash, $model->id, [Cache::TAGS => $this->getModelTags($model)]);
-			}
-		}
-		return $id;
-	}
-
-	public function idToUrl($id)
-	{
-		$hash = $this->createCacheHash($id);
-
-		if (isset($this->urls[$hash])) {
-			return $this->urls[$hash];
-		}
-
-		$cache = $this->getCache();
-		$url = $cache->load($hash);
-
-		if (!$url) {
-			$model = $this->modelRepo->find($id);
-			if ($model) {
-				$url = $model->getFullPath();
-				$this->urls[$hash] = $url;
-				$cache->save($hash, $url, [Cache::TAGS => $this->getModelTags($model)]);
-			}
-		}
-		return $url;
-	}
-
-	/** @return Cache */
-	public function getCache()
-	{
-		$cache = new Cache($this->cacheStorage, get_class($this));
-		return $cache;
-	}
-
-	private function createCacheHash($value)
-	{
-		return md5(self::TAG_PRODUCER . $value);
-	}
-
-	private function getModelTags(ProducerModel $model)
-	{
-		return [
-			self::TAG_ALL_PRODUCERS,
-			self::TAG_PRODUCER . $model->line->producer->id,
-			self::TAG_ALL_LINES,
-			self::TAG_LINE . $model->line->id,
-			self::TAG_ALL_MODELS,
-			self::TAG_MODEL . $model->id,
-		];
 	}
 
 }

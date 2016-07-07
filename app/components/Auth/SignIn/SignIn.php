@@ -49,17 +49,18 @@ class SignIn extends BaseControl
 		$this->form->setTranslator($this->translator);
 
 		$mail = $this->form->addText('mail', 'E-mail')
-				->setAttribute('placeholder', 'E-mail');
+			->setAttribute('placeholder', 'E-mail');
 		if (!$this->user) {
 			$mail->setRequired('Please enter your e-mail');
 		}
 
 		$this->form->addPassword('password', 'Password')
-				->setAttribute('placeholder', 'Password')
-				->setRequired('Please enter your password.');
+			->setAttribute('placeholder', 'Password')
+			->setRequired('Please enter your password');
 
-		$this->form->addCheckbox('remember', 'Remember')
-						->getLabelPrototype()->class = "rememberme check";
+		$remember = $this->form->addCheckbox('remember', 'Remember');
+		$remember->getLabelPrototype()->class = 'rememberme';
+		$remember->getControlPrototype()->class = 'i-check';
 
 		$this->form->addSubmit('signIn', 'Sign In');
 
@@ -109,33 +110,20 @@ class SignIn extends BaseControl
 		$this->user = $user;
 	}
 
-	public function renderLogin()
-	{
-		$this->setTemplateFile('login');
-		parent::render();
-	}
-
 	public function renderSocial()
 	{
 		$this->setTemplateFile('social');
 		parent::render();
 	}
 
-	public function renderLock()
-	{
-		$this->setTemplateFile('lock');
-		$this->template->loggedUser = $this->user;
-		parent::render();
-	}
-
 	// <editor-fold desc="setters & getters">
-	
+
 	public function setBacklink($backlink)
 	{
 		$this->backlink = $backlink;
 		return $this;
 	}
-	
+
 	public function hasErrors()
 	{
 		return $this->form && $this->form->hasErrors();

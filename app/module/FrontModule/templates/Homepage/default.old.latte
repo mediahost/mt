@@ -1,0 +1,102 @@
+{includeblock '../categories.latte'}
+
+{block breadcrumb}{/block}
+
+{block content}
+	<div class="container">
+		<div class="homepage">
+
+			<div class="row margin-bottom-40">
+				<div class="sidebar col-md-3 col-sm-4">
+					{include categories}
+				</div>
+				<div class="col-md-9 col-sm-8">
+					{include accessories}
+
+					{snippet topProducts}
+						{include topProducts}
+					{/snippet}
+				</div>
+			</div>
+
+			<div class="row margin-bottom-40">
+				{snippet sales}
+					{include sales}
+				{/snippet}
+
+				{include promo}
+			</div>
+
+			{snippet news}
+				{include news}
+			{/snippet}
+
+			{snippet lastVisited}
+				{include lastVisited}
+			{/snippet}
+
+		</div>
+	</div>
+{/block}
+
+{define topProducts}
+	<h2>{_'Top products'}</h2>
+	<div class="owl-carousel owl-carousel3">
+		<div n:foreach="$topStocks as $stock">
+			{control stock-$stock->id}
+		</div>
+	</div>
+{/define}
+
+{define accessories}
+	<h2>{_'Select your accessories for...'}</h2>
+	{cache 'modelSelector' . $locale, tags => [App\Components\Producer\Form\ModelSelector::CACHE_ID]}
+		<div class="model-selector clearfix">
+			{control modelSelector}
+		</div>
+	{/cache}
+{/define}
+
+{define sales}
+	<div class="col-md-6 two-items-bottom-items" n:ifset="$saleSign">
+		<h2>{$saleSign}</h2>
+		<div class="owl-carousel owl-carousel2">
+			<div n:foreach="$saleStocks as $stock">
+				{control stock-$stock->id}
+			</div>
+		</div>
+	</div>
+{/define}
+
+{define promo}
+	<div class="col-md-6">
+		<img src="{$basePath}/images/banners/why_us.png" style="width: 100%" alt="{_'Why us'}"/>
+	</div>
+{/define}
+
+{define news}
+	<div class="row margin-bottom-35" n:ifset="$newSign">
+		<div class="col-md-12 sale-product">
+			<h2>{$newSign}</h2>
+			<div class="owl-carousel owl-carousel5">
+				<div n:foreach="$newStocks as $stock">
+					{control stock-$stock->id}
+				</div>
+			</div>
+		</div>
+	</div>
+{/define}
+
+{define lastVisited}
+	<div class="row margin-bottom-35" n:if="count($visitedStocks)">
+		<div class="col-md-12 sale-product">
+			<h2>{_'Last visited'}</h2>
+
+			<div class="owl-carousel owl-carousel5">
+				<div n:foreach="$visitedStocks as $stock">
+					{control stock-$stock->id}
+				</div>
+			</div>
+		</div>
+	</div>
+{/define}

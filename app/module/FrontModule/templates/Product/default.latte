@@ -1,4 +1,4 @@
-{includeblock '../categories.latte'}
+{*{includeblock '../categories.latte'}*}
 
 {block breadcrumbItems}
 	<li n:foreach="$product->mainCategory->pathWithThis as $category">
@@ -8,165 +8,135 @@
 {/block}
 
 {block content}
-	<div class="container">
-		<!-- BEGIN SIDEBAR & CONTENT -->
-		<div class="row">
-
-			<!-- BEGIN SIDEBAR -->
-			<div class="sidebar col-md-3 col-sm-5">
-				{include categories}
-
-				{include bestsellers}
+	<div class="row row-col-border">
+		<div class="col-md-3">
+			{include category}
+		</div>
+		<div class="col-md-9">
+			<div class="col-md-7">
+				<div class="product-page-product-wrap jqzoom-stage">
+					<div class="clearfix">
+						<a href="{$basePath}/foto/{$product->image|size}" id="jqzoom" data-rel="gal-1">
+							<img src="{$basePath}/foto/{$product->image|size:'460','460'}"
+								 alt="{$product}"
+								 title="{$product}"/>
+						</a>
+					</div>
+				</div>
+				<ul class="jqzoom-list" n:if="count($product->images)">
+					<li n:foreach="$product->images as $image">
+						<a class="zoomThumbActive" href="javascript:void(0)"
+						   data-rel="{ gallery:'gal-1', smallimage: '{$basePath}/foto/{$image|size:'100'}', largeimage: '{$basePath}/foto/{$image|size}'}">
+							<img src="{$basePath}/foto/{$image|size:'100'}" alt="{$product}" title="{$product}"/>
+						</a>
+					</li>
+				</ul>
 			</div>
-			<!-- END SIDEBAR -->
-
-			<!-- BEGIN CONTENT -->
-			<div class="col-md-9 col-sm-7">
-
-				<div class="product-page margin-bottom-30">
+			<div class="col-md-5">
+				<ul class="product-page-product-rating">
+					<h1>
+						<a n:tag-if="$user->isAllowed('products')"
+								n:href=":App:Products:edit $stock->id"
+								target="_blank">
+							{$product}
+						</a>
+					</h1>
+					<p class="product-page-price">
+						{$stock->getPrice($priceLevel)|currencyVat}
+						<em n:if="$stock->oldPrice">
+							<span>{$stock->oldPrice|currency}</span>
+						</em>
+					</p>
 					<div class="row">
-						<div class="col-md-6 col-sm-6">
-							<div class="product-main-image">
-								<img src="{$basePath}/foto/{$product->image|size:'380','380'}"
-									 alt="{$product}"
-									 data-BigImgSrc="{$basePath}/foto/{$product->image|size}">
-							</div>
-							<div class="product-other-images" n:if="count($product->images)">
-								<a n:foreach="$product->images as $image"
-										href="{$basePath}/foto/{$image|size}" class="fancybox-button"
-										rel="photos-lib">
-									<img alt="{$product}" src="{$basePath}/foto/{$image|size:'65'}">
-								</a>
-							</div>
+						<div class="col-md-6">
+							<p class="text-muted text-sm vat">
+								{_'include %value% VAT', NULL, ['value' => $stock->vat]}
+							</p>
 						</div>
-						<div class="col-md-6 col-sm-6">
-							<h1>
-								<a n:tag-if="$user->isAllowed('products')"
-										n:href=":App:Products:edit $stock->id"
-										target="_blank">
-									{$product}
+						<div class="col-md-6">
+							<p class="text-right product-availability">
+								{_'Availability'}:
+								{if $stock->inStore > 10}
+									<strong>{_'In Stock'}</strong>
+								{elseif $stock->inStore > 0}
+									<strong>{$stock->inStore} {$product->unit}</strong>
+								{else}
+									<strong>{_'Temporarily Sold Out'}</strong>
+								{/if}
+							</p>
+						</div>
+					</div>
+					<p class="product-page-desc-lg" n:if="$product->perex">
+						{$product->perex|stripTags|noescape}
+					</p>
+					<div class="row">
+						<div class="col-md-5 product-page-cart">
+							{control addToCart:button}
+						</div>
+						<div class="col-md-7 text-right">
+							<div class="product-homecredit">
+								<a href="{$homecreditCalc}"
+								   id="homecreditCalc"
+								   data-fancybox-type="iframe">
+									<img src="{$basePath}/images/homecredit/splatkova_kalkulacka_sk.jpg"
+										 alt="{_'HomeCredit iCalc'}"/>
 								</a>
-							</h1>
-							<div class="price-availability-block">
-								<div class="clearfix">
-									<div class="price">
-										<strong>{$stock->getPrice($priceLevel)|currencyVat}</strong>
-										<em n:if="$stock->oldPrice">
-											<span>{$stock->oldPrice|currency}</span>
-										</em>
-										<span class="vat">{_'include %value% VAT', NULL, ['value' => $stock->vat]}</span>
-									</div>
-									<div class="availability">
-										{_'Availability'}:
-										{if $stock->inStore > 10}
-											<strong>{_'In Stock'}</strong>
-										{elseif $stock->inStore > 0}
-											<strong>{$stock->inStore} {$product->unit}</strong>
-										{else}
-											<strong>{_'Temporarily Sold Out'}</strong>
-										{/if}
-										{*<div class="watchdog">*}
-											{*<a href="#watchdog" data-toggle="modal">*}
-												{*<span class="fa fa-bar-chart-o"></span>*}
-												{*{_'Watch Price'}*}
-											{*</a>*}
-										{*</div>*}
-									</div>
-								</div>
-								<div n:if="$homecreditCalc" class="subimages">
-									<a href="{$homecreditCalc}"
-									   id="homecreditCalc"
-									   data-fancybox-type="iframe">
-										<img src="{$basePath}/images/homecredit/splatkova_kalkulacka_sk.jpg"
-											 alt="{_'HomeCredit iCalc'}"/>
-									</a>
-								</div>
 							</div>
-							<div class="product-page-perex" n:if="$product->perex">
-								<p>{$product->perex|noescape}</p>
-							</div>
-							<div class="product-page-cart">
-								{control addToCart}
-							</div>
-							<ul class="social-icons">
-								<li>
-									<a class="facebook" data-original-title="facebook" target="_blank"
-									   href="https://www.facebook.com/sharer/sharer.php?u={link //this}"></a>
-								</li>
-								<li>
-									<a class="twitter" data-original-title="twitter" target="_blank"
-									   href="https://twitter.com/home?status={link //this}"></a>
-								</li>
-								<li>
-									<a class="googleplus" data-original-title="googleplus" target="_blank"
-									   href="https://plus.google.com/share?url={link //this}"></a>
-								</li>
-							</ul>
-							<div class="recommend">
+							<div class="product-recommend">
 								<a href="#recommend" data-toggle="modal">
 									<span class="fa fa-send"></span>
 									{_'Recommend'}
 								</a>
 							</div>
+							{*<div class="product-watchdog">*}
+								{*<a href="#watchdog" data-toggle="modal">*}
+									{*<span class="fa fa-bar-chart-o"></span>*}
+									{*{_'Watch Price'}*}
+								{*</a>*}
+							{*</div>*}
 						</div>
-
-						<div class="product-page-content">
-							<ul id="myTab" class="nav nav-tabs">
-								<li class="active"><a href="#Description" data-toggle="tab">{_'Description'}</a>
-								</li>
-								<li n:if="$params && count($params)"><a href="#Parameters"
-																		data-toggle="tab">{_'Parameters'}</a></li>
-							</ul>
-							<div id="myTabContent" class="tab-content">
-								<div class="tab-pane fade in active" id="Description">
-									<p>{$product->description|noescape}</p>
-								</div>
-								<div n:if="$params && count($params)" class="tab-pane fade" id="Parameters">
-									<table class="datasheet">
-										<tr>
-											<th colspan="2">{_'Additional features'}</th>
-										</tr>
-										{foreach $params as $param}
-											{var paramName => 'parameter' . $param->code}
-											{var paramValue => $product->$paramName}
-											<tr n:if="$paramValue || $param->typeIsBool">
-												{? $param->setCurrentLocale($lang)}
-												<td class="datasheet-features-type">{$param}</td>
-												<td n:if="$param->typeIsBool && $paramValue">{_'YES'}</td>
-												<td n:if="$param->typeIsBool && !$paramValue">{_'NO'}</td>
-												<td n:if="!$param->typeIsBool">{$paramValue}</td>
-											</tr>
-										{/foreach}
-									</table>
-								</div>
-							</div>
-						</div>
-
-						<div class="sticker sticker-new" n:if="isset($newSign) && $product->hasSign($newSign)"></div>
-						<div class="sticker sticker-sale" n:if="isset($saleSign) && $product->hasSign($saleSign)"></div>
+					</div>
+				</ul>
+			</div>
+			{*<div class="gap"></div>*}
+			<div class="tabbable product-tabs">
+				<ul class="nav nav-tabs" id="myTab">
+					<li class="active">
+						<a href="#description" data-toggle="tab">{_'Description'}</a>
+					</li>
+					<li n:if="$params && count($params)">
+						<a href="#parameters" data-toggle="tab">{_'Parameters'}</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane fade in active" id="description">
+						<p>{$product->description|noescape}</p>
+					</div>
+					<div n:if="$params && count($params)" class="tab-pane fade" id="parameters">
+						<table class="table">
+							<tbody>
+							<tr>
+								<th colspan="2">{_'Additional features'}</th>
+							</tr>
+							{foreach $params as $param}
+								{var paramName => 'parameter' . $param->code}
+								{var paramValue => $product->$paramName}
+								<tr n:if="$paramValue || $param->typeIsBool">
+									{? $param->setCurrentLocale($lang)}
+									<td class="datasheet-features-type">{$param}</td>
+									<td n:if="$param->typeIsBool && $paramValue">{_'YES'}</td>
+									<td n:if="$param->typeIsBool && !$paramValue">{_'NO'}</td>
+									<td n:if="!$param->typeIsBool">{$paramValue}</td>
+								</tr>
+							{/foreach}
+							</tbody>
+						</table>
 					</div>
 				</div>
-
-				{cache 'product-similars_' . $product->id . $locale, tags => [$productCacheTag]}
-					<div class="product-page" n:if="count($product->similars)">
-						<div class="row">
-							<div class="col-md-12 similar-products">
-								<h2>{_'Similar products'}</h2>
-								<div class="owl-carousel owl-carousel4">
-									<div n:foreach="$product->similars as $similar" n:if="$similar->stock">
-										{include product, stock => $similar->stock, product => $similar}
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				{/cache}
-
 			</div>
-			<!-- END CONTENT -->
-
+			<div class="gap"></div>
+			{include similar}
 		</div>
-		<!-- END SIDEBAR & CONTENT -->
 	</div>
 
 	<div class="modal fade" id="watchdog" tabindex="-1" role="basic" aria-hidden="true">
@@ -194,31 +164,545 @@
 	</div>
 {/block}
 
-{define product}
-	<div class="product-item">
-		<div class="pi-img-wrapper">
-			<img src="{$basePath}/foto/{$product->image|size:'250'}" class="img-responsive" alt="{$product}"/>
-		<span class="pi-cart-count">
-			X
-			<img src="{$basePath}/assets/frontend/img/cart.svg">
-		</span>
-			<div>
-				<a href="{$basePath}/foto/{$product->image|size}"
-				   class="btn btn-default fancybox-button">
-					{_'Zoom'}
-				</a>
-				<a n:href="Product: 'id' => $product->getUrlId(), 'slug' => $product->getSlug()"
-						class="btn btn-default fancybox-fast-view">
-					{_'View'}
-				</a>
+{define category}
+	<h4 class="widget-title-sm">Recently Viewed</h4>
+	<ul class="product-list">
+		<li>
+			<div class="product product-sm-left ">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="{$basePath}/foto/100-100/default.png" alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">Vintage Men's Canvas Shoulder Bag Casual School
+						Military Messenger Travel Bag</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$52</span>
+					</div>
+				</div>
+			</div>
+		</li>
+		<li>
+			<div class="product product-sm-left ">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="{$basePath}/foto/100-100/default.png" alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">Citizen NightHawk EcoDrive Chronograph Black
+						Ion-plated...</h5>
+					<div class="product-caption-price"><span
+								class="product-caption-price-old">$101</span><span
+								class="product-caption-price-new">$51</span>
+					</div>
+				</div>
+			</div>
+		</li>
+		<li>
+			<div class="product product-sm-left ">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="{$basePath}/foto/100-100/default.png" alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">Beats by Dre urBeats In-Ear Noise Isolating Headphones
+						with In-line Control</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$64</span>
+					</div>
+				</div>
+			</div>
+		</li>
+	</ul>
+	<div class="gap gap-small"></div>
+	<h4 class="widget-title-sm">Recommended to You</h4>
+	<ul class="product-list">
+		<li>
+			<div class="product product-sm-left ">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="{$basePath}/foto/100-100/default.png" alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">Samsung N900 Galaxy Note 3 32GB Verizon Wireless
+						Black...</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$121</span>
+					</div>
+				</div>
+			</div>
+		</li>
+		<li>
+			<div class="product product-sm-left ">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="{$basePath}/foto/100-100/default.png" alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">Citizen NightHawk EcoDrive Chronograph Black
+						Ion-plated...</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$143</span>
+					</div>
+				</div>
+			</div>
+		</li>
+		<li>
+			<div class="product product-sm-left ">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="{$basePath}/foto/100-100/default.png" alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">Vintage Men's Canvas Shoulder Bag Casual School
+						Military Messenger Travel Bag</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$133</span>
+					</div>
+				</div>
+			</div>
+		</li>
+	</ul>
+	<div class="gap gap-small"></div>
+{/define}
+
+{define similar}
+	<h3 class="widget-title">You Might Also Like</h3>
+	<div class="row row-sm-gap" data-gutter="10">
+		<div class="col-md-3">
+			<div class="product product-sm-left ">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="{$basePath}/foto/100-100/default.png"
+						 alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">Lenovo ThinkPad 11e 11.6" Notebook, AMD A4-6210
+						1.8GHz, 4GB RAM, 500GBHDD, W7Pro</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$97</span>
+					</div>
+				</div>
 			</div>
 		</div>
-		<h3>
-			<a n:href="Product: 'id' => $product->getUrlId(), 'slug' => $product->getSlug()">{$product}</a>
-		</h3>
-		<div class="pi-price">{$stock->price|currencyVat}</div>
-		<a n:href="this" class="btn btn-default add2cart">{_'Add to cart'}</a>
-		<div n:if="$product->hasSign($newSign)" class="sticker sticker-new"></div>
-		<div n:if="$product->hasSign($saleSign)" class="sticker sticker-sale"></div>
+		<div class="col-md-3">
+			<div class="product product-sm-left ">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="{$basePath}/foto/100-100/default.png"
+						 alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">LG G3 VS985 - 32GB - Verizon Smartphone - Metallic
+						Black or Silk White - Great</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$98</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="product product-sm-left ">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="{$basePath}/foto/100-100/default.png"
+						 alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">LG G Flex D959 - 32GB - Titan Silver GSM Unlocked
+						Android Smartphone (B)</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$142</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="product product-sm-left ">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="{$basePath}/foto/100-100/default.png"
+						 alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">Apple iPhone 5c - 16GB - GSM Factory Unlocked White
+						Blue Green Pink Yellow</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$64</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row row-sm-gap" data-gutter="10">
+		<div class="col-md-3">
+			<div class="product product-sm-left ">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="{$basePath}/foto/100-100/default.png"
+						 alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">Apple 11.6" MacBook Air Notebook Computer MJVM2LL/A
+						(Early 2015)</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$109</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="product product-sm-left ">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="{$basePath}/foto/100-100/default.png"
+						 alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">HP EliteBook 8460p 2.7GHz i7 8GB 160GB DVD Win 7 Pro
+						64 Laptop Computer CAM B</h5>
+					<div class="product-caption-price"><span
+								class="product-caption-price-old">$104</span><span
+								class="product-caption-price-new">$63</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="product product-sm-left ">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="{$basePath}/foto/100-100/default.png"
+						 alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">Nikon COOLPIX L840 Digital Camera, Red - Refurbished
+						by Nikon U.S.A. #26486 B</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$132</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="product product-sm-left ">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="{$basePath}/foto/100-100/default.png"
+						 alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">Apple iPhone 4S 16GB Factory Unlocked Black and White
+						Smartphone</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$136</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row row-sm-gap" data-gutter="10">
+		<div class="col-md-3">
+			<div class="product product-sm-left ">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="{$basePath}/foto/100-100/default.png"
+						 alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">Nikon D5200 24.1 MP Digital SLR Camera - Black (Kit w/
+						18-55 VR Lens)</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$65</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="product product-sm-left ">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="{$basePath}/foto/100-100/default.png"
+						 alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">Motorola XT1096 Moto X 2nd Generation 16GB Verizon
+						Wireless gsm unlocked</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$146</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="product product-sm-left ">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="{$basePath}/foto/100-100/default.png"
+						 alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">GoPro HERO4 Black 4K Action Camera Hero 4 Surf
+						Camcorder . CHDHX-401. NEW</h5>
+					<div class="product-caption-price"><span class="product-caption-price-new">$87</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="product product-sm-left ">
+				<ul class="product-labels"></ul>
+				<div class="product-img-wrap">
+					<img class="product-img" src="{$basePath}/foto/100-100/default.png"
+						 alt="Image Alternative text"
+						 title="Image Title"/>
+				</div>
+				<a class="product-link" href="#"></a>
+				<div class="product-caption">
+					<ul class="product-caption-rating">
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li class="rated"><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+						<li><i class="fa fa-star"></i>
+						</li>
+					</ul>
+					<h5 class="product-caption-title">Samsung Galaxy Note 4 IV 4G FACTORY UNLOCKED Black or
+						White</h5>
+					<div class="product-caption-price"><span
+								class="product-caption-price-old">$146</span><span
+								class="product-caption-price-new">$103</span>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 {/define}

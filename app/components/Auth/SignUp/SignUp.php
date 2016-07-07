@@ -40,6 +40,9 @@ class SignUp extends BaseControl
 
 	private $completeInfo = FALSE;
 
+	/** @var string */
+	private $backlink;
+
 	/** @return Form */
 	protected function createComponentForm()
 	{
@@ -88,8 +91,7 @@ class SignUp extends BaseControl
 				->setRequired('Please enter your e-mail.')
 				->setAttribute('placeholder', 'E-mail')
 				->addRule(Form::EMAIL, 'E-mail has not valid format.')
-				->addServerRule([$this, 'validateMail'], $this->translator->translate('%value% is already registered.'))
-				->setOption('description', 'for example: example@domain.com');
+				->addServerRule([$this, 'validateMail'], $this->translator->translate('%value% is already registered.'));
 
 		$helpText = $this->translator->translate('At least %count% characters long.', NULL, ['count' => $this->settings->passwords->minLength]);
 		$form->addPassword('password', 'Password')
@@ -159,12 +161,6 @@ class SignUp extends BaseControl
 		return $address;
 	}
 
-	public function renderLogin()
-	{
-		$this->setTemplateFile('login');
-		parent::render();
-	}
-
 	public function renderSocial()
 	{
 		$this->setTemplateFile('social');
@@ -176,13 +172,17 @@ class SignUp extends BaseControl
 	/** @return FacebookConnect */
 	protected function createComponentFacebook()
 	{
-		return $this->iFacebookConnectFactory->create();
+		$control = $this->iFacebookConnectFactory->create();
+		$control->setBacklink($this->backlink);
+		return $control;
 	}
 
 	/** @return TwitterConnect */
 	protected function createComponentTwitter()
 	{
-		return $this->iTwitterConnectFactory->create();
+		$control = $this->iTwitterConnectFactory->create();
+		$control->setBacklink($this->backlink);
+		return $control;
 	}
 
 	// </editor-fold>
@@ -190,6 +190,12 @@ class SignUp extends BaseControl
 	public function setCompleteInfo()
 	{
 		$this->completeInfo = TRUE;
+		return $this;
+	}
+
+	public function setBacklink($backlink)
+	{
+		$this->backlink = $backlink;
 		return $this;
 	}
 

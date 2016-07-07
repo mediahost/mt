@@ -1,0 +1,33 @@
+{block breadcrumb}
+	<header class="page-header">
+		<h1 class="page-title">
+			{$page} {$producer}
+		</h1>
+		<ol class="breadcrumb page-breadcrumb">
+			<li><a n:href=":Front:Homepage:">{$pageInfo->projectName}</a></li>
+			<li><a n:href="Service:">{$page}</a></li>
+			<li class="active"><span>{$producer}</span></li>
+		</ol>
+	</header>
+{/block}
+
+{block content}
+<div class="row row-sm-gap service">
+	<div class="col-md-12">
+		<h2 class="widget-title">{_'Select line'}</h2>
+		<hr>
+		<div class="row products">
+			<div n:foreach="$producer->lines as $line" n:if="$line->hasModels()" class="col-md-3 col-sm-6">
+				<div class="product product-sm-left line">
+					<a n:href="Service: 'producer' => $producer->slug, 'line' => $line->slug"
+							class="product-link"></a>
+					<div class="product-caption">
+						<h3 class="product-caption-title">
+							{$line}
+						</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

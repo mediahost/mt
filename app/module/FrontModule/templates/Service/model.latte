@@ -1,0 +1,103 @@
+{block breadcrumb}
+	<header class="page-header">
+		<h1 class="page-title">
+			{_'Phone Service'} {$model}
+		</h1>
+		<ol class="breadcrumb page-breadcrumb">
+			<li><a n:href=":Front:Homepage:">{$pageInfo->projectName}</a></li>
+			<li><a n:href="Service:">{$page}</a></li>
+			<li><a n:href="Service: 'producer' => $producer->slug">{$producer}</a></li>
+			<li><a n:href="Service: 'producer' => $producer->slug, 'line' => $line->slug">{$line}</a></li>
+			<li class="active"><span>{$model}</span></li>
+		</ol>
+	</header>
+{/block}
+
+{block content}
+	{var showPrices => count($model->parameterPrices)}
+	<div class="row service">
+		<div class="col-md-7">
+			{if $showPrices}
+				<div class="box">
+					{include priceTable}
+				</div>
+				<div class="gap-small"></div>
+			{/if}
+			<div class="box">
+				{include contact}
+			</div>
+		</div>
+		<div class="col-md-5">
+			{include image}
+		</div>
+	</div>
+{/block}
+
+{define image}
+	<div class="product-page-product-wrap">
+		<div class="clearfix">
+			<div class="zoomPad">
+				<img src="{$basePath}/foto/{$model->image|size}"
+					 alt="{$model->getFullName()}" title="{$model->getFullName()}"/>
+			</div>
+		</div>
+	</div>
+	{if $model->html}
+		<div class="gap-small"></div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="box">
+					<p n:if="$model->html" class="product-page-desc">{$model->html|noescape}</p>
+				</div>
+			</div>
+		</div>
+	{/if}
+	<div class="gap-small"></div>
+	<div class="row">
+		<div class="col-md-12 text-right">
+			<a n:href="Homepage:" class="btn btn-default">{_'Back to main page'}</a>
+		</div>
+	</div>
+{/define}
+
+{define priceTable}
+	<h2>{_'Post warranty, paid service interventions'}</h2>
+	<table class="table table-striped product-page-features-table">
+		<thead>
+		<tr>
+			<th class="name">
+				{_'Repair'}
+			</th>
+			<th class="price">
+				{_'Price with vat'}
+			</th>
+			<th class="text">
+				{_'Description'}
+			</th>
+		</tr>
+		</thead>
+
+		<tbody>
+		<tr n:foreach="$model->parameterPrices as $parameterPrice">
+			{var parameter => $parameterPrice->parameter}
+			{? $parameter->setCurrentLocale($lang)}
+			<td class="name">
+				{$parameter}
+			</td>
+			<td class="price">
+				<span class="value">{$parameterPrice->price|changeVat|asCurrency}</span>
+				<span class="symbol">{$currencySymbol}</span>
+			</td>
+			<td class="text">
+				{$parameter->text}
+			</td>
+		</tr>
+		</tbody>
+	</table>
+{/define}
+
+{define contact}
+	<h2>{_'Order your phone service'}</h2>
+	<p>{_'Please describe your defects and we will contact you back with solution options'}</p>
+	{control contactService}
+{/define}

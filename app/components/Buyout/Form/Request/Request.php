@@ -41,45 +41,41 @@ class Request extends BaseControl
 	{
 		$form = new Form();
 		$form->setTranslator($this->translator)
-				->setRenderer(new MetronicFormRenderer())
-				->getElementPrototype()
-				->addAttributes(['data-target-loading' => '#request-form-loading'])
-				->class = 'ajax';
-
-
-		$form->addHidden('modelId');
+			->setRenderer(new MetronicFormRenderer());
 
 		$form->addCheckbox('isNew')
-				->setDefaultValue(TRUE);
+			->setDefaultValue(FALSE);
 
 		$questions = $form->addContainer('questions');
 		foreach ($this->model->questions as $qm) {
 			$questions->addRadioList($qm->id, $qm->question->text, [
-						'y' => $this->translator->translate('buyout.request.input.yes'),
-						'n' => $this->translator->translate('buyout.request.input.no'),
-					])->getControlPrototype()->class[] = 'form-control';
+				'y' => $this->translator->translate('buyout.request.input.yes'),
+				'n' => $this->translator->translate('buyout.request.input.no'),
+			]);
 			$questions[$qm->id]->getSeparatorPrototype()->setName(NULL);
 		}
 
-		$labelCol = 'col-md-5';
 		$form->addText('email', 'buyout.request.input.email')
-						->setRequired('buyout.request.required.email')
-						->addRule(Form::EMAIL)
-						->getControlPrototype()->class[] = 'form-control input-medium';
-		$form['email']->getLabelPrototype()->class[] = 'control-label ' . $labelCol;
+			->setRequired('buyout.request.required.email')
+			->addRule(Form::EMAIL);
+		$form['email']->getControlPrototype()->class[] = 'form-control';
+		$form['email']->getLabelPrototype()->class[] = 'control-label';
 
 		$form->addText('fullname', 'buyout.request.input.fullname')
-						->setRequired('buyout.request.required.fullname')
-						->getControlPrototype()->class[] = 'form-control input-medium';
-		$form['fullname']->getLabelPrototype()->class[] = 'control-label ' . $labelCol;
+			->setRequired('buyout.request.required.fullname');
+		$form['fullname']->getControlPrototype()->class[] = 'form-control';
+		$form['fullname']->getLabelPrototype()->class[] = 'control-label';
 
-		$form->addSubmit('recalculate', 'buyout.request.input.recalculate')
-						->setValidationScope(FALSE)
-						->setAttribute('style', 'display:none')
-						->getControlPrototype()->class[] = 'ajax btn btn-default';
+		$form->addText('phone', 'buyout.request.input.phone');
+		$form['phone']->getControlPrototype()->class[] = 'form-control';
+		$form['phone']->getLabelPrototype()->class[] = 'control-label';
 
-		$form->addSubmit('send', 'buyout.request.input.send')
-						->getControlPrototype()->class[] = 'btn btn-primary';
+		$form->addTextArea('text', 'buyout.request.input.message', NULL, 5)
+			->setAttribute('placeholder', 'buyout.request.input.placeholder.message');
+		$form['text']->getControlPrototype()->class[] = 'form-control';
+		$form['text']->getLabelPrototype()->class[] = 'control-label';
+
+		$form->addSubmit('send', 'buyout.request.input.send');
 
 		$form->onSuccess[] = $this->formSucceeded;
 		return $form;
@@ -87,8 +83,7 @@ class Request extends BaseControl
 
 	public function formSucceeded(Form $form, ArrayHash $values)
 	{
-
-		$this->summary = (int) $this->model->buyoutPrice;
+		$this->summary = (int)$this->model->buyoutPrice;
 
 		foreach ($values['questions'] as $id => $question) {
 			$qm = $this->model->questions[$id];
@@ -96,9 +91,9 @@ class Request extends BaseControl
 			$price = 0;
 
 			if ($question === 'y') {
-				$price = (int) $qm->priceA;
+				$price = (int)$qm->priceA;
 			} else if ($question === 'n') {
-				$price = (int) $qm->priceB;
+				$price = (int)$qm->priceB;
 			}
 			$this->summary += $price;
 		}
@@ -110,16 +105,16 @@ class Request extends BaseControl
 		if ($form['send']->isSubmittedBy()) {
 			$our = $this->iOurMessageFactory->create();
 			$our->addParameter('model', $this->model)
-					->addParameter('formData', $values)
-					->addParameter('summary', $this->summary);
+				->addParameter('formData', $values)
+				->addParameter('summary', $this->summary);
 
 			$our->setFrom($values->email);
 			$our->send();
 
 			$their = $this->iTheirMessageFactory->create();
 			$their->addParameter('model', $this->model)
-					->addParameter('formData', $values)
-					->addParameter('summary', $this->summary);
+				->addParameter('formData', $values)
+				->addParameter('summary', $this->summary);
 
 			$their->addTo($values->email);
 			$their->send();

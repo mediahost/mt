@@ -1,112 +1,43 @@
-{includeblock '../categories.latte'}
-
-{block breadcrumbItems}
-	<li class="active">
-		{ifset $activeProducer}
-			<span>{_'%type% for %name%', NULL, ['type' => $page, 'name' => $activeProducer]}</span>
-		{else}
-			<span>{$page}</span>
-		{/ifset}
-	</li>
+{block breadcrumb}
+	<header class="page-header">
+		<h1 class="page-title">
+			{$page}
+		</h1>
+		<ol class="breadcrumb page-breadcrumb">
+			<li><a n:href=":Front:Homepage:">{$pageInfo->projectName}</a></li>
+			<li class="active"><span>{$page}</span></li>
+		</ol>
+	</header>
 {/block}
 
 {block content}
-<div class="container">
-	<!-- BEGIN SIDEBAR & CONTENT -->
-	<div class="row">
-
-		<!-- BEGIN SIDEBAR -->
-		<div class="sidebar col-md-3 col-sm-5">
-			{include categories}
+<div class="row row-sm-gap service">
+	<div class="col-md-12">
+		<div n:if="$page->html" class="blog-post-body">
+			{$page->html|noescape}
 		</div>
-		<!-- END SIDEBAR -->
-
-		<!-- BEGIN CONTENT -->
-		<div class="col-md-9 col-sm-7 service">
-
-			<div class="margin-bottom-20">
-				<h1>{$page}</h1>
-				<div class="content-page">
-					<div class="page-html-content">
-						{$page->html|noescape}
+		<h2 class="widget-title">{_'Select producer'}</h2>
+		<hr>
+		<div class="row products">
+			<div n:foreach="$producers as $producer" n:if="$producer->hasLines(TRUE)" class="col-md-3 col-sm-6">
+				<div class="product product-sm-left">
+					<div class="product-img-wrap">
+						<img class="product-img" src="{$basePath}/foto/{$producer->image|size:200}"
+							 alt="{$producer}"
+							 title="{$producer}"/>
 					</div>
-				</div>
-			</div>
-
-			<div id="loaded-content" class="loadingNoOverlay">
-
-				<div class="clearfix model-selector margin-bottom-20">
-					{control modelSelector}
-				</div>
-
-				<div n:snippet="modelPrices">
-					<div class="panel" n:if="$model">
-						{var showPrices => count($model->parameterPrices)}
-						<div n:if="$showPrices" class="panel-body">
-							<img src="{$basePath}/foto/{$model->image|size:150:150}" class="thumbnail"/>
-							<h4>{_'Post warranty, paid service interventions'}</h4>
-							<p class="block">
-								{$model->html|noescape}
-							</p>
+					<a n:href="Service: 'producer' => $producer->slug"
+							class="product-link"></a>
+					<div class="product-caption">
+						<div class="product-caption-subtitle">
+							{_'Service'}
 						</div>
-						<table n:if="$showPrices" class="table table-hover prices-list">
-							<thead>
-							<tr>
-								<th class="name">
-									{_'Repair'}
-								</th>
-								<th class="price">
-									{_'Price with vat'}
-								</th>
-								<th class="text">
-									{_'Description'}
-								</th>
-							</tr>
-							</thead>
-							<tbody>
-							<tr n:foreach="$model->parameterPrices as $parameterPrice"
-									n:if="$parameterPrice->price->withoutVat > 0">
-								{var parameter => $parameterPrice->parameter}
-								{? $parameter->setCurrentLocale($lang)}
-								<td class="name">
-									{$parameter}
-								</td>
-								<td class="price">
-									<span class="value">{$parameterPrice->price|changeVat|asCurrency}</span>
-									<span class="symbol">{$currencySymbol}</span>
-								</td>
-								<td class="text">
-									{$parameter->text}
-								</td>
-							</tr>
-							</tbody>
-							<tfoot>
-							<tr>
-								<td></td>
-								<th>
-									{_'Contact us:'}
-								</th>
-								<td>
-									<a href="mailto:servis@mobilnetelefony.sk">
-										<i class="fa fa-envelope-o"></i>
-										servis@mobilnetelefony.sk
-									</a> |
-									<i class="fa fa-phone"></i> +421 908 84 84 84
-								</td>
-							</tr>
-							</tfoot>
-						</table>
-						<div n:if="!$showPrices" class="panel-body">
-							<h4>{_'Please describe your defects and we will contact you back with solution options'}</h4>
-							<p>&nbsp;</p>
-							{control contactService}
-						</div>
+						<h3 class="product-caption-title">
+							{$producer}
+						</h3>
 					</div>
 				</div>
 			</div>
 		</div>
-		<!-- END CONTENT -->
-
 	</div>
-	<!-- END SIDEBAR & CONTENT -->
 </div>

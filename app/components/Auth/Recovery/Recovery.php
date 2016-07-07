@@ -71,12 +71,6 @@ class Recovery extends BaseControl
 		}
 	}
 
-	public function renderLogin()
-	{
-		$this->setTemplateFile('login');
-		parent::render();
-	}
-
 }
 
 interface IRecoveryFactory
