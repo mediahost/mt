@@ -23,13 +23,13 @@ use Knp\DoctrineBehaviors\Model;
  */
 class Payment extends BaseTranslatable
 {
-	
+
 	const PERSONAL = 1;
 	const ON_DELIVERY = 2;
 	const BANK_ACCOUNT = 3;
 	const CARD_PAYMENT = 4;
 	const HOMECREDIT_SK = 5;
-	
+
 	use Model\Translatable\Translatable;
 
 	/** @ORM\Column(type="boolean") */
@@ -63,6 +63,9 @@ class Payment extends BaseTranslatable
 	private $price;
 
 	/** @ORM\Column(type="float", nullable=true) */
+	private $percentPrice;
+
+	/** @ORM\Column(type="float", nullable=true) */
 	private $freePrice;
 
 	public function __construct($currentLocale = NULL)
@@ -71,10 +74,34 @@ class Payment extends BaseTranslatable
 		parent::__construct($currentLocale);
 	}
 
+	private function getBasePrice()
+	{
+		if ($this->isPriceInPercent()) {
+			return 0;
+		}
+		return $this->price;
+	}
+
 	public function getPrice(Basket $basket = NULL, $level = NULL)
 	{
-		$price = $basket ? $this->getPriceByBasket($basket, $level) : $this->price;
-		return new Price($this->vat, $price);
+		$price = $basket ? $this->getPriceByBasket($basket, $level) : $this->getBasePrice();
+		return new Price($this->vat, $price, !$this->isPriceInPercent());
+	}
+
+	public function getPercentPrice()
+	{
+		return $this->percentPrice;
+	}
+
+	private function getValueOfPercentPrice(Basket $basket, $level = NULL)
+	{
+		$basketPrice = $basket->getItemsTotalPrice(NULL, $level, TRUE);
+		return $basketPrice * ($this->percentPrice / 100);
+	}
+
+	public function isPriceInPercent()
+	{
+		return (bool)$this->percentPrice;
 	}
 
 	public function getPriceByStocks(array $stocks, array $quantities = [])
@@ -91,26 +118,34 @@ class Payment extends BaseTranslatable
 
 	private function getPriceByBasket(Basket $basket, $level = NULL)
 	{
-		$price = $this->price;
+		$price = $this->getBasePrice();
+		if ($this->isPriceInPercent()) {
+			$price = $this->getValueOfPercentPrice($basket, $level);
+		}
 		if ($this->useCond1) {
 			$price = $this->applyCond1($price, $basket, $level);
 		}
 		if ($this->useCond2) {
 			$price = $this->applyCond2($price, $basket, $level);
-		}		
+		}
 		return $this->applyFree($price, $basket, $level);
 	}
-	
+
+	public function getFreePrice()
+	{
+		return new Price($this->vat, $this->freePrice);
+	}
+
 	private function applyCond1($price, Basket $basket, $level = NULL)
 	{
 		return $price;
 	}
-	
+
 	private function applyCond2($price, Basket $basket, $level = NULL)
 	{
 		return $price;
 	}
-	
+
 	private function applyFree($price, Basket $basket, $level = NULL)
 	{
 		$freePrice = $this->getFreePrice();
@@ -128,9 +163,10 @@ class Payment extends BaseTranslatable
 		return $this;
 	}
 
-	public function getFreePrice()
+	public function setPercentPrice($value)
 	{
-		return new Price($this->vat, $this->freePrice);
+		$this->percentPrice = $value;
+		return $this;
 	}
 
 	public function setFreePrice($value, $withVat = FALSE)
@@ -139,24 +175,24 @@ class Payment extends BaseTranslatable
 		$this->freePrice = $price->withoutVat;
 		return $this;
 	}
-	
+
 	public function addShipping(Shipping $shipping)
 	{
 		$this->shippings->add($shipping);
 		return $this;
 	}
-	
+
 	public function clearShippings()
 	{
 		$this->shippings->clear();
 		return $this;
 	}
-	
+
 	public function containShipping(Shipping $shipping)
 	{
 		return $this->shippings->contains($shipping);
 	}
-	
+
 	public function __toString()
 	{
 		return $this->name;

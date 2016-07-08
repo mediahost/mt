@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Model\Entity\Price;
 use LogicException;
 use Nette\Utils\Strings;
 use RecursiveDirectoryIterator;
@@ -22,6 +23,11 @@ class Helpers
 	}
 
 	// <editor-fold desc="strings">
+
+	public static function formatPercentage($value, $suffix = ' %')
+	{
+		return Price::floatToStr($value) . $suffix;
+	}
 
 	/**
 	 * Alias for concatStrings()

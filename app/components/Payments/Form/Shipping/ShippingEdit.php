@@ -63,6 +63,9 @@ class ShippingEdit extends BaseControl
 		$form->addText('price', 'Price')
 				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
 				->setRequired();
+		$form->addText('percentPrice', 'Percent Price')
+			->setAttribute('class', ['mask_percentage', MetronicTextInputBase::SIZE_S])
+			->setOption('description', 'If percentage is set than price will be zero.');
 
 		$form->addSelect2('vat', 'Vat', $this->vatFacade->getValues())
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
@@ -96,10 +99,16 @@ class ShippingEdit extends BaseControl
 
 	private function load(ArrayHash $values)
 	{
-		$vatRepo = $this->em->getRepository(Vat::getClassName());
-		$vat = $vatRepo->find($values->vat);
-		$this->shipping->vat = $vat;
-		$this->shipping->setPrice($values->price, $values->with_vat);
+		if ($values->percentPrice) {
+			$this->shipping->setPercentPrice($values->percentPrice);
+			$this->shipping->setPrice(0, $values->with_vat);
+		} else {
+			$vatRepo = $this->em->getRepository(Vat::getClassName());
+			$vat = $vatRepo->find($values->vat);
+			$this->shipping->vat = $vat;
+			$this->shipping->setPrice($values->price, $values->with_vat);
+			$this->shipping->setPercentPrice(NULL);
+		}
 		if (isset($values->active)) {
 			$this->shipping->active = $values->active;
 		}
@@ -143,6 +152,7 @@ class ShippingEdit extends BaseControl
 			'cond2' => $this->shipping->useCond2,
 			'html' => $this->shipping->html,
 			'locality' => $this->shipping->locality,
+			'percentPrice' => $this->shipping->getPercentPrice(),
 		];
 		if ($this->shipping->price) {
 			$values += [

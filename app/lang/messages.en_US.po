@@ -1611,3 +1611,9 @@ msgstr "Recommend"
 
 msgid "Recommend has been send."
 msgstr "Recommend has been send."
+
+msgid "Percent Price"
+msgstr "Percent Price"
+
+msgid "If percentage is set than price will be zero."
+msgstr "If percentage is set than price will be zero."
