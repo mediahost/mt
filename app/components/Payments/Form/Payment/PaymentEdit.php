@@ -63,8 +63,11 @@ class PaymentEdit extends BaseControl
 		}
 
 		$form->addText('price', 'Price')
-				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
-				->setRequired();
+			->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
+			->setRequired();
+		$form->addText('percentPrice', 'Percent Price')
+			->setAttribute('class', ['mask_percentage', MetronicTextInputBase::SIZE_S])
+			->setOption('description', 'If percentage is set than price will be zero.');
 
 		$form->addSelect2('vat', 'Vat', $this->vatFacade->getValues())
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
@@ -105,7 +108,6 @@ class PaymentEdit extends BaseControl
 	private function load(ArrayHash $values)
 	{
 		$shippingRepo = $this->em->getRepository(Shipping::getClassName());
-		$vatRepo = $this->em->getRepository(Vat::getClassName());
 
 		$this->payment->clearShippings();
 		foreach ($values->shippings as $shippingId) {
@@ -115,9 +117,16 @@ class PaymentEdit extends BaseControl
 			}
 		}
 
-		$vat = $vatRepo->find($values->vat);
-		$this->payment->vat = $vat;
-		$this->payment->setPrice($values->price, $values->with_vat);
+		if ($values->percentPrice) {
+			$this->payment->setPercentPrice($values->percentPrice);
+			$this->payment->setPrice(0, $values->with_vat);
+		} else {
+			$vatRepo = $this->em->getRepository(Vat::getClassName());
+			$vat = $vatRepo->find($values->vat);
+			$this->payment->vat = $vat;
+			$this->payment->setPrice($values->price, $values->with_vat);
+			$this->payment->setPercentPrice(NULL);
+		}
 		if (isset($values->active)) {
 			$this->payment->active = $values->active;
 		}
@@ -167,6 +176,7 @@ class PaymentEdit extends BaseControl
 			'isHomecreditSk' => $this->payment->isHomecreditSk,
 			'html' => $this->payment->html,
 			'errorHtml' => $this->payment->errorHtml,
+			'percentPrice' => $this->payment->getPercentPrice(),
 		];
 		foreach ($this->payment->shippings as $shipping) {
 			$values['shippings'][] = $shipping->id;

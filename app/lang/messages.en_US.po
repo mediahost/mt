@@ -1641,3 +1641,9 @@ msgstr "Select model"
 
 msgid "Back to main page"
 msgstr "Back to main page"
+
+msgid "Percent Price"
+msgstr "Percent Price"
+
+msgid "If percentage is set than price will be zero."
+msgstr "If percentage is set than price will be zero."

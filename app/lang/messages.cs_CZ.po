@@ -1596,3 +1596,9 @@ msgstr "Vyberte model"
 
 msgid "Back to main page"
 msgstr "Zpět na hlavní stranu"
+
+msgid "Percent Price"
+msgstr "Procentuální cena"
+
+msgid "If percentage is set than price will be zero."
+msgstr "Pokud je nastavena procentuální cena, bude základní cena nulová."
