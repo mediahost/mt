@@ -190,11 +190,11 @@ class RouterFactory
 			'presenter' => 'Page',
 			'action' => 'default',
 		]);
-		$frontRouter[] = $routeCategory = new FilterRoute(self::LOCALE_PARAM . 'c/[<slug ' . $slugs . '>/]<c>.htm[l]', [
+		$frontRouter[] = $routeCategory = new FilterRoute(self::LOCALE_PARAM . 'c/[<slug ' . $slugs . '>/]<c [0-9]+>.htm[l]', [
 			'presenter' => 'Category',
 			'action' => 'default',
 		]);
-		$frontRouter[] = $routeProduct = new FilterRoute(self::LOCALE_PARAM . '[<slug ' . $slug . '>-]<id [0-9a-z]+>.htm[l]', [
+		$frontRouter[] = $routeProduct = new FilterRoute(self::LOCALE_PARAM . '[<slug ' . $slug . '>-]<id [0-9]+>.htm[l]', [
 			'presenter' => 'Product',
 			'action' => 'default',
 		]);
