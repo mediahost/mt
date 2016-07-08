@@ -42,7 +42,7 @@
 								{_$shipping}
 							</td>
 							<td>
-								{$shipping->price|currencyVat}
+								{if $shipping->isPriceInPercent()}{$shipping->percentPrice|percentage}{else}{$shipping->price|currencyVat}{/if}
 							</td>
 							<td>
 								<a n:href="editShipping $shipping->id" class="btn btn-xs btn-mini">
@@ -89,7 +89,7 @@
 								{_$payment}
 							</td>
 							<td>
-								{$payment->price|currencyVat}
+								{if $payment->isPriceInPercent()}{$payment->percentPrice|percentage}{else}{$payment->price|currencyVat}{/if}
 							</td>
 							<td>
 								<a n:href="editPayment $payment->id" class="btn btn-xs btn-mini">

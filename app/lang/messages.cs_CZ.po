@@ -1566,3 +1566,9 @@ msgstr "Doporučit známému"
 
 msgid "Recommend has been send."
 msgstr "Doporučení bylo odesláno."
+
+msgid "Percent Price"
+msgstr "Procentuální cena"
+
+msgid "If percentage is set than price will be zero."
+msgstr "Pokud je nastavena procentuální cena, bude základní cena nulová."
