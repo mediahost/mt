@@ -7,6 +7,8 @@ use App\Model\Entity\ProducerLine;
 
 class ProducerRepository extends BaseRepository
 {
+	const ALL_PRODUCERS_CACHE_ID = 'all-producers';
+
 	public function findOneByUrl($url)
 	{
 		if (is_string($url)) {
