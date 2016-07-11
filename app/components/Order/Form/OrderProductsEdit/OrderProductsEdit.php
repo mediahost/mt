@@ -125,18 +125,20 @@ class OrderProductsEdit extends BaseControl
 				$form['quantities'][$stockId]->addError($message);
 			}
 		}
-		foreach ($values->new as $stockId) {
-			try {
-				$this->setOrderItem($stockId, 1, TRUE);
-			} catch (InsufficientQuantityException $e) {
-				$stockRepo = $this->em->getRepository(Stock::getClassName());
-				$stock = $stockRepo->find($stockId);
-				if ($stock) {
-					$message = $this->translator->translate('No free product \'%name%\'.', ['name' => $stock->product]);
-				} else {
-					$message = $this->translator->translate('No free product with ID \'%number%\'.', ['number' => $stockId]);
+		if ($this->order->isEditable) {
+			foreach ($values->new as $stockId) {
+				try {
+					$this->setOrderItem($stockId, 1, TRUE);
+				} catch (InsufficientQuantityException $e) {
+					$stockRepo = $this->em->getRepository(Stock::getClassName());
+					$stock = $stockRepo->find($stockId);
+					if ($stock) {
+						$message = $this->translator->translate('No free product \'%name%\'.', ['name' => $stock->product]);
+					} else {
+						$message = $this->translator->translate('No free product with ID \'%number%\'.', ['number' => $stockId]);
+					}
+					$form['new']->addError($message);
 				}
-				$form['new']->addError($message);
 			}
 		}
 		$stocks = [];
