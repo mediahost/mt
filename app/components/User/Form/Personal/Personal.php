@@ -149,7 +149,7 @@ class Personal extends BaseControl
 
 	public function formValidate(Form $form, ArrayHash $values)
 	{
-		if (!$this->dealerRequired && $values->dealer) {
+		if (!$this->dealerRequired && (isset($values->dealer) && $values->dealer)) {
 			if (!$values->ico || !$values->dic || !$values->icoVat) {
 				$form->addError($this->translator->translate('cart.form.validator.dealer'));
 				$form['dealer']->addError($this->translator->translate('cart.form.validator.company'));
@@ -172,7 +172,7 @@ class Personal extends BaseControl
 			$billingAddress = $this->loadBillingAddress($values);
 			$shippingAddress = $this->dealerRequired ? NULL : $this->loadShippingAddress($values);
 			$this->userFacade->setAddress($this->user->identity, $billingAddress, $shippingAddress, !$this->dealerRequired);
-			$this->userFacade->setDealerWant($this->user->identity, $this->dealerRequired ? TRUE : $values->dealer);
+			$this->userFacade->setDealerWant($this->user->identity, (!$this->dealerRequired && isset($values->dealer)) ? $values->dealer : TRUE);
 
 			if ($values->newsletter) {
 				$this->newsletterFacade->subscribe($this->user->identity);
