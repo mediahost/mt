@@ -171,21 +171,41 @@ class RouterFactory
 			'model' => NULL,
 		]);
 
-		$frontRouter[] = new Route(self::LOCALE_PARAM . 'vykup[/<producer>[/<line>]]', [
+		$frontRouter[] = new Route('[<locale=sk cs|sk>/]vykup[/<producer>[/<line>]]', [
 			'presenter' => 'Buyout',
 			'action' => 'default',
 		]);
-		$frontRouter[] = new Route(self::LOCALE_PARAM . 'kupim/<model>', [
+		$frontRouter[] = new Route('en/sell-phone[/<producer>[/<line>]]', [
+			'presenter' => 'Buyout',
+			'action' => 'default',
+			'locale' => 'en',
+		]);
+		$frontRouter[] = new Route('[<locale=sk cs|sk>/]kupim/<model>', [
 			'presenter' => 'Buyout',
 			'action' => 'model',
 		]);
-		$frontRouter[] = new Route(self::LOCALE_PARAM . 'servis[/<producer>[/<line>]]', [
+		$frontRouter[] = new Route('en/sell/<model>', [
+			'presenter' => 'Buyout',
+			'action' => 'model',
+			'locale' => 'en',
+		]);
+		$frontRouter[] = new Route('[<locale=sk cs|sk>/]servis[/<producer>[/<line>]]', [
 			'presenter' => 'Service',
 			'action' => 'default',
 		]);
-		$frontRouter[] = new Route(self::LOCALE_PARAM . 'oprava/<model>', [
+		$frontRouter[] = new Route('en/phone-service[/<producer>[/<line>]]', [
+			'presenter' => 'Service',
+			'action' => 'default',
+			'locale' => 'en',
+		]);
+		$frontRouter[] = new Route('[<locale=sk cs|sk>/]oprava/<model>', [
 			'presenter' => 'Service',
 			'action' => 'model',
+		]);
+		$frontRouter[] = new Route('en/fix-service/<model>', [
+			'presenter' => 'Service',
+			'action' => 'model',
+			'locale' => 'en',
 		]);
 
 		$slugs = '[0-9a-z/-]+';
