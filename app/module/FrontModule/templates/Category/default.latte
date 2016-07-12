@@ -33,80 +33,78 @@
 {/block}
 
 {block content}
-<div class="container">
-	<!-- BEGIN SIDEBAR & CONTENT -->
-	<div class="row category">
+<!-- BEGIN SIDEBAR & CONTENT -->
+<div class="row category">
 
-		<!-- BEGIN SIDEBAR -->
-		<div class="sidebar col-md-3 col-sm-5">
-			{include categories}
-		</div>
-		<!-- END SIDEBAR -->
+	<!-- BEGIN SIDEBAR -->
+	<div class="sidebar col-md-3 col-sm-5">
+		{include categories}
+	</div>
+	<!-- END SIDEBAR -->
 
-		<!-- BEGIN CONTENT -->
-		<div class="col-md-9 col-sm-7">
-			{ifset $accessoriesFor}
-				<h2>{_'Accessories for "%model%"', ['model' => $accessoriesFor->getFullname('/')]}</h2>
-				{cache 'modelSelector' . $locale . $accessoriesFor->id,
+	<!-- BEGIN CONTENT -->
+	<div class="col-md-9 col-sm-7">
+		{ifset $accessoriesFor}
+			<h2>{_'Accessories for "%model%"', ['model' => $accessoriesFor->getFullname('/')]}</h2>
+			{cache 'modelSelector' . $locale . $accessoriesFor->id,
                     tags => [App\Components\Producer\Form\ModelSelector::CACHE_ID]}
-					<div class="model-selector clearfix">
-						{control modelSelector}
+				<div class="model-selector clearfix">
+					{control modelSelector}
+				</div>
+			{/cache}
+		{/ifset}
+
+		<div class="clearfix">
+			<div class="col-lg-6">
+				<h1 n:ifset="$category">{$category}</h1>
+				<h1 n:ifset="$searched">{$searched}</h1>
+				<h1 n:ifset="$accessoriesFor">{$accessoriesFor}</h1>
+				<h1 n:ifset="$producer">
+					{if $model}
+						{$model}
+					{elseif $line}
+						{$line}
+					{else}
+						{$producer}
+					{/if}
+				</h1>
+			</div>
+			<div class="col-lg-6">{control products:sorting}</div>
+		</div>
+
+		<div class="sidebar-filter margin-bottom-25">
+			{ifset $subcategories}
+				{cache 'subcategory_' . $category->id, tags => [$categoryCacheTag . $category->id]}
+					<div class="subcategories row" n:if="count($subcategories)">
+						<div class="col-md-3" n:foreach="$subcategories as $subcategory">
+							{cache 'subcategory_' . $subcategory->id, tags => [$categoryCacheTag . $subcategory->id]}
+								{? $subcategory->setCurrentLocale($locale)}
+								<a n:href="Category: 'c' => $subcategory->getUrlId(), 'slug' => $subcategory->getSlug()"
+										class="subcategory">
+									<div class="pull-right" n:if="$subcategory->image">
+										<img src="{$basePath}/foto/{$subcategory->image|size:32:32}" alt="64x64"
+											 data-src="holder.js/32x32">
+									</div>
+									<div class="text">{$subcategory->name}</div>
+								</a>
+							{/cache}
+						</div>
 					</div>
 				{/cache}
 			{/ifset}
-
-			<div class="clearfix">
-				<div class="col-lg-6">
-					<h1 n:ifset="$category">{$category}</h1>
-					<h1 n:ifset="$searched">{$searched}</h1>
-					<h1 n:ifset="$accessoriesFor">{$accessoriesFor}</h1>
-					<h1 n:ifset="$producer">
-						{if $model}
-							{$model}
-						{elseif $line}
-							{$line}
-						{else}
-							{$producer}
-						{/if}
-					</h1>
-				</div>
-				<div class="col-lg-6">{control products:sorting}</div>
-			</div>
-
-			<div class="sidebar-filter margin-bottom-25">
-				{ifset $subcategories}
-					{cache 'subcategory_' . $category->id, tags => [$categoryCacheTag . $category->id]}
-						<div class="subcategories row" n:if="count($subcategories)">
-							<div class="col-md-3" n:foreach="$subcategories as $subcategory">
-								{cache 'subcategory_' . $subcategory->id, tags => [$categoryCacheTag . $subcategory->id]}
-									{? $subcategory->setCurrentLocale($locale)}
-									<a n:href="Category: 'c' => $subcategory->getUrlId(), 'slug' => $subcategory->getSlug()"
-											class="subcategory">
-										<div class="pull-right" n:if="$subcategory->image">
-											<img src="{$basePath}/foto/{$subcategory->image|size:32:32}" alt="64x64"
-												 data-src="holder.js/32x32">
-										</div>
-										<div class="text">{$subcategory->name}</div>
-									</a>
-								{/cache}
-							</div>
-						</div>
-					{/cache}
-				{/ifset}
-				{control products:filter}
-			</div>
-
-			{control products:list}
-
-			<!-- BEGIN PAGINATOR -->
-			<div class="row">
-				{control products:paginator}
-			</div>
-			<!-- END PAGINATOR -->
-
+			{control products:filter}
 		</div>
-		<!-- END CONTENT -->
+
+		{control products:list}
+
+		<!-- BEGIN PAGINATOR -->
+		<div class="row">
+			{control products:paginator}
+		</div>
+		<!-- END PAGINATOR -->
 
 	</div>
-	<!-- END SIDEBAR & CONTENT -->
+	<!-- END CONTENT -->
+
 </div>
+<!-- END SIDEBAR & CONTENT -->

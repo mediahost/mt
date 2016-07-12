@@ -184,3 +184,23 @@ form {
 		}
 	}
 }
+
+#categories {
+	.main-category {
+		.category-filters {
+			display: none;
+		}
+		&.active {
+			& > a {
+				.dropdown-menu-category-icon {
+					opacity: 1;
+				}
+			}
+			.active {
+				& > a {
+					font-weight: bold;
+				}
+			}
+		}
+	}
+}
