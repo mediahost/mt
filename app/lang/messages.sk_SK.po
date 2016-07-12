@@ -497,6 +497,9 @@ msgstr "Vyberte si príslušenstvo pre..."
 msgid "Accessories for \"%model%\""
 msgstr "Príslušenstvo \"%model%\""
 
+msgid "Accessories for"
+msgstr "Vhodné pre"
+
 msgid "Access Denied"
 msgstr "Prístup zamietnutý"
 

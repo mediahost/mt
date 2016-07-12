@@ -487,6 +487,9 @@ msgstr "Select your accessories for..."
 msgid "Accessories for \"%model%\""
 msgstr "Accessories for \"%model%\""
 
+msgid "Accessories for"
+msgstr "Accessories for"
+
 msgid "Access Denied"
 msgstr "Access Denied"
 
