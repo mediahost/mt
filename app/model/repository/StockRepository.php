@@ -64,8 +64,12 @@ class StockRepository extends BaseRepository
 	public function delete($stock, $deleteWithProduct = TRUE)
 	{
 		if ($deleteWithProduct && $stock->product) {
+			$stock->product->active = FALSE;
+			parent::save($stock->product);
 			parent::delete($stock->product);
 		}
+		$stock->active = FALSE;
+		parent::save($stock);
 		return parent::delete($stock);
 	}
 
