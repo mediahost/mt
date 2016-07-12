@@ -57,7 +57,7 @@ class PohodaFacade extends Object
 	/** @var SettingsStorage @inject */
 	public $settings;
 
-	public function updateFullProducts($lastChange = NULL, $offset = 0)
+	public function updateFullProducts($lastChange = NULL, $offset = 0, $noLimit = FALSE)
 	{
 		/* @var $pohodaRepo PohodaItemRepository */
 		$pohodaRepo = $this->em->getRepository(PohodaItem::getClassName());
@@ -73,7 +73,8 @@ class PohodaFacade extends Object
 			$conditions['updatedAt >='] = $lastChange;
 		}
 
-		$pohodaItems = $pohodaRepo->findArrBy($conditions, 500, $offset);
+		$limit = $noLimit ? NULL : 500;
+		$pohodaItems = $pohodaRepo->findArrBy($conditions, $limit, $offset);
 		$listedCount = 0;
 		$changedCount = 0;
 		foreach ($pohodaItems as $pohodaProductArr) {
