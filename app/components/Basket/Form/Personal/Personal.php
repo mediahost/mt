@@ -103,11 +103,11 @@ class Personal extends BaseControl
 						->addRule(Form::EMAIL, 'cart.form.validator.mail')
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
 		$form['mail']->setDisabled($this->user->isLoggedIn());
-		$form->addCheckSwitch('newsletter', 'cart.form.newsletter', 'YES', 'NO')
+		$form->addCheckbox('newsletter', 'cart.form.newsletter')
 				->setDefaultValue(TRUE);
 
 		$shippingBoxId = 'shippingBox';
-		$form->addCheckSwitch('other_delivery', 'cart.form.sameDelivery', 'YES', 'NO')
+		$form->addCheckbox('other_delivery', 'cart.form.sameDelivery')
 				->setDefaultValue(FALSE)
 				->addCondition(Form::EQUAL, TRUE)
 				->toggle($shippingBoxId);
@@ -131,7 +131,7 @@ class Personal extends BaseControl
 
 		$form->addGroup();
 		$companyBoxId = 'companyBox';
-		$form->addCheckSwitch('isCompany', 'cart.form.isCompany', 'YES', 'NO')
+		$form->addCheckbox('isCompany', 'cart.form.isCompany')
 				->setDefaultValue(FALSE)
 				->addCondition(Form::EQUAL, TRUE)
 				->toggle($companyBoxId);
@@ -206,7 +206,7 @@ class Personal extends BaseControl
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_S;
 
 		$invoiceBoxId = 'invoiceBox';
-		$form->addCheckSwitch('invoice', 'cart.form.inputInvoice', 'YES', 'NO')
+		$form->addCheckbox('invoice', 'cart.form.inputInvoice')
 				->setDefaultValue(FALSE)
 				->addCondition(Form::EQUAL, TRUE)
 				->toggle($invoiceBoxId);

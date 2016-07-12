@@ -34,10 +34,6 @@ var Cart = function () {
 		$(document).on('change', paymentsInputSelector, function (e) {
 			checkRadio();
 		});
-			
-		$("#homecreditCalc").fancybox({
-			'height': '90%'
-		});
 	};
 
 	var cartAddress = function () {

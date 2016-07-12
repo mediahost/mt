@@ -137,7 +137,6 @@
 				<a n:href="this#" class="showDiscountInput">{_'Insert your discount'}</a>
 				<div class="input-group display-none" id="discountInput">
 					<div class="input-icon">
-						<i class="fa fa-gift fa-fw"></i>
 						{input $form['voucher']}
 					</div>
 					<span class="input-group-btn">
@@ -149,7 +148,13 @@
 			</div>
 		</div>
 		<div class="row cart-continue">
-			<div class="col-md-6 col-sm-6"></div>
+			<div class="col-md-6 col-sm-6">
+				<a href="{plink Homepage:}" class="btn">
+					<i class="fa fa-chevron-left"></i>
+					&nbsp;
+					{_'cart.continueShopping'}
+				</a>
+			</div>
 			<div class="col-md-6 col-sm-6">
 				{button send, class=>'btn btn-primary'}
 				{_'cart.continue'}

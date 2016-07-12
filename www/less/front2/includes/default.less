@@ -74,16 +74,28 @@ form {
 			-webkit-transition: all 0.3s ease-in-out;
 		}
 		.facebook {
-			background: url(@pathImages + 'social/facebook.png') no-repeat;
+			background: url(@pathImagesGlobal + 'social/facebook.png') no-repeat;
 		}
 		.twitter {
-			background: url(@pathImages + 'social/twitter.png') no-repeat;
+			background: url(@pathImagesGlobal + 'social/twitter.png') no-repeat;
 		}
 	}
 }
 
 .no-border {
 	border: none !important;
+}
+.display-none, .display-hide {
+	display: none;
+}
+.static-info.align-reverse {
+	.name, .value {
+		text-align: right;
+		font-size: 14px;
+	}
+	.value {
+		font-weight: bold;
+	}
 }
 
 .product-page-price {
@@ -203,4 +215,62 @@ form {
 			}
 		}
 	}
+}
+
+.note {
+	margin: 0 0 20px 0;
+	padding: 15px 30px 15px 15px;
+	border-left: 5px solid #eee;
+	&.note-info {
+		background-color: #eef7fb;
+		border-color: #91d9e8;
+		//color: #31708f;
+	}
+}
+
+/* Form input sizing */
+.input-mini {
+	width: 45px !important;
+}
+
+.input-xsmall {
+	width: 80px !important;
+}
+
+.input-small {
+	width: 145px !important;
+}
+
+.input-medium {
+	width: 240px !important;
+}
+
+.input-large {
+	width: 320px !important;
+}
+
+.input-xlarge {
+	width: 420px !important;
+}
+
+.input-inline {
+	display: inline-block;
+	width: auto;
+	vertical-align: middle;
+}
+
+.form-group .input-inline {
+	margin-right: 5px;
+}
+
+.input-sm {
+	height: 28px;
+	padding: 5px 10px;
+	font-size: 13px;
+}
+
+select.input-sm {
+	height: 28px;
+	line-height: 28px;
+	padding: 2px 10px;
 }

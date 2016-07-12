@@ -63,6 +63,7 @@ class MetronicFormRenderer extends ExtendedFormRenderer
 				$control instanceof DatePicker) {
 			$control->getControlPrototype()->class('form-control', TRUE);
 		} else if ($control instanceof Checkbox) {
+			$control->getControlPrototype()->class('i-check');
 			$control->getSeparatorPrototype()
 					->setName('div')
 					->class($control->getControlPrototype()->type);
