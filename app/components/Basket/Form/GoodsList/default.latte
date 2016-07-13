@@ -166,6 +166,7 @@
 		{? $form->render('end')}
 	{/form}
 </div>
+<div n:if="$basket->isEmpty()" class="gap-big"></div>
 <div n:if="$basket->isEmpty()" class="note note-info">
 	<h4 class="block">{_'cart.yourCartIsEmpty'}</h4>
 	<p>
