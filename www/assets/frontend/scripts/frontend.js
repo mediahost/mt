@@ -2,6 +2,9 @@ var Frontend = function () {
 
 	return {
 		init: function () {
+			$(document).on('ifChanged', 'input.i-check', function (e) {
+				$(this).change();
+			});
 			// $("#homecreditCalc").fancybox({
 			// 	'height': '90%'
 			// });
