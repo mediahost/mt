@@ -17,7 +17,7 @@ class PohodaPresenter extends BasePresenter
 	public function actionSynchronize($all = FALSE, $limit = NULL, $offset = NULL)
 	{
 		proc_nice(19);
-		ini_set('max_execution_time', 500);
+		ini_set('max_execution_time', 800);
 		
 		if (!$this->settings->modules->pohoda->enabled) {
 			throw new ForbiddenRequestException('Pohoda module is not allowed');

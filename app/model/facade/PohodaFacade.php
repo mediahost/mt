@@ -143,7 +143,7 @@ class PohodaFacade extends Object
 				}
 
 				if ($change) {
-					if ($noLimit) {
+					if ($limit) {
 						Debugger::log('UPDATED Code: ' . $stock->pohodaCode, 'pohoda-synchronized-counts');
 					}
 					$this->em->persist($stock);
