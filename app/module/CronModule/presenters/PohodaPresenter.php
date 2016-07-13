@@ -14,7 +14,7 @@ class PohodaPresenter extends BasePresenter
 	/** @var PohodaFacade @inject */
 	public $pohodaFacade;
 
-	public function actionSynchronize($all = FALSE, $offset = 0, $noLimit = FALSE)
+	public function actionSynchronize($all = FALSE, $limit = NULL, $offset = NULL)
 	{
 		proc_nice(19);
 		ini_set('max_execution_time', 500);
@@ -26,7 +26,7 @@ class PohodaPresenter extends BasePresenter
 		$lastDataChangeTime = $this->pohodaFacade->getLastSync(PohodaFacade::ANY_IMPORT, PohodaFacade::LAST_UPDATE);
 		if ($lastDataChangeTime || $all) {
 			try {
-				$this->pohodaFacade->updateFullProducts($all ? NULL : $lastDataChangeTime, $offset, $noLimit);
+				$this->pohodaFacade->updateFullProducts($all ? NULL : $lastDataChangeTime, $limit, $offset);
 				$this->status = parent::STATUS_OK;
 				$this->message = 'Synchronize was successful';
 				$this->pohodaFacade->clearLastSync(PohodaFacade::ANY_IMPORT, PohodaFacade::LAST_UPDATE);
