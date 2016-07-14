@@ -5,9 +5,11 @@
 {block content}
 
 <div class="container">
-	{if !$basket->isEmpty()}
-		{include steps}
-	{/if}
+	{snippet steps}
+		{if !$basket->isEmpty()}
+			{include steps}
+		{/if}
+	{/snippet}
 
 	<!-- BEGIN CONTENT -->
 	<div class="row margin-bottom-20">

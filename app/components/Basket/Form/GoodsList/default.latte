@@ -59,9 +59,9 @@
 								<strong>{$item->getTotalPrice($exchange, $priceLevel)|asCurrency:TRUE}</strong>
 							</td>
 							<td class="del-goods-col">
-								<a class="del-goods ajax" 
+								<a class="del-goods ajax"
 								   href="{plink removeFromCart! $stock->id}" 
-								   data-target-loading="#snippet--goodsList">&nbsp;</a>
+								   data-target-loading="#frm-goodsList-form">&nbsp;</a>
 							</td>
 						</tr>
 					{/foreach}
@@ -86,9 +86,9 @@
 								<strong>-{$voucher->getDiscountValue($productsTotalWith, $exchange)|asCurrency:TRUE}</strong>
 							</td>
 							<td class="del-goods-col">
-								<a class="del-goods ajax" 
+								<a class="del-goods ajax"
 								   href="{plink removeVoucherFromCart! $voucher->id}" 
-								   data-target-loading="#snippet--goodsList">&nbsp;</a>
+								   data-target-loading="#frm-goodsList-form">&nbsp;</a>
 							</td>
 						</tr>
 					{/foreach}
@@ -134,7 +134,7 @@
 
 			<div class="insert-discount">
 				<h4>{_'cart.discount'}</h4>
-				<a n:href="this#" class="showDiscountInput">{_'Insert your discount'}</a>
+				<a n:href="this" class="showDiscountInput">{_'Insert your discount'}</a>
 				<div class="input-group display-none" id="discountInput">
 					<div class="input-icon">
 						{input $form['voucher']}

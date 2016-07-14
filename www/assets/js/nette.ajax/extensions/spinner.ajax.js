@@ -63,10 +63,10 @@
 			if (this.element && this.element.hasClass('loadingNoOverlay')) {
 				options.overlayColor = 'none';
 			}
-			// Metronic.blockUI(options);
+			Frontend.blockUI(options);
 		},
 		complete: function () {
-			// Metronic.unblockUI(this.element);
+			Frontend.unblockUI(this.element);
 			if (this.moveTarget.length) {
 				$(document).scrollTop((this.moveTarget.offset().top - 20));
 			}

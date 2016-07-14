@@ -42,15 +42,15 @@
 	</div>
 {/define}
 
-{define lastVisited}
-	<div class="row margin-bottom-35" n:if="count($visitedStocks)">
-		<div class="col-md-12 sale-product">
-			<h2>{_'Last visited'}</h2>
-			<div class="owl-carousel owl-carousel5">
-				<div n:foreach="$visitedStocks as $stock">
-					{control stock-$stock->id}
-				</div>
-			</div>
-		</div>
-	</div>
-{/define}
+{*{define lastVisited}*}
+	{*<div class="row margin-bottom-35" n:if="count($visitedStocks)">*}
+		{*<div class="col-md-12 sale-product">*}
+			{*<h2>{_'Last visited'}</h2>*}
+			{*<div class="owl-carousel owl-carousel5">*}
+				{*<div n:foreach="$visitedStocks as $stock">*}
+					{*{control stock-$stock->id}*}
+				{*</div>*}
+			{*</div>*}
+		{*</div>*}
+	{*</div>*}
+{*{/define}*}

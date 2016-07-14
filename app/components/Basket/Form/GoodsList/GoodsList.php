@@ -3,8 +3,6 @@
 namespace App\Components\Basket\Form;
 
 use App\Components\BaseControl;
-use App\Forms\Controls\TextInputBased\MetronicTextInputBase;
-use App\Forms\Controls\TextInputBased\Spinner;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Stock;
@@ -41,28 +39,26 @@ class GoodsList extends BaseControl
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
 		if ($this->isAjax) {
-			$form->getElementPrototype()->class('ajax loadingNoOverlay' . ($this->isSendOnChange ? ' sendOnChange' : NULL));
+			$class = 'ajax loadingNoOverlay' . ($this->isSendOnChange ? ' sendOnChange' : NULL);
+			$form->getElementPrototype()->class($class);
 		}
 
 		$quantityContainer = $form->addContainer('quantity');
 		foreach ($this->basketFacade->getItems() as $item) {
-			$quantityContainer->addSpinner($item->stock->id)
-					->setValue($item->quantity)
-					->setPlusButton('default', 'fa fa-angle-up')
-					->setMinusButton('default', 'fa fa-angle-down')
-					->setMin(self::MIN)
-					->setMax($this->max)
-					->setType(Spinner::TYPE_UP_DOWN)
-					->setSize(MetronicTextInputBase::SIZE_XS);
+			$quantityContainer->addText($item->stock->id)
+				->setValue($item->quantity)
+				->setType('number')
+				->addRule(Form::INTEGER, 'cart.wrongValue')
+				->addRule(Form::RANGE, 'cart.quantityRange', [self::MIN, $item->stock->inStore]);
 		}
 
 		$form->addText('voucher', 'cart.voucher.code')
-				->setAttribute('placeholder', 'cart.voucher.code')
-				->getControlPrototype()->class[] = 'noSendOnChange';
+			->setAttribute('placeholder', 'cart.voucher.code')
+			->getControlPrototype()->class[] = 'noSendOnChange';
 		$form->addSubmit('insert', 'cart.voucher.insert');
 
 		$form->addSubmit('send', 'cart.continue')
-				->setDisabled(!$this->basketFacade->isAllItemsInStore());
+			->setDisabled(!$this->basketFacade->isAllItemsInStore());
 
 		$form->setDefaults($this->getDefaults());
 		$form->onSuccess[] = $this->formSucceeded;
@@ -101,7 +97,7 @@ class GoodsList extends BaseControl
 			}
 			return;
 		}
-		
+
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
 		foreach ($values->quantity as $stockId => $quantity) {
 			$stock = $stockRepo->find($stockId);
@@ -120,7 +116,7 @@ class GoodsList extends BaseControl
 			$this->onSend();
 		} else {
 			if ($this->presenter->ajax) {
-		$this->presenter->redrawControl();
+				$this->presenter->redrawControl();
 			}
 		}
 	}

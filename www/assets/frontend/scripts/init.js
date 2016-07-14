@@ -5,3 +5,12 @@ jQuery(document).ready(function () {
 	Categories.init();
 	Cart.init();
 });
+
+$.nette.ext('netteAjax', {
+	before: function (jqXHR, settings) {
+	},
+	complete: function (payload, t, params) {
+		Frontend.init();
+		Cart.init();
+	}
+});
