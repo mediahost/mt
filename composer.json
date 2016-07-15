@@ -73,7 +73,7 @@
 		"drahak/restful": "@dev",
 		"kdyby/forms-replicator": "dev-master",
 		"kdyby/doctrine-cache": "@dev",
-		"heureka/overenozakazniky": "dev-master",
+		"heureka/overeno-zakazniky": "dev-master",
 		"pixidos/gpwebpay": "^1.0"
 	},
 	"require-dev": {
