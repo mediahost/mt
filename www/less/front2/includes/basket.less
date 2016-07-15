@@ -48,106 +48,115 @@
 		padding: 20px;
 		overflow-x: auto;
 		&.goods-data {
-			th {
-				font-size: 16px;
-				border-bottom: solid 1px #ecebeb;
-				padding-bottom: 8px;
-				&.goods-page-quantity {
-					width: 120px;
-					text-align: center;
-				}
-				&.goods-page-price {
-					width: 130px;
-					text-align: center;
-				}
-				&.goods-page-vat {
-					width: 70px;
-					text-align: center;
-				}
-				&.goods-page-total {
-					width: 15%;
-					text-align: center;
-				}
-				&.del-goods-col {
-					width: 5%;
-				}
-			}
-			td {
-				@lineMaxHeight: 21px;
-				vertical-align: top;
-				padding: 20px 20px 20px 0;
-				border-bottom: solid 1px #ecebeb;
-				&.goods-page-quantity {
-					text-align: center;
-					padding-right: 0px;
-					.product-quantity {
+			table {
+				width: 100%;
+				th {
+					font-size: 16px;
+					border-bottom: solid 1px #ecebeb;
+					padding-bottom: 8px;
+					&.goods-page-quantity {
+						width: 120px;
+						text-align: center;
+					}
+					&.goods-page-price {
+						width: 130px;
+						text-align: center;
+					}
+					&.goods-page-vat {
 						width: 70px;
 						text-align: center;
-						margin: 0px auto;
-						input {
-							padding-right: 4px;
+					}
+					&.goods-page-total {
+						width: 15%;
+						text-align: center;
+					}
+					&.del-goods-col {
+						width: 5%;
+					}
+				}
+				td {
+					@lineMaxHeight: 21px;
+					vertical-align: top;
+					padding: 20px 20px 20px 0;
+					border-bottom: solid 1px #ecebeb;
+					&.goods-page-image {
+						width: 105px;
+						img {
+							width: 75px;
 						}
-						.help-block {
-							margin-top: 42px;
-							width: 100px;
+					}
+					&.goods-page-quantity {
+						text-align: center;
+						padding-right: 0px;
+						.product-quantity {
+							width: 70px;
+							text-align: center;
+							margin: 0px auto;
+							input {
+								padding-right: 4px;
+							}
+							.help-block {
+								margin-top: 42px;
+								width: 100px;
+							}
+						}
+						strong {
+							font-weight: normal;
+							font-size: 15px;
+							line-height: 28px;
 						}
 					}
-					strong {
-						font-weight: normal;
-						font-size: 15px;
-						line-height: 28px;
+					&.goods-page-description {
+						h3 {
+							font-size: 14px;
+						}
 					}
-				}
-				&.goods-page-description {
-					h3 {
-						font-size: 14px;
+					&.goods-page-price {
+						line-height: @lineMaxHeight;
+						color: #486d97;
+						width: 130px;
+						text-align: right;
+						strong {
+							font-weight: normal;
+							font-size: 15px;
+							line-height: 28px;
+						}
 					}
-				}
-				&.goods-page-price {
-					line-height: @lineMaxHeight;
-					color: #486d97;
-					width: 130px;
-					text-align: right;
-					strong {
-						font-weight: normal;
-						font-size: 15px;
-						line-height: 28px;
+					&.goods-page-vat {
+						line-height: @lineMaxHeight;
+						width: 70px;
+						text-align: right;
+						strong {
+							font-weight: normal;
+							font-size: 15px;
+							line-height: 28px;
+						}
 					}
-				}
-				&.goods-page-vat {
-					line-height: @lineMaxHeight;
-					width: 70px;
-					text-align: right;
-					strong {
-						font-weight: normal;
-						font-size: 15px;
-						line-height: 28px;
+					&.goods-page-total {
+						font-size: @lineMaxHeight;
+						line-height: @lineMaxHeight;
+						color: #486d97;
+						width: 160px;
+						text-align: right;
+						padding-right: 0px;
 					}
-				}
-				&.goods-page-total {
-					font-size: @lineMaxHeight;
-					line-height: @lineMaxHeight;
-					color: #486d97;
-					width: 160px;
-					text-align: right;
-					padding-right: 0px;
-				}
-				&.del-goods-col {
-					padding-left: 10px;
-					padding-right: 10px;
-					.del-goods {
-						width: 17px;
-						height: 17px;
-						color: #fff !important;
-						border-radius: 22px !important;
-						float: right;
-						margin: 2px 0 0 5px;
-						line-height: 1;
-						font-size: 12px;
-						background: #d7dde3 url('@{pathImages}/icons/del-goods.png') no-repeat 50% 50%;
-						&:hover {
-							text-decoration: none;
-							background-color: #8fabc7;
+					&.del-goods-col {
+						padding-left: 10px;
+						padding-right: 10px;
+						.del-goods {
+							width: 17px;
+							height: 17px;
+							color: #fff !important;
+							border-radius: 22px !important;
+							float: right;
+							margin: 2px 0 0 5px;
+							line-height: 1;
+							font-size: 12px;
+							background: #d7dde3 url('@{pathImages}/icons/del-goods.png') no-repeat 50% 50%;
+							&:hover {
+								text-decoration: none;
+								background-color: #8fabc7;
+							}
 						}
 					}
 				}
@@ -200,6 +209,9 @@
 					padding: 10px;
 					margin: 0px;
 					border: 1px solid white;
+					.i-radio {
+						margin-left: 10px;
+					}
 					&:hover {
 						background-color: #f8f8f8;
 						cursor: pointer;

@@ -1,6 +1,6 @@
 var Cart = function () {
 
-	var paymentsInputSelector = '.cart-content.payments-data .radio-list .radio input';
+	var paymentsInputSelector = '.cart-content.payments-data .radio-list .i-radio input';
 
 	var checkRadio = function (radio) {
 		if (radio) {

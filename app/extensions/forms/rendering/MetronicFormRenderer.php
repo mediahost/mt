@@ -68,6 +68,7 @@ class MetronicFormRenderer extends ExtendedFormRenderer
 					->setName('div')
 					->class($control->getControlPrototype()->type);
 		} else if ($control instanceof RadioList) {
+			$control->getControlPrototype()->class('i-radio');
 			$control->getContainerPrototype()
 					->setName('div')
 					->class('radio-list');

@@ -5,24 +5,22 @@ var Frontend = function () {
 			$(document).on('ifChanged', 'input.i-check', function (e) {
 				$(this).change();
 			});
+			$(document).on('ifChanged', 'input.i-radio', function (e) {
+				if ($(e.target).is(':checked')) {
+					$(this).change();
+				}
+			});
+
 			// $("#homecreditCalc").fancybox({
 			// 	'height': '90%'
 			// });
 
-			// $('#frm-products-filterForm').removeClass('in');
-
-			// $(document).on('click', '.alert-auto-dismiss', function () {
-			// 	$(this).fadeOut();
-			// });
-
-			// if (loginError) {
-			// 	$('#signInModal').modal('show');
-			// }
 		},
-		afterComplete: function () {
-			// setTimeout(function () {
-			// 	$('.alert-auto-dismiss').fadeOut();
-			// }, 2000);
+		afterAjaxInit: function () {
+			$('.i-check, .i-radio').iCheck({
+				checkboxClass: 'i-check',
+				radioClass: 'i-radio'
+			});
 		},
 		blockUI: function (options) {
 			options = $.extend(true, {}, options);
