@@ -5,7 +5,7 @@ extensions:
 	exchangeExtension: h4kuna\Exchange\Nette\DI\ExchangeExtension
 
 exchangeExtension:
-	driver: h4kuna\Exchange\Driver\Ecb\Day
+	driver: h4kuna\Exchange\Driver\BankRates
 	currencies: {
 		eur: [decimal: 2, point: ',', thousand: ' ', mask: '1 S', symbol: '€']
 		czk: [decimal: 2, point: ',', thousand: ' ', mask: '1 S', symbol: 'Kč'] 
