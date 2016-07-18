@@ -119,12 +119,6 @@ class AddToCart extends BaseControl
 		parent::render();
 	}
 
-	public function renderButton()
-	{
-		$this->setTemplateFile('button');
-		$this->render();
-	}
-
 	// <editor-fold desc="setters & getters">
 
 	public function setStock(Stock $stock)
