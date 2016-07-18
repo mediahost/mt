@@ -11,9 +11,9 @@ var Frontend = function () {
 				}
 			});
 
-			// $("#homecreditCalc").fancybox({
-			// 	'height': '90%'
-			// });
+			$("#homecreditCalc").fancybox({
+				'height': '90%'
+			});
 
 		},
 		afterAjaxInit: function () {
