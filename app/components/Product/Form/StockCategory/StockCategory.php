@@ -42,7 +42,7 @@ class StockCategory extends StockBase
 		$form = new Form();
 		$form->setTranslator($this->translator)
 			->setRenderer(new MetronicHorizontalFormRenderer());
-//		$form->getElementPrototype()->class('ajax');
+		$form->getElementPrototype()->class('ajax');
 
 		$categories = $this->categoryFacade->getCategoriesList($this->translator->getLocale());
 
