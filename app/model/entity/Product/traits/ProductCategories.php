@@ -35,6 +35,15 @@ trait ProductCategories
 	/** @ORM\ManyToMany(targetEntity="ProducerModel", inversedBy="products") */
 	protected $accessoriesFor;
 
+	/** @ORM\Column(type="simple_array") */
+	private $accessoriesProducerIds;
+
+	/** @ORM\Column(type="simple_array") */
+	private $accessoriesLineIds;
+
+	/** @ORM\Column(type="simple_array") */
+	private $accessoriesModelIds;
+
 	/** @ORM\ManyToOne(targetEntity="App\Model\Entity\Heureka\Category") */
 	protected $heurekaCategory;
 	
