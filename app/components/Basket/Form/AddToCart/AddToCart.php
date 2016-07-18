@@ -11,7 +11,6 @@ use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Stock;
 use App\Model\Facade\BasketFacade;
 use App\Model\Facade\Exception\InsufficientQuantityException;
-use Tracy\Debugger;
 
 class AddToCart extends BaseControl
 {
