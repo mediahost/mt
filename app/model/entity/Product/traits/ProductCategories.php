@@ -6,6 +6,7 @@ use App\Model\Entity\Category;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
+use Tracy\Debugger;
 
 /**
  * @property Producer $producer
@@ -46,7 +47,7 @@ trait ProductCategories
 
 	/** @ORM\ManyToOne(targetEntity="App\Model\Entity\Heureka\Category") */
 	protected $heurekaCategory;
-	
+
 	public function setMainCategory(Category $category)
 	{
 		$this->mainCategory = $category;
@@ -66,7 +67,7 @@ trait ProductCategories
 			return TRUE;
 		};
 		$this->categories->forAll($removeIdles);
-		
+
 		if ($mainCategory) {
 			$this->setMainCategory($mainCategory);
 		}
@@ -111,18 +112,21 @@ trait ProductCategories
 			return TRUE;
 		};
 		$this->accessoriesFor->forAll($removeIdles);
-		
+
 		foreach ($models as $model) {
 			if ($model instanceof ProducerModel) {
 				$this->addAccessoryModel($model);
 			}
 		}
+		$this->resaveAccessoriesFor();
 		return $this;
 	}
 
 	public function clearAccessoriesFor()
 	{
-		return $this->accessoriesFor->clear();
+		$this->accessoriesFor->clear();
+		$this->resaveAccessoriesFor();
+		return $this;
 	}
 
 	public function addAccessoryModel(ProducerModel $model)
@@ -130,12 +134,30 @@ trait ProductCategories
 		if (!$this->accessoriesFor->contains($model)) {
 			$this->accessoriesFor->add($model);
 		}
+		$this->resaveAccessoriesFor();
 		return $this;
 	}
 
 	public function removeAccessoryModel(ProducerModel $model)
 	{
-		return $this->accessoriesFor->removeElement($model);
+		$this->accessoriesFor->removeElement($model);
+		$this->resaveAccessoriesFor();
+		return $this;
+	}
+
+	public function resaveAccessoriesFor()
+	{
+		$this->accessoriesProducerIds = [];
+		$this->accessoriesLineIds = [];
+		$this->accessoriesModelIds = [];
+		$resave = function ($key, ProducerModel $model) {
+			$this->accessoriesProducerIds[] = $model->line->producer->id;
+			$this->accessoriesLineIds[] = $model->line->id;
+			$this->accessoriesModelIds[] = $model->id;
+			return TRUE;
+		};
+		$this->accessoriesFor->forAll($resave);
+		return $this;
 	}
 
 	public function isInCategory($category)
