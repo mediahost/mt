@@ -21,6 +21,30 @@
 						<li>
 							<a href="#">Kontakt</a>
 						</li>
+						{*<li class="shop-currencies">*}
+							{*<a n:foreach="$exchange as $currCode => $curr"*}
+									{*n:href="setCurrency! $currCode"*}
+									{*n:class="$currCode == $currency->getCode() ? current">*}
+								{*{$curr->getFormat()->getSymbol()}*}
+							{*</a>*}
+						{*</li>*}
+						{*{foreach $allowedLanguages as $allowedLang}*}
+							{*{var $code = substr($allowedLang,0,2)}*}
+							{*{if $code !== $locale}*}
+								{*<li>*}
+
+									{*{if $user->loggedIn}*}
+										{*{var $args = [locale => $code, overwrite => yes]}*}
+									{*{else}*}
+										{*{var $args = [locale => $code]}*}
+									{*{/if}*}
+									{*<a n:href="this (expand) $args">*}
+										{*<img src="{$basePath}/images/flags/{$code}.png"*}
+											 {*alt="{_locale_$code}"/>{_locale_$code}*}
+									{*</a>*}
+								{*</li>*}
+							{*{/if}*}
+						{*{/foreach}*}
 					</ul>
 				</div>
 			</div>
