@@ -9,8 +9,6 @@ use App\Components\Auth\SignIn;
 use App\Components\Auth\SignUp;
 use App\Components\Newsletter\Form\ISubscribeFactory;
 use App\Components\Newsletter\Form\Subscribe;
-use App\Components\Producer\Form\IModelSelectorFactory;
-use App\Components\Producer\Form\ModelSelector;
 use App\Components\Product\Form\IPrintStockFactory;
 use App\Extensions\Products\IProductListFactory;
 use App\Extensions\Products\ProductList;
@@ -18,13 +16,11 @@ use App\Forms\Form;
 use App\Helpers;
 use App\Model\Entity\Category;
 use App\Model\Entity\Page;
-use App\Model\Entity\ProducerModel;
 use App\Model\Entity\Product;
 use App\Model\Entity\Sign;
 use App\Model\Entity\Stock;
 use App\Model\Entity\Voucher;
 use App\Model\Facade\CategoryFacade;
-use App\Model\Facade\ProducerFacade;
 use App\Model\Repository\CategoryRepository;
 use App\Model\Repository\ProductRepository;
 use App\Model\Repository\StockRepository;
@@ -37,9 +33,6 @@ abstract class BasePresenter extends BaseBasePresenter
 	const PAGE_INFO_TITLE = 'title';
 	const PAGE_INFO_KEYWORDS = 'keywords';
 	const PAGE_INFO_DESCRIPTION = 'description';
-
-	/** @var IModelSelectorFactory @inject */
-	public $iModelSelectorFactory;
 
 	/** @var ISubscribeFactory @inject */
 	public $iSubscribeControlFactory;
@@ -314,23 +307,6 @@ abstract class BasePresenter extends BaseBasePresenter
 	public function searchSucceeded(Form $form, $values)
 	{
 		$this->redirect('Category:search', $values->search);
-	}
-
-	/** @return ModelSelector */
-	public function createComponentModelSelector()
-	{
-		$control = $this->iModelSelectorFactory->create();
-		$control->setAjax(FALSE);
-		$control->onAfterSelect = function ($producer, $line, $model) {
-			if ($model instanceof ProducerModel) {
-				$this->redirect('Accessories:', $model->id);
-			} else {
-				$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Model')]);
-				$this->flashMessage($message, 'warning');
-				$this->redirect('this');
-			}
-		};
-		return $control;
 	}
 
 	/** @return Subscribe */

@@ -73,7 +73,6 @@ services:
 	# Producers
 	- {implement: App\Components\Producer\Form\IProducerEditFactory, inject: yes}
 	- {implement: App\Components\Producer\Form\IModelParameterEditFactory, inject: yes}
-	- {implement: App\Components\Producer\Form\IModelSelectorFactory, inject: yes}
 	- {implement: App\Components\Producer\Form\IContactShopFactory, inject: yes}
 	- {implement: App\Components\Producer\Grid\IModelParametersGridFactory, inject: yes}
 

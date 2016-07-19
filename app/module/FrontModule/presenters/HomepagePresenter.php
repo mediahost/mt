@@ -5,14 +5,8 @@ namespace App\FrontModule\Presenters;
 class HomepagePresenter extends BasePresenter
 {
 
-	const DEFAULT_SHOW_SLIDER = FALSE;
-	const DEFAULT_SHOW_BRANDS = TRUE;
-
-	public function actionDefault($slider = self::DEFAULT_SHOW_SLIDER, $brands = self::DEFAULT_SHOW_BRANDS)
+	public function actionDefault()
 	{
-		$this->showSlider = (bool) $slider;
-		$this->showBrands = (bool) $brands;
-		$this['modelSelector']->setAccessories();
 	}
 
 	public function renderDefault()

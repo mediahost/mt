@@ -121,28 +121,6 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 		$this->sendJson($data);
 	}
 
-	public function actionAccessories($id)
-	{
-		$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
-		if ($id) {
-			$modelEntity = $modelRepo->find($id);
-		}
-		if (isset($modelEntity) && $modelEntity) {
-			/* @var $products ProductList */
-			$products = $this['products'];
-			$products->addFilterAccessoriesFor($modelEntity);
-
-			$this['modelSelector']->setAccessories();
-			$this['modelSelector']->setModel($modelEntity);
-			$this->template->accessoriesFor = $modelEntity;
-			$this->setView('default');
-		} else {
-			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Model')]);
-			$this->flashMessage($message, 'warning');
-			$this->redirect('Homepage:');
-		}
-	}
-
 	public function actionProducer($producer = NULL, $line = NULL, $model = NULL)
 	{
 		if ($model) {

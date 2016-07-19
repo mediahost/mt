@@ -1,35 +1,46 @@
 {includeblock '../categories.latte'}
 
-{block breadcrumbItems}
-	{ifset $category}
-		<li n:foreach="$category->path as $parent">
-			<a n:href="Category: 'c' => $parent->getUrlId(), 'slug' => $parent->getSlug()">{$parent}</a>
-		</li>
-		<li class="active">{$category}</li>
-		{elseifset $searched}
-		<li>
-			<span>{_'Search'}</span>
-		</li>
-		<li class="active">{$searched}</li>
-		{elseifset $accessoriesFor}
-		<li>
-			<span>{$accessoriesFor->line->producer}</span>
-		</li>
-		<li>
-			<span>{$accessoriesFor->line}</span>
-		</li>
-		<li class="active">{$accessoriesFor}</li>
-		{elseifset $producer}
-		<li>
-			<a n:href="Category:producer, 'producer' => $producer->slug">{$producer}</a>
-		</li>
-		<li n:if="$line">
-			<a n:href="Category:producer, 'producer' => $producer->slug, 'line' => $line->slug">{$line}</a>
-		</li>
-		<li n:if="$model">
-			<a n:href="Category:producer, 'producer' => $producer->slug, 'line' => $line->slug, 'model' => $model->slug">{$model}</a>
-		</li>
-	{/ifset}
+{block breadcrumb}
+	<header class="page-header">
+		<h1 class="page-title">
+			{ifset $category}
+				{$category}
+				{elseifset $searched}
+				{$searched}
+				{elseifset $producer}
+				{if $model}
+					{$model}
+					{elseif $line}
+					{$producer} / {$line}
+					{else}
+					{$producer}
+				{/if}
+			{/ifset}
+		</h1>
+		<ol class="breadcrumb page-breadcrumb">
+			{ifset $category}
+				<li n:foreach="$category->path as $parent">
+					<a n:href="Category: 'c' => $parent->getUrlId(), 'slug' => $parent->getSlug()">{$parent}</a>
+				</li>
+				<li class="active">{$category}</li>
+			{elseifset $searched}
+				<li>
+					<span>{_'Search'}</span>
+				</li>
+				<li class="active">{$searched}</li>
+			{elseifset $producer}
+				<li>
+					<a n:href="Category:producer, 'producer' => $producer->slug">{$producer}</a>
+				</li>
+				<li n:if="$line">
+					<a n:href="Category:producer, 'producer' => $producer->slug, 'line' => $line->slug">{$line}</a>
+				</li>
+				<li n:if="$model">
+					<a n:href="Category:producer, 'producer' => $producer->slug, 'line' => $line->slug, 'model' => $model->slug">{$model}</a>
+				</li>
+			{/ifset}
+		</ol>
+	</header>
 {/block}
 
 {block content}
@@ -44,30 +55,8 @@
 
 	<!-- BEGIN CONTENT -->
 	<div class="col-md-9 col-sm-7">
-		{ifset $accessoriesFor}
-			<h2>{_'Accessories for "%model%"', ['model' => $accessoriesFor->getFullname('/')]}</h2>
-			{cache 'modelSelector' . $locale . $accessoriesFor->id,
-                    tags => [App\Components\Producer\Form\ModelSelector::CACHE_ID]}
-				<div class="model-selector clearfix">
-					{control modelSelector}
-				</div>
-			{/cache}
-		{/ifset}
-
 		<div class="clearfix">
 			<div class="col-lg-6">
-				<h1 n:ifset="$category">{$category}</h1>
-				<h1 n:ifset="$searched">{$searched}</h1>
-				<h1 n:ifset="$accessoriesFor">{$accessoriesFor}</h1>
-				<h1 n:ifset="$producer">
-					{if $model}
-						{$model}
-					{elseif $line}
-						{$line}
-					{else}
-						{$producer}
-					{/if}
-				</h1>
 			</div>
 			<div class="col-lg-6">{control products:sorting}</div>
 		</div>

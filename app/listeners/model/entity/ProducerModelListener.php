@@ -2,7 +2,6 @@
 
 namespace App\Listeners\Model\Entity;
 
-use App\Components\Producer\Form\ModelSelector;
 use App\Model\Entity\ProducerModel;
 use App\Model\Facade\ProducerFacade;
 use Doctrine\ORM\Events;
@@ -24,18 +23,11 @@ class ProducerModelListener extends Object implements Subscriber
 	public function getSubscribedEvents()
 	{
 		return array(
-			Events::prePersist,
 			Events::postUpdate,
-			Events::postRemove,
 		);
 	}
 
 	// <editor-fold desc="listeners redirectors">
-
-	public function prePersist()
-	{
-		$this->clearModelSelectorCache();
-	}
 
 	public function postUpdate($params)
 	{
@@ -45,25 +37,9 @@ class ProducerModelListener extends Object implements Subscriber
 				$this->clearProducerModelCache($model);
 			}
 		}
-		$this->clearModelSelectorCache();
-	}
-
-	public function postRemove()
-	{
-		$this->clearModelSelectorCache();
 	}
 
 	// </editor-fold>
-
-	private function clearModelSelectorCache()
-	{
-		$cache = new Cache($this->cacheStorage);
-		$cache->clean([
-			Cache::TAGS => [
-				ModelSelector::CACHE_ID,
-			],
-		]);
-	}
 
 	private function clearProducerModelCache(ProducerModel $model)
 	{

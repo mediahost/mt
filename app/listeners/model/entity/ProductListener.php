@@ -2,7 +2,6 @@
 
 namespace App\Listeners\Model\Entity;
 
-use App\Components\Producer\Form\ModelSelector;
 use App\Model\Entity\ProducerModel;
 use App\Model\Entity\Product;
 use App\Model\Entity\ProductTranslation;
@@ -49,9 +48,6 @@ class ProductListener extends Object implements Subscriber
 			}
 			if ($this->hasDeleted($params)) {
 				$this->clearProductCache($product);
-			}
-			if ($this->hasChangeAccessories()) {
-				$this->clearModelSelectorCache($product);
 			}
 		}
 	}
@@ -105,14 +101,6 @@ class ProductListener extends Object implements Subscriber
 		$cache = new Cache($this->cacheStorage);
 		$cache->clean([
 			Cache::TAGS => [ProductFacade::TAG_PRODUCT . $product->id],
-		]);
-	}
-
-	private function clearModelSelectorCache()
-	{
-		$cache = new Cache($this->cacheStorage);
-		$cache->clean([
-			Cache::TAGS => [ModelSelector::CACHE_ID],
 		]);
 	}
 
