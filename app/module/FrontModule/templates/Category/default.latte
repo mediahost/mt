@@ -10,9 +10,9 @@
 				{elseifset $producer}
 				{if $model}
 					{$model}
-					{elseif $line}
+				{elseif $line}
 					{$producer} / {$line}
-					{else}
+				{else}
 					{$producer}
 				{/if}
 			{/ifset}
@@ -40,6 +40,7 @@
 				</li>
 			{/ifset}
 		</ol>
+		{control products:sorting}
 	</header>
 {/block}
 
@@ -50,41 +51,37 @@
 	<!-- BEGIN SIDEBAR -->
 	<div class="sidebar col-md-3 col-sm-5">
 		{include categories}
+		{control products:filter}
 	</div>
 	<!-- END SIDEBAR -->
 
 	<!-- BEGIN CONTENT -->
 	<div class="col-md-9 col-sm-7">
-		<div class="clearfix">
-			<div class="col-lg-6">
-			</div>
-			<div class="col-lg-6">{control products:sorting}</div>
-		</div>
 
-		<div class="sidebar-filter margin-bottom-25">
-			{ifset $subcategories}
-				{cache 'subcategory_' . $category->id, tags => [$categoryCacheTag . $category->id]}
-					<div class="subcategories row" n:if="count($subcategories)">
-						<div class="col-md-3" n:foreach="$subcategories as $subcategory">
-							{cache 'subcategory_' . $subcategory->id, tags => [$categoryCacheTag . $subcategory->id]}
-								{? $subcategory->setCurrentLocale($locale)}
-								<a n:href="Category: 'c' => $subcategory->getUrlId(), 'slug' => $subcategory->getSlug()"
-										class="subcategory">
-									<div class="pull-right" n:if="$subcategory->image">
-										<img src="{$basePath}/foto/{$subcategory->image|size:32:32}" alt="64x64"
-											 data-src="holder.js/32x32">
-									</div>
-									<div class="text">{$subcategory->name}</div>
-								</a>
-							{/cache}
+		<div class="row products producers-list" n:if="$productsCount && isset($subcategories) && count($subcategories)">
+			{cache 'subcategory_' . $category->id, tags => [$categoryCacheTag . $category->id]}
+				<div n:foreach="$subcategories as $subcategory" class="col-md-4 col-sm-12">
+					<div class="product product-sm-left">
+						<div class="product-img-wrap">
+							<img class="product-img" src="{$basePath}/foto/{$subcategory->image|size:200}"
+								 alt="{$subcategory->getName()}"
+								 title="{$subcategory->getName()}"/>
+						</div>
+						<a n:href="Category: 'c' => $subcategory->getUrlId(), 'slug' => $subcategory->getSlug()"
+								class="product-link"></a>
+						<div class="product-caption">
+							<h3 class="product-caption-title">
+								{$subcategory->getName()}
+							</h3>
 						</div>
 					</div>
-				{/cache}
-			{/ifset}
-			{control products:filter}
+				</div>
+			{/cache}
 		</div>
 
-		{control products:list}
+		<div class="row">
+			{control products:list}
+		</div>
 
 		<!-- BEGIN PAGINATOR -->
 		<div class="row">

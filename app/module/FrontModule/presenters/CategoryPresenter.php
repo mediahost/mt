@@ -48,6 +48,7 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 		$keywords = $description = [];
 		if ($this->category) {
 			$products->addFilterCategory($this->category);
+			$this->template->productsCount = $products->getCount();
 			$this->template->category = $this->category;
 			$this->template->subcategories = $this->subcategories;
 			$title = $this->category->getTreeName(' | ', TRUE);

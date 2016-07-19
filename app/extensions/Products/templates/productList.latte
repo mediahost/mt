@@ -3,18 +3,18 @@
 	{foreach $stocks as $stock}
 		{var isLastOnRow => !($iterator->counter % $itemsPerRow)}
 		{if $iterator->first}
-			<div class="row product-list">
-			{/if}
+			<div class="row" data-gutter="15">
+		{/if}
 			<!-- PRODUCT ITEM START -->
 			<div class="col-md-4 col-sm-6 col-xs-12">
 				{control stock-$stock->id}
 			</div>
 			<!-- PRODUCT ITEM END -->
-			{if $iterator->last}
+		{if $iterator->last}
 			</div>
 		{elseif $isLastOnRow}
-		</div>
-		<div class="row product-list">
+			</div>
+			<div class="row" data-gutter="15">
 		{/if}
 	{/foreach}
 	{if !count($stocks)}

@@ -1,62 +1,68 @@
 {snippet productFilter}
 	{form filterForm}
 		{? $form->render('begin')}
-		<div class="row">
-			<div class="form-group col-sm-7">
+
+		<aside class="category-filters">
+
+			<div class="category-filters-section">
+				<h3 class="widget-title-sm">{_'Price'}</h3>
 				{input price}
 			</div>
-			<div class="form-group col-sm-2 available">
-				{input onlyAvailable}
-			</div>
-			<div class="form-group col-sm-3 text-center more">
-				<a class="btn btn-default" role="button" data-toggle="collapse" href="#filter-div" 
-				   aria-expanded="true" aria-controls="filter-div">
-					{_'More params'}
-					<i class="fa fa-angle-down"></i>
-				</a>
-			</div>
-		</div>
-		<div id="filter-div" n:class="margin-bottom-0, collapse, $expandFilter ? in">
-			<div class="form-group">
-				<h3>{_'Parameters'}</h3>
-				<div>
-					<div class="checkbox-list">
-						{ifset $form['B1']}
-							{input B1, class => "checkbox-inline"}
-						{/ifset}
-						{ifset $form['B2']}
-							{input B2, class => "checkbox-inline"}
-						{/ifset}
-						{ifset $form['B3']}
-							{input B3, class => "checkbox-inline"}
-						{/ifset}
-						{ifset $form['B4']}
-							{input B4, class => "checkbox-inline"}
-						{/ifset}
-						{ifset $form['B5']}
-							{input B5, class => "checkbox-inline"}
-						{/ifset}
-						{ifset $form['B5']}
-							{input B6, class => "checkbox-inline"}
-						{/ifset}
-					</div>
-					<div class="row m-t">
-						<div class="form-group col-sm-4" n:ifset="$form['S1']">
-							{label S1 /}<br>
-							{input S1, class => 'select2 form-control input-medium'}
-						</div>
-						<div class="form-group col-sm-4" n:ifset="$form['S2']">
-							{label S2 /}<br>
-							{input S2, class => 'select2 form-control input-medium'}
-						</div>
-						<div class="form-group col-sm-4" n:ifset="$form['S3']">
-							{label S3 /}<br>
-							{input S3, class => 'select2 form-control input-medium'}
-						</div>
-					</div>
+
+			<div class="category-filters-section">
+				<h3 class="widget-title-sm">{_'Show'}</h3>
+				<div class="checkbox">
+					{input onlyAvailable}
 				</div>
 			</div>
-		</div>
+
+			<div class="category-filters-section">
+				<h3 class="widget-title-sm">{_'Parameters'}</h3>
+				<div n:ifset="$form['B1']" class="checkbox">
+					{input B1}
+				</div>
+				<div n:ifset="$form['B2']" class="checkbox">
+					{input B2}
+				</div>
+				<div n:ifset="$form['B3']" class="checkbox">
+					{input B3}
+				</div>
+				<div n:ifset="$form['B4']" class="checkbox">
+					{input B4}
+				</div>
+				<div n:ifset="$form['B5']" class="checkbox">
+					{input B5}
+				</div>
+				<div n:ifset="$form['B6']" class="checkbox">
+					{input B6}
+				</div>
+			</div>
+
+			<div n:ifset="$form['S1']" class="category-filters-section multi-headers">
+				<h3 class="widget-title-sm">
+					{label S1 /}
+				</h3>
+				<div class="checkbox">
+					{input S1, class => 'select2 form-control input-fluid'}
+				</div>
+
+				<h3 class="widget-title-sm">
+					{label S2 /}
+				</h3>
+				<div class="checkbox">
+					{input S2, class => 'select2 form-control input-fluid'}
+				</div>
+
+				<h3 class="widget-title-sm">
+					{label S3 /}
+				</h3>
+				<div class="checkbox">
+					{input S3, class => 'select2 form-control input-fluid'}
+				</div>
+			</div>
+
+		</aside>
+
 		{? $form->render('end')}
 	{/form}
 {/snippet}

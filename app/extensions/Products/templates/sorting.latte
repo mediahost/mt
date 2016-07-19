@@ -2,14 +2,14 @@
 	{if count($stocks)}
 		{form sortingForm}
 			{? $form->render('begin')}
-			<div class="row list-view-sorting clearfix">
-				<div class="pull-right" 
-					 n:foreach="$form->getComponents() as $name => $component" 
-					 n:if="$component instanceof Nette\Forms\Controls\SelectBox">
-					{!=$form->renderer->renderLabel($form[$name])}
-					{input $form[$name]}
-				</div>
-			</div>
+
+			<ul class="category-selections clearfix">
+				<li n:foreach="$form->getComponents() as $name => $component"
+						n:if="$component instanceof Nette\Forms\Controls\SelectBox">
+					{label $form[$name] class => 'category-selections-sign'/}
+					{input $form[$name] class => 'category-selections-select'}
+				</li>
+			</ul>
 			{? $form->render('end')}
 		{/form}
 	{/if}

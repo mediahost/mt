@@ -19,7 +19,7 @@ trait ProductImages
 	/** @ORM\OneToOne(targetEntity="Image", cascade="all") */
 	protected $image;
 
-	/** 
+	/**
 	 * @ORM\ManyToMany(targetEntity="Image", cascade="all")
 	 * @var ArrayCollection
 	 */
@@ -42,12 +42,12 @@ trait ProductImages
 		$image = new Image($file);
 		$image->requestedFilename = 'product_image_' . Strings::webalize(microtime());
 		$image->setFolder(Image::FOLDER_PRODUCTS);
-		
+
 		$this->images->add($image);
-		
+
 		return $this;
 	}
-	
+
 	public function hasOtherImage(Image $image)
 	{
 		$containImage = function ($key, Image $item) use ($image) {
@@ -55,17 +55,25 @@ trait ProductImages
 		};
 		return $this->images->exists($containImage);
 	}
-	
+
 	public function removeOtherImage($id)
 	{
 		$removeById = function ($key, Image $image) use ($id) {
-			if ((int) $image->id === (int) $id) {
+			if ((int)$image->id === (int)$id) {
 				$this->images->removeElement($image);
 			}
 			return TRUE;
 		};
 		$this->images->forAll($removeById);
 		return $this;
+	}
+
+	public function getSecondImage()
+	{
+		foreach ($this->images as $image) {
+			return $image;
+		}
+		return NULL;
 	}
 
 }

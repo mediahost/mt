@@ -1,46 +1,48 @@
-<div class="product-item-container">
-	{snippet stockPrint}
-        {foreach $flashes as $flash}
-            <div class="alert alert-{$flash->type} alert-dismissable alert-auto-dismiss">
-				<button type="button" class="close close-large" data-dismiss="alert" aria-hidden="true"></button>
-				{$flash->message}
-            </div>
-        {/foreach}
+{snippet stockPrint}
+	<div class="product" id="{$id}">
+        {*{foreach $flashes as $flash}*}
+            {*<div class="alert alert-{$flash->type} alert-dismissable alert-auto-dismiss">*}
+				{*<button type="button" class="close close-large" data-dismiss="alert" aria-hidden="true"></button>*}
+				{*{$flash->message}*}
+            {*</div>*}
+        {*{/foreach}*}
 
 		{var blockId => 'stockPrint' . $stock->id}
 		{var product => $stock->product}
 		{var countInBasket => $basket->getCountInBasket($stock)}
-		<div class="product-item" id="{$id}">
-			<div class="pi-img-wrapper">
-				<img src="{$basePath}/foto/{$product->image|size:'250'}" class="img-responsive" alt="{$product}" />
-				<span class="pi-cart-count" n:if="$countInBasket">
-					{$countInBasket}
-					<img src="{$basePath}/assets/frontend/img/cart.svg">
-				</span>
-				<div>
-					<a href="{$basePath}/foto/{$product->image|size}" 
-					   class="btn btn-default fancybox-button">
-						{_'Zoom'}
-					</a>
-					<a href="{plink Product: 'id' => $stock->getUrlId(), 'slug' => $stock->getSlug()}"
-					   class="btn btn-default fancybox-fast-view">
-						{_'View'}
-					</a>
-				</div>
-			</div>
-			<h3>
-				<a href="{plink Product: 'id' => $stock->getUrlId(), 'slug' => $stock->getSlug()}">
-					{$product}
-				</a>
-			</h3>
-			<div class="pi-price">{$stock->getPrice($priceLevel)|currencyVat}</div>
 
-			<a n:href="addToCart!" 
-			   n:class="btn, btn-default, add2cart, ajax, !$basket->getCountAllowedToAdd($stock) ? disabled"
-			   data-target-loading="#{$id}">{_'Add to cart'}</a>
-
-			<div n:if="$product->hasSign($newSign)" class="sticker sticker-new"></div>
-			<div n:if="$product->hasSign($saleSign)" class="sticker sticker-sale"></div>
+		<ul class="product-labels">
+			<li n:if="$product->hasSign($newSign)">{_'New'}</li>
+			<li n:if="$product->hasSign($saleSign)">{_'Sale'}</li>
+			<li n:if="$countInBasket">
+				<i class="fa fa-cart"></i>
+				{$countInBasket}
+			</li>
+		</ul>
+		<div n:class="$product->secondImage ? product-img-wrap : product-img-wrap-single">
+			<img class="product-img-primary" src="{$basePath}/foto/{$product->image|size:300}"
+				 alt="{$product}" title="{$product}" />
+			<img n:if="$product->secondImage" class="product-img-alt" src="{$basePath}/foto/{$product->secondImage|size:300}"
+				 alt="{$product}" title="{$product}" />
 		</div>
-	{/snippet}
-</div>
+		<a class="product-link" href="{plink Product: 'id' => $stock->getUrlId(), 'slug' => $stock->getSlug()}"></a>
+		<div class="product-caption">
+			<h5 class="product-caption-title">
+				{$product}
+			</h5>
+			<div class="product-caption-price">
+				<span class="product-caption-price-new">
+					{$stock->getPrice($priceLevel)|currencyVat}
+				</span>
+			</div>
+			<ul class="product-caption-feature-list">
+				<li>3 left</li>
+				<li>Free Shipping</li>
+			</ul>
+
+			{*<a n:href="addToCart!"*}
+					{*n:class="btn, btn-default, add2cart, ajax, !$basket->getCountAllowedToAdd($stock) ? disabled"*}
+					{*data-target-loading="#{$id}">{_'Add to cart'}</a>*}
+		</div>
+	</div>
+{/snippet}

@@ -147,6 +147,9 @@ class ProductList extends Control
 	/** @var bool */
 	protected $ajax;
 
+	/** @var bool */
+	protected $filterApplied = FALSE;
+
 	// </editor-fold>
 
 	/* 	 ADD FILTERS *************************************************************************************** */
@@ -480,6 +483,8 @@ class ProductList extends Control
 	 */
 	public function getCount()
 	{
+		$this->applyFiltering();
+
 		if ($this->count === NULL) {
 			$paginator = new DoctrinePaginator($this->qb->getQuery());
 			$this->count = $paginator->count();
@@ -671,6 +676,9 @@ class ProductList extends Control
 
 	protected function applyFiltering()
 	{
+		if ($this->filterApplied) {
+			return $this;
+		}
 		$this->filterNotDeleted();
 		$this->filterOnlyActive();
 		$this->filterByInStore($this->showOnlyAvailable);
@@ -715,6 +723,9 @@ class ProductList extends Control
 		if ($this->maxPrice) {
 			$this->filterByPrice([$this->minPrice, $this->maxPrice]);
 		}
+
+		$this->filterApplied = TRUE;
+		return $this;
 	}
 
 	protected function filterNotDeleted()
@@ -1157,7 +1168,7 @@ class ProductList extends Control
 		$toValue = $this->maxPrice ? ceil($this->exchange->change($this->maxPrice)) : NULL;
 
 		$form->addText('price', 'Range:')
-				->setAttribute('data-min', $limitMinPrice)
+				->setAttribute('data-min', 100)
 				->setAttribute('data-max', $limitMaxPrice)
 				->setAttribute('data-from', $fromValue)
 				->setAttribute('data-to', $toValue)

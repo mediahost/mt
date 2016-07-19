@@ -1,21 +1,5 @@
 "use strict";
 
-//  i Check plugin
-$('.i-check, .i-radio').iCheck({
-    checkboxClass: 'i-check',
-    radioClass: 'i-radio'
-});
-
-// price slider
-$("#price-slider").ionRangeSlider({
-    min: 130,
-    max: 575,
-    type: 'double',
-    prefix: "$",
-    prettify: false,
-    hasGrid: false
-});
-
 $('#jqzoom').jqzoom({
     zoomType: 'standard',
     lens: true,
