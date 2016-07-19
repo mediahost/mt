@@ -1,5 +1,3 @@
-{*{includeblock '../categories.latte'}*}
-
 {block breadcrumbItems}
 	<li n:foreach="$product->mainCategory->pathWithThis as $category">
 		<a n:href="Category: 'c' => $category->getUrlId(), 'slug' => $category->getSlug()">{$category}</a>
