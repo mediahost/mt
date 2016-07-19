@@ -5,8 +5,11 @@ namespace App\AppModule\Presenters;
 use App\Extensions\Installer;
 use App\Extensions\LimitExceededException;
 use App\Extensions\WrongSituationException;
+use App\Model\Entity\Product;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Tools\SchemaTool;
 use Kdyby\Doctrine\Connection;
 use Nette\Utils\FileSystem;
@@ -43,7 +46,7 @@ class ServicePresenter extends BasePresenter
 	 */
 	public function actionTools()
 	{
-		
+
 	}
 
 	/**
@@ -53,7 +56,7 @@ class ServicePresenter extends BasePresenter
 	 */
 	public function actionCreators()
 	{
-		
+
 	}
 
 	/**
@@ -122,10 +125,23 @@ class ServicePresenter extends BasePresenter
 		$this->redirect('this');
 	}
 
+	/**
+	 * @secured
+	 * @resource('service')
+	 * @privilege('reSaveAccessoriesFor')
+	 */
+	public function handleReSaveAccessoriesFor()
+	{
+		$count = $this->resaveProductsAccessoriesFor();
+		$message = $this->translator->translate('%count% products was updated', $count);
+		$this->flashMessage($message, 'success');
+		$this->redirect('this');
+	}
+
 	private function removeCache()
 	{
 		$cacheFolder = './../temp/cache/';
-		
+
 		foreach (scandir(realpath($cacheFolder)) as $key => $folder) {
 			$folderName = realpath($cacheFolder . $folder);
 			if ($folder !== '.' && $folder !== '..' && !preg_match('/^\.delete/', $folder)) {
@@ -133,14 +149,14 @@ class ServicePresenter extends BasePresenter
 				FileSystem::rename($folderName, $newName);
 			}
 		}
-		
+
 		foreach (scandir(realpath($cacheFolder)) as $folder) {
 			$folderName = realpath($cacheFolder . $folder);
 			if (preg_match('/^\.delete/', $folder)) {
 				FileSystem::delete($folderName);
 			}
 		}
-		
+
 		return $this;
 	}
 
@@ -163,9 +179,9 @@ class ServicePresenter extends BasePresenter
 	{
 		FileSystem::delete(realpath('./../temp/install/'));
 		$this->installer
-				->setInstallDoctrine(TRUE)
-				->setInstallAdminer(FALSE)
-				->setInstallComposer(FALSE);
+			->setInstallDoctrine(TRUE)
+			->setInstallAdminer(FALSE)
+			->setInstallComposer(FALSE);
 		$this->installer->install();
 		return $this;
 	}
@@ -173,6 +189,33 @@ class ServicePresenter extends BasePresenter
 	private function importDbAll()
 	{
 		return $this;
+	}
+
+	private function resaveProductsAccessoriesFor()
+	{
+		$rsm = new ResultSetMapping();
+		$rsm->addEntityResult(Product::getClassName(), 'p');
+		$rsm->addFieldResult('p', 'product_id', 'id');
+		$sql = "SELECT DISTINCT `product_id`
+				FROM `product_producer_model`
+				LEFT JOIN `product` ON `product_producer_model`.`product_id` = `product`.`id`
+				WHERE `product`.`accessories_producer_ids` = ''
+				LIMIT :limit";
+		$query = $this->em->createNativeQuery($sql, $rsm)
+		->setParameter('limit', 100);
+
+		$counter = 0;
+		$productsRepo = $this->em->getRepository(Product::getClassName());
+		foreach ($query->getResult(AbstractQuery::HYDRATE_ARRAY) as $item) {
+			$product = $productsRepo->find($item['id']);
+			if ($product) {
+				$product->updateAccessoriesForOptimized();
+				$this->em->persist($product);
+				$counter++;
+			}
+		}
+		$this->em->flush();
+		return $counter;
 	}
 
 }
