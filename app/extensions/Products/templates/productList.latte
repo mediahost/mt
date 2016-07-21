@@ -1,21 +1,11 @@
-{snippet productList}
+<div n:snippet="productList" class="row"{if count($stocks)} data-gutter="15"{/if}>
 	<!-- BEGIN PRODUCT LIST -->
 	{foreach $stocks as $stock}
-		{var isLastOnRow => !($iterator->counter % $itemsPerRow)}
-		{if $iterator->first}
-			<div class="row" data-gutter="15">
-		{/if}
-			<!-- PRODUCT ITEM START -->
-			<div class="col-md-4 col-sm-6 col-xs-12">
-				{control stock-$stock->id}
-			</div>
-			<!-- PRODUCT ITEM END -->
-		{if $iterator->last}
-			</div>
-		{elseif $isLastOnRow}
-			</div>
-			<div class="row" data-gutter="15">
-		{/if}
+		<!-- PRODUCT ITEM START -->
+		<div class="col-md-4 col-sm-6 col-xs-12">
+			{control stock-$stock->id}
+		</div>
+		<!-- PRODUCT ITEM END -->
 	{/foreach}
 	{if !count($stocks)}
 		<div class="note note-info">
@@ -27,4 +17,4 @@
 		</div>
 	{/if}
 	<!-- END PRODUCT LIST -->
-{/snippet}
+</div>

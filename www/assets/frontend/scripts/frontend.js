@@ -99,11 +99,18 @@ var Frontend = function () {
 		}
 	};
 
+	var handleDisableButtons = function () {
+		$(document).on('click', '.btn.disabled', function (e) {
+			e.preventDefault();
+		});
+	};
+
 	return {
 		init: function () {
 			handleICheck();
 			handleProductFilter();
 			handleProductDetail();
+			handleDisableButtons();
 		},
 		afterAjaxInit: function () {
 			handleInitICheck();

@@ -58,7 +58,8 @@
 	<!-- BEGIN CONTENT -->
 	<div class="col-md-9 col-sm-7">
 
-		<div class="row products producers-list" n:if="$productsCount && isset($subcategories) && count($subcategories)">
+		<div class="row products producers-list" data-gutter="15"
+				n:if="$productsCount && isset($subcategories) && count($subcategories)">
 			{cache 'subcategory_' . $category->id, tags => [$categoryCacheTag . $category->id]}
 				<div n:foreach="$subcategories as $subcategory" class="col-md-4 col-sm-12">
 					<div class="product product-sm-left">
@@ -79,14 +80,10 @@
 			{/cache}
 		</div>
 
-		<div class="row">
-			{control products:list}
-		</div>
+		{control products:list}
 
 		<!-- BEGIN PAGINATOR -->
-		<div class="row">
-			{control products:paginator}
-		</div>
+		{control products:paginator}
 		<!-- END PAGINATOR -->
 
 	</div>

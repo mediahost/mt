@@ -637,6 +637,12 @@ msgstr "Change Password"
 msgid "In Stock"
 msgstr "In Stock"
 
+msgid "In Stock > %count% %unit%"
+msgstr "In Stock > %count% %unit%"
+
+msgid "In Stock %count% %unit%"
+msgstr "%count% %unit% in stock"
+
 msgid "Temporarily Sold Out"
 msgstr "Temporarily Sold Out"
 

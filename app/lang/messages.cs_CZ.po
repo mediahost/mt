@@ -645,6 +645,12 @@ msgstr "Změnit heslo"
 msgid "In Stock"
 msgstr "Skladem"
 
+msgid "In Stock > %count% %unit%"
+msgstr "Skladem > %count% %unit%"
+
+msgid "In Stock %count% %unit%"
+msgstr "Skladem %count% %unit%"
+
 msgid "Temporarily Sold Out"
 msgstr "Dočasně vyprodáno"
 
