@@ -63,10 +63,18 @@
 			if (this.element && this.element.hasClass('loadingNoOverlay')) {
 				options.overlayColor = 'none';
 			}
-			Frontend.blockUI(options);
+			if (Frontend) {
+				Frontend.blockUI(options);
+			} else if (Metronic) {
+				Metronic.blockUI(options);
+			}
 		},
 		complete: function () {
-			Frontend.unblockUI(this.element);
+			if (Frontend) {
+				Frontend.unblockUI(this.element);
+			} else if (Metronic) {
+				Metronic.unblockUI(this.element);
+			}
 			if (this.moveTarget.length) {
 				$(document).scrollTop((this.moveTarget.offset().top - 20));
 			}

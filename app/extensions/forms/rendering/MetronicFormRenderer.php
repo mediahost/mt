@@ -2,6 +2,7 @@
 
 namespace App\Forms\Renderers;
 
+use App\Forms\Controls\ChoiseBased\CheckSwitch;
 use App\Forms\Controls\Custom\DatePicker;
 use Nette\Forms\Controls\Button;
 use Nette\Forms\Controls\Checkbox;
@@ -62,7 +63,7 @@ class MetronicFormRenderer extends ExtendedFormRenderer
 				$control instanceof MultiSelectBox ||
 				$control instanceof DatePicker) {
 			$control->getControlPrototype()->class('form-control', TRUE);
-		} else if ($control instanceof Checkbox) {
+		} else if ($control instanceof Checkbox && !$control instanceof CheckSwitch) {
 			$control->getControlPrototype()->class('i-check');
 			$control->getSeparatorPrototype()
 					->setName('div')
