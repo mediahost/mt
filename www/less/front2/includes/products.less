@@ -17,6 +17,23 @@
 }
 
 .product {
+	.product-labels {
+		& > li {
+			&.new {
+				background-color: #ec3835;
+			}
+			&.sale {
+				background-color: #f5b529;
+			}
+			&.top {
+				background-color: #66c36d;
+			}
+		}
+		&.right {
+			left: auto;
+			right: -3px;
+		}
+	}
 	.product-img-wrap {
 		height: auto;
 	}

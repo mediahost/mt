@@ -12,11 +12,14 @@
 		{var countInBasket => $basket->getCountInBasket($stock)}
 
 		<ul class="product-labels">
-			<li n:if="$product->hasSign($newSign)">{_'New'}</li>
-			<li n:if="$product->hasSign($saleSign)">{_'Sale'}</li>
+			<li n:if="$product->hasSign($newSign)" class="new">{_'New'}</li>
+			<li n:if="$product->hasSign($saleSign)" class="sale">{_'Sale'}</li>
+			<li n:if="$product->hasSign($topSign)" class="top">{_'Top'}</li>
+		</ul>
+		<ul class="product-labels right">
 			<li n:if="$countInBasket">
-				<i class="fa fa-cart"></i>
-				{$countInBasket}
+				<i class="fa fa-shopping-cart"></i>
+				{$countInBasket}x
 			</li>
 		</ul>
 		<div n:class="$product->secondImage ? product-img-wrap : product-img-wrap-single">
@@ -42,7 +45,7 @@
 				</div>
 				<div class="col-md-5 col-md-6 col-sm-12 col-xs-4 product-caption-button text-right">
 					<a n:href="addToCart!"
-							n:class="btn, $stock->inStore ? btn-primary : btn-default, add2cart, !$basket->getCountAllowedToAdd($stock) ? disabled">{_'Add to cart'}</a>
+							n:class="btn, $basket->getCountAllowedToAdd($stock) ? btn-primary : btn-default, add2cart, !$basket->getCountAllowedToAdd($stock) ? disabled">{_'Add to cart'}</a>
 				</div>
 			</div>
 			<div class="row">
@@ -52,7 +55,7 @@
 					{elseif $stock->inStore > 5}
 						<strong>{_'In Stock > %count% %unit%', 5, ['unit' => $product->unit]}</strong>
 					{elseif $stock->inStore > 0}
-						<strong>{_'In Stock > %count% %unit%', $stock->inStore, ['unit' => $product->unit]}</strong>
+						<strong>{_'In Stock %count% %unit%', $stock->inStore, ['unit' => $product->unit]}</strong>
 					{else}
 						<strong>{_'Temporarily Sold Out'}</strong>
 					{/if}
