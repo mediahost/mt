@@ -2,7 +2,6 @@
 	{if count($stocks)}
 		{form sortingForm}
 			{? $form->render('begin')}
-
 			<ul class="category-selections clearfix">
 				<li n:foreach="$form->getComponents() as $name => $component"
 						n:if="$component instanceof Nette\Forms\Controls\SelectBox">

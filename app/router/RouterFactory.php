@@ -214,9 +214,10 @@ class RouterFactory
 			'presenter' => 'Page',
 			'action' => 'default',
 		]);
-		$frontRouter[] = $routeCategory = new FilterRoute(self::LOCALE_PARAM . 'c/[<slug ' . $slugs . '>/]<c [0-9]+>.htm[l]', [
+		$frontRouter[] = $routeCategory = new FilterRoute(self::LOCALE_PARAM . 'c/[<slug ' . $slugs . '>/][page-<products-page \d+>/]<c [0-9]+>.htm[l]', [
 			'presenter' => 'Category',
 			'action' => 'default',
+			'products-page' => 1,
 		]);
 		$frontRouter[] = $routeProduct = new FilterRoute(self::LOCALE_PARAM . '[<slug [0-9a-z-]+>-]<id [0-9]+>.htm[l]', [
 			'presenter' => 'Product',

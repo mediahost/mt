@@ -114,6 +114,7 @@ var Frontend = function () {
 		},
 		afterAjaxInit: function () {
 			handleInitICheck();
+			handleProductFilter();
 		},
 		blockUI: function (options) {
 			handleBlockUi(options);

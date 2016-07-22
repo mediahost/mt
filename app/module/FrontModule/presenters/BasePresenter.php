@@ -275,12 +275,12 @@ abstract class BasePresenter extends BaseBasePresenter
 		$list->setItemsPerPage($this->settings->pageConfig->itemsPerRow, $this->settings->pageConfig->rowsPerPage);
 
 		$list->setAjax();
-		$list->setPriceLevel($this->priceLevel);
+		$list->setLevel($this->priceLevel);
 
-		$list->sorting = [
-			'price' => ProductList::ORDER_DESC,
-			'name' => ProductList::ORDER_ASC,
-		];
+		$list->setSorting([
+			ProductList::ORDER_BY_PRICE => ProductList::ORDER_ASC,
+			ProductList::ORDER_BY_NAME => ProductList::ORDER_ASC,
+		]);
 
 		$list->qb = $this->stockRepo->createQueryBuilder('s')
 				->innerJoin('s.product', 'p');

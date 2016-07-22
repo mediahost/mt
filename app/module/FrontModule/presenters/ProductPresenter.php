@@ -127,10 +127,10 @@ class ProductPresenter extends ProductCategoryBasePresenter
 		$list->filter = [
 			'fulltext' => $text,
 		];
-		$list->sorting = [
-			'name' => ProductList::ORDER_ASC,
-			'price' => ProductList::ORDER_DESC,
-		];
+		$list->setSorting([
+			ProductList::ORDER_BY_NAME => ProductList::ORDER_ASC,
+			ProductList::ORDER_BY_PRICE => ProductList::ORDER_DESC,
+		]);
 
 		$stocks = $list->getData(TRUE, FALSE);
 		$items = [];

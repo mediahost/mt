@@ -1,12 +1,5 @@
 {snippet stockPrint}
 	<div class="product" id="{$id}">
-		{*{foreach $flashes as $flash}*}
-		{*<div class="alert alert-{$flash->type} alert-dismissable alert-auto-dismiss">*}
-		{*<button type="button" class="close close-large" data-dismiss="alert" aria-hidden="true"></button>*}
-		{*{$flash->message}*}
-		{*</div>*}
-		{*{/foreach}*}
-
 		{var blockId => 'stockPrint' . $stock->id}
 		{var product => $stock->product}
 		{var countInBasket => $basket->getCountInBasket($stock)}
@@ -45,7 +38,7 @@
 				</div>
 				<div class="col-md-5 col-md-6 col-sm-12 col-xs-4 product-caption-button text-right">
 					<a n:href="addToCart!"
-							n:class="btn, $basket->getCountAllowedToAdd($stock) ? btn-primary : btn-default, add2cart, !$basket->getCountAllowedToAdd($stock) ? disabled">{_'Add to cart'}</a>
+							n:class="ajax, btn, $basket->getCountAllowedToAdd($stock) ? btn-primary : btn-default, add2cart, !$basket->getCountAllowedToAdd($stock) ? disabled">{_'Add to cart'}</a>
 				</div>
 			</div>
 			<div class="row">

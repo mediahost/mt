@@ -35,12 +35,15 @@ use Nette\Templating\FileTemplate;
 use Nette\Utils\ArrayHash;
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
+use Tracy\Debugger;
 
 class ProductList extends Control
 {
 
-	const ORDER_ASC = 'ASC';
-	const ORDER_DESC = 'DESC';
+	const ORDER_ASC = TRUE;
+	const ORDER_DESC = FALSE;
+	const ORDER_BY_PRICE = 'price';
+	const ORDER_BY_NAME = 'name';
 	const DEFAULT_PRICE_LEVEL = 'defaultPrice';
 
 	/** @var BasketFacade @inject */
@@ -70,9 +73,6 @@ class ProductList extends Control
 	/** @var int @persistent */
 	public $perPage;
 
-	/** @var string @persistent */
-	public $sort;
-
 	/** @var bool @persistent */
 	public $showOnlyAvailable = FALSE;
 
@@ -86,13 +86,28 @@ class ProductList extends Control
 	public $limitPrices = array();
 
 	/** @var int @persistent */
-	public $priceLevel;
+	public $pl;
 
 	/** @var array @persistent */
 	public $filter = array();
 
-	/** @var array @persistent */
-	public $sorting = array();
+	/**
+	 * Sorting by Price
+	 * @var bool @persistent
+	 */
+	public $sp = TRUE;
+
+	/**
+	 * Sorting by name
+	 * @var bool @persistent
+	 */
+	public $sn = TRUE;
+
+	/**
+	 * Sorting by price first
+	 * @var bool @persistent
+	 */
+	public $spf = TRUE;
 
 	/** @var array event on render */
 	public $onRender = [];
@@ -281,9 +296,9 @@ class ProductList extends Control
 		return $this;
 	}
 
-	public function setPriceLevel($level)
+	public function setLevel($level)
 	{
-		$this->priceLevel = $level;
+		$this->pl = $level;
 		return $this;
 	}
 
@@ -306,29 +321,18 @@ class ProductList extends Control
 	 */
 	public function setSorting($sort)
 	{
+		$i = 0;
 		foreach ($sort as $column => $dir) {
-			$this->checkSortDirection($column, $dir);
-			$this->sorting[$column] = $dir;
-		}
-
-		return $this;
-	}
-
-	public function addSorting($column, $dir = NULL, $asFirst = TRUE)
-	{
-		if ($dir === NULL && preg_match('/^(\w+)_(\w+)$/', $column, $matches)) {
-			$column = $matches[1];
-			$dir = $matches[2];
-		}
-		if (!$column) {
-			return $this;
-		}
-		$this->checkSortDirection($column, $dir);
-
-		if ($asFirst) {
-			$this->sorting = [$column => $dir] + $this->sorting;
-		} else {
-			$this->sorting[$column] = $dir;
+			if ($i === 0) {
+				$this->spf = $column === self::ORDER_BY_PRICE;
+			}
+			if ($column === self::ORDER_BY_PRICE) {
+				$this->sp = $dir ? self::ORDER_ASC : self::ORDER_DESC;
+			}
+			if ($column === self::ORDER_BY_NAME) {
+				$this->sn = $dir ? self::ORDER_ASC : self::ORDER_DESC;
+			}
+			$i++;
 		}
 
 		return $this;
@@ -399,17 +403,6 @@ class ProductList extends Control
 
 	// </editor-fold>
 	// <editor-fold defaultstate="collapsed" desc="protected setters">
-
-	protected function checkSortDirection($column, &$dir)
-	{
-		$replace = array('asc' => self::ORDER_ASC, 'desc' => self::ORDER_DESC);
-		$dir = strtr(strtolower($dir), $replace);
-		if (!in_array($dir, $replace)) {
-			throw new InvalidArgumentException("Dir '$dir' for column '$column' is not allowed.");
-		}
-
-		return $this;
-	}
 
 	protected function resetPerPageList($firstItem)
 	{
@@ -581,9 +574,9 @@ class ProductList extends Control
 
 	protected function getDefaultSortingMethod()
 	{
-		$sorting = $this->sorting;
-		list($name, $order) = each($sorting);
-		$code = Helpers::concatStrings('_', Strings::webalize($name), Strings::webalize($order));
+		$name = $this->spf ? self::ORDER_BY_PRICE : self::ORDER_BY_NAME;
+		$order = $this->spf ? $this->sp : $this->sn;
+		$code = Helpers::concatStrings('_', Strings::webalize($name), Strings::webalize($order ? '1' : '0'));
 
 		return $code;
 	}
@@ -598,10 +591,10 @@ class ProductList extends Control
 	protected function getSortingMethods()
 	{
 		return [
-			'price_asc' => 'Price (Low > High)',
-			'price_desc' => 'Price (High > Low)',
-			'name_asc' => 'Name (A - Z)',
-			'name_desc' => 'Name (Z - A)',
+			self::ORDER_BY_PRICE . '_1' => 'Price (Low > High)',
+			self::ORDER_BY_PRICE . '_0' => 'Price (High > Low)',
+			self::ORDER_BY_NAME . '_1' => 'Name (A - Z)',
+			self::ORDER_BY_NAME . '_0' => 'Name (Z - A)',
 		];
 	}
 
@@ -634,10 +627,10 @@ class ProductList extends Control
 
 	protected function getPriceLevelName()
 	{
-		if (!$this->priceLevelName && $this->priceLevel) {
+		if (!$this->priceLevelName && $this->pl) {
 			$allowedProperties = Stock::getPriceProperties();
-			if (array_key_exists($this->priceLevel, $allowedProperties)) {
-				$this->priceLevelName = $allowedProperties[$this->priceLevel];
+			if (array_key_exists($this->pl, $allowedProperties)) {
+				$this->priceLevelName = $allowedProperties[$this->pl];
 			} else {
 				$this->priceLevelName = self::DEFAULT_PRICE_LEVEL;
 			}
@@ -950,14 +943,21 @@ class ProductList extends Control
 
 	protected function applySorting()
 	{
-		try {
-			$this->addSorting($this->sort);
-		} catch (InvalidArgumentException $exc) {
-			throw new ProductListException('This sorting method isn\'t supported.');
+		if ($this->spf) {
+			$ordering = [
+				self::ORDER_BY_PRICE => $this->sp,
+				self::ORDER_BY_NAME => $this->sn,
+			];
+		} else {
+			$ordering = [
+				self::ORDER_BY_NAME => $this->sn,
+				self::ORDER_BY_PRICE => $this->sp,
+			];
 		}
 
 		$orderBy = new OrderBy();
-		foreach ($this->sorting as $key => $value) {
+		foreach ($ordering as $key => $value) {
+			$dir = $value ? 'ASC' : 'DESC';
 			switch ($key) {
 				case 'name':
 					$this->appendTranslation();
@@ -965,11 +965,11 @@ class ProductList extends Control
 							->andWhere('t.locale = :locale OR t.locale = :defaultLocale')
 							->setParameter('locale', $this->translator->getDefaultLocale())
 							->setParameter('defaultLocale', $this->translator->getDefaultLocale())
-							->orderBy('t.name', $value);
-					$orderBy->add('t.name', $value);
+							->orderBy('t.name', $dir);
+					$orderBy->add('t.name', $dir);
 					break;
 				case 'price':
-					$orderBy->add('s.' . $this->getPriceLevelName(), $value);
+					$orderBy->add('s.' . $this->getPriceLevelName(), $dir);
 					break;
 			}
 		}
@@ -1096,7 +1096,7 @@ class ProductList extends Control
 		}
 
 		$this->template->stocks = $data;
-		$this->template->priceLevel = $this->priceLevel;
+		$this->template->priceLevel = $this->pl;
 		$this->template->paginator = $this->paginator;
 		$this->template->itemsPerRow = $this->itemsPerRow;
 		$this->template->lang = $this->translator->getLocale();
@@ -1113,7 +1113,7 @@ class ProductList extends Control
 		return new Multiplier(function ($itemId) {
 			$control = $this->iStockPrint->create();
 			$control->setStockById($itemId);
-			$control->setPriceLevel($this->priceLevel);
+			$control->setPriceLevel($this->pl);
 			return $control;
 		});
 	}
@@ -1141,7 +1141,12 @@ class ProductList extends Control
 
 	public function processSortingForm(Form $param, ArrayHash $values)
 	{
-		$this->sort = $values->sort;
+		if (preg_match('/^(\w+)_(\w+)$/', $values->sort, $matches)) {
+			$column = $matches[1];
+			$dir = $matches[2] ? self::ORDER_ASC : self::ORDER_DESC;
+			$this->setSorting([$column => $dir]);
+		}
+
 		$key = array_search($values->perPage, $this->perPageList);
 		if ($key !== FALSE) {
 			$this->perPage = $key ? $values->perPage : NULL;
