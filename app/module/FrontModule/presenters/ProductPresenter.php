@@ -121,16 +121,11 @@ class ProductPresenter extends ProductCategoryBasePresenter
 	public function actionSearchJson($text, $getProductId = TRUE, $page = 1, $perPage = 10)
 	{
 		/* @var $list ProductList */
-		$list = $this['products'];
-		$list->setPage($page);
-		$list->setItemsPerPage($perPage);
-		$list->filter = [
-			'fulltext' => $text,
-		];
-		$list->setSorting([
-			ProductList::ORDER_BY_NAME => ProductList::ORDER_ASC,
-			ProductList::ORDER_BY_PRICE => ProductList::ORDER_DESC,
-		]);
+		$list = $this['products']
+			->setPage($page)
+			->setItemsPerPage($perPage)
+			->addFilterFulltext($text)
+			->setSorting(ProductList::SORT_BY_NAME_ASC);
 
 		$stocks = $list->getData(TRUE, FALSE);
 		$items = [];

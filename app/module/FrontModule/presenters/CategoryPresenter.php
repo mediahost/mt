@@ -13,10 +13,10 @@ use Nette\Utils\Strings;
 
 class CategoryPresenter extends ProductCategoryBasePresenter
 {
-	
+
 	/** @var Category */
 	private $category;
-	
+
 	/** @var array */
 	private $subcategories = [];
 
@@ -38,12 +38,12 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 		$this->setActiveCategory($this->category);
 		$this->subcategories = $this->category->children;
 	}
-	
+
 	public function renderDefault()
 	{
 		/* @var $products ProductList */
 		$products = $this['products'];
-		
+
 		$title = NULL;
 		$keywords = $description = [];
 		if ($this->category) {
@@ -60,7 +60,7 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 			$this->template->searched = $this->searched;
 			$title = $keywords = $description = $this->searched;
 		}
-		
+
 		$this->changePageInfo(self::PAGE_INFO_TITLE, $title);
 		$this->changePageInfo(self::PAGE_INFO_KEYWORDS, $keywords);
 		$this->changePageInfo(self::PAGE_INFO_DESCRIPTION, $description);
@@ -85,14 +85,11 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 	public function actionSearchJson($text, $page = 1, $perPage = 10)
 	{
 		/* @var $list ProductList */
-		$list = $this['products'];
-		$list->setPage($page);
-		$list->setItemsPerPage($perPage);
-		$list->addFilterFulltext($text);
-		$list->setSorting([
-			ProductList::ORDER_BY_NAME => ProductList::ORDER_ASC,
-			ProductList::ORDER_BY_PRICE => ProductList::ORDER_DESC,
-		]);
+		$list = $this['products']
+			->setPage($page)
+			->setItemsPerPage($perPage)
+			->addFilterFulltext($text)
+			->setSorting(ProductList::SORT_BY_NAME_ASC);
 
 		$stocks = $list->getData(TRUE, FALSE);
 		$items = [];
@@ -102,7 +99,7 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 			$price = $stock->getPrice($this->priceLevel);
 			$item = [];
 			$item['id'] = $stock->id;
-			$item['text'] = (string) $product;
+			$item['text'] = (string)$product;
 			$item['shortText'] = Strings::truncate($item['text'], 30);
 			$item['description'] = $product->description;
 			$item['perex'] = $product->perex;

@@ -40,10 +40,10 @@ use Tracy\Debugger;
 class ProductList extends Control
 {
 
-	const ORDER_ASC = TRUE;
-	const ORDER_DESC = FALSE;
-	const ORDER_BY_PRICE = 'price';
-	const ORDER_BY_NAME = 'name';
+	const SORT_BY_PRICE_ASC = 1;
+	const SORT_BY_PRICE_DESC = 2;
+	const SORT_BY_NAME_ASC = 3;
+	const SORT_BY_NAME_DESC = 4;
 	const DEFAULT_PRICE_LEVEL = 'defaultPrice';
 
 	/** @var BasketFacade @inject */
@@ -91,23 +91,8 @@ class ProductList extends Control
 	/** @var array @persistent */
 	public $filter = array();
 
-	/**
-	 * Sorting by Price
-	 * @var bool @persistent
-	 */
-	public $sp = TRUE;
-
-	/**
-	 * Sorting by name
-	 * @var bool @persistent
-	 */
-	public $sn = TRUE;
-
-	/**
-	 * Sorting by price first
-	 * @var bool @persistent
-	 */
-	public $spf = TRUE;
+	/** @var int @persistent */
+	public $sorting = self::SORT_BY_PRICE_ASC;
 
 	/** @var array event on render */
 	public $onRender = [];
@@ -241,7 +226,7 @@ class ProductList extends Control
 	public function addFilterFulltext($text)
 	{
 		$this->setFilter([
-			'fulltext' => (string) $text,
+			'fulltext' => (string)$text,
 		]);
 		if (!count($this->limitPrices)) {
 			$this->limitPrices = $this->stockFacade->getLimitPrices($this->getPriceLevelName());
@@ -252,7 +237,7 @@ class ProductList extends Control
 	public function addFilterUpdatedFrom($time)
 	{
 		$this->setFilter([
-			'updatedFrom' => (string) $time,
+			'updatedFrom' => (string)$time,
 		]);
 		return $this;
 	}
@@ -260,7 +245,7 @@ class ProductList extends Control
 	public function addFilterCreatedFrom($time)
 	{
 		$this->setFilter([
-			'createdFrom' => (string) $time,
+			'createdFrom' => (string)$time,
 		]);
 		return $this;
 	}
@@ -321,18 +306,13 @@ class ProductList extends Control
 	 */
 	public function setSorting($sort)
 	{
-		$i = 0;
-		foreach ($sort as $column => $dir) {
-			if ($i === 0) {
-				$this->spf = $column === self::ORDER_BY_PRICE;
-			}
-			if ($column === self::ORDER_BY_PRICE) {
-				$this->sp = $dir ? self::ORDER_ASC : self::ORDER_DESC;
-			}
-			if ($column === self::ORDER_BY_NAME) {
-				$this->sn = $dir ? self::ORDER_ASC : self::ORDER_DESC;
-			}
-			$i++;
+		switch ($sort) {
+			case self::SORT_BY_PRICE_ASC:
+			case self::SORT_BY_PRICE_DESC:
+			case self::SORT_BY_NAME_ASC:
+			case self::SORT_BY_NAME_DESC:
+				$this->sorting = $sort;
+				break;
 		}
 
 		return $this;
@@ -340,8 +320,8 @@ class ProductList extends Control
 
 	public function setItemsPerPage($itemsPerRow, $rowsPerPage = 1)
 	{
-		$itemsPerRowInt = (int) $itemsPerRow;
-		$rowsPerPageInt = (int) $rowsPerPage;
+		$itemsPerRowInt = (int)$itemsPerRow;
+		$rowsPerPageInt = (int)$rowsPerPage;
 		$this->itemsPerRow = $itemsPerRowInt ? $itemsPerRowInt : 1;
 		$this->rowsPerPage = $rowsPerPageInt ? $rowsPerPageInt : 1;
 		$itemsPerPage = $this->getDefaultPerPage();
@@ -572,15 +552,6 @@ class ProductList extends Control
 		return $this->itemsPerRow * $this->rowsPerPage;
 	}
 
-	protected function getDefaultSortingMethod()
-	{
-		$name = $this->spf ? self::ORDER_BY_PRICE : self::ORDER_BY_NAME;
-		$order = $this->spf ? $this->sp : $this->sn;
-		$code = Helpers::concatStrings('_', Strings::webalize($name), Strings::webalize($order ? '1' : '0'));
-
-		return $code;
-	}
-
 	/** @return array */
 	protected function getItemsForCountSelect()
 	{
@@ -591,10 +562,10 @@ class ProductList extends Control
 	protected function getSortingMethods()
 	{
 		return [
-			self::ORDER_BY_PRICE . '_1' => 'Price (Low > High)',
-			self::ORDER_BY_PRICE . '_0' => 'Price (High > Low)',
-			self::ORDER_BY_NAME . '_1' => 'Name (A - Z)',
-			self::ORDER_BY_NAME . '_0' => 'Name (Z - A)',
+			self::SORT_BY_PRICE_ASC => 'Price (Low > High)',
+			self::SORT_BY_PRICE_DESC => 'Price (High > Low)',
+			self::SORT_BY_NAME_ASC => 'Name (A - Z)',
+			self::SORT_BY_NAME_DESC => 'Name (Z - A)',
 		];
 	}
 
@@ -724,9 +695,9 @@ class ProductList extends Control
 	protected function filterNotDeleted()
 	{
 		$this->qb
-				->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
-				->andWhere('p.deletedAt IS NULL OR p.deletedAt > :now')
-				->setParameter('now', new DateTime());
+			->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
+			->andWhere('p.deletedAt IS NULL OR p.deletedAt > :now')
+			->setParameter('now', new DateTime());
 
 		return $this;
 	}
@@ -734,9 +705,9 @@ class ProductList extends Control
 	protected function filterOnlyActive()
 	{
 		$this->qb
-				->andWhere('s.active = :active')
-				->andWhere('p.active = :active')
-				->setParameter('active', TRUE);
+			->andWhere('s.active = :active')
+			->andWhere('p.active = :active')
+			->setParameter('active', TRUE);
 
 		return $this;
 	}
@@ -745,8 +716,8 @@ class ProductList extends Control
 	{
 		$dateTime = $time instanceof DateTime ? $time : DateTime::from($time);
 		$this->qb
-				->andWhere('s.updatedAt >= :time OR p.updatedAt >= :time')
-				->setParameter('time', $dateTime);
+			->andWhere('s.updatedAt >= :time OR p.updatedAt >= :time')
+			->setParameter('time', $dateTime);
 
 		return $this;
 	}
@@ -755,8 +726,8 @@ class ProductList extends Control
 	{
 		$dateTime = $time instanceof DateTime ? $time : DateTime::from($time);
 		$this->qb
-				->andWhere('s.createdAt >= :time OR p.createdAt >= :time')
-				->setParameter('time', $dateTime);
+			->andWhere('s.createdAt >= :time OR p.createdAt >= :time')
+			->setParameter('time', $dateTime);
 
 		return $this;
 	}
@@ -767,12 +738,12 @@ class ProductList extends Control
 		$this->qb->innerJoin('p.categories', 'categories');
 		if (is_array($category)) {
 			$this->qb
-					->andWhere('categories IN (:categories)')
-					->setParameter('categories', $category);
+				->andWhere('categories IN (:categories)')
+				->setParameter('categories', $category);
 		} else {
 			$this->qb
-					->andWhere('categories = :category')
-					->setParameter('category', $category);
+				->andWhere('categories = :category')
+				->setParameter('category', $category);
 		}
 
 		return $this;
@@ -783,12 +754,12 @@ class ProductList extends Control
 		$category = is_string($category) ? explode(',', $category) : $category;
 		if (is_array($category)) {
 			$this->qb
-					->andWhere('p.mainCategory NOT IN (:categories)')
-					->setParameter('categories', $category);
+				->andWhere('p.mainCategory NOT IN (:categories)')
+				->setParameter('categories', $category);
 		} else {
 			$this->qb
-					->andWhere('p.mainCategory != :category')
-					->setParameter('category', $category);
+				->andWhere('p.mainCategory != :category')
+				->setParameter('category', $category);
 		}
 
 		return $this;
@@ -798,12 +769,12 @@ class ProductList extends Control
 	{
 		if (is_array($producer)) {
 			$this->qb
-					->andWhere('p.producer IN (:producers)')
-					->setParameter('producers', $producer);
+				->andWhere('p.producer IN (:producers)')
+				->setParameter('producers', $producer);
 		} else {
 			$this->qb
-					->andWhere('p.producer = :producer')
-					->setParameter('producer', $producer);
+				->andWhere('p.producer = :producer')
+				->setParameter('producer', $producer);
 		}
 
 		return $this;
@@ -813,12 +784,12 @@ class ProductList extends Control
 	{
 		if (is_array($line)) {
 			$this->qb
-					->andWhere('p.producerLine IN (:lines)')
-					->setParameter('lines', $line);
+				->andWhere('p.producerLine IN (:lines)')
+				->setParameter('lines', $line);
 		} else {
 			$this->qb
-					->andWhere('p.producerLine = :line')
-					->setParameter('line', $line);
+				->andWhere('p.producerLine = :line')
+				->setParameter('line', $line);
 		}
 
 		return $this;
@@ -828,12 +799,12 @@ class ProductList extends Control
 	{
 		if (is_array($model)) {
 			$this->qb
-					->andWhere('p.producerModel IN (:models)')
-					->setParameter('models', $model);
+				->andWhere('p.producerModel IN (:models)')
+				->setParameter('models', $model);
 		} else {
 			$this->qb
-					->andWhere('p.producerModel = :model')
-					->setParameter('model', $model);
+				->andWhere('p.producerModel = :model')
+				->setParameter('model', $model);
 		}
 
 		return $this;
@@ -844,12 +815,12 @@ class ProductList extends Control
 		$this->qb->innerJoin('p.accessoriesFor', 'accessoriesFor');
 		if (is_array($model)) {
 			$this->qb
-					->andWhere('accessoriesFor IN (:models)')
-					->setParameter('models', $model);
+				->andWhere('accessoriesFor IN (:models)')
+				->setParameter('models', $model);
 		} else {
 			$this->qb
-					->andWhere('accessoriesFor = :model')
-					->setParameter('model', $model);
+				->andWhere('accessoriesFor = :model')
+				->setParameter('model', $model);
 		}
 
 		return $this;
@@ -920,7 +891,7 @@ class ProductList extends Control
 	{
 		if ($isInStore) {
 			$this->qb->andWhere("s.inStore >= :inStore")
-					->setParameter('inStore', 1);
+				->setParameter('inStore', 1);
 		}
 
 		return $this;
@@ -936,43 +907,36 @@ class ProductList extends Control
 				$operator = '=';
 			}
 			$this->qb->andWhere("p.parameter{$code} {$operator} :{$paramKey}")
-					->setParameter($paramKey, $value);
+				->setParameter($paramKey, $value);
 		}
 		return $this;
 	}
 
 	protected function applySorting()
 	{
-		if ($this->spf) {
-			$ordering = [
-				self::ORDER_BY_PRICE => $this->sp,
-				self::ORDER_BY_NAME => $this->sn,
-			];
-		} else {
-			$ordering = [
-				self::ORDER_BY_NAME => $this->sn,
-				self::ORDER_BY_PRICE => $this->sp,
-			];
+		$orderBy = new OrderBy();
+
+		switch ($this->sorting) {
+			case self::SORT_BY_PRICE_ASC:
+			case self::SORT_BY_PRICE_DESC:
+				$dir = $this->sorting === self::SORT_BY_PRICE_ASC ? 'ASC' : 'DESC';
+				$orderBy->add('s.' . $this->getPriceLevelName(), $dir);
+				break;
+			case self::SORT_BY_NAME_ASC:
+			case self::SORT_BY_NAME_DESC:
+				$dir = $this->sorting === self::SORT_BY_NAME_ASC ? 'ASC' : 'DESC';
+				$this->appendTranslation();
+				$this->qb
+					->andWhere('t.locale = :locale OR t.locale = :defaultLocale')
+					->setParameter('locale', $this->translator->getDefaultLocale())
+					->setParameter('defaultLocale', $this->translator->getDefaultLocale())
+					->orderBy('t.name', $dir);
+				$orderBy->add('t.name', $dir);
+				break;
+			default:
+				return $this;
 		}
 
-		$orderBy = new OrderBy();
-		foreach ($ordering as $key => $value) {
-			$dir = $value ? 'ASC' : 'DESC';
-			switch ($key) {
-				case 'name':
-					$this->appendTranslation();
-					$this->qb
-							->andWhere('t.locale = :locale OR t.locale = :defaultLocale')
-							->setParameter('locale', $this->translator->getDefaultLocale())
-							->setParameter('defaultLocale', $this->translator->getDefaultLocale())
-							->orderBy('t.name', $dir);
-					$orderBy->add('t.name', $dir);
-					break;
-				case 'price':
-					$orderBy->add('s.' . $this->getPriceLevelName(), $dir);
-					break;
-			}
-		}
 		if ($orderBy->count()) {
 			$this->qb->orderBy($orderBy);
 		}
@@ -981,14 +945,14 @@ class ProductList extends Control
 	protected function applyPaging()
 	{
 		$paginator = $this->getPaginator()
-				->setItemCount($this->getCount())
-				->setPage($this->page);
+			->setItemCount($this->getCount())
+			->setPage($this->page);
 
 		$offset = $paginator->getOffset();
 		$limit = $paginator->getLength();
 		$this->qb
-				->setFirstResult($offset)
-				->setMaxResults($limit);
+			->setFirstResult($offset)
+			->setMaxResults($limit);
 	}
 
 	// </editor-fold>
@@ -1123,14 +1087,14 @@ class ProductList extends Control
 		$form = new Form($this, $name);
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
-		$form->getElementPrototype()->class = ['sendOnChange', 'loadingNoOverlay', !$this->ajax ? : 'ajax'];
+		$form->getElementPrototype()->class = ['sendOnChange', 'loadingNoOverlay', !$this->ajax ?: 'ajax'];
 
 		$form->addSelect('sort', 'Sort by', $this->getSortingMethods())
-				->setDefaultValue($this->getDefaultSortingMethod())
-				->getControlPrototype()->class('input-sm');
+			->setDefaultValue($this->sorting)
+			->getControlPrototype()->class('input-sm');
 
 		$form->addSelect('perPage', 'Show', $this->getItemsForCountSelect())
-				->getControlPrototype()->class('input-sm');
+			->getControlPrototype()->class('input-sm');
 		$defaultPerPage = array_search($this->perPage, $this->perPageList);
 		if ($defaultPerPage !== FALSE) {
 			$form['perPage']->setDefaultValue($this->perPage);
@@ -1141,12 +1105,7 @@ class ProductList extends Control
 
 	public function processSortingForm(Form $param, ArrayHash $values)
 	{
-		if (preg_match('/^(\w+)_(\w+)$/', $values->sort, $matches)) {
-			$column = $matches[1];
-			$dir = $matches[2] ? self::ORDER_ASC : self::ORDER_DESC;
-			$this->setSorting([$column => $dir]);
-		}
-
+		$this->setSorting($values->sort);
 		$key = array_search($values->perPage, $this->perPageList);
 		if ($key !== FALSE) {
 			$this->perPage = $key ? $values->perPage : NULL;
@@ -1159,10 +1118,10 @@ class ProductList extends Control
 		$form = new Form($this, $name);
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
-		$form->getElementPrototype()->class = ['sendOnChange', 'loadingNoOverlay', !$this->ajax ? : 'ajax'];
+		$form->getElementPrototype()->class = ['sendOnChange', 'loadingNoOverlay', !$this->ajax ?: 'ajax'];
 
 		$form->addCheckbox('onlyAvailable', 'Only Available')
-				->setDefaultValue($this->showOnlyAvailable);
+			->setDefaultValue($this->showOnlyAvailable);
 
 		$limitMinPriceRaw = $this->getLimitPriceMin();
 		$limitMaxPriceRaw = $this->getLimitPriceMax();
@@ -1173,14 +1132,14 @@ class ProductList extends Control
 		$toValue = $this->maxPrice ? ceil($this->exchange->change($this->maxPrice)) : NULL;
 
 		$form->addText('price', 'Range:')
-				->setAttribute('data-min', 100)
-				->setAttribute('data-max', $limitMaxPrice)
-				->setAttribute('data-from', $fromValue)
-				->setAttribute('data-to', $toValue)
-				->setAttribute('data-type', 'double')
-				->setAttribute('data-step', '1')
-				->setAttribute('data-hasgrid', 'false')
-				->setAttribute('data-postfix', ' ' . $this->getCurrencySymbol());
+			->setAttribute('data-min', 100)
+			->setAttribute('data-max', $limitMaxPrice)
+			->setAttribute('data-from', $fromValue)
+			->setAttribute('data-to', $toValue)
+			->setAttribute('data-type', 'double')
+			->setAttribute('data-step', '1')
+			->setAttribute('data-hasgrid', 'false')
+			->setAttribute('data-postfix', ' ' . $this->getCurrencySymbol());
 
 		$paramRepo = $this->em->getRepository(Parameter::getClassName());
 		$allParams = $paramRepo->findAll();
@@ -1217,8 +1176,8 @@ class ProductList extends Control
 			$this->minPrice = $this->exchange->change($minPriceRaw, $this->exchange->getWeb(), $this->exchange->getDefault());
 			$this->maxPrice = $this->exchange->change($maxPriceRaw, $this->exchange->getWeb(), $this->exchange->getDefault());
 			$form['price']
-					->setAttribute('data-from', $minPriceRaw)
-					->setAttribute('data-to', $maxPriceRaw);
+				->setAttribute('data-from', $minPriceRaw)
+				->setAttribute('data-to', $maxPriceRaw);
 		}
 
 		$this->resetFilterParameter();

@@ -184,21 +184,21 @@ abstract class BasePresenter extends BaseBasePresenter
 	{
 		$categoryRepo = $this->em->getRepository(Category::getClassName());
 		$this->template->menuCategories = ArrayHash::from([
-					'category1' => $categoryRepo->find(355),
-					'category2' => $categoryRepo->find(177),
+			'category1' => $categoryRepo->find(355),
+			'category2' => $categoryRepo->find(177),
 		]);
 		$pageRepo = $this->em->getRepository(Page::getClassName());
 		$settings = $this->settings;
 		$this->template->menuPages = ArrayHash::from([
-					'page1' => $pageRepo->find($settings->pageInfo->orderByPhonePageId),
-					'page2' => $settings->modules->buyout->enabled ? $pageRepo->find($settings->modules->buyout->pageId) : NULL,
-					'page3' => $settings->modules->service->enabled ? $pageRepo->find($settings->modules->service->pageId) : NULL,
-					'page4' => $pageRepo->find($settings->pageInfo->contactPageId),
-					'page5' => $settings->modules->dealer->enabled ? $pageRepo->find($settings->modules->dealer->pageId) : NULL,
+			'page1' => $pageRepo->find($settings->pageInfo->orderByPhonePageId),
+			'page2' => $settings->modules->buyout->enabled ? $pageRepo->find($settings->modules->buyout->pageId) : NULL,
+			'page3' => $settings->modules->service->enabled ? $pageRepo->find($settings->modules->service->pageId) : NULL,
+			'page4' => $pageRepo->find($settings->pageInfo->contactPageId),
+			'page5' => $settings->modules->dealer->enabled ? $pageRepo->find($settings->modules->dealer->pageId) : NULL,
 		]);
 		$this->template->footerPages = ArrayHash::from([
-					'page1' => $pageRepo->find($settings->pageInfo->termPageId),
-					'page2' => $pageRepo->find($settings->pageInfo->complaintPageId),
+			'page1' => $pageRepo->find($settings->pageInfo->termPageId),
+			'page2' => $pageRepo->find($settings->pageInfo->complaintPageId),
 		]);
 	}
 
@@ -270,20 +270,15 @@ abstract class BasePresenter extends BaseBasePresenter
 	public function createComponentProducts()
 	{
 		$list = $this->iProductListFactory->create();
-		$list->setTranslator($this->translator);
-		$list->setExchange($this->exchange, $this->exchange->getWeb());
-		$list->setItemsPerPage($this->settings->pageConfig->itemsPerRow, $this->settings->pageConfig->rowsPerPage);
-
-		$list->setAjax();
-		$list->setLevel($this->priceLevel);
-
-		$list->setSorting([
-			ProductList::ORDER_BY_PRICE => ProductList::ORDER_ASC,
-			ProductList::ORDER_BY_NAME => ProductList::ORDER_ASC,
-		]);
+		$list->setTranslator($this->translator)
+			->setExchange($this->exchange, $this->exchange->getWeb())
+			->setItemsPerPage($this->settings->pageConfig->itemsPerRow, $this->settings->pageConfig->rowsPerPage)
+			->setAjax()
+			->setLevel($this->priceLevel)
+			->setSorting(ProductList::SORT_BY_PRICE_ASC);
 
 		$list->qb = $this->stockRepo->createQueryBuilder('s')
-				->innerJoin('s.product', 'p');
+			->innerJoin('s.product', 'p');
 
 		return $list;
 	}
@@ -294,12 +289,12 @@ abstract class BasePresenter extends BaseBasePresenter
 		$form->setTranslator($this->translator);
 
 		$form->addText('search')
-						->setDefaultValue($this->searched)
-						->setAttribute('placeholder', 'Search by Keyword')
-						->getControlPrototype()->class = 'form-control typeahead';
+			->setDefaultValue($this->searched)
+			->setAttribute('placeholder', 'Search by Keyword')
+			->getControlPrototype()->class = 'form-control typeahead';
 
 		$form->addSubmit('send', 'Search')
-						->getControlPrototype()->class = 'btn btn-primary';
+			->getControlPrototype()->class = 'btn btn-primary';
 
 		$form->onSuccess[] = $this->searchSucceeded;
 	}
