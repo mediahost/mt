@@ -3,7 +3,9 @@
 namespace App\Extensions\Products;
 
 use App\Components\Product\Form\IPrintStockFactory;
+use App\Extensions\Products\Components\ISortingFormFactory;
 use App\Extensions\Products\Components\Paginator;
+use App\Extensions\Products\Components\SortingForm;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Helpers;
@@ -46,6 +48,8 @@ class ProductList extends Control
 	const SORT_BY_NAME_DESC = 4;
 	const DEFAULT_PRICE_LEVEL = 'defaultPrice';
 
+	// <editor-fold defaultstate="collapsed" desc="injects">
+
 	/** @var BasketFacade @inject */
 	public $basketFacade;
 
@@ -67,11 +71,17 @@ class ProductList extends Control
 	/** @var IPrintStockFactory @inject */
 	public $iStockPrint;
 
+	/** @var ISortingFormFactory @inject */
+	public $iSortingFormFactory;
+
+	// </editor-fold>
+	// <editor-fold defaultstate="collapsed" desc="persistent">
+
 	/** @var int @persistent */
 	public $page = 1;
 
 	/** @var int @persistent */
-	public $perPage;
+	public $perPage = 15;
 
 	/** @var bool @persistent */
 	public $showOnlyAvailable = FALSE;
@@ -82,17 +92,23 @@ class ProductList extends Control
 	/** @var int @persistent */
 	public $maxPrice;
 
-	/** @var array @persistent */
-	public $limitPrices = array();
-
 	/** @var int @persistent */
-	public $pl;
+	public $priceLevel;
 
 	/** @var array @persistent */
 	public $filter = array();
 
 	/** @var int @persistent */
 	public $sorting = self::SORT_BY_PRICE_ASC;
+
+	/** @var array @persistent */
+	public $limitPrices = array();
+
+	/** @var bool @persistent show filter as expanded */
+	public $expandFilter = FALSE;
+
+	// </editor-fold>
+	// <editor-fold defaultstate="collapsed" desc="events">
 
 	/** @var array event on render */
 	public $onRender = [];
@@ -103,10 +119,17 @@ class ProductList extends Control
 	/** @var array event for modifying each item */
 	public $onEachItem = [];
 
-	/** @var bool show filter as expanded */
-	public $expandFilter = FALSE;
+	// </editor-fold>
+	// <editor-fold defaultstate="collapsed" desc="variables">
 
-	// <editor-fold defaultstate="collapsed" desc="protected variables">
+	/** @var QueryBuilder */
+	protected $qb;
+
+	/** @var mixed */
+	protected $data;
+
+	/** @var int total count of items */
+	protected $count;
 
 	/** @var array */
 	protected $perPageListMultiples = [1, 2, 3, 6];
@@ -120,9 +143,6 @@ class ProductList extends Control
 	/** @var int */
 	protected $rowsPerPage = 3;
 
-	/** @var QueryBuilder */
-	protected $qb;
-
 	/** @var int */
 	protected $limitMinPrice = 0;
 
@@ -131,12 +151,6 @@ class ProductList extends Control
 
 	/** @var string */
 	protected $priceLevelName = self::DEFAULT_PRICE_LEVEL;
-
-	/** @var int total count of items */
-	protected $count;
-
-	/** @var mixed */
-	protected $data;
 
 	/** @var Paginator */
 	protected $paginator;
@@ -270,6 +284,17 @@ class ProductList extends Control
 
 	// </editor-fold>
 
+	/**
+	 * Add filtering.
+	 * @param array $filter
+	 * @return ProductList
+	 */
+	protected function setFilter(array $filter)
+	{
+		$this->filter = array_merge($this->filter, $filter);
+		return $this;
+	}
+
 	/* 	 SETTERS ******************************************************************************************* */
 
 	// <editor-fold defaultstate="collapsed" desc="public setters">
@@ -283,27 +308,10 @@ class ProductList extends Control
 
 	public function setLevel($level)
 	{
-		$this->pl = $level;
+		$this->priceLevel = $level;
 		return $this;
 	}
 
-	/**
-	 * Add filtering.
-	 * @param array $filter
-	 * @return ProductList
-	 */
-	public function setFilter(array $filter)
-	{
-		$this->filter = array_merge($this->filter, $filter);
-		return $this;
-	}
-
-	/**
-	 * Set sorting.
-	 * @param array $sort
-	 * @return ProductList
-	 * @throws InvalidArgumentException
-	 */
 	public function setSorting($sort)
 	{
 		switch ($sort) {
@@ -552,23 +560,6 @@ class ProductList extends Control
 		return $this->itemsPerRow * $this->rowsPerPage;
 	}
 
-	/** @return array */
-	protected function getItemsForCountSelect()
-	{
-		return array_combine($this->perPageList, $this->perPageList);
-	}
-
-	/** @return array */
-	protected function getSortingMethods()
-	{
-		return [
-			self::SORT_BY_PRICE_ASC => 'Price (Low > High)',
-			self::SORT_BY_PRICE_DESC => 'Price (High > Low)',
-			self::SORT_BY_NAME_ASC => 'Name (A - Z)',
-			self::SORT_BY_NAME_DESC => 'Name (Z - A)',
-		];
-	}
-
 	protected function getLimitPrices()
 	{
 		if (!count($this->limitPrices)) {
@@ -598,10 +589,10 @@ class ProductList extends Control
 
 	protected function getPriceLevelName()
 	{
-		if (!$this->priceLevelName && $this->pl) {
+		if (!$this->priceLevelName && $this->priceLevel) {
 			$allowedProperties = Stock::getPriceProperties();
-			if (array_key_exists($this->pl, $allowedProperties)) {
-				$this->priceLevelName = $allowedProperties[$this->pl];
+			if (array_key_exists($this->priceLevel, $allowedProperties)) {
+				$this->priceLevelName = $allowedProperties[$this->priceLevel];
 			} else {
 				$this->priceLevelName = self::DEFAULT_PRICE_LEVEL;
 			}
@@ -621,7 +612,7 @@ class ProductList extends Control
 
 	/* 	 SORTING & FILTERING & PAGING ********************************************************************** */
 
-	// <editor-fold defaultstate="collapsed" desc="filter, sort, paging">
+	// <editor-fold desc="filter, sort, paging">
 
 	private function appendTranslation()
 	{
@@ -959,7 +950,7 @@ class ProductList extends Control
 
 	/* 	 SIGNALS ******************************************************************************************* */
 
-	// <editor-fold defaultstate="collapsed" desc="signals">
+	// <editor-fold desc="signals">
 
 	/**
 	 * @param int $page
@@ -1060,7 +1051,7 @@ class ProductList extends Control
 		}
 
 		$this->template->stocks = $data;
-		$this->template->priceLevel = $this->pl;
+		$this->template->priceLevel = $this->priceLevel;
 		$this->template->paginator = $this->paginator;
 		$this->template->itemsPerRow = $this->itemsPerRow;
 		$this->template->lang = $this->translator->getLocale();
@@ -1071,46 +1062,29 @@ class ProductList extends Control
 	// </editor-fold>
 	// <editor-fold defaultstate="collapsed" desc="forms">
 
-
 	protected function createComponentStock()
 	{
 		return new Multiplier(function ($itemId) {
 			$control = $this->iStockPrint->create();
 			$control->setStockById($itemId);
-			$control->setPriceLevel($this->pl);
+			$control->setPriceLevel($this->priceLevel);
 			return $control;
 		});
 	}
 
-	protected function createComponentSortingForm($name)
+	/** @return SortingForm */
+	protected function createComponentSortingForm()
 	{
-		$form = new Form($this, $name);
-		$form->setTranslator($this->translator);
-		$form->setRenderer(new MetronicFormRenderer());
-		$form->getElementPrototype()->class = ['sendOnChange', 'loadingNoOverlay', !$this->ajax ?: 'ajax'];
-
-		$form->addSelect('sort', 'Sort by', $this->getSortingMethods())
-			->setDefaultValue($this->sorting)
-			->getControlPrototype()->class('input-sm');
-
-		$form->addSelect('perPage', 'Show', $this->getItemsForCountSelect())
-			->getControlPrototype()->class('input-sm');
-		$defaultPerPage = array_search($this->perPage, $this->perPageList);
-		if ($defaultPerPage !== FALSE) {
-			$form['perPage']->setDefaultValue($this->perPage);
-		}
-
-		$form->onSuccess[] = $this->processSortingForm;
-	}
-
-	public function processSortingForm(Form $param, ArrayHash $values)
-	{
-		$this->setSorting($values->sort);
-		$key = array_search($values->perPage, $this->perPageList);
-		if ($key !== FALSE) {
-			$this->perPage = $key ? $values->perPage : NULL;
-		}
-		$this->reload();
+		$control = $this->iSortingFormFactory->create();
+		$control->setAjax();
+		$control->setSorting($this->sorting);
+		$control->setPerPage($this->perPage, $this->perPageList);
+		$control->onAfterSend = function ($sorting, $perPage) {
+			$this->setSorting($sorting);
+			$this->perPage = $perPage;
+			$this->reload();
+		};
+		return $control;
 	}
 
 	protected function createComponentFilterForm($name)

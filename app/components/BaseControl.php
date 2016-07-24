@@ -61,15 +61,6 @@ abstract class BaseControl extends UI\Control
 		return $this;
 	}
 
-	/**
-	 * Set actual language for form
-	 */
-	public function setLang($lang)
-	{
-		$this->lang = $this->translator->getLocale();
-		return $this;
-	}
-
 	public function getTemplate()
 	{
 		$template = parent::getTemplate();
