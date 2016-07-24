@@ -90,6 +90,8 @@ class CartPresenter extends BasePresenter
 				$this->template->specialCategoriesLinks = $specialCategoriesLinks;
 			}
 		}
+
+//		$this->template->visitedStocks = $this->user->storage->getVisited();
 	}
 
 	public function actionUncomplete($cart)

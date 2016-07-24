@@ -97,12 +97,6 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->template->showSteps = $this->showSteps;
 		$this->template->priceLevel = $this->priceLevel;
 
-		$this->template->newStocks = $this->stockFacade->getNews();
-		$this->template->saleStocks = $this->stockFacade->getSales();
-		$this->template->topStocks = $this->stockFacade->getTops();
-		$this->template->bestsellerStocks = $this->stockFacade->getBestSellers();
-		$this->template->visitedStocks = $this->user->storage->getVisited();
-
 		$this->template->basket = $this->basketFacade;
 		$this->template->loginError = $this['signInModal']->hasErrors();
 
