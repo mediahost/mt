@@ -3,9 +3,11 @@
 namespace App\Model\Repository;
 
 use App\Model\Entity\Category;
+use App\Model\Entity\Producer;
 use App\Model\Entity\Product;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\Expr\Orx;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Kdyby\Doctrine\QueryBuilder;
 
@@ -33,12 +35,12 @@ class ProductRepository extends BaseRepository
 		}
 
 		$qb = $this->createQueryBuilder('p')
-				->join('p.translations', 't')
-				->where('t.slug = :slug')
-				->setParameter('slug', $slug);
+			->join('p.translations', 't')
+			->where('t.slug = :slug')
+			->setParameter('slug', $slug);
 		if ($category) {
 			$qb->andWhere('p.mainCategory = :category')
-					->setParameter('category', $category);
+				->setParameter('category', $category);
 		}
 		if ($onlyActive) {
 			$qb->andWhere('p.active = :active')
@@ -52,10 +54,10 @@ class ProductRepository extends BaseRepository
 	public function findByName($name, $locale = NULL, $limit = null, $offset = null, &$totalCount = null)
 	{
 		$qb = $this->createQueryBuilder('p')
-				->join('p.translations', 't')
-				->where('t.name LIKE :name')
-				->setParameter('name', '%' . $name . '%')
-				->orderBy('t.name', 'ASC');
+			->join('p.translations', 't')
+			->where('t.name LIKE :name')
+			->setParameter('name', '%' . $name . '%')
+			->orderBy('t.name', 'ASC');
 		$this->extendQbWhereLocale($qb, $locale);
 
 		if ($limit) {
@@ -64,9 +66,9 @@ class ProductRepository extends BaseRepository
 		}
 
 		return $qb->getQuery()
-						->setMaxResults($limit)
-						->setFirstResult($offset)
-						->getResult();
+			->setMaxResults($limit)
+			->setFirstResult($offset)
+			->getResult();
 	}
 
 	private function extendQbWhereLocale(QueryBuilder &$qb, $locale, $alias = 't')
@@ -89,17 +91,29 @@ class ProductRepository extends BaseRepository
 	{
 		$row = 'p.parameter' . $code;
 		$qb = $this->createQueryBuilder('p')
-				->select('p.parameter' . $code)
-				->distinct()
-				->where("{$row} IS NOT NULL");
+			->select('p.parameter' . $code)
+			->distinct()
+			->where("{$row} IS NOT NULL");
 		$query = $qb->getQuery();
-		
+
 		$values = [];
 		foreach ($query->getResult(AbstractQuery::HYDRATE_ARRAY) as $item) {
 			$value = reset($item);
 			$values[$value] = $value;
 		}
 		return $values;
+	}
+
+	public function getProducersIds()
+	{
+		$rsm = new ResultSetMapping();
+		$rsm->addScalarResult('producer_id', 'producerId');
+		$sql = 'SELECT DISTINCT producer_id FROM ' . $this->getClassMetadata()->getTableName();
+		$query = $this->createNativeQuery($sql, $rsm);
+
+		return array_map(function ($row) {
+			return reset($row);
+		}, $query->getResult(AbstractQuery::HYDRATE_ARRAY));
 	}
 
 }

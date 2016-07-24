@@ -5,9 +5,11 @@ namespace App\Model\Facade;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
+use App\Model\Entity\Product;
 use App\Model\Repository\ProducerLineRepository;
 use App\Model\Repository\ProducerModelRepository;
 use App\Model\Repository\ProducerRepository;
+use App\Model\Repository\ProductRepository;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Translation\Translator;
 use Nette\Object;
@@ -27,6 +29,9 @@ class ProducerFacade extends Object
 	/** @var Translator @inject */
 	public $translator;
 
+	/** @var ProductRepository */
+	private $productRepo;
+
 	/** @var ProducerRepository */
 	private $producerRepo;
 
@@ -39,6 +44,7 @@ class ProducerFacade extends Object
 	public function __construct(EntityManager $em)
 	{
 		$this->em = $em;
+		$this->productRepo = $this->em->getRepository(Product::getClassName());
 		$this->producerRepo = $this->em->getRepository(Producer::getClassName());
 		$this->lineRepo = $this->em->getRepository(ProducerLine::getClassName());
 		$this->modelRepo = $this->em->getRepository(ProducerModel::getClassName());
@@ -52,8 +58,17 @@ class ProducerFacade extends Object
 	public function getProducersList($onlyWithChildren = FALSE, $onlyWithProducts = FALSE, $toString = TRUE)
 	{
 		$producers = [];
+		$lines = $this->lineRepo->findPairs('name', 'producerId');
+		$producersIdsInProducts = $this->productRepo->getProducersIds();
 		foreach ($this->producerRepo->findAllWithPriority() as $producer) {
-			if ((!$onlyWithChildren || $producer->hasLines(TRUE)) && (!$onlyWithProducts || $producer->hasProducts())) {
+			$isIn = TRUE;
+			if ($isIn && $onlyWithChildren) {
+				$isIn = array_key_exists($producer->id, $lines);
+			}
+			if ($isIn && $onlyWithProducts) {
+				$isIn = in_array($producer->id, $producersIdsInProducts);
+			}
+			if ($isIn) {
 				$producers[$producer->id] = $toString ? (string)$producer : $producer;
 			}
 		}
