@@ -57,9 +57,16 @@ class ProducerFacade extends Object
 
 	public function getProducersList($onlyWithChildren = FALSE, $onlyWithProducts = FALSE, $toString = TRUE)
 	{
+		$lines = [];
+		if ($onlyWithChildren) {
+			$lines = $this->lineRepo->findPairs('id', 'producerId');
+		}
+		$producersIdsInProducts = [];
+		if ($onlyWithProducts) {
+			$producersIdsInProducts = $this->productRepo->getProducersIds();
+		}
+
 		$producers = [];
-		$lines = $this->lineRepo->findPairs('name', 'producerId');
-		$producersIdsInProducts = $this->productRepo->getProducersIds();
 		foreach ($this->producerRepo->findAllWithPriority() as $producer) {
 			$isIn = TRUE;
 			if ($isIn && $onlyWithChildren) {
@@ -77,6 +84,15 @@ class ProducerFacade extends Object
 
 	public function getLinesList(Producer $producer = NULL, $fullPath = FALSE, $onlyWithChildren = FALSE, $onlyWithProducts = FALSE)
 	{
+		$models = [];
+		if ($onlyWithChildren) {
+			$models = $this->modelRepo->findPairs('id', 'lineId');
+		}
+		$producersIdsInProducts = [];
+		if ($onlyWithProducts) {
+			$producersIdsInProducts = $this->productRepo->getProducersIds();
+		}
+
 		$conditions = [];
 		if ($producer) {
 			$conditions['producer'] = $producer;
@@ -84,7 +100,14 @@ class ProducerFacade extends Object
 
 		$lines = [];
 		foreach ($this->lineRepo->findBy($conditions, ['priority' => 'ASC']) as $line) {
-			if ((!$onlyWithChildren || $line->hasModels()) && (!$onlyWithProducts || $line->hasProducts())) {
+			$isIn = TRUE;
+			if ($isIn && $onlyWithChildren) {
+				$isIn = array_key_exists($line->id, $models);
+			}
+			if ($isIn && $onlyWithProducts) {
+				$isIn = in_array($line->producer->id, $producersIdsInProducts);
+			}
+			if ($isIn) {
 				$lines[$line->id] = $fullPath ? $line->getFullName() : (string)$line;
 			}
 		}
@@ -98,13 +121,21 @@ class ProducerFacade extends Object
 			$conditions['line'] = $line;
 		}
 
+		$producersIdsInProducts = [];
+		if ($onlyWithProducts) {
+			$producersIdsInProducts = $this->productRepo->getProducersIds();
+		}
+
 		$models = [];
 		foreach ($this->modelRepo->findBy($conditions, ['priority' => 'ASC']) as $model) {
-			if (!$onlyWithProducts || $model->hasProducts()) {
+			$isIn = TRUE;
+			if ($isIn && $onlyWithProducts) {
+				$isIn = in_array($model->line->producer->id, $producersIdsInProducts);
+			}
+			if ($isIn) {
 				$models[$model->id] = $fullPath ? $model->getFullName() : (string)$model;
 			}
 		}
-
 		return $models;
 	}
 

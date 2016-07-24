@@ -28,13 +28,13 @@ class ProducerLineRepository extends BaseRepository
 
 		if ($key === 'producerId') {
 			$rsm = new ResultSetMapping();
-			$rsm->addScalarResult('producer_id', 'producerId');
+			$rsm->addScalarResult('producer_id', $key);
 			$rsm->addScalarResult($value, $value);
 			$sql = 'SELECT producer_id, ' . $value . ' FROM ' . $this->getClassMetadata()->getTableName();
 			$query = $this->createNativeQuery($sql, $rsm);
 			$result = [];
 			foreach ($query->getResult(AbstractQuery::HYDRATE_ARRAY) as $item) {
-				$result[$item['producerId']] = $item[$value];
+				$result[$item[$key]] = $item[$value];
 			}
 			return $result;
 		} else {

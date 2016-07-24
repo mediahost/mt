@@ -6,6 +6,37 @@ use App\Model\Entity\ProducerLine;
 
 class ProducerModelRepository extends BaseRepository
 {
+
+	public function findPairs($criteria, $value = NULL, $orderBy = array(), $key = NULL)
+	{
+		if (!is_array($criteria)) {
+			$key = $orderBy;
+			$orderBy = $value;
+			$value = $criteria;
+			$criteria = array();
+		}
+
+		if (!is_array($orderBy)) {
+			$key = $orderBy;
+			$orderBy = array();
+		}
+
+		if ($key === 'lineId') {
+			$rsm = new ResultSetMapping();
+			$rsm->addScalarResult('line_id', $key);
+			$rsm->addScalarResult($value, $value);
+			$sql = 'SELECT line_id, ' . $value . ' FROM ' . $this->getClassMetadata()->getTableName();
+			$query = $this->createNativeQuery($sql, $rsm);
+			$result = [];
+			foreach ($query->getResult(AbstractQuery::HYDRATE_ARRAY) as $item) {
+				$result[$item[$key]] = $item[$value];
+			}
+			return $result;
+		} else {
+			return parent::findPairs($criteria, $value, $orderBy, $key);
+		}
+	}
+
 	public function findOneByUrl($url)
 	{
 		if (is_string($url)) {
