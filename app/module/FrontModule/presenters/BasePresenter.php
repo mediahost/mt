@@ -107,7 +107,6 @@ abstract class BasePresenter extends BaseBasePresenter
 
 		$this->loadTemplateMenu();
 		$this->loadTemplateCategoriesSettings();
-		$this->loadTemplateSigns();
 		$this->loadTemplateProducers();
 		$this->loadTemplateApplets();
 	}
@@ -176,12 +175,13 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	protected function loadTemplateMenu()
 	{
-		$categoryRepo = $this->em->getRepository(Category::getClassName());
-		$this->template->menuCategories = ArrayHash::from([
-			'category1' => $categoryRepo->find(355),
-			'category2' => $categoryRepo->find(177),
-		]);
+//		$categoryRepo = $this->em->getRepository(Category::getClassName());
+//		$this->template->menuCategories = ArrayHash::from([
+//			'category1' => $categoryRepo->find(355),
+//			'category2' => $categoryRepo->find(177),
+//		]);
 		$pageRepo = $this->em->getRepository(Page::getClassName());
+		$pageRepo->findAllWithCache($this->locale);
 		$settings = $this->settings;
 		$this->template->menuPages = ArrayHash::from([
 			'page1' => $pageRepo->find($settings->pageInfo->orderByPhonePageId),
