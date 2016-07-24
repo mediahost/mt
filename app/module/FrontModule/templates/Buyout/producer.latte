@@ -16,7 +16,7 @@
 	<div class="col-md-12">
 		<h2 class="widget-title">{_'Select line'}</h2>
 		<hr>
-		<div class="row products">
+		<div class="row products producers-list" data-gutter="15">
 			<div n:foreach="$producer->lines as $line" n:if="$line->hasModels()" class="col-md-3 col-sm-6">
 				<div class="product product-sm-left line">
 					<a n:href="Buyout: 'producer' => $producer->slug, 'line' => $line->slug"
