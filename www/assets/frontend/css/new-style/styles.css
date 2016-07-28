@@ -522,7 +522,7 @@ hr {
 	width: 100%;
 	display: block;
 	position: relative;
-	z-index: 2;
+	z-index: 6;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
 	margin-bottom: 25px;
