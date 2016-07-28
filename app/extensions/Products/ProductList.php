@@ -588,7 +588,6 @@ class ProductList extends Control
 		$form->setRenderer(new MetronicFormRenderer());
 		$form->getElementPrototype()->class = [
 			'sendOnChange',
-			'loadingNoOverlay',
 			!$this->ajax ?: 'ajax'
 		];
 

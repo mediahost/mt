@@ -25,7 +25,6 @@ class SortingForm extends BaseControl
 		$form->setRenderer(new MetronicFormRenderer());
 		$form->getElementPrototype()->class = [
 			!$this->isSendOnChange ?: 'sendOnChange',
-			'loadingNoOverlay',
 			!$this->isAjax ?: 'ajax'
 		];
 

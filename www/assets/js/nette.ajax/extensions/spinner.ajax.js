@@ -58,7 +58,7 @@
 			}
 			var options = {
 				target: this.element,
-				animate: true
+				iconOnly: true
 			};
 			if (this.element && this.element.hasClass('loadingNoOverlay')) {
 				options.overlayColor = 'none';
