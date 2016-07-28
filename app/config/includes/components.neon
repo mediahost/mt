@@ -1,5 +1,5 @@
 # Components
-# !!!must have "crete:" for components with events!!!
+# !!!must have "create:" for components with events!!!
 
 services:
 	# Other extensions
