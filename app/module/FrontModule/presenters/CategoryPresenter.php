@@ -35,20 +35,17 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 			$this->redirect('this', ['slug' => $this->category->getUrl()]);
 		}
 
+		$this['products']->addFilterCategory($this->category);
+
 		$this->setActiveCategory($this->category);
 		$this->subcategories = $this->category->children;
 	}
 
 	public function renderDefault()
 	{
-		/* @var $products ProductList */
-		$products = $this['products'];
-
 		$title = NULL;
 		$keywords = $description = [];
 		if ($this->category) {
-			$products->addFilterCategory($this->category);
-			$this->template->productsCount = $products->getCount();
 			$this->template->category = $this->category;
 			$this->template->subcategories = $this->subcategories;
 			$title = $this->category->getTreeName(' | ', TRUE);
@@ -56,7 +53,6 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 			$description = $this->category->getTreeName(' - ');
 		}
 		if ($this->searched) {
-			$products->addFilterFulltext($this->searched);
 			$this->template->searched = $this->searched;
 			$title = $keywords = $description = $this->searched;
 		}
@@ -76,6 +72,8 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 			$searchedRepo->save($searched);
 
 			$this->searched = $text;
+			$this['products']->addFilterFulltext($text);
+
 			$this->setView('default');
 		} else {
 			$this->redirect('Homepage:');
@@ -91,7 +89,7 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 			->addFilterFulltext($text)
 			->setSorting(ProductList::SORT_BY_NAME_ASC);
 
-		$stocks = $list->getData(TRUE, FALSE);
+		$stocks = $list->getData();
 		$items = [];
 		foreach ($stocks as $stock) {
 			/* @var $stock Stock */
@@ -144,15 +142,14 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 		}
 
 		if ($producer) {
-			/* @var $products ProductList */
-			$products = $this['products'];
-			$products->addFilterProducer($producer);
+			$filterProducer = $producer;
 			if ($line) {
-				$products->addFilterLine($line);
+				$filterProducer = $line;
 			}
 			if ($model) {
-				$products->addFilterModel($model);
+				$filterProducer = $model;
 			}
+			$this['products']->addFilterProducer($filterProducer);
 
 			$this->template->producer = $producer;
 			$this->template->line = $line;

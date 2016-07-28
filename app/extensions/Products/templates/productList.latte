@@ -1,9 +1,10 @@
 <div n:snippet="productList" class="row"{if count($stocks)} data-gutter="15"{/if}>
 	<!-- BEGIN PRODUCT LIST -->
 	{foreach $stocks as $stock}
+		{var $stockId => $stock->id}
 		<!-- PRODUCT ITEM START -->
 		<div class="col-md-4 col-sm-6 col-xs-12">
-			{control stock-$stock->id}
+			{control stock-$stockId}
 		</div>
 		<!-- PRODUCT ITEM END -->
 	{/foreach}

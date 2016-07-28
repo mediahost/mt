@@ -127,7 +127,7 @@ class ProductPresenter extends ProductCategoryBasePresenter
 			->addFilterFulltext($text)
 			->setSorting(ProductList::SORT_BY_NAME_ASC);
 
-		$stocks = $list->getData(TRUE, FALSE);
+		$stocks = $list->getData();
 		$items = [];
 		foreach ($stocks as $stock) {
 			/* @var $stock Stock */

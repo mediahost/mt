@@ -1,3 +1,68 @@
 {snippet productFilter}
-	{control filterForm}
+	{form filterForm data-target-loading=>"#mainContainer", data-target-move=>"#snippet-products-productList"}
+		{? $form->render('begin')}
+
+		<aside class="category-filters">
+
+			<div class="category-filters-section">
+				<h3 class="widget-title-sm">{_'Price'}</h3>
+				{input price}
+			</div>
+
+			<div class="category-filters-section">
+				<h3 class="widget-title-sm">{_'Show'}</h3>
+				<div class="checkbox">
+					{input onlyAvailable}
+				</div>
+			</div>
+
+			<div class="category-filters-section">
+				<h3 class="widget-title-sm">{_'Parameters'}</h3>
+				<div n:ifset="$form['B1']" class="checkbox">
+					{input B1}
+				</div>
+				<div n:ifset="$form['B2']" class="checkbox">
+					{input B2}
+				</div>
+				<div n:ifset="$form['B3']" class="checkbox">
+					{input B3}
+				</div>
+				<div n:ifset="$form['B4']" class="checkbox">
+					{input B4}
+				</div>
+				<div n:ifset="$form['B5']" class="checkbox">
+					{input B5}
+				</div>
+				<div n:ifset="$form['B6']" class="checkbox">
+					{input B6}
+				</div>
+			</div>
+
+			<div n:ifset="$form['S1']" class="category-filters-section multi-headers">
+				<h3 class="widget-title-sm">
+					{label S1 /}
+				</h3>
+				<div class="checkbox">
+					{input S1, class => 'select2 form-control input-fluid'}
+				</div>
+
+				<h3 class="widget-title-sm">
+					{label S2 /}
+				</h3>
+				<div class="checkbox">
+					{input S2, class => 'select2 form-control input-fluid'}
+				</div>
+
+				<h3 class="widget-title-sm">
+					{label S3 /}
+				</h3>
+				<div class="checkbox">
+					{input S3, class => 'select2 form-control input-fluid'}
+				</div>
+			</div>
+
+		</aside>
+
+		{? $form->render('end')}
+	{/form}
 {/snippet}

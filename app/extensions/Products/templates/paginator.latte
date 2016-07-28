@@ -1,5 +1,5 @@
 {snippet productPaginator}
-	{if count($stocks)}
+	{if $paginator->getItemCount()}
 		{var loadingSelector => '#mainContainer'}
 		{var moveSelector => '#snippet-products-productList'}
 		<div class="row">

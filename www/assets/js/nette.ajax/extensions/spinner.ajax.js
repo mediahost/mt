@@ -76,7 +76,8 @@
 				Metronic.unblockUI(this.element);
 			}
 			if (this.moveTarget.length) {
-				$(document).scrollTop((this.moveTarget.offset().top - 20));
+				var topPosition = this.moveTarget.offset().top - 20;
+				$('html, body').stop().animate({scrollTop:topPosition}, 500, 'swing');
 			}
 		}
 	}, {

@@ -271,9 +271,6 @@ abstract class BasePresenter extends BaseBasePresenter
 			->setLevel($this->priceLevel)
 			->setSorting(ProductList::SORT_BY_PRICE_ASC);
 
-		$list->qb = $this->stockRepo->createQueryBuilder('s')
-			->innerJoin('s.product', 'p');
-
 		return $list;
 	}
 

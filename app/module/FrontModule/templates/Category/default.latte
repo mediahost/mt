@@ -59,7 +59,7 @@
 	<div class="col-md-9 col-sm-7">
 
 		<div class="row products producers-list" data-gutter="15"
-				n:if="$productsCount && isset($subcategories) && count($subcategories)">
+				n:if="isset($subcategories) && count($subcategories) && $_control->getComponent('products')->getCount() > 0">
 			{cache 'subcategory_' . $category->id, tags => [$categoryCacheTag . $category->id]}
 				<div n:foreach="$subcategories as $subcategory" class="col-md-4 col-sm-12">
 					<div class="product product-sm-left">

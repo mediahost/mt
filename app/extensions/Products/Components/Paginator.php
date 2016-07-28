@@ -63,6 +63,7 @@ class Paginator extends \Nette\Utils\Paginator
 			);
 
 			$quotient = ($this->getPageCount() - 1) / $this->stepCount;
+			$quotient = $quotient < 0 ? 0 : $quotient;
 
 			for ($i = 0; $i <= $this->stepCount; $i++) {
 				$arr[] = (int) (round($quotient * $i) + $this->getFirstPage());

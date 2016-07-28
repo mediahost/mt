@@ -3,6 +3,7 @@
 namespace App\Extensions\Products;
 
 use App\Components\Product\Form\IPrintStockFactory;
+use App\Extensions\Products\Components\DataHolder;
 use App\Extensions\Products\Components\ISortingFormFactory;
 use App\Extensions\Products\Components\Paginator;
 use App\Extensions\Products\Components\SortingForm;
@@ -21,6 +22,7 @@ use App\Model\Entity\Vat;
 use App\Model\Facade\BasketFacade;
 use App\Model\Facade\ProductFacade;
 use App\Model\Facade\StockFacade;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\Query\Expr\OrderBy;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
@@ -32,12 +34,12 @@ use Kdyby\Doctrine\QueryBuilder;
 use Kdyby\Translation\Translator;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Multiplier;
+use Nette\ComponentModel\IContainer;
 use Nette\Localization\ITranslator;
 use Nette\Templating\FileTemplate;
 use Nette\Utils\ArrayHash;
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
-use Tracy\Debugger;
 
 class ProductList extends Control
 {
@@ -81,10 +83,13 @@ class ProductList extends Control
 	public $page = 1;
 
 	/** @var int @persistent */
-	public $perPage = 15;
+	public $sorting = self::SORT_BY_PRICE_ASC;
 
-	/** @var bool @persistent */
-	public $showOnlyAvailable = FALSE;
+	/** @var bool @persistent show only in store */
+	public $stored = FALSE;
+
+	/** @var int @persistent */
+	public $perPage = 15;
 
 	/** @var int @persistent */
 	public $minPrice;
@@ -92,20 +97,8 @@ class ProductList extends Control
 	/** @var int @persistent */
 	public $maxPrice;
 
-	/** @var int @persistent */
-	public $priceLevel;
-
 	/** @var array @persistent */
-	public $filter = array();
-
-	/** @var int @persistent */
-	public $sorting = self::SORT_BY_PRICE_ASC;
-
-	/** @var array @persistent */
-	public $limitPrices = array();
-
-	/** @var bool @persistent show filter as expanded */
-	public $expandFilter = FALSE;
+	public $filter;
 
 	// </editor-fold>
 	// <editor-fold defaultstate="collapsed" desc="events">
@@ -122,14 +115,17 @@ class ProductList extends Control
 	// </editor-fold>
 	// <editor-fold defaultstate="collapsed" desc="variables">
 
-	/** @var QueryBuilder */
-	protected $qb;
+	/** @var DataHolder */
+	protected $holder;
 
 	/** @var mixed */
 	protected $data;
 
 	/** @var int total count of items */
 	protected $count;
+
+	/** @var Paginator */
+	protected $paginator;
 
 	/** @var array */
 	protected $perPageListMultiples = [1, 2, 3, 6];
@@ -144,16 +140,13 @@ class ProductList extends Control
 	protected $rowsPerPage = 3;
 
 	/** @var int */
-	protected $limitMinPrice = 0;
+	protected $priceLevel;
 
 	/** @var int */
-	protected $limitMaxPrice;
+	protected $limitPriceMin;
 
-	/** @var string */
-	protected $priceLevelName = self::DEFAULT_PRICE_LEVEL;
-
-	/** @var Paginator */
-	protected $paginator;
+	/** @var int */
+	protected $limitPriceMax;
 
 	/** @var string */
 	protected $currency;
@@ -161,10 +154,15 @@ class ProductList extends Control
 	/** @var bool */
 	protected $ajax;
 
-	/** @var bool */
-	protected $filterApplied = FALSE;
-
 	// </editor-fold>
+
+	private function getHolder()
+	{
+		if (!$this->holder) {
+			$this->holder = new DataHolder($this->em);
+		}
+		return $this->holder;
+	}
 
 	/* 	 ADD FILTERS *************************************************************************************** */
 
@@ -172,126 +170,89 @@ class ProductList extends Control
 
 	public function addFilterCategory(Category $category)
 	{
-		// for reducing queries
-		$categoryRepo = $this->em->getRepository(Category::getClassName());
-		$categoryRepo->findAll();
-
-		$this->setFilter([
-			'category' => implode(',', array_keys($category->childrenArray)),
-		]);
-		if (!count($this->limitPrices)) {
-			$this->limitPrices = $this->stockFacade->getLimitPrices($this->getPriceLevelName(), $category);
-		}
+		$this->getHolder()->filterCategory($category);
+		$this->setLimitPrices();
 		return $this;
 	}
 
-	public function addFilterNotCategory(Category $category)
+	public function addFilterProducers($producer)
 	{
-		$this->setFilter([
-			'categoryNot' => implode(',', array_keys($category->childrenArray)),
-		]);
-		return $this;
+		$this->getHolder()->filterProducer($producer);
+		$this->setLimitPrices();
 	}
 
-	public function addFilterProducer(Producer $producer)
+	public function addFilterAccessoriesFor(array $producers)
 	{
-		$this->setFilter([
-			'producer' => $producer->id,
-		]);
-		if (!count($this->limitPrices)) {
-			$this->limitPrices = $this->stockFacade->getLimitPrices($this->getPriceLevelName(), NULL, $producer);
-		}
-		return $this;
-	}
-
-	public function addFilterLine(ProducerLine $line)
-	{
-		$this->setFilter([
-			'line' => $line->id,
-		]);
-		if (!count($this->limitPrices)) {
-			$this->limitPrices = $this->stockFacade->getLimitPrices($this->getPriceLevelName(), NULL, $line);
-		}
-		return $this;
-	}
-
-	public function addFilterModel(ProducerModel $model)
-	{
-		$this->setFilter([
-			'model' => $model->id,
-		]);
-		if (!count($this->limitPrices)) {
-			$this->limitPrices = $this->stockFacade->getLimitPrices($this->getPriceLevelName(), NULL, $model);
-		}
-		return $this;
-	}
-
-	public function addFilterAccessoriesFor(ProducerModel $model)
-	{
-		$this->setFilter([
-			'accessoriesFor' => $model->id,
-		]);
-		if (!count($this->limitPrices)) {
-			$this->limitPrices = $this->stockFacade->getLimitPrices($this->getPriceLevelName(), NULL, $model);
-		}
+		$this->getHolder()->filterAccessoriesFor($producers);
 		return $this;
 	}
 
 	public function addFilterFulltext($text)
 	{
-		$this->setFilter([
-			'fulltext' => (string)$text,
-		]);
-		if (!count($this->limitPrices)) {
-			$this->limitPrices = $this->stockFacade->getLimitPrices($this->getPriceLevelName());
-		}
+		$this->getHolder()->filterFulltext($text);
+		$this->setLimitPrices();
 		return $this;
 	}
 
 	public function addFilterUpdatedFrom($time)
 	{
-		$this->setFilter([
-			'updatedFrom' => (string)$time,
-		]);
+		$this->getHolder()->filterUpdatedFrom($time);
 		return $this;
 	}
 
 	public function addFilterCreatedFrom($time)
 	{
-		$this->setFilter([
-			'createdFrom' => (string)$time,
-		]);
-		return $this;
-	}
-
-	public function addFilterParameter($code, $value)
-	{
-		$this->filter['parameter'][$code] = $value;
-		return $this;
-	}
-
-	public function resetFilterParameter()
-	{
-		$this->filter['parameter'] = [];
-		return $this;
-	}
-
-	public function resetFilter()
-	{
-		$this->filter = [];
+		$this->getHolder()->filterCreatedFrom($time);
 		return $this;
 	}
 
 	// </editor-fold>
 
-	/**
-	 * Add filtering.
-	 * @param array $filter
-	 * @return ProductList
-	 */
-	protected function setFilter(array $filter)
+	protected function applyPaging()
 	{
-		$this->filter = array_merge($this->filter, $filter);
+		$paginator = $this->getPaginator()
+			->setItemCount($this->getCount())
+			->setPage($this->page);
+
+		$offset = $paginator->getOffset();
+		$limit = $paginator->getLength();
+		$this->getHolder()->setPaging($limit, $offset);
+		return $this;
+	}
+
+	protected function applySorting()
+	{
+		switch ($this->sorting) {
+			case self::SORT_BY_PRICE_ASC:
+			case self::SORT_BY_PRICE_DESC:
+				$dir = $this->sorting === self::SORT_BY_PRICE_ASC ? 'ASC' : 'DESC';
+				$this->getHolder()->setSorting(DataHolder::ORDER_BY_PRICE, $dir);
+				break;
+			case self::SORT_BY_NAME_ASC:
+			case self::SORT_BY_NAME_DESC:
+				$dir = $this->sorting === self::SORT_BY_NAME_ASC ? 'ASC' : 'DESC';
+				$this->getHolder()->setSorting(DataHolder::ORDER_BY_NAME, $dir);
+				break;
+		}
+		return $this;
+	}
+
+	protected function applyFiltering()
+	{
+		$this->getHolder()->filterInStore($this->stored);
+		if ($this->maxPrice) {
+			$this->getHolder()->filterPrice($this->minPrice > 0 ? $this->minPrice : 0, $this->maxPrice);
+		}
+		if ($this->filter) {
+			$params = unserialize($this->filter);
+			if (is_array($params)) {
+				foreach ($params as $code => $value) {
+					$this->getHolder()->filterParameter($code, $value);
+				}
+			}
+		} else {
+			$this->getHolder()->filterResetParameters();
+		}
 		return $this;
 	}
 
@@ -299,16 +260,10 @@ class ProductList extends Control
 
 	// <editor-fold defaultstate="collapsed" desc="public setters">
 
-	public function setQb(QueryBuilder $model)
-	{
-		$this->qb = $model;
-
-		return $this;
-	}
-
 	public function setLevel($level)
 	{
 		$this->priceLevel = $level;
+		$this->getHolder()->setPriceLevel($level);
 		return $this;
 	}
 
@@ -326,6 +281,13 @@ class ProductList extends Control
 		return $this;
 	}
 
+	public function setFilterPrice($from, $to)
+	{
+		$this->minPrice = $from;
+		$this->maxPrice = $to;
+		return $this;
+	}
+
 	public function setItemsPerPage($itemsPerRow, $rowsPerPage = 1)
 	{
 		$itemsPerRowInt = (int)$itemsPerRow;
@@ -339,17 +301,9 @@ class ProductList extends Control
 		return $this;
 	}
 
-	public function setPerPageList(array $perPageList)
-	{
-		$this->perPageList = $perPageList;
-
-		return $this;
-	}
-
 	public function setTranslator(ITranslator $translator)
 	{
 		$this->translator = $translator;
-
 		return $this;
 	}
 
@@ -357,40 +311,25 @@ class ProductList extends Control
 	{
 		$this->exchange = $exchange;
 		$this->currency = $currency;
-
-		return $this;
-	}
-
-	public function setPaginator(Paginator $paginator)
-	{
-		$this->paginator = $paginator;
-
-		return $this;
-	}
-
-	public function setPage($page)
-	{
-		$this->page = $page;
-
 		return $this;
 	}
 
 	public function setAjax($value = TRUE)
 	{
 		$this->ajax = $value;
-
-		return $this;
-	}
-
-	public function setTemplateFile($file)
-	{
-		$this->getTemplate()->setFile($file);
-
 		return $this;
 	}
 
 	// </editor-fold>
 	// <editor-fold defaultstate="collapsed" desc="protected setters">
+
+	protected function setLimitPrices()
+	{
+		if (!$this->limitPriceMin || !$this->limitPriceMax) {
+			list($this->limitPriceMin, $this->limitPriceMax) = $this->getHolder()->getLimitPrices();
+		}
+		return $this;
+	}
 
 	protected function resetPerPageList($firstItem)
 	{
@@ -402,43 +341,29 @@ class ProductList extends Control
 		return $this;
 	}
 
+	protected function setFilterParams(array $params)
+	{
+		$serialized = @serialize($params);
+		$this->filter = count($params) && $serialized ? $serialized : NULL;
+		return $this;
+	}
+
 	// </editor-fold>
 
 	/* 	 GETTERS ******************************************************************************************* */
 
 	// <editor-fold defaultstate="collapsed" desc="public getters">
 
-	/**
-	 * Returns items per page.
-	 * @return int
-	 */
 	public function getPerPage()
 	{
 		return $this->perPage === NULL ? $this->getDefaultPerPage() : $this->perPage;
 	}
 
-	/**
-	 * Returns list of possible items per page.
-	 * @return array
-	 */
 	public function getPerPageList()
 	{
 		return $this->perPageList;
 	}
 
-	/**
-	 * Returns translator.
-	 * @return ITranslator
-	 */
-	public function getTranslator()
-	{
-		return $this->translator;
-	}
-
-	/**
-	 * @return Paginator
-	 * @internal
-	 */
 	public function getPaginator()
 	{
 		if ($this->paginator === NULL) {
@@ -449,45 +374,16 @@ class ProductList extends Control
 		return $this->paginator;
 	}
 
-	/**
-	 * @return QueryBuilder
-	 * @internal
-	 */
-	public function getQb()
+	public function getCount($refresh = FALSE)
 	{
-		return $this->qb;
-	}
-
-	/**
-	 * Returns total count of data.
-	 * @return int
-	 */
-	public function getCount()
-	{
-		$this->applyFiltering();
-
-		if ($this->count === NULL) {
-			$paginator = new DoctrinePaginator($this->qb->getQuery());
-			$this->count = $paginator->count();
+		if ($this->count === NULL || $refresh) {
+			$this->count = $this->getHolder()->getCount();
 		}
-
 		return $this->count;
 	}
 
-	/**
-	 * Returns fetched data.
-	 * @param bool $applyPaging
-	 * @param bool $useCache
-	 * @param bool $fetch
-	 * @throws Exception
-	 * @return array
-	 */
-	public function getData($applyPaging = TRUE, $useCache = TRUE, $fetch = TRUE, $prepare = TRUE)
+	public function getData($applyPaging = TRUE, $useCache = TRUE, $prepare = TRUE)
 	{
-		if ($this->qb === NULL) {
-			throw new Exception('Model cannot be empty, please use method $productList->setQb().');
-		}
-
 		$data = $this->data;
 		if ($data === NULL || $useCache === FALSE) {
 
@@ -498,13 +394,9 @@ class ProductList extends Control
 				$this->applyPaging();
 			}
 
-			if ($fetch === FALSE) {
-				return $this->qb;
-			}
+			$data = $this->getHolder()->getStocks();
 
-			$data = $this->fetchData();
-
-			if ($useCache === TRUE) {
+			if ($useCache) {
 				$this->data = $data;
 			}
 
@@ -525,79 +417,12 @@ class ProductList extends Control
 		return $data;
 	}
 
-	/**
-	 * @return array
-	 * @internal
-	 */
-	public function fetchData()
-	{
-		$data = array();
-
-		// DoctrinePaginator is better if the query uses ManyToMany associations
-		if ($this->qb->getMaxResults() !== NULL || $this->qb->getFirstResult() !== NULL) {
-			$result = new DoctrinePaginator($this->qb->getQuery());
-		} else {
-			$result = $this->qb->getQuery()->getResult();
-		}
-
-		foreach ($result as $item) {
-			// Return only entity itself
-			$data[] = is_array($item) ? $item[0] : $item;
-		}
-
-		return $data;
-	}
-
 	// </editor-fold>
 	// <editor-fold defaultstate="collapsed" desc="protected getters">
 
-	/**
-	 * Returns default per page.
-	 * @return int
-	 */
 	protected function getDefaultPerPage()
 	{
 		return $this->itemsPerRow * $this->rowsPerPage;
-	}
-
-	protected function getLimitPrices()
-	{
-		if (!count($this->limitPrices)) {
-			$qb = clone $this->qb;
-			$qb->select("MIN(s.{$this->getPriceLevelName()}) AS minimum, MAX(s.{$this->getPriceLevelName()}) AS maximum");
-			$result = $qb->getQuery()->getOneOrNullResult();
-			$this->limitPrices = [$result['minimum'], $result['maximum']];
-		}
-		return $this->limitPrices;
-	}
-
-	protected function getLimitPriceMin()
-	{
-		if ($this->limitMinPrice === NULL) {
-			list($this->limitMinPrice, $maxPrice) = $this->getLimitPrices();
-		}
-		return $this->limitMinPrice;
-	}
-
-	protected function getLimitPriceMax()
-	{
-		if ($this->limitMaxPrice === NULL) {
-			list($minPrice, $this->limitMaxPrice) = $this->getLimitPrices();
-		}
-		return $this->limitMaxPrice;
-	}
-
-	protected function getPriceLevelName()
-	{
-		if (!$this->priceLevelName && $this->priceLevel) {
-			$allowedProperties = Stock::getPriceProperties();
-			if (array_key_exists($this->priceLevel, $allowedProperties)) {
-				$this->priceLevelName = $allowedProperties[$this->priceLevel];
-			} else {
-				$this->priceLevelName = self::DEFAULT_PRICE_LEVEL;
-			}
-		}
-		return $this->priceLevelName;
 	}
 
 	protected function getCurrencySymbol()
@@ -608,342 +433,22 @@ class ProductList extends Control
 		return NULL;
 	}
 
-	// </editor-fold>
-
-	/* 	 SORTING & FILTERING & PAGING ********************************************************************** */
-
-	// <editor-fold desc="filter, sort, paging">
-
-	private function appendTranslation()
+	protected function getLimitPriceMin()
 	{
-		$dql = $this->qb->getDQLParts();
-		foreach ($this->qb->getRootAliases() as $rootAlias) {
-			foreach ($dql['join'][$rootAlias] as $join) {
-				if ($join->getAlias() === 't') {
-					return $this;
-				}
-			}
-		}
-		$this->qb->innerJoin('p.translations', 't');
-
-		return $this;
+		$this->setLimitPrices();
+		return $this->limitPriceMin;
 	}
 
-	protected function applyFiltering()
+	protected function getLimitPriceMax()
 	{
-		if ($this->filterApplied) {
-			return $this;
-		}
-		$this->filterNotDeleted();
-		$this->filterOnlyActive();
-		$this->filterByInStore($this->showOnlyAvailable);
-		foreach ($this->filter as $key => $value) {
-			switch ($key) {
-				case 'category':
-					$this->filterByCategory($value);
-					break;
-				case 'categoryNot':
-					$this->filterByCategoryNot($value);
-					break;
-				case 'producer':
-					$this->filterByProducer($value);
-					break;
-				case 'line':
-					$this->filterByLine($value);
-					break;
-				case 'model':
-					$this->filterByModel($value);
-					break;
-				case 'accessoriesFor':
-					$this->filterByAccessoriesFor($value);
-					break;
-				case 'fulltext':
-					$this->filterByFulltext($value);
-					break;
-				case 'updatedFrom':
-					$this->filterByUpdatedFrom($value);
-					break;
-				case 'createdFrom':
-					$this->filterByCreatedFrom($value);
-					break;
-				case 'parameter':
-					$this->filterByParameters($value);
-					break;
-			}
-		}
-
-		// get limit prices before edit price part of query
-		$this->getLimitPrices();
-
-		if ($this->maxPrice) {
-			$this->filterByPrice([$this->minPrice, $this->maxPrice]);
-		}
-
-		$this->filterApplied = TRUE;
-		return $this;
+		$this->setLimitPrices();
+		return $this->limitPriceMax;
 	}
 
-	protected function filterNotDeleted()
+	protected function getFilterParams()
 	{
-		$this->qb
-			->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
-			->andWhere('p.deletedAt IS NULL OR p.deletedAt > :now')
-			->setParameter('now', new DateTime());
-
-		return $this;
-	}
-
-	protected function filterOnlyActive()
-	{
-		$this->qb
-			->andWhere('s.active = :active')
-			->andWhere('p.active = :active')
-			->setParameter('active', TRUE);
-
-		return $this;
-	}
-
-	protected function filterByUpdatedFrom($time)
-	{
-		$dateTime = $time instanceof DateTime ? $time : DateTime::from($time);
-		$this->qb
-			->andWhere('s.updatedAt >= :time OR p.updatedAt >= :time')
-			->setParameter('time', $dateTime);
-
-		return $this;
-	}
-
-	protected function filterByCreatedFrom($time)
-	{
-		$dateTime = $time instanceof DateTime ? $time : DateTime::from($time);
-		$this->qb
-			->andWhere('s.createdAt >= :time OR p.createdAt >= :time')
-			->setParameter('time', $dateTime);
-
-		return $this;
-	}
-
-	protected function filterByCategory($category)
-	{
-		$category = is_string($category) ? explode(',', $category) : $category;
-		$this->qb->innerJoin('p.categories', 'categories');
-		if (is_array($category)) {
-			$this->qb
-				->andWhere('categories IN (:categories)')
-				->setParameter('categories', $category);
-		} else {
-			$this->qb
-				->andWhere('categories = :category')
-				->setParameter('category', $category);
-		}
-
-		return $this;
-	}
-
-	protected function filterByCategoryNot($category)
-	{
-		$category = is_string($category) ? explode(',', $category) : $category;
-		if (is_array($category)) {
-			$this->qb
-				->andWhere('p.mainCategory NOT IN (:categories)')
-				->setParameter('categories', $category);
-		} else {
-			$this->qb
-				->andWhere('p.mainCategory != :category')
-				->setParameter('category', $category);
-		}
-
-		return $this;
-	}
-
-	protected function filterByProducer($producer)
-	{
-		if (is_array($producer)) {
-			$this->qb
-				->andWhere('p.producer IN (:producers)')
-				->setParameter('producers', $producer);
-		} else {
-			$this->qb
-				->andWhere('p.producer = :producer')
-				->setParameter('producer', $producer);
-		}
-
-		return $this;
-	}
-
-	protected function filterByLine($line)
-	{
-		if (is_array($line)) {
-			$this->qb
-				->andWhere('p.producerLine IN (:lines)')
-				->setParameter('lines', $line);
-		} else {
-			$this->qb
-				->andWhere('p.producerLine = :line')
-				->setParameter('line', $line);
-		}
-
-		return $this;
-	}
-
-	protected function filterByModel($model)
-	{
-		if (is_array($model)) {
-			$this->qb
-				->andWhere('p.producerModel IN (:models)')
-				->setParameter('models', $model);
-		} else {
-			$this->qb
-				->andWhere('p.producerModel = :model')
-				->setParameter('model', $model);
-		}
-
-		return $this;
-	}
-
-	protected function filterByAccessoriesFor($model)
-	{
-		$this->qb->innerJoin('p.accessoriesFor', 'accessoriesFor');
-		if (is_array($model)) {
-			$this->qb
-				->andWhere('accessoriesFor IN (:models)')
-				->setParameter('models', $model);
-		} else {
-			$this->qb
-				->andWhere('accessoriesFor = :model')
-				->setParameter('model', $model);
-		}
-
-		return $this;
-	}
-
-	protected function filterByFulltext($text)
-	{
-		$words = preg_split('/\s+/', $text, -1, PREG_SPLIT_NO_EMPTY);
-		$conditions = new Andx();
-		foreach ($words as $key => $word) {
-			$keyword = 'word' . $key;
-			$conditions->add('t.name LIKE :' . $keyword);
-			$this->qb->setParameter($keyword, "%$word%");
-		}
-		$this->appendTranslation();
-		$this->qb->andWhere($conditions);
-
-		return $this;
-	}
-
-	protected function filterByPrice(array $prices)
-	{
-		// prices are inserted with vat
-		list($lowPriceValue, $highPriceValue) = $prices;
-
-		// recount price to price without vat
-		$vatRepo = $this->em->getRepository(Vat::getClassName());
-		$vatPricesLow = [];
-		$vatPricesHigh = [];
-		foreach ($vatRepo->findAll() as $vat) {
-			if ($lowPriceValue > 0) {
-				$vatPricesLow[$vat->id] = new Price($vat, $lowPriceValue, FALSE);
-			}
-			if ($highPriceValue > 0) {
-				$vatPricesHigh[$vat->id] = new Price($vat, $highPriceValue, FALSE);
-			}
-		}
-
-		$vatParameterAdd = FALSE;
-		if (count($vatPricesLow)) {
-			$condition = NULL;
-			foreach ($vatPricesLow as $vatId => $price) {
-				$conditionAdd = "s.vat = :vat{$vatId} AND s.{$this->getPriceLevelName()} >= :lowPrice{$vatId}";
-				$condition = Helpers::concatStrings(') OR (', $condition, $conditionAdd);
-				$this->qb->setParameter("lowPrice{$vatId}", $price->withoutVat);
-				$this->qb->setParameter("vat{$vatId}", $vatId);
-				$vatParameterAdd = TRUE;
-			}
-			$this->qb->andWhere('(' . $condition . ')');
-		}
-		if (count($vatPricesHigh)) {
-			$condition = NULL;
-			foreach ($vatPricesHigh as $vatId => $price) {
-				$conditionAdd = "s.vat = :vat{$vatId} AND s.{$this->getPriceLevelName()} <= :highPrice{$vatId}";
-				$condition = Helpers::concatStrings(') OR (', $condition, $conditionAdd);
-				$this->qb->setParameter("highPrice{$vatId}", $price->withoutVat);
-				if (!$vatParameterAdd) {
-					$this->qb->setParameter("vat{$vatId}", $vatId);
-				}
-			}
-			$this->qb->andWhere('(' . $condition . ')');
-		}
-
-		return $this;
-	}
-
-	protected function filterByInStore($isInStore)
-	{
-		if ($isInStore) {
-			$this->qb->andWhere("s.inStore >= :inStore")
-				->setParameter('inStore', 1);
-		}
-
-		return $this;
-	}
-
-	protected function filterByParameters(array $parameters)
-	{
-		foreach ($parameters as $code => $value) {
-			$paramKey = 'param' . $code;
-			if (Parameter::checkCodeHasType($code, Parameter::STRING)) {
-				$operator = 'LIKE';
-			} else {
-				$operator = '=';
-			}
-			$this->qb->andWhere("p.parameter{$code} {$operator} :{$paramKey}")
-				->setParameter($paramKey, $value);
-		}
-		return $this;
-	}
-
-	protected function applySorting()
-	{
-		$orderBy = new OrderBy();
-
-		switch ($this->sorting) {
-			case self::SORT_BY_PRICE_ASC:
-			case self::SORT_BY_PRICE_DESC:
-				$dir = $this->sorting === self::SORT_BY_PRICE_ASC ? 'ASC' : 'DESC';
-				$orderBy->add('s.' . $this->getPriceLevelName(), $dir);
-				break;
-			case self::SORT_BY_NAME_ASC:
-			case self::SORT_BY_NAME_DESC:
-				$dir = $this->sorting === self::SORT_BY_NAME_ASC ? 'ASC' : 'DESC';
-				$this->appendTranslation();
-				$this->qb
-					->andWhere('t.locale = :locale OR t.locale = :defaultLocale')
-					->setParameter('locale', $this->translator->getDefaultLocale())
-					->setParameter('defaultLocale', $this->translator->getDefaultLocale())
-					->orderBy('t.name', $dir);
-				$orderBy->add('t.name', $dir);
-				break;
-			default:
-				return $this;
-		}
-
-		if ($orderBy->count()) {
-			$this->qb->orderBy($orderBy);
-		}
-	}
-
-	protected function applyPaging()
-	{
-		$paginator = $this->getPaginator()
-			->setItemCount($this->getCount())
-			->setPage($this->page);
-
-		$offset = $paginator->getOffset();
-		$limit = $paginator->getLength();
-		$this->qb
-			->setFirstResult($offset)
-			->setMaxResults($limit);
+		$unserialized = @unserialize($this->filter);
+		return $unserialized ? $unserialized : [];
 	}
 
 	// </editor-fold>
@@ -952,21 +457,12 @@ class ProductList extends Control
 
 	// <editor-fold desc="signals">
 
-	/**
-	 * @param int $page
-	 * @internal
-	 */
 	public function handlePage($page)
 	{
 		$this->page = $page;
 		$this->reload();
 	}
 
-	/**
-	 * Refresh wrapper.
-	 * @return void
-	 * @internal
-	 */
 	public function reload()
 	{
 		if ($this->presenter->isAjax()) {
@@ -991,7 +487,7 @@ class ProductList extends Control
 	{
 		$template = parent::createTemplate();
 		$template->setFile(__DIR__ . '/templates/productList.latte');
-		$template->registerHelper('translate', callback($this->getTranslator(), 'translate'));
+		$template->registerHelper('translate', callback($this->translator, 'translate'));
 
 		return $template;
 	}
@@ -1026,7 +522,6 @@ class ProductList extends Control
 	public function renderFilter()
 	{
 		$this->template->setFile(__DIR__ . '/templates/filter.latte');
-		$this->template->expandFilter = $this->expandFilter;
 		$this->templateRender();
 	}
 
@@ -1051,8 +546,7 @@ class ProductList extends Control
 		}
 
 		$this->template->stocks = $data;
-		$this->template->priceLevel = $this->priceLevel;
-		$this->template->paginator = $this->paginator;
+		$this->template->paginator = $this->getPaginator();
 		$this->template->itemsPerRow = $this->itemsPerRow;
 		$this->template->lang = $this->translator->getLocale();
 		$this->template->ajax = $this->ajax;
@@ -1092,10 +586,14 @@ class ProductList extends Control
 		$form = new Form($this, $name);
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
-		$form->getElementPrototype()->class = ['sendOnChange', 'loadingNoOverlay', !$this->ajax ?: 'ajax'];
+		$form->getElementPrototype()->class = [
+			'sendOnChange',
+			'loadingNoOverlay',
+			!$this->ajax ?: 'ajax'
+		];
 
 		$form->addCheckbox('onlyAvailable', 'Only Available')
-			->setDefaultValue($this->showOnlyAvailable);
+			->setDefaultValue($this->stored);
 
 		$limitMinPriceRaw = $this->getLimitPriceMin();
 		$limitMaxPriceRaw = $this->getLimitPriceMax();
@@ -1105,8 +603,8 @@ class ProductList extends Control
 		$fromValue = $this->minPrice ? floor($this->exchange->change($this->minPrice)) : NULL;
 		$toValue = $this->maxPrice ? ceil($this->exchange->change($this->maxPrice)) : NULL;
 
-		$form->addText('price', 'Range:')
-			->setAttribute('data-min', 100)
+		$form->addText('price', 'Range')
+			->setAttribute('data-min', $limitMinPrice)
 			->setAttribute('data-max', $limitMaxPrice)
 			->setAttribute('data-from', $fromValue)
 			->setAttribute('data-to', $toValue)
@@ -1115,6 +613,7 @@ class ProductList extends Control
 			->setAttribute('data-hasgrid', 'false')
 			->setAttribute('data-postfix', ' ' . $this->getCurrencySymbol());
 
+		$filteredParams = $this->getFilterParams();
 		$paramRepo = $this->em->getRepository(Parameter::getClassName());
 		$allParams = $paramRepo->findAll();
 		$defaultValues = [];
@@ -1130,8 +629,8 @@ class ProductList extends Control
 					$form->addSelect2($parameter->code, $parameter->name, $items);
 					break;
 			}
-			if (isset($this->filter['parameter'][$parameter->code])) {
-				$defaultValues[$parameter->code] = $this->filter['parameter'][$parameter->code];
+			if (isset($filteredParams[$parameter->code])) {
+				$defaultValues[$parameter->code] = $filteredParams[$parameter->code];
 			}
 		}
 		$form->setDefaults($defaultValues);
@@ -1141,27 +640,29 @@ class ProductList extends Control
 
 	public function processFilterForm(Form $form, ArrayHash $values)
 	{
-		$this->showOnlyAvailable = $values->onlyAvailable;
+		$this->stored = $values->onlyAvailable;
 
 		$glue = preg_quote(';');
 		if (preg_match('/^(\d+)' . $glue . '(\d+)$/', $values->price, $matches)) {
 			$minPriceRaw = $matches[1];
 			$maxPriceRaw = $matches[2];
-			$this->minPrice = $this->exchange->change($minPriceRaw, $this->exchange->getWeb(), $this->exchange->getDefault());
-			$this->maxPrice = $this->exchange->change($maxPriceRaw, $this->exchange->getWeb(), $this->exchange->getDefault());
+
+			$minPrice = $this->exchange->change($minPriceRaw, $this->exchange->getWeb(), $this->exchange->getDefault());
+			$maxPrice = $this->exchange->change($maxPriceRaw, $this->exchange->getWeb(), $this->exchange->getDefault());
+			$this->setFilterPrice($minPrice, $maxPrice);
 			$form['price']
 				->setAttribute('data-from', $minPriceRaw)
 				->setAttribute('data-to', $maxPriceRaw);
 		}
 
-		$this->resetFilterParameter();
+		$params = [];
 		foreach (Product::getParameterProperties() as $parameterProperty) {
 			if (isset($values->{$parameterProperty->code}) && $values->{$parameterProperty->code}) {
-				$this->addFilterParameter($parameterProperty->code, $values->{$parameterProperty->code});
+				$params[$parameterProperty->code] = $values->{$parameterProperty->code};
 			}
 		}
+		$this->setFilterParams($params);
 
-		$this->expandFilter = TRUE;
 		$this->reload();
 	}
 

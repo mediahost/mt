@@ -2,6 +2,7 @@
 
 namespace App\ApiModule\Presenters;
 
+use App\Extensions\Products\IProductListFactory;
 use App\Extensions\Products\ProductList;
 use App\Model\Entity\Order;
 use App\Model\Entity\OrderStateType;
@@ -28,6 +29,9 @@ class PohodaConnectorPresenter extends BasePresenter
 	/** @var PohodaFacade @inject */
 	public $pohodaFacade;
 
+	/** @var IProductListFactory @inject */
+	public $iProductListFactory;
+
 	/** Priority CPU using */
 	public function actionReadStorageCart()
 	{
@@ -37,26 +41,19 @@ class PohodaConnectorPresenter extends BasePresenter
 			$this->resource->state = 'error';
 			$this->resource->message = 'This module is not allowed';
 		} else {
-
-			/* @var $stockRepo StockRepository */
-			$stockRepo = $this->em->getRepository(Stock::getClassName());
 			/* @var $pohodaRepo PohodaItemRepository */
 			$pohodaRepo = $this->em->getRepository(PohodaItem::getClassName());
 
 			$lastConvert = $this->pohodaFacade->getLastSync(PohodaFacade::ANY_IMPORT, PohodaFacade::LAST_CONVERT);
 
-			$list = new ProductList();
+			$list = $this->iProductListFactory->create();
 			$list->setTranslator($this->translator);
 			$list->setExchange($this->exchange, $this->exchange->getDefault());
-			$list->qb = $stockRepo->createQueryBuilder('s')
-					->innerJoin('s.product', 'p');
 			$list->addFilterUpdatedFrom($lastConvert);
 
-			$insertList = new ProductList();
+			$insertList = $this->iProductListFactory->create();
 			$insertList->setTranslator($this->translator);
 			$insertList->setExchange($this->exchange, $this->exchange->getDefault());
-			$insertList->qb = $stockRepo->createQueryBuilder('s')
-					->innerJoin('s.product', 'p');
 			$insertList->addFilterCreatedFrom(new DateTime('- 3 days'));
 
 			$pohodaRepo->findAll(); // load all items in doctrine and find will be without SQL
@@ -85,7 +82,7 @@ class PohodaConnectorPresenter extends BasePresenter
 			$this->resource->state = 'error';
 			$this->resource->message = 'This module is not allowed';
 		} else {
-			
+
 			$orderTypeRepo = $this->em->getRepository(OrderStateType::getClassName());
 			$type = $orderTypeRepo->find(OrderStateType::STORNO);
 
@@ -104,7 +101,7 @@ class PohodaConnectorPresenter extends BasePresenter
 					$orderItems[] = $item;
 				}
 			}
-			
+
 			$this->template->orders = $orders;
 			$this->template->orderItems = $orderItems;
 			$this->template->ico = $this->settings->modules->pohoda->ico;
