@@ -24,9 +24,9 @@ class ProductFacade extends Object
 		$this->productRepo = $this->em->getRepository(Product::getClassName());
 	}
 
-	public function getParameterValues(Parameter $parameter, array $ids = [])
+	public function getParameterValues(Parameter $parameter, array $ids = [], $specificValue = NULL)
 	{
-		return $this->productRepo->getParameterValues($parameter->code, $ids);
+		return $this->productRepo->getParameterValues($parameter->code, $ids, $specificValue);
 	}
 
 }

@@ -88,16 +88,20 @@ class ProductRepository extends BaseRepository
 		}
 	}
 
-	public function getParameterValues($code, array $ids = [])
+	public function getParameterValues($code, array $ids = [], $specificValue = NULL)
 	{
 		$row = 'p.parameter' . $code;
 		$qb = $this->createQueryBuilder('p')
 			->select('p.parameter' . $code)
 			->distinct()
-			->where("{$row} IS NOT NULL");
+			->where($row . ' IS NOT NULL');
 		if (count($ids)) {
 			$qb->andWhere('p.id IN (:ids)')
 				->setParameter('ids', $ids);
+		}
+		if ($specificValue !== NULL) {
+			$qb->andWhere($row . ' = :specificValue')
+				->setParameter('specificValue', $specificValue);
 		}
 		$query = $qb->getQuery();
 

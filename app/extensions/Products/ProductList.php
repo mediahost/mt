@@ -621,7 +621,10 @@ class ProductList extends Control
 			$parameter->setCurrentLocale($this->translator->getLocale());
 			switch ($parameter->type) {
 				case Parameter::BOOLEAN:
-					$form->addCheckbox($parameter->code, $parameter->name);
+					$moreItems = $this->productFacade->getParameterValues($parameter, $findedIds, TRUE);
+					if ($moreItems) {
+						$form->addCheckbox($parameter->code, $parameter->name);
+					}
 					break;
 				case Parameter::STRING:
 					$items = [NULL => '--- Not selected ---'];
