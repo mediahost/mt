@@ -57,20 +57,24 @@
 				this.element = parentPortlet;
 			}
 			var options = {
-				target: this.element,
-				iconOnly: true
+				target: this.element
 			};
+			if (typeof(Frontend) === typeof(Function)) {
+				options.iconOnly = true;
+			} else {
+				options.animate = true;
+			}
 			if (this.element && this.element.hasClass('loadingNoOverlay')) {
 				options.overlayColor = 'none';
 			}
-			if (Frontend) {
+			if (typeof(Frontend) === typeof(Function)) {
 				Frontend.blockUI(options);
 			} else if (Metronic) {
 				Metronic.blockUI(options);
 			}
 		},
 		complete: function () {
-			if (Frontend) {
+			if (typeof(Frontend) === typeof(Function)) {
 				Frontend.unblockUI(this.element);
 			} else if (Metronic) {
 				Metronic.unblockUI(this.element);
