@@ -98,7 +98,7 @@ class ProductList extends Control
 	public $maxPrice;
 
 	/** @var array @persistent */
-	public $filter;
+	public $param;
 
 	// </editor-fold>
 	// <editor-fold defaultstate="collapsed" desc="events">
@@ -243,8 +243,8 @@ class ProductList extends Control
 		if ($this->maxPrice) {
 			$this->getHolder()->filterPrice($this->minPrice > 0 ? $this->minPrice : 0, $this->maxPrice);
 		}
-		if ($this->filter) {
-			$params = unserialize($this->filter);
+		if ($this->param) {
+			$params = unserialize($this->param);
 			if (is_array($params)) {
 				foreach ($params as $code => $value) {
 					$this->getHolder()->filterParameter($code, $value);
@@ -344,7 +344,7 @@ class ProductList extends Control
 	protected function setFilterParams(array $params)
 	{
 		$serialized = @serialize($params);
-		$this->filter = count($params) && $serialized ? $serialized : NULL;
+		$this->param = count($params) && $serialized ? $serialized : NULL;
 		return $this;
 	}
 
@@ -447,7 +447,7 @@ class ProductList extends Control
 
 	protected function getFilterParams()
 	{
-		$unserialized = @unserialize($this->filter);
+		$unserialized = @unserialize($this->param);
 		return $unserialized ? $unserialized : [];
 	}
 
@@ -616,6 +616,7 @@ class ProductList extends Control
 		$paramRepo = $this->em->getRepository(Parameter::getClassName());
 		$allParams = $paramRepo->findAll();
 		$defaultValues = [];
+		$findedIds = $this->getHolder()->getProductsIds(TRUE);
 		foreach ($allParams as $parameter) {
 			$parameter->setCurrentLocale($this->translator->getLocale());
 			switch ($parameter->type) {
@@ -623,9 +624,11 @@ class ProductList extends Control
 					$form->addCheckbox($parameter->code, $parameter->name);
 					break;
 				case Parameter::STRING:
-					$items = [NULL => ''];
-					$items += $this->productFacade->getParameterValues($parameter);
-					$form->addSelect2($parameter->code, $parameter->name, $items);
+					$items = [NULL => '--- Not selected ---'];
+					$moreItems = $this->productFacade->getParameterValues($parameter, $findedIds);
+					if (count($moreItems)) {
+						$form->addSelect2($parameter->code, $parameter->name, $items + $moreItems);
+					}
 					break;
 			}
 			if (isset($filteredParams[$parameter->code])) {
