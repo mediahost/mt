@@ -59,7 +59,7 @@
 			var options = {
 				target: this.element
 			};
-			if (typeof(Frontend) === typeof(Function)) {
+			if (typeof(Frontend) === 'object') {
 				options.iconOnly = true;
 			} else {
 				options.animate = true;
@@ -67,16 +67,16 @@
 			if (this.element && this.element.hasClass('loadingNoOverlay')) {
 				options.overlayColor = 'none';
 			}
-			if (typeof(Frontend) === typeof(Function)) {
+			if (typeof(Frontend) === 'object') {
 				Frontend.blockUI(options);
-			} else if (Metronic) {
+			} else if (typeof(Metronic) === 'object') {
 				Metronic.blockUI(options);
 			}
 		},
 		complete: function () {
-			if (typeof(Frontend) === typeof(Function)) {
+			if (typeof(Frontend) === 'object') {
 				Frontend.unblockUI(this.element);
-			} else if (Metronic) {
+			} else if (typeof(Metronic) === 'object') {
 				Metronic.unblockUI(this.element);
 			}
 			if (this.moveTarget.length) {
