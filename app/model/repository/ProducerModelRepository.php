@@ -3,6 +3,8 @@
 namespace App\Model\Repository;
 
 use App\Model\Entity\ProducerLine;
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 class ProducerModelRepository extends BaseRepository
 {

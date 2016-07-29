@@ -184,8 +184,12 @@ class DataHolder extends Object
 	{
 		$this->applyPreFilters();
 
-		$criteria = $this->getStockCriteria();
-		list($lowerPrice, $higherPrice) = $this->stockRepo->getLimitPricesBy($criteria, $this->priceLevelName);
+		try {
+			$criteria = $this->getStockCriteria();
+			list($lowerPrice, $higherPrice) = $this->stockRepo->getLimitPricesBy($criteria, $this->priceLevelName);
+		} catch (DataHolderException $e) {
+			$higherPrice = $lowerPrice = 0;
+		}
 
 		return [$lowerPrice, $higherPrice];
 	}
@@ -334,7 +338,7 @@ class DataHolder extends Object
 
 	public function filterCategory(Category $category)
 	{
-		$ids = array_keys($category->getChildrenArray()) + [$category->id];
+		$ids = array_keys($category->getChildrenArray());
 		$productIds = $this->productRepo->getIdsByCategoryIds($ids);
 		$this->addStockCriteria('product IN', $productIds);
 		return $this;
@@ -353,8 +357,8 @@ class DataHolder extends Object
 				$producerIds[] = $item->producer->id;
 			} elseif ($item instanceof ProducerModel) {
 				$modelIds[] = $item->id;
-				$lineIds = $item->line->id;
-				$producerIds[] = $item->producer->id;
+				$lineIds[] = $item->line->id;
+				$producerIds[] = $item->line->producer->id;
 			}
 		}
 

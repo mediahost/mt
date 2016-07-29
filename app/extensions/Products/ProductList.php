@@ -4,42 +4,29 @@ namespace App\Extensions\Products;
 
 use App\Components\Product\Form\IPrintStockFactory;
 use App\Extensions\Products\Components\DataHolder;
+use App\Extensions\Products\Components\IProducerFilterFactory;
 use App\Extensions\Products\Components\ISortingFormFactory;
 use App\Extensions\Products\Components\Paginator;
 use App\Extensions\Products\Components\SortingForm;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
-use App\Helpers;
 use App\Model\Entity\Category;
 use App\Model\Entity\Parameter;
-use App\Model\Entity\Price;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
 use App\Model\Entity\Product;
-use App\Model\Entity\Stock;
-use App\Model\Entity\Vat;
 use App\Model\Facade\BasketFacade;
 use App\Model\Facade\ProductFacade;
 use App\Model\Facade\StockFacade;
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\Query\Expr\Andx;
-use Doctrine\ORM\Query\Expr\OrderBy;
-use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
-use Exception;
 use h4kuna\Exchange\Exchange;
-use InvalidArgumentException;
 use Kdyby\Doctrine\EntityManager;
-use Kdyby\Doctrine\QueryBuilder;
 use Kdyby\Translation\Translator;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Multiplier;
-use Nette\ComponentModel\IContainer;
 use Nette\Localization\ITranslator;
 use Nette\Templating\FileTemplate;
 use Nette\Utils\ArrayHash;
-use Nette\Utils\DateTime;
-use Nette\Utils\Strings;
 
 class ProductList extends Control
 {
@@ -76,6 +63,9 @@ class ProductList extends Control
 	/** @var ISortingFormFactory @inject */
 	public $iSortingFormFactory;
 
+	/** @var IProducerFilterFactory @inject */
+	public $iProducerFilterFactory;
+
 	// </editor-fold>
 	// <editor-fold defaultstate="collapsed" desc="persistent">
 
@@ -96,6 +86,15 @@ class ProductList extends Control
 
 	/** @var int @persistent */
 	public $maxPrice;
+
+	/** @var int @persistent */
+	public $producer;
+
+	/** @var int @persistent */
+	public $line;
+
+	/** @var int @persistent */
+	public $model;
 
 	/** @var array @persistent */
 	public $param;
@@ -240,6 +239,32 @@ class ProductList extends Control
 	protected function applyFiltering()
 	{
 		$this->getHolder()->filterInStore($this->stored);
+
+		$accessoriesFilter = [];
+		if ($this->producer) {
+			$producerRepo = $this->em->getRepository(Producer::getClassName());
+			$producer = $producerRepo->find($this->producer);
+			if ($producer) {
+				$accessoriesFilter[] = $producer;
+			}
+		}
+		if ($this->line) {
+			$lineRepo = $this->em->getRepository(ProducerLine::getClassName());
+			$line = $lineRepo->find($this->line);
+			if ($line) {
+				$accessoriesFilter[] = $line;
+			}
+		}
+		if ($this->model) {
+			$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
+			$model = $modelRepo->find($this->model);
+			if ($model) {
+				$accessoriesFilter[] = $model;
+			}
+		}
+		if (count($accessoriesFilter)) {
+			$this->getHolder()->filterAccessoriesFor($accessoriesFilter);
+		}
 		if ($this->maxPrice) {
 			$this->getHolder()->filterPrice($this->minPrice > 0 ? $this->minPrice : 0, $this->maxPrice);
 		}
@@ -278,6 +303,14 @@ class ProductList extends Control
 				break;
 		}
 
+		return $this;
+	}
+
+	public function setProducer(Producer $producer = NULL, ProducerLine $line = NULL, ProducerModel $model = NULL)
+	{
+		$this->producer = $producer ? $producer->id : NULL;
+		$this->line = $line ? $line->id : NULL;
+		$this->model = $model ? $model->id : NULL;
 		return $this;
 	}
 
@@ -573,9 +606,24 @@ class ProductList extends Control
 		$control->setAjax();
 		$control->setSorting($this->sorting);
 		$control->setPerPage($this->perPage, $this->perPageList);
-		$control->onAfterSend = function ($sorting, $perPage) {
+		$control->setProducer($this->producer);
+		$control->setLine($this->line);
+		$control->setModel($this->model);
+
+		$control->onAfterSend = function ($sorting, $perPage, $producer, $line, $model) {
 			$this->setSorting($sorting);
+			$this->setProducer($producer, $line, $model);
 			$this->perPage = $perPage;
+			$this->reload();
+		};
+		return $control;
+	}
+
+	protected function createComponentAccessoriesFilterForm()
+	{
+		$control = $this->iProducerFilterFactory->create();
+		$control->setAjax();
+		$control->onAfterSend = function ($producer, $line, $model) {
 			$this->reload();
 		};
 		return $control;
@@ -602,15 +650,17 @@ class ProductList extends Control
 		$fromValue = $this->minPrice ? floor($this->exchange->change($this->minPrice)) : NULL;
 		$toValue = $this->maxPrice ? ceil($this->exchange->change($this->maxPrice)) : NULL;
 
-		$form->addText('price', 'Range')
-			->setAttribute('data-min', $limitMinPrice)
-			->setAttribute('data-max', $limitMaxPrice)
-			->setAttribute('data-from', $fromValue)
-			->setAttribute('data-to', $toValue)
-			->setAttribute('data-type', 'double')
-			->setAttribute('data-step', '1')
-			->setAttribute('data-hasgrid', 'false')
-			->setAttribute('data-postfix', ' ' . $this->getCurrencySymbol());
+		if ($limitMaxPrice > 0) {
+			$form->addText('price', 'Range')
+				->setAttribute('data-min', $limitMinPrice)
+				->setAttribute('data-max', $limitMaxPrice)
+				->setAttribute('data-from', $fromValue)
+				->setAttribute('data-to', $toValue)
+				->setAttribute('data-type', 'double')
+				->setAttribute('data-step', '1')
+				->setAttribute('data-hasgrid', 'false')
+				->setAttribute('data-postfix', ' ' . $this->getCurrencySymbol());
+		}
 
 		$filteredParams = $this->getFilterParams();
 		$paramRepo = $this->em->getRepository(Parameter::getClassName());

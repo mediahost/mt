@@ -6,6 +6,10 @@ use App\Components\BaseControl;
 use App\Extensions\Products\ProductList;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
+use App\Model\Entity\Producer;
+use App\Model\Entity\ProducerLine;
+use App\Model\Entity\ProducerModel;
+use App\Model\Facade\ProducerFacade;
 
 class SortingForm extends BaseControl
 {
@@ -13,6 +17,16 @@ class SortingForm extends BaseControl
 	private $sorting;
 	private $perPage;
 	private $perPageList = [];
+
+	/** @var Producer */
+	private $producer;
+	/** @var ProducerLine */
+	private $line;
+	/** @var ProducerModel */
+	private $model;
+
+	/** @var ProducerFacade @inject */
+	public $producerFacade;
 
 	/** @var array */
 	public $onAfterSend = [];
@@ -28,12 +42,32 @@ class SortingForm extends BaseControl
 			!$this->isAjax ?: 'ajax'
 		];
 
+		$notSelected = [NULL => '--- Not Selected ---'];
+
+		$producers = $this->producerFacade->getProducersList(TRUE);
+		$form->addSelect('producer', 'Producer', $notSelected + $producers)
+			->setDisabled(!count($producers))
+			->setDefaultValue($this->producer ? $this->producer->id : NULL)
+			->getControlPrototype()->class('input-medium category-selections-select');
+
+		$lines = $this->producer ? $this->producerFacade->getLinesList($this->producer, FALSE, TRUE) : [];
+		$form->addSelect('line', 'Line', $notSelected + $lines)
+			->setDisabled(!count($lines))
+			->setDefaultValue($this->line ? $this->line->id : NULL)
+			->getControlPrototype()->class('input-medium category-selections-select');
+
+		$models = $this->line ? $this->producerFacade->getModelsList($this->line, FALSE, TRUE) : [];
+		$form->addSelect('model', 'Model', $notSelected + $models)
+			->setDisabled(!count($models))
+			->setDefaultValue($this->model ? $this->model->id : NULL)
+			->getControlPrototype()->class('input-medium category-selections-select');
+
 		$form->addSelect('sort', 'Sort by', $this->getSortingMethods())
 			->setDefaultValue($this->sorting)
-			->getControlPrototype()->class('input-sm');
+			->getControlPrototype()->class('input-sm category-selections-select');
 
 		$perPage = $form->addSelect('perPage', 'Show', $this->getItemsForCountSelect())
-			->getControlPrototype()->class('input-sm');
+			->getControlPrototype()->class('input-sm category-selections-select');
 		$defaultPerPage = array_search($this->perPage, $this->perPageList);
 		if ($defaultPerPage !== FALSE) {
 			$perPage->setDefaultValue($this->perPage);
@@ -46,22 +80,68 @@ class SortingForm extends BaseControl
 	public function formSucceeded(Form $form, $values)
 	{
 		$this->setSorting($values->sort);
+
+		if (isset($values->producer)) {
+			$this->setProducer($values->producer);
+		}
+		if (isset($values->line)) {
+			$this->setLine($values->line);
+		}
+		if (isset($values->model)) {
+			$this->setModel($values->model);
+		}
+
 		$key = array_search($values->perPage, $this->perPageList);
 		if ($key !== FALSE) {
 			$this->perPage = $key ? $values->perPage : NULL;
 		}
-		$this->onAfterSend($this->sorting, $this->perPage);
+		$this->onAfterSend($this->sorting, $this->perPage, $this->producer, $this->line, $this->model);
 	}
 
 	public function setSorting($value)
 	{
 		$this->sorting = $value;
+		return $this;
+	}
+
+	public function setProducer($producer)
+	{
+		if ($producer instanceof Producer) {
+			$this->producer = $producer;
+		} else if ($producer) {
+			$producerRepo = $this->em->getRepository(Producer::getClassName());
+			$this->producer = $producerRepo->find($producer);
+		}
+		return $this;
+	}
+
+	public function setLine($line)
+	{
+		if ($line instanceof Producer) {
+			$this->line = $line;
+		} else if ($line) {
+			$lineRepo = $this->em->getRepository(ProducerLine::getClassName());
+			$this->line = $lineRepo->find($line);
+		}
+		return $this;
+	}
+
+	public function setModel($model)
+	{
+		if ($model instanceof Producer) {
+			$this->model = $model;
+		} else if ($model) {
+			$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
+			$this->model = $modelRepo->find($model);
+		}
+		return $this;
 	}
 
 	public function setPerPage($perPage, array $perPageList)
 	{
 		$this->perPage = $perPage;
 		$this->perPageList = $perPageList;
+		return $this;
 	}
 
 

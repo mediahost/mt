@@ -4,7 +4,7 @@
 
 		<aside class="category-filters">
 
-			<div class="category-filters-section">
+			<div n:ifset="$form['price']" class="category-filters-section">
 				<h3 class="widget-title-sm">{_'Price'}</h3>
 				{input price}
 			</div>
@@ -16,7 +16,8 @@
 				</div>
 			</div>
 
-			<div class="category-filters-section">
+			<div n:if="isset($form['B1']) || isset($form['B2']) || isset($form['B3']) || isset($form['B4']) || isset($form['B5'])"
+					class="category-filters-section">
 				<h3 class="widget-title-sm">{_'Parameters'}</h3>
 				<div n:ifset="$form['B1']" class="checkbox">
 					{input B1}
@@ -38,7 +39,8 @@
 				</div>
 			</div>
 
-			<div n:ifset="$form['S1']" class="category-filters-section multi-headers">
+			<div n:if="isset($form['S1']) || isset($form['S2']) || isset($form['S3'])"
+					class="category-filters-section multi-headers">
 				<h3 class="widget-title-sm">
 					{label S1 /}
 				</h3>
