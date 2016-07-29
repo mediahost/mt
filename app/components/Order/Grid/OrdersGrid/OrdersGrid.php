@@ -153,7 +153,7 @@ class OrdersGrid extends BaseControl
 						->setDisable(function($item) {
 							return !$this->presenter->canDelete($item);
 						})
-				->elementPrototype->class[] = 'red';
+				->getElementPrototype()->class[] = 'red';
 
 		$grid->setActionWidth("10%");
 
