@@ -11,7 +11,6 @@ use Kdyby\Doctrine\EntityRepository;
 use Kdyby\Doctrine\QueryBuilder;
 use Kdyby\Doctrine\QueryException;
 use LogicException;
-use Tracy\Debugger;
 
 abstract class BaseRepository extends EntityRepository implements IRepository
 {
@@ -118,8 +117,14 @@ abstract class BaseRepository extends EntityRepository implements IRepository
 			$this->appendAndOrCriteria($qb, $orItem[0], $orItem[1]);
 		}
 
+		$startFunPos = strpos($value, '(');
+		if ($startFunPos === FALSE) {
+			$aliasedValue = self::ALIAS . '.' . $value;
+		} else {
+			$aliasedValue = substr($value, 0, $startFunPos + 1) . self::ALIAS . '.' . substr($value, $startFunPos + 1);
+		}
 		$query = $qb
-			->select(self::ALIAS . '.' . $value, self::ALIAS . '.' . $key)
+			->select($aliasedValue, self::ALIAS . '.' . $key)
 			->resetDQLPart('from')->from($this->getEntityName(), self::ALIAS, self::ALIAS . '.' . $key)
 			->autoJoinOrderBy((array)$orderBy)
 			->getQuery();

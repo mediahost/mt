@@ -48,7 +48,7 @@ class DataHolder extends Object
 	private $stocks;
 
 	/** @var array */
-	private $stockIds;
+	private $productIds;
 
 	/** @var string */
 	private $priceLevelName;
@@ -146,9 +146,9 @@ class DataHolder extends Object
 		return $this->stocks;
 	}
 
-	public function getStocksIds($withoutPost = FALSE)
+	public function getProductsIds($withoutPost = FALSE)
 	{
-		if (!$this->stockIds) {
+		if (!$this->productIds) {
 			$this->applyPreFilters();
 			if (!$withoutPost) {
 				$this->applyPostFilters();
@@ -156,12 +156,12 @@ class DataHolder extends Object
 
 			try {
 				$criteria = $this->getStockCriteria();
-				$this->stockIds = $this->stockRepo->findPairs($criteria, 'id', $this->orderBy);
+				$this->productIds = $this->stockRepo->findPairs($criteria, 'IDENTITY(product)', $this->orderBy);
 			} catch (DataHolderException $e) {
-				$this->stockIds = [];
+				$this->productIds = [];
 			}
 		}
-		return $this->stockIds;
+		return $this->productIds;
 	}
 
 	public function getCount()
