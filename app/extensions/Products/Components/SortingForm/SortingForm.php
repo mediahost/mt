@@ -9,7 +9,7 @@ use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
-use App\Model\Facade\ProducerFacade;
+use App\Model\Facade\ProducerFacade
 
 class SortingForm extends BaseControl
 {
@@ -44,22 +44,22 @@ class SortingForm extends BaseControl
 
 		$notSelected = [NULL => '--- Not Selected ---'];
 
-		$producers = $this->producerFacade->getProducersList(TRUE);
+		$producers = $this->producerFacade->getProducersList(TRUE, FALSE, TRUE);
 		$form->addSelect('producer', 'Producer', $notSelected + $producers)
 			->setDisabled(!count($producers))
-			->setDefaultValue($this->producer ? $this->producer->id : NULL)
+			->setDefaultValue($this->producer && array_key_exists($this->producer->id, $producers) ? $this->producer->id : NULL)
 			->getControlPrototype()->class('input-medium category-selections-select');
 
 		$lines = $this->producer ? $this->producerFacade->getLinesList($this->producer, FALSE, TRUE) : [];
 		$form->addSelect('line', 'Line', $notSelected + $lines)
 			->setDisabled(!count($lines))
-			->setDefaultValue($this->line ? $this->line->id : NULL)
+			->setDefaultValue($this->line && array_key_exists($this->line->id, $lines) ? $this->line->id : NULL)
 			->getControlPrototype()->class('input-medium category-selections-select');
 
 		$models = $this->line ? $this->producerFacade->getModelsList($this->line, FALSE, TRUE) : [];
 		$form->addSelect('model', 'Model', $notSelected + $models)
 			->setDisabled(!count($models))
-			->setDefaultValue($this->model ? $this->model->id : NULL)
+			->setDefaultValue($this->model && array_key_exists($this->model->id, $models) ? $this->model->id : NULL)
 			->getControlPrototype()->class('input-medium category-selections-select');
 
 		$form->addSelect('sort', 'Sort by', $this->getSortingMethods())
@@ -112,6 +112,9 @@ class SortingForm extends BaseControl
 			$producerRepo = $this->em->getRepository(Producer::getClassName());
 			$this->producer = $producerRepo->find($producer);
 		}
+		if (!$this->producer) {
+			$this->setLine(NULL);
+		}
 		return $this;
 	}
 
@@ -123,6 +126,11 @@ class SortingForm extends BaseControl
 			$lineRepo = $this->em->getRepository(ProducerLine::getClassName());
 			$this->line = $lineRepo->find($line);
 		}
+
+		if (!$this->producer || ($this->line && $this->line->producer->id !== $this->producer->id)) {
+			$this->line = NULL;
+		}
+
 		return $this;
 	}
 
@@ -134,6 +142,11 @@ class SortingForm extends BaseControl
 			$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
 			$this->model = $modelRepo->find($model);
 		}
+
+		if (!$this->line || ($this->model && $this->model->line->id !== $this->line->id)) {
+			$this->model = NULL;
+		}
+
 		return $this;
 	}
 

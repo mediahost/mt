@@ -52,28 +52,30 @@ class ProducerFacade extends Object
 
 	public function getProducers($onlyWithChildren = FALSE, $onlyWithProducts = FALSE)
 	{
-		return $this->getProducersList($onlyWithChildren, $onlyWithProducts, FALSE);
+		return $this->getProducersList($onlyWithChildren, $onlyWithProducts, FALSE, FALSE);
 	}
 
-	public function getProducersList($onlyWithChildren = FALSE, $onlyWithProducts = FALSE, $toString = TRUE)
+	public function getProducersList($onlyWithChildren = FALSE, $onlyWithProducts = FALSE, $onlyWithAccProducers = FALSE, $toString = TRUE)
 	{
+		$criteria = [];
+		if ($onlyWithProducts) {
+			$criteria['id IN'] = $this->productRepo->getProducersIds();
+		}
+		if ($onlyWithAccProducers) {
+			$ids = $this->productRepo->getAccessoriesProducersIds();
+			$criteria['id IN'] = isset($criteria['id IN']) ? array_diff($criteria['id IN'], $ids) : $ids;
+		}
+
 		$lines = [];
 		if ($onlyWithChildren) {
 			$lines = $this->lineRepo->findPairs('id', 'producerId');
 		}
-		$producersIdsInProducts = [];
-		if ($onlyWithProducts) {
-			$producersIdsInProducts = $this->productRepo->getProducersIds();
-		}
 
 		$producers = [];
-		foreach ($this->producerRepo->findAllWithPriority() as $producer) {
+		foreach ($this->producerRepo->findAllWithPriority($criteria) as $producer) {
 			$isIn = TRUE;
-			if ($isIn && $onlyWithChildren) {
+			if ($onlyWithChildren) {
 				$isIn = array_key_exists($producer->id, $lines);
-			}
-			if ($isIn && $onlyWithProducts) {
-				$isIn = in_array($producer->id, $producersIdsInProducts);
 			}
 			if ($isIn) {
 				$producers[$producer->id] = $toString ? (string)$producer : $producer;
@@ -82,7 +84,7 @@ class ProducerFacade extends Object
 		return $producers;
 	}
 
-	public function getLinesList(Producer $producer = NULL, $fullPath = FALSE, $onlyWithChildren = FALSE, $onlyWithProducts = FALSE)
+	public function getLinesList(Producer $producer = NULL, $fullPath = FALSE, $onlyWithChildren = FALSE, $onlyWithProducts = FALSE, $onlyWithAccLines = FALSE)
 	{
 		$models = [];
 		if ($onlyWithChildren) {
@@ -93,13 +95,17 @@ class ProducerFacade extends Object
 			$producersIdsInProducts = $this->productRepo->getProducersIds();
 		}
 
-		$conditions = [];
+		$criteria = [];
 		if ($producer) {
-			$conditions['producer'] = $producer;
+			$criteria['producer'] = $producer;
+		}
+		if ($onlyWithAccLines) {
+			$ids = $this->productRepo->getAccessoriesLinesIds();
+			$criteria['id IN'] = isset($criteria['id IN']) ? array_diff($criteria['id IN'], $ids) : $ids;
 		}
 
 		$lines = [];
-		foreach ($this->lineRepo->findBy($conditions, ['priority' => 'ASC']) as $line) {
+		foreach ($this->lineRepo->findBy($criteria, ['priority' => 'ASC']) as $line) {
 			$isIn = TRUE;
 			if ($isIn && $onlyWithChildren) {
 				$isIn = array_key_exists($line->id, $models);
@@ -114,27 +120,23 @@ class ProducerFacade extends Object
 		return $lines;
 	}
 
-	public function getModelsList(ProducerLine $line = NULL, $fullPath = FALSE, $onlyWithProducts = FALSE)
+	public function getModelsList(ProducerLine $line = NULL, $fullPath = FALSE, $onlyWithProducts = FALSE, $onlyWithAccModels = FALSE)
 	{
-		$conditions = [];
+		$criteria = [];
 		if ($line) {
-			$conditions['line'] = $line;
+			$criteria['line'] = $line;
 		}
-
-		$producersIdsInProducts = [];
 		if ($onlyWithProducts) {
-			$producersIdsInProducts = $this->productRepo->getProducersIds();
+			$criteria['producer'] = $this->productRepo->getProducersIds();
+		}
+		if ($onlyWithAccModels) {
+			$ids = $this->productRepo->getAccessoriesModelsIds();
+			$criteria['id IN'] = isset($criteria['id IN']) ? array_diff($criteria['id IN'], $ids) : $ids;
 		}
 
 		$models = [];
-		foreach ($this->modelRepo->findBy($conditions, ['priority' => 'ASC']) as $model) {
-			$isIn = TRUE;
-			if ($isIn && $onlyWithProducts) {
-				$isIn = in_array($model->line->producer->id, $producersIdsInProducts);
-			}
-			if ($isIn) {
-				$models[$model->id] = $fullPath ? $model->getFullName() : (string)$model;
-			}
+		foreach ($this->modelRepo->findBy($criteria, ['priority' => 'ASC']) as $model) {
+			$models[$model->id] = $fullPath ? $model->getFullName() : (string)$model;
 		}
 		return $models;
 	}

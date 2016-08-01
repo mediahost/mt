@@ -125,6 +125,42 @@ class ProductRepository extends BaseRepository
 		}, $query->getResult(AbstractQuery::HYDRATE_ARRAY));
 	}
 
+	public function getAccessoriesProducersIds()
+	{
+		return $this->getAccessoriesIds('accessories_producer_ids');
+	}
+
+	public function getAccessoriesLinesIds()
+	{
+		return $this->getAccessoriesIds('accessories_line_ids');
+	}
+
+	public function getAccessoriesModelsIds()
+	{
+		return $this->getAccessoriesIds('accessories_model_ids');
+	}
+
+	private function getAccessoriesIds($column)
+	{
+		$rsm = new ResultSetMapping();
+		$rsm->addScalarResult($column, 'ids');
+
+		$sql = 'SELECT DISTINCT ' . $column . ' ' .
+			'FROM ' . $this->getClassMetadata()->getTableName() . ' ' .
+			'WHERE ' . $column . ' != \'\'';
+		$query = $this->createNativeQuery($sql, $rsm);
+
+		$ids = [];
+		$idFields = array_map(function ($row) {
+			return explode(',', reset($row));
+		}, $query->getResult(AbstractQuery::HYDRATE_ARRAY));
+
+		foreach ($idFields as $field) {
+			$ids = array_merge($ids, $field);
+		}
+		return array_unique($ids);
+	}
+
 	public function getIdsByCategoryIds(array $ids)
 	{
 		if (count($ids) === 1) {
