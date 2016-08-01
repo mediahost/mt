@@ -73,3 +73,4 @@ services:
 			- allow('superadmin', 'pages')
 			- allow('superadmin', 'payments')
 			- allow('superadmin', 'groups')
+			- allow('superadmin', 'users')

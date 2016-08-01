@@ -21,6 +21,9 @@ use Nette\Utils\ArrayHash;
 class UserBasic extends BaseControl
 {
 
+	/** @var \Nette\Security\User @inject */
+	public $userIdentity;
+
 	/** @var User */
 	private $user;
 
@@ -74,16 +77,19 @@ class UserBasic extends BaseControl
 
 		$role = $form->addMultiSelectBoxes('roles', 'Roles', $this->getRoles())
 				->setRequired('Select any role');
-
-		$groupRepo = $this->em->getRepository(Group::getClassName());
-		$groups = [NULL => '--- No Group ---'] + $groupRepo->findPairs(['type' => Group::TYPE_DEALER], 'name');
-		$form->addSelect2('group', 'Group', $groups);
+		if (!$this->user->isNew() && !$this->userIdentity->isAllowed('users', 'editAll')) {
+			$role->setDisabled();
+		}
 
 		$roleRepo = $this->em->getRepository(Role::getClassName());
 		$defaultRole = $roleRepo->findOneByName(Role::USER);
 		if ($defaultRole && in_array($defaultRole->getId(), $this->getRoles())) {
 			$role->setDefaultValue($defaultRole->getId());
 		}
+
+		$groupRepo = $this->em->getRepository(Group::getClassName());
+		$groups = [NULL => '--- No Group ---'] + $groupRepo->findPairs(['type' => Group::TYPE_DEALER], 'name');
+		$form->addSelect2('group', 'Group', $groups);
 
 		$form->addSubmit('save', 'Save');
 
@@ -117,13 +123,17 @@ class UserBasic extends BaseControl
 		if ($values->password !== NULL && $values->password !== "") {
 			$this->user->setPassword($values->password);
 		}
-		$this->user->clearRoles();
-		foreach ($values->roles as $id) {
-			$roleDao = $this->em->getDao(Role::getClassName());
-			$item = $roleDao->find($id);
-			if ($item) {
-				$this->user->addRole($item);
+
+		if (isset($values->roles)) {
+			$this->user->clearRoles();
+			foreach ($values->roles as $id) {
+				$roleDao = $this->em->getDao(Role::getClassName());
+				$item = $roleDao->find($id);
+				if ($item) {
+					$this->user->addRole($item);
+				}
 			}
+
 		}
 		$this->user
 				->setLocale($this->translator->getDefaultLocale())
