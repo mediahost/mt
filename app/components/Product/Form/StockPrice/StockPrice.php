@@ -120,7 +120,8 @@ class StockPrice extends StockBase
 			$discount = NULL;
 			$percentValue = $percents->$groupId;
 			if ($fixedValue > 0) {
-				$discount = new Discount($fixedValue, Discount::FIXED_PRICE);
+				$fixedPrice = new Price($this->stock->vat, $fixedValue, !$values->with_vat);
+				$discount = new Discount($fixedPrice->withoutVat, Discount::FIXED_PRICE);
 			} else if ($percentValue &&
 					0 < $percentValue && $percentValue < 100 &&
 					(($this->percentIsSale && $percentValue > 0) || (!$this->percentIsSale && $percentValue < 100))
@@ -196,7 +197,8 @@ class StockPrice extends StockBase
 					$value = $this->percentIsSale ? $groupDiscount->discount->value : (100 - $groupDiscount->discount->value);
 					break;
 				default:
-					$value = $groupDiscount->discount->value;
+					$discountedPrice = $groupDiscount->discount->getDiscountedPrice($this->stock->price);
+					$value = $this->defaultWithVat ? $discountedPrice->withVat : $discountedPrice->withoutVat;
 					break;
 			}
 			$values[$groupDiscount->discount->type][$groupDiscount->group->id] = $value;
