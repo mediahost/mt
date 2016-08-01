@@ -10,6 +10,7 @@ use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Discount;
 use App\Model\Entity\Group;
+use App\Model\Entity\Price;
 use App\Model\Entity\Stock;
 use Nette\Http\FileUpload;
 use Nette\Utils\ArrayHash;
@@ -86,13 +87,17 @@ class CsvStockImport extends BaseControl
 			foreach ($groups as $group) {
 				$priceName = 'price' . $group->level;
 				$priceValue = $row->$priceName;
-				if (preg_match('/^(\d+)\%$/', $priceValue, $matches)) {
-					$value = StockPrice::PERCENT_IS_PRICE ? $matches[1] : 100 - $matches[1];
+				if (preg_match('/^(\d+([,\.]\d+)*)\%$/', $priceValue, $matches)) {
+					$number = Price::strToFloat($matches[1]);
+					$value = StockPrice::PERCENT_IS_PRICE ? $number : 100 - $number;
 					$discount = new Discount($value, Discount::PERCENTAGE);
-				} else {
-					$discount = new Discount($priceValue, Discount::FIXED_PRICE);
+				} else if (preg_match('/^(\d+([,\.]\d+)*)$/', $priceValue, $matches)) {
+					$number = Price::strToFloat($priceValue);
+					$discount = new Discount($number, Discount::FIXED_PRICE);
 				}
-				$stock->addDiscount($discount, $group);
+				if (isset($discount)) {
+					$stock->addDiscount($discount, $group);
+				}
 			}
 			$stock->setDefaltPrice($row->defaultPrice);
 			$stockRepo->save($stock);

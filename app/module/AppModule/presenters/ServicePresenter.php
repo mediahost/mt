@@ -5,7 +5,10 @@ namespace App\AppModule\Presenters;
 use App\Extensions\Installer;
 use App\Extensions\LimitExceededException;
 use App\Extensions\WrongSituationException;
+use App\Model\Entity\Discount;
+use App\Model\Entity\Group;
 use App\Model\Entity\Product;
+use App\Model\Entity\Stock;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
 use Doctrine\ORM\AbstractQuery;
@@ -138,6 +141,19 @@ class ServicePresenter extends BasePresenter
 		$this->redirect('this');
 	}
 
+	/**
+	 * @secured
+	 * @resource('service')
+	 * @privilege('resetBonusPrices')
+	 */
+	public function handleResetBonusPrices()
+	{
+		$this->resetBonusPrices();
+		$message = $this->translator->translate('All bonus prices was restored to default values');
+		$this->flashMessage($message, 'success');
+		$this->redirect('this');
+	}
+
 	private function removeCache()
 	{
 		$cacheFolder = './../temp/cache/';
@@ -202,7 +218,7 @@ class ServicePresenter extends BasePresenter
 				WHERE `product`.`accessories_producer_ids` = ''
 				LIMIT :limit";
 		$query = $this->em->createNativeQuery($sql, $rsm)
-		->setParameter('limit', 100);
+			->setParameter('limit', 100);
 
 		$counter = 0;
 		$productsRepo = $this->em->getRepository(Product::getClassName());
@@ -216,6 +232,23 @@ class ServicePresenter extends BasePresenter
 		}
 		$this->em->flush();
 		return $counter;
+	}
+
+	private function resetBonusPrices()
+	{
+		$groupRepo = $this->em->getRepository(Group::getClassName());
+		$bonusGroups = $groupRepo->findByType(Group::TYPE_BONUS);
+
+		$stockRepo = $this->em->getRepository(Stock::getClassName());
+		$stocks = $stockRepo->findByPrice11(NULL, [], 100);
+		foreach ($stocks as $stock) {
+			foreach ($bonusGroups as $group) {
+				$stock->addDiscount($group->getDiscount(), $group);
+			}
+			$stock->recalculateOtherPrices();
+			$stockRepo->save($stock);
+		}
+		return $this;
 	}
 
 }
