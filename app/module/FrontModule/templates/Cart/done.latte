@@ -9,6 +9,7 @@
 			<div class="col-md-12 col-sm-12">
 				<div class="cart-page">
 					{var paymentError => $order->isCardPayment() && !$order->isPayed()}
+					<div class="gap-big"></div>
 					<div n:class="note, $paymentError ? note-warning : note-success">
 						<h4 class="block">
 							{if $order->isCardPayment() && $order->isPayed()}

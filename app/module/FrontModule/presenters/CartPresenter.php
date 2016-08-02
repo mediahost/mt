@@ -19,8 +19,7 @@ use App\Model\Entity\Payment;
 use App\Model\Entity\Shipping;
 use App\Model\Facade\Exception\ItemsIsntOnStockException;
 use Doctrine\ORM\NoResultException;
-use HeurekaOvereno;
-use HeurekaOverenoException;
+use Heureka\ShopCertification;
 use Nette\Utils\Html;
 use Pixidos\GPWebPay\Components\GPWebPayControl;
 use Pixidos\GPWebPay\Components\GPWebPayControlFactory;
@@ -213,14 +212,17 @@ class CartPresenter extends BasePresenter
 		$heurekaSettings = $this->settings->modules->heureka;
 		if ($heurekaSettings->enabled) {
 			try {
-				$overeno = new HeurekaOvereno($heurekaSettings->keyOvereno, HeurekaOvereno::LANGUAGE_SK);
-				$overeno->setEmail($order->mail);
-				$overeno->addOrderId($order->id);
+				$options = [
+					'service' => ShopCertification::HEUREKA_SK,
+				];
+				$shopCertification = new ShopCertification($heurekaSettings->keyOvereno, $options);
+				$shopCertification->setEmail($order->mail);
+				$shopCertification->setOrderId($order->id);
 				foreach ($order->items as $item) {
-					$overeno->addProductItemId($item->stock->id);
+					$shopCertification->addProductItemId($item->stock->id);
 				}
-				$overeno->send();
-			} catch (HeurekaOverenoException $ex) {
+				$shopCertification->logOrder();
+			} catch (ShopCertification\Exception $ex) {
 				Debugger::log($ex->getMessage(), 'heureka-overeno');
 			}
 		}
