@@ -21,6 +21,8 @@ class HomeCredit extends Object
 	const HC_RET_YES = 'Y';
 	const HC_RET_NO = 'N';
 	const HC_RET_LATE = 'L';
+	const MIN_PRICE = 80;
+	const ALLOWED_CURRENCY = 'EUR';
 
 	/** @var Translator @inject */
 	public $translator;
@@ -101,7 +103,7 @@ class HomeCredit extends Object
 
 	public function getIShopLink()
 	{
-		if ($this->exchange->getWeb()->getCode() !== 'EUR') {
+		if ($this->exchange->getWeb()->getCode() !== self::ALLOWED_CURRENCY) {
 			return NULL;
 		}
 		if (!$this->orderId) {
@@ -109,6 +111,9 @@ class HomeCredit extends Object
 		}
 		if (!$this->product) {
 			throw new HomeCreditException('Product is not set');
+		}
+		if ($this->product->price < self::MIN_PRICE) {
+			return NULL;
 		}
 		if (!$this->address) {
 			throw new HomeCreditException('Address is not set');
@@ -149,11 +154,14 @@ class HomeCredit extends Object
 
 	public function getCalcLink()
 	{
-		if ($this->exchange->getWeb()->getCode() !== 'EUR') {
+		if ($this->exchange->getWeb()->getCode() !== self::ALLOWED_CURRENCY) {
 			return NULL;
 		}
 		if (!$this->product) {
 			throw new HomeCreditException('Product is not set');
+		}
+		if ($this->product->price < self::MIN_PRICE) {
+			return NULL;
 		}
 
 		$time = (new DateTime())->format('d.m.Y-H:i:s');
