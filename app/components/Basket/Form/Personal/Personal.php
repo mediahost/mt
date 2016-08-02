@@ -42,9 +42,9 @@ class Personal extends BaseControl
 		$form = new Form();
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicHorizontalFormRenderer(4, 8));
-		if ($this->isAjax) {
-			$form->getElementPrototype()->class('ajax loadingNoOverlay');
-		}
+		$form->getElementPrototype()->class = [
+			!$this->isAjax ?: 'ajax'
+		];
 
 		if ($this->basketFacade->needAddress()) {
 			$this->createFormWithAddress($form);

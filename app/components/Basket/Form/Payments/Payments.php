@@ -39,9 +39,10 @@ class Payments extends BaseControl
 		$form = new Form();
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
-		if ($this->isAjax) {
-			$form->getElementPrototype()->class('ajax loadingNoOverlay' . ($this->isSendOnChange ? ' sendOnChange' : ''));
-		}
+		$form->getElementPrototype()->class = [
+			!$this->isSendOnChange ?: 'sendOnChange',
+			!$this->isAjax ?: 'ajax'
+		];
 
 		$basket = $this->basketFacade->getBasket();
 		$shippings = $this->paymentFacade->getShippingsList($basket, $this->priceLevel);
