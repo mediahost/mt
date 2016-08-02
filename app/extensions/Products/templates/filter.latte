@@ -41,26 +41,33 @@
 
 			<div n:if="isset($form['S1']) || isset($form['S2']) || isset($form['S3'])"
 					class="category-filters-section multi-headers">
-				<h3 class="widget-title-sm">
-					{label S1 /}
-				</h3>
-				<div class="checkbox">
-					{input S1, class => 'select2 form-control input-fluid'}
-				</div>
 
-				<h3 class="widget-title-sm">
-					{label S2 /}
-				</h3>
-				<div class="checkbox">
-					{input S2, class => 'select2 form-control input-fluid'}
-				</div>
+				{ifset $form['S1']}
+					<h3 class="widget-title-sm">
+						{label S1 /}
+					</h3>
+					<div class="checkbox">
+						{input S1, class => 'select2 form-control input-fluid'}
+					</div>
+				{/ifset}
 
-				<h3 class="widget-title-sm">
-					{label S3 /}
-				</h3>
-				<div class="checkbox">
-					{input S3, class => 'select2 form-control input-fluid'}
-				</div>
+				{ifset $form['S2']}
+					<h3 class="widget-title-sm">
+						{label S2 /}
+					</h3>
+					<div class="checkbox">
+						{input S2, class => 'select2 form-control input-fluid'}
+					</div>
+				{/ifset}
+
+				{ifset $form['S3']}
+					<h3 class="widget-title-sm">
+						{label S3 /}
+					</h3>
+					<div class="checkbox">
+						{input S3, class => 'select2 form-control input-fluid'}
+					</div>
+				{/ifset}
 			</div>
 
 		</aside>
