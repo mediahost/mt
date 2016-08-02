@@ -9,7 +9,7 @@ use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
-use App\Model\Facade\ProducerFacade
+use App\Model\Facade\ProducerFacade;
 
 class SortingForm extends BaseControl
 {
