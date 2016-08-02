@@ -7,7 +7,7 @@
 		{var clickSelector => '#basket-dialog-caller'}
 
 		<ul class="product-labels">
-			<li n:if="!$product->hasSign($newSign)" class="new">{$newSign}</li>
+			<li n:if="$product->hasSign($newSign)" class="new">{$newSign}</li>
 			<li n:if="$product->hasSign($saleSign)" class="sale">{$saleSign}</li>
 			<li n:if="$product->hasSign($topSign)" class="top">{$topSign}</li>
 		</ul>
