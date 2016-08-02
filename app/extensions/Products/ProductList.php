@@ -138,6 +138,9 @@ class ProductList extends Control
 	/** @var int */
 	protected $rowsPerPage = 3;
 
+	/** @var bool */
+	protected $producerAllowNone = TRUE;
+
 	/** @var int */
 	protected $priceLevel;
 
@@ -303,6 +306,7 @@ class ProductList extends Control
 	public function setProducer(Producer $producer = NULL, ProducerLine $line = NULL, ProducerModel $model = NULL)
 	{
 		$this->producer = $producer ? $producer->id : NULL;
+		$this->producerAllowNone = FALSE;
 		$this->line = $line ? $line->id : NULL;
 		$this->model = $model ? $model->id : NULL;
 		return $this;
@@ -600,7 +604,7 @@ class ProductList extends Control
 		$control->setAjax();
 		$control->setSorting($this->sorting);
 		$control->setPerPage($this->perPage, $this->perPageList);
-		$control->setProducer($this->producer);
+		$control->setProducer($this->producer, $this->producerAllowNone);
 		$control->setLine($this->line);
 		$control->setModel($this->model);
 

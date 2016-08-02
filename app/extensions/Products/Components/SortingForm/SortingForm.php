@@ -17,6 +17,7 @@ class SortingForm extends BaseControl
 	private $sorting;
 	private $perPage;
 	private $perPageList = [];
+	private $allowNone = TRUE;
 
 	/** @var Producer */
 	private $producer;
@@ -45,7 +46,7 @@ class SortingForm extends BaseControl
 		$notSelected = [NULL => '--- Not Selected ---'];
 
 		$producers = $this->producerFacade->getProducersList(TRUE, FALSE, TRUE);
-		$form->addSelect('producer', 'Producer', $notSelected + $producers)
+		$form->addSelect('producer', 'Producer', $this->allowNone ? $notSelected + $producers : $producers)
 			->setDisabled(!count($producers))
 			->setDefaultValue($this->producer && array_key_exists($this->producer->id, $producers) ? $this->producer->id : NULL)
 			->getControlPrototype()->class('input-medium category-selections-select');
@@ -104,7 +105,7 @@ class SortingForm extends BaseControl
 		return $this;
 	}
 
-	public function setProducer($producer)
+	public function setProducer($producer, $allowNone = TRUE)
 	{
 		if ($producer instanceof Producer) {
 			$this->producer = $producer;
@@ -115,6 +116,7 @@ class SortingForm extends BaseControl
 		if (!$this->producer) {
 			$this->setLine(NULL);
 		}
+		$this->allowNone = $allowNone;
 		return $this;
 	}
 
