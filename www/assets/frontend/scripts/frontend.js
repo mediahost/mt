@@ -112,8 +112,8 @@ var Frontend = function () {
 					backgroundColor: 'none'
 				},
 				overlayCSS: {
-					backgroundColor: options.overlayColor ? options.overlayColor : '#555',
-					opacity: options.boxed ? 0.05 : 0.1,
+					backgroundColor: options.overlayColor ? options.overlayColor : overlayColor,
+					opacity: options.boxed ? overlayOpacityBoxed : overlayOpacity,
 					cursor: 'wait'
 				}
 			});

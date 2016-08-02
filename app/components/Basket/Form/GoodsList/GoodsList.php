@@ -38,10 +38,10 @@ class GoodsList extends BaseControl
 		$form = new Form();
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
-		if ($this->isAjax) {
-			$class = 'ajax loadingNoOverlay' . ($this->isSendOnChange ? ' sendOnChange' : NULL);
-			$form->getElementPrototype()->class($class);
-		}
+		$form->getElementPrototype()->class = [
+			!$this->isSendOnChange ?: 'sendOnChange',
+			!$this->isAjax ?: 'ajax'
+		];
 
 		$quantityContainer = $form->addContainer('quantity');
 		foreach ($this->basketFacade->getItems() as $item) {

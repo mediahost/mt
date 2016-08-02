@@ -109,6 +109,57 @@
 		</li>
 	</ul>
 
+	<div class="mfp-with-anim mfp-hide mfp-dialog clearfix" id="basket-dialog">
+		<h3 class="widget-title">{_'cart.navigation.cart'}</h3>
+		<hr/>
+		{if $basket->isEmpty()}
+			<h4 class="block">{_'cart.yourCartIsEmpty'}</h4>
+			<p>
+				<a n:href="Homepage:">{_'cart.continueShopping'}</a>
+			</p>
+		{else}
+			<ul>
+				<li n:foreach="$basket->items as $item">
+					{var stock => $item->stock}
+					{var product => $stock->product}
+					{? $product->setCurrentLocale($lang)}
+					<div class="row">
+						<div class="col-md-1 image">
+							<a n:href="Product: 'id' => $product->getUrlId(), 'slug' => $product->getSlug()">
+								<img src="{$basePath}/foto/{$product->image|size:'35','35'}"
+									 alt="{$product->name}" title="{$product->name}"/>
+							</a>
+						</div>
+						<div class="col-md-9 product-item">
+							<a n:href="Product: $product->id">
+								<span class="quantity">{$item->quantity}x</span>
+								<span class="name">{$product->name}</span>
+							</a>
+						</div>
+						<div class="col-md-2 price text-right">
+							{$item->getTotalPrice($exchange, $priceLevel)|asCurrency:TRUE}
+						</div>
+					</div>
+				</li>
+			</ul>
+			<hr/>
+			<ul>
+				<li>
+					<div class="row">
+						<div class="col-sm-6">
+							<a n:href="Cart:" class="btn btn-primary">
+								{_'View Cart'}
+							</a>
+						</div>
+						<div class="col-sm-6 menu-basket-price text-right">
+							{$basket->getProductsTotalPrice($priceLevel)|asCurrency:TRUE}
+						</div>
+					</div>
+				</li>
+			</ul>
+		{/if}
+	</div>
+
 	<div n:if="!$user->loggedIn" class="mfp-with-anim mfp-hide mfp-dialog clearfix" id="nav-login-dialog">
 		<h3 class="widget-title">{_'My Account'}</h3>
 		<hr/>

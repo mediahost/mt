@@ -39,7 +39,9 @@
 <div class="global-wrapper clearfix" id="global-wrapper">
 
 	{include 'topbar.latte'}
-	{include 'header.latte'}
+	{snippetArea header}
+		{include 'header.latte'}
+	{/snippetArea}
 
 	<!-- BEGIN FLASH MESSAGES-->
 	<div class="container" n:snippet="flashMessages">

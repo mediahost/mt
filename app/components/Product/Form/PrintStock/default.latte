@@ -3,6 +3,8 @@
 		{var blockId => 'stockPrint' . $stock->id}
 		{var product => $stock->product}
 		{var countInBasket => $basket->getCountInBasket($stock)}
+		{var loadingSelector => '#mainContainer'}
+		{var clickSelector => '#basket-dialog-caller'}
 
 		<ul class="product-labels">
 			<li n:if="$product->hasSign($newSign)" class="new">{_'New'}</li>
@@ -38,7 +40,9 @@
 				</div>
 				<div class="col-md-5 col-md-6 col-sm-12 col-xs-4 product-caption-button text-right">
 					<a n:href="addToCart!"
-							n:class="ajax, btn, $basket->getCountAllowedToAdd($stock) ? btn-primary : btn-default, add2cart, !$basket->getCountAllowedToAdd($stock) ? disabled">{_'Add to cart'}</a>
+							n:class="ajax, btn, $basket->getCountAllowedToAdd($stock) ? btn-primary : btn-default, add2cart, !$basket->getCountAllowedToAdd($stock) ? disabled"
+					data-target-click="{$clickSelector}"
+					data-target-loading="{$loadingSelector}">{_'Add to cart'}</a>
 				</div>
 			</div>
 			<div class="row">

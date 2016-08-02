@@ -28,7 +28,10 @@
 		<div class="container">
 			<div class="collapse navbar-collapse navbar-collapse-no-pad" id="main-nav-collapse">
 				{include 'menu.latte'}
-				{include 'basket.latte'}
+				<div n:snippet="basket">
+					{include 'basket.latte'}
+				</div>
+				<a href="#basket-dialog" id="basket-dialog-caller" class="popup-text hidden" data-effect="mfp-move-from-top"></a>
 			</div>
 		</div>
 	</nav>
