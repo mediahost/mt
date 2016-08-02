@@ -165,6 +165,7 @@ class SettingsExtension extends CompilerExtension
 			'complaintPageId' => 1, // TODO: move to pageConfig
 			'contactPageId' => 1, // TODO: move to pageConfig
 			'orderByPhonePageId' => 1, // TODO: move to pageConfig
+			'bonusPageId' => 1, // TODO: move to pageConfig
 		],
 		'pageConfig' => [
 			'itemsPerRow' => 3,

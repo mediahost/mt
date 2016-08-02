@@ -2,49 +2,38 @@
 	<div class="navbar-before mobile-hidden">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-6">
+				<div class="col-md-4">
 					<p class="navbar-before-sign">
-						Infolinka {$companyInfo->contact->phone} (Po - Pia: 9:00 - 17:00)
+						{_'Infoline'} {$companyInfo->contact->phone} (Po - Pia: 9:00 - 17:00)
 					</p>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-8">
 					<ul class="nav navbar-nav navbar-right navbar-right-no-mar">
-						<li>
-							<a href="#">Objednavka cez telefon</a>
+						<li n:foreach="$exchange as $currCode => $curr">
+							<a n:href="setCurrency! $currCode" n:class="$currCode == $currency->getCode() ? current">
+								{$curr->getFormat()->getSymbol()}
+							</a>
 						</li>
-						<li>
-							<a href="#">Obchodne podmienky</a>
+						{foreach $allowedLanguages as $allowedLang}
+							{var $code = substr($allowedLang,0,2)}
+							{if $code !== $locale}
+								<li>
+									{if $user->loggedIn}
+										{var $args = [locale => $code, overwrite => yes]}
+									{else}
+										{var $args = [locale => $code]}
+									{/if}
+									<a n:href="this (expand) $args">
+										<img src="{$basePath}/images/flags/{$code}.png"
+											 alt="{_locale_$code}"/>{_locale_$code}
+									</a>
+								</li>
+							{/if}
+						{/foreach}
+						<li n:foreach="$footerPages as $footerPage" n:if="$footerPage">
+							{? $footerPage->setCurrentLocale($locale)}
+							<a n:href="Page: $footerPage->id">{$footerPage}</a>
 						</li>
-						<li>
-							<a href="#">Reklamacie</a>
-						</li>
-						<li>
-							<a href="#">Kontakt</a>
-						</li>
-						{*<li class="shop-currencies">*}
-							{*<a n:foreach="$exchange as $currCode => $curr"*}
-									{*n:href="setCurrency! $currCode"*}
-									{*n:class="$currCode == $currency->getCode() ? current">*}
-								{*{$curr->getFormat()->getSymbol()}*}
-							{*</a>*}
-						{*</li>*}
-						{*{foreach $allowedLanguages as $allowedLang}*}
-							{*{var $code = substr($allowedLang,0,2)}*}
-							{*{if $code !== $locale}*}
-								{*<li>*}
-
-									{*{if $user->loggedIn}*}
-										{*{var $args = [locale => $code, overwrite => yes]}*}
-									{*{else}*}
-										{*{var $args = [locale => $code]}*}
-									{*{/if}*}
-									{*<a n:href="this (expand) $args">*}
-										{*<img src="{$basePath}/images/flags/{$code}.png"*}
-											 {*alt="{_locale_$code}"/>{_locale_$code}*}
-									{*</a>*}
-								{*</li>*}
-							{*{/if}*}
-						{*{/foreach}*}
 					</ul>
 				</div>
 			</div>

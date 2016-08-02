@@ -22,7 +22,9 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 
 	public function actionDefault($c, $slug = NULL)
 	{
-		$this->category = $this->categoryRepo->find($c);
+		if ($c) {
+			$this->category = $this->categoryRepo->find($c);
+		}
 		if (!$this->category) {
 			$message = $this->translator->translate('Requested category doesn\'t exist. Try to choose another from list.');
 			$this->flashMessage($message, 'warning');
@@ -155,6 +157,22 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 			$this->template->line = $line;
 			$this->template->model = $model;
 
+			$this->setView('default');
+		} else {
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Producer')]);
+			$this->flashMessage($message, 'warning');
+			$this->redirect('Homepage:');
+		}
+	}
+
+	public function actionAppropriate($producer)
+	{
+		$producerRepo = $this->em->getRepository(Producer::getClassName());
+		$producer = $producerRepo->findOneBySlug($producer);
+		if ($producer) {
+			$this['products']->setProducer($producer);
+
+			$this->template->producer = $producer;
 			$this->setView('default');
 		} else {
 			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Producer')]);

@@ -180,12 +180,6 @@ class ProductList extends Control
 		$this->setLimitPrices();
 	}
 
-	public function addFilterAccessoriesFor(array $producers)
-	{
-		$this->getHolder()->filterAccessoriesFor($producers);
-		return $this;
-	}
-
 	public function addFilterFulltext($text)
 	{
 		$this->getHolder()->filterFulltext($text);

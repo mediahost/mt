@@ -16,6 +16,7 @@ use App\Forms\Form;
 use App\Helpers;
 use App\Model\Entity\Category;
 use App\Model\Entity\Page;
+use App\Model\Entity\ProducerModel;
 use App\Model\Entity\Product;
 use App\Model\Entity\Sign;
 use App\Model\Entity\Stock;
@@ -175,25 +176,45 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	protected function loadTemplateMenu()
 	{
-//		$categoryRepo = $this->em->getRepository(Category::getClassName());
-//		$this->template->menuCategories = ArrayHash::from([
-//			'category1' => $categoryRepo->find(355),
-//			'category2' => $categoryRepo->find(177),
-//		]);
+		$stockRepo = $this->em->getRepository(Stock::getClassName());
+		$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
 		$pageRepo = $this->em->getRepository(Page::getClassName());
 		$pageRepo->findAllWithCache($this->locale);
 		$settings = $this->settings;
 		$this->template->menuPages = ArrayHash::from([
-			'page1' => $pageRepo->find($settings->pageInfo->orderByPhonePageId),
+			'page1' => $this->link('Homepage:'),
 			'page2' => $settings->modules->buyout->enabled ? $pageRepo->find($settings->modules->buyout->pageId) : NULL,
 			'page3' => $settings->modules->service->enabled ? $pageRepo->find($settings->modules->service->pageId) : NULL,
-			'page4' => $pageRepo->find($settings->pageInfo->contactPageId),
+			'page4' => $pageRepo->find($settings->pageInfo->bonusPageId),
 			'page5' => $settings->modules->dealer->enabled ? $pageRepo->find($settings->modules->dealer->pageId) : NULL,
+			'page6' => $pageRepo->find($settings->pageInfo->contactPageId),
 		]);
 		$this->template->footerPages = ArrayHash::from([
-			'page1' => $pageRepo->find($settings->pageInfo->termPageId),
-			'page2' => $pageRepo->find($settings->pageInfo->complaintPageId),
+			'page1' => $pageRepo->find($settings->pageInfo->orderByPhonePageId),
+			'page2' => $pageRepo->find($settings->pageInfo->termPageId),
+			'page3' => $pageRepo->find($settings->pageInfo->complaintPageId),
+			'page4' => $pageRepo->find($settings->pageInfo->contactPageId),
 		]);
+		$this->template->mostSearchedStocks = [
+			$stockRepo->find(4291),
+			$stockRepo->find(132626),
+			$stockRepo->find(131213),
+			$stockRepo->find(131680),
+			$stockRepo->find(132622),
+			$stockRepo->find(132249),
+			$stockRepo->find(131219),
+			$stockRepo->find(132621),
+		];
+		$this->template->mostSearchedModels = [
+			$modelRepo->find(1),
+			$modelRepo->find(2),
+			$modelRepo->find(3),
+			$modelRepo->find(4),
+			$modelRepo->find(5),
+			$modelRepo->find(6),
+			$modelRepo->find(7),
+			$modelRepo->find(8),
+		];
 	}
 
 	protected function loadTemplateCategoriesSettings()

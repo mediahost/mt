@@ -8,13 +8,13 @@
 				{elseifset $searched}
 				{$searched}
 				{elseifset $producer}
-				{if $model}
+				{ifset $model}
 					{$model}
-				{elseif $line}
+				{elseifset $line}
 					{$producer} / {$line}
 				{else}
 					{$producer}
-				{/if}
+				{/ifset}
 			{/ifset}
 		</h1>
 		<ol class="breadcrumb page-breadcrumb">
@@ -32,10 +32,10 @@
 				<li>
 					<a n:href="Category:producer, 'producer' => $producer->slug">{$producer}</a>
 				</li>
-				<li n:if="$line">
+				<li n:ifset="$line">
 					<a n:href="Category:producer, 'producer' => $producer->slug, 'line' => $line->slug">{$line}</a>
 				</li>
-				<li n:if="$model">
+				<li n:ifset="$model">
 					<a n:href="Category:producer, 'producer' => $producer->slug, 'line' => $line->slug, 'model' => $model->slug">{$model}</a>
 				</li>
 			{/ifset}
