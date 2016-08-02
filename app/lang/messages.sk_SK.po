@@ -1618,3 +1618,6 @@ msgstr "--- Neurčené ---"
 
 msgid "Infoline"
 msgstr "Infolinka"
+
+msgid "Select type of your phone"
+msgstr "Pre aký telefón hľadáte tovar?"

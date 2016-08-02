@@ -1617,3 +1617,6 @@ msgstr "--- Nevybráno ---"
 
 msgid "Infoline"
 msgstr "Infolinka"
+
+msgid "Select type of your phone"
+msgstr "Pro jaký telefon hledáte zboží?"

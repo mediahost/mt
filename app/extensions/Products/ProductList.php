@@ -538,6 +538,9 @@ class ProductList extends Control
 			if ($this->isControlInvalid('productSorting')) {
 				$this->renderSorting();
 			}
+			if ($this->isControlInvalid('productAccessories')) {
+				$this->renderAccessories();
+			}
 		} else {
 			$this->renderList();
 		}
@@ -565,6 +568,12 @@ class ProductList extends Control
 	public function renderSorting()
 	{
 		$this->template->setFile(__DIR__ . '/templates/sorting.latte');
+		$this->templateRender();
+	}
+
+	public function renderAccessories()
+	{
+		$this->template->setFile(__DIR__ . '/templates/accessories.latte');
 		$this->templateRender();
 	}
 
@@ -604,13 +613,9 @@ class ProductList extends Control
 		$control->setAjax();
 		$control->setSorting($this->sorting);
 		$control->setPerPage($this->perPage, $this->perPageList);
-		$control->setProducer($this->producer, $this->producerAllowNone);
-		$control->setLine($this->line);
-		$control->setModel($this->model);
 
-		$control->onAfterSend = function ($sorting, $perPage, $producer, $line, $model) {
+		$control->onAfterSend = function ($sorting, $perPage) {
 			$this->setSorting($sorting);
-			$this->setProducer($producer, $line, $model);
 			$this->perPage = $perPage;
 			$this->reload();
 		};
@@ -621,7 +626,11 @@ class ProductList extends Control
 	{
 		$control = $this->iProducerFilterFactory->create();
 		$control->setAjax();
+		$control->setProducer($this->producer, $this->producerAllowNone);
+		$control->setLine($this->line);
+		$control->setModel($this->model);
 		$control->onAfterSend = function ($producer, $line, $model) {
+			$this->setProducer($producer, $line, $model);
 			$this->reload();
 		};
 		return $control;
