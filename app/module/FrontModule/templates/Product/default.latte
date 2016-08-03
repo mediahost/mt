@@ -15,7 +15,7 @@
 				<div class="product-page-product-wrap jqzoom-stage">
 					<div class="clearfix">
 						<a href="{$basePath}/foto/{$product->image|size}" id="jqzoom" data-rel="gal-1">
-							<img src="{$basePath}/foto/{$product->image|size:'460','460'}"
+							<img src="{$basePath}/foto/{$product->image|size:460}"
 								 alt="{$product}"
 								 title="{$product}"/>
 						</a>
@@ -24,8 +24,8 @@
 				<ul class="jqzoom-list" n:if="count($product->images)">
 					<li n:foreach="$product->images as $image">
 						<a class="zoomThumbActive" href="javascript:void(0)"
-						   data-rel="{ gallery:'gal-1', smallimage: '{$basePath}/foto/{$image|size:'100'}', largeimage: '{$basePath}/foto/{$image|size}'}">
-							<img src="{$basePath}/foto/{$image|size:'100'}" alt="{$product}" title="{$product}"/>
+						   data-rel="{ gallery:'gal-1', smallimage: '{$basePath}/foto/{$image|size:100}', largeimage: '{$basePath}/foto/{$image|size}'}">
+							<img src="{$basePath}/foto/{$image|size:100}" alt="{$product}" title="{$product}"/>
 						</a>
 					</li>
 				</ul>

@@ -79,7 +79,7 @@
 					{? $product->setCurrentLocale($lang)}
 					<a n:href="Product: 'id' => $product->getUrlId(), 'slug' => $product->getSlug()"
 							class="dropdown-menu-shipping-cart-img">
-						<img src="{$basePath}/foto/{$product->image|size:'35','35'}"
+						<img src="{$basePath}/foto/{$product->image|size:60}"
 							 alt="{$product->name}" title="{$product->name}"/>
 					</a>
 					<div class="dropdown-menu-shipping-cart-inner">
@@ -126,7 +126,7 @@
 					<div class="row">
 						<div class="col-md-1 image">
 							<a n:href="Product: 'id' => $product->getUrlId(), 'slug' => $product->getSlug()">
-								<img src="{$basePath}/foto/{$product->image|size:'35','35'}"
+								<img src="{$basePath}/foto/{$product->image|size:60}"
 									 alt="{$product->name}" title="{$product->name}"/>
 							</a>
 						</div>

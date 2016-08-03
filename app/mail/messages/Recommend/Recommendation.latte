@@ -21,7 +21,7 @@
 						{var product => $stock->product}
 						{? $product->setCurrentLocale($locale)}
 						<td>
-							<img src="{$basePath}/foto/{$product->image|size:'100'}" alt="{$product->name}" border="0">
+							<img src="{$basePath}/foto/{$product->image|size:100}" alt="{$product->name}" border="0">
 						</td>
 						<td style="padding:5px 0px">
 							<a n:href="{$colon}Front:Product: 'id' => $stock->getUrlId(), 'slug' => $stock->getSlug()" style="text-decoration:none!important" target="_blank">
