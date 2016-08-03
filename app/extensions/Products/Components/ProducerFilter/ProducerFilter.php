@@ -68,15 +68,9 @@ class ProducerFilter extends BaseControl
 
 	public function formSucceeded(Form $form, $values)
 	{
-		if (isset($values->producer)) {
-			$this->setProducer($values->producer);
-		}
-		if (isset($values->line)) {
-			$this->setLine($values->line);
-		}
-		if (isset($values->model)) {
-			$this->setModel($values->model);
-		}
+		$this->setProducer(!isset($values->producer) || !$values->producer ? NULL : $values->producer, $this->allowNone);
+		$this->setLine(!isset($values->line) || !$values->line ? NULL : $values->line);
+		$this->setModel(!isset($values->model) || !$values->model ? NULL : $values->model);
 
 		$this->onAfterSend($this->producer, $this->line, $this->model);
 	}
@@ -88,10 +82,14 @@ class ProducerFilter extends BaseControl
 		} else if ($producer) {
 			$producerRepo = $this->em->getRepository(Producer::getClassName());
 			$this->producer = $producerRepo->find($producer);
+		} else {
+			$this->producer = NULL;
 		}
+
 		if (!$this->producer) {
 			$this->setLine(NULL);
 		}
+
 		$this->allowNone = $allowNone;
 		return $this;
 	}
@@ -103,6 +101,8 @@ class ProducerFilter extends BaseControl
 		} else if ($line) {
 			$lineRepo = $this->em->getRepository(ProducerLine::getClassName());
 			$this->line = $lineRepo->find($line);
+		} else {
+			$this->line = NULL;
 		}
 
 		if (!$this->producer || ($this->line && $this->line->producer->id !== $this->producer->id)) {
@@ -119,6 +119,8 @@ class ProducerFilter extends BaseControl
 		} else if ($model) {
 			$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
 			$this->model = $modelRepo->find($model);
+		} else {
+			$this->model = NULL;
 		}
 
 		if (!$this->line || ($this->model && $this->model->line->id !== $this->line->id)) {

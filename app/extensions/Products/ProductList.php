@@ -303,11 +303,21 @@ class ProductList extends Control
 		return $this;
 	}
 
-	public function setProducer(Producer $producer = NULL, ProducerLine $line = NULL, ProducerModel $model = NULL)
+	public function setProducer(Producer $producer = NULL, $allowNone = FALSE)
 	{
 		$this->producer = $producer ? $producer->id : NULL;
-		$this->producerAllowNone = FALSE;
+		$this->producerAllowNone = $allowNone;
+		return $this;
+	}
+
+	public function setLine(ProducerLine $line = NULL)
+	{
 		$this->line = $line ? $line->id : NULL;
+		return $this;
+	}
+
+	public function setModel(ProducerModel $model = NULL)
+	{
 		$this->model = $model ? $model->id : NULL;
 		return $this;
 	}
@@ -632,7 +642,9 @@ class ProductList extends Control
 		$control->setModel($this->model);
 		$control->setProductIds($findedProductIds);
 		$control->onAfterSend = function ($producer, $line, $model) {
-			$this->setProducer($producer, $line, $model);
+			$this->setProducer($producer, $this->producerAllowNone);
+			$this->setLine($line);
+			$this->setModel($model);
 			$this->reload();
 		};
 		return $control;

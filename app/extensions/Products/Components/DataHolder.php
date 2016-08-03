@@ -31,6 +31,7 @@ class DataHolder extends Object
 	const DEFAULT_PRICE_LEVEL = 'defaultPrice';
 	const ORDER_BY_PRICE = 'price';
 	const ORDER_BY_NAME = 'name';
+	const PREFIX_ACCESSORIES = 'num_';
 
 	/** @var EntityManager @inject */
 	public $em;
@@ -156,6 +157,16 @@ class DataHolder extends Object
 
 			try {
 				$criteria = $this->getStockCriteria();
+				if ($withoutPost && isset($criteria[StockRepository::CRITERIA_ORX_KEY])) { // without accessories filter
+					foreach ($criteria[StockRepository::CRITERIA_ORX_KEY] as $key => $item) {
+						foreach ($item[1] as $itemKey => $itemValue) {
+							if (preg_match('/^' . preg_quote(self::PREFIX_ACCESSORIES, '/') . '/', $itemKey)) {
+								unset($criteria[StockRepository::CRITERIA_ORX_KEY][$key]);
+								break;
+							}
+						}
+					}
+				}
 				$this->productIds = $this->stockRepo->findPairs($criteria, 'IDENTITY(product)', $this->orderBy);
 			} catch (DataHolderException $e) {
 				$this->productIds = [];
@@ -372,7 +383,7 @@ class DataHolder extends Object
 			$assoc = [];
 			$orx = new Orx();
 			foreach ($ids as $key => $id) {
-				$prefix = 'num_' . crc32($columnName) . '_' . $key;
+				$prefix = self::PREFIX_ACCESSORIES . crc32($columnName) . '_' . $key;
 				$prefixA = $prefix . 'A';
 				$prefixB = $prefix . 'B';
 				$prefixC = $prefix . 'C';
