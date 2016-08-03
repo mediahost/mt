@@ -103,6 +103,7 @@ class ProductPresenter extends ProductCategoryBasePresenter
 		$this->template->homecreditCalc = $this->homecredit->getCalcLink();
 		$this->template->productCacheTag = ProductFacade::TAG_PRODUCT . $product->id;
 		$this->template->stockCacheTag = StockFacade::TAG_STOCK . $product->stock->id;
+		$this->template->allVisits = $this->visitFacade->getVisitsCount($this->stock, VisitFacade::ALL_VISITS);
 
 		// Last visited
 		$this->user->storage->addVisit($this->stock);

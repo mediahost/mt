@@ -9,12 +9,14 @@ use App\Model\Repository\VisitRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Http\Request;
 use Nette\Object;
+use Tracy\Debugger;
 
 class VisitFacade extends Object
 {
 	
 	const IGNORE_TIME = '1 minutes';
 	const LAST_VISIT = '24 hours';
+	const ALL_VISITS = NULL;
 
 	/** @var EntityManager @inject */
 	public $em;
