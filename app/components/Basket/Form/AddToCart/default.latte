@@ -1,10 +1,10 @@
 {snippet AddToCart}
-	{form form}
+	{form form, data-target-loading => '#product-view'}
 		{? $form->render('begin')}
 
 		<div class="form-body">
 			<div class="quantity-button">
-				{button add, class=>"btn btn-lg btn-primary"}
+				{button add, class=>"btn btn-lg btn-primary", data-target-click => '#basket-dialog-caller'}
 					<i class="fa fa-shopping-cart"></i>
 					{_'Add to cart'}
 				{/button}

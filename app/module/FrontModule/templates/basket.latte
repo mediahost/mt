@@ -124,13 +124,13 @@
 					{var product => $stock->product}
 					{? $product->setCurrentLocale($lang)}
 					<div class="row">
-						<div class="col-md-1 image">
+						<div class="col-md-2 image">
 							<a n:href="Product: 'id' => $product->getUrlId(), 'slug' => $product->getSlug()">
 								<img src="{$basePath}/foto/{$product->image|size:60}"
 									 alt="{$product->name}" title="{$product->name}"/>
 							</a>
 						</div>
-						<div class="col-md-9 product-item">
+						<div class="col-md-8 product-item">
 							<a n:href="Product: $product->id">
 								<span class="quantity">{$item->quantity}x</span>
 								<span class="name">{$product->name}</span>

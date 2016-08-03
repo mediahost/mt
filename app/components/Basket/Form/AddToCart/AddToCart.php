@@ -48,9 +48,9 @@ class AddToCart extends BaseControl
 		$form = new Form();
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
-		if ($this->isAjax) {
-			$form->getElementPrototype()->class('ajax loadingNoOverlay');
-		}
+		$form->getElementPrototype()->class = [
+			!$this->isAjax ?: 'ajax'
+		];
 
 		$form->addSpinner('quantity')
 			->setDisabled($this->isDisabled())
