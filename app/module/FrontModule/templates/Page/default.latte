@@ -7,27 +7,21 @@
 {/block}
 
 {block content}
-<div class="container">
-	<!-- BEGIN SIDEBAR & CONTENT -->
-	<div class="row">
+<div class="row">
+	<!-- BEGIN SIDEBAR -->
+	<div class="col-md-3">
+		{include categories}
+	</div>
+	<!-- END SIDEBAR -->
 
-		<!-- BEGIN SIDEBAR -->
-		<div class="sidebar col-md-3 col-sm-5">
-			{include categories}
-		</div>
-		<!-- END SIDEBAR -->
-
-		<!-- BEGIN CONTENT -->
-		<div class="col-md-9 col-sm-7">
-			<h1>{$page}</h1>
-			<div class="content-page">
-				<div class="page-html-content">
-					{$page->html|noescape}
-				</div>
+	<!-- BEGIN CONTENT -->
+	<div class="col-md-9">
+		<h1>{$page}</h1>
+		<div class="content-page">
+			<div class="page-html-content">
+				{$page->html|noescape}
 			</div>
 		</div>
-		<!-- END CONTENT -->
-
 	</div>
-	<!-- END SIDEBAR & CONTENT -->
+	<!-- END CONTENT -->
 </div>
