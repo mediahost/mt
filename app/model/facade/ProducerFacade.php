@@ -61,8 +61,9 @@ class ProducerFacade extends Object
 		if ($onlyWithProducts) {
 			$criteria['id IN'] = $this->productRepo->getProducersIds();
 		}
-		if ($onlyWithAccProducers) {
-			$ids = $this->productRepo->getAccessoriesProducersIds();
+		if ($onlyWithAccProducers !== FALSE) {
+			$productIds = is_array($onlyWithAccProducers) && count($onlyWithAccProducers) ? $onlyWithAccProducers : [];
+			$ids = $this->productRepo->getAccessoriesProducersIds($productIds);
 			$criteria['id IN'] = isset($criteria['id IN']) ? array_diff($criteria['id IN'], $ids) : $ids;
 		}
 
@@ -99,8 +100,9 @@ class ProducerFacade extends Object
 		if ($producer) {
 			$criteria['producer'] = $producer;
 		}
-		if ($onlyWithAccLines) {
-			$ids = $this->productRepo->getAccessoriesLinesIds();
+		if ($onlyWithAccLines !== FALSE) {
+			$productIds = is_array($onlyWithAccLines) && count($onlyWithAccLines) ? $onlyWithAccLines : [];
+			$ids = $this->productRepo->getAccessoriesLinesIds($productIds);
 			$criteria['id IN'] = isset($criteria['id IN']) ? array_diff($criteria['id IN'], $ids) : $ids;
 		}
 
@@ -129,8 +131,9 @@ class ProducerFacade extends Object
 		if ($onlyWithProducts) {
 			$criteria['producer'] = $this->productRepo->getProducersIds();
 		}
-		if ($onlyWithAccModels) {
-			$ids = $this->productRepo->getAccessoriesModelsIds();
+		if ($onlyWithAccModels !== FALSE) {
+			$productIds = is_array($onlyWithAccModels) && count($onlyWithAccModels) ? $onlyWithAccModels : [];
+			$ids = $this->productRepo->getAccessoriesModelsIds($productIds);
 			$criteria['id IN'] = isset($criteria['id IN']) ? array_diff($criteria['id IN'], $ids) : $ids;
 		}
 

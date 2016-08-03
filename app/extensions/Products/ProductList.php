@@ -624,11 +624,13 @@ class ProductList extends Control
 
 	protected function createComponentAccessoriesFilterForm()
 	{
+		$findedProductIds = $this->getHolder()->getProductsIds(TRUE);
 		$control = $this->iProducerFilterFactory->create();
 		$control->setAjax();
 		$control->setProducer($this->producer, $this->producerAllowNone);
 		$control->setLine($this->line);
 		$control->setModel($this->model);
+		$control->setProductIds($findedProductIds);
 		$control->onAfterSend = function ($producer, $line, $model) {
 			$this->setProducer($producer, $line, $model);
 			$this->reload();
@@ -673,19 +675,19 @@ class ProductList extends Control
 		$paramRepo = $this->em->getRepository(Parameter::getClassName());
 		$allParams = $paramRepo->findAll();
 		$defaultValues = [];
-		$findedIds = $this->getHolder()->getProductsIds(TRUE);
+		$findedProductIds = $this->getHolder()->getProductsIds(TRUE);
 		foreach ($allParams as $parameter) {
 			$parameter->setCurrentLocale($this->translator->getLocale());
 			switch ($parameter->type) {
 				case Parameter::BOOLEAN:
-					$moreItems = $this->productFacade->getParameterValues($parameter, $findedIds, TRUE);
+					$moreItems = $this->productFacade->getParameterValues($parameter, $findedProductIds, TRUE);
 					if ($moreItems) {
 						$form->addCheckbox($parameter->code, $parameter->name);
 					}
 					break;
 				case Parameter::STRING:
 					$items = [NULL => '--- Not selected ---'];
-					$moreItems = $this->productFacade->getParameterValues($parameter, $findedIds);
+					$moreItems = $this->productFacade->getParameterValues($parameter, $findedProductIds);
 					if (count($moreItems)) {
 						$form->addSelect2($parameter->code, $parameter->name, $items + $moreItems);
 					}

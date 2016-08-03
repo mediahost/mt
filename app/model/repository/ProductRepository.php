@@ -125,22 +125,22 @@ class ProductRepository extends BaseRepository
 		}, $query->getResult(AbstractQuery::HYDRATE_ARRAY));
 	}
 
-	public function getAccessoriesProducersIds()
+	public function getAccessoriesProducersIds(array $productIds = [])
 	{
-		return $this->getAccessoriesIds('accessories_producer_ids');
+		return $this->getAccessoriesIds('accessories_producer_ids', $productIds);
 	}
 
-	public function getAccessoriesLinesIds()
+	public function getAccessoriesLinesIds(array $productIds = [])
 	{
-		return $this->getAccessoriesIds('accessories_line_ids');
+		return $this->getAccessoriesIds('accessories_line_ids', $productIds);
 	}
 
-	public function getAccessoriesModelsIds()
+	public function getAccessoriesModelsIds(array $productIds = [])
 	{
-		return $this->getAccessoriesIds('accessories_model_ids');
+		return $this->getAccessoriesIds('accessories_model_ids', $productIds);
 	}
 
-	private function getAccessoriesIds($column)
+	private function getAccessoriesIds($column, array $productIds = [])
 	{
 		$rsm = new ResultSetMapping();
 		$rsm->addScalarResult($column, 'ids');
@@ -148,6 +148,9 @@ class ProductRepository extends BaseRepository
 		$sql = 'SELECT DISTINCT ' . $column . ' ' .
 			'FROM ' . $this->getClassMetadata()->getTableName() . ' ' .
 			'WHERE ' . $column . ' != \'\'';
+		if (count($productIds)) {
+			$sql .= ' AND id IN (' . implode(',', $productIds) . ')';
+		}
 		$query = $this->createNativeQuery($sql, $rsm);
 
 		$ids = [];

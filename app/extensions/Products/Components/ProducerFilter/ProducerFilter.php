@@ -20,6 +20,8 @@ class ProducerFilter extends BaseControl
 	private $line;
 	/** @var ProducerModel */
 	private $model;
+	/** @var array */
+	private $productIds;
 
 	/** @var ProducerFacade @inject */
 	public $producerFacade;
@@ -40,19 +42,20 @@ class ProducerFilter extends BaseControl
 
 		$notSelected = [NULL => '--- Not Selected ---'];
 
-		$producers = $this->producerFacade->getProducersList(TRUE, FALSE, TRUE);
+		$productIds = is_array($this->productIds) ? $this->productIds : TRUE;
+		$producers = $this->producerFacade->getProducersList(TRUE, FALSE, $productIds);
 		$form->addSelect('producer', 'Producer', $this->allowNone ? $notSelected + $producers : $producers)
 			->setDisabled(!count($producers))
 			->setDefaultValue($this->producer && array_key_exists($this->producer->id, $producers) ? $this->producer->id : NULL)
 			->getControlPrototype()->class('input-medium category-selections-select');
 
-		$lines = $this->producer ? $this->producerFacade->getLinesList($this->producer, FALSE, TRUE) : [];
+		$lines = $this->producer ? $this->producerFacade->getLinesList($this->producer, FALSE, TRUE, FALSE, $productIds) : [];
 		$form->addSelect('line', 'Line', $notSelected + $lines)
 			->setDisabled(!count($lines))
 			->setDefaultValue($this->line && array_key_exists($this->line->id, $lines) ? $this->line->id : NULL)
 			->getControlPrototype()->class('input-medium category-selections-select');
 
-		$models = $this->line ? $this->producerFacade->getModelsList($this->line, FALSE, TRUE) : [];
+		$models = $this->line ? $this->producerFacade->getModelsList($this->line, FALSE, TRUE, $productIds) : [];
 		$form->addSelect('model', 'Model', $notSelected + $models)
 			->setDisabled(!count($models))
 			->setDefaultValue($this->model && array_key_exists($this->model->id, $models) ? $this->model->id : NULL)
@@ -125,6 +128,11 @@ class ProducerFilter extends BaseControl
 		return $this;
 	}
 
+	public function setProductIds(array $ids)
+	{
+		$this->productIds = $ids;
+		return $this;
+	}
 
 }
 
