@@ -1,12 +1,12 @@
 {snippet stockPrint}
-	<div class="product" id="{$id}">
+	<div class="{$mainClasses}" id="{$id}">
 		{var blockId => 'stockPrint' . $stock->id}
 		{var product => $stock->product}
 		{var countInBasket => $basket->getCountInBasket($stock)}
 		{var loadingSelector => '#mainContainer'}
 		{var clickSelector => '#basket-dialog-caller'}
 
-		<ul class="product-labels">
+		<ul class="product-labels" n:if="$showLabels">
 			<li n:if="$product->hasSign($newSign)" class="new">{$newSign}</li>
 			<li n:if="$product->hasSign($saleSign)" class="sale">{$saleSign}</li>
 			<li n:if="$product->hasSign($topSign)" class="top">{$topSign}</li>
@@ -17,10 +17,10 @@
 				{$countInBasket}x
 			</li>
 		</ul>
-		<div n:class="$product->secondImage ? product-img-wrap : product-img-wrap-single">
+		<div n:class="$showSecondImage && $product->secondImage ? product-img-wrap : product-img-wrap-single">
 			<img class="product-img-primary" src="{$basePath}/foto/{$product->image|size:300}"
 				 alt="{$product}" title="{$product}"/>
-			<img n:if="$product->secondImage" class="product-img-alt"
+			<img n:if="$showSecondImage && $product->secondImage" class="product-img-alt"
 											  src="{$basePath}/foto/{$product->secondImage|size:300}"
 											  alt="{$product}" title="{$product}"/>
 		</div>
@@ -42,7 +42,11 @@
 					<a n:href="addToCart!"
 							n:class="ajax, btn, $basket->getCountAllowedToAdd($stock) ? btn-primary : btn-default, add2cart, !$basket->getCountAllowedToAdd($stock) ? disabled"
 					data-target-click="{$clickSelector}"
-					data-target-loading="{$loadingSelector}">{_'Add to cart'}</a>
+					data-target-loading="{$loadingSelector}"
+					data-ajax-off="history">
+						<span class="text">{_'Add to cart'}</span>
+						<span class="icon fa fa-shopping-cart"></span>
+					</a>
 				</div>
 			</div>
 			<div class="row">

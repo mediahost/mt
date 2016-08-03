@@ -1665,3 +1665,6 @@ msgstr "Infoline"
 
 msgid "Select type of your phone"
 msgstr "Select type of your phone"
+
+msgid "News on our e-shop"
+msgstr "News on our e-shop"

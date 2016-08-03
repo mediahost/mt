@@ -22,6 +22,17 @@ class PrintStock extends BaseControl
 	/** @var int */
 	private $priceLevel = NULL;
 
+	/** @var bool */
+	private $showLabels = TRUE;
+
+	/** @var bool */
+	private $showSecondImage = TRUE;
+
+	/** @var array */
+	private $mainClasses = [
+		'product',
+	];
+
 	public function handleAddToCart()
 	{
 		try {
@@ -76,6 +87,9 @@ class PrintStock extends BaseControl
 		$this->template->stock = $this->stock;
 		$this->template->basket = $this->basketFacade;
 		$this->template->priceLevel = $this->priceLevel;
+		$this->template->showLabels = $this->showLabels;
+		$this->template->showSecondImage = $this->showSecondImage;
+		$this->template->mainClasses = implode(' ', $this->mainClasses);
 		$this->loadTemplateSigns();
 		parent::render();
 	}
@@ -103,6 +117,24 @@ class PrintStock extends BaseControl
 	public function setPriceLevel($level)
 	{
 		$this->priceLevel = $level;
+		return $this;
+	}
+
+	public function setMainClasses(array $classes)
+	{
+		$this->mainClasses = $classes;
+		return $this;
+	}
+
+	public function setShowLabels($show = TRUE)
+	{
+		$this->showLabels = $show;
+		return $this;
+	}
+
+	public function setShowSecondImage($show = TRUE)
+	{
+		$this->showSecondImage = $show;
 		return $this;
 	}
 

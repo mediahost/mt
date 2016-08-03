@@ -77,6 +77,17 @@ abstract class BasePresenter extends BaseBasePresenter
 	/** @var string */
 	protected $searched;
 
+	/** @var bool */
+	protected $stockComponentLabels = TRUE;
+
+	/** @var bool */
+	protected $stockComponentSecondImage = TRUE;
+
+	/** @var string */
+	protected $stockComponentClasses = [
+		'product',
+	];
+
 	protected function startup()
 	{
 		parent::startup();
@@ -278,6 +289,9 @@ abstract class BasePresenter extends BaseBasePresenter
 			$control = $this->iStockPrint->create();
 			$control->setStockById($itemId);
 			$control->setPriceLevel($this->priceLevel);
+			$control->setMainClasses($this->stockComponentClasses);
+			$control->setShowLabels($this->stockComponentLabels);
+			$control->setShowSecondImage($this->stockComponentSecondImage);
 			return $control;
 		});
 	}

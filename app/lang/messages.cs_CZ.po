@@ -1620,3 +1620,6 @@ msgstr "Infolinka"
 
 msgid "Select type of your phone"
 msgstr "Pro jaký telefon hledáte zboží?"
+
+msgid "News on our e-shop"
+msgstr "Novinky v našem e-shopu"
