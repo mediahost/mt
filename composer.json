@@ -74,7 +74,8 @@
 		"kdyby/forms-replicator": "dev-master",
 		"kdyby/doctrine-cache": "@dev",
 		"heureka/overeno-zakazniky": "dev-master",
-		"pixidos/gpwebpay": "^1.0"
+		"pixidos/gpwebpay": "^1.0",
+		"vojtech-dobes/nette-ajax-history": "@dev"
 	},
 	"require-dev": {
 		"nette/tester": "1.3.*@dev",
