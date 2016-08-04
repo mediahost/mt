@@ -1,0 +1,61 @@
+{block pageTitle}
+	{_'Thumbnail Tools'}
+{/block}
+
+{block breadcrumbItems}
+	<li>
+		<a n:href="Service:">{_'Services'}</a>
+	</li>
+	<li><span>{_'Tools'}</span></li>
+{/block}
+
+{block content}
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-image font-green-sharp"></i>
+					<span class="caption-subject font-green-sharp sbold">
+						{_'Select size to generate'}
+					</span>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<table class="table table-hover table-striped table-bordered">
+					<thead>
+					<tr>
+						<td>{_'Size'}</td>
+						<td>{_'Links'}</td>
+					</tr>
+					</thead>
+					<tbody>
+					<tr n:foreach="$allSizes as $size">
+						<td>{$size}</td>
+						<td>
+							<a n:foreach="$folders as $folder"
+									n:href="makeThumbnails! 'size' => $size, 'folder' => $folder"
+									class="btn link">
+								{$folder}
+							</a>
+							<a n:href="makeThumbnails! 'size' => $size"
+									class="btn default blue-stripe delete-confirm">
+								{_'All'}
+							</a>
+							<a n:href="clearThumbnailsSize! 'size' => $size"
+									class="btn default yellow-stripe delete-confirm">
+								{_'Clear'}
+							</a>
+							<a n:href="clearThumbnailsSize! 'size' => $size, 'delete' => TRUE"
+									class="btn btn-danger delete-confirm">
+								{_'Delete'}
+							</a>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

@@ -27,6 +27,12 @@ class Foto extends Object
 	/** @var string */
 	private $defaultFormat;
 
+	/** @var array */
+	private $thumbnailSizes;
+
+	/** @var array */
+	private $originalImages;
+
 	public function setFolders($folder, $originalFolderName)
 	{
 		$this->rootFolder = $folder;
@@ -78,40 +84,8 @@ class Foto extends Object
 			$filename = Helpers::getPath($this->originalFolder, $name);
 		}
 
-		$sizeX = 0;
-		$sizeY = 0;
-		$resizeMethod = Image::FIT;
-		if (preg_match('@^(\d+)' . preg_quote(FotoHelpers::getSizeSeparator()) . '(\d+)$@', $size, $matches)) {
-			$sizeX = $matches[1];
-			$sizeY = $matches[2];
-			if ((int) $sizeY === 0) {
-				$resizeMethod = Image::FILL_EXACT;
-			}
-		}
-
-		if ($sizeX > 0) {
-			$resizedPath = Helpers::getPath($this->rootFolder, $sizeX . FotoHelpers::getSizeSeparator() . $sizeY);
-			FileSystem::createDir(Helpers::getPath($resizedPath, FotoHelpers::getFolderFromPath($name)));
-			$resized = Helpers::getPath($resizedPath, $name);
-
-			if (!file_exists($resized) || filemtime($filename) > filemtime($resized)) {
-				$img = Image::fromFile($filename);
-
-				switch ($resizeMethod) {
-					case Image::FILL_EXACT:
-						$sizeY = $sizeX;
-						break;
-					case Image::FIT:
-					default:
-						$sizeX = min($sizeX, $img->width);
-						$sizeY = min($sizeY, $img->height);
-						break;
-				}
-				$img->resize($sizeX, $sizeY, $resizeMethod);
-				$img->save($resized);
-			}
-
-			$filename = $resized;
+		if ($size) {
+			$filename = $this->resize($filename, $name, $size);
 		}
 
 		try {
@@ -126,6 +100,49 @@ class Foto extends Object
 			Debugger::log($ex->getMessage(), 'image');
 		}
 		return NULL;
+	}
+
+	private function resize($filename, $name, $size, $overwrite = TRUE)
+	{
+		$sizeX = 0;
+		$sizeY = 0;
+		$resizeMethod = Image::FIT;
+		if (preg_match('@^(\d+)' . preg_quote(FotoHelpers::getSizeSeparator()) . '(\d+)$@', $size, $matches)) {
+			$sizeX = $matches[1];
+			$sizeY = $matches[2];
+			if ((int)$sizeY === 0) {
+				$resizeMethod = Image::FILL_EXACT;
+			}
+		}
+
+		if ($sizeX > 0) {
+			$resizedPath = Helpers::getPath($this->rootFolder, $sizeX . FotoHelpers::getSizeSeparator() . $sizeY);
+			FileSystem::createDir(Helpers::getPath($resizedPath, FotoHelpers::getFolderFromPath($name)));
+			$resized = Helpers::getPath($resizedPath, $name);
+
+			if ($overwrite || !file_exists($resized) || filemtime($filename) > filemtime($resized)) {
+				$img = Image::fromFile($filename);
+
+				switch ($resizeMethod) {
+					case Image::FILL_EXACT:
+						$sizeY = $sizeX;
+						break;
+					case Image::FIT:
+					default:
+						$sizeX = min($sizeX, $img->width);
+						$sizeY = min($sizeY, $img->height);
+						break;
+				}
+				$img->resize($sizeX, $sizeY, $resizeMethod);
+				$img->save($resized);
+			} else if (!$overwrite && file_exists($resized)) {
+				throw new FotoException('File exists and you don\'t want to overwrite it.');
+			}
+
+			$filename = $resized;
+		}
+
+		return $filename;
 	}
 
 	/**
@@ -149,7 +166,7 @@ class Foto extends Object
 		} else if (is_string($source)) { // filename or string
 			if (file_exists($source)) {
 				$img = Image::fromFile($source, $format);
-		} else {
+			} else {
 				$format = FotoHelpers::getFormatFromString($source->contents);
 				$img = Image::fromString($source);
 			}
@@ -190,6 +207,95 @@ class Foto extends Object
 				FotoHelpers::deleteFile($filename);
 			}
 		}
+	}
+
+	public function createThumbnails($size = NULL, $subFolder = NULL, &$resizedCount = FALSE)
+	{
+		if (!$size) {
+			foreach ($this->getThumbnailSizes() as $dir) {
+				$this->createThumbnails($dir, $subFolder, $resizedCount);
+			}
+		} else {
+			foreach ($this->getOriginalImages($subFolder) as $filename => $name) {
+				try {
+					$this->resize($filename, $name, $size, FALSE);
+					$resizedCount--;
+				} catch (FotoException $e) {
+					continue;
+				}
+				if ($resizedCount !== FALSE && $resizedCount <= 1) {
+					throw new FotoException('Maximum thumbnails was created');
+				}
+			}
+		}
+		return $this;
+	}
+
+	public function clearFolder($size, $deleteFolder = FALSE)
+	{
+		$dirName = Helpers::getPath($this->rootFolder, $size);
+		if (is_dir($dirName)) {
+			if ($deleteFolder) {
+				FileSystem::delete($dirName);
+			} else {
+				foreach (scandir($dirName) as $item) {
+					if (preg_match('/^[A-z0-9\-_]+$/', $item)) { // without files
+						FileSystem::delete(Helpers::getPath($dirName, $item));
+					}
+				}
+			}
+		}
+		return TRUE;
+	}
+
+	public function getThumbnailSizes()
+	{
+		if (!$this->thumbnailSizes) {
+			foreach (scandir($this->rootFolder) as $dir) {
+				if (preg_match('/^\d+\-\d+$/', $dir)) {
+					$this->thumbnailSizes[] = $dir;
+				}
+			}
+		}
+		return $this->thumbnailSizes;
+	}
+
+	public function getFoldersInOriginal()
+	{
+		$folders = [];
+		foreach (scandir($this->originalFolder) as $dir) {
+			if (preg_match('/^[A-z0-9\-_]+$/', $dir)) {
+				$folders[] = $dir;
+			}
+		}
+		return $folders;
+	}
+
+	private function getOriginalImages($subFolder = NULL)
+	{
+		if (!isset($this->originalImages[$subFolder])) {
+			$this->originalImages[$subFolder] = $this->getImageList($this->originalFolder, $subFolder);
+		}
+		return $this->originalImages[$subFolder];
+	}
+
+	private function getImageList($folder, $subFolder = NULL, $path = [])
+	{
+		$list = [];
+		foreach (scandir($folder) as $item) {
+			if (preg_match('/^[A-z0-9\-_]+(\.[A-z0-9\-_]+)?$/', $item)) {
+				$fullPath = Helpers::getPath($folder, $item);
+				$newPath = array_merge($path, [$item]);
+				if (is_file($fullPath)) {
+					$list[$fullPath] = Helpers::getPath($newPath);
+				} else if (is_dir($fullPath)) {
+					if (!$subFolder || $subFolder === $item) {
+						$list += $this->getImageList($fullPath, NULL, $newPath);
+					}
+				}
+			}
+		}
+		return $list;
 	}
 
 }
@@ -283,5 +389,5 @@ class FotoHelpers extends Object
 
 class FotoException extends Exception
 {
-	
+
 }

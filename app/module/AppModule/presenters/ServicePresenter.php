@@ -2,10 +2,11 @@
 
 namespace App\AppModule\Presenters;
 
+use App\Extensions\Foto;
+use App\Extensions\FotoException;
 use App\Extensions\Installer;
 use App\Extensions\LimitExceededException;
 use App\Extensions\WrongSituationException;
-use App\Model\Entity\Discount;
 use App\Model\Entity\Group;
 use App\Model\Entity\Product;
 use App\Model\Entity\Stock;
@@ -31,6 +32,9 @@ class ServicePresenter extends BasePresenter
 
 	/** @var UserFacade @inject */
 	public $userFacade;
+
+	/** @var Foto @inject */
+	public $foto;
 
 	/**
 	 * @secured
@@ -60,6 +64,17 @@ class ServicePresenter extends BasePresenter
 	public function actionCreators()
 	{
 
+	}
+
+	/**
+	 * @secured
+	 * @resource('service')
+	 * @privilege('thumbnails')
+	 */
+	public function actionThumbnails()
+	{
+		$this->template->allSizes = $this->foto->getThumbnailSizes();
+		$this->template->folders = $this->foto->getFoldersInOriginal();
 	}
 
 	/**
@@ -151,6 +166,44 @@ class ServicePresenter extends BasePresenter
 		$this->resetBonusPrices();
 		$message = $this->translator->translate('All bonus prices was restored to default values');
 		$this->flashMessage($message, 'success');
+		$this->redirect('this');
+	}
+
+	/**
+	 * @secured
+	 * @resource('service')
+	 * @privilege('resetBonusPrices')
+	 */
+	public function handleMakeThumbnails($size = NULL, $folder = NULL, $maximum = 100)
+	{
+		ini_set('max_execution_time', 300);
+		try {
+			$rest = $maximum;
+			$this->foto->createThumbnails($size, $folder, $rest);
+			$message = $this->translator->translate('All thumbnails was created');
+			$this->flashMessage($message, 'success');
+		} catch (FotoException $e) {
+			$message = $this->translator->translate('Must run once again. Maximum allowed thumbnails (%count%) was created.', $maximum);
+			$this->flashMessage($message, 'warning');
+		}
+		$this->redirect('this');
+	}
+
+	/**
+	 * @secured
+	 * @resource('service')
+	 * @privilege('clearThumbnailsSize')
+	 */
+	public function handleClearThumbnailsSize($size = NULL, $delete = FALSE)
+	{
+		try {
+			$this->foto->clearFolder($size, $delete);
+			$message = $this->translator->translate('Size %size% was deleted.', ['size' => $size]);
+			$this->flashMessage($message, 'success');
+		} catch (FotoException $e) {
+			$message = $this->translator->translate('Size %size% was not deleted.', ['size' => $size]);
+			$this->flashMessage($message, 'warning');
+		}
 		$this->redirect('this');
 	}
 

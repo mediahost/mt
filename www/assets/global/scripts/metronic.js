@@ -319,6 +319,12 @@ var Metronic = function () {
 			$(this).closest('.note').remove();
 			e.preventDefault();
 		});
+
+		$('body').on('click', '.delete-confirm', function (e) {
+			if (!confirm('Are you sure?')) {
+				return false;
+			}
+		});
 	};
 
 	// Handle Hower Dropdowns
