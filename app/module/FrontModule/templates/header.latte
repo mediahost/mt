@@ -14,12 +14,14 @@
 				</a>
 			</div>
 			<div class="rel">
-				<form class="navbar-form navbar-left navbar-main-search navbar-main-search-category" role="search">
+				{form search class => 'navbar-form navbar-left navbar-main-search navbar-main-search-category'}
+					{? $form->render('begin')}
 					<div class="form-group">
-						<input class="form-control" type="text" placeholder="Search the Entire Store..."/>
+						{input search}
 					</div>
-					<a class="fa fa-search navbar-main-search-submit" href="#"></a>
-				</form>
+					{button send class => 'fa fa-search navbar-main-search-submit', value => ''}{/button}
+					{? $form->render('end')}
+				{/form}
 			</div>
 		</div>
 	</nav>

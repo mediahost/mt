@@ -139,16 +139,135 @@ var Frontend = function () {
 		});
 	};
 
+	var handleSelect2 = function () {
+
+		$('select.select2').each(function () {
+			$(this).prop('disabled', this.hasAttribute('data-disabled') ? 'disabled' : false);
+			var params = {};
+			for (var i = 0, attrs = this.attributes, l = attrs.length; i < l; i++) {
+				var attr = attrs.item(i).nodeName;
+				if (attr === "placeholder" || attr === "data-placeholder") {
+					params.placeholder = $(this).attr(attr);
+					params.allowClear = true;
+				} else if (attr === "data-tags") {
+					params.tags = JSON.parse($(this).attr(attr));
+				} else if (attr.substring(0, 5) === "data-") {
+					var paramName = attr.substring(5).replace(/\-/g, "_");
+					var paramNameIndex = paramName.indexOf("_");
+					while (paramNameIndex !== -1) {
+						paramName = paramName.substring(0, paramNameIndex)
+							+ paramName.substring(paramNameIndex + 1, paramNameIndex + 2).toUpperCase()
+							+ paramName.substring(paramNameIndex + 2);
+						paramNameIndex = paramName.indexOf("_");
+					}
+					params[paramName] = $(this).attr(attr);
+				}
+			}
+			$(this).select2(params);
+		});
+
+	};
+
+	var handleSearch = function () {
+
+		if ($.fn.typeahead === undefined) {
+			console.error('Plugin "typeahead.js" is missing! Run `bower install typeahead.js` and load bundled version.');
+			return;
+		} else if (window.Bloodhound === undefined) {
+			console.error('Plugin "Bloodhound" required by "typeahead.js" is missing!');
+			return;
+		}
+
+		var locale = {
+			'empty': {
+				'en': 'Searched term does not match any product',
+				'cs': 'Hledanému výrazu neodpovídá žádný produkt',
+				'sk': 'Hľadanému výrazu neodpovedá žiadny produkt'
+			}
+		};
+
+		var transformFinded = function (response) {
+			return response.items;
+		};
+
+		var urlParams = function (url, params) {
+			var glue = '?';
+			if (url && url.match(/\?/)) {
+				glue = '&';
+			}
+			return url + glue + $.param(params);
+		};
+
+		var url = links['Category:searchJson'];
+		var wildcard = '-QUERY-';
+		var params = {
+			'text': wildcard,
+			'currency': currencyName,
+			'locale': lang
+		};
+
+		var options = {
+			datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+			queryTokenizer: Bloodhound.tokenizers.whitespace,
+			remote: {
+				url: urlParams(url, params),
+				wildcard: wildcard,
+				transform: transformFinded
+			}
+		};
+
+		if (window.NProgress !== undefined) {
+			options.remote.ajax = {
+				beforeSend: $.proxy(window.NProgress.start),
+				complete: $.proxy(window.NProgress.done)
+			};
+		}
+
+		var source = new Bloodhound(options);
+
+
+		var formatResult = function (result) {
+			if (result.loading)
+				return result.text;
+			var markup = [
+				'<div class="clearfix">',
+				'<a href="' + result.url + '">',
+				'<div class="col-sm-1 image">',
+				'<img src="' + result.image_thumbnail_100 + '" style="max-width: 100%" />',
+				'</div>',
+				'<div class="col-sm-8 text">' + result.shortText + '</div>',
+				'<div class="col-sm-3 price"><strong>' + result.priceWithVatFormated + '</strong></div>',
+				'</a>',
+				'</div>'
+			].join('\n');
+			return markup;
+		};
+
+		$('#frm-search .search-input').typeahead(null, {
+			name: 'search',
+			display: 'text',
+			source: source,
+			limit: 10,
+			templates: {
+				empty: '<div class="empty-message">' + locale.empty[lang] + '</div>',
+				suggestion: formatResult
+			}
+		});
+	};
+
 	return {
 		init: function () {
 			handleICheck();
 			handleProductFilter();
 			handleProductDetail();
 			handleDisableButtons();
+			handleSelect2();
+			handleSearch();
 		},
 		afterAjaxInit: function () {
 			handleInitICheck();
 			handleProductFilter();
+			handleSelect2();
 		},
 		blockUI: function (options) {
 			handleBlockUi(options);

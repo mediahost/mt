@@ -282,6 +282,13 @@ class ProductList extends Control
 
 	// <editor-fold defaultstate="collapsed" desc="public setters">
 
+	public function setPage($page, $itemsPerPage = NULL)
+	{
+		$this->page = $page;
+		$this->perPage = $itemsPerPage;
+		return $this;
+	}
+
 	public function setLevel($level)
 	{
 		$this->priceLevel = $level;

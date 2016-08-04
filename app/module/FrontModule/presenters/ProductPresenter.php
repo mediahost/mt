@@ -123,8 +123,7 @@ class ProductPresenter extends ProductCategoryBasePresenter
 	{
 		/* @var $list ProductList */
 		$list = $this['products']
-			->setPage($page)
-			->setItemsPerPage($perPage)
+			->setPage($page, $perPage)
 			->addFilterFulltext($text)
 			->setSorting(ProductList::SORT_BY_NAME_ASC);
 

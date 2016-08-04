@@ -28,9 +28,40 @@ body {
 .navbar-main {
 	background: #11304F;
 }
-
+.navbar-pad {
+	z-index: 1001;
+	.boxShadowNone()
+}
 .navbar-before {
 	background: #000000;
+}
+#frm-search {
+	.navbar-main-search-submit {
+		border: none;
+	}
+	.tt-hint {
+		.rounded(4px);
+	}
+	.tt-menu {
+		width: 655px;
+		border: none;
+		top: 32px !important;
+		.roundedAll(0px, 0px, 4px, 4px);
+		.empty-message {
+			padding: 10px;
+		}
+		.tt-dataset-search {
+			//height: 50px;
+			.tt-suggestion {
+				line-height: 23px;
+				.image {
+					img {
+						//height: 50px;
+					}
+				}
+			}
+		}
+	}
 }
 
 #snippet--flashMessages {

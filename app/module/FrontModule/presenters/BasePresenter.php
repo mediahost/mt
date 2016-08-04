@@ -317,7 +317,7 @@ abstract class BasePresenter extends BaseBasePresenter
 		$form->addText('search')
 			->setDefaultValue($this->searched)
 			->setAttribute('placeholder', 'Search by Keyword')
-			->getControlPrototype()->class = 'form-control typeahead';
+			->getControlPrototype()->class = 'form-control search-input';
 
 		$form->addSubmit('send', 'Search')
 			->getControlPrototype()->class = 'btn btn-primary';
