@@ -51,14 +51,16 @@
 	<!-- BEGIN SIDEBAR -->
 	<div class="sidebar col-md-3 col-sm-5">
 		{include categories}
-		{control products:filter}
+		{if $showFilter}
+			{control products:filter}
+		{/if}
 	</div>
 	<!-- END SIDEBAR -->
 
 	<!-- BEGIN CONTENT -->
 	<div class="col-md-9 col-sm-7">
 
-		<div class="accessories-filter clearfix">
+		<div class="accessories-filter clearfix" n:if="$showAccessoriesFilter">
 			<h4>{_'Select type of your phone'}</h4>
 			{control products:accessories}
 		</div>

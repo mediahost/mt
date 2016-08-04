@@ -20,6 +20,12 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 	/** @var array */
 	private $subcategories = [];
 
+	/** @var bool */
+	private $showFilter = TRUE;
+
+	/** @var bool */
+	private $showAccessoriesFilter = TRUE;
+
 	public function actionDefault($c, $slug = NULL)
 	{
 		if ($c) {
@@ -58,6 +64,8 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 			$this->template->searched = $this->searched;
 			$title = $keywords = $description = $this->searched;
 		}
+		$this->template->showFilter = $this->showFilter;
+		$this->template->showAccessoriesFilter = $this->showAccessoriesFilter;
 
 		$this->changePageInfo(self::PAGE_INFO_TITLE, $title);
 		$this->changePageInfo(self::PAGE_INFO_KEYWORDS, $keywords);
@@ -75,6 +83,8 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 
 			$this->searched = $text;
 			$this['products']->addFilterFulltext($text);
+			$this->showFilter = FALSE;
+			$this->showAccessoriesFilter = FALSE;
 
 			$this->setView('default');
 		} else {
