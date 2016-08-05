@@ -1668,3 +1668,6 @@ msgstr "Select type of your phone"
 
 msgid "News on our e-shop"
 msgstr "News on our e-shop"
+
+msgid "Gift"
+msgstr "Gift"

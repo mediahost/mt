@@ -1624,3 +1624,6 @@ msgstr "Pre aký telefón hľadáte tovar?"
 
 msgid "News on our e-shop"
 msgstr "Novinky na našom e-shope"
+
+msgid "Gift"
+msgstr "Dárček"
