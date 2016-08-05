@@ -23,12 +23,16 @@ class Subscribe extends BaseControl
 	{
 		$form = new Form;
 		$form->setTranslator($this->translator->domain('newsletter.subscribeForm'))
-				->setRenderer(new MetronicFormRenderer())
-				->getElementPrototype()->class[] = 'ajax';
+			->setRenderer(new MetronicFormRenderer())
+			->getElementPrototype()->class = [
+			'ajax',
+			'loadingNoOverlay',
+			'loadingAnimate',
+		];
 
-		$form->addText('email', 'label')
-				->addRule(Form::EMAIL)
-				->setAttribute('placeholder', $this->translator->translate('placeholder'));
+		$form->addText('mail', 'mail')
+			->addRule(Form::EMAIL, 'validator.mail')
+			->setAttribute('placeholder', $this->translator->translate('placeholder'));
 
 		$form->addSubmit('subscribe', 'submit');
 
@@ -38,8 +42,7 @@ class Subscribe extends BaseControl
 
 	public function formSucceeded(Form $form, ArrayHash $values)
 	{
-		$this->newsletterFacade->subscribe($values->email);
-		
+		$this->newsletterFacade->subscribe($values->mail);
 		$this->template->success = TRUE;
 
 		if ($this->presenter->isAjax()) {

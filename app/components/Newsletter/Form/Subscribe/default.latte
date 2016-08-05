@@ -1,15 +1,13 @@
-
 <div n:snippet="form" class="form-snippet">
 	{ifset $success}
-		<p>{_'newsletter.subscribeControl.success'}</p>
+		<p>{_'newsletter.subscribeForm.success'}</p>
 	{else}
 		{form form}
-			<div class="input-group" data-target-loading="request-form-loading">
-				<input n:name="email" class="form-control no-live-validation">
-				<span class="input-group-btn">
-					{button subscribe, class=> "btn btn-primary"}{caption}{/button}
-				</span>
+			<div class="form-group">
+				{label mail/}
+				{input mail class=> 'newsletter-input form-control'}
 			</div>
+			{input subscribe class=> 'btn btn-primary'}
 		{/form}
 	{/ifset}
 </div>

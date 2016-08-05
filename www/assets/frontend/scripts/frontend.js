@@ -225,7 +225,6 @@ var Frontend = function () {
 
 		var source = new Bloodhound(options);
 
-
 		var formatResult = function (result) {
 			if (result.loading)
 				return result.text;

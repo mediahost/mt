@@ -68,11 +68,16 @@ admin:
 				dealer: 'dealer'
 				unknown: 'neznámý'
 
+front:
+	headline: 'Newsletter'
+
 subscribeForm:
-	label: 'E-mail'
+	mail: 'Registrujte se k odběru novinek'
 	placeholder: 'Zadejte váš e-mail'
 	submit: 'Přihlásit'
 	success: 'Odběr úspěšně přihlášen.'
+	validator:
+		mail: 'Nesprávný formát'
 
 presenter:
 	success: 'Odhlášení z odběru proběhlo úspěšně!'

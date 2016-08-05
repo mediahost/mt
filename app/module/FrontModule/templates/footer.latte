@@ -50,27 +50,21 @@
 						<li><a class="fa fa-google-plus" href="#"></a></li>
 					</ul>
 				</div>
-				<div class="col-md-3">
-					<h4 class="widget-title-sm">Newsletter</h4>
-					<form>
-						<div class="form-group">
-							<label>Sign up to the newsletter</label>
-							<input class="newsletter-input form-control" placeholder="Your e-mail address" type="text"/>
-						</div>
-						<input class="btn btn-primary" type="submit" value="Sign up"/>
-					</form>
+				<div class="col-md-3" id="request-form-loading">
+					<!-- BEGIN NEWSLETTER -->
+					<h4 class="widget-title-sm">{_'newsletter.front.headline'}</h4>
+					{control subscribe}
+					<!-- END NEWSLETTER -->
 				</div>
 			</div>
 			<ul class="main-footer-links-list">
 				<li><a href="#">Hlavne menu links</a></li>
-				<li><a href="#">MObilne telefony</a></li>
-				<li><a href="#">PRislus</a></li>
-				<li><a href="#">Nahradne diley</a></li>
+				<li><a href="#">Mobilne telefony</a></li>
+				<li><a href="#">Prislusenstvo</a></li>
+				<li><a href="#">Nahradne diely</a></li>
 				<li><a href="#">Navigacie</a></li>
-				<li><a href="#">Vyggety</a></li>
 			</ul>
-			<img class="main-footer-img" src="{$basePath}/assets/frontend/img/footer.png"
-				 alt="Image Alternative text" title="Image Title"/>
+			<img class="main-footer-img" src="{$basePath}/assets/frontend/img/footer.png" alt="footer"/>
 		</div>
 	</footer>
 	<!-- END FOOTER -->

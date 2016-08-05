@@ -63,10 +63,10 @@
 			var options = {
 				target: this.element
 			};
-			if (typeof(Frontend) === 'object') {
-				options.iconOnly = true;
-			} else {
+			if (this.element.hasClass('loadingAnimate') || typeof(Frontend) !== 'object') {
 				options.animate = true;
+			} else {
+				options.iconOnly = true;
 			}
 			if (this.element && this.element.hasClass('loadingNoOverlay')) {
 				options.overlayColor = 'none';

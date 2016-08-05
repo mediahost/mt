@@ -68,11 +68,16 @@ admin:
 				dealer: 'dealer'
 				unknown: 'unknown'
 
+front:
+	headline: 'Newsletter'
+
 subscribeForm:
-	label: 'E-mail'
+	mail: 'Sign up to the newsletter'
 	placeholder: 'Enter your e-mail'
 	submit: 'Subscribe'
 	success: 'Newsletter succesfully subscribed.'
+	validator:
+		mail: 'Wrong format'
 
 presenter:
 	success: 'Newsletter successfully unsubscribed!'
