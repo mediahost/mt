@@ -152,25 +152,6 @@ class RouterFactory
 			'action' => 'default',
 		]);
 
-		$frontRouter[] = new Route(self::LOCALE_PARAM . 'search[/<text>]', [
-			'presenter' => 'Category',
-			'action' => 'search',
-			'text' => NULL,
-		]);
-
-		$frontRouter[] = new Route(self::LOCALE_PARAM . 'most-searched', [
-			'presenter' => 'MostSearched',
-			'action' => 'default',
-		]);
-
-		$frontRouter[] = new Route(self::LOCALE_PARAM . 'producer[/<producer>[/<line>[/<model>]]]', [
-			'presenter' => 'Category',
-			'action' => 'producer',
-			'producer' => NULL,
-			'line' => NULL,
-			'model' => NULL,
-		]);
-
 		$frontRouter[] = new Route('[<locale=sk cs|sk>/]vykup[/<producer>[/<line>]]', [
 			'presenter' => 'Buyout',
 			'action' => 'default',
@@ -210,20 +191,39 @@ class RouterFactory
 
 		$slugs = '[0-9a-z/-]+';
 
-		$frontRouter[] = $routePage = new FilterRoute(self::LOCALE_PARAM . 'p/<id ' . $slugs . '>', [
-			'presenter' => 'Page',
-			'action' => 'default',
-		]);
-		$frontRouter[] = $routeCategory = new FilterRoute(self::LOCALE_PARAM . 'appropriate/<producer>/[page-<products-page \d+>/]', [
+		$frontRouter[] = new FilterRoute(self::LOCALE_PARAM . 'appropriate/<producer>/[page-<products-page \d+>/]', [
 			'presenter' => 'Category',
 			'action' => 'appropriate',
 			'products-page' => 1,
 		]);
-		$frontRouter[] = $routeCategory = new FilterRoute(self::LOCALE_PARAM . 'c/[<slug ' . $slugs . '>/][page-<products-page \d+>/]<c [0-9]+>.htm[l]', [
+		$frontRouter[] = new Route(self::LOCALE_PARAM . 'search[/<text>]', [
+			'presenter' => 'Category',
+			'action' => 'search',
+			'text' => NULL,
+			'c' => NULL,
+		]);
+		$frontRouter[] = new Route(self::LOCALE_PARAM . 'most-searched', [
+			'presenter' => 'MostSearched',
+			'action' => 'default',
+		]);
+		$frontRouter[] = new Route(self::LOCALE_PARAM . 'producer[/<producer>[/<line>[/<model>]]]', [
+			'presenter' => 'Category',
+			'action' => 'producer',
+			'producer' => NULL,
+			'line' => NULL,
+			'model' => NULL,
+		]);
+		$frontRouter[] = new FilterRoute(self::LOCALE_PARAM . 'c/[<slug ' . $slugs . '>/][page-<products-page \d+>/]<c [0-9]+>.htm[l]', [
 			'presenter' => 'Category',
 			'action' => 'default',
 			'products-page' => 1,
 		]);
+
+		$frontRouter[] = $routePage = new FilterRoute(self::LOCALE_PARAM . 'p/<id ' . $slugs . '>', [
+			'presenter' => 'Page',
+			'action' => 'default',
+		]);
+
 		$frontRouter[] = $routeProduct = new FilterRoute(self::LOCALE_PARAM . '[<slug [0-9a-z-]+>-]<id [0-9]+>.htm[l]', [
 			'presenter' => 'Product',
 			'action' => 'default',
