@@ -150,9 +150,9 @@ trait ProductCategories
 		$this->accessoriesLineIds = [];
 		$this->accessoriesModelIds = [];
 		$resave = function ($key, ProducerModel $model) {
-			$this->accessoriesProducerIds[] = $model->line->producer->id;
-			$this->accessoriesLineIds[] = $model->line->id;
-			$this->accessoriesModelIds[] = $model->id;
+			$this->accessoriesProducerIds[$model->line->producer->id] = $model->line->producer->id;
+			$this->accessoriesLineIds[$model->line->id] = $model->line->id;
+			$this->accessoriesModelIds[$model->id] = $model->id;
 			return TRUE;
 		};
 		$this->accessoriesFor->forAll($resave);
