@@ -35,6 +35,7 @@
 			<CATEGORYTEXT>{_'categoryText'}</CATEGORYTEXT>
 		{/if}
 		<EAN n:if="$stock['barcode']">{$stock['barcode']}</EAN>
+		<GIFT n:if="$stock['gift']">{$stock['gift']}</GIFT>
 
 		<DELIVERY_DATE>{$stock['inStore'] ? $deliveryStoreTime : $deliveryNotInStoreTime}</DELIVERY_DATE>
 

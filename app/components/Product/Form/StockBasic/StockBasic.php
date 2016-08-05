@@ -37,7 +37,8 @@ class StockBasic extends StockBase
 		$form->addText('pohodaCode', 'Code for Pohoda', NULL, 20)
 				->setOption('description', 'Identification for synchronizing')
 				->addRule(Form::FILLED, 'Product must be synchronized');
-		$form->addText('barcode', 'Barcode');
+		$form->addText('gift', 'Gift', NULL, 50);
+		$form->addText('barcode', 'Barcode', NULL, 50);
 		$form->addCheckSwitch('active', 'Active');
 		$form->addWysiHtml('perex', 'Perex', 4)
 						->getControlPrototype()->class[] = 'page-html-content';
@@ -61,6 +62,7 @@ class StockBasic extends StockBase
 	private function load(ArrayHash $values)
 	{
 		$this->stock->barcode = $values->barcode;
+		$this->stock->gift = $values->gift;
 		$this->stock->pohodaCode = $values->pohodaCode;
 		$this->stock->active = $values->active;
 
@@ -86,6 +88,7 @@ class StockBasic extends StockBase
 		$values = [
 			'pohodaCode' => $this->stock->pohodaCode,
 			'barcode' => $this->stock->barcode,
+			'gift' => $this->stock->gift,
 			'active' => $this->stock->active,
 		];
 		if ($this->stock->product) {

@@ -12,7 +12,11 @@ class DashboardPresenter extends BasePresenter
 	 */
 	public function actionDefault()
 	{
-		$this->redirect('Orders:');
+		if ($this->user->isInRole('superadmin')) {
+			$this->redirect('Products:');
+		} else {
+			$this->redirect('Orders:');
+		}
 	}
 
 }

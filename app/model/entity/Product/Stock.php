@@ -35,6 +35,7 @@ use Nette\Utils\DateTime;
  * @property int $lock
  * @property int $inStore
  * @property string $barcode
+ * @property string $gift
  * @property string $pohodaCode
  * @property string $importedFrom
  */
@@ -65,6 +66,9 @@ class Stock extends BaseEntity
 
 	/** @ORM\Column(type="string", length=50, nullable=true) */
 	protected $barcode;
+
+	/** @ORM\Column(type="string", length=50, nullable=true) */
+	protected $gift;
 
 	/** @ORM\Column(type="string", length=20, nullable=true) */
 	protected $pohodaCode;
