@@ -14,22 +14,29 @@
 								{$curr->getFormat()->getSymbol()}
 							</a>
 						</li>
-						{foreach $allowedLanguages as $allowedLang}
-							{var $code = substr($allowedLang,0,2)}
-							{if $code !== $locale}
-								<li>
-									{if $user->loggedIn}
-										{var $args = [locale => $code, overwrite => yes]}
-									{else}
-										{var $args = [locale => $code]}
-									{/if}
-									<a n:href="this (expand) $args">
-										<img src="{$basePath}/images/flags/{$code}.png"
-											 alt="{_locale_$code}"/>{_locale_$code}
-									</a>
-								</li>
-							{/if}
-						{/foreach}
+						<li class="langs-block">
+							<a href="this" class="current">
+								<img src="{$basePath}/images/flags/{$locale}.png"
+									 alt="{_locale_$locale}">{_locale_$locale}
+							</a>
+							<div class="langs-block-others-wrapper">
+								<div class="langs-block-others">
+									{foreach $allowedLanguages as $allowedLang}
+										{var $code = substr($allowedLang,0,2)}
+										{continueIf $code === $locale}
+										{if $user->loggedIn}
+											{var $args = [locale => $code, overwrite => yes]}
+										{else}
+											{var $args = [locale => $code]}
+										{/if}
+										<a n:href="this (expand) $args">
+											<img src="{$basePath}/images/flags/{$code}.png"
+												 alt="{_locale_$code}">{_locale_$code}
+										</a>
+									{/foreach}
+								</div>
+							</div>
+						</li>
 						<li n:foreach="$footerPages as $footerPage" n:if="$footerPage">
 							{? $footerPage->setCurrentLocale($locale)}
 							<a n:href="Page: $footerPage->id">{$footerPage}</a>

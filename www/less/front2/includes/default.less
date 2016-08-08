@@ -458,3 +458,57 @@ UI Loading
 		animation-delay: -0.16s;
 	}
 }
+
+.langs-block {
+	position: relative;
+	margin-right: 20px;
+	.fa {
+		margin-right: 0;
+	}
+	&:hover {
+		.langs-block-others {
+			display: block;
+		}
+	}
+}
+.langs-block-others-wrapper {
+	position: absolute;
+	left: 0;
+	top: 100%;
+	z-index: 99999;
+}
+.langs-block-others {
+	padding: 10px 10px 2px;
+	background: #F9F9F9;
+	z-index: 9999;
+	width: 110px;
+	display: none;
+	margin-top: 12px;
+	border-top: solid 2px rgb(77, 77, 77);
+	box-shadow: 5px 5px rgba(91, 91, 91, 0.2);
+	position: relative;
+	transition: opacity .3s ease-in-out;
+	-moz-transition: opacity .3s ease-in-out;
+	-webkit-transition: opacity .3s ease-in-out;
+	&:after {
+		top: -8px;
+		width: 0;
+		height: 0;
+		left: 8px;
+		z-index: 2;
+		content: " ";
+		display: block;
+		position: absolute;
+		border-bottom: 8px solid #fff;
+		border-right: 8px solid transparent;
+		border-left: 8px solid transparent;
+	}
+	a {
+		display: block;
+		margin-bottom: 8px;
+		img {
+			padding-bottom: 2px;
+			padding-right: 5px;
+		}
+	}
+}
