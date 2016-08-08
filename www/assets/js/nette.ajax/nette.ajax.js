@@ -148,12 +148,15 @@ var nette = function () {
 	/**
 	 * Executes AJAX request. Attaches listeners and events.
 	 *
-	 * @param  {object} settings
+	 * @param  {object|string} settings or URL
 	 * @param  {Element|null} ussually Anchor or Form
 	 * @param  {event|null} event causing the request
 	 * @return {jqXHR|null}
 	 */
 	this.ajax = function (settings, ui, e) {
+		if ($.type(settings) === 'string') {
+			settings = {url: settings};
+		}
 		if (!settings.nette && ui && e) {
 			var $el = $(ui), xhr, originalBeforeSend;
 			var analyze = settings.nette = {
@@ -173,7 +176,7 @@ var nette = function () {
 			}
 
 			if (!settings.url) {
-				settings.url = analyze.form ? analyze.form.attr('action') : ui.href;
+				settings.url = analyze.form ? analyze.form.attr('action') || window.location.pathname + window.location.search : ui.href;
 			}
 			if (!settings.type) {
 				settings.type = analyze.form ? analyze.form.attr('method') : 'get';
@@ -312,7 +315,10 @@ $.nette.ext('validation', {
 			} else if (explicitNoAjax) return false;
 		}
 
-		if (validate.form && analyze.form && !((analyze.isSubmit || analyze.isImage) && analyze.el.attr('formnovalidate') !== undefined)) {
+		if (validate.form && analyze.form) {
+			if (analyze.isSubmit || analyze.isImage) {
+				analyze.form.get(0)["nette-submittedBy"] = analyze.el.get(0);
+			}
 			var ie = this.ie();
 			if (analyze.form.get(0).onsubmit && analyze.form.get(0).onsubmit((typeof ie !== 'undefined' && ie < 9) ? undefined : e) === false) {
 				e.stopImmediatePropagation();
@@ -381,7 +387,8 @@ $.nette.ext('forms', {
 		}
 		
 		// https://developer.mozilla.org/en-US/docs/Web/Guide/Using_FormData_Objects#Sending_files_using_a_FormData_object
-		if (analyze.form.attr('method').toLowerCase() === 'post' && 'FormData' in window) {
+		var formMethod = analyze.form.attr('method');
+		if (formMethod && formMethod.toLowerCase() === 'post' && 'FormData' in window) {
 			var formData = new FormData(analyze.form[0]);
 			for (var i in data) {
 				formData.append(i, data[i]);
@@ -458,7 +465,7 @@ $.nette.ext('snippets', {
 			$el.append(html);
 		} else if (!back && $el.is('[data-ajax-prepend]')) {
 			$el.prepend(html);
-		} else {
+		} else if ($el.html() != html) {
 			$el.html(html);
 		}
 	},

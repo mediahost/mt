@@ -19,6 +19,7 @@ use Kdyby\Doctrine\EntityManager;
 use Kdyby\Translation\Translator;
 use Nette\Application\ForbiddenRequestException;
 use Nette\Application\UI\Presenter;
+use Tracy\Debugger;
 use WebLoader\Nette\CssLoader;
 use WebLoader\Nette\LoaderFactory;
 
@@ -104,6 +105,8 @@ abstract class BasePresenter extends Presenter
 		$currency = $this->exchange[$this->exchange->getWeb()];
 		$this->template->currency = $currency;
 		$this->template->currencySymbol = $currency->getFormat()->getSymbol();
+
+		$this->template->isDevelopment = Debugger::isEnabled();
 	}
 
 	// <editor-fold desc="requirments">
