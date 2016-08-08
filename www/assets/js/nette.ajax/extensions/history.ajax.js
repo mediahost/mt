@@ -3,7 +3,7 @@
 // Is History API reliably supported? (based on Modernizr & PJAX)
 	if (!(window.history && history.pushState && window.history.replaceState && !navigator.userAgent.match(/((iPod|iPhone|iPad).+\bOS\s+[1-4]|WebApps\/.+CFNetwork)/))) return;
 
-	$.nette.ext('redirect', false);
+	// $.nette.ext('redirect', false);
 
 	var findSnippets = function () {
 		var result = [];
@@ -23,6 +23,16 @@
 		if (handler) {
 			handler.apply(context, args);
 		}
+	};
+	var removeDo = function (url) {
+		var doString = 'do\=[\-a-z0-9]+';
+		var regexpEnd = new RegExp('[\?|\&]' + doString + '$');
+		var regexpStart = new RegExp('\\?' + doString + '\&');
+		var regexpInside = new RegExp('\&' + doString + '\&');
+		url = url.replace(regexpEnd, '');
+		url = url.replace(regexpStart, '?');
+		url = url.replace(regexpInside, '&');
+		return url;
 	};
 
 	$.nette.ext('history', {
@@ -94,7 +104,7 @@
 					href: this.href,
 					title: document.title,
 					ui: this.cache ? findSnippets() : null
-				}, document.title, this.href);
+				}, document.title, removeDo(this.href));
 			}
 			this.href = null;
 			this.popped = true;

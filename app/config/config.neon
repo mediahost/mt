@@ -73,4 +73,3 @@ extensions:
 	todoQueue: App\Extensions\FilesManager\DI\TodoQueueExtension
 	gpwebpay: Pixidos\GPWebPay\DI\GPWebPayExtension
 	homecredit: App\Extensions\HomeCredit\DI\HomeCreditExtension
-	ajaxHistory: VojtechDobes\NetteAjax\HistoryExtension
