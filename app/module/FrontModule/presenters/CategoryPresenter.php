@@ -124,6 +124,7 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 		$data = [
 			'items' => $items,
 			'total_count' => $list->getCount(),
+			'more' => $this->link('//search', ['text' => $text]),
 		];
 		$this->sendJson($data);
 	}

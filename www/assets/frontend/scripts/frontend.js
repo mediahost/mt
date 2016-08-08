@@ -183,11 +183,20 @@ var Frontend = function () {
 				'en': 'Searched term does not match any product',
 				'cs': 'Hledanému výrazu neodpovídá žádný produkt',
 				'sk': 'Hľadanému výrazu neodpovedá žiadny produkt'
+			},
+			'all': {
+				'en': 'Show all',
+				'cs': 'Zobrazit vše',
+				'sk': 'Zobraziť všetko'
 			}
 		};
 
-		var transformFinded = function (response) {
-			return response.items;
+		var url = links['Category:searchJson'];
+		var wildcard = '-QUERY-';
+		var params = {
+			'text': wildcard,
+			'currency': currencyName,
+			'locale': lang
 		};
 
 		var urlParams = function (url, params) {
@@ -198,12 +207,10 @@ var Frontend = function () {
 			return url + glue + $.param(params);
 		};
 
-		var url = links['Category:searchJson'];
-		var wildcard = '-QUERY-';
-		var params = {
-			'text': wildcard,
-			'currency': currencyName,
-			'locale': lang
+		var moreLink;
+		var transformFinded = function (response) {
+			moreLink = response.more;
+			return response.items;
 		};
 
 		var options = {
@@ -249,7 +256,8 @@ var Frontend = function () {
 			limit: 10,
 			templates: {
 				empty: '<div class="empty-message">' + locale.empty[lang] + '</div>',
-				suggestion: formatResult
+				suggestion: formatResult,
+				footer: '<div class="more-message"><a href="' + moreLink + '">' + locale.all[lang] + '</a></div>',
 			}
 		});
 	};
