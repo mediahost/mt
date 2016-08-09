@@ -174,7 +174,7 @@ class ServicePresenter extends BasePresenter
 	 * @resource('service')
 	 * @privilege('resetBonusPrices')
 	 */
-	public function handleMakeThumbnails($size = NULL, $folder = NULL, $maximum = 100)
+	public function handleMakeThumbnails($size = NULL, $folder = NULL, $maximum = 500)
 	{
 		ini_set('max_execution_time', 300);
 		try {

@@ -4,6 +4,8 @@ namespace App\Extensions;
 
 use App\Helpers;
 use Exception;
+use Nette\Caching\Cache;
+use Nette\Caching\IStorage;
 use Nette\Http\FileUpload;
 use Nette\IOException;
 use Nette\Object;
@@ -14,6 +16,9 @@ use Tracy\Debugger;
 
 class Foto extends Object
 {
+
+	/** @var IStorage @inject */
+	public $cacheStorage;
 
 	/** @var string */
 	private $rootFolder;
@@ -29,9 +34,6 @@ class Foto extends Object
 
 	/** @var array */
 	private $thumbnailSizes;
-
-	/** @var array */
-	private $originalImages;
 
 	public function setFolders($folder, $originalFolderName)
 	{
@@ -273,10 +275,13 @@ class Foto extends Object
 
 	private function getOriginalImages($subFolder = NULL)
 	{
-		if (!isset($this->originalImages[$subFolder])) {
-			$this->originalImages[$subFolder] = $this->getImageList($this->originalFolder, $subFolder);
+		$cache = new Cache($this->cacheStorage, get_class($this));
+		$data = $cache->load($subFolder);
+		if (!$data) {
+			$data = $this->getImageList($this->originalFolder, $subFolder);
+			$cache->save($subFolder, $data);
 		}
-		return $this->originalImages[$subFolder];
+		return $data;
 	}
 
 	private function getImageList($folder, $subFolder = NULL, $path = [])
