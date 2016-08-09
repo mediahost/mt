@@ -11,6 +11,7 @@ use Nette\IOException;
 use Nette\Object;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Image;
+use Nette\Utils\ImageException;
 use Nette\Utils\UnknownImageFileException;
 use Tracy\Debugger;
 
@@ -122,23 +123,27 @@ class Foto extends Object
 			FileSystem::createDir(Helpers::getPath($resizedPath, FotoHelpers::getFolderFromPath($name)));
 			$resized = Helpers::getPath($resizedPath, $name);
 
-			if ($overwrite || !file_exists($resized) || filemtime($filename) > filemtime($resized)) {
-				$img = Image::fromFile($filename);
-
-				switch ($resizeMethod) {
-					case Image::FILL_EXACT:
-						$sizeY = $sizeX;
-						break;
-					case Image::FIT:
-					default:
-						$sizeX = min($sizeX, $img->width);
-						$sizeY = min($sizeY, $img->height);
-						break;
-				}
-				$img->resize($sizeX, $sizeY, $resizeMethod);
-				$img->save($resized);
-			} else if (!$overwrite && file_exists($resized)) {
+			if (!$overwrite && file_exists($resized)) {
 				throw new FotoException('File exists and you don\'t want to overwrite it.');
+			} else if (!file_exists($resized) || filemtime($filename) > filemtime($resized)) {
+				try {
+					$img = Image::fromFile($filename);
+
+					switch ($resizeMethod) {
+						case Image::FILL_EXACT:
+							$sizeY = $sizeX;
+							break;
+						case Image::FIT:
+						default:
+							$sizeX = min($sizeX, $img->width);
+							$sizeY = min($sizeY, $img->height);
+							break;
+					}
+					$img->resize($sizeX, $sizeY, $resizeMethod);
+					$img->save($resized);
+				} catch (ImageException $e) {
+					Debugger::log('FILE: ' . $filename . '; ERR: ' . $e->getMessage(), 'foto-error');
+				}
 			}
 
 			$filename = $resized;
