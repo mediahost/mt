@@ -7,11 +7,8 @@
 				{button add, class=>"btn btn-lg btn-primary", data-target-click => '#basket-dialog-caller'}
 					<i class="fa fa-shopping-cart"></i>
 					{_'Add to cart'}
+					<span n:if="$alreadyInBasket">{$alreadyInBasket}x</span>
 				{/button}
-			</div>
-			<div n:if="$alreadyInBasket" class="already-in-basket">
-				<i class="fa fa-shopping-cart"></i>
-				{$alreadyInBasket}x
 			</div>
 			<div class="clearfix"></div>
 		</div>
