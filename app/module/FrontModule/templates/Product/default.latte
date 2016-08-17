@@ -13,26 +13,19 @@
 			{include categories}
 		</div>
 		<div class="col-md-9" id="product-view">
-			<div class="col-md-7">
-				<div class="product-page-product-wrap jqzoom-stage">
+			<div class="col-md-7" id="popup-gallery">
+				<div n:class="product-page-product-wrap, !count($product->images) ? no-others">
 					<div class="clearfix">
-						<a href="{$basePath}/foto/{$product->image|size}" id="jqzoom" data-rel="gal-1">
+						<a href="{$basePath}/foto/{$product->image|size}" class="popup-gallery-image">
 							<img src="{$basePath}/foto/{$product->image|size:460,460}"
 								 alt="{$product}"
 								 title="{$product}"/>
 						</a>
 					</div>
 				</div>
-				<ul class="jqzoom-list" n:if="count($product->images)">
-					<li>
-						<a class="zoomThumbActive" href="javascript:void(0)"
-						   data-rel="{ gallery:'gal-1', smallimage: '{$basePath}/foto/{$product->image|size:500,500}', largeimage: '{$basePath}/foto/{$product->image|size}'}">
-							<img src="{$basePath}/foto/{$product->image|size:100}" alt="{$product}" title="{$product}"/>
-						</a>
-					</li>
+				<ul class="other-images" n:if="count($product->images)">
 					<li n:foreach="$product->images as $image">
-						<a href="javascript:void(0)"
-						   data-rel="{ gallery:'gal-1', smallimage: '{$basePath}/foto/{$image|size:500,500}', largeimage: '{$basePath}/foto/{$image|size}'}">
+						<a href="{$basePath}/foto/{$image|size}" class="popup-gallery-image">
 							<img src="{$basePath}/foto/{$image|size:100}" alt="{$product}" title="{$product}"/>
 						</a>
 					</li>

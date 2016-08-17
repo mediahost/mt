@@ -10,6 +10,24 @@ var Frontend = function () {
 
     var overlayOpacityBoxed = 0.5;
 
+	var handleOwl = function () {
+		$('.owl-carousel').each(function(){
+			$(this).owlCarousel();
+		});
+	};
+
+	var handleLightbox = function () {
+		$('#popup-gallery').each(function() {
+			$(this).magnificPopup({
+				delegate: 'a.popup-gallery-image',
+				type: 'image',
+				gallery: {
+					enabled: true
+				}
+			});
+		});
+	};
+
 	var handleInitICheck = function () {
 		$('.i-check, .i-radio').iCheck({
 			checkboxClass: 'i-check',
@@ -264,6 +282,8 @@ var Frontend = function () {
 
 	return {
 		init: function () {
+			handleOwl();
+			handleLightbox();
 			handleICheck();
 			handleProductFilter();
 			handleProductDetail();
