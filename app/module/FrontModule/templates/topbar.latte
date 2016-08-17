@@ -9,8 +9,8 @@
 				</div>
 				<div class="col-md-8">
 					<ul class="nav navbar-nav navbar-right navbar-right-no-mar">
-						<li n:foreach="$exchange as $currCode => $curr">
-							<a n:href="setCurrency! $currCode" n:class="$currCode == $currency->getCode() ? current">
+						<li n:foreach="$exchange as $currCode => $curr" n:class="currency-menu, $currCode == $currency->getCode() ? current">
+							<a n:href="setCurrency! $currCode">
 								{$curr->getFormat()->getSymbol()}
 							</a>
 						</li>
