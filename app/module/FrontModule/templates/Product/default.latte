@@ -82,8 +82,11 @@
 									</a>
 								</div>
 							</div>
-							<div class="product-page-perex" n:if="$product->perex">
-								<p>{$product->perex|noescape}</p>
+							<div class="product-page-perex" n:if="$product->perex || $stock->vat->isNone()">
+								<p n:if="$product->perex">{$product->perex|noescape}</p>
+								<p n:if="$stock->vat->isNone()">
+									{_'NoVatLaw'}
+								</p>
 							</div>
 							<div class="product-page-cart">
 								{control addToCart}

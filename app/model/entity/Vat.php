@@ -17,11 +17,11 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  */
 class Vat extends BaseEntity
 {
-	
+
 	const HIGH = 1;
 	const LOW = 2;
 	const NONE = 3;
-	
+
 	use Identifier;
 
 	/** @ORM\Column(type="float") */
@@ -77,9 +77,14 @@ class Vat extends BaseEntity
 		return $this->downDecimal + 1;
 	}
 
+	public function isNone()
+	{
+		return $this->id === self::NONE;
+	}
+
 	public function __toString()
 	{
-		return (string) ((int) $this->percent . '%');
+		return (string)((int)$this->percent . '%');
 	}
 
 }
