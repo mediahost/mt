@@ -1660,6 +1660,9 @@ msgstr "If percentage is set than price will be zero."
 msgid "--- Not selected ---"
 msgstr "--- Not selected ---"
 
+msgid "--- All ---"
+msgstr "--- All ---"
+
 msgid "Infoline"
 msgstr "Infoline"
 

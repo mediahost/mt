@@ -1615,6 +1615,9 @@ msgstr "Pokud je nastavena procentuální cena, bude základní cena nulová."
 msgid "--- Not selected ---"
 msgstr "--- Nevybráno ---"
 
+msgid "--- All ---"
+msgstr "--- Všechno ---"
+
 msgid "Infoline"
 msgstr "Infolinka"
 

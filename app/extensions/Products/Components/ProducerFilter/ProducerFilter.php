@@ -40,7 +40,7 @@ class ProducerFilter extends BaseControl
 			!$this->isAjax ?: 'ajax'
 		];
 
-		$notSelected = [NULL => '--- Not Selected ---'];
+		$notSelected = [NULL => '--- All ---'];
 
 		$productIds = is_array($this->productIds) ? $this->productIds : TRUE;
 		$producers = $this->producerFacade->getProducersList(TRUE, FALSE, $productIds);
