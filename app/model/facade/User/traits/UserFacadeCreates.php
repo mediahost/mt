@@ -119,8 +119,7 @@ trait UserFacadeCreates
 					->setTwitterAccessToken($user->twitter->accessToken);
 		}
 
-		$registration->verificationToken = Random::generate(32);
-		$registration->verificationExpiration = new DateTime('now + ' . $this->settings->expiration->verification);
+		$registration->setVerification(Random::generate(32), new DateTime('now + ' . $this->settings->expiration->verification));
 
 		$this->registrationRepo->save($registration);
 
