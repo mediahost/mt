@@ -241,9 +241,7 @@ var Frontend = function () {
 			return url + glue + $.param(params);
 		};
 
-		var moreLink;
 		var transformFinded = function (response) {
-			moreLink = response.more;
 			return response.items;
 		};
 
@@ -291,7 +289,10 @@ var Frontend = function () {
 			templates: {
 				empty: '<div class="empty-message">' + locale.empty[lang] + '</div>',
 				suggestion: formatResult,
-				footer: '<div class="more-message"><a href="' + moreLink + '">' + locale.all[lang] + '</a></div>',
+				footer: function (data) {
+					console.log(data.query);
+					return '<div class="more-message"><a href="search/' + data.query + '">' + locale.all[lang] + '</a></div>';
+				}
 			}
 		});
 	};
