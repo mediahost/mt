@@ -33,8 +33,13 @@ class PrintStock extends BaseControl
 		'product',
 	];
 
-	public function handleAddToCart()
+	public function handleAddToCart($showLabels = TRUE, $showSecondImage = TRUE, $mainClasses = NULL)
 	{
+		// simulate persistent parameters
+		$this->showLabels = $showLabels;
+		$this->showSecondImage = $showSecondImage;
+		$this->mainClasses = [$mainClasses];
+
 		try {
 			if (!$this->stock) {
 				throw new BaseControlException();

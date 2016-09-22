@@ -39,7 +39,7 @@
 					</span>
 				</div>
 				<div class="col-md-5 col-md-6 col-sm-12 col-xs-4 product-caption-button text-right">
-					<a n:href="addToCart!"
+					<a n:href="addToCart! $showLabels, $showSecondImage, $mainClasses"
 							n:class="ajax, btn, $basket->getCountAllowedToAdd($stock) ? btn-primary : btn-default, add2cart, !$basket->getCountAllowedToAdd($stock) ? disabled"
 					data-target-click="{$clickSelector}"
 					data-target-loading="{$loadingSelector}"
