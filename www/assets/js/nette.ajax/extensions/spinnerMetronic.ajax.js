@@ -50,11 +50,13 @@
 				Metronic.blockUI(options);
 			}
 		},
-		complete: function () {
-			if (typeof(Frontend) === 'object') {
-				Frontend.unblockUI(this.element);
-			} else if (typeof(Metronic) === 'object') {
-				Metronic.unblockUI(this.element);
+		complete: function (payload) {
+			if (!payload.redirect) {
+				if (typeof(Frontend) === 'object') {
+					Frontend.unblockUI(this.element);
+				} else if (typeof(Metronic) === 'object') {
+					Metronic.unblockUI(this.element);
+				}
 			}
 
 			if (this.moveTarget.length) {

@@ -40,6 +40,7 @@ class GoodsList extends BaseControl
 		$form->setRenderer(new MetronicFormRenderer());
 		$form->getElementPrototype()->class = [
 			!$this->isSendOnChange ?: 'sendOnChange',
+			!$this->isAjax ?: 'ajax'
 		];
 
 		$quantityContainer = $form->addContainer('quantity');
