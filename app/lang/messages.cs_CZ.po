@@ -1627,5 +1627,14 @@ msgstr "Pro jaký telefon hledáte zboží?"
 msgid "News on our e-shop"
 msgstr "Novinky v našem e-shopu"
 
+msgid "Product in sale"
+msgstr "Zboží ve slevě"
+
+msgid "Top products"
+msgstr "Nejprodávanější"
+
+msgid "Last visited"
+msgstr "Poslední navštívené"
+
 msgid "Gift"
 msgstr "Dárek"

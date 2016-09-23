@@ -64,14 +64,18 @@
 			</div>
 		</div>
 	</div>
-	<h3 class="widget-title">{_'News on our e-shop'}</h3>
-	<div class="owl-carousel owl-loaded owl-nav-out" data-options='{ "items":7, "loop":true, "nav":true }'>
-		<div class="owl-item" n:foreach="$newStocks as $stock">
-			{var stockId => $stock->id}
-			{control stock-$stockId}
+
+	{if count($newStocks)}
+		<h3 class="widget-title">{_'News on our e-shop'}</h3>
+		<div class="owl-carousel owl-loaded owl-nav-out" data-options='{ "items":7, "loop":true, "nav":true }'>
+			<div class="owl-item" n:foreach="$newStocks as $stock">
+				{var stockId => $stock->id}
+				{control stock-$stockId}
+			</div>
 		</div>
-	</div>
-	<div class="gap gap-small"></div>
+		<div class="gap gap-small"></div>
+	{/if}
+
 	<div class="row row-col-gap">
 		<div class="col-md-6">
 			<div class="banner banner-o-hid" style="background-color:#D2D2D2;">
@@ -100,415 +104,38 @@
 			</div>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col-md-3">
-			<h3 class="widget-title-sm">Weekly Featured</h3>
-			<div class="row row-sm-gap" data-gutter="10">
-				<div class="col-md-12">
-					<div class="product product-sm-left ">
-						<ul class="product-labels"></ul>
-						<div class="product-img-wrap">
-							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
-								 title="Image Title"/>
-						</div>
-						<a class="product-link" href="#"></a>
-						<div class="product-caption">
-							<ul class="product-caption-rating">
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-							</ul>
-							<h5 class="product-caption-title">Cobra Fly-Z Mens Golf Driver - 6 Colors - 4 Flex
-								Options - Right Hand - 2015</h5>
-							<div class="product-caption-price"><span class="product-caption-price-new">$85</span>
-							</div>
-							<ul class="product-caption-feature-list">
-								<li>Free Shipping</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row row-sm-gap" data-gutter="10">
-				<div class="col-md-12">
-					<div class="product product-sm-left ">
-						<ul class="product-labels"></ul>
-						<div class="product-img-wrap">
-							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
-								 title="Image Title"/>
-						</div>
-						<a class="product-link" href="#"></a>
-						<div class="product-caption">
-							<ul class="product-caption-rating">
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li><i class="fa fa-star"></i>
-								</li>
-							</ul>
-							<h5 class="product-caption-title">Fossil Women's Original Boyfriend ES3380 Rose-Gold
-								Stainless-Steel Quartz Watch</h5>
-							<div class="product-caption-price"><span class="product-caption-price-new">$83</span>
-							</div>
-							<ul class="product-caption-feature-list">
-								<li>Free Shipping</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row row-sm-gap" data-gutter="10">
-				<div class="col-md-12">
-					<div class="product product-sm-left ">
-						<ul class="product-labels"></ul>
-						<div class="product-img-wrap">
-							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
-								 title="Image Title"/>
-						</div>
-						<a class="product-link" href="#"></a>
-						<div class="product-caption">
-							<ul class="product-caption-rating">
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li><i class="fa fa-star"></i>
-								</li>
-							</ul>
-							<h5 class="product-caption-title">HomCom Leather Rocking Sofa Single Recliner Chair
-								Black Cushion</h5>
-							<div class="product-caption-price"><span class="product-caption-price-new">$51</span>
-							</div>
-							<ul class="product-caption-feature-list">
-								<li>2 left</li>
-								<li>Free Shipping</li>
-							</ul>
-						</div>
-					</div>
-				</div>
+
+	{if count($saleStocks)}
+		<h3 class="widget-title">{_'Product in sale'}</h3>
+		<div class="owl-carousel owl-loaded owl-nav-out" data-options='{ "items":7, "loop":true, "nav":true }'>
+			<div class="owl-item" n:foreach="$saleStocks as $stock">
+				{var stockId => $stock->id}
+				{control stock-$stockId}
 			</div>
 		</div>
-		<div class="col-md-3">
-			<h3 class="widget-title-sm">On Sale</h3>
-			<div class="row row-sm-gap" data-gutter="10">
-				<div class="col-md-12">
-					<div class="product product-sm-left ">
-						<ul class="product-labels"></ul>
-						<div class="product-img-wrap">
-							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
-								 title="Image Title"/>
-						</div>
-						<a class="product-link" href="#"></a>
-						<div class="product-caption">
-							<ul class="product-caption-rating">
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-							</ul>
-							<h5 class="product-caption-title">Apple iPhone 4S 16GB Factory Unlocked Black and White
-								Smartphone</h5>
-							<div class="product-caption-price"><span class="product-caption-price-new">$61</span>
-							</div>
-							<ul class="product-caption-feature-list">
-								<li>Free Shipping</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row row-sm-gap" data-gutter="10">
-				<div class="col-md-12">
-					<div class="product product-sm-left ">
-						<ul class="product-labels"></ul>
-						<div class="product-img-wrap">
-							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
-								 title="Image Title"/>
-						</div>
-						<a class="product-link" href="#"></a>
-						<div class="product-caption">
-							<ul class="product-caption-rating">
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li><i class="fa fa-star"></i>
-								</li>
-								<li><i class="fa fa-star"></i>
-								</li>
-							</ul>
-							<h5 class="product-caption-title">Samsung Galaxy S6 Edge+ Factory Unlocked GSM 32GB</h5>
-							<div class="product-caption-price"><span class="product-caption-price-new">$119</span>
-							</div>
-							<ul class="product-caption-feature-list">
-								<li>5 left</li>
-								<li>Free Shipping</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row row-sm-gap" data-gutter="10">
-				<div class="col-md-12">
-					<div class="product product-sm-left ">
-						<ul class="product-labels"></ul>
-						<div class="product-img-wrap">
-							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
-								 title="Image Title"/>
-						</div>
-						<a class="product-link" href="#"></a>
-						<div class="product-caption">
-							<ul class="product-caption-rating">
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li><i class="fa fa-star"></i>
-								</li>
-								<li><i class="fa fa-star"></i>
-								</li>
-							</ul>
-							<h5 class="product-caption-title">Dooney & Bourke Pebble Grain Hobo</h5>
-							<div class="product-caption-price"><span class="product-caption-price-new">$144</span>
-							</div>
-							<ul class="product-caption-feature-list">
-								<li>Free Shipping</li>
-							</ul>
-						</div>
-					</div>
-				</div>
+		<div class="gap gap-small"></div>
+	{/if}
+
+	{if count($topStocks)}
+		<h3 class="widget-title">{_'Top products'}</h3>
+		<div class="owl-carousel owl-loaded owl-nav-out" data-options='{ "items":7, "loop":true, "nav":true }'>
+			<div class="owl-item" n:foreach="$topStocks as $stock">
+				{var stockId => $stock->id}
+				{control stock-$stockId}
 			</div>
 		</div>
-		<div class="col-md-3">
-			<h3 class="widget-title-sm">New Arrivals</h3>
-			<div class="row row-sm-gap" data-gutter="10">
-				<div class="col-md-12">
-					<div class="product product-sm-left ">
-						<ul class="product-labels"></ul>
-						<div class="product-img-wrap">
-							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
-								 title="Image Title"/>
-						</div>
-						<a class="product-link" href="#"></a>
-						<div class="product-caption">
-							<ul class="product-caption-rating">
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li><i class="fa fa-star"></i>
-								</li>
-								<li><i class="fa fa-star"></i>
-								</li>
-							</ul>
-							<h5 class="product-caption-title">Magnum Precision UltraLite II Waterproof Composite Toe
-								Slip Resistant Work Boots</h5>
-							<div class="product-caption-price"><span class="product-caption-price-new">$135</span>
-							</div>
-							<ul class="product-caption-feature-list">
-								<li>1 left</li>
-								<li>Free Shipping</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row row-sm-gap" data-gutter="10">
-				<div class="col-md-12">
-					<div class="product product-sm-left ">
-						<ul class="product-labels"></ul>
-						<div class="product-img-wrap">
-							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
-								 title="Image Title"/>
-						</div>
-						<a class="product-link" href="#"></a>
-						<div class="product-caption">
-							<ul class="product-caption-rating">
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li><i class="fa fa-star"></i>
-								</li>
-								<li><i class="fa fa-star"></i>
-								</li>
-							</ul>
-							<h5 class="product-caption-title">WENGER WOMEN'S STAINLESS STEEL DATE NEW WATCH
-								0721.102</h5>
-							<div class="product-caption-price"><span class="product-caption-price-new">$125</span>
-							</div>
-							<ul class="product-caption-feature-list">
-								<li>Free Shipping</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row row-sm-gap" data-gutter="10">
-				<div class="col-md-12">
-					<div class="product product-sm-left ">
-						<ul class="product-labels"></ul>
-						<div class="product-img-wrap">
-							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
-								 title="Image Title"/>
-						</div>
-						<a class="product-link" href="#"></a>
-						<div class="product-caption">
-							<ul class="product-caption-rating">
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li><i class="fa fa-star"></i>
-								</li>
-							</ul>
-							<h5 class="product-caption-title">RK3441K 4-1/2" Compact Circular Saw by Rockwell</h5>
-							<div class="product-caption-price"><span class="product-caption-price-new">$115</span>
-							</div>
-							<ul class="product-caption-feature-list">
-								<li>5 left</li>
-								<li>Free Shipping</li>
-							</ul>
-						</div>
-					</div>
-				</div>
+		<div class="gap gap-small"></div>
+	{/if}
+
+	{if count($lastStocks)}
+		<h3 class="widget-title">{_'Last visited'}</h3>
+		<div class="owl-carousel owl-loaded owl-nav-out" data-options='{ "items":7, "loop":true, "nav":true }'>
+			<div class="owl-item" n:foreach="$lastStocks as $stock">
+				{var stockId => $stock->id}
+				{control stock-$stockId}
 			</div>
 		</div>
-		<div class="col-md-3">
-			<h3 class="widget-title-sm">Hot Now</h3>
-			<div class="row row-sm-gap" data-gutter="10">
-				<div class="col-md-12">
-					<div class="product product-sm-left ">
-						<ul class="product-labels"></ul>
-						<div class="product-img-wrap">
-							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
-								 title="Image Title"/>
-						</div>
-						<a class="product-link" href="#"></a>
-						<div class="product-caption">
-							<ul class="product-caption-rating">
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-							</ul>
-							<h5 class="product-caption-title">Fitbit Flex Black w/ Teal Bands Activity & Sleep
-								Tracker (Teal)</h5>
-							<div class="product-caption-price"><span class="product-caption-price-new">$105</span>
-							</div>
-							<ul class="product-caption-feature-list">
-								<li>Free Shipping</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row row-sm-gap" data-gutter="10">
-				<div class="col-md-12">
-					<div class="product product-sm-left ">
-						<ul class="product-labels"></ul>
-						<div class="product-img-wrap">
-							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
-								 title="Image Title"/>
-						</div>
-						<a class="product-link" href="#"></a>
-						<div class="product-caption">
-							<ul class="product-caption-rating">
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li><i class="fa fa-star"></i>
-								</li>
-							</ul>
-							<h5 class="product-caption-title">Hanes TAGLESS&reg; Nano-T&reg; Men's Long-Sleeve Tee
-								style 498L</h5>
-							<div class="product-caption-price"><span class="product-caption-price-new">$51</span>
-							</div>
-							<ul class="product-caption-feature-list">
-								<li>Free Shipping</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row row-sm-gap" data-gutter="10">
-				<div class="col-md-12">
-					<div class="product product-sm-left ">
-						<ul class="product-labels"></ul>
-						<div class="product-img-wrap">
-							<img class="product-img" src="img/500x500.png" alt="Image Alternative text"
-								 title="Image Title"/>
-						</div>
-						<a class="product-link" href="#"></a>
-						<div class="product-caption">
-							<ul class="product-caption-rating">
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-								<li class="rated"><i class="fa fa-star"></i>
-								</li>
-							</ul>
-							<h5 class="product-caption-title">FootJoy FJ Sport Golf Shoes White Mens Closeout 53255
-								New</h5>
-							<div class="product-caption-price"><span class="product-caption-price-new">$140</span>
-							</div>
-							<ul class="product-caption-feature-list">
-								<li>Free Shipping</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+		<div class="gap gap-small"></div>
+	{/if}
+
 {/block}

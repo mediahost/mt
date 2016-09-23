@@ -1628,5 +1628,14 @@ msgstr "Pre aký telefón hľadáte tovar?"
 msgid "News on our e-shop"
 msgstr "Novinky na našom e-shope"
 
+msgid "Product in sale"
+msgstr "Tovary v zľave"
+
+msgid "Top products"
+msgstr "Najpredávanejšie"
+
+msgid "Last visited"
+msgstr "Poslednej navštívenej"
+
 msgid "Gift"
 msgstr "Dárček"

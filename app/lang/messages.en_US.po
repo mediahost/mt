@@ -1672,5 +1672,14 @@ msgstr "Select type of your phone"
 msgid "News on our e-shop"
 msgstr "News on our e-shop"
 
+msgid "Product in sale"
+msgstr "Product in sale"
+
+msgid "Top products"
+msgstr "Top products"
+
+msgid "Last visited"
+msgstr "Last visited"
+
 msgid "Gift"
 msgstr "Gift"
