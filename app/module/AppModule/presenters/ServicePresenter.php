@@ -295,7 +295,7 @@ class ServicePresenter extends BasePresenter
 		$bonusGroups = $groupRepo->findByType(Group::TYPE_BONUS);
 
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
-		$stocks = $stockRepo->findByPrice11(NULL, [], 100);
+		$stocks = $stockRepo->findByPrice11(0, [], 100);
 		foreach ($stocks as $stock) {
 			foreach ($bonusGroups as $group) {
 				$stock->addDiscount($group->getDiscount(), $group);
