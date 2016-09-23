@@ -174,7 +174,7 @@ class ServicePresenter extends BasePresenter
 	 * @resource('service')
 	 * @privilege('resetBonusPrices')
 	 */
-	public function handleMakeThumbnails($size = NULL, $folder = NULL, $maximum = 500)
+	public function handleMakeThumbnails($size = NULL, $folder = NULL, $maximum = 500, $redirect = TRUE)
 	{
 		ini_set('max_execution_time', 300);
 		try {
@@ -186,7 +186,9 @@ class ServicePresenter extends BasePresenter
 			$message = $this->translator->translate('Must run once again. Maximum allowed thumbnails (%count%) was created.', $maximum);
 			$this->flashMessage($message, 'warning');
 		}
-		$this->redirect('this');
+		if ($redirect) {
+			$this->redirect('this');
+		}
 	}
 
 	/**
