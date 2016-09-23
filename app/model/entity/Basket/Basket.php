@@ -114,7 +114,7 @@ class Basket extends BaseEntity
 
 		if ($this->items->exists($isInItems)) {
 			$this->items->forAll($changeQuantity);
-		} else {
+		} else if ($quantity) {
 			$item = new BasketItem();
 			$item->basket = $this;
 			$item->stock = $stock;

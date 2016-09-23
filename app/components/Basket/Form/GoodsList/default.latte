@@ -61,7 +61,8 @@
 							<td class="del-goods-col">
 								<a class="del-goods ajax"
 								   href="{plink removeFromCart! $stock->id}" 
-								   data-target-loading="#frm-goodsList-form">&nbsp;</a>
+								   data-target-loading="#frm-goodsList-form"
+								   data-ajax-off="history">&nbsp;</a>
 							</td>
 						</tr>
 					{/foreach}
@@ -151,14 +152,12 @@
 			<div class="col-md-6 col-sm-6">
 				<a href="{plink Homepage:}" class="btn">
 					<i class="fa fa-chevron-left"></i>
-					&nbsp;
 					{_'cart.continueShopping'}
 				</a>
 			</div>
 			<div class="col-md-6 col-sm-6">
 				{button send, class=>'btn btn-primary'}
 				{_'cart.continue'}
-				&nbsp;
 				<i class="fa fa-chevron-right"></i>
 				{/button}
 			</div>
