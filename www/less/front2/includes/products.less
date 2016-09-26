@@ -121,6 +121,15 @@
 			}
 		}
 	}
+	.vertical {
+		.product-caption {
+			width: auto;
+			.product-caption-title {
+				margin-top: 10px;
+				height: 67px;
+			}
+		}
+	}
 }
 
 .accessories-filter {
@@ -157,13 +166,13 @@
 }
 
 @media (min-width: 768px) {
-	.product:not(.product-sm) {
+	.product:not(.product-sm):not(.product-sm-left) {
 		height: 365px;
 	}
 }
 
 @media (min-width: 992px) {
-	.product:not(.product-sm) {
+	.product:not(.product-sm):not(.product-sm-left) {
 		height: 360px;
 		.product-img-wrap-single {
 			height: 192px;
@@ -172,7 +181,7 @@
 }
 
 @media (min-width: 1200px) {
-	.product:not(.product-sm) {
+	.product:not(.product-sm):not(.product-sm-left) {
 		height: 410px;
 		.product-img-wrap-single {
 			height: 242px;

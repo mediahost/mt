@@ -1628,7 +1628,7 @@ msgstr "Pre aký telefón hľadáte tovar?"
 msgid "News on our e-shop"
 msgstr "Novinky na našom e-shope"
 
-msgid "Product in sale"
+msgid "Product on sale"
 msgstr "Tovary v zľave"
 
 msgid "Top products"
@@ -1639,3 +1639,54 @@ msgstr "Poslednej navštívenej"
 
 msgid "Gift"
 msgstr "Dárček"
+
+msgid "NoVatLaw"
+msgstr "Nie je možné uplatniť odpočet DPH - osobitný režim DPH, podľa § 66 zákona č. 222/2004 Z.z (0% DPH)"
+
+msgid "Products for your mobile phone"
+msgstr "Tovar pre Váš mobil"
+
+msgid "We show you products suitable for your phone"
+msgstr "Zobrazíme Vám tovar vhodný pre Váš telefón"
+
+msgid "Select phone"
+msgstr "Vyberte telefón"
+
+msgid "Cell phones"
+msgstr "Mobilné telefóny"
+
+msgid "With a guarantee"
+msgstr "so zárukou"
+
+msgid "View offer"
+msgstr "Zobraziť ponuku"
+
+msgid "Accessories"
+msgstr "Príslušenstvo"
+
+msgid "Enhance your phone"
+msgstr "Vylepšite si telefón"
+
+msgid "Spare parts"
+msgstr "Náhradné diely"
+
+msgid "Quality and with guarantee"
+msgstr "Kvalitné a zo zárukou"
+
+msgid "Phone service"
+msgstr "Servis telefónov"
+
+msgid "The cheapest service guarantee"
+msgstr "Garancia najlacnejšieho servisu"
+
+msgid "Show price list of repairs"
+msgstr "Zobraziť cenník opráv"
+
+msgid "Sell your phone"
+msgstr "Výkup telefónov"
+
+msgid "Money for old and broken!"
+msgstr "Peniaze za starý aj nefunkcný!"
+
+msgid "ask for price"
+msgstr "Zistiť cenu"

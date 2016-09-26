@@ -1672,8 +1672,8 @@ msgstr "Select type of your phone"
 msgid "News on our e-shop"
 msgstr "News on our e-shop"
 
-msgid "Product in sale"
-msgstr "Product in sale"
+msgid "Product on sale"
+msgstr "Product on sale"
 
 msgid "Top products"
 msgstr "Top products"
@@ -1683,3 +1683,55 @@ msgstr "Last visited"
 
 msgid "Gift"
 msgstr "Gift"
+
+msgid "NoVatLaw"
+msgstr "Nie je možné uplatniť odpočet DPH - osobitný režim DPH, podľa § 66 zákona č. 222/2004 Z.z (0% DPH)"
+
+msgid "Products for your mobile phone"
+msgstr "Products for your mobile phone"
+
+msgid "We show you products suitable for your phone"
+msgstr "We show you products suitable for your phone"
+
+msgid "Select phone"
+msgstr "Select phone"
+
+msgid "Cell phones"
+msgstr "Cell phones"
+
+msgid "With a guarantee"
+msgstr "With a guarantee"
+
+msgid "View offer"
+msgstr "View offer"
+
+msgid "Accessories"
+msgstr "Accessories"
+
+msgid "Enhance your phone"
+msgstr "Enhance your phone"
+
+msgid "Spare parts"
+msgstr "Spare parts"
+
+msgid "Quality and with guarantee"
+msgstr "Quality and with guarantee"
+
+msgid "Phone service"
+msgstr "Phone service"
+
+msgid "The cheapest service guarantee"
+msgstr "The cheapest service guarantee"
+
+msgid "Show price list of repairs"
+msgstr "Show price list of repairs"
+
+msgid "Sell your phone"
+msgstr "Sell your phone"
+
+msgid "Money for old and broken!"
+msgstr "Money for old and broken!"
+
+msgid "ask for price"
+msgstr "ask for price"
+

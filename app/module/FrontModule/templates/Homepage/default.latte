@@ -12,55 +12,54 @@
 			<div class="banner banner-o-hid banner-xl" style="background-color:#D2D2D2; height:490px;">
 				<a class="banner-link" href="#"></a>
 				<div class="banner-caption-left banner-caption-dark">
-					<h5 class="banner-title">Vsetko pre Vas telefon</h5>
-					<p class="banner-desc">Zadajte typ Vasho telefonu a zobrazime mam tovar vhodny pre tento
-						telefon</p>
-					<p class="banner-shop-now">Vyberte si svoj telefon<i class="fa fa-caret-right"></i>
+					<h5 class="banner-title">{_'Products for your mobile phone'}</h5>
+					<p class="banner-desc">{_'We show you products suitable for your phone'}</p>
+					<p class="banner-shop-now">{_'Select phone'}<i class="fa fa-caret-right"></i>
 					</p>
 				</div>
-				<img class="banner-img" src="img/test_banner/25-i.png" alt="Image Alternative text"
+				<img class="banner-img" src="{$basePath}/assets/frontend/img/homepage/1.png" alt="Banner"
 					 title="Image Title" style="bottom: -25px; right: -10px; width: 500px;"/>
 			</div>
 		</div>
 	</div>
 	<div class="row row-col-gap">
 		<div class="col-md-4">
-			<div class="banner banner-o-hid" style="background-color:#D2D2D2;">
+			<div class="banner banner-o-hid" style="background-color:rgba(210, 210, 210, 0.41);">
 				<a class="banner-link" href="#"></a>
 				<div class="banner-caption-left banner-caption-dark">
-					<h5 class="banner-title">Mobilne Telefony</h5>
-					<p class="banner-desc">aj bez DPH a so zarukou!</p>
-					<p class="banner-shop-now">Zobrazit ponuku <i class="fa fa-caret-right"></i>
+					<h5 class="banner-title">{_'Cell phones'}</h5>
+					<p class="banner-desc">{_'With a guarantee'}</p>
+					<p class="banner-shop-now">{_'View offer'}<i class="fa fa-caret-right"></i>
 					</p>
 				</div>
-				<img class="banner-img" src="img/test_banner/27-i.png" alt="Image Alternative text"
-					 title="Image Title" style="top: 5px; right: 10px; width: 120px;"/>
+				<img class="banner-img" src="{$basePath}/assets/frontend/img/homepage/6.png" alt="Banner"
+					 title="Image Title" style="top: 20px; right: -15px; width: 220px;"/>
 			</div>
 		</div>
 		<div class="col-md-4">
-			<div class="banner banner-o-hid" style="background-color:#D2D2D2;">
+			<div class="banner banner-o-hid" style="background-color:rgba(210, 210, 210, 0.41);">
 				<a class="banner-link" href="#"></a>
 				<div class="banner-caption-left banner-caption-dark">
-					<h5 class="banner-title">Prislusenstvo</h5>
-					<p class="banner-desc">pre kazdy telefon</p>
-					<p class="banner-shop-now">Zobrazit ponuku <i class="fa fa-caret-right"></i>
+					<h5 class="banner-title">{_'Accessories'}</h5>
+					<p class="banner-desc">{_'Enhance your phone'}</p>
+					<p class="banner-shop-now">{_'View offer'}<i class="fa fa-caret-right"></i>
 					</p>
 				</div>
-				<img class="banner-img" src="img/test_banner/26-i.png" alt="Image Alternative text"
-					 title="Image Title" style="top: 5px; right: -30px; width: 180px;"/>
+				<img class="banner-img" src="{$basePath}/assets/frontend/img/homepage/4.png" alt="Banner"
+					 title="Image Title" style="top: 15px; right: -60px; width: 280px;"/>
 			</div>
 		</div>
 		<div class="col-md-4">
-			<div class="banner banner-o-hid" style="background-color:#D2D2D2;">
+			<div class="banner banner-o-hid" style="background-color:rgba(210, 210, 210, 0.41);">
 				<a class="banner-link" href="#"></a>
 				<div class="banner-caption-left banner-caption-dark">
-					<h5 class="banner-title">Nahradne diely</h5>
-					<p class="banner-desc">Kvalitne so zarukou</p>
-					<p class="banner-shop-now">Zobrazit ponuku <i class="fa fa-caret-right"></i>
+					<h5 class="banner-title">{_'Spare parts'}</h5>
+					<p class="banner-desc">{_'Quality and with guarantee'}</p>
+					<p class="banner-shop-now">{_'View offer'}<i class="fa fa-caret-right"></i>
 					</p>
 				</div>
-				<img class="banner-img" src="img/test_banner/29-i.png" alt="Image Alternative text"
-					 title="Image Title" style="top: 33px; right: -85px; width: 240px;"/>
+				<img class="banner-img" src="{$basePath}/assets/frontend/img/homepage/3.png" alt="Banner"
+					 title="Image Title" style="top: 10px; right: -45px; width: 240px;"/>
 			</div>
 		</div>
 	</div>
@@ -69,8 +68,10 @@
 		<h3 class="widget-title">{_'News on our e-shop'}</h3>
 		<div class="owl-carousel owl-loaded owl-nav-out" data-options='{ "items":7, "loop":true, "nav":true }'>
 			<div class="owl-item" n:foreach="$newStocks as $stock">
-				{var stockId => $stock->id}
-				{control stock-$stockId}
+				<div class="product product-sm owl-item-slide">
+					{var stockId => $stock->id}
+					{control stock-$stockId}
+				</div>
 			</div>
 		</div>
 		<div class="gap gap-small"></div>
@@ -81,61 +82,70 @@
 			<div class="banner banner-o-hid" style="background-color:#D2D2D2;">
 				<a class="banner-link" href="#"></a>
 				<div class="banner-caption-left banner-caption-dark">
-					<h5 class="banner-title">Servis telefonov</h5>
-					<p class="banner-desc">Garancia najlacnejsieho servisu</p>
-					<p class="banner-shop-now">Zobrazit cennik oprav <i class="fa fa-caret-right"></i>
+					<h5 class="banner-title">{_'Phone service'}</h5>
+					<p class="banner-desc">{_'The cheapest service guarantee'}</p>
+					<p class="banner-shop-now">{_'Show price list of repairs'}<i class="fa fa-caret-right"></i>
 					</p>
 				</div>
-				<img class="banner-img" src="img/test_banner/28-i.png" alt="Image Alternative text"
-					 title="Image Title" style="bottom: 0px; right: 0px; width: 240px;"/>
+				<img class="banner-img" src="{$basePath}/assets/frontend/img/homepage/2.png" alt="Banner"
+					 title="Image Title" style="top: 20px; right: 0px; width: 240px;"/>
 			</div>
 		</div>
 		<div class="col-md-6">
 			<div class="banner banner-o-hid" style="background-color:#D2D2D2;">
 				<a class="banner-link" href="#"></a>
 				<div class="banner-caption-left banner-caption-dark">
-					<h5 class="banner-title">Vykup telefonov</h5>
-					<p class="banner-desc">Najlepsie ceny na trhu</p>
-					<p class="banner-shop-now">Zistit cenu <i class="fa fa-caret-right"></i>
+					<h5 class="banner-title">{_'Sell your phone'}</h5>
+					<p class="banner-desc">{_'Money for old and broken!'}</p>
+					<p class="banner-shop-now">{_'ask for price'}<i class="fa fa-caret-right"></i>
 					</p>
 				</div>
-				<img class="banner-img" src="img/test_banner/32-i.png" alt="Image Alternative text"
+				<img class="banner-img" src="{$basePath}/assets/frontend/img/homepage/5.png" alt="Banner"
 					 title="Image Title" style="bottom: 0; right: 0; width: 260px;"/>
 			</div>
 		</div>
 	</div>
 
 	{if count($saleStocks)}
-		<h3 class="widget-title">{_'Product in sale'}</h3>
-		<div class="owl-carousel owl-loaded owl-nav-out" data-options='{ "items":7, "loop":true, "nav":true }'>
-			<div class="owl-item" n:foreach="$saleStocks as $stock">
-				{var stockId => $stock->id}
-				{control stock-$stockId}
+		<div class="col-md-3">
+			<h3 class="widget-title-sm">{_'Product on sale'}</h3>
+			<div class="row row-sm-gap" data-gutter="10" n:foreach="$saleStocks as $stock">
+				<div class="col-md-12">
+					<div class="product product-sm-left">
+						{var stockId => $stock->id}
+						{control stock-$stockId:vertical}
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class="gap gap-small"></div>
 	{/if}
 
 	{if count($topStocks)}
-		<h3 class="widget-title">{_'Top products'}</h3>
-		<div class="owl-carousel owl-loaded owl-nav-out" data-options='{ "items":7, "loop":true, "nav":true }'>
-			<div class="owl-item" n:foreach="$topStocks as $stock">
-				{var stockId => $stock->id}
-				{control stock-$stockId}
+		<div class="col-md-3">
+			<h3 class="widget-title-sm">{_'Top products'}</h3>
+			<div class="row row-sm-gap" data-gutter="10" n:foreach="$topStocks as $stock">
+				<div class="col-md-12">
+					<div class="product product-sm-left">
+						{var stockId => $stock->id}
+						{control stock-$stockId:vertical}
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class="gap gap-small"></div>
 	{/if}
 
 	{if count($lastStocks)}
-		<h3 class="widget-title">{_'Last visited'}</h3>
-		<div class="owl-carousel owl-loaded owl-nav-out" data-options='{ "items":7, "loop":true, "nav":true }'>
-			<div class="owl-item" n:foreach="$lastStocks as $stock">
-				{var stockId => $stock->id}
-				{control stock-$stockId}
+		<div class="col-md-3">
+			<h3 class="widget-title-sm">{_'Last visited'}</h3>
+			<div class="row row-sm-gap" data-gutter="10" n:foreach="$lastStocks as $stock">
+				<div class="col-md-12">
+					<div class="product product-sm-left">
+						{var stockId => $stock->id}
+						{control stock-$stockId:vertical}
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class="gap gap-small"></div>
 	{/if}
 
 {/block}

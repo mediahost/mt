@@ -99,6 +99,12 @@ class PrintStock extends BaseControl
 		parent::render();
 	}
 
+	public function renderVertical()
+	{
+		$this->setTemplateFile('vertical');
+		$this->render();
+	}
+
 	// </editor-fold>
 	// <editor-fold desc="setters & getters">
 

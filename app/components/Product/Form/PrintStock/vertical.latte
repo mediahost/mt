@@ -1,5 +1,5 @@
 {snippet stockPrint}
-	<div class="{$mainClasses}" id="{$id}">
+	<div class="vertical {$mainClasses}" id="{$id}">
 		{var blockId => 'stockPrint' . $stock->id}
 		{var product => $stock->product}
 		{var countInBasket => $basket->getCountInBasket($stock)}
@@ -17,20 +17,23 @@
 				{$countInBasket}x
 			</li>
 		</ul>
-		<div n:class="$showSecondImage && $product->secondImage ? product-img-wrap : product-img-wrap-single">
-			<img class="product-img-primary" src="{$basePath}/foto/{$product->image|size:300}"
-				 alt="{$product}" title="{$product}"/>
-			<img n:if="$showSecondImage && $product->secondImage" class="product-img-alt"
-											  src="{$basePath}/foto/{$product->secondImage|size:300}"
-											  alt="{$product}" title="{$product}"/>
-		</div>
+
 		<a class="product-link" href="{plink Product: 'id' => $stock->getUrlId(), 'slug' => $stock->getSlug()}"></a>
+
 		<div class="product-caption">
-			<h5 class="product-caption-title">
-				{$product}
-			</h5>
 			<div class="row">
-				<div class="col-lg-7 col-md-6 col-sm-12 col-xs-8 product-caption-price">
+				<div class="col-md-6">
+					<img class="product-img" src="{$basePath}/foto/{$product->image|size:300}" alt="{$product}" title="{$product}"/>
+				</div>
+				<div class="col-md-6">
+					<h5 class="product-caption-title">
+						{$product}
+					</h5>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-6 col-sm-12 col-xs-8 product-caption-price text-center">
 					<span class="product-caption-price-new">
 						{$stock->getPrice($priceLevel)|currencyVat}
 					</span>
@@ -38,18 +41,17 @@
 						{$stock->oldPrice|currency}
 					</span>
 				</div>
-				<div class="col-lg-5 col-md-6 col-sm-12 col-xs-4 product-caption-button text-right">
+				<div class="col-md-6 col-sm-12 col-xs-4 product-caption-button text-center">
 					<a n:href="addToCart! $showLabels, $showSecondImage, $mainClasses"
 							n:class="ajax, btn, $basket->getCountAllowedToAdd($stock) ? btn-primary : btn-default, add2cart, !$basket->getCountAllowedToAdd($stock) ? disabled"
-					data-target-click="{$clickSelector}"
-					data-target-loading="{$loadingSelector}"
-					data-ajax-off="history">
+							data-target-click="{$clickSelector}"
+							data-target-loading="{$loadingSelector}"
+							data-ajax-off="history">
 						<span class="text">{_'Add to cart'}</span>
 						<span class="icon fa fa-shopping-cart"></span>
 					</a>
 				</div>
 			</div>
-
 		</div>
 	</div>
 {/snippet}
