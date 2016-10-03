@@ -13,6 +13,12 @@
 	{var thirdColCond => count($producers) > $secondColCnt}
 
 	<ul class="nav navbar-nav navbar-nav-lg">
+		<li>
+			<a n:href="Homepage:">
+				<span></span>
+				<i class="fa fa-home"></i>
+			</a>
+		</li>
 		{ifset $menuPages->page1}
 			<li class="dropdown yamm-fw">
 				<a n:href="this">
@@ -208,7 +214,7 @@
 			</a>
 		</li>
 		<li n:ifset="$menuPages->page5">
-			<a n:href="Page: $menuPages->page5->id">
+			<a n:href="$menuPages->page5->link">
 				<span>{_'menu.subtitle.page5'}</span>{_'menu.headline.page5'}
 			</a>
 		</li>
