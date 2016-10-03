@@ -80,9 +80,13 @@ class PrintStock extends BaseControl
 			$top = $signRepo->find($signs->values->top);
 			$top->setCurrentLocale($this->translator->getLocale());
 
+			$special = $signRepo->find($signs->values->special);
+			$special->setCurrentLocale($this->translator->getLocale());
+
 			$this->template->newSign = $new;
 			$this->template->saleSign = $sale;
 			$this->template->topSign = $top;
+			$this->template->specialSign = $special;
 		}
 	}
 

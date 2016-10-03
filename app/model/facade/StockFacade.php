@@ -132,6 +132,13 @@ class StockFacade extends Object
 		return $this->getSignedProducts($id, $count);
 	}
 
+	public function getSpecials($count = 3)
+	{
+		$signs = $this->settings->modules->signs;
+		$id = $signs->enabled ? $signs->values->special : NULL;
+		return $this->getSignedProducts($id, $count);
+	}
+
 	public function getBestSellers()
 	{
 		return [];

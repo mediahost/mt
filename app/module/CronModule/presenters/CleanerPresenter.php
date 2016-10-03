@@ -44,6 +44,17 @@ class CleanerPresenter extends BasePresenter
 			}
 		}
 
+		// top sign
+		if ($signsSetting->enabled) {
+			$sign = $signRepo->find($signsSetting->values->top);
+			if ($sign) {
+				$productSignRepo->deleteBy([
+					'sign' => $sign,
+					'createdAt <=' => DateTime::from('-' . $signsSetting->clearOlder),
+				]);
+			}
+		}
+
 		$this->status = parent::STATUS_OK;
 	}
 

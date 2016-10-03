@@ -251,9 +251,13 @@ abstract class BasePresenter extends BaseBasePresenter
 			$top = $signRepo->find($signs->values->top);
 			$top->setCurrentLocale($this->locale);
 
+			$special = $signRepo->find($signs->values->special);
+			$special->setCurrentLocale($this->locale);
+
 			$this->template->newSign = $new;
 			$this->template->saleSign = $sale;
 			$this->template->topSign = $top;
+			$this->template->specialSign = $special;
 		}
 	}
 

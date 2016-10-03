@@ -8,8 +8,9 @@
 
 		<ul class="product-labels" n:if="$showLabels">
 			<li n:if="$product->hasSign($newSign)" class="new">{$newSign}</li>
-			<li n:if="$product->hasSign($saleSign)" class="sale">{$saleSign}</li>
 			<li n:if="$product->hasSign($topSign)" class="top">{$topSign}</li>
+			<li n:if="$product->hasSign($specialSign)" class="special">{$specialSign}</li>
+			<li n:if="$product->hasSign($saleSign)" class="sale">{$saleSign}</li>
 		</ul>
 		<ul class="product-labels right">
 			<li n:if="$countInBasket">

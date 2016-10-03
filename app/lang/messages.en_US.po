@@ -1681,6 +1681,9 @@ msgstr "Top products"
 msgid "Last visited"
 msgstr "Last visited"
 
+msgid "Special offer"
+msgstr "Special offer"
+
 msgid "Gift"
 msgstr "Gift"
 
@@ -1734,4 +1737,10 @@ msgstr "Money for old and broken!"
 
 msgid "ask for price"
 msgstr "ask for price"
+
+msgid "Select brand"
+msgstr "Select brand"
+
+msgid "Brand"
+msgstr "Brand"
 

@@ -1636,6 +1636,9 @@ msgstr "Nejprodávanější"
 msgid "Last visited"
 msgstr "Poslední navštívené"
 
+msgid "Special offer"
+msgstr "Akce"
+
 msgid "Gift"
 msgstr "Dárek"
 
@@ -1689,3 +1692,9 @@ msgstr "Peníze za starý i nefunkční!"
 
 msgid "ask for price"
 msgstr "Zjistit cenu"
+
+msgid "Select brand"
+msgstr "Vyberte značku"
+
+msgid "Značka"
+msgstr "Značka"
