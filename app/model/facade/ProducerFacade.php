@@ -129,7 +129,7 @@ class ProducerFacade extends Object
 			$criteria['line'] = $line;
 		}
 		if ($onlyWithProducts) {
-			$criteria['producer'] = $this->productRepo->getProducersIds();
+			$criteria['line.producer'] = $this->productRepo->getProducersIds();
 		}
 		if ($onlyWithAccModels !== FALSE) {
 			$productIds = is_array($onlyWithAccModels) && count($onlyWithAccModels) ? $onlyWithAccModels : [];
