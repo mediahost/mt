@@ -13,6 +13,7 @@ $configurator->setDebugMode([
 	// TMPs
 	'149.62.146.153', // Brno TMP1
 	'94.113.216.110', // Brno TMP2
+	'94.113.23.178', // Brno TMP3
 ]);
 
 $configurator->enableDebugger(__DIR__ . '/../log');
