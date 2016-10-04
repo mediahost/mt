@@ -65,27 +65,27 @@
 			{control products:accessories}
 		</div>
 
-		<div class="row products producers-list" data-gutter="15"
-				n:if="isset($subcategories) && count($subcategories) && $_control->getComponent('products')->getCount() > 0">
-			{cache 'subcategory_' . $category->id, tags => [$categoryCacheTag . $category->id]}
-				<div n:foreach="$subcategories as $subcategory" class="col-md-4 col-sm-12">
-					<div class="product product-sm-left">
-						<div class="product-img-wrap">
-							<img class="product-img" src="{$basePath}/foto/{$subcategory->image|size:200}"
-								 alt="{$subcategory->getName()}"
-								 title="{$subcategory->getName()}"/>
-						</div>
-						<a n:href="Category: 'c' => $subcategory->getUrlId(), 'slug' => $subcategory->getSlug()"
-								class="product-link"></a>
-						<div class="product-caption">
-							<h3 class="product-caption-title">
-								{$subcategory->getName()}
-							</h3>
-						</div>
-					</div>
-				</div>
-			{/cache}
-		</div>
+		{*<div class="row products producers-list" data-gutter="15"*}
+				{*n:if="isset($subcategories) && count($subcategories) && $_control->getComponent('products')->getCount() > 0">*}
+			{*{cache 'subcategory_' . $category->id, tags => [$categoryCacheTag . $category->id]}*}
+				{*<div n:foreach="$subcategories as $subcategory" class="col-md-4 col-sm-12">*}
+					{*<div class="product product-sm-left">*}
+						{*<div class="product-img-wrap">*}
+							{*<img class="product-img" src="{$basePath}/foto/{$subcategory->image|size:200}"*}
+								 {*alt="{$subcategory->getName()}"*}
+								 {*title="{$subcategory->getName()}"/>*}
+						{*</div>*}
+						{*<a n:href="Category: 'c' => $subcategory->getUrlId(), 'slug' => $subcategory->getSlug()"*}
+								{*class="product-link"></a>*}
+						{*<div class="product-caption">*}
+							{*<h3 class="product-caption-title">*}
+								{*{$subcategory->getName()}*}
+							{*</h3>*}
+						{*</div>*}
+					{*</div>*}
+				{*</div>*}
+			{*{/cache}*}
+		{*</div>*}
 
 		{control products:list}
 
