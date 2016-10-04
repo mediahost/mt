@@ -175,14 +175,37 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 		}
 	}
 
-	public function actionAppropriate($producer)
+	public function actionAppropriate($producer = NULL, $line = NULL, $model = NULL)
 	{
-		$producerRepo = $this->em->getRepository(Producer::getClassName());
-		$producer = $producerRepo->findOneBySlug($producer);
+		if ($model) {
+			$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
+			$model = $modelRepo->findOneBySlug($model);
+			if ($model) {
+				$line = $model->line;
+				$producer = $line->producer;
+			} else {
+				$producer = NULL;
+			}
+		} else if ($line) {
+			$lineRepo = $this->em->getRepository(ProducerLine::getClassName());
+			$line = $lineRepo->findOneBySlug($line);
+			if ($line) {
+				$producer = $line->producer;
+			} else {
+				$producer = NULL;
+			}
+		} else if ($producer) {
+			$producerRepo = $this->em->getRepository(Producer::getClassName());
+			$producer = $producerRepo->findOneBySlug($producer);
+		}
+
 		if ($producer) {
-			$this['products']->setProducer($producer);
+			$this['products']->addFilterAccessoriesFor($producer, $line, $model);
+			$this->showAccessoriesFilter = FALSE;
 
 			$this->template->producer = $producer;
+			$this->template->line = $line;
+			$this->template->model = $model;
 			$this->setView('default');
 		} else {
 			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Producer')]);

@@ -115,6 +115,10 @@ class SettingsExtension extends CompilerExtension
 				'deliveryNotInStoreTime' => NULL,
 				'locales' => ['cs'],
 			],
+			'producer' => [
+				'enabled' => FALSE,
+				'pageId' => 1, // ID of page in pages to show as basic info
+			],
 			'service' => [
 				'enabled' => FALSE,
 				'pageId' => 1, // ID of page in pages to show as basic info

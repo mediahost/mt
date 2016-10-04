@@ -188,13 +188,27 @@ class RouterFactory
 			'action' => 'model',
 			'locale' => 'en',
 		]);
+		$frontRouter[] = new Route('vyrobca[/<producer>[/<line>]]', [
+			'presenter' => 'Producer',
+			'action' => 'default',
+			'locale' => 'sk',
+		]);
+		$frontRouter[] = new Route('cs/vyrobce[/<producer>[/<line>]]', [
+			'presenter' => 'Producer',
+			'action' => 'default',
+			'locale' => 'cs',
+		]);
+		$frontRouter[] = new Route('en/producer[/<producer>[/<line>]]', [
+			'presenter' => 'Producer',
+			'action' => 'default',
+			'locale' => 'en',
+		]);
 
 		$slugs = '[0-9a-z/-]+';
 
-		$frontRouter[] = new FilterRoute(self::LOCALE_PARAM . 'appropriate/<producer>/[page-<products-page \d+>/]', [
+		$frontRouter[] = new FilterRoute(self::LOCALE_PARAM . 'appropriate/<producer>[/<line>[/<model>]]', [
 			'presenter' => 'Category',
 			'action' => 'appropriate',
-			'products-page' => 1,
 		]);
 		$frontRouter[] = new Route(self::LOCALE_PARAM . 'search[/<text>]', [
 			'presenter' => 'Category',

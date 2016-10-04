@@ -30,13 +30,13 @@
 				<li class="active">{$searched}</li>
 			{elseifset $producer}
 				<li>
-					<a n:href="Category:producer, 'producer' => $producer->slug">{$producer}</a>
+					<a n:href="Category:appropriate, 'producer' => $producer->slug">{$producer}</a>
 				</li>
 				<li n:ifset="$line">
-					<a n:href="Category:producer, 'producer' => $producer->slug, 'line' => $line->slug">{$line}</a>
+					<a n:href="Category:appropriate, 'producer' => $producer->slug, 'line' => $line->slug">{$line}</a>
 				</li>
 				<li n:ifset="$model">
-					<a n:href="Category:producer, 'producer' => $producer->slug, 'line' => $line->slug, 'model' => $model->slug">{$model}</a>
+					<a n:href="Category:appropriate, 'producer' => $producer->slug, 'line' => $line->slug, 'model' => $model->slug">{$model}</a>
 				</li>
 			{/ifset}
 		</ol>

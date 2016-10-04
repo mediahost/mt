@@ -1,0 +1,43 @@
+{block breadcrumb}
+	<header class="page-header">
+		<h1 class="page-title">
+			{$page}
+		</h1>
+		<ol class="breadcrumb page-breadcrumb">
+			<li><a n:href=":Front:Homepage:">{$pageInfo->projectName}</a></li>
+			<li class="active"><span>{$page}</span></li>
+		</ol>
+	</header>
+{/block}
+
+{block content}
+<div class="row row-sm-gap service">
+	<div class="col-md-12">
+		<div n:if="$page->html" class="blog-post-body">
+			{$page->html|noescape}
+		</div>
+		<h2 class="widget-title">{_'Select brand'}</h2>
+		<hr>
+		<div class="row products producers-list" data-gutter="15">
+			<div n:foreach="$producers as $producer" n:if="$producer->hasLines(TRUE)" class="col-md-3 col-sm-6">
+				<div class="product product-sm-left">
+					<div class="product-img-wrap">
+						<img class="product-img" src="{$basePath}/foto/{$producer->image|size:200}"
+							 alt="{$producer}"
+							 title="{$producer}"/>
+					</div>
+					<a n:href="Producer: 'producer' => $producer->slug"
+							class="product-link"></a>
+					<div class="product-caption">
+						<div class="product-caption-subtitle">
+							{_'Brand'}
+						</div>
+						<h3 class="product-caption-title">
+							{$producer}
+						</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

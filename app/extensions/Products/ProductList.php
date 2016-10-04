@@ -183,6 +183,19 @@ class ProductList extends Control
 		$this->setLimitPrices();
 	}
 
+	public function addFilterAccessoriesFor(Producer $producer, ProducerLine $line = NULL, ProducerModel $model = NULL)
+	{
+		$this['accessoriesFilterForm']->setProducer($producer, $this->producerAllowNone);
+		if ($line) {
+			$this['accessoriesFilterForm']->setLine($line);
+		}
+		if ($model) {
+			$this['accessoriesFilterForm']->setModel($model);
+		}
+		$this->getHolder()->filterAccessoriesFor([$producer, $line, $model]);
+		$this->setLimitPrices();
+	}
+
 	public function addFilterFulltext($text)
 	{
 		$this->getHolder()->filterFulltext($text);

@@ -10,22 +10,22 @@
 		</div>
 		<div class="col-md-9">
 			<div class="banner banner-o-hid banner-xl" style="background-color:#D2D2D2; height:490px;">
-				<a class="banner-link" href="#"></a>
+				<a class="banner-link" n:href="Producer:"></a>
 				<div class="banner-caption-left banner-caption-dark">
 					<h5 class="banner-title">{_'Products for your mobile phone'}</h5>
 					<p class="banner-desc">{_'We show you products suitable for your phone'}</p>
 					<p class="banner-shop-now">{_'Select phone'}<i class="fa fa-caret-right"></i>
 					</p>
 				</div>
-				<img class="banner-img" src="{$basePath}/assets/frontend/img/homepage/1.png" alt="Banner"
-					 title="Image Title" style="bottom: -25px; right: -10px; width: 500px;"/>
+				<img class="banner-img" src="{$basePath}/assets/frontend/img/homepage/8.png" alt="Banner"
+					 title="Image Title" style="bottom: -25px; right: -40px; width: 700px;"/>
 			</div>
 		</div>
 	</div>
 	<div class="row row-col-gap">
 		<div class="col-md-4">
 			<div class="banner banner-o-hid" style="background-color:rgba(210, 210, 210, 0.41);">
-				<a class="banner-link" href="#"></a>
+				<a class="banner-link" n:href="Category: 'c' => $cat1->getUrlId(), 'slug' => $cat1->getSlug()"></a>
 				<div class="banner-caption-left banner-caption-dark">
 					<h5 class="banner-title">{_'Cell phones'}</h5>
 					<p class="banner-desc">{_'With a guarantee'}</p>
@@ -38,7 +38,7 @@
 		</div>
 		<div class="col-md-4">
 			<div class="banner banner-o-hid" style="background-color:rgba(210, 210, 210, 0.41);">
-				<a class="banner-link" href="#"></a>
+				<a class="banner-link" n:href="Category: 'c' => $cat2->getUrlId(), 'slug' => $cat2->getSlug()"></a>
 				<div class="banner-caption-left banner-caption-dark">
 					<h5 class="banner-title">{_'Accessories'}</h5>
 					<p class="banner-desc">{_'Enhance your phone'}</p>
@@ -51,7 +51,7 @@
 		</div>
 		<div class="col-md-4">
 			<div class="banner banner-o-hid" style="background-color:rgba(210, 210, 210, 0.41);">
-				<a class="banner-link" href="#"></a>
+				<a class="banner-link" n:href="Category: 'c' => $cat3->getUrlId(), 'slug' => $cat3->getSlug()"></a>
 				<div class="banner-caption-left banner-caption-dark">
 					<h5 class="banner-title">{_'Spare parts'}</h5>
 					<p class="banner-desc">{_'Quality and with guarantee'}</p>
@@ -105,6 +105,20 @@
 			</div>
 		</div>
 	</div>
+
+	{if count($specialStocks)}
+		<div class="col-md-3">
+			<h3 class="widget-title-sm">{_'Special offer'}</h3>
+			<div class="row row-sm-gap" data-gutter="10" n:foreach="$specialStocks as $stock">
+				<div class="col-md-12">
+					<div class="product product-sm-left">
+						{var stockId => $stock->id}
+						{control stock-$stockId:vertical}
+					</div>
+				</div>
+			</div>
+		</div>
+	{/if}
 
 	{if count($saleStocks)}
 		<div class="col-md-3">

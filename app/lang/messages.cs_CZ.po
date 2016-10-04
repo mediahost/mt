@@ -1696,5 +1696,5 @@ msgstr "Zjistit cenu"
 msgid "Select brand"
 msgstr "Vyberte značku"
 
-msgid "Značka"
+msgid "Brand"
 msgstr "Značka"
