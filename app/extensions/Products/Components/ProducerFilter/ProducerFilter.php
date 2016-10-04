@@ -16,10 +16,13 @@ class ProducerFilter extends BaseControl
 
 	/** @var Producer */
 	private $producer;
+
 	/** @var ProducerLine */
 	private $line;
+
 	/** @var ProducerModel */
 	private $model;
+
 	/** @var array */
 	private $productIds;
 
@@ -40,27 +43,14 @@ class ProducerFilter extends BaseControl
 			!$this->isAjax ?: 'ajax'
 		];
 
-		$notSelected = [NULL => '--- All ---'];
-
-		$productIds = is_array($this->productIds) ? $this->productIds : TRUE;
-		$producers = $this->producerFacade->getProducersList(TRUE, FALSE, $productIds);
-		$form->addSelect('producer', 'Producer', $this->allowNone ? $notSelected + $producers : $producers)
-			->setDisabled(!count($producers))
-			->setDefaultValue($this->producer && array_key_exists($this->producer->id, $producers) ? $this->producer->id : NULL)
+		$form->addSelect('producer', 'Producer')
+			->getControlPrototype()->class('input-medium category-selections-select');
+		$form->addSelect('line', 'Line')
+			->getControlPrototype()->class('input-medium category-selections-select');
+		$form->addSelect('model', 'Model')
 			->getControlPrototype()->class('input-medium category-selections-select');
 
-		$lines = $this->producer ? $this->producerFacade->getLinesList($this->producer, FALSE, TRUE, FALSE, $productIds) : [];
-		$form->addSelect('line', 'Line', $notSelected + $lines)
-			->setDisabled(!count($lines))
-			->setDefaultValue($this->line && array_key_exists($this->line->id, $lines) ? $this->line->id : NULL)
-			->getControlPrototype()->class('input-medium category-selections-select');
-
-		$models = $this->line ? $this->producerFacade->getModelsList($this->line, FALSE, TRUE, $productIds) : [];
-		$form->addSelect('model', 'Model', $notSelected + $models)
-			->setDisabled(!count($models))
-			->setDefaultValue($this->model && array_key_exists($this->model->id, $models) ? $this->model->id : NULL)
-			->getControlPrototype()->class('input-medium category-selections-select');
-
+		$this->setFormValues($form);
 
 		$form->onSuccess[] = $this->formSucceeded;
 		return $form;
@@ -72,7 +62,33 @@ class ProducerFilter extends BaseControl
 		$this->setLine(!isset($values->line) || !$values->line ? NULL : $values->line);
 		$this->setModel(!isset($values->model) || !$values->model ? NULL : $values->model);
 
+		$this->setFormValues($form);
+
 		$this->onAfterSend($this->producer, $this->line, $this->model);
+	}
+
+	private function setFormValues(Form &$form)
+	{
+		$notSelected = [NULL => '--- All ---'];
+
+		$productIds = is_array($this->productIds) ? $this->productIds : TRUE;
+		$producers = $this->producerFacade->getProducersList(TRUE, FALSE, $productIds);
+		$form['producer']
+			->setItems($this->allowNone ? $notSelected + $producers : $producers)
+			->setDisabled(!count($producers))
+			->setDefaultValue($this->producer && array_key_exists($this->producer->id, $producers) ? $this->producer->id : NULL);
+
+		$lines = $this->producer ? $this->producerFacade->getLinesList($this->producer, FALSE, TRUE, FALSE, $productIds) : [];
+		$form['line']
+			->setItems($notSelected + $lines)
+			->setDisabled(!count($lines))
+			->setDefaultValue($this->line && array_key_exists($this->line->id, $lines) ? $this->line->id : NULL);
+
+		$models = $this->line ? $this->producerFacade->getModelsList($this->line, FALSE, TRUE, $productIds) : [];
+		$form['model']
+			->setItems($notSelected + $models)
+			->setDisabled(!count($models))
+			->setDefaultValue($this->model && array_key_exists($this->model->id, $models) ? $this->model->id : NULL);
 	}
 
 	public function setProducer($producer, $allowNone = TRUE)
