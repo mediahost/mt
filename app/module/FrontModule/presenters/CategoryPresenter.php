@@ -98,7 +98,7 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 		$list = $this['products']
 			->setPage($page, $perPage)
 			->addFilterFulltext($text)
-			->setSorting(ProductList::SORT_BY_NAME_ASC);
+			->setSorting(ProductList::SORT_BY_PRICE_DESC);
 
 		$stocks = $list->getData();
 		$items = [];
