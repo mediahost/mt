@@ -1073,9 +1073,9 @@ hr {
 .main-footer-img {
 	position: absolute;
 	bottom: 0;
-	right: -50px;
+	right: -30px;
 	display: block;
-	width: 324px;
+	width: 294px;
 	-webkit-filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.3));
 }
 
