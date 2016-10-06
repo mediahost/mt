@@ -84,6 +84,7 @@ class CsvStockImport extends BaseControl
 			$groups = $groupRepo->findAll();
 			$stock->product->name = $row->name;
 			$stock->setPurchasePrice($row->purchasePrice);
+			/* @var $group Group */
 			foreach ($groups as $group) {
 				$priceName = 'price' . $group->level;
 				$priceValue = $row->$priceName;
@@ -91,9 +92,11 @@ class CsvStockImport extends BaseControl
 					$number = Price::strToFloat($matches[1]);
 					$value = StockPrice::PERCENT_IS_PRICE ? $number : 100 - $number;
 					$discount = new Discount($value, Discount::PERCENTAGE);
-				} else if (preg_match('/^(\d+([,\.]\d+)*)$/', $priceValue, $matches)) {
+				} else if (preg_match('/^(\d+([,\.]\d+)*)$/', $priceValue, $matches) && Price::strToFloat($priceValue) > 0) {
 					$number = Price::strToFloat($priceValue);
 					$discount = new Discount($number, Discount::FIXED_PRICE);
+				} else if ($group->isBonusType()) {
+					$discount = $group->getDiscount();
 				}
 				if (isset($discount)) {
 					$stock->addDiscount($discount, $group);
