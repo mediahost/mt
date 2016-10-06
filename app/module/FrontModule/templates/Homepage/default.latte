@@ -70,7 +70,7 @@
 			<div class="owl-item" n:foreach="$newStocks as $stock">
 				<div class="product product-sm owl-item-slide">
 					{var stockId => $stock->id}
-					{control stock-$stockId}
+					{control stock-$stockId:horizontal}
 				</div>
 			</div>
 		</div>

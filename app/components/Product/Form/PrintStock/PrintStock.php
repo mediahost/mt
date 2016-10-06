@@ -109,6 +109,12 @@ class PrintStock extends BaseControl
 		$this->render();
 	}
 
+	public function renderHorizontal()
+	{
+		$this->setTemplateFile('horizontal');
+		$this->render();
+	}
+
 	// </editor-fold>
 	// <editor-fold desc="setters & getters">
 
