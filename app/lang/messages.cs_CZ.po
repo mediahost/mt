@@ -1519,6 +1519,9 @@ msgstr "Platobná kalkulačka Home Credit"
 msgid "NoVatLaw"
 msgstr "Nie je možné uplatniť odpočet DPH - osobitný režim DPH, podľa § 66 zákona č. 222/2004 Z.z (0% DPH)"
 
+msgid "NoVatLaw2"
+msgstr "Tovar z výkupu"
+
 msgid "Set Reminder"
 msgstr "Nastavit hlídání"
 

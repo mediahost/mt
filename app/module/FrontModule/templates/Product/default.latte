@@ -85,6 +85,9 @@
 							<div class="product-page-perex" n:if="$product->perex || $stock->vat->isNone()">
 								<p n:if="$product->perex">{$product->perex|noescape}</p>
 								<p n:if="$stock->vat->isNone()">
+									{_'NoVatLaw2'}
+								</p>
+								<p n:if="$stock->vat->isNone()">
 									{_'NoVatLaw'}
 								</p>
 							</div>
