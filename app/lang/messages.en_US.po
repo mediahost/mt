@@ -637,12 +637,6 @@ msgstr "Change Password"
 msgid "In Stock"
 msgstr "In Stock"
 
-msgid "In Stock > %count% %unit%"
-msgstr "In Stock > %count% %unit%"
-
-msgid "In Stock %count% %unit%"
-msgstr "%count% %unit% in stock"
-
 msgid "Temporarily Sold Out"
 msgstr "Temporarily Sold Out"
 
@@ -1572,6 +1566,12 @@ msgstr "Watch Price/Availability"
 
 msgid "HomeCredit iCalc"
 msgstr "Home Credit Calculation"
+
+msgid "NoVatLaw"
+msgstr "Nie je možné uplatniť odpočet DPH - osobitný režim DPH, podľa § 66 zákona č. 222/2004 Z.z (0% DPH)"
+
+msgid "NoVatLaw2"
+msgstr "Tovar z výkupu"
 
 msgid "Set Reminder"
 msgstr "Set Reminder"
