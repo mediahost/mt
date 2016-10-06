@@ -1488,7 +1488,7 @@ msgid "Must be bigger than %d"
 msgstr "Musí byť väčšia ako %d"
 
 msgid "Bonus Points"
-msgstr "Bonusové body"
+msgstr "Vernostný program"
 
 msgid "My Bonus Points"
 msgstr "Moje bonusové body"
@@ -1705,3 +1705,6 @@ msgstr "Vyberte značku"
 
 msgid "Brand"
 msgstr "Značka"
+
+msgid "%count% points"
+msgstr "%count% bodov"

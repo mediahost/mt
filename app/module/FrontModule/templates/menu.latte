@@ -209,7 +209,7 @@
 			</li>
 		{/ifset}
 		<li n:ifset="$menuPages->page4">
-			<a n:href="Page: $menuPages->page4->id">
+			<a n:href="{$menuPages->page4->link}">
 				<span>{_'menu.subtitle.page4'}</span>{_'menu.headline.page4'}
 			</a>
 		</li>

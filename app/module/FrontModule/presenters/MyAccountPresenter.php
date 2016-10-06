@@ -98,11 +98,6 @@ class MyAccountPresenter extends BasePresenter
 		}
 	}
 
-	/**
-	 * @secured
-	 * @resource('myAccount')
-	 * @privilege('bonus')
-	 */
 	public function actionBonus()
 	{
 		$this->template->points = $this->user->identity->bonusCount;

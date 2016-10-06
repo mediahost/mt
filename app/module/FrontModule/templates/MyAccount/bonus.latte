@@ -1,5 +1,7 @@
+{includeblock '../categories.latte'}
+
 {block breadcrumbItems}
-	<li><a n:href="MyAccount:">{_'My Account'}</a></li>
+	<li n:if="$user->loggedIn"><a n:href="MyAccount:">{_'My Account'}</a></li>
 	<li class="active">{_'Bonus Points'}</li>
 {/block}
 
@@ -7,11 +9,17 @@
 <div class="container">
 	<div class="row">
 
-		{include 'navigation.latte'}
+		{if $user->loggedIn}
+			{include 'navigation.latte'}
+		{else}
+			<div class="sidebar col-md-3 col-sm-3">
+				{include categories}
+			</div>
+		{/if}
 
 		<!-- BEGIN CONTENT -->
 		<div class="col-md-9 col-sm-7">
-			<h1>{_'Bonus Points'}</h1>
+			<h1>{_'Bonus Points'} - {_'%count% points', $user->identity->bonusCount}</h1>
 			<div class="content-page">
 				<div n:if="$points" class="panel panel-info">
 					<div class="panel-heading">
@@ -43,8 +51,8 @@
 						<td>1 - 1000</td>
 						<td>
 							0.25%
-								<span n:if="1 <= $points && $points <= 1000"
-										class="badge badge-primary pull-right">{_'Your discount'}</span>
+							<span n:if="1 <= $points && $points <= 1000"
+									class="badge badge-primary pull-right">{_'Your discount'}</span>
 						</td>
 					</tr>
 					<tr>
@@ -52,8 +60,8 @@
 						<td>1001 - 2500</td>
 						<td>
 							0.5%
-								<span n:if="1001 <= $points && $points <= 2500"
-										class="badge badge-primary pull-right">{_'Your discount'}</span>
+							<span n:if="1001 <= $points && $points <= 2500"
+									class="badge badge-primary pull-right">{_'Your discount'}</span>
 						</td>
 					</tr>
 					<tr>
@@ -61,8 +69,8 @@
 						<td>2501 - 5000</td>
 						<td>
 							0.75%
-								<span n:if="2501 <= $points && $points <= 5000"
-										class="badge badge-primary pull-right">{_'Your discount'}</span>
+							<span n:if="2501 <= $points && $points <= 5000"
+									class="badge badge-primary pull-right">{_'Your discount'}</span>
 						</td>
 					</tr>
 					<tr>
@@ -70,8 +78,8 @@
 						<td>5001 a více</td>
 						<td>
 							1%
-								<span n:if="5001 <= $points"
-										class="badge badge-primary pull-right">{_'Your discount'}</span>
+							<span n:if="5001 <= $points"
+									class="badge badge-primary pull-right">{_'Your discount'}</span>
 						</td>
 					</tr>
 					</tbody>

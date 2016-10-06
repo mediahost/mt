@@ -1744,3 +1744,5 @@ msgstr "Select brand"
 msgid "Brand"
 msgstr "Brand"
 
+msgid "%count% points"
+msgstr "%count% points"
