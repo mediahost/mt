@@ -600,7 +600,10 @@ msgid "Top products"
 msgstr "Top tovar"
 
 msgid "Last visited"
-msgstr "Posledné navštívené"
+msgstr "História prezerania"
+
+msgid "Interesant products"
+msgstr "Zaujímavý tovar"
 
 msgid "My Account"
 msgstr "Môj účet"

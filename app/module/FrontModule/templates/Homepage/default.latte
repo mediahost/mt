@@ -106,6 +106,8 @@
 		</div>
 	</div>
 
+	{var columnsCount => 0}
+
 	{if count($specialStocks)}
 		<div class="col-md-3">
 			<h3 class="widget-title-sm">{_'Special offer'}</h3>
@@ -118,6 +120,7 @@
 				</div>
 			</div>
 		</div>
+		{? $columnsCount++}
 	{/if}
 
 	{if count($saleStocks)}
@@ -132,6 +135,7 @@
 				</div>
 			</div>
 		</div>
+		{? $columnsCount++}
 	{/if}
 
 	{if count($topStocks)}
@@ -146,12 +150,28 @@
 				</div>
 			</div>
 		</div>
+		{? $columnsCount++}
 	{/if}
 
 	{if count($lastStocks)}
 		<div class="col-md-3">
 			<h3 class="widget-title-sm">{_'Last visited'}</h3>
 			<div class="row row-sm-gap" data-gutter="10" n:foreach="$lastStocks as $stock">
+				<div class="col-md-12">
+					<div class="product product-sm-left">
+						{var stockId => $stock->id}
+						{control stock-$stockId:vertical}
+					</div>
+				</div>
+			</div>
+		</div>
+		{? $columnsCount++}
+	{/if}
+
+	{if $columnsCount < 4 && count($interestStocks)}
+		<div class="col-md-3">
+			<h3 class="widget-title-sm">{_'Interesant products'}</h3>
+			<div class="row row-sm-gap" data-gutter="10" n:foreach="$interestStocks as $stock">
 				<div class="col-md-12">
 					<div class="product product-sm-left">
 						{var stockId => $stock->id}

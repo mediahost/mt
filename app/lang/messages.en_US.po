@@ -592,6 +592,9 @@ msgstr "Top products"
 msgid "Last visited"
 msgstr "Last visited"
 
+msgid "Interesant products"
+msgstr "Interesant products"
+
 msgid "My Account"
 msgstr "My Account"
 

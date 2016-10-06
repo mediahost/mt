@@ -16,6 +16,7 @@ use Nette\Http\Request;
 use Nette\Object;
 use Nette\Security\IIdentity;
 use Nette\Security\IUserStorage;
+use Tracy\Debugger;
 
 class UserStorageStrategy extends Object implements IUserStorage
 {
@@ -182,7 +183,7 @@ class UserStorageStrategy extends Object implements IUserStorage
 			}
 		} else {
 			$ids = array_keys($this->guestStorage->visits);
-			array_slice($ids, 0, $limit);
+			$ids = array_slice($ids, 0, $limit);
 			$stocks = $this->stockRepo->findAssoc(['id' => $ids], 'id');
 		}
 

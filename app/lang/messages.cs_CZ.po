@@ -1640,7 +1640,10 @@ msgid "Top products"
 msgstr "Nejprodávanější"
 
 msgid "Last visited"
-msgstr "Poslední navštívené"
+msgstr "Historie prohlížení"
+
+msgid "Interesant products"
+msgstr "Zajímavé produkty"
 
 msgid "Special offer"
 msgstr "Akce"

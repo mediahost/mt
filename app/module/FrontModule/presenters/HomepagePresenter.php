@@ -21,6 +21,7 @@ class HomepagePresenter extends BasePresenter
 		$this->template->saleStocks = $this->stockFacade->getSales(3);
 		$this->template->topStocks = $this->stockFacade->getTops(3);
 		$this->template->specialStocks = $this->stockFacade->getSpecials(3);
+		$this->template->interestStocks = $this->stockFacade->getRandom(3);
 		$this->template->lastStocks = $this->user->getStorage()->getVisited(3);
 
 		$categoryRepo = $this->em->getRepository(Category::getClassName());

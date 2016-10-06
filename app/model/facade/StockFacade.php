@@ -139,6 +139,22 @@ class StockFacade extends Object
 		return $this->getSignedProducts($id, $count);
 	}
 
+	public function getRandom($count = 3)
+	{
+		$qb = $this->stockRepo
+			->createQueryBuilder('s')
+			->innerJoin('s.product', 'p')
+			->andWhere('s.active = :active AND p.active = :active')
+			->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
+			->andWhere('s.inStore >= 3')
+			->setParameter('active', TRUE)
+			->setParameter('now', new DateTime());
+		return $qb->orderBy('s.id', 'DESC')
+			->setMaxResults($count)
+			->getQuery()
+			->getResult();
+	}
+
 	public function getBestSellers()
 	{
 		return [];
