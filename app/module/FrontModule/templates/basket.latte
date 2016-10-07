@@ -146,12 +146,15 @@
 			<ul>
 				<li>
 					<div class="row">
-						<div class="col-sm-6">
+						<div class="col-sm-9">
 							<a n:href="Cart:" class="btn btn-primary">
-								{_'View Cart'}
+								{_'Finish order'}
+							</a>
+							<a n:href="this" class="btn btn-default basket-close">
+								{_'Continue shopping'}
 							</a>
 						</div>
-						<div class="col-sm-6 menu-basket-price text-right">
+						<div class="col-sm-3 menu-basket-price text-right">
 							{$basket->getProductsTotalPrice($priceLevel)|asCurrency:TRUE}
 						</div>
 					</div>

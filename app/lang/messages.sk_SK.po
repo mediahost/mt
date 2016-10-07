@@ -479,6 +479,12 @@ msgstr "Upraviť užívateľa"
 msgid "View Cart"
 msgstr "Prezrieť košík"
 
+msgid "Finish order"
+msgstr "Dokončiť objednávku"
+
+msgid "Continue shopping"
+msgstr "Pokračovat v nákupe"
+
 msgid "Checkout"
 msgstr "Pokladňa"
 

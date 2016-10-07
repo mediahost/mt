@@ -297,6 +297,13 @@ var Frontend = function () {
 		});
 	};
 
+	var handleBasket = function () {
+		$(document).on('click', '#basket-dialog .basket-close', function (e) {
+			e.preventDefault();
+			$('#basket-dialog').magnificPopup('close');
+		});
+	};
+
 	return {
 		init: function () {
 			handleOwl();
@@ -307,6 +314,7 @@ var Frontend = function () {
 			handleDisableButtons();
 			handleSelect2();
 			handleSearch();
+			handleBasket();
 		},
 		afterAjaxInit: function () {
 			handleInitICheck();

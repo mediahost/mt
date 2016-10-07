@@ -469,6 +469,12 @@ msgstr "Edit User"
 msgid "View Cart"
 msgstr "View Cart"
 
+msgid "Finish order"
+msgstr "Finish order"
+
+msgid "Continue shopping"
+msgstr "Continue shopping"
+
 msgid "Checkout"
 msgstr "Checkout"
 
