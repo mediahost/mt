@@ -4613,15 +4613,22 @@ header.main {
 
 .banner-xl .banner-title {
 	line-height: 1.1em;
-	font-size: 60px;
+	font-size: 50px;
 }
 
-.banner-xl .banner-desc {
+.banner-xl .banner-highlight {
+	color: #91c6fc;
+	font-weight: bolder;
+	padding-bottom: 20px;
 	font-size: 30px;
 }
 
+.banner-xl .banner-desc {
+	font-size: 20px;
+}
+
 .banner-xl .banner-shop-now {
-	font-size: 22px;
+	font-size: 20px;
 }
 
 .banner-o-hid {

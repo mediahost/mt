@@ -1702,11 +1702,17 @@ msgstr "Gift"
 msgid "NoVatLaw"
 msgstr "Nie je možné uplatniť odpočet DPH - osobitný režim DPH, podľa § 66 zákona č. 222/2004 Z.z (0% DPH)"
 
-msgid "Products for your mobile phone"
-msgstr "Products for your mobile phone"
+msgid "Show product for"
+msgstr "Show product for"
 
-msgid "We show you products suitable for your phone"
-msgstr "We show you products suitable for your phone"
+msgid "Your phone"
+msgstr "Your phone"
+
+msgid "Try our new filter"
+msgstr "Try our new filter"
+
+msgid "Revolution new"
+msgstr "Revolution new"
 
 msgid "Select phone"
 msgstr "Select phone"
