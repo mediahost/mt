@@ -182,8 +182,15 @@ class UserStorageStrategy extends Object implements IUserStorage
 				$stocks[$visited->stock->id] = $visited->stock;
 			}
 		} else {
-			$ids = array_keys($this->guestStorage->visits);
-			$ids = array_slice($ids, 0, $limit);
+			$ids = [];
+			$i = 0;
+			foreach ($this->guestStorage->visits as $id => $date) {
+				if ($i >= $limit) {
+					break;
+				}
+				$ids[] = $id;
+				$i++;
+			}
 			$stocks = $this->stockRepo->findAssoc(['id' => $ids], 'id');
 		}
 
