@@ -88,6 +88,12 @@ class CsvStockImport extends BaseControl
 			foreach ($groups as $group) {
 				$priceName = 'price' . $group->level;
 				$priceValue = $row->$priceName;
+
+				// temporary skip bonus value
+				if ($group->isBonusType()) {
+					continue;
+				}
+
 				if (preg_match('/^(\d+([,\.]\d+)*)\%$/', $priceValue, $matches)) {
 					$number = Price::strToFloat($matches[1]);
 					$value = StockPrice::PERCENT_IS_PRICE ? $number : 100 - $number;
