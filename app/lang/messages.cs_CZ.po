@@ -798,6 +798,9 @@ msgstr "Chyba při ukládání výrobce."
 msgid "wasntFound"
 msgstr "%name% nebyl nalezen."
 
+msgid "wasntFoundHe"
+msgstr "%name% nebyl nalezen."
+
 msgid "wasntFoundShe"
 msgstr "%name% nebyla nalezena."
 
@@ -1716,3 +1719,9 @@ msgstr "Značka"
 
 msgid "%count% points"
 msgstr "%count% bodů"
+
+msgid "Your service request has been sent."
+msgstr "Váš požadavek na servis telefonu byl odeslán. Co nejdříve Vás budeme kontaktovat."
+
+msgid "Your buyout request has been sent."
+msgstr "Váš požadavek na výkup telefonu byl odeslán. Budeme Vás kontaktovat s cenovou nabídkou na výkup."

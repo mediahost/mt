@@ -787,6 +787,9 @@ msgstr "Error while saving producer."
 msgid "wasntFound"
 msgstr "%name% wasn't found."
 
+msgid "wasntFoundHe"
+msgstr "%name% wasn't found."
+
 msgid "wasntFoundShe"
 msgstr "%name% wasn't found."
 
@@ -1755,3 +1758,9 @@ msgstr "Brand"
 
 msgid "%count% points"
 msgstr "%count% points"
+
+msgid "Your service request has been sent."
+msgstr "Your service request has been sent."
+
+msgid "Your buyout request has been sent."
+msgstr "Your buyout request has been sent."

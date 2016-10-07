@@ -803,6 +803,9 @@ msgstr "Chyba pri ukladaní výrobcu."
 msgid "wasntFound"
 msgstr "%name% nebol nájdený."
 
+msgid "wasntFoundHe"
+msgstr "%name% nebol nájdený."
+
 msgid "wasntFoundShe"
 msgstr "%name% nebola nájdená."
 
@@ -1717,3 +1720,9 @@ msgstr "Značka"
 
 msgid "%count% points"
 msgstr "%count% bodov"
+
+msgid "Your service request has been sent."
+msgstr "Vaša požiadavka na servis telefónu bola odoslaná. Budeme Vás kontaktovať v najkratšom čase."
+
+msgid "Your buyout request has been sent."
+msgstr "Vaša požiadavka na výkup telefónu bola odoslaná. Budeme Vás kontaktovať s cenovou ponukou na výkup."
