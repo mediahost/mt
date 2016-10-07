@@ -152,8 +152,8 @@ abstract class BuyoutServiceBasePresenter extends BasePresenter
 			$control->setModel($this->model);
 		}
 		$control->onSend = function ($isBuyout, $isService) {
-			$mesaage = $isService ? 'Your service request has been sent.' : 'Your buyout request has been sent.';
-			$this->flashMessage($this->translator->translate($mesaage), 'success');
+			$message = $isService ? 'Your service request has been sent.' : 'Your buyout request has been sent.';
+			$this->flashMessage($this->translator->translate($message), 'success');
 			$this->redirect('this', ['producer' => NULL, 'line' => NULL, 'model' => NULL]);
 		};
 		return $control;
