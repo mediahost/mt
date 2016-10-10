@@ -76,7 +76,7 @@ class ProductList extends Control
 	public $sorting = self::SORT_BY_PRICE_ASC;
 
 	/** @var bool @persistent show only in store */
-	public $stored = FALSE;
+	public $stored = TRUE;
 
 	/** @var int @persistent */
 	public $perPage = 15;
