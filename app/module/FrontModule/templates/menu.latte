@@ -32,7 +32,7 @@
 								<h5>{_'menu.brand.top'}</h5>
 								<ul class="dropdown-menu-items-list">
 									{foreach $producers as $producer}
-										<li><a n:href="Category:appropriate 'producer' => $producer->slug">{$producer}</a></li>
+										<li><a n:href="Producer: 'producer' => $producer->slug">{$producer}</a></li>
 										{breakIf $iterator->counter >= $topColCnt}
 									{/foreach}
 								</ul>
@@ -42,7 +42,7 @@
 								<ul class="dropdown-menu-items-list">
 									{foreach $producers as $producer}
 										{continueIf $iterator->counter <= $topColCnt}
-										<li><a n:href="Category:appropriate 'producer' => $producer->slug">{$producer}</a></li>
+										<li><a n:href="Producer: 'producer' => $producer->slug">{$producer}</a></li>
 										{breakIf $iterator->counter >= $firstColCnt}
 									{/foreach}
 								</ul>
@@ -52,7 +52,7 @@
 								<ul class="dropdown-menu-items-list">
 									{foreach $producers as $producer}
 										{continueIf $iterator->counter <= $firstColCnt}
-										<li><a n:href="Category:appropriate 'producer' => $producer->slug">{$producer}</a></li>
+										<li><a n:href="Producer: 'producer' => $producer->slug">{$producer}</a></li>
 										{breakIf $iterator->counter >= $secondColCnt}
 									{/foreach}
 								</ul>
@@ -62,7 +62,7 @@
 								<ul class="dropdown-menu-items-list">
 									{foreach $producers as $producer}
 										{continueIf $iterator->counter <= $secondColCnt}
-										<li><a n:href="Category:appropriate 'producer' => $producer->slug">{$producer}</a></li>
+										<li><a n:href="Producer: 'producer' => $producer->slug">{$producer}</a></li>
 										{breakIf $iterator->counter >= $thirdColCnt}
 									{/foreach}
 								</ul>
