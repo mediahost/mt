@@ -21,6 +21,7 @@ class FilesManager extends Object
 	const EXPORT_HEUREKA_STOCKS = 'heureka-stocks';
 	const EXPORT_DEALER_STOCKS = 'dealer-stocks';
 	const EXPORT_DEALER_CATEGORIES = 'dealer-categories';
+	const CSV_LOG = 'csv-log';
 
 	/** @var string */
 	private $rootFolder;
@@ -82,6 +83,9 @@ class FilesManager extends Object
 				break;
 			case self::MAILS:
 				$path = Helpers::getPath($path, self::MAILS);
+				break;
+			case self::CSV_LOG:
+				$path = Helpers::getPath($path, self::CSV_LOG);
 				break;
 
 			default:

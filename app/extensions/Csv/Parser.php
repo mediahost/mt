@@ -5,11 +5,14 @@ namespace App\Extensions\Csv;
 use App\Extensions\Csv\Exceptions\BeforeProcessException;
 use App\Extensions\Csv\Exceptions\InternalException;
 use App\Extensions\Csv\Exceptions\WhileProcessException;
+use App\Extensions\FilesManager;
+use App\Helpers;
 use Exception;
 use Kdyby\Translation\Translator;
 use Nette\Http\FileUpload;
 use Nette\Object;
 use Nette\Utils\Callback;
+use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use Tracy\Debugger;
 
@@ -21,6 +24,9 @@ class Parser extends Object
 
 	/** @var Translator @inject */
 	public $translator;
+
+	/** @var FilesManager @inject */
+	public $filesManager;
 
 	/** @var FileUpload */
 	private $file;
@@ -38,7 +44,7 @@ class Parser extends Object
 	private $escape;
 
 	/** @var int */
-	private $lenght;
+	private $length;
 
 	/** @var resource */
 	private $handle;
@@ -57,12 +63,12 @@ class Parser extends Object
 		$this->setCsv();
 	}
 
-	public function setCsv($delimiter = ',', $enclosure = '"', $escape = '\\', $lenght = 0)
+	public function setCsv($delimiter = ',', $enclosure = '"', $escape = '\\', $length = 0)
 	{
-		$this->delimiter = (string) $delimiter;
-		$this->enclosure = (string) $enclosure;
-		$this->escape = (string) $escape;
-		$this->lenght = (int) $lenght;
+		$this->delimiter = (string)$delimiter;
+		$this->enclosure = (string)$enclosure;
+		$this->escape = (string)$escape;
+		$this->length = (int)$length;
 		return $this;
 	}
 
@@ -76,10 +82,18 @@ class Parser extends Object
 	{
 		if ($file->isOk() && file_exists($file->getTemporaryFile())) {
 			$this->file = $file->getTemporaryFile();
+			$this->saveFile();
 		} else {
 			throw new BeforeProcessException('Inserted file is corrupted.');
 		}
 		return $this;
+	}
+
+	private function saveFile()
+	{
+		$path = $this->filesManager->getDir(FilesManager::CSV_LOG);
+		$filename = time() . '.csv';
+		FileSystem::copy($this->file, Helpers::getPath($path, $filename));
 	}
 
 	public function setCallback($callable)
@@ -108,7 +122,7 @@ class Parser extends Object
 		$executed = [];
 
 		$line = 0;
-		while (($row = fgetcsv($this->handle, $this->lenght, $this->delimiter, $this->enclosure, $this->escape))) {
+		while (($row = fgetcsv($this->handle, $this->length, $this->delimiter, $this->enclosure, $this->escape))) {
 			$line++;
 			if ($this->skipFirstLine && $line === 1) {
 				continue;
@@ -147,8 +161,8 @@ class Parser extends Object
 			$expectedCount = count($this->rowAliases);
 			if ($actualCount !== $expectedCount) {
 				$text = 'Line #%line% failed validation scheme'
-						. ' - should have %expected% columns'
-						. ' and it have %actual%.';
+					. ' - should have %expected% columns'
+					. ' and it have %actual%.';
 				$message = $this->translator->translate($text, [
 					'line' => $lineNumber,
 					'expected' => $expectedCount,
