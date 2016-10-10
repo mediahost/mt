@@ -12,11 +12,9 @@ use App\Model\Repository\StockRepository;
 use App\Model\Repository\VisitRepository;
 use h4kuna\Exchange\Currency\IProperty;
 use Kdyby\Doctrine\EntityManager;
-use Nette\Http\Request;
 use Nette\Object;
 use Nette\Security\IIdentity;
 use Nette\Security\IUserStorage;
-use Tracy\Debugger;
 
 class UserStorageStrategy extends Object implements IUserStorage
 {
@@ -182,15 +180,12 @@ class UserStorageStrategy extends Object implements IUserStorage
 				$stocks[$visited->stock->id] = $visited->stock;
 			}
 		} else {
-			$ids = [];
-			$i = 0;
-			foreach ($this->guestStorage->visits as $id => $date) {
-				if ($i >= $limit) {
-					break;
-				}
-				$ids[] = $id;
-				$i++;
-			}
+			$visits = $this->guestStorage->visits;
+			uasort($visits, function (\DateTime $a, \DateTime $b) {
+				return $a->getTimestamp() - $b->getTimestamp();
+			});
+			$ids = array_reverse(array_keys($visits));
+			$ids = array_slice($ids, 0, $limit);
 			$stocks = $this->stockRepo->findAssoc(['id' => $ids], 'id');
 		}
 
@@ -206,7 +201,7 @@ class UserStorageStrategy extends Object implements IUserStorage
 		if ($this->isAuthenticated()) {
 			$this->userStorage->identity->locale = $locale;
 			$this->em->persist($this->userStorage->identity)
-					->flush();
+				->flush();
 		} else {
 			$this->guestStorage->identity->locale = $locale;
 		}
@@ -223,7 +218,7 @@ class UserStorageStrategy extends Object implements IUserStorage
 		if ($this->isAuthenticated()) {
 			$this->userStorage->identity->currency = $currency->getCode();
 			$this->em->persist($this->userStorage->identity)
-					->flush();
+				->flush();
 		} else {
 			$this->guestStorage->identity->currency = $currency->getCode();
 		}
