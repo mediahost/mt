@@ -58,8 +58,11 @@ class Parser extends Object
 	/** @var bool */
 	private $skipFirstLine = TRUE;
 
-	public function __construct()
+	public function __construct(Translator $translator, FilesManager $filesManager)
 	{
+		ini_set('max_execution_time', 120);
+		$this->translator = $translator;
+		$this->filesManager = $filesManager;
 		$this->setCsv();
 	}
 
