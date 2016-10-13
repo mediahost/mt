@@ -308,7 +308,7 @@ abstract class BasePresenter extends BaseBasePresenter
 			->setItemsPerPage($this->settings->pageConfig->itemsPerRow, $this->settings->pageConfig->rowsPerPage)
 			->setAjax()
 			->setLevel($this->priceLevel)
-			->setSorting(ProductList::SORT_BY_PRICE_ASC);
+			->setSorting(ProductList::SORT_BY_PRICE_DESC);
 
 		return $list;
 	}

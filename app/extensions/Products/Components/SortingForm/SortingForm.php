@@ -71,8 +71,8 @@ class SortingForm extends BaseControl
 	private function getSortingMethods()
 	{
 		return [
-			ProductList::SORT_BY_PRICE_ASC => 'Price (Low > High)',
 			ProductList::SORT_BY_PRICE_DESC => 'Price (High > Low)',
+			ProductList::SORT_BY_PRICE_ASC => 'Price (Low > High)',
 			ProductList::SORT_BY_NAME_ASC => 'Name (A - Z)',
 			ProductList::SORT_BY_NAME_DESC => 'Name (Z - A)',
 		];
