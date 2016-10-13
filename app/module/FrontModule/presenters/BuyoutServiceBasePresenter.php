@@ -148,13 +148,17 @@ abstract class BuyoutServiceBasePresenter extends BasePresenter
 	{
 		$control = $this->iContactShopFactory->create();
 		if ($this->model) {
-			$control->setService();
+			if ($this->presenter->name === 'Front:Buyout') {
+				$control->setBuyout();
+			} else if ($this->presenter->name === 'Front:Service') {
+				$control->setService();
+			}
 			$control->setModel($this->model);
 		}
 		$control->onSend = function ($isBuyout, $isService) {
 			$message = $isService ? 'Your service request has been sent.' : 'Your buyout request has been sent.';
 			$this->flashMessage($this->translator->translate($message), 'success');
-			$this->redirect('this', ['producer' => NULL, 'line' => NULL, 'model' => NULL]);
+			$this->redirect('this');
 		};
 		return $control;
 	}
