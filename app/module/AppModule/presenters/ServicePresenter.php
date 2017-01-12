@@ -146,11 +146,11 @@ class ServicePresenter extends BasePresenter
 	/**
 	 * @secured
 	 * @resource('service')
-	 * @privilege('reSaveAccessoriesFor')
+	 * @privilege('reSaveProducts')
 	 */
-	public function handleReSaveAccessoriesFor()
+	public function handleReSaveProducts()
 	{
-		$count = $this->resaveProductsAccessoriesFor();
+		$count = $this->resaveProducts();
 		$message = $this->translator->translate('%count% products was updated', $count);
 		$this->flashMessage($message, 'success');
 		$this->redirect('this');
@@ -262,28 +262,21 @@ class ServicePresenter extends BasePresenter
 		return $this;
 	}
 
-	private function resaveProductsAccessoriesFor()
+	private function resaveProducts()
 	{
-		$rsm = new ResultSetMapping();
-		$rsm->addEntityResult(Product::getClassName(), 'p');
-		$rsm->addFieldResult('p', 'product_id', 'id');
-		$sql = "SELECT DISTINCT `product_id`
-				FROM `product_producer_model`
-				LEFT JOIN `product` ON `product_producer_model`.`product_id` = `product`.`id`
-				WHERE `product`.`accessories_producer_ids` = ''
-				LIMIT :limit";
-		$query = $this->em->createNativeQuery($sql, $rsm)
-			->setParameter('limit', 100);
+		$productsRepo = $this->em->getRepository(Product::getClassName());
+		$products = $productsRepo->findBy([
+			'categoriesIds' => NULL,
+			'mainCategory NOT' => NULL,
+		], [
+			'updatedAt' => 'ASC',
+		], 500);
 
 		$counter = 0;
-		$productsRepo = $this->em->getRepository(Product::getClassName());
-		foreach ($query->getResult(AbstractQuery::HYDRATE_ARRAY) as $item) {
-			$product = $productsRepo->find($item['id']);
-			if ($product) {
-				$product->updateAccessoriesForOptimized();
-				$this->em->persist($product);
-				$counter++;
-			}
+		foreach ($products as $product) {
+			$product->updateCategoriesForOptimized();
+			$this->em->persist($product);
+			$counter++;
 		}
 		$this->em->flush();
 		return $counter;

@@ -32,6 +32,9 @@ trait ProductCategories
 	/** @ORM\ManyToMany(targetEntity="Category", inversedBy="products") */
 	protected $categories;
 
+	/** @ORM\Column(type="simple_array") */
+	private $categoriesIds;
+
 	/** @ORM\ManyToMany(targetEntity="ProducerModel", inversedBy="products") */
 	protected $accessoriesFor;
 
@@ -75,12 +78,15 @@ trait ProductCategories
 				$this->addCategory($category);
 			}
 		}
+		$this->updateCategoriesForOptimized();
 		return $this;
 	}
 
 	public function clearCategories()
 	{
-		return $this->categories->clear();
+		$this->categories->clear();
+		$this->updateCategoriesForOptimized();
+		return $this;
 	}
 
 	public function addCategory(Category $category)
@@ -91,6 +97,7 @@ trait ProductCategories
 		if (!$this->categories->contains($category)) {
 			$this->categories->add($category);
 		}
+		$this->updateCategoriesForOptimized();
 		return $this;
 	}
 
@@ -99,7 +106,20 @@ trait ProductCategories
 		if ($category === $this->mainCategory) {
 			$this->mainCategory = NULL;
 		}
-		return $this->categories->removeElement($category);
+		$this->categories->removeElement($category);
+		$this->updateCategoriesForOptimized();
+		return $this;
+	}
+
+	public function updateCategoriesForOptimized()
+	{
+		$this->categoriesIds = [];
+		$resave = function ($key, Category $category) {
+			$this->categoriesIds[$category->id] = $category->id;
+			return TRUE;
+		};
+		$this->categories->forAll($resave);
+		return $this;
 	}
 
 	public function setAccessoriesFor(array $models)
@@ -166,12 +186,7 @@ trait ProductCategories
 		} else {
 			$categoryId = $category;
 		}
-		foreach ($this->categories as $category) {
-			if ($category->id == $categoryId) {
-				return TRUE;
-			}
-		}
-		return FALSE;
+		return array_key_exists($categoryId, $this->categoriesIds);
 	}
 
 	public function isInCategories(array $categories)
