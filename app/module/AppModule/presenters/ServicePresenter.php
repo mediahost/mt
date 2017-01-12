@@ -266,15 +266,15 @@ class ServicePresenter extends BasePresenter
 	{
 		$productsRepo = $this->em->getRepository(Product::getClassName());
 		$products = $productsRepo->findBy([
-			'categoriesIds' => NULL,
-			'mainCategory NOT' => NULL,
+			'active' => TRUE,
+			'fulltext' => NULL,
 		], [
 			'updatedAt' => 'ASC',
 		], 500);
 
 		$counter = 0;
 		foreach ($products as $product) {
-			$product->updateCategoriesForOptimized();
+			$product->updateFulltext();
 			$this->em->persist($product);
 			$counter++;
 		}

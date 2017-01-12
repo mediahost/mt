@@ -11,9 +11,10 @@ trait CategoryBase
 	/**
 	 * Returns array of parents without this category
 	 * - in order from this to top parent
+	 * @param bool $onlyIds
 	 * @return array
 	 */
-	public function getParents()
+	public function getParents($onlyIds = FALSE)
 	{
 		$isTranslatable = property_exists($this, 'currentLocale');
 		$parent = $this->parent;
@@ -22,11 +23,15 @@ trait CategoryBase
 		while ($parent !== NULL && !$containExistingEdge) {
 			if ($parent->id === $this->id || array_key_exists($parent->id, $path)) {
 				$containExistingEdge = TRUE;
-			} elseif ($isTranslatable) {
+			} elseif (!$onlyIds && $isTranslatable) {
 				$parent->setCurrentLocale($this->currentLocale);
 				$path[$parent->id] = $parent;
 			} else {
-				$path[$parent->id] = $parent;
+				if ($onlyIds) {
+					$path[$parent->id] = $parent->id;
+				} else {
+					$path[$parent->id] = $parent;
+				}
 			}
 			$parent = $parent->parent;
 		}

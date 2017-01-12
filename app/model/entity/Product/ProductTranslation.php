@@ -51,6 +51,7 @@ class ProductTranslation extends BaseEntity
 			if ($this->translatable->stock) {
 				$this->translatable->stock->setChangePohodaData();
 			}
+			$this->translatable->updateFulltext($this);
 		}
 		return $this;
 	}

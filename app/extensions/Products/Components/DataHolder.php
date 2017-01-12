@@ -65,12 +65,6 @@ class DataHolder extends Object
 
 	// <editor-fold defaultstate="collapsed" desc="filters">
 
-	/** @var bool */
-	private $needJoin = FALSE;
-
-	/** @var array */
-	private $productCriteria = [];
-
 	/** @var array */
 	private $stockCriteria = [];
 
@@ -138,8 +132,7 @@ class DataHolder extends Object
 			$this->applyPostFilters();
 
 			try {
-				$criteria = $this->getStockCriteria();
-				$this->stocks = $this->stockRepo->findBy($criteria, $this->orderBy, $this->limit, $this->offset);
+				$this->stocks = $this->stockRepo->findBy($this->stockCriteria, $this->orderBy, $this->limit, $this->offset);
 			} catch (DataHolderException $e) {
 				$this->stocks = [];
 			}
@@ -182,8 +175,7 @@ class DataHolder extends Object
 			$this->applyPostFilters();
 
 			try {
-				$criteria = $this->getStockCriteria();
-				$this->count = $this->stockRepo->countBy($criteria);
+				$this->count = $this->stockRepo->countBy($this->stockCriteria);
 			} catch (DataHolderException $e) {
 				$this->count = 0;
 			}
@@ -209,92 +201,26 @@ class DataHolder extends Object
 
 	private function addStockCriteria($key, $value, $productAlias = FALSE)
 	{
-		switch ($key) {
-			case 'product IN':
-				if (array_key_exists($key, $this->stockCriteria)) {
-					$this->stockCriteria[$key] = array_intersect($this->stockCriteria[$key], $value);
-				} else {
-					$this->stockCriteria[$key] = $value;
-				}
-				break;
-			default:
-				if ($key instanceof Orx) {
-					if ($productAlias) {
-						$key = BaseRepository::renameOrxWithAlias($key, 'product');
-					}
-					$this->stockCriteria[StockRepository::CRITERIA_ORX_KEY][] = [$key, $value];
-				} else {
-					$this->stockCriteria[$productAlias ? 'product.' . $key : $key] = $value;
-				}
-				if (preg_match('/^product\./', $key)) {
-					$this->needJoin = TRUE;
-				}
-				break;
+		if ($key instanceof Orx) {
+			if ($productAlias) {
+				$key = BaseRepository::renameOrxWithAlias($key, 'product');
+			}
+			$this->stockCriteria[StockRepository::CRITERIA_ORX_KEY][] = [$key, $value];
+		} else if ($key instanceof Andx) { // don't use renaming
+			$this->stockCriteria[StockRepository::CRITERIA_ANDX_KEY][] = [$key, $value];
+		} else {
+			$this->stockCriteria[$productAlias ? 'product.' . $key : $key] = $value;
 		}
 		return $this;
 	}
 
 	private function addProductCriteria($key, $value)
 	{
-		if ($key instanceof Orx) {
-			$this->productCriteria[ProductRepository::CRITERIA_ORX_KEY][] = [$key, $value];
-		} else {
-			$this->productCriteria[$key] = $value;
-		}
-		return $this;
-	}
-
-	private function isJoinBetter()
-	{
-		$better = [
-			'active',
-			'deleteDate',
-			'inStore',
-			'producer',
-			'producerLine',
-			'producerModel',
-		];
-		foreach ($this->productCriteria as $key => $value) {
-			if ($key === ProductRepository::CRITERIA_ORX_KEY) {
-				foreach ($value as $item) {
-					foreach ($item[1] as $itemKey => $itemValue) {
-						if (preg_match('/^num_/', $itemKey)) {
-							continue;
-						} else if (!in_array($itemKey, $better)) {
-							return FALSE;
-						}
-					}
-				}
-			} else if (preg_match('/^parameter/', $key)) {
-				continue;
-			} else if (!in_array($key, $better)) {
-				return FALSE;
-			}
-		}
-		return TRUE;
+		return $this->addStockCriteria($key, $value, TRUE);
 	}
 
 	private function getStockCriteria()
 	{
-		if ($this->needJoin || $this->isJoinBetter()) {
-			foreach ($this->productCriteria as $key => $value) {
-				if ($key === ProductRepository::CRITERIA_ORX_KEY) {
-					foreach ($value as $item) {
-						$this->addStockCriteria($item[0], $item[1], TRUE);
-					}
-				} else {
-					$this->addStockCriteria($key, $value, TRUE);
-				}
-			}
-		} else {
-			$productIds = $this->productRepo->findPairs($this->productCriteria, 'id');
-			$this->addStockCriteria('product IN', $productIds);
-		}
-		$this->productCriteria = [];
-
-		if (array_key_exists('product IN', $this->stockCriteria) && !count($this->stockCriteria['product IN'])) {
-			throw new DataHolderException();
-		}
 		return $this->stockCriteria;
 	}
 
@@ -349,9 +275,18 @@ class DataHolder extends Object
 
 	public function filterCategory(Category $category)
 	{
-		$ids = array_keys($category->getChildrenArray());
-		$productIds = $this->productRepo->getIdsByCategoryIds($ids);
-		$this->addStockCriteria('product IN', $productIds);
+		$orx = new Orx();
+		$orx->add('product.categoriesIds = :categoryId');
+		$orx->add('product.categoriesIds LIKE :categoryIdA');
+		$orx->add('product.categoriesIds LIKE :categoryIdB');
+		$orx->add('product.categoriesIds LIKE :categoryIdC');
+		$params = [
+			'categoryId' => $category->id,
+			'categoryIdA' => "%,{$category->id}",
+			'categoryIdB' => "{$category->id},%",
+			'categoryIdC' => "%,{$category->id},%",
+		];
+		$this->stockCriteria[ProductRepository::CRITERIA_ORX_KEY][] = [$orx, $params];
 		return $this;
 	}
 
@@ -437,8 +372,13 @@ class DataHolder extends Object
 	public function filterFulltext($text)
 	{
 		$words = preg_split('/\s+/', $text, -1, PREG_SPLIT_NO_EMPTY);
-		$productIds = $this->productRepo->getIdsByFulltext($words);
-		$this->addStockCriteria('product IN', $productIds);
+		$andx = new Andx();
+		$params = [];
+		foreach ($words as $key => $word) {
+			$andx->add('product.fulltext LIKE :word' . $key);
+			$params['word' . $key] = "%$word%";
+		}
+		$this->stockCriteria[ProductRepository::CRITERIA_ANDX_KEY][] = [$andx, $params];
 		return $this;
 	}
 

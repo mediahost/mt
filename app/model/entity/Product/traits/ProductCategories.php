@@ -116,6 +116,9 @@ trait ProductCategories
 		$this->categoriesIds = [];
 		$resave = function ($key, Category $category) {
 			$this->categoriesIds[$category->id] = $category->id;
+			foreach ($category->getParents(TRUE) as $parent) {
+				$this->categoriesIds[$parent->id] = $parent->id;
+			}
 			return TRUE;
 		};
 		$this->categories->forAll($resave);

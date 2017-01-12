@@ -3,7 +3,6 @@
 namespace App\Model\Repository;
 
 use Doctrine\Common\Cache\Cache;
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\Query\Expr\Composite;
 use Doctrine\ORM\Query\Expr\Orx;
@@ -18,6 +17,7 @@ abstract class BaseRepository extends EntityRepository implements IRepository
 	const ALIAS = 'e';
 	const CACHE_LIFETIME = 1209600; // 14 days
 	const CRITERIA_ORX_KEY = 'orx';
+	const CRITERIA_ANDX_KEY = 'andx';
 
 	private $criteriaJoins = [];
 
@@ -37,10 +37,18 @@ abstract class BaseRepository extends EntityRepository implements IRepository
 
 	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
 	{
+		$criteriaOr = [];
 		if (array_key_exists(self::CRITERIA_ORX_KEY, $criteria)) {
 			$criteriaOr = $criteria[self::CRITERIA_ORX_KEY];
 			unset($criteria[self::CRITERIA_ORX_KEY]);
-			return $this->findByWithOr($criteria, $criteriaOr, $orderBy, $limit, $offset);
+		}
+		$criteriaAnd = [];
+		if (array_key_exists(self::CRITERIA_ANDX_KEY, $criteria)) {
+			$criteriaAnd = $criteria[self::CRITERIA_ANDX_KEY];
+			unset($criteria[self::CRITERIA_ANDX_KEY]);
+		}
+		if ($criteriaAnd || $criteriaOr) {
+			return $this->findByWithOr($criteria, $criteriaOr, $criteriaAnd, $orderBy, $limit, $offset);
 		} else {
 			return parent::findBy($criteria, $orderBy, $limit, $offset);
 		}
@@ -48,10 +56,18 @@ abstract class BaseRepository extends EntityRepository implements IRepository
 
 	public function countBy(array $criteria = array())
 	{
+		$criteriaOr = [];
 		if (array_key_exists(self::CRITERIA_ORX_KEY, $criteria)) {
 			$criteriaOr = $criteria[self::CRITERIA_ORX_KEY];
 			unset($criteria[self::CRITERIA_ORX_KEY]);
-			return $this->countByWithOr($criteria, $criteriaOr);
+		}
+		$criteriaAnd = [];
+		if (array_key_exists(self::CRITERIA_ANDX_KEY, $criteria)) {
+			$criteriaAnd = $criteria[self::CRITERIA_ANDX_KEY];
+			unset($criteria[self::CRITERIA_ANDX_KEY]);
+		}
+		if ($criteriaAnd || $criteriaOr) {
+			return $this->countByWithOr($criteria, $criteriaOr, $criteriaAnd);
 		} else {
 			return parent::countBy($criteria);
 		}
@@ -59,21 +75,32 @@ abstract class BaseRepository extends EntityRepository implements IRepository
 
 	public function findPairs($criteria, $value = NULL, $orderBy = [], $key = NULL)
 	{
+		$criteriaOr = [];
 		if (is_array($criteria) && array_key_exists(self::CRITERIA_ORX_KEY, $criteria)) {
 			$criteriaOr = $criteria[self::CRITERIA_ORX_KEY];
 			unset($criteria[self::CRITERIA_ORX_KEY]);
-			return $this->findPairsWithOr($criteria, $criteriaOr, $value, $orderBy, $key);
+		}
+		$criteriaAnd = [];
+		if (is_array($criteria) && array_key_exists(self::CRITERIA_ANDX_KEY, $criteria)) {
+			$criteriaAnd = $criteria[self::CRITERIA_ANDX_KEY];
+			unset($criteria[self::CRITERIA_ANDX_KEY]);
+		}
+		if ($criteriaAnd || $criteriaOr) {
+			return $this->findPairsWithOr($criteria, $criteriaOr, $criteriaAnd, $value, $orderBy, $key);
 		} else {
 			return parent::findPairs($criteria, $value, $orderBy, $key);
 		}
 	}
 
-	public function findByWithOr(array $criteria, array $criteriaOr, array $orderBy = null, $limit = null, $offset = null)
+	public function findByWithOr(array $criteria, array $criteriaOr, array $criteriaAnd, array $orderBy = null, $limit = null, $offset = null)
 	{
 		$qb = $this->createQueryBuilder(self::ALIAS)
 			->whereCriteria($criteria);
 
 		foreach ($criteriaOr as $orItem) {
+			$this->appendAndOrCriteria($qb, $orItem[0], $orItem[1]);
+		}
+		foreach ($criteriaAnd as $orItem) {
 			$this->appendAndOrCriteria($qb, $orItem[0], $orItem[1]);
 		}
 
@@ -85,12 +112,15 @@ abstract class BaseRepository extends EntityRepository implements IRepository
 			->getResult();
 	}
 
-	public function countByWithOr(array $criteria, array $criteriaOr)
+	public function countByWithOr(array $criteria, array $criteriaOr, array $criteriaAnd)
 	{
 		$qb = $this->createQueryBuilder(self::ALIAS)
 			->whereCriteria($criteria);
 
 		foreach ($criteriaOr as $orItem) {
+			$this->appendAndOrCriteria($qb, $orItem[0], $orItem[1]);
+		}
+		foreach ($criteriaAnd as $orItem) {
 			$this->appendAndOrCriteria($qb, $orItem[0], $orItem[1]);
 		}
 
@@ -100,7 +130,7 @@ abstract class BaseRepository extends EntityRepository implements IRepository
 			->getSingleScalarResult();
 	}
 
-	public function findPairsWithOr(array $criteria, array $criteriaOr, $value = NULL, $orderBy = [], $key = NULL)
+	public function findPairsWithOr(array $criteria, array $criteriaOr, array $criteriaAnd, $value = NULL, $orderBy = [], $key = NULL)
 	{
 		if (!is_array($orderBy)) {
 			$key = $orderBy;
@@ -114,6 +144,9 @@ abstract class BaseRepository extends EntityRepository implements IRepository
 			->whereCriteria($criteria);
 
 		foreach ($criteriaOr as $orItem) {
+			$this->appendAndOrCriteria($qb, $orItem[0], $orItem[1]);
+		}
+		foreach ($criteriaAnd as $orItem) {
 			$this->appendAndOrCriteria($qb, $orItem[0], $orItem[1]);
 		}
 
@@ -173,10 +206,10 @@ abstract class BaseRepository extends EntityRepository implements IRepository
 		return $withAlias;
 	}
 
-	protected function appendAndOrCriteria(QueryBuilder &$qb, Orx $orx, array $params = [])
+	protected function appendAndOrCriteria(QueryBuilder &$qb, Composite $expr, array $params = [])
 	{
-		$orx = $this->renameExprWithJoin($qb, $orx);
-		$qb->andWhere($orx);
+		$expr = $this->renameExprWithJoin($qb, $expr, $expr instanceof Orx);
+		$qb->andWhere($expr);
 
 		foreach ($params as $paramKey => $paramValue) {
 			$qb->setParameter($paramKey, $paramValue);

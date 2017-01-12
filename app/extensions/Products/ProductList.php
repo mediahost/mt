@@ -386,9 +386,9 @@ class ProductList extends Control
 
 	protected function setLimitPrices()
 	{
-		if (!$this->limitPriceMin || !$this->limitPriceMax) {
-			list($this->limitPriceMin, $this->limitPriceMax) = $this->getHolder()->getLimitPrices();
-		}
+//		if (!$this->limitPriceMin || !$this->limitPriceMax) {
+//			list($this->limitPriceMin, $this->limitPriceMax) = $this->getHolder()->getLimitPrices();
+//		}
 		return $this;
 	}
 

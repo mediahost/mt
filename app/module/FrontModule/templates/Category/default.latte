@@ -52,7 +52,7 @@
 	<div class="sidebar col-md-3 col-sm-5">
 		{include categories}
 		{if $showFilter}
-			{control products:filter}
+			{*{control products:filter}*}
 		{/if}
 	</div>
 	<!-- END SIDEBAR -->
@@ -60,10 +60,10 @@
 	<!-- BEGIN CONTENT -->
 	<div class="col-md-9 col-sm-7">
 
-		<div class="accessories-filter clearfix" n:if="$showAccessoriesFilter">
-			<h4>{_'Select type of your phone'}</h4>
-			{control products:accessories}
-		</div>
+		{*<div class="accessories-filter clearfix" n:if="$showAccessoriesFilter">*}
+			{*<h4>{_'Select type of your phone'}</h4>*}
+			{*{control products:accessories}*}
+		{*</div>*}
 
 		{*<div class="row products producers-list" data-gutter="15"*}
 				{*n:if="isset($subcategories) && count($subcategories) && $_control->getComponent('products')->getCount() > 0">*}

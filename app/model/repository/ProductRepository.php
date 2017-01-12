@@ -164,48 +164,4 @@ class ProductRepository extends BaseRepository
 		return array_unique($ids);
 	}
 
-	public function getIdsByCategoryIds(array $ids)
-	{
-		if (count($ids) === 1) {
-			$whereId = '= ' . reset($ids);
-		} else {
-			$whereId = 'IN (' . implode(',', $ids) . ')';
-		}
-
-		$rsm = new ResultSetMapping();
-		$rsm->addScalarResult('product_id', 'productId');
-		$sql = 'SELECT product_id FROM product_category WHERE category_id ' . $whereId;
-		$query = $this->createNativeQuery($sql, $rsm);
-
-		return array_map(function ($row) {
-			return reset($row);
-		}, $query->getArrayResult());
-	}
-
-	public function getIdsByFulltext(array $words)
-	{
-		$table = $this->getEntityManager()->getClassMetadata(ProductTranslation::getClassName())->getTableName();
-
-		$rsm = new ResultSetMapping();
-		$rsm->addScalarResult('translatable_id', 'productId');
-
-		$params = [];
-		$conditions = new Andx();
-		foreach ($words as $key => $word) {
-			$keyword = 'word' . $key;
-			$conditions->add('t.name LIKE :' . $keyword);
-			$params[$keyword] = "%$word%";
-		}
-
-		$sql = 'SELECT translatable_id 
-				FROM ' . $table . ' t 
-				WHERE ' . $conditions;
-		$query = $this->createNativeQuery($sql, $rsm)
-			->setParameters($params);
-
-		return array_map(function ($row) {
-			return reset($row);
-		}, $query->getArrayResult());
-	}
-
 }

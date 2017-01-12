@@ -61,6 +61,12 @@ class Product extends BaseTranslatable
 	/** @ORM\OneToMany(targetEntity="Stock", mappedBy="product") */
 	protected $stocks;
 
+	/** @ORM\Column(name="`fulltext`", type="text", nullable=true) */
+	private $fulltext;
+
+	/** @var array */
+	private $fulltextArray;
+
 	public function __construct($currentLocale = NULL)
 	{
 		$this->stocks = new ArrayCollection();
@@ -91,6 +97,28 @@ class Product extends BaseTranslatable
 	public function getUrlId()
 	{
 		return $this->getId();
+	}
+
+	public function updateFulltext(ProductTranslation $translation = NULL)
+	{
+		$this->fulltextArray = [];
+		if ($translation) {
+			$this->translations->add($translation);
+		}
+		foreach ($this->translations as $translation) {
+			$this->addFulltext($translation->name);
+		}
+		$this->fulltext = Helpers::concatArray($this->fulltextArray, ' ');
+		return $this;
+	}
+
+	private function addFulltext($text)
+	{
+		$words = preg_split('/\s+/', $text, -1, PREG_SPLIT_NO_EMPTY);
+		foreach ($words as $word) {
+			$this->fulltextArray[md5($word)] = $word;
+		}
+		return $this;
 	}
 
 	public function __toString()
