@@ -89,7 +89,9 @@ class StockCategory extends StockBase
 		$form->addMultiSelect2('accessoriesFor', 'Accessories for', $allModels);
 
 		$heurekaCategories = $this->heurekaFacade->getFullnames($this->translator->getLocale());
-		$form->addSelect2('heurekaCategory', 'Heureka Category', [NULL => '--- No Category ---'] + $heurekaCategories);
+		if ($heurekaCategories) {
+			$form->addSelect2('heurekaCategory', 'Heureka Category', [NULL => '--- No Category ---'] + $heurekaCategories);
+		}
 
 		$form->addSubmit('save', 'Save');
 
@@ -226,7 +228,7 @@ class StockCategory extends StockBase
 		}
 		$this->stock->product->setAccessoriesFor($accesoryModels);
 
-		if ($values->heurekaCategory) {
+		if (isset($values->heurekaCategory) && $values->heurekaCategory) {
 			$heurekaCategoryRepo = $this->em->getRepository(HeurekaCategory::getClassName());
 			$heurekaCategory = $heurekaCategoryRepo->find($values->heurekaCategory);
 			if ($heurekaCategory) {
