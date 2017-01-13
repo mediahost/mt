@@ -24,7 +24,7 @@ class ProducerFilter extends BaseControl
 	private $model;
 
 	/** @var array */
-	private $productIds;
+	private $criteria;
 
 	/** @var ProducerFacade @inject */
 	public $producerFacade;
@@ -71,20 +71,19 @@ class ProducerFilter extends BaseControl
 	{
 		$notSelected = [NULL => '--- All ---'];
 
-		$productIds = is_array($this->productIds) ? $this->productIds : TRUE;
-		$producers = $this->producerFacade->getProducersList(TRUE, FALSE, $productIds);
+		$producers = $this->producerFacade->getProducersList(TRUE, FALSE, $this->criteria);
 		$form['producer']
 			->setItems($this->allowNone ? $notSelected + $producers : $producers)
 			->setDisabled(!count($producers))
 			->setDefaultValue($this->producer && array_key_exists($this->producer->id, $producers) ? $this->producer->id : NULL);
 
-		$lines = $this->producer ? $this->producerFacade->getLinesList($this->producer, FALSE, TRUE, FALSE, $productIds) : [];
+		$lines = $this->producer ? $this->producerFacade->getLinesList($this->producer, FALSE, TRUE, FALSE, $this->criteria) : [];
 		$form['line']
 			->setItems($notSelected + $lines)
 			->setDisabled(!count($lines))
 			->setDefaultValue($this->line && array_key_exists($this->line->id, $lines) ? $this->line->id : NULL);
 
-		$models = $this->line ? $this->producerFacade->getModelsList($this->line, FALSE, TRUE, $productIds) : [];
+		$models = $this->line ? $this->producerFacade->getModelsList($this->line, FALSE, TRUE, $this->criteria) : [];
 		$form['model']
 			->setItems($notSelected + $models)
 			->setDisabled(!count($models))
@@ -146,9 +145,9 @@ class ProducerFilter extends BaseControl
 		return $this;
 	}
 
-	public function setProductIds(array $ids)
+	public function setCriteria(array $criteria)
 	{
-		$this->productIds = $ids;
+		$this->criteria = $criteria;
 		return $this;
 	}
 

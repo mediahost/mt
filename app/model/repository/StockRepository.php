@@ -4,6 +4,7 @@ namespace App\Model\Repository;
 
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Query\Expr\Orx;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Kdyby\Doctrine\QueryBuilder;
 use Kdyby\Doctrine\QueryException;
@@ -156,6 +157,59 @@ class StockRepository extends BaseRepository
 			$values[$value] = $value;
 		}
 		return $values;
+	}
+
+	public function getAccessoriesProducersIds(array $criteria = [])
+	{
+		return $this->getAccessoriesIds('accessoriesProducerIds', $criteria);
+	}
+
+	public function getAccessoriesLinesIds(array $criteria = [])
+	{
+		return $this->getAccessoriesIds('accessoriesLineIds', $criteria);
+	}
+
+	public function getAccessoriesModelsIds(array $criteria = [])
+	{
+		return $this->getAccessoriesIds('accessoriesModelIds', $criteria);
+	}
+
+	private function getAccessoriesIds($column, array $criteria = [])
+	{
+		$criteriaOr = [];
+		if (array_key_exists(self::CRITERIA_ORX_KEY, $criteria)) {
+			$criteriaOr = $criteria[self::CRITERIA_ORX_KEY];
+			unset($criteria[self::CRITERIA_ORX_KEY]);
+		}
+		$criteriaAnd = [];
+		if (array_key_exists(self::CRITERIA_ANDX_KEY, $criteria)) {
+			$criteriaAnd = $criteria[self::CRITERIA_ANDX_KEY];
+			unset($criteria[self::CRITERIA_ANDX_KEY]);
+		}
+
+		$qb = $this->createQueryBuilder(self::ALIAS)
+			->whereCriteria($criteria)
+			->select('p.' . $column)
+			->distinct();
+
+		foreach ($criteriaOr as $orItem) {
+			$this->appendAndOrCriteria($qb, $orItem[0], $orItem[1]);
+		}
+		foreach ($criteriaAnd as $orItem) {
+			$this->appendAndOrCriteria($qb, $orItem[0], $orItem[1]);
+		}
+
+		$query = $qb->getQuery();
+
+		$ids = [];
+		foreach ($query->getArrayResult() as $row) {
+			foreach (reset($row) as $item) {
+				if ($item) {
+					$ids[$item] = $item;
+				}
+			}
+		}
+		return $ids;
 	}
 
 }

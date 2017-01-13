@@ -4,9 +4,7 @@ namespace App\Model\Repository;
 
 use App\Model\Entity\Category;
 use App\Model\Entity\Product;
-use App\Model\Entity\ProductTranslation;
 use Doctrine\ORM\AbstractQuery;
-use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -99,45 +97,6 @@ class ProductRepository extends BaseRepository
 		return array_map(function ($row) {
 			return reset($row);
 		}, $query->getResult(AbstractQuery::HYDRATE_ARRAY));
-	}
-
-	public function getAccessoriesProducersIds(array $productIds = [])
-	{
-		return $this->getAccessoriesIds('accessories_producer_ids', $productIds);
-	}
-
-	public function getAccessoriesLinesIds(array $productIds = [])
-	{
-		return $this->getAccessoriesIds('accessories_line_ids', $productIds);
-	}
-
-	public function getAccessoriesModelsIds(array $productIds = [])
-	{
-		return $this->getAccessoriesIds('accessories_model_ids', $productIds);
-	}
-
-	private function getAccessoriesIds($column, array $productIds = [])
-	{
-		$rsm = new ResultSetMapping();
-		$rsm->addScalarResult($column, 'ids');
-
-		$sql = 'SELECT DISTINCT ' . $column . ' ' .
-			'FROM ' . $this->getClassMetadata()->getTableName() . ' ' .
-			'WHERE ' . $column . ' != \'\'';
-		if (count($productIds)) {
-			$sql .= ' AND id IN (' . implode(',', $productIds) . ')';
-		}
-		$query = $this->createNativeQuery($sql, $rsm);
-
-		$ids = [];
-		$idFields = array_map(function ($row) {
-			return explode(',', reset($row));
-		}, $query->getResult(AbstractQuery::HYDRATE_ARRAY));
-
-		foreach ($idFields as $field) {
-			$ids = array_merge($ids, $field);
-		}
-		return array_unique($ids);
 	}
 
 }

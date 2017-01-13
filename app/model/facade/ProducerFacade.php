@@ -6,10 +6,12 @@ use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
 use App\Model\Entity\Product;
+use App\Model\Entity\Stock;
 use App\Model\Repository\ProducerLineRepository;
 use App\Model\Repository\ProducerModelRepository;
 use App\Model\Repository\ProducerRepository;
 use App\Model\Repository\ProductRepository;
+use App\Model\Repository\StockRepository;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Translation\Translator;
 use Nette\Object;
@@ -32,6 +34,9 @@ class ProducerFacade extends Object
 	/** @var ProductRepository */
 	private $productRepo;
 
+	/** @var StockRepository */
+	private $stockRepo;
+
 	/** @var ProducerRepository */
 	private $producerRepo;
 
@@ -45,6 +50,7 @@ class ProducerFacade extends Object
 	{
 		$this->em = $em;
 		$this->productRepo = $this->em->getRepository(Product::getClassName());
+		$this->stockRepo = $this->em->getRepository(Stock::getClassName());
 		$this->producerRepo = $this->em->getRepository(Producer::getClassName());
 		$this->lineRepo = $this->em->getRepository(ProducerLine::getClassName());
 		$this->modelRepo = $this->em->getRepository(ProducerModel::getClassName());
@@ -52,18 +58,17 @@ class ProducerFacade extends Object
 
 	public function getProducers($onlyWithChildren = FALSE, $onlyWithProducts = FALSE)
 	{
-		return $this->getProducersList($onlyWithChildren, $onlyWithProducts, FALSE, FALSE);
+		return $this->getProducersList($onlyWithChildren, $onlyWithProducts, [], FALSE);
 	}
 
-	public function getProducersList($onlyWithChildren = FALSE, $onlyWithProducts = FALSE, $onlyWithAccProducers = FALSE, $toString = TRUE)
+	public function getProducersList($onlyWithChildren = FALSE, $onlyWithProducts = FALSE, array $onlyWithAccProducers = [], $toString = TRUE)
 	{
 		$criteria = [];
 		if ($onlyWithProducts) {
 			$criteria['id IN'] = $this->productRepo->getProducersIds();
 		}
-		if ($onlyWithAccProducers !== FALSE) {
-			$productIds = is_array($onlyWithAccProducers) && count($onlyWithAccProducers) ? $onlyWithAccProducers : [];
-			$ids = $this->productRepo->getAccessoriesProducersIds($productIds);
+		if ($onlyWithAccProducers) {
+			$ids = $this->stockRepo->getAccessoriesProducersIds($onlyWithAccProducers);
 			$criteria['id IN'] = isset($criteria['id IN']) ? array_diff($criteria['id IN'], $ids) : $ids;
 		}
 
@@ -85,7 +90,7 @@ class ProducerFacade extends Object
 		return $producers;
 	}
 
-	public function getLinesList(Producer $producer = NULL, $fullPath = FALSE, $onlyWithChildren = FALSE, $onlyWithProducts = FALSE, $onlyWithAccLines = FALSE)
+	public function getLinesList(Producer $producer = NULL, $fullPath = FALSE, $onlyWithChildren = FALSE, $onlyWithProducts = FALSE, array $onlyWithAccLines = [])
 	{
 		$models = [];
 		if ($onlyWithChildren) {
@@ -100,9 +105,8 @@ class ProducerFacade extends Object
 		if ($producer) {
 			$criteria['producer'] = $producer;
 		}
-		if ($onlyWithAccLines !== FALSE) {
-			$productIds = is_array($onlyWithAccLines) && count($onlyWithAccLines) ? $onlyWithAccLines : [];
-			$ids = $this->productRepo->getAccessoriesLinesIds($productIds);
+		if ($onlyWithAccLines) {
+			$ids = $this->stockRepo->getAccessoriesLinesIds($onlyWithAccLines);
 			$criteria['id IN'] = isset($criteria['id IN']) ? array_diff($criteria['id IN'], $ids) : $ids;
 		}
 
@@ -122,7 +126,7 @@ class ProducerFacade extends Object
 		return $lines;
 	}
 
-	public function getModelsList(ProducerLine $line = NULL, $fullPath = FALSE, $onlyWithProducts = FALSE, $onlyWithAccModels = FALSE)
+	public function getModelsList(ProducerLine $line = NULL, $fullPath = FALSE, $onlyWithProducts = FALSE, array $onlyWithAccModels = [])
 	{
 		$criteria = [];
 		if ($line) {
@@ -131,9 +135,8 @@ class ProducerFacade extends Object
 		if ($onlyWithProducts) {
 			$criteria['line.producer'] = $this->productRepo->getProducersIds();
 		}
-		if ($onlyWithAccModels !== FALSE) {
-			$productIds = is_array($onlyWithAccModels) && count($onlyWithAccModels) ? $onlyWithAccModels : [];
-			$ids = $this->productRepo->getAccessoriesModelsIds($productIds);
+		if ($onlyWithAccModels) {
+			$ids = $this->stockRepo->getAccessoriesModelsIds($onlyWithAccModels);
 			$criteria['id IN'] = isset($criteria['id IN']) ? array_diff($criteria['id IN'], $ids) : $ids;
 		}
 

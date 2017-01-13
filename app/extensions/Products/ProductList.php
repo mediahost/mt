@@ -674,13 +674,12 @@ class ProductList extends Control
 
 	protected function createComponentAccessoriesFilterForm()
 	{
-//		$findedProductIds = $this->getHolder()->getProductsIds(TRUE);
 		$control = $this->iProducerFilterFactory->create()
 			->setAjax()
 			->setProducer($this->producer, $this->producerAllowNone)
 			->setLine($this->line)
-			->setModel($this->model);
-//		$control->setProductIds($findedProductIds);
+			->setModel($this->model)
+			->setCriteria($this->getHolder()->getCriteria(TRUE));
 
 		$control->onAfterSend = function ($producer, $line, $model) {
 			$this->setProducer($producer, $this->producerAllowNone);
