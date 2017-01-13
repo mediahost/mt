@@ -6,6 +6,7 @@ services:
 	- {implement: App\Extensions\Csv\IParserFactory, inject: yes}
 	- {implement: App\Extensions\Products\IProductListFactory, inject: yes}
 	- {implement: App\Extensions\Products\Components\ISortingFormFactory, inject: yes}
+	- {implement: App\Extensions\Products\Components\IMainFilterFactory, inject: yes}
 	- {implement: App\Extensions\Products\Components\IProducerFilterFactory, inject: yes}
 
 	# Auth

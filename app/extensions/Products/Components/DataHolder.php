@@ -66,6 +66,9 @@ class DataHolder extends Object
 	// <editor-fold defaultstate="collapsed" desc="filters">
 
 	/** @var array */
+	private $productCriteria = [];
+
+	/** @var array */
 	private $stockCriteria = [];
 
 	/** @var array */
@@ -124,6 +127,19 @@ class DataHolder extends Object
 
 	// </editor-fold>
 	// <editor-fold defaultstate="collapsed" desc="public getters">
+
+	public function getCriteria($withoutPost = FALSE)
+	{
+		if (!$this->productCriteria) {
+			$this->applyPreFilters();
+			if (!$withoutPost) {
+				$this->applyPostFilters();
+			}
+			$this->productCriteria = $this->stockCriteria;
+		}
+		unset($this->productCriteria['inStore >=']);
+		return $this->productCriteria;
+	}
 
 	public function getStocks()
 	{
@@ -187,12 +203,7 @@ class DataHolder extends Object
 	{
 		$this->applyPreFilters();
 
-		try {
-			$criteria = $this->getStockCriteria();
-			list($lowerPrice, $higherPrice) = $this->stockRepo->getLimitPricesBy($criteria, $this->priceLevelName);
-		} catch (DataHolderException $e) {
-			$higherPrice = $lowerPrice = 0;
-		}
+		list($lowerPrice, $higherPrice) = $this->stockRepo->getLimitPricesBy($this->stockCriteria, $this->priceLevelName);
 
 		return [$lowerPrice, $higherPrice];
 	}

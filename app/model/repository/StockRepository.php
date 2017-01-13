@@ -7,7 +7,6 @@ use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Kdyby\Doctrine\QueryBuilder;
 use Kdyby\Doctrine\QueryException;
-use Nette\Utils\Strings;
 
 class StockRepository extends BaseRepository
 {
@@ -78,12 +77,15 @@ class StockRepository extends BaseRepository
 
 	public function getLimitPricesBy($criteria, $priceName)
 	{
-		$priceName = self::ALIAS . '.' . $priceName;
+		$criteriaOr = [];
 		if (array_key_exists(self::CRITERIA_ORX_KEY, $criteria)) {
 			$criteriaOr = $criteria[self::CRITERIA_ORX_KEY];
 			unset($criteria[self::CRITERIA_ORX_KEY]);
-		} else {
-			$criteriaOr = [];
+		}
+		$criteriaAnd = [];
+		if (array_key_exists(self::CRITERIA_ANDX_KEY, $criteria)) {
+			$criteriaAnd = $criteria[self::CRITERIA_ANDX_KEY];
+			unset($criteria[self::CRITERIA_ANDX_KEY]);
 		}
 
 		$qb = $this->createQueryBuilder(self::ALIAS)
@@ -92,7 +94,11 @@ class StockRepository extends BaseRepository
 		foreach ($criteriaOr as $orItem) {
 			$this->appendAndOrCriteria($qb, $orItem[0], $orItem[1]);
 		}
+		foreach ($criteriaAnd as $orItem) {
+			$this->appendAndOrCriteria($qb, $orItem[0], $orItem[1]);
+		}
 
+		$priceName = self::ALIAS . '.' . $priceName;
 		$min = (new Expr())->min($priceName);
 		$max = (new Expr())->max($priceName);
 		$query = $qb
@@ -106,6 +112,50 @@ class StockRepository extends BaseRepository
 		} catch (\Doctrine\ORM\Query\QueryException $e) {
 			throw new QueryException($e, $query);
 		}
+	}
+
+	public function getParameterValues($code, array $criteria = [], $specificValue = NULL)
+	{
+		$prefix = 'product.';
+		$parameterName = 'parameter' . $code;
+		$row = $prefix . $parameterName;
+
+		$criteriaOr = [];
+		if (array_key_exists(self::CRITERIA_ORX_KEY, $criteria)) {
+			$criteriaOr = $criteria[self::CRITERIA_ORX_KEY];
+			unset($criteria[self::CRITERIA_ORX_KEY]);
+		}
+		$criteriaAnd = [];
+		if (array_key_exists(self::CRITERIA_ANDX_KEY, $criteria)) {
+			$criteriaAnd = $criteria[self::CRITERIA_ANDX_KEY];
+			unset($criteria[self::CRITERIA_ANDX_KEY]);
+		}
+
+		$criteria[$row . ' NOT'] = NULL;
+		if ($specificValue !== NULL) {
+			$criteria[$row] = $specificValue;
+		}
+
+		$qb = $this->createQueryBuilder(self::ALIAS)
+			->whereCriteria($criteria)
+			->select('p.' . $parameterName)
+			->distinct();
+
+		foreach ($criteriaOr as $orItem) {
+			$this->appendAndOrCriteria($qb, $orItem[0], $orItem[1]);
+		}
+		foreach ($criteriaAnd as $orItem) {
+			$this->appendAndOrCriteria($qb, $orItem[0], $orItem[1]);
+		}
+
+		$query = $qb->getQuery();
+
+		$values = [];
+		foreach ($query->getResult() as $item) {
+			$value = reset($item);
+			$values[$value] = $value;
+		}
+		return $values;
 	}
 
 }

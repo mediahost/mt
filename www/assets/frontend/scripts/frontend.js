@@ -4,20 +4,20 @@ var Frontend = function () {
 
 	var imgPath = 'img/';
 
-    var overlayColor = '#fff';
+	var overlayColor = '#fff';
 
-    var overlayOpacity = 0.7;
+	var overlayOpacity = 0.7;
 
-    var overlayOpacityBoxed = 0.5;
+	var overlayOpacityBoxed = 0.5;
 
 	var handleOwl = function () {
-		$('.owl-carousel').each(function(){
+		$('.owl-carousel').each(function () {
 			$(this).owlCarousel();
 		});
 	};
 
 	var handleLightbox = function () {
-		$('#popup-gallery').each(function() {
+		$('#popup-gallery').each(function () {
 			$(this).magnificPopup({
 				delegate: 'a.popup-gallery-image',
 				type: 'image',
@@ -36,7 +36,7 @@ var Frontend = function () {
 			removalDelay: 500,
 			closeBtnInside: true,
 			callbacks: {
-				beforeOpen: function() {
+				beforeOpen: function () {
 					this.st.mainClass = this.st.el.attr('data-effect');
 				}
 			},
@@ -70,10 +70,10 @@ var Frontend = function () {
 	};
 
 	var handleProductFilter = function () {
-		$("#frm-products-filterForm-price")
+		$("#frm-products-filterForm-form-price")
 			.ionRangeSlider({
 				onFinish: function (data) {
-					$("#frm-products-filterForm-price").closest('form.sendOnChange').submit();
+					$('#frm-products-filterForm-form-price').closest('form.sendOnChange').submit();
 				}
 			});
 	};
@@ -105,21 +105,21 @@ var Frontend = function () {
 
 		if (options.target) { // element blocking
 			var el = $(options.target);
-            var htmlHeight = 80;
-            var htmlTop = '10%';
-            var elBottom = el.position().top + el.height();
+			var htmlHeight = 80;
+			var htmlTop = '10%';
+			var elBottom = el.position().top + el.height();
 			if (el.height() <= ($(window).height())) {
 				options.cenrerY = true;
 			} else if ($(window).scrollTop() > el.position().top) {
-                var screenHeight = $(window).height();
-                var restHeight = elBottom - $(window).scrollTop();
-                var heightToSplit = restHeight < screenHeight ? restHeight : screenHeight;
-			    var sizeYMiddle = heightToSplit / 2;
-                if (sizeYMiddle > htmlHeight) {
-                    var elScrollTop = $(window).scrollTop() - el.position().top;
-                    htmlTop = (elScrollTop + sizeYMiddle - (htmlHeight / 2)) + 'px';
-                }
-            }
+				var screenHeight = $(window).height();
+				var restHeight = elBottom - $(window).scrollTop();
+				var heightToSplit = restHeight < screenHeight ? restHeight : screenHeight;
+				var sizeYMiddle = heightToSplit / 2;
+				if (sizeYMiddle > htmlHeight) {
+					var elScrollTop = $(window).scrollTop() - el.position().top;
+					htmlTop = (elScrollTop + sizeYMiddle - (htmlHeight / 2)) + 'px';
+				}
+			}
 			el.block({
 				message: html,
 				baseZ: options.zIndex ? options.zIndex : 1000,

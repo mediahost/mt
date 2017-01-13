@@ -18,6 +18,7 @@ class ProductRepository extends BaseRepository
 	/**
 	 * @param string|array $url
 	 * @param string $locale
+	 * @param bool $onlyActive
 	 * @return Product
 	 */
 	public function findOneByUrl($url, $locale = NULL, $onlyActive = TRUE)
@@ -86,31 +87,6 @@ class ProductRepository extends BaseRepository
 			}
 			$qb->andWhere($orExpr);
 		}
-	}
-
-	public function getParameterValues($code, array $ids = [], $specificValue = NULL)
-	{
-		$row = 'p.parameter' . $code;
-		$qb = $this->createQueryBuilder('p')
-			->select('p.parameter' . $code)
-			->distinct()
-			->where($row . ' IS NOT NULL');
-		if (count($ids)) {
-			$qb->andWhere('p.id IN (:ids)')
-				->setParameter('ids', $ids);
-		}
-		if ($specificValue !== NULL) {
-			$qb->andWhere($row . ' = :specificValue')
-				->setParameter('specificValue', $specificValue);
-		}
-		$query = $qb->getQuery();
-
-		$values = [];
-		foreach ($query->getResult(AbstractQuery::HYDRATE_ARRAY) as $item) {
-			$value = reset($item);
-			$values[$value] = $value;
-		}
-		return $values;
 	}
 
 	public function getProducersIds()

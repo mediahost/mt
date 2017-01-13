@@ -4,18 +4,16 @@ namespace App\Extensions\Products;
 
 use App\Components\Product\Form\IPrintStockFactory;
 use App\Extensions\Products\Components\DataHolder;
+use App\Extensions\Products\Components\IMainFilterFactory;
 use App\Extensions\Products\Components\IProducerFilterFactory;
 use App\Extensions\Products\Components\ISortingFormFactory;
+use App\Extensions\Products\Components\MainFilter;
 use App\Extensions\Products\Components\Paginator;
 use App\Extensions\Products\Components\SortingForm;
-use App\Forms\Form;
-use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Category;
-use App\Model\Entity\Parameter;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
-use App\Model\Entity\Product;
 use App\Model\Facade\BasketFacade;
 use App\Model\Facade\ProductFacade;
 use App\Model\Facade\StockFacade;
@@ -26,7 +24,6 @@ use Nette\Application\UI\Control;
 use Nette\Application\UI\Multiplier;
 use Nette\Localization\ITranslator;
 use Nette\Templating\FileTemplate;
-use Nette\Utils\ArrayHash;
 
 class ProductList extends Control
 {
@@ -62,6 +59,9 @@ class ProductList extends Control
 
 	/** @var ISortingFormFactory @inject */
 	public $iSortingFormFactory;
+
+	/** @var IMainFilterFactory @inject */
+	public $iMainFilterFactory;
 
 	/** @var IProducerFilterFactory @inject */
 	public $iProducerFilterFactory;
@@ -386,9 +386,9 @@ class ProductList extends Control
 
 	protected function setLimitPrices()
 	{
-//		if (!$this->limitPriceMin || !$this->limitPriceMax) {
-//			list($this->limitPriceMin, $this->limitPriceMax) = $this->getHolder()->getLimitPrices();
-//		}
+		if (!$this->limitPriceMin || !$this->limitPriceMax) {
+			list($this->limitPriceMin, $this->limitPriceMax) = $this->getHolder()->getLimitPrices();
+		}
 		return $this;
 	}
 
@@ -629,9 +629,9 @@ class ProductList extends Control
 	protected function createComponentStock()
 	{
 		return new Multiplier(function ($itemId) {
-			$control = $this->iStockPrint->create();
-			$control->setStockById($itemId);
-			$control->setPriceLevel($this->priceLevel);
+			$control = $this->iStockPrint->create()
+				->setStockById($itemId)
+				->setPriceLevel($this->priceLevel);
 			return $control;
 		});
 	}
@@ -639,10 +639,10 @@ class ProductList extends Control
 	/** @return SortingForm */
 	protected function createComponentSortingForm()
 	{
-		$control = $this->iSortingFormFactory->create();
-		$control->setAjax();
-		$control->setSorting($this->sorting);
-		$control->setPerPage($this->perPage, $this->perPageList);
+		$control = $this->iSortingFormFactory->create()
+			->setAjax()
+			->setSorting($this->sorting)
+			->setPerPage($this->perPage, $this->perPageList);
 
 		$control->onAfterSend = function ($sorting, $perPage) {
 			$this->setSorting($sorting);
@@ -652,15 +652,36 @@ class ProductList extends Control
 		return $control;
 	}
 
+	/** @return MainFilter */
+	protected function createComponentFilterForm()
+	{
+		$control = $this->iMainFilterFactory->create()
+			->setAjax()
+			->setStored($this->stored)
+			->setLimitPrices($this->getLimitPriceMin(), $this->getLimitPriceMax())
+			->setPrices($this->minPrice, $this->maxPrice)
+			->setCurrencySymbol($this->getCurrencySymbol())
+			->setFilter($this->getHolder()->getCriteria(TRUE), $this->getFilterParams());
+
+		$control->onAfterSend = function ($stored, $minPrice, $maxPrice, $params) {
+			$this->stored = $stored;
+			$this->setFilterPrice($minPrice, $maxPrice);
+			$this->setFilterParams($params);
+			$this->reload();
+		};
+		return $control;
+	}
+
 	protected function createComponentAccessoriesFilterForm()
 	{
-		$findedProductIds = $this->getHolder()->getProductsIds(TRUE);
-		$control = $this->iProducerFilterFactory->create();
-		$control->setAjax();
-		$control->setProducer($this->producer, $this->producerAllowNone);
-		$control->setLine($this->line);
-		$control->setModel($this->model);
-		$control->setProductIds($findedProductIds);
+//		$findedProductIds = $this->getHolder()->getProductsIds(TRUE);
+		$control = $this->iProducerFilterFactory->create()
+			->setAjax()
+			->setProducer($this->producer, $this->producerAllowNone)
+			->setLine($this->line)
+			->setModel($this->model);
+//		$control->setProductIds($findedProductIds);
+
 		$control->onAfterSend = function ($producer, $line, $model) {
 			$this->setProducer($producer, $this->producerAllowNone);
 			$this->setLine($line);
@@ -668,98 +689,6 @@ class ProductList extends Control
 			$this->reload();
 		};
 		return $control;
-	}
-
-	protected function createComponentFilterForm($name)
-	{
-		$form = new Form($this, $name);
-		$form->setTranslator($this->translator);
-		$form->setRenderer(new MetronicFormRenderer());
-		$form->getElementPrototype()->class = [
-			'sendOnChange',
-			!$this->ajax ?: 'ajax'
-		];
-
-		$form->addCheckbox('onlyAvailable', 'Only Available')
-			->setDefaultValue($this->stored);
-
-		$limitMinPriceRaw = $this->getLimitPriceMin();
-		$limitMaxPriceRaw = $this->getLimitPriceMax();
-		$limitMinPrice = floor($this->exchange->change($limitMinPriceRaw));
-		$limitMaxPrice = ceil($this->exchange->change($limitMaxPriceRaw));
-
-		$fromValue = $this->minPrice ? floor($this->exchange->change($this->minPrice)) : NULL;
-		$toValue = $this->maxPrice ? ceil($this->exchange->change($this->maxPrice)) : NULL;
-
-		if ($limitMaxPrice > 0) {
-			$form->addText('price', 'Range')
-				->setAttribute('data-min', $limitMinPrice)
-				->setAttribute('data-max', $limitMaxPrice)
-				->setAttribute('data-from', $fromValue)
-				->setAttribute('data-to', $toValue)
-				->setAttribute('data-type', 'double')
-				->setAttribute('data-step', '1')
-				->setAttribute('data-hasgrid', 'false')
-				->setAttribute('data-postfix', ' ' . $this->getCurrencySymbol());
-		}
-
-		$filteredParams = $this->getFilterParams();
-		$paramRepo = $this->em->getRepository(Parameter::getClassName());
-		$allParams = $paramRepo->findAll();
-		$defaultValues = [];
-		$findedProductIds = $this->getHolder()->getProductsIds(TRUE);
-		foreach ($allParams as $parameter) {
-			$parameter->setCurrentLocale($this->translator->getLocale());
-			switch ($parameter->type) {
-				case Parameter::BOOLEAN:
-					$moreItems = $this->productFacade->getParameterValues($parameter, $findedProductIds, TRUE);
-					if ($moreItems) {
-						$form->addCheckbox($parameter->code, $parameter->name);
-					}
-					break;
-				case Parameter::STRING:
-					$items = [NULL => '--- Not selected ---'];
-					$moreItems = $this->productFacade->getParameterValues($parameter, $findedProductIds);
-					if (count($moreItems)) {
-						$form->addSelect2($parameter->code, $parameter->name, $items + $moreItems);
-					}
-					break;
-			}
-			if (isset($filteredParams[$parameter->code])) {
-				$defaultValues[$parameter->code] = $filteredParams[$parameter->code];
-			}
-		}
-		$form->setDefaults($defaultValues);
-
-		$form->onSuccess[] = $this->processFilterForm;
-	}
-
-	public function processFilterForm(Form $form, ArrayHash $values)
-	{
-		$this->stored = $values->onlyAvailable;
-
-		$glue = preg_quote(';');
-		if (preg_match('/^(\d+)' . $glue . '(\d+)$/', $values->price, $matches)) {
-			$minPriceRaw = $matches[1];
-			$maxPriceRaw = $matches[2];
-
-			$minPrice = $this->exchange->change($minPriceRaw, $this->exchange->getWeb(), $this->exchange->getDefault());
-			$maxPrice = $this->exchange->change($maxPriceRaw, $this->exchange->getWeb(), $this->exchange->getDefault());
-			$this->setFilterPrice($minPrice, $maxPrice);
-			$form['price']
-				->setAttribute('data-from', $minPriceRaw)
-				->setAttribute('data-to', $maxPriceRaw);
-		}
-
-		$params = [];
-		foreach (Product::getParameterProperties() as $parameterProperty) {
-			if (isset($values->{$parameterProperty->code}) && $values->{$parameterProperty->code}) {
-				$params[$parameterProperty->code] = $values->{$parameterProperty->code};
-			}
-		}
-		$this->setFilterParams($params);
-
-		$this->reload();
 	}
 
 	// </editor-fold>
