@@ -82,7 +82,10 @@ class CategoryListener extends Object implements Subscriber
 
 	private function clearCache(Category $category, $withParent = FALSE)
 	{
-		$tags = [CategoryFacade::TAG_CATEGORY . $category->id];
+		$tags = [
+			CategoryFacade::TAG_CATEGORY,
+			CategoryFacade::TAG_CATEGORY . $category->id,
+		];
 		if ($withParent) {
 			$tags[] = CategoryFacade::TAG_CATEGORY . ($category->parent ? $category->parent->id : NULL);
 		}

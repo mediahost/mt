@@ -1,49 +1,55 @@
+{layout none}
+{include categoriesInside}
+
 {define categories}
 	<div class="clearfix">
 		<ul id="categories"
-			class="dropdown-menu dropdown-menu-category dropdown-menu-category-hold"
-			{ifset $activeCategory}data-active-categories="{$activeCategory->getIdPath()}"{/ifset}>
-
-			{foreach $rootCategoriesIds as $categoryId}
-
-				{cache 'category-main_' . $categoryId . $locale, tags => [$categoryCacheTag . $categoryId]}
-					{var $category => $categoryRepo->find($categoryId)}
-					{? $category->setCurrentLocale($locale)}
-					{var showSubmenu => $category->hasChildren}
-					{var showMegamenu => $category->hasChildren}
-
-					{var icons => [
-						// 1 => 'rocket',
-					]}
-
-					<li class="main-category" data-category="{$category->id}">
-						<a n:href="Category: 'c' => $category->getUrlId(), 'slug' => $category->getSlug()">
-							<i class="fa fa-{ifset $icons[$category->id]}{$icons[$category->id]}{else}arrow-right{/ifset}
-									dropdown-menu-category-icon"></i>
-							{$category}
-						</a>
-
-						<aside n:if="$showSubmenu" class="category-filters">
-							<div class="category-filters-section">
-								<ul class="cateogry-filters-list">
-									{foreach $category->children as $child}
-										<li data-category="{$child->id}" data-parent-category="{$category->id}">
-											{include submenu, category => $child, deep => 2}
-										</li>
-									{/foreach}
-								</ul>
-							</div>
-						</aside>
-
-						<div n:if="$showMegamenu" class="dropdown-menu-category-section">
-							{include megamenu, category => $category}
-						</div>
-					</li>
-				{/cache}
-
-			{/foreach}
+		    class="dropdown-menu dropdown-menu-category dropdown-menu-category-hold"
+		    {ifset $activeCategory}data-active-categories="{$activeCategory->getIdPath()}"{/ifset}>
+			{$categoryBlock|noescape}
 		</ul>
 	</div>
+{/define}
+
+{define categoriesInside}
+	{ifset $rootCategoriesIds}
+		{foreach $rootCategoriesIds as $categoryId}
+
+			{var $category => $categoryRepo->find($categoryId)}
+			{? $category->setCurrentLocale($locale)}
+			{var showSubmenu => $category->hasChildren}
+			{var showMegamenu => $category->hasChildren}
+
+			{var icons => [
+				// 1 => 'rocket',
+			]}
+
+			<li class="main-category" data-category="{$category->id}">
+				<a n:href="Category: 'c' => $category->getUrlId(), 'slug' => $category->getSlug()">
+					<i class="fa fa-{ifset $icons[$category->id]}{$icons[$category->id]}{else}arrow-right{/ifset}
+									dropdown-menu-category-icon"></i>
+					{$category}
+				</a>
+
+				<aside n:if="$showSubmenu" class="category-filters">
+					<div class="category-filters-section">
+						<ul class="cateogry-filters-list">
+							{foreach $category->children as $child}
+								<li data-category="{$child->id}" data-parent-category="{$category->id}">
+									{include submenu, category => $child, deep => 2}
+								</li>
+							{/foreach}
+						</ul>
+					</div>
+				</aside>
+
+				<div n:if="$showMegamenu" class="dropdown-menu-category-section">
+					{include megamenu, category => $category}
+				</div>
+			</li>
+
+		{/foreach}
+	{/ifset}
 {/define}
 
 {define megamenu}
@@ -57,13 +63,11 @@
 					</h5>
 					<ul class="dropdown-menu-category-list">
 						{foreach $category->children as $child}
-							{cache 'category-megamenu_' . $child->id . $locale, tags => [$categoryCacheTag . $child->id]}
-								<li>
-									<a n:href="Category: 'c' => $child->getUrlId(), 'slug' => $child->getSlug()">
-										{$child}
-									</a>
-								</li>
-							{/cache}
+							<li>
+								<a n:href="Category: 'c' => $child->getUrlId(), 'slug' => $child->getSlug()">
+									{$child}
+								</a>
+							</li>
 							{breakIf $iterator->counter >= $colCount}
 						{/foreach}
 					</ul>
@@ -73,13 +77,11 @@
 					<ul class="dropdown-menu-category-list">
 						{foreach $category->children as $child}
 							{continueIf  $iterator->counter <= $colCount}
-							{cache 'category-megamenu_' . $child->id . $locale, tags => [$categoryCacheTag . $child->id]}
-								<li>
-									<a n:href="Category: 'c' => $child->getUrlId(), 'slug' => $child->getSlug()">
-										{$child}
-									</a>
-								</li>
-							{/cache}
+							<li>
+								<a n:href="Category: 'c' => $child->getUrlId(), 'slug' => $child->getSlug()">
+									{$child}
+								</a>
+							</li>
 							{breakIf $iterator->counter > $colCount}
 						{/foreach}
 					</ul>
@@ -90,26 +92,25 @@
 {/define}
 
 {define submenu}
-	{cache 'category-submenu_' . $category->id . $locale, tags => [$categoryCacheTag . $category->id]}
 
-		{? $category->setCurrentLocale($locale)}
-		<a n:href="Category: 'c' => $category->getUrlId(), 'slug' => $category->getSlug()">
-			{$category}
-		</a>
+	{? $category->setCurrentLocale($locale)}
+	<a n:href="Category: 'c' => $category->getUrlId(), 'slug' => $category->getSlug()">
+		{$category}
+	</a>
 
-		{var isExpandable => $category->hasChildren && $deep < $maxCategoryDeep}
+	{var isExpandable => $category->hasChildren && $deep < $maxCategoryDeep}
 
-		<aside n:if="$isExpandable" class="category-filters">
-			<div class="category-filters-section">
-				<ul class="cateogry-filters-list">
-					{foreach $category->children as $child}
-						<li data-category="{$child->id}" data-parent-category="{$category->id}">
-							{include submenu, category => $child, deep => ++$deep}
-						</li>
-					{/foreach}
-				</ul>
-			</div>
-		</aside>
+	<aside n:if="$isExpandable" class="category-filters">
+		<div class="category-filters-section">
+			<ul class="cateogry-filters-list">
+				{foreach $category->children as $child}
+					<li data-category="{$child->id}" data-parent-category="{$category->id}">
+						{include submenu, category => $child, deep => ++$deep}
+					</li>
+				{/foreach}
+			</ul>
+		</div>
+	</aside>
 
-	{/cache}
 {/define}
+

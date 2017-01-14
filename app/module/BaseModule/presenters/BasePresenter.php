@@ -19,6 +19,7 @@ use Kdyby\Doctrine\EntityManager;
 use Kdyby\Translation\Translator;
 use Nette\Application\ForbiddenRequestException;
 use Nette\Application\UI\Presenter;
+use Nette\Caching\IStorage;
 use Tracy\Debugger;
 use WebLoader\Nette\CssLoader;
 use WebLoader\Nette\LoaderFactory;
@@ -51,6 +52,9 @@ abstract class BasePresenter extends Presenter
 
 	/** @var EntityManager @inject */
 	public $em;
+
+	/** @var IStorage @inject */
+	public $cacheStorage;
 
 	/** @var UserFacade @inject */
 	public $userFacade;

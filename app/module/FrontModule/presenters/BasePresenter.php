@@ -25,7 +25,11 @@ use App\Model\Facade\CategoryFacade;
 use App\Model\Repository\CategoryRepository;
 use App\Model\Repository\ProductRepository;
 use App\Model\Repository\StockRepository;
+use Latte\Engine;
 use Nette\Application\UI\Multiplier;
+use Nette\Bridges\ApplicationLatte\Template;
+use Nette\Bridges\ApplicationLatte\UIMacros;
+use Nette\Caching\Cache;
 use Nette\Utils\ArrayHash;
 
 abstract class BasePresenter extends BaseBasePresenter
@@ -62,9 +66,6 @@ abstract class BasePresenter extends BaseBasePresenter
 	/** @var string */
 	protected $currentBacklink;
 
-	/** @var array */
-	protected $rootCategoriesIds;
-
 	/** @var bool */
 	protected $showSlider = FALSE;
 
@@ -76,6 +77,9 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	/** @var string */
 	protected $searched;
+
+	/** @var string */
+	protected $categoriesBlock;
 
 	/** @var bool */
 	protected $stockComponentLabels = TRUE;
@@ -94,16 +98,14 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->stockRepo = $this->em->getRepository(Stock::getClassName());
 		$this->productRepo = $this->em->getRepository(Product::getClassName());
 		$this->categoryRepo = $this->em->getRepository(Category::getClassName());
-		$this->rootCategoriesIds = $this->categoryRepo->findRootIds();
 		$this->currentBacklink = $this->storeRequest();
+		$this->createCategoryTemplate();
 	}
 
 	protected function beforeRender()
 	{
 		parent::beforeRender();
 		$this->template->backlink = $this->currentBacklink;
-		$this->template->rootCategoriesIds = $this->rootCategoriesIds;
-		$this->template->categoryRepo = $this->categoryRepo;
 		$this->template->showSlider = $this->showSlider;
 		$this->template->showBrands = $this->showBrands;
 		$this->template->showSteps = $this->showSteps;
@@ -115,12 +117,39 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->template->pageKeywords = $this->settings->pageInfo->keywords;
 		$this->template->pageDescription = $this->settings->pageInfo->description;
 
-		$this->template->categoryCacheTag = CategoryFacade::TAG_CATEGORY;
+		$this->template->categoryBlock = $this->categoriesBlock;
 
 		$this->loadTemplateMenu();
-		$this->loadTemplateCategoriesSettings();
 		$this->loadTemplateProducers();
 		$this->loadTemplateApplets();
+	}
+
+	public function createCategoryTemplate()
+	{
+		$key = 'categories_' . $this->locale;
+		$cache = new Cache($this->cacheStorage, 'CategoriesBlock');
+
+		$this->categoriesBlock = $cache->load($key);
+		if (!$this->categoriesBlock) {
+			$categoryLatte = new Engine();
+			UIMacros::install($categoryLatte->getCompiler());
+
+			$categoriesSettings = $this->settings->modules->categories;
+			$categoriesTemplate = new Template($categoryLatte);
+			$categoriesTemplate->setFile(realpath(__DIR__ . '/../templates/categories.latte'));
+			$categoriesTemplate->control = $categoriesTemplate->_control = $this;
+			$categoriesTemplate->locale = $this->locale;
+			$categoriesTemplate->categoryRepo = $this->categoryRepo;
+			$categoriesTemplate->rootCategoriesIds = $this->categoryRepo->findRootIds();
+			$categoriesTemplate->maxCategoryDeep = $categoriesSettings->enabled ? $categoriesSettings->maxDeep : 3;
+			$this->categoriesBlock = (string)$categoriesTemplate;
+
+			$cache->save($key, $this->categoriesBlock, [
+				Cache::TAGS => [
+					CategoryFacade::TAG_CATEGORY,
+				]
+			]);
+		}
 	}
 
 	public function changePageInfo($type, $content)
@@ -226,14 +255,6 @@ abstract class BasePresenter extends BaseBasePresenter
 			$modelRepo->find(7),
 			$modelRepo->find(8),
 		];
-	}
-
-	protected function loadTemplateCategoriesSettings()
-	{
-		$categories = $this->settings->modules->categories;
-		$this->template->expandOnlyActiveCategories = $categories->enabled ? $categories->expandOnlyActiveCategories : FALSE;
-		$this->template->maxCategoryDeep = $categories->enabled ? $categories->maxDeep : 3;
-		$this->template->showProductsCount = $categories->enabled ? $categories->showProductsCount : FALSE;
 	}
 
 	protected function loadTemplateSigns()
