@@ -3598,7 +3598,7 @@ header.main {
 
 .product-sm-left .product-caption {
 	float: left;
-	width: 60%;
+	width: 100% !important;
 	padding: 0 15px;
 }
 
