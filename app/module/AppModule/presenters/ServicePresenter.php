@@ -21,6 +21,9 @@ use Nette\Utils\FileSystem;
 class ServicePresenter extends BasePresenter
 {
 
+	const PRODUCT_RESAVE_CATEGORIES_IDS = 1;
+	const PRODUCT_RESAVE_FULLTEXT = 2;
+
 	/** @var Connection @inject */
 	public $connection;
 
@@ -148,9 +151,9 @@ class ServicePresenter extends BasePresenter
 	 * @resource('service')
 	 * @privilege('reSaveProducts')
 	 */
-	public function handleReSaveProducts()
+	public function handleReSaveProducts($method = self::PRODUCT_RESAVE_CATEGORIES_IDS)
 	{
-		$count = $this->resaveProducts();
+		$count = $this->resaveProducts($method);
 		$message = $this->translator->translate('%count% products was updated', $count);
 		$this->flashMessage($message, 'success');
 		$this->redirect('this');
@@ -262,19 +265,34 @@ class ServicePresenter extends BasePresenter
 		return $this;
 	}
 
-	private function resaveProducts()
+	private function resaveProducts($method)
 	{
+		switch ($method) {
+			default:
+			case self::PRODUCT_RESAVE_CATEGORIES_IDS:
+				$criteria = [
+					'categoriesIds' => NULL,
+					'mainCategory NOT' => NULL,
+				];
+				$method = 'updateCategoriesForOptimized';
+				break;
+			case self::PRODUCT_RESAVE_FULLTEXT:
+				$criteria = [
+					'active' => TRUE,
+					'fulltext' => NULL,
+				];
+				$method = 'updateFulltext';
+				break;
+		}
+
 		$productsRepo = $this->em->getRepository(Product::getClassName());
-		$products = $productsRepo->findBy([
-			'active' => TRUE,
-			'fulltext' => NULL,
-		], [
+		$products = $productsRepo->findBy($criteria, [
 			'updatedAt' => 'ASC',
 		], 500);
 
 		$counter = 0;
 		foreach ($products as $product) {
-			$product->updateFulltext();
+			call_user_func([$product, $method]);
 			$this->em->persist($product);
 			$counter++;
 		}

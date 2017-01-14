@@ -3,85 +3,96 @@
 {/block}
 
 {block breadcrumbItems}
-<li>
-	<a n:href="Service:">{_'Services'}</a>
-</li>
-<li><span>{_'Tools'}</span></li>
+	<li>
+		<a n:href="Service:">{_'Services'}</a>
+	</li>
+	<li><span>{_'Tools'}</span></li>
 {/block}
 
 {block content}
 
 <div class="row">
 	<div class="col-md-6">
-        <div class="list-group">
+		<div class="list-group">
 
-            <a n:href="importInitData!" class="list-group-item delete-confirm">
-                <h4 class="list-group-item-heading">
-                    {_'Import Init Data to DB'}
-                    ({_'contains RE-INSTALL DB'})
-                </h4>
-                <p class="list-group-item-text">
-                     {_'Clear all data in DB and imports initial data from test backup.'}
-                     {_'Please create BACKUP before do this DB schema!'}
-                </p>
-            </a>
+			<a n:href="importInitData!" class="list-group-item delete-confirm">
+				<h4 class="list-group-item-heading">
+					{_'Import Init Data to DB'}
+					({_'contains RE-INSTALL DB'})
+				</h4>
+				<p class="list-group-item-text">
+					{_'Clear all data in DB and imports initial data from test backup.'}
+					{_'Please create BACKUP before do this DB schema!'}
+				</p>
+			</a>
 
-            <a n:href="install!" class="list-group-item delete-confirm">
-                <h4 class="list-group-item-heading">
-                    {_'Install DB'}
-                </h4>
-                <p class="list-group-item-text">
-                     {_'Run istalation procedure.'}
-                     {_'DB will be maintained.'}
-                </p>
-            </a>
+			<a n:href="install!" class="list-group-item delete-confirm">
+				<h4 class="list-group-item-heading">
+					{_'Install DB'}
+				</h4>
+				<p class="list-group-item-text">
+					{_'Run istalation procedure.'}
+					{_'DB will be maintained.'}
+				</p>
+			</a>
 
-            <a n:href="reinstall!" class="list-group-item delete-confirm">
-                <h4 class="list-group-item-heading">
-                    {_'Reinstall DB'}
-                </h4>
-                <p class="list-group-item-text">
-                     {_'Clear actual DB schema and reinstall DB'}
-                     {_'Please create BACKUP before do this DB schema!'}
-                </p>
-            </a>
+			<a n:href="reinstall!" class="list-group-item delete-confirm">
+				<h4 class="list-group-item-heading">
+					{_'Reinstall DB'}
+				</h4>
+				<p class="list-group-item-text">
+					{_'Clear actual DB schema and reinstall DB'}
+					{_'Please create BACKUP before do this DB schema!'}
+				</p>
+			</a>
 
-            <a n:href="removeCache!" class="list-group-item delete-confirm">
-                <h4 class="list-group-item-heading">
-                    {_'Remove Cache'}
-                </h4>
-                <p class="list-group-item-text">
-                     {_'Remove all temp/cache'}
-                </p>
-            </a>
+			<a n:href="removeCache!" class="list-group-item delete-confirm">
+				<h4 class="list-group-item-heading">
+					{_'Remove Cache'}
+				</h4>
+				<p class="list-group-item-text">
+					{_'Remove all temp/cache'}
+				</p>
+			</a>
 
-            <a n:href="afterDeploy!" class="list-group-item delete-confirm">
-                <h4 class="list-group-item-heading">
-                    {_'After Deploy'}
-                </h4>
-                <p class="list-group-item-text">
-                    {_'Remove all temp/cache & run install'}
-                </p>
-            </a>
+			<a n:href="afterDeploy!" class="list-group-item delete-confirm">
+				<h4 class="list-group-item-heading">
+					{_'After Deploy'}
+				</h4>
+				<p class="list-group-item-text">
+					{_'Remove all temp/cache & run install'}
+				</p>
+			</a>
 
-            <a n:href="reSaveProducts!" class="list-group-item delete-confirm">
-                <h4 class="list-group-item-heading">
-                    {_'Update Products'}
-                </h4>
-                <p class="list-group-item-text">
-                    {_'Update each Product to choised version'}
-                </p>
-            </a>
+			<a n:href="reSaveProducts! App\AppModule\Presenters\ServicePresenter::PRODUCT_RESAVE_CATEGORIES_IDS"
+					class="list-group-item delete-confirm">
+				<h4 class="list-group-item-heading">
+					{_'Update Products - categoriesIds'}
+				</h4>
+				<p class="list-group-item-text">
+					{_'Update each Product whitch have NULL in categoriesIds'}
+				</p>
+			</a>
 
-            <a n:href="resetBonusPrices!" class="list-group-item delete-confirm">
-                <h4 class="list-group-item-heading">
-                    {_'Reset Bonus Prices'}
-                </h4>
-                <p class="list-group-item-text">
-                    {_'Reset all bonus prices to default values'}
-                </p>
-            </a>
+			<a n:href="reSaveProducts! App\AppModule\Presenters\ServicePresenter::PRODUCT_RESAVE_FULLTEXT"
+					class="list-group-item delete-confirm">
+				<h4 class="list-group-item-heading">
+					{_'Update Products - fulltext'}
+				</h4>
+				<p class="list-group-item-text">
+					{_'Update each Product whitch have NULL in fulltext'}
+				</p>
+			</a>
 
-        </div>
+			<a n:href="resetBonusPrices!" class="list-group-item delete-confirm">
+				<h4 class="list-group-item-heading">
+					{_'Reset Bonus Prices'}
+				</h4>
+				<p class="list-group-item-text">
+					{_'Reset all bonus prices to default values'}
+				</p>
+			</a>
+
+		</div>
 	</div>
 </div>
