@@ -3598,8 +3598,12 @@ header.main {
 
 .product-sm-left .product-caption {
 	float: left;
-	width: 100% !important;
+	width: 60%;
 	padding: 0 15px;
+}
+
+.product-sm-left:not(.product-producer) .product-caption {
+	width: 100% !important;
 }
 
 .product-sm-left .product-caption-feature-list {
