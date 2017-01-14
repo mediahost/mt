@@ -481,7 +481,7 @@ hr {
 	}
 }
 
-.dropdown-menu-category > li > a:after {
+.dropdown-menu-category:not(.no-after) > li > a:after {
 	position: absolute;
 	display: block;
 	content: '\f105';

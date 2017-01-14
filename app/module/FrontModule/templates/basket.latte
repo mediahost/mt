@@ -18,7 +18,7 @@
 				<i class="fa fa-user"></i>
 				{$user->identity|truncate:10}
 			</a>
-			<ul class="dropdown-menu dropdown-menu-category">
+			<ul class="dropdown-menu dropdown-menu-category no-after">
 				{if $user->isAllowed('myAccount')}
 					<li n:if="!$user->identity->isDealer()">
 						<a n:href="MyAccount:bonus">
