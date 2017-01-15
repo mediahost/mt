@@ -46,6 +46,9 @@ class OrderFacade extends Object
 	/** @var Request @inject */
 	public $request;
 
+	/** @var ShopFacade @inject */
+	public $shopFacade;
+
 	/** @var OrderRepository */
 	private $orderRepo;
 
@@ -69,6 +72,7 @@ class OrderFacade extends Object
 		$order = new Order($locale, $user);
 		$order->ip = $this->request->remoteAddress;
 		$order->state = $stateRepo->find(OrderState::ORDERED_IN_SYSTEM);
+		$order->shopVariant = $this->shopFacade->getShopVariant($locale);
 		$order->setCurrency($currency->getCode(), $rate);
 		$order->import($basket, $priceLevel);
 		$this->orderRepo->save($order);
