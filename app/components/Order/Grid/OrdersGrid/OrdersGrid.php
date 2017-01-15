@@ -8,6 +8,8 @@ use App\Extensions\Grido\DataSources\Doctrine;
 use App\Forms\Controls\SelectBased\Select2;
 use App\Model\Entity\Order;
 use App\Model\Entity\OrderState;
+use App\Model\Entity\Shop;
+use App\Model\Entity\ShopVariant;
 use App\Model\Facade\Exception\FacadeException;
 use App\Model\Facade\OrderFacade;
 use Grido\Grid;
@@ -19,6 +21,12 @@ class OrdersGrid extends BaseControl
 	/** @var OrderFacade @inject */
 	public $orderFacade;
 
+	/** @var Shop */
+	private $shop;
+
+	/** @var ShopVariant */
+	private $shopVariant;
+
 	/** @return Grid */
 	protected function createComponentGrid()
 	{
@@ -28,24 +36,32 @@ class OrdersGrid extends BaseControl
 
 		$repo = $this->em->getRepository(Order::getClassName());
 		$qb = $repo->createQueryBuilder('o')
-				->leftJoin('o.billingAddress', 'a');
+			->leftJoin('o.billingAddress', 'a');
+		if ($this->shop) {
+			$qb->andWhere('o.shop = :shop')
+				->setParameter('shop', $this->shop);
+		}
+		if ($this->shopVariant) {
+			$qb->andWhere('o.shopVariant = :shopVariant')
+				->setParameter('shopVariant', $this->shopVariant);
+		}
 		$grid->setModel(new Doctrine($qb, [
 			'billingAddress' => 'a',
 			'billingAddress.name' => 'a.name',
-				]), TRUE);
+		]), TRUE);
 
 		$grid->setDefaultSort([
 			'createdAt' => 'DESC',
 		]);
 
 		$grid->addColumnText('id', 'Number')
-				->setCustomRender(function ($item) {
-					$link = $this->presenter->link('edit', ['id' => $item->id]);
-					return Html::el('a')->href($link)->setText($item->id);
-				})
-				->setSortable()
-				->setFilterText()
-				->setSuggestion();
+			->setCustomRender(function ($item) {
+				$link = $this->presenter->link('edit', ['id' => $item->id]);
+				return Html::el('a')->href($link)->setText($item->id);
+			})
+			->setSortable()
+			->setFilterText()
+			->setSuggestion();
 		$grid->getColumn('id')->headerPrototype->width = '7%';
 
 		$stateRepo = $this->em->getRepository(OrderState::getClassName());
@@ -56,108 +72,121 @@ class OrdersGrid extends BaseControl
 			return $this->templateColumnRenderer(__DIR__ . '/state.latte', $item);
 		};
 		$grid->addColumnText('state', 'State')
-				->setSortable()
-				->setCustomRender($stateRenderer)
-				->setFilterSelect([NULL => '--- anyone ---'] + $stateList);
+			->setSortable()
+			->setCustomRender($stateRenderer)
+			->setFilterSelect([NULL => '--- anyone ---'] + $stateList);
 		$grid->getColumn('state')
-				->setEditableControl($stateSelector)
-				->setEditableCallback(function ($id, $newValue, $oldValue, $column) {
-					try {
-						$this->orderFacade->changeStateByOrderId($id, $newValue);
-						return TRUE;
-					} catch (FacadeException $e) {
-						return FALSE;
-					}
-				});
+			->setEditableControl($stateSelector)
+			->setEditableCallback(function ($id, $newValue, $oldValue, $column) {
+				try {
+					$this->orderFacade->changeStateByOrderId($id, $newValue);
+					return TRUE;
+				} catch (FacadeException $e) {
+					return FALSE;
+				}
+			});
 		$grid->getColumn('state')->cellPrototype->class[] = 'changeOnClick';
 
 		$grid->addColumnDate('paymentDate', 'Payment date')
 			->setSortable()
 			->setCustomRender(function (Order $item) {
 				if ($item->paymentDate) {
-				    return date_format($item->paymentDate, 'd.m.Y') . ' ('.$item->paymentBlameName.')';
+					return date_format($item->paymentDate, 'd.m.Y') . ' (' . $item->paymentBlameName . ')';
 				}
 			});
 
 		$grid->addColumnText('address', 'Address')
-				->setColumn('billingAddress.name')
-				->setCustomRender(function ($item) {
-					$address = (string) $item->billingAddress;
-					return $item->billingAddress && $item->billingAddress->isFilled() ? $address : $item->mail;
-				})
-				->setSortable()
-				->setFilterText()
-				->setSuggestion();
+			->setColumn('billingAddress.name')
+			->setCustomRender(function ($item) {
+				$address = (string)$item->billingAddress;
+				return $item->billingAddress && $item->billingAddress->isFilled() ? $address : $item->mail;
+			})
+			->setSortable()
+			->setFilterText()
+			->setSuggestion();
 
 		$grid->addColumnText('note', 'Note')
-				->setEditableCallback(function ($id, $newValue, $oldValue, $column) {
-					$orderRepo = $this->em->getRepository(Order::getClassName());
-					$order = $orderRepo->find($id);
-					if ($order) {
-						$order->note = $newValue;
-						$orderRepo->save($order);
-						return TRUE;
-					}
-					return FALSE;
-				})
-				->setFilterText()
-				->setSuggestion();
+			->setEditableCallback(function ($id, $newValue, $oldValue, $column) {
+				$orderRepo = $this->em->getRepository(Order::getClassName());
+				$order = $orderRepo->find($id);
+				if ($order) {
+					$order->note = $newValue;
+					$orderRepo->save($order);
+					return TRUE;
+				}
+				return FALSE;
+			})
+			->setFilterText()
+			->setSuggestion();
 		$grid->getColumn('note')->cellPrototype->class[] = 'changeOnDblClick';
 
 		$grid->addColumnText('totalPrice', 'Total price')
-				->setCustomRender(function ($item) {
-					$toCurrency = $item->currency;
-					$totalPrice = $item->getTotalPriceToPay($this->exchange);
-					return $this->exchange->formatTo($totalPrice, $toCurrency);
-				})
-				->setFilterNumber();
+			->setCustomRender(function ($item) {
+				$toCurrency = $item->currency;
+				$totalPrice = $item->getTotalPriceToPay($this->exchange);
+				return $this->exchange->formatTo($totalPrice, $toCurrency);
+			})
+			->setFilterNumber();
 		$grid->getColumn('totalPrice')->headerPrototype->width = '10%';
 		$grid->getColumn('totalPrice')->cellPrototype->style = 'text-align: right';
 
 		$grid->addColumnDate('createdAt', 'Created At', 'd.m.Y H:i:s')
-				->setSortable()
-				->setFilterText()
-				->setSuggestion();
+			->setSortable()
+			->setFilterText()
+			->setSuggestion();
 		$grid->getColumn('createdAt')->headerPrototype->width = '10%';
 		$grid->getColumn('createdAt')->cellPrototype->style = 'text-align: center';
 
 		$grid->addColumnText('locale', 'Language')
-				->setSortable()
-				->setFilterText()
-				->setSuggestion();
+			->setSortable()
+			->setFilterText()
+			->setSuggestion();
 		$grid->getColumn('locale')->headerPrototype->width = '4%';
 		$grid->getColumn('locale')->cellPrototype->style = 'text-align: center';
 
 		$grid->addColumnText('currency', 'Currency')
-				->setCustomRender(function ($item) {
-					return $item->currency . ($item->rate ? ' (' . $item->rate . ')' : '');
-				})
-				->setSortable()
-				->setFilterSelect([
-					NULL => '--- anyone ---',
-					'CZK' => 'CZK',
-					'EUR' => 'EUR',
-		]);
+			->setCustomRender(function ($item) {
+				return $item->currency . ($item->rate ? ' (' . $item->rate . ')' : '');
+			})
+			->setSortable()
+			->setFilterSelect([
+				NULL => '--- anyone ---',
+				'CZK' => 'CZK',
+				'EUR' => 'EUR',
+			]);
 		$grid->getColumn('currency')->headerPrototype->width = '7%';
 		$grid->getColumn('locale')->cellPrototype->style = 'text-align: center';
 
 		$grid->addActionHref('edit', 'Edit')
-				->setIcon('fa fa-edit');
+			->setIcon('fa fa-edit');
 
 		$grid->addActionHref('delete', 'Delete')
-						->setIcon('fa fa-trash-o')
-						->setConfirm(function($item) {
-							$message = $this->translator->translate('Are you sure you want to delete \'%name%\'?', NULL, ['name' => (string) $item]);
-							return $message;
-						})
-						->setDisable(function($item) {
-							return !$this->presenter->canDelete($item);
-						})
-				->getElementPrototype()->class[] = 'red';
+			->setIcon('fa fa-trash-o')
+			->setConfirm(function ($item) {
+				$message = $this->translator->translate('Are you sure you want to delete \'%name%\'?', NULL, ['name' => (string)$item]);
+				return $message;
+			})
+			->setDisable(function ($item) {
+				return !$this->presenter->canDelete($item);
+			})
+			->getElementPrototype()->class[] = 'red';
 
 		$grid->setActionWidth("10%");
 
 		return $grid;
+	}
+
+	public function setShop($shopId = NULL, $variantId = NULL)
+	{
+		if ($variantId) {
+			$shopVariantRepo = $this->em->getRepository(ShopVariant::getClassName());
+			$this->shopVariant = $shopVariantRepo->find($variantId);
+			$this->shop = $this->shopVariant->shop;
+		} else if ($shopId) {
+			$shopRepo = $this->em->getRepository(Shop::getClassName());
+			$this->shop = $shopRepo->find($shopId);
+		}
+		return $this;
 	}
 
 }

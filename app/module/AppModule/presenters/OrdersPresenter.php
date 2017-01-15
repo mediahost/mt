@@ -11,7 +11,10 @@ use App\Components\Order\Form\OrderProductsEdit;
 use App\Components\Order\Grid\IOrdersGridFactory;
 use App\Components\Order\Grid\OrdersGrid;
 use App\Model\Entity\Order;
+use App\Model\Entity\Shop;
+use App\Model\Entity\ShopVariant;
 use App\Model\Repository\OrderRepository;
+use App\Model\Repository\ShopRepository;
 use Exception;
 
 class OrdersPresenter extends BasePresenter
@@ -45,14 +48,24 @@ class OrdersPresenter extends BasePresenter
 		$this->orderRepo = $this->em->getRepository(Order::getClassName());
 	}
 
-	/**
+	/** 
 	 * @secured
 	 * @resource('orders')
 	 * @privilege('default')
 	 */
-	public function actionDefault()
+	public function actionDefault($filterShop = NULL, $filterVariant = NULL, $showAll = FALSE)
 	{
+		if ($showAll) {
+			$filterShop = $filterVariant = NULL;
+		} else if (!$filterShop && !$filterShop) {
+			$filterShop = $this->shopVariant->shop->id;
+		}
 
+		$shopRepo = $this->em->getRepository(Shop::getClassName());
+		$this->template->shops = $shopRepo->findAll();
+		$this->template->filteredShopId = $filterShop;
+		$this->template->filteredVariantId = $filterVariant;
+		$this['ordersGrid']->setShop($filterShop, $filterVariant);
 	}
 
 	/**
@@ -136,7 +149,7 @@ class OrdersPresenter extends BasePresenter
 		$control = $this->iOrderProductsEditFactory->create();
 		$control->onAfterSave = function (Order $savedOrder) {
 			$message = $this->translator->translate('successfullySavedShe', NULL, [
-				'type' => $this->translator->translate('Order'), 'name' => (string) $savedOrder
+				'type' => $this->translator->translate('Order'), 'name' => (string)$savedOrder
 			]);
 			$this->flashMessage($message, 'success');
 			$this->redirect('this');
@@ -150,7 +163,7 @@ class OrdersPresenter extends BasePresenter
 		$control = $this->iChangeStateFactory->create();
 		$control->onAfterSave = function (Order $savedOrder) {
 			$message = $this->translator->translate('successfullySavedShe', NULL, [
-				'type' => $this->translator->translate('Order'), 'name' => (string) $savedOrder
+				'type' => $this->translator->translate('Order'), 'name' => (string)$savedOrder
 			]);
 			$this->flashMessage($message, 'success');
 			$this->redirect('this');
@@ -164,7 +177,7 @@ class OrdersPresenter extends BasePresenter
 		$control = $this->iChangeAddressFactory->create();
 		$control->onAfterSave = function (Order $savedOrder) {
 			$message = $this->translator->translate('successfullySavedShe', NULL, [
-				'type' => $this->translator->translate('Order'), 'name' => (string) $savedOrder
+				'type' => $this->translator->translate('Order'), 'name' => (string)$savedOrder
 			]);
 			$this->flashMessage($message, 'success');
 			$this->redirect('this');
