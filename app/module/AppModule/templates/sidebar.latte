@@ -108,9 +108,16 @@
 			<!-- END ADMIN -->
 
 			<!-- BEGIN SUPERADMIN -->
-			{if $user->isAllowed('examples')}
+			{if $user->isInRole('superadmin')}
 				<li class="heading">
 					<h3 class="uppercase">{_'Superadmin'}</h3>
+				</li>
+				<li n:if="$user->isAllowed('shops')"
+						n:class="start, $presenter->isLinkCurrent('Shops:*') ? active">
+					<a n:href="Shops:">
+						<i class="fa fa-shopping-cart"></i>
+						<span class="title">{_'Shops'}</span><span class="selected"></span>
+					</a>
 				</li>
 				<li n:if="$user->isAllowed('examples', 'default')"
 					n:class="start, $presenter->isLinkCurrent('Examples:*') ? active">

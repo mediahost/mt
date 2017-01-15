@@ -1,0 +1,75 @@
+{block pageTitle}
+	{_'Shops'}
+{/block}
+
+{block breadcrumbItems}
+	<li><span>{_'Shops'}</span></li>
+{/block}
+
+{block content}
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption font-green-sharp">
+					<i class="fa fa-shopping-cart"></i>
+					<span class="caption-subject bold uppercase">
+						{_'Shops'}
+					</span>
+				</div>
+				<div class="actions">
+					<a class="btn btn-circle btn-success" n:href="add" >
+						<i class="fa fa-plus"></i>
+						{_'Add'}
+					</a>
+					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title=""
+					   title="">
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<table class="table table-bordered table-hover">
+					<thead>
+					<tr>
+						<th width="10%">#</th>
+						<th>{_'Shop'}</th>
+						<th>{_'Variants'}</th>
+						<th width="10%"></th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr n:foreach="$shops as $shop">
+						<td>
+							{$shop->id}
+						</td>
+						<td>
+							{$shop}
+						</td>
+						<td>
+							{foreach $locales as $locale}
+								{var $code = substr($locale,0,2)}
+								{var $variant = $shop->getVariant($code)}
+								{if $variant}
+									<span class="btn btn-xs btn-default">{$variant}</span>
+								{else}
+									<a n:href="addVariant! 'code' => $code, 'shopId' => $shop->id" class="btn btn-xs btn-success">
+										<i class="fa fa-plus"></i>
+										{$code}
+									</a>
+								{/if}
+							{/foreach}
+						</td>
+						<td>
+							<a n:href="edit $shop->id" class="btn btn-xs btn-mini">
+								<i class="fa fa-edit"></i>
+								{_'Edit'}
+							</a>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

@@ -16,6 +16,7 @@ class InstallPresenter extends BasePresenter
 
 	protected function startup()
 	{
+		ini_set('max_execution_time', 120);
 		if ($this->user->loggedIn) {
 			$this->user->logout();
 		}

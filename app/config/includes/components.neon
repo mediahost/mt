@@ -110,5 +110,8 @@ services:
 	# Recommend
 	- {implement: App\Components\Recommend\Form\IRecommendFactory, inject: yes}
 
+	# Shops
+	- {implement: App\Components\Shop\Form\IShopEditFactory, inject: yes}
+
 	# Example
 	- {implement: App\Components\Example\Form\IExampleFormFactory, inject: yes}

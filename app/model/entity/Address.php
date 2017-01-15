@@ -19,6 +19,7 @@ use Nette\Utils\Strings;
  * @property string $country
  * @property string $countryFormat
  * @property string $phone
+ * @property string $mail
  * @property string $ico
  * @property string $icoVat
  * @property string $dic
@@ -50,6 +51,9 @@ class Address extends BaseEntity
 
 	/** @ORM\Column(type="string", length=30, nullable=true) */
 	protected $phone;
+
+	/** @ORM\Column(type="string", length=30, nullable=true) */
+	protected $mail;
 
 	/** @ORM\Column(type="string", length=50, nullable=true) */
 	protected $ico;

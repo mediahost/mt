@@ -37,6 +37,8 @@ services:
 			- addResource('users')
 			- addResource('images')
 
+			- addResource('shops')
+
 			# Privilegies
 			- deny('guest')
 

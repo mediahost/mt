@@ -36,6 +36,8 @@ use Nette\Utils\Random;
  * @property string $note
  * @property Address $billingAddress
  * @property Address $shippingAddress
+ * @property ShopVariant $shopVariant
+ * @property-read Shop $shop
  * @property DateTime $paymentDate
  * @property int $paymentBlame
  * @property-read string $paymentBlameName
@@ -110,8 +112,14 @@ class Order extends BaseEntity
 	/** @ORM\Column(type="datetime", nullable=true) */
 	protected $paymentDate;
 
-	/** @ORM\Column(type="integer", nullable=true)*/
+	/** @ORM\Column(type="integer", nullable=true) */
 	protected $paymentBlame;
+
+	/** @ORM\ManyToOne(targetEntity="ShopVariant") */
+	protected $shopVariant;
+
+	/** @ORM\ManyToOne(targetEntity="Shop") */
+	private $shop;
 
 	public function __construct($locale, User $user = NULL)
 	{
@@ -128,7 +136,7 @@ class Order extends BaseEntity
 	public function getPaymentBlameName()
 	{
 		if (isset($this->paymentBlameNames[$this->paymentBlame])) {
-		    return $this->paymentBlameNames[$this->paymentBlame];
+			return $this->paymentBlameNames[$this->paymentBlame];
 		}
 		return NULL;
 	}
@@ -140,7 +148,7 @@ class Order extends BaseEntity
 
 	public function isPayed()
 	{
-		return (bool) $this->paymentBlame;
+		return (bool)$this->paymentBlame;
 	}
 
 	public function setUser(User $user)
@@ -176,9 +184,9 @@ class Order extends BaseEntity
 
 	public function getNeedPin()
 	{
-		return (bool) !$this->shippingAddress;
+		return (bool)!$this->shippingAddress;
 	}
-	
+
 	public function getPin($force = FALSE)
 	{
 		return ($force || $this->getNeedPin()) ? $this->pin : NULL;
@@ -257,6 +265,18 @@ class Order extends BaseEntity
 		}
 		$this->payment->import($payment);
 		return $this;
+	}
+
+	public function setShopVariant(ShopVariant $shopVariant)
+	{
+		$this->shopVariant = $shopVariant;
+		$this->shop = $shopVariant->shop;
+		return $this;
+	}
+
+	public function getShop()
+	{
+		return $this->shop;
 	}
 
 	/** @return int */
@@ -391,7 +411,7 @@ class Order extends BaseEntity
 	/** @var bool */
 	public function hasVouchers()
 	{
-		return (bool) $this->vouchers->count();
+		return (bool)$this->vouchers->count();
 	}
 
 	public function import(Basket $basket, $level = NULL)
@@ -432,7 +452,7 @@ class Order extends BaseEntity
 
 	public function __toString()
 	{
-		return (string) $this->id;
+		return (string)$this->id;
 	}
 
 	public function setExchangeRate(Exchange $exchange, $setWeb = FALSE)
