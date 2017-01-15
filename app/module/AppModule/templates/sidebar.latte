@@ -141,6 +141,12 @@
 						<span class="title">{_'Service'}</span><span class="selected"></span>
 					</a>
 					<ul class="sub-menu">
+						<li n:class="$presenter->isLinkCurrent('Service:updates') ? active">
+							<a n:href="Service:updates">
+								<i class="fa fa-refresh"></i>
+								{_'Updates'}
+							</a>
+						</li>
 						<li n:class="$presenter->isLinkCurrent('Service:tools') ? active">
 							<a n:href="Service:tools">
 								<i class="fa fa-code"></i>

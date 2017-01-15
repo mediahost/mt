@@ -5,15 +5,13 @@ namespace App\AppModule\Presenters;
 use App\Extensions\Foto;
 use App\Extensions\FotoException;
 use App\Extensions\Installer;
-use App\Extensions\LimitExceededException;
-use App\Extensions\WrongSituationException;
 use App\Model\Entity\Group;
+use App\Model\Entity\Order;
 use App\Model\Entity\Product;
+use App\Model\Entity\ShopVariant;
 use App\Model\Entity\Stock;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
-use Doctrine\ORM\AbstractQuery;
-use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Tools\SchemaTool;
 use Kdyby\Doctrine\Connection;
 use Nette\Utils\FileSystem;
@@ -55,6 +53,16 @@ class ServicePresenter extends BasePresenter
 	 * @privilege('tools')
 	 */
 	public function actionTools()
+	{
+
+	}
+
+	/**
+	 * @secured
+	 * @resource('service')
+	 * @privilege('updates')
+	 */
+	public function actionUpdates()
 	{
 
 	}
@@ -156,7 +164,18 @@ class ServicePresenter extends BasePresenter
 		$count = $this->resaveProducts($method);
 		$message = $this->translator->translate('%count% products was updated', $count);
 		$this->flashMessage($message, 'success');
-		$this->redirect('this');
+	}
+
+	/**
+	 * @secured
+	 * @resource('service')
+	 * @privilege('updateOrders')
+	 */
+	public function handleUpdateOrders()
+	{
+		$count = $this->resaveOrders();
+		$message = $this->translator->translate('%count% orders was updated', $count);
+		$this->flashMessage($message, 'success');
 	}
 
 	/**
@@ -285,8 +304,8 @@ class ServicePresenter extends BasePresenter
 				break;
 		}
 
-		$productsRepo = $this->em->getRepository(Product::getClassName());
-		$products = $productsRepo->findBy($criteria, [
+		$productRepo = $this->em->getRepository(Product::getClassName());
+		$products = $productRepo->findBy($criteria, [
 			'updatedAt' => 'ASC',
 		], 500);
 
@@ -294,6 +313,30 @@ class ServicePresenter extends BasePresenter
 		foreach ($products as $product) {
 			call_user_func([$product, $method]);
 			$this->em->persist($product);
+			$counter++;
+		}
+		$this->em->flush();
+		return $counter;
+	}
+
+	private function resaveOrders()
+	{
+		$criteria = [
+			'shop' => NULL,
+		];
+
+		$orderRepo = $this->em->getRepository(Order::getClassName());
+		$orders = $orderRepo->findBy($criteria, [
+			'updatedAt' => 'ASC',
+		], 500);
+
+		$shopVariantRepo = $this->em->getRepository(ShopVariant::getClassName());
+		$shopVariant = $shopVariantRepo->find(1);
+
+		$counter = 0;
+		foreach ($orders as $order) {
+			$order->shopVariant = $shopVariant;
+			$this->em->persist($order);
 			$counter++;
 		}
 		$this->em->flush();
