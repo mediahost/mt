@@ -26,9 +26,6 @@ class SettingsStorage extends Object
 
 	/** @var ArrayHash */
 	private $pageInfo;
-
-	/** @var ArrayHash */
-	private $companyInfo;
 	
 	/** @var ArrayHash */
 	private $mails;
@@ -133,24 +130,6 @@ class SettingsStorage extends Object
 	public function getPageInfo()
 	{
 		return $this->pageInfo;
-	}
-
-	/**
-	 * @param array $values
-	 * @return SettingsStorage
-	 */
-	public function setCompanyInfo(array $values)
-	{
-		$this->companyInfo = ArrayHash::from($values);
-		return $this;
-	}
-
-	/**
-	 * @return ArrayHash
-	 */
-	public function getCompanyInfo()
-	{
-		return $this->companyInfo;
 	}
 
 	/**

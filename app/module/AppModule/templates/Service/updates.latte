@@ -1,0 +1,50 @@
+{block pageTitle}
+	{_'Service Tools'}
+{/block}
+
+{block breadcrumbItems}
+	<li>
+		<a n:href="Service:">{_'Services'}</a>
+	</li>
+	<li><span>{_'Updates'}</span></li>
+{/block}
+
+{block content}
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="list-group">
+
+			<a n:href="reSaveProducts! App\AppModule\Presenters\ServicePresenter::PRODUCT_RESAVE_CATEGORIES_IDS"
+					class="list-group-item delete-confirm">
+				<h4 class="list-group-item-heading">
+					{_'Update Products - categoriesIds'}
+				</h4>
+				<p class="list-group-item-text">
+					{_'Update each Product whitch have NULL in categoriesIds'}
+				</p>
+			</a>
+
+			<a n:href="reSaveProducts! App\AppModule\Presenters\ServicePresenter::PRODUCT_RESAVE_FULLTEXT"
+					class="list-group-item delete-confirm">
+				<h4 class="list-group-item-heading">
+					{_'Update Products - fulltext'}
+				</h4>
+				<p class="list-group-item-text">
+					{_'Update each Product whitch have NULL in fulltext'}
+				</p>
+			</a>
+
+			<a n:href="updateOrders!"
+					class="list-group-item delete-confirm">
+				<h4 class="list-group-item-heading">
+					{_'Update Orders'}
+				</h4>
+				<p class="list-group-item-text">
+					{_'Update each Order whitch have NULL in Shop'}
+				</p>
+			</a>
+
+		</div>
+	</div>
+</div>

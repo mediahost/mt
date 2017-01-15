@@ -225,15 +225,15 @@ abstract class BasePresenter extends BaseBasePresenter
 			'page1' => $this->link('Homepage:'),
 			'page2' => $settings->modules->buyout->enabled ? $pageRepo->find($settings->modules->buyout->pageId) : NULL,
 			'page3' => $settings->modules->service->enabled ? $pageRepo->find($settings->modules->service->pageId) : NULL,
-			'page4' => $pageRepo->find($settings->pageInfo->bonusPageId),
+			'page4' => $pageRepo->find($settings->pageConfig->pageIds->bonusPageId),
 			'page5' => $settings->modules->dealer->enabled ? $pageRepo->find($settings->modules->dealer->pageId) : NULL,
-			'page6' => $pageRepo->find($settings->pageInfo->contactPageId),
+			'page6' => $pageRepo->find($settings->pageConfig->pageIds->contactPageId),
 		]);
 		$this->template->footerPages = ArrayHash::from([
-			'page1' => $pageRepo->find($settings->pageInfo->orderByPhonePageId),
-			'page2' => $pageRepo->find($settings->pageInfo->termPageId),
-			'page3' => $pageRepo->find($settings->pageInfo->complaintPageId),
-			'page4' => $pageRepo->find($settings->pageInfo->contactPageId),
+			'page1' => $pageRepo->find($settings->pageConfig->pageIds->orderByPhonePageId),
+			'page2' => $pageRepo->find($settings->pageConfig->pageIds->termPageId),
+			'page3' => $pageRepo->find($settings->pageConfig->pageIds->complaintPageId),
+			'page4' => $pageRepo->find($settings->pageConfig->pageIds->contactPageId),
 		]);
 		$this->template->mostSearchedStocks = [
 			$stockRepo->find(4291),

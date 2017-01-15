@@ -13,13 +13,16 @@ use Nette\Utils\Strings;
  * @ORM\Entity
  *
  * @property string $name
+ * @property-read string $company
  * @property string $street
  * @property string $city
  * @property string $zipcode
  * @property string $country
  * @property string $countryFormat
  * @property string $phone
+ * @property string $phoneHome
  * @property string $mail
+ * @property string $mailHome
  * @property string $ico
  * @property string $icoVat
  * @property string $dic
@@ -53,7 +56,13 @@ class Address extends BaseEntity
 	protected $phone;
 
 	/** @ORM\Column(type="string", length=30, nullable=true) */
+	protected $phoneHome;
+
+	/** @ORM\Column(type="string", length=30, nullable=true) */
 	protected $mail;
+
+	/** @ORM\Column(type="string", length=30, nullable=true) */
+	protected $mailHome;
 
 	/** @ORM\Column(type="string", length=50, nullable=true) */
 	protected $ico;
@@ -87,6 +96,15 @@ class Address extends BaseEntity
 		if ($force || $address->phone) {
 			$this->phone = $address->phone;
 		}
+		if ($force || $address->phoneHome) {
+			$this->phoneHome = $address->phoneHome;
+		}
+		if ($force || $address->mail) {
+			$this->mail = $address->mail;
+		}
+		if ($force || $address->mailHome) {
+			$this->mailHome = $address->mailHome;
+		}
 		if ($force || $address->ico) {
 			$this->ico = $address->ico;
 		}
@@ -104,18 +122,18 @@ class Address extends BaseEntity
 	public function isComplete()
 	{
 		return $this->name &&
-				$this->street &&
-				$this->city &&
-				$this->zipcode &&
-				$this->country &&
-				$this->phone;
+			$this->street &&
+			$this->city &&
+			$this->zipcode &&
+			$this->country &&
+			$this->phone;
 	}
 
 	public function isCompany()
 	{
 		return $this->ico ||
-				$this->dic ||
-				$this->icoVat;
+			$this->dic ||
+			$this->icoVat;
 	}
 
 	public function clearCompany()
@@ -138,6 +156,11 @@ class Address extends BaseEntity
 			return $splitted[0];
 		}
 		return NULL;
+	}
+
+	public function getCompany()
+	{
+		return $this->name;
 	}
 
 	public function getSurname()
@@ -187,7 +210,7 @@ class Address extends BaseEntity
 
 	public function __toString()
 	{
-		return (string) $this->name;
+		return (string)$this->name;
 	}
 
 	public function getCityFormat()

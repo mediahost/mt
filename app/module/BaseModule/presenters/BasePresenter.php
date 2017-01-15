@@ -5,12 +5,14 @@ namespace App\BaseModule\Presenters;
 use App\ExchangeHelper;
 use App\Extensions\Settings\SettingsStorage;
 use App\Model\Entity\Rate;
+use App\Model\Entity\ShopVariant;
 use App\Model\Facade\BasketFacade;
 use App\Model\Facade\CategoryFacade;
 use App\Model\Facade\GroupFacade;
 use App\Model\Facade\OrderFacade;
 use App\Model\Facade\ParameterFacade;
 use App\Model\Facade\ProducerFacade;
+use App\Model\Facade\ShopFacade;
 use App\Model\Facade\StockFacade;
 use App\Model\Facade\UserFacade;
 use h4kuna\Exchange\Exchange;
@@ -29,6 +31,9 @@ use WebLoader\Nette\LoaderFactory;
  */
 abstract class BasePresenter extends Presenter
 {
+
+	/** @var ShopVariant */
+	protected $shopVariant;
 
 	/** @persistent */
 	public $locale;
@@ -80,6 +85,9 @@ abstract class BasePresenter extends Presenter
 	/** @var OrderFacade @inject */
 	public $orderFacade;
 
+	/** @var ShopFacade @inject */
+	public $shopFacade;
+
 	/** @var int */
 	protected $priceLevel = NULL;
 
@@ -91,6 +99,7 @@ abstract class BasePresenter extends Presenter
 		$this->setLocale();
 		$this->loadCurrencyRates();
 		$this->loadPriceLevel();
+		$this->loadShop();
 	}
 
 	protected function beforeRender()
@@ -101,12 +110,12 @@ abstract class BasePresenter extends Presenter
 		$this->template->defaultLocale = $this->translator->getDefaultLocale();
 		$this->template->allowedLanguages = $this->translator->getAvailableLocales();
 
-		$this->template->designSettings = $this->settings->design;
-		$this->template->pageInfo = $this->settings->getPageInfo();
-		$this->template->companyInfo = $this->settings->getCompanyInfo();
-		$this->template->exchange = $this->exchange;
+		$this->template->designSettings = $this->settings->design; // TODO: remove design settings
+		$this->template->pageInfo = $this->settings->pageInfo;
+		$this->template->shop = $this->shopVariant->shop;
 
 		$currency = $this->exchange[$this->exchange->getWeb()];
+		$this->template->exchange = $this->exchange;
 		$this->template->currency = $currency;
 		$this->template->currencySymbol = $currency->getFormat()->getSymbol();
 
@@ -161,6 +170,15 @@ abstract class BasePresenter extends Presenter
 	}
 
 	// </editor-fold>
+	// <editor-fold desc="shop">
+
+	private function loadShop()
+	{
+		$this->shopVariant = $this->shopFacade->getShopVariant($this->locale);
+	}
+
+	// </editor-fold>
+	// <editor-fold desc="locale">
 
 	private function setLocale()
 	{
@@ -179,6 +197,7 @@ abstract class BasePresenter extends Presenter
 		}
 	}
 
+	// </editor-fold>
 	// <editor-fold desc="handlers">
 
 	public function handleSetCurrency($currency)
@@ -218,7 +237,7 @@ abstract class BasePresenter extends Presenter
 	protected function createComponentCssApp()
 	{
 		$css = $this->webLoader->createCssLoader('app')
-				->setMedia('screen,projection,tv');
+			->setMedia('screen,projection,tv');
 		return $css;
 	}
 
@@ -226,7 +245,7 @@ abstract class BasePresenter extends Presenter
 	protected function createComponentCssPrint()
 	{
 		$css = $this->webLoader->createCssLoader('print')
-				->setMedia('print');
+			->setMedia('print');
 		return $css;
 	}
 

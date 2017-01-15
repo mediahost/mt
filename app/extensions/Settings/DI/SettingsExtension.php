@@ -165,36 +165,20 @@ class SettingsExtension extends CompilerExtension
 			'authorUrl' => 'http://www.mediahost.sk/',
 			'keywords' => 'keywords',
 			'description' => 'description',
-			'termPageId' => 1, // TODO: move to pageConfig
-			'complaintPageId' => 1, // TODO: move to pageConfig
-			'contactPageId' => 1, // TODO: move to pageConfig
-			'orderByPhonePageId' => 1, // TODO: move to pageConfig
-			'bonusPageId' => 1, // TODO: move to pageConfig
 		],
 		'pageConfig' => [
 			'itemsPerRow' => 3,
 			'rowsPerPage' => 4,
-		],
-		'companyInfo' => [
-			'address' => [
-				'company' => 'Company name',
-				'street' => 'Main street 2',
-				'zip' => '123 45',
-				'city' => 'City',
+			'pageIds' => [
+				'termPageId' => 1,
+				'complaintPageId' => 1,
+				'contactPageId' => 1,
+				'orderByPhonePageId' => 1,
+				'bonusPageId' => 1,
 			],
-			'contact' => [
-				'phone' => '+420 123 456 789',
-				'phone2' => '+420 123 456 789',
-				'email' => 'contact@company.sk',
-				'email2' => 'contact@company.sk',
-			],
-			'bank' => [
-				'sk' => 'SK1234567890123456789012',
-				'cz' => 'CZ1234567890123456789012',
-			],
-			'company' => [
-				'ico' => '12345678',
-				'dic' => 'SK12345678',
+			'shop' => [
+				'id' => 1,
+				'defaultVariant' => 1,
 			],
 		],
 		'expiration' => [
@@ -234,7 +218,6 @@ class SettingsExtension extends CompilerExtension
 				->setClass('App\Extensions\Settings\SettingsStorage')
 				->addSetup('setPageInfo', [$config['pageInfo']])
 				->addSetup('setPageConfig', [$config['pageConfig']])
-				->addSetup('setCompanyInfo', [$config['companyInfo']])
 				->addSetup('setMails', [$config['mails']])
 				->addSetup('setExpiration', [$config['expiration']])
 				->addSetup('setPasswords', [$config['passwords']])

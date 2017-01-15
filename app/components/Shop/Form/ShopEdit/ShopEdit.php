@@ -57,7 +57,14 @@ class ShopEdit extends BaseControl
 		$form->addText('phone', 'cart.form.phone', NULL, 20)
 			->setRequired('cart.form.validator.filled')
 			->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_S;
+		$form->addText('phoneHome', 'Phone Home', NULL, 20)
+			->setRequired('cart.form.validator.filled')
+			->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_S;
 		$form->addText('mail', 'cart.form.mail', NULL, 255)
+			->addRule(Form::FILLED, 'cart.form.validator.filled')
+			->addRule(Form::EMAIL, 'cart.form.validator.mail')
+			->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
+		$form->addText('mailHome', 'Mail Home', NULL, 255)
 			->addRule(Form::FILLED, 'cart.form.validator.filled')
 			->addRule(Form::EMAIL, 'cart.form.validator.mail')
 			->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_L;
@@ -112,6 +119,8 @@ class ShopEdit extends BaseControl
 		$this->shop->address->country = $values->country;
 		$this->shop->address->phone = $values->phone;
 		$this->shop->address->mail = $values->mail;
+		$this->shop->address->phoneHome = $values->phoneHome;
+		$this->shop->address->mailHome = $values->mailHome;
 		$this->shop->address->ico = $values->ico;
 		$this->shop->address->dic = $values->dic;
 
@@ -155,6 +164,8 @@ class ShopEdit extends BaseControl
 			$values['zipcode'] = $this->shop->address->zipcode;
 			$values['phone'] = $this->shop->address->phone;
 			$values['mail'] = $this->shop->address->mail;
+			$values['phoneHome'] = $this->shop->address->phoneHome;
+			$values['mailHome'] = $this->shop->address->mailHome;
 			$values['ico'] = $this->shop->address->ico;
 			$values['dic'] = $this->shop->address->dic;
 		}

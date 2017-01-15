@@ -6,11 +6,11 @@
 				<div class="col-md-3">
 					<h4 class="widget-title-sm">{$pageInfo->projectName}</h4>
 					<address class="margin-bottom-40">
-						<strong>{$companyInfo->address->company}</strong><br>
-						{$companyInfo->address->street}<br>
-						{$companyInfo->address->zip} {$companyInfo->address->city}<br>
-						{_'IČO'}: {$companyInfo->company->ico}<br>
-						{_'DIČ'}: {$companyInfo->company->dic}
+						<strong>{$shop->address->company}</strong><br>
+						{$shop->address->street}<br>
+						{$shop->address->zipcode} {$shop->address->city}<br>
+						{_'IČO'}: {$shop->address->ico}<br>
+						{_'DIČ'}: {$shop->address->dic}
 					</address>
 					<h4 class="widget-title-sm">{_'Open hours'}</h4>
 					<table>
@@ -31,15 +31,15 @@
 					<address class="margin-bottom-40">
 						<address class="margin-bottom-10">
 							<strong>Konzultácie ohľadom spracovania objednávok</strong><br>
-							{_'Phone'}: {$companyInfo->contact->phone}<br>
+							{_'Phone'}: {$shop->address->phone}<br>
 							{_'Email'}: <a
-									href="mailto:{$companyInfo->contact->email}">{$companyInfo->contact->email}</a><br>
+									href="mailto:{$shop->address->mail}">{$shop->address->mail}</a><br>
 						</address>
 						<address class="margin-bottom-40">
 							<strong>Reklamácie, servis</strong><br>
-							{_'Phone'}: {$companyInfo->contact->phone2}<br>
+							{_'Phone'}: {$shop->address->phoneHome}<br>
 							{_'Email'}: <a
-									href="mailto:{$companyInfo->contact->email2}">{$companyInfo->contact->email2}</a><br>
+									href="mailto:{$shop->address->mailHome}">{$shop->address->mailHome}</a><br>
 						</address>
 					</address>
 				</div>

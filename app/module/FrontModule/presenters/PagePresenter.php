@@ -26,7 +26,7 @@ class PagePresenter extends BasePresenter
 	
 	public function actionTerms()
 	{
-		$id = $this->settings->pageInfo->termPageId;
+		$id = $this->settings->pageConfig->pageIds->termPageId;
 		$this->getPage($id);
 		$this->setView('default');
 	}

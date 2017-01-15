@@ -5,6 +5,7 @@ namespace App\Mail\Messages;
 use App\ExchangeHelper;
 use App\Extensions\Settings\SettingsStorage;
 use App\Model\Entity\Order;
+use App\Model\Facade\ShopFacade;
 use h4kuna\Exchange\Exchange;
 use Kdyby\Translation\Translator;
 use Nette\Application\LinkGenerator;
@@ -39,6 +40,9 @@ abstract class BaseMessage extends Message
 	/** @var Exchange @inject */
 	public $exchange;
 
+	/** @var ShopFacade @inject */
+	public $shopFacade;
+
 	/** @var array */
 	protected $params = [];
 
@@ -67,9 +71,10 @@ abstract class BaseMessage extends Message
 
 	protected function build()
 	{
+		$shopVariant = $this->shopFacade->getShopVariant($this->translator->getLocale());
 		$currency = $this->exchange[$this->exchange->getWeb()];
 		$this->params += [
-			'companyInfo' => $this->settings->companyInfo,
+			'shopInfo' => $shopVariant->shop,
 			'pageInfo' => $this->settings->pageInfo,
 			'mail' => $this,
 			'colon' => '',
@@ -81,9 +86,9 @@ abstract class BaseMessage extends Message
 
 		$template = $this->templateFactory->createTemplate();
 		$template->setTranslator($this->translator)
-						->setFile($this->getPath())
-						->setParameters($this->params)
-				->_control = $this->linkGenerator;
+			->setFile($this->getPath())
+			->setParameters($this->params)
+			->_control = $this->linkGenerator;
 
 		$this->setHtmlBody($template);
 
@@ -107,7 +112,7 @@ abstract class BaseMessage extends Message
 
 	protected function beforeSend()
 	{
-		
+
 	}
 
 	protected function afterSend()
