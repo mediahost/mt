@@ -218,6 +218,7 @@ class SettingsExtension extends CompilerExtension
 				->setClass('App\Extensions\Settings\SettingsStorage')
 				->addSetup('setPageInfo', [$config['pageInfo']])
 				->addSetup('setPageConfig', [$config['pageConfig']])
+				->addSetup('setCompanyInfo', [$config['companyInfo']])
 				->addSetup('setMails', [$config['mails']])
 				->addSetup('setExpiration', [$config['expiration']])
 				->addSetup('setPasswords', [$config['passwords']])

@@ -180,7 +180,7 @@ header {
 .quantity-button {
 	span {
 		font-size: 10px;
-		padding-left: 7	px;
+		padding-left: 7px;
 	}
 }
 
@@ -501,12 +501,14 @@ UI Loading
 		}
 	}
 }
+
 .langs-block-others-wrapper {
 	position: absolute;
 	left: 0;
 	top: 100%;
 	z-index: 99999;
 }
+
 .langs-block-others {
 	padding: 10px 10px 2px;
 	background: #F9F9F9;
@@ -549,6 +551,37 @@ UI Loading
 			a {
 				color: white;
 			}
+		}
+	}
+}
+
+.side-banner-left, .side-banner-right {
+	display: none;
+}
+
+@basePageWidth: 1170px;
+@bannerWidth: 240px;
+@bannerHeight: 1300px;
+@bannerPaddingSide: 10px;
+@bannerPaddingTop: 30px;
+@bannerMove: @bannerWidth + @bannerPaddingSide;
+@bannerAllowSize: @basePageWidth + (2 * @bannerMove);
+@media (min-width: @bannerAllowSize) {
+	#mainContainer {
+		position: relative;
+		.side-banner-left, .side-banner-right {
+			display: block;
+			width: @bannerWidth;
+			height: @bannerHeight;
+			position: absolute;
+		}
+		.side-banner-left {
+			left: -@bannerMove;
+			top: @bannerPaddingTop;
+		}
+		.side-banner-right {
+			right: -@bannerMove;
+			top: @bannerPaddingTop;
 		}
 	}
 }
