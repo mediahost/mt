@@ -165,15 +165,17 @@ class SettingsExtension extends CompilerExtension
 			'authorUrl' => 'http://www.mediahost.sk/',
 			'keywords' => 'keywords',
 			'description' => 'description',
-			'termPageId' => 1, // TODO: move to pageConfig
-			'complaintPageId' => 1, // TODO: move to pageConfig
-			'contactPageId' => 1, // TODO: move to pageConfig
-			'orderByPhonePageId' => 1, // TODO: move to pageConfig
-			'bonusPageId' => 1, // TODO: move to pageConfig
 		],
 		'pageConfig' => [
 			'itemsPerRow' => 3,
 			'rowsPerPage' => 4,
+			'pageIds' => [
+				'termPageId' => 1,
+				'complaintPageId' => 1,
+				'contactPageId' => 1,
+				'orderByPhonePageId' => 1,
+				'bonusPageId' => 1,
+			],
 		],
 		'companyInfo' => [
 			'address' => [
