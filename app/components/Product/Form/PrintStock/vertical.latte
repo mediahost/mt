@@ -40,9 +40,6 @@
 					<span class="product-caption-price-new">
 						{$stock->getPrice($priceLevel)|currencyVat}
 					</span>
-					<span class="product-caption-price-old" n:if="$stock->oldPrice">
-						{$stock->oldPrice|currency}
-					</span>
 					{*<a n:href="addToCart! $showLabels, $showSecondImage, $mainClasses"*}
 							{*n:class="ajax, btn, $basket->getCountAllowedToAdd($stock) ? btn-primary : btn-default, add2cart, !$basket->getCountAllowedToAdd($stock) ? disabled"*}
 							{*data-target-click="{$clickSelector}"*}

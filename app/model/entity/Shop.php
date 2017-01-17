@@ -10,6 +10,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
 /**
  * @ORM\Entity(repositoryClass="App\Model\Repository\ProductRepository")
  *
+ * @property string $letter
  * @property ArrayCollection $variants
  * @property Address $address
  * @property BankAccount $bankAccounts
@@ -20,6 +21,9 @@ class Shop extends BaseEntity
 {
 
 	use Identifier;
+
+	/** @ORM\Column(type="string", length=1) */
+	protected $priceLetter;
 
 	/** @ORM\OneToMany(targetEntity="ShopVariant", mappedBy="shop", cascade={"persist", "remove"}) */
 	protected $variants;
@@ -62,9 +66,10 @@ class Shop extends BaseEntity
 		return $this;
 	}
 
-	public function __construct()
+	public function __construct($letter)
 	{
 		parent::__construct();
+		$this->priceLetter = $letter;
 		$this->variants = new ArrayCollection();
 	}
 

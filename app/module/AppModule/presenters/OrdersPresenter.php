@@ -48,7 +48,7 @@ class OrdersPresenter extends BasePresenter
 		$this->orderRepo = $this->em->getRepository(Order::getClassName());
 	}
 
-	/** 
+	/**
 	 * @secured
 	 * @resource('orders')
 	 * @privilege('default')

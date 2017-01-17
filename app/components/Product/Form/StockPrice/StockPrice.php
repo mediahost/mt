@@ -85,8 +85,6 @@ class StockPrice extends StockBase
 
 		$form->addText('purchase', 'Purchase price')
 				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
-		$form->addText('old', 'Old price')
-				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
 
 		$form->addSubmit('save', 'Save')
 				->setAttribute('data-dismiss-after', 'true');
@@ -106,7 +104,6 @@ class StockPrice extends StockBase
 	private function load(ArrayHash $values)
 	{
 		$this->stock->setPurchasePrice($values->purchase > 0 ? $values->purchase : NULL, $values->with_vat);
-		$this->stock->setOldPrice($values->old > 0 ? $values->old : NULL, $values->with_vat);
 
 		$vatRepo = $this->em->getRepository(Vat::getClassName());
 		$vat = $vatRepo->find($values->vat);
@@ -176,11 +173,6 @@ class StockPrice extends StockBase
 		if ($this->stock->purchasePrice) {
 			$values += [
 				'purchase' => $this->defaultWithVat ? $this->stock->purchasePrice->withVat : $this->stock->purchasePrice->withoutVat,
-			];
-		}
-		if ($this->stock->oldPrice) {
-			$values += [
-				'old' => $this->defaultWithVat ? $this->stock->oldPrice->withVat : $this->stock->oldPrice->withoutVat,
 			];
 		}
 		if ($this->stock->price) {

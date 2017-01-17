@@ -21,7 +21,6 @@ use Nette\Utils\DateTime;
  * @property Price $price
  * @property array $groupDiscounts
  * @property Price $purchasePrice
- * @property Price $oldPrice
  * @property Vat $vat
  * @property mixed $createdBy
  * @property mixed $updatedBy
@@ -42,11 +41,18 @@ use Nette\Utils\DateTime;
 class Stock extends BaseEntity
 {
 
+	const DEFAULT_PRICE_BASE = 'A';
+	const DEFAULT_PRICE_VERSION = 1;
+
 	use Identifier;
 	use Model\Blameable\Blameable;
 	use Model\Timestampable\Timestampable;
 	use Model\SoftDeletable\SoftDeletable;
 	use Traits\StockPrices;
+	use Traits\StockPurchasePrice;
+	use Traits\StockDefaultPrice;
+	use Traits\StockGroupPrices;
+	use Traits\StockVat;
 	use Traits\StockQuantities;
 
 	/** @ORM\ManyToOne(targetEntity="Product", inversedBy="stocks", cascade={"persist"}) */

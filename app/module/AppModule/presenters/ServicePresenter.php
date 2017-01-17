@@ -354,7 +354,7 @@ class ServicePresenter extends BasePresenter
 			foreach ($bonusGroups as $group) {
 				$stock->addDiscount($group->getDiscount(), $group);
 			}
-			$stock->recalculateOtherPrices();
+			$stock->recalculatePrices();
 			$stockRepo->save($stock);
 		}
 		return $this;
