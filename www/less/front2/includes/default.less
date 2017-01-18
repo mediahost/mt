@@ -565,9 +565,10 @@ UI Loading
 @bannerPaddingSide: 10px;
 @bannerPaddingTop: 30px;
 @bannerMove: @bannerWidth + @bannerPaddingSide;
-@bannerAllowSize: @basePageWidth + (2 * @bannerMove);
+@bannerAllowSize: @basePageWidth + (@bannerMove);
 @media (min-width: @bannerAllowSize) {
 	#mainContainer {
+		min-height: @bannerHeight + @bannerPaddingTop;
 		position: relative;
 		.side-banner-left, .side-banner-right {
 			display: block;

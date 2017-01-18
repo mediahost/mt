@@ -3,8 +3,6 @@
 {block breadcrumb}{/block}
 
 {block content}
-
-<div class="container">
 	{snippet steps}
 		{if !$basket->isEmpty()}
 			{include steps}
@@ -27,6 +25,6 @@
 	<!-- END CONTENT -->
 
 	{*{snippet lastVisited}*}
-		{*{include lastVisited}*}
+	{*{include lastVisited}*}
 	{*{/snippet}*}
-</div>
+{/block}
