@@ -9,6 +9,7 @@ use Exception;
 class PohodaItemRepository extends BaseRepository
 {
 
+	const ALIAS = 'p';
 	const CODE = 'code';
 
 	private $codedIds;
@@ -16,36 +17,36 @@ class PohodaItemRepository extends BaseRepository
 	public function findArrGroupedBy(array $criteria, $limit = null, $offset = null)
 	{
 		$qb = $this->createQueryBuilder('p')
-				->addSelect(new Func('SUM', 'p.count'))
-				->whereCriteria($criteria)
-				->groupBy('p.' . self::CODE);
+			->addSelect(new Func('SUM', 'p.count'))
+			->whereCriteria($criteria)
+			->groupBy('p.' . self::CODE);
 		return $qb->getQuery()
-						->setMaxResults($limit)
-						->setFirstResult($offset)
-						->getResult(AbstractQuery::HYDRATE_ARRAY);
+			->setMaxResults($limit)
+			->setFirstResult($offset)
+			->getResult(AbstractQuery::HYDRATE_ARRAY);
 	}
 
 	public function findArrBy(array $criteria, $limit = null, $offset = null)
 	{
 		$qb = $this->createQueryBuilder('p')
-				->whereCriteria($criteria)
-				->autoJoinOrderBy((array) ['updatedAt' => 'DESC']);
+			->whereCriteria($criteria)
+			->autoJoinOrderBy((array)['updatedAt' => 'DESC']);
 		return $qb->getQuery()
-						->setMaxResults($limit)
-						->setFirstResult($offset)
-						->getResult(AbstractQuery::HYDRATE_ARRAY);
+			->setMaxResults($limit)
+			->setFirstResult($offset)
+			->getResult(AbstractQuery::HYDRATE_ARRAY);
 	}
 
 	public function getSumCountGroupedBy($code)
 	{
 		$qb = $this->createQueryBuilder('p')
-				->select(new Func('SUM', 'p.count'))
-				->whereCriteria(['p.' . self::CODE => $code])
-				->groupBy('p.' . self::CODE);
+			->select(new Func('SUM', 'p.count'))
+			->whereCriteria(['p.' . self::CODE => $code])
+			->groupBy('p.' . self::CODE);
 
 		return $qb->setMaxResults(1)
-						->getQuery()
-						->getOneOrNullResult();
+			->getQuery()
+			->getOneOrNullResult();
 	}
 
 	public function findIdsForCode($useCache = TRUE)
@@ -57,9 +58,9 @@ class PohodaItemRepository extends BaseRepository
 		$key = $this->getClassMetadata()->getSingleIdentifierFieldName();
 
 		$query = $this->createQueryBuilder('p')
-				->select('p.' . self::CODE, 'p.' . $key)
-				->resetDQLPart('from')->from($this->getEntityName(), 'p', 'p.' . $key)
-				->getQuery();
+			->select('p.' . self::CODE, 'p.' . $key)
+			->resetDQLPart('from')->from($this->getEntityName(), 'p', 'p.' . $key)
+			->getQuery();
 
 		$this->codedIds = [];
 
@@ -87,6 +88,33 @@ class PohodaItemRepository extends BaseRepository
 			}
 		}
 		return $items;
+	}
+
+	public function updateSkipped($code, $skipped = NULL)
+	{
+		return $this->updateSynchronized($code, NULL, $skipped);
+	}
+
+	public function updateSynchronized($code, $synchronized = NULL, $skipped = NULL)
+	{
+		$values = [];
+		if ($synchronized !== NULL) {
+			$values[self::ALIAS . '.synchronized'] = $synchronized;
+		}
+		if ($skipped !== NULL) {
+			$values[self::ALIAS . '.skipped'] = $skipped;
+		}
+		if ($values) {
+			$qb = $this->createQueryBuilder(self::ALIAS)
+				->update()
+				->where(self::ALIAS . '.code = :code')
+				->setParameter('code', $code);
+			foreach ($values as $key => $value) {
+				$qb->set($key, $value);
+			}
+			return $qb->getQuery()->execute();
+		}
+		return NULL;
 	}
 
 }
