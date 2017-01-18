@@ -3,6 +3,7 @@
 namespace App\CronModule\Presenters;
 
 use App\Extensions\Settings\SettingsStorage;
+use App\Model\Entity\PohodaItem;
 use App\Model\Entity\ProductSign;
 use App\Model\Entity\Sign;
 use Nette\Utils\DateTime;
@@ -54,6 +55,20 @@ class CleanerPresenter extends BasePresenter
 				]);
 			}
 		}
+
+		$this->status = parent::STATUS_OK;
+	}
+
+	public function actionCleanPohodaSkipped()
+	{
+		$pohodaItemRepo = $this->em->getRepository(PohodaItem::getClassName());
+		$skipped = $pohodaItemRepo->findBy(['skipped' => TRUE]);
+
+		foreach ($skipped as $item) {
+			$item->resetSynchronize();
+			$this->em->persist($item);
+		}
+		$this->em->flush();
 
 		$this->status = parent::STATUS_OK;
 	}

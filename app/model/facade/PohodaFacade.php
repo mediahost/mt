@@ -57,7 +57,7 @@ class PohodaFacade extends Object
 	/** @var SettingsStorage @inject */
 	public $settings;
 
-	public function updateFullProducts($lastChange = NULL, $limit = NULL, $offset = NULL)
+	public function updateFullProducts($limit = NULL, $offset = NULL)
 	{
 		/* @var $pohodaRepo PohodaItemRepository */
 		$pohodaRepo = $this->em->getRepository(PohodaItem::getClassName());
@@ -68,40 +68,44 @@ class PohodaFacade extends Object
 		}
 		$conditions = [
 			'isInternet' => 'true',
+			'synchronized' => FALSE,
+			'skipped' => FALSE,
 		];
-		if ($lastChange) {
-			$conditions['updatedAt >='] = $lastChange;
-		}
+		$order = ['updatedAt' => 'DESC'];
 
-		$limit = $limit === NULL ? 500 : $limit;
-		$pohodaItems = $pohodaRepo->findArrBy($conditions, $limit, $offset);
+		$limit = $limit === NULL ? 100 : $limit;
+		$pohodaItems = $pohodaRepo->findBy($conditions, $order, $limit, $offset);
 		$listedCount = 0;
 		$changedCount = 0;
-		foreach ($pohodaItems as $pohodaProductArr) {
+		/* @var $pohodaProduct PohodaItem */
+		foreach ($pohodaItems as $pohodaProduct) {
 			$listedCount++;
-			$totalSumValue = $pohodaRepo->getSumCountGroupedBy($pohodaProductArr['code']);
+			$totalSumValue = $pohodaRepo->getSumCountGroupedBy($pohodaProduct->code);
 			$totalCount = 0;
 			if (is_array($totalSumValue) && array_key_exists(1, $totalSumValue)) {
-				$totalCountRaw = (int) $totalSumValue[1];
+				$totalCountRaw = (int)$totalSumValue[1];
 				$totalCount = $totalCountRaw > 0 ? $totalCountRaw : 0;
 			}
 
 			/* @var $stock Stock */
-			if (array_key_exists('code', $pohodaProductArr)) {
+			if ($pohodaProduct->code) {
 
 				$stock = $stockRepo->findOneBy([
-					'pohodaCode' => $pohodaProductArr['code'],
+					'pohodaCode' => $pohodaProduct->code,
 					'active' => TRUE,
 					'deletedAt' => NULL,
 				]);
 				$change = FALSE;
 				$skipFullActualize = FALSE;
+
 				if (!$stock) {
+					Debugger::log('SKIPPED Code: ' . $pohodaProduct->code, 'pohoda-synchronized-counts');
+					$pohodaRepo->updateSkipped($pohodaProduct->code, TRUE);
 					continue;
 				}
 
 				$isFromToday = $stock->createdAt >= DateTime::from('-24 hours');
-				$isChangedFromShop = $stock->updatedPohodaDataAt > $pohodaProductArr['updatedAt'];
+				$isChangedFromShop = $stock->updatedPohodaDataAt > $pohodaProduct->updatedAt;
 				if ($isChangedFromShop && !$isFromToday) {
 					$skipFullActualize = TRUE;
 				}
@@ -114,28 +118,28 @@ class PohodaFacade extends Object
 				if (!$skipFullActualize && $totalCount) {
 
 					$translation = $stock->product->translateAdd($language);
-					if ($translation->name != $pohodaProductArr['name']) {
-						$translation->name = $pohodaProductArr['name'];
+					if ($translation->name != $pohodaProduct->name) {
+						$translation->name = $pohodaProduct->name;
 						$stock->product->mergeNewTranslations();
 						$change = TRUE;
 					}
 
-					if (!$stock->purchasePrice || round($stock->purchasePrice->withoutVat, 2) != round($pohodaProductArr['purchasingPrice'], 2)) {
-						$stock->purchasePrice = $pohodaProductArr['purchasingPrice'];
+					if (!$stock->purchasePrice || round($stock->purchasePrice->withoutVat, 2) != round($pohodaProduct->purchasingPrice, 2)) {
+						$stock->purchasePrice = $pohodaProduct->purchasingPrice;
 						$change = TRUE;
 					}
 
-					if (!$stock->price || round($stock->price->withoutVat, 2) != round($pohodaProductArr['recountedSellingWithoutVat'], 2)) {
-						$stock->price = $pohodaProductArr['recountedSellingWithoutVat'];
+					if (!$stock->price || round($stock->price->withoutVat, 2) != round($pohodaProduct->recountedSellingWithoutVat, 2)) {
+						$stock->price = $pohodaProduct->recountedSellingWithoutVat;
 						$change = TRUE;
 					}
 
-					if ($stock->barcode != $pohodaProductArr['ean']) {
-						$stock->barcode = $pohodaProductArr['ean'];
+					if ($stock->barcode != $pohodaProduct->ean) {
+						$stock->barcode = $pohodaProduct->ean;
 						$change = TRUE;
 					}
 
-					$vat = $this->getVatFromPohodaString($pohodaProductArr['sellingRateVAT']);
+					$vat = $this->getVatFromPohodaString($pohodaProduct->sellingRateVAT);
 					if ($vat && (!$stock->vat || $stock->vat->id != $vat->id)) {
 						$stock->vat = $vat;
 						$change = TRUE;
@@ -147,15 +151,12 @@ class PohodaFacade extends Object
 						Debugger::log('UPDATED Code: ' . $stock->pohodaCode, 'pohoda-synchronized-counts');
 					}
 					$this->em->persist($stock);
+					$this->em->flush();
 					$changedCount++;
 				}
-			}
-
-			if ($changedCount % 500 === 0) {
-				$this->em->flush();
+				$pohodaRepo->updateSynchronized($pohodaProduct->code, TRUE);
 			}
 		}
-		$this->em->flush();
 
 		Debugger::log('LISTED: ' . $listedCount . '; UPDATED: ' . $changedCount, 'pohoda-synchronized-counts');
 	}
@@ -290,7 +291,8 @@ class PohodaFacade extends Object
 									$reader->name === 'stk:sellingRateVAT' ||
 									$reader->name === 'stk:isSales' ||
 									$reader->name === 'stk:isInternet'
-									)) {
+								)
+							) {
 								$item->{$reader->name} = $reader->readString();
 							}
 							if ($reader->nodeType === XMLReader::ELEMENT && $reader->name === 'stk:storage') {
@@ -302,7 +304,8 @@ class PohodaFacade extends Object
 									if ($reader->nodeType === XMLReader::ELEMENT && (
 											$reader->name === 'typ:id' ||
 											$reader->name === 'typ:ids'
-											)) {
+										)
+									) {
 										$item->storage->{$reader->name} = $reader->readString();
 									}
 								}
@@ -327,7 +330,8 @@ class PohodaFacade extends Object
 											$reader->name === 'typ:id' ||
 											$reader->name === 'typ:ids' ||
 											$reader->name === 'typ:price'
-											)) {
+										)
+									) {
 										$stockPriceItem->{$reader->name} = $reader->readString();
 									}
 								}
@@ -398,6 +402,7 @@ class PohodaFacade extends Object
 						$product->setRecountedSellingPrice(NULL, $item->stockPrice1, $sellingVatRate);
 					}
 
+					$product->resetSynchronize();
 					$this->em->persist($product);
 					$counter++;
 				}
@@ -421,7 +426,7 @@ class PohodaFacade extends Object
 
 	private function recountVatRate($withoutVat, $withVat)
 	{
-		$vatRates = (array) $this->settings->modules->pohoda->vatRates;
+		$vatRates = (array)$this->settings->modules->pohoda->vatRates;
 		asort($vatRates);
 
 		if ($withoutVat >= $withVat) {
