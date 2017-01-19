@@ -47,7 +47,7 @@ body {
 		.rounded(4px);
 	}
 	.tt-menu {
-		width: 655px;
+		width: 585px;
 		border: none;
 		top: 32px !important;
 		.roundedAll(0px, 0px, 4px, 4px);
@@ -560,14 +560,15 @@ UI Loading
 }
 
 @basePageWidth: 1170px;
-@bannerWidth: 240px;
-@bannerHeight: 1300px;
+@bannerWidth: 188px;
+@bannerHeight: 941px;
 @bannerPaddingSide: 10px;
 @bannerPaddingTop: 30px;
 @bannerMove: @bannerWidth + @bannerPaddingSide;
-@bannerAllowSize: @basePageWidth + (2 * @bannerMove);
+@bannerAllowSize: @basePageWidth + (@bannerMove);
 @media (min-width: @bannerAllowSize) {
 	#mainContainer {
+		min-height: @bannerHeight + @bannerPaddingTop;
 		position: relative;
 		.side-banner-left, .side-banner-right {
 			display: block;

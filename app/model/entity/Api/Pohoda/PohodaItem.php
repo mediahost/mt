@@ -24,6 +24,8 @@ use Knp\DoctrineBehaviors\Model;
  * @property string $sellingRateVAT
  * @property string $isSales
  * @property string $isInternet
+ * @property bool $synchronized
+ * @property bool $skipped
  */
 class PohodaItem extends BaseEntity
 {
@@ -59,7 +61,7 @@ class PohodaItem extends BaseEntity
 
 	/** @ORM\Column(type="string", length=20, nullable=true) */
 	protected $countReceivedOrders;
-	
+
 	/** @var int */
 	protected $totalCount;
 
@@ -93,35 +95,49 @@ class PohodaItem extends BaseEntity
 	/** @ORM\Column(type="float", nullable=true) */
 	protected $recountedSellingWithVat;
 
+	/** @ORM\Column(type="boolean") */
+	protected $synchronized = FALSE;
+
+	/** @ORM\Column(type="boolean") */
+	protected $skipped = FALSE;
+
 	public function __construct($id)
 	{
 		$this->id = $id;
+		$this->resetSynchronize();
 		parent::__construct();
+	}
+
+	public function resetSynchronize()
+	{
+		$this->skipped = FALSE;
+		$this->synchronized = FALSE;
+		return $this;
 	}
 
 	public function getName()
 	{
-		return (string) $this->name;
+		return (string)$this->name;
 	}
 
 	public function getEan()
 	{
-		return (string) $this->ean;
+		return (string)$this->ean;
 	}
 
 	public function getCount()
 	{
-		return (int) $this->count;
+		return (int)$this->count;
 	}
 
 	public function getCountRecievedOrders()
 	{
-		return (int) $this->countReceivedOrders;
+		return (int)$this->countReceivedOrders;
 	}
 
 	public function getTotalCount()
 	{
-		return $this->totalCount ? (int) $this->totalCount : $this->getCount();
+		return $this->totalCount ? (int)$this->totalCount : $this->getCount();
 	}
 
 	public function getIsSales()
@@ -160,12 +176,12 @@ class PohodaItem extends BaseEntity
 
 	public function getPurchasingPriceWithoutVat()
 	{
-		return (float) $this->purchasingPrice;
+		return (float)$this->purchasingPrice;
 	}
 
 	public function getSellingPriceWithoutVat()
 	{
-		return (float) $this->sellingPrice;
+		return (float)$this->sellingPrice;
 	}
 
 }

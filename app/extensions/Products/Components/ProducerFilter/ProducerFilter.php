@@ -44,11 +44,11 @@ class ProducerFilter extends BaseControl
 		];
 
 		$form->addSelect('producer', 'Producer')
-			->getControlPrototype()->class('input-medium category-selections-select');
+			->getControlPrototype()->class('category-selections-select');
 		$form->addSelect('line', 'Line')
-			->getControlPrototype()->class('input-medium category-selections-select');
+			->getControlPrototype()->class('category-selections-select');
 		$form->addSelect('model', 'Model')
-			->getControlPrototype()->class('input-medium category-selections-select');
+			->getControlPrototype()->class('category-selections-select');
 
 		$this->setFormValues($form);
 
