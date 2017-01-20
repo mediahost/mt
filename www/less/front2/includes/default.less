@@ -4,6 +4,21 @@ body {
 	background-image: url(@pathImages + "greyzz.png");
 }
 
+h1 {
+	&.main-headline {
+		font-size: 24px;
+		margin-bottom: 25px;
+		color: #21334a;
+	}
+}
+@media (max-width: 1199px) {
+	h1 {
+		&.main-headline {
+			font-size: 20px;
+		}
+	}
+}
+
 .global-wrapper {
 	background-color: transparent;
 }
