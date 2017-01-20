@@ -42,7 +42,7 @@ class OrderPaymentBase extends BaseEntity
 	/** @return Vat */
 	public function getVat()
 	{
-		return new Vat(NULL, $this->vat ? $this->vat : 0);
+		return new Vat($this->vat ? $this->vat : 0);
 	}
 	
 	public function __toString()

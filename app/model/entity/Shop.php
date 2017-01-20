@@ -10,7 +10,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
 /**
  * @ORM\Entity(repositoryClass="App\Model\Repository\ProductRepository")
  *
- * @property string $letter
+ * @property string $priceLetter
  * @property ArrayCollection $variants
  * @property Address $address
  * @property BankAccount $bankAccounts
@@ -36,6 +36,9 @@ class Shop extends BaseEntity
 
 	/** @ORM\OneToOne(targetEntity="BankAccount", cascade={"persist", "remove"}) */
 	protected $bankAccount2;
+
+	/** @ORM\OneToMany(targetEntity="ShopVariant", mappedBy="shop") */
+	protected $vats;
 
 	public function getBankAccounts()
 	{

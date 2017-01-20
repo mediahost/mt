@@ -14,17 +14,32 @@ trait StockDefaultPrice
 	/** @ORM\Column(type="float", nullable=true) */
 	private $defaultPriceA1;
 
+	/** @ORM\Column(type="boolean") */
+	private $synchronizePriceA1 = TRUE;
+
 	/** @ORM\Column(type="float", nullable=true) */
 	private $defaultPriceA2;
+
+	/** @ORM\Column(type="boolean") */
+	private $synchronizePriceA2 = TRUE;
 
 	/** @ORM\Column(type="float", nullable=true) */
 	private $defaultPriceB1;
 
+	/** @ORM\Column(type="boolean") */
+	private $synchronizePriceB1 = TRUE;
+
 	/** @ORM\Column(type="float", nullable=true) */
 	private $defaultPriceB2;
 
+	/** @ORM\Column(type="boolean") */
+	private $synchronizePriceB2 = TRUE;
+
 	/** @ORM\Column(type="float", nullable=true) */
 	private $defaultPriceB3;
+
+	/** @ORM\Column(type="boolean") */
+	private $synchronizePriceB3 = TRUE;
 
 	/**
 	 * @param Group|int $groupOrLevel Group or level
@@ -68,6 +83,19 @@ trait StockDefaultPrice
 
 		$this->setChangePohodaData();
 
+		return $this;
+	}
+
+	public function isSynchronizePrice($shopLetter = self::DEFAULT_PRICE_BASE, $shopNumber = self::DEFAULT_PRICE_VERSION)
+	{
+		$attr = 'synchronizePrice' . $shopLetter . $shopNumber;
+		return $this->$attr;
+	}
+
+	public function setSynchronizePrice($shopLetter = self::DEFAULT_PRICE_BASE, $shopNumber = self::DEFAULT_PRICE_VERSION, $value = TRUE)
+	{
+		$attr = 'synchronizePrice' . $shopLetter . $shopNumber;
+		$this->$attr = $value;
 		return $this;
 	}
 

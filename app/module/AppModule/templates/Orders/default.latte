@@ -27,7 +27,7 @@
 								n:foreach="$shopItem->variants as $variantItem"
 								n:href="this 'filterShop' => $shopItem->id, 'filterVariant' => $variantItem->id, 'showAll' => FALSE">
 							<i n:if="$filteredVariantId == $variantItem->id" class="fa fa-filter"></i>
-							{$shopItem} | {$variantItem->locale|upper}
+							{$variantItem->fullName}
 						</a>
 					{/foreach}
 					<a class="btn btn-circle btn-danger"

@@ -8,41 +8,24 @@ trait StockPurchasePrice
 {
 
 	/** @ORM\Column(type="float", nullable=true) */
-	private $purchasePrice; // TODO: delete
-
-	/** @ORM\Column(type="float", nullable=true) */
-	private $purchasePriceA1;
-
-	/** @ORM\Column(type="float", nullable=true) */
-	private $purchasePriceA2;
-
-	/** @ORM\Column(type="float", nullable=true) */
-	private $purchasePriceB1;
-
-	/** @ORM\Column(type="float", nullable=true) */
-	private $purchasePriceB2;
-
-	/** @ORM\Column(type="float", nullable=true) */
-	private $purchasePriceB3;
+	private $purchasePrice;
 
 	/** @return Price|NULL */
 	public function getPurchasePrice()
 	{
-		$priceAttr = 'purchasePrice' . $this->priceBase . $this->priceVersion;
-		if ($this->$priceAttr === NULL) {
+		if ($this->purchasePrice === NULL) {
 			return NULL;
 		}
-		return new Price($this->getVat(), $this->$priceAttr);
+		return new Price($this->getVat(), $this->purchasePrice);
 	}
 
 	public function setPurchasePrice($value, $withVat = FALSE)
 	{
-		$priceAttr = 'purchasePrice' . $this->priceBase . $this->priceVersion;
 		if ($value === NULL) {
-			$this->$priceAttr = NULL;
+			$this->purchasePrice = NULL;
 		} else {
 			$price = new Price($this->getVat(), $value, !$withVat);
-			$this->$priceAttr = $price->withoutVat;
+			$this->purchasePrice = $price->withoutVat;
 		}
 		
 		$this->setChangePohodaData();

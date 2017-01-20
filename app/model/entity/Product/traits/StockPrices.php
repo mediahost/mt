@@ -8,18 +8,22 @@ use Nette\Reflection\ClassType;
 trait StockPrices
 {
 
-	/** @var string */
-	private $priceBase = self::DEFAULT_PRICE_BASE;
-
-	/** @var integer */
-	private $priceVersion = self::DEFAULT_PRICE_VERSION;
-
-	public static function getPriceProperties()
+	public static function getPriceProperties($type = 'price')
 	{
+		switch ($type) {
+			case 'price':
+				$suffixRegExp = '\d+';
+				break;
+			case 'defaultPrice':
+				$suffixRegExp = '\w\d+';
+				break;
+			default:
+				return [];
+		}
 		$properties = [];
 		$reflection = new ClassType(Stock::getClassName());
 		foreach ($reflection->properties as $property) {
-			if (preg_match('/^price(\d+)$/', $property->name, $matches)) {
+			if (preg_match('/^' . $type . '(' . $suffixRegExp . ')$/', $property->name, $matches)) {
 				$properties[$matches[1]] = $matches[0];
 			}
 		}
@@ -34,7 +38,30 @@ trait StockPrices
 
 	public function recalculateVersionPrices()
 	{
-		// TODO: implement
+		$attr = 'defaultPrice';
+		$defaultAttr = $attr . self::DEFAULT_PRICE_BASE . self::DEFAULT_PRICE_VERSION;
+
+		foreach (self::getPriceProperties($attr) as $key => $property) {
+			$shopLetter = substr($key, 0, 1);
+			$shopNumber = substr($key, 1);
+			$propertyAttr = $attr . $key;
+
+			if ($property !== $defaultAttr && $this->isSynchronizePrice($shopLetter, $shopNumber)) {
+				switch ($shopNumber) {
+					case 1: // EUR
+					default:
+						$this->$propertyAttr = $this->$defaultAttr;
+						break;
+					case 2: // CZK
+						$this->$propertyAttr = $this->$defaultAttr / self::RECALCULATE_RATE_CZK;
+						break;
+					case 3: // PLN
+						$this->$propertyAttr = $this->$defaultAttr / self::RECALCULATE_RATE_PLN;
+						break;
+				}
+			}
+		}
+
 		return $this;
 	}
 

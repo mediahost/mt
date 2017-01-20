@@ -11,6 +11,8 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  * @ORM\Entity
  *
  * @property int $value
+ * @property-read string $locale
+ * @property-read string $type
  * @property-read float $percent
  * @property-read float $downDecimal
  * @property-read float $upDecimal
@@ -18,18 +20,24 @@ use Kdyby\Doctrine\Entities\BaseEntity;
 class Vat extends BaseEntity
 {
 
-	const HIGH = 1;
-	const LOW = 2;
-	const NONE = 3;
+	const HIGH = 'high';
+	const LOW1 = 'low1';
+	const LOW2 = 'low2';
+	const NONE = 'none';
 
 	use Identifier;
 
 	/** @ORM\Column(type="float") */
 	protected $value;
 
-	public function __construct($id, $value)
+	/** @ORM\ManyToOne(targetEntity="Shop", inversedBy="vats") */
+	protected $shop;
+
+	/** @ORM\Column(type="string", length=6) */
+	protected $type;
+
+	public function __construct($value)
 	{
-		$this->setId($id);
 		$this->setValue($value);
 		parent::__construct();
 	}
@@ -41,12 +49,6 @@ class Vat extends BaseEntity
 		}
 		$this->value = $value;
 
-		return $this;
-	}
-
-	protected function setId($id)
-	{
-		$this->id = $id;
 		return $this;
 	}
 
@@ -79,12 +81,22 @@ class Vat extends BaseEntity
 
 	public function isNone()
 	{
-		return $this->id === self::NONE;
+		return $this->type === self::NONE;
 	}
 
 	public function __toString()
 	{
 		return (string)((int)$this->percent . '%');
+	}
+
+	public static function getOptions()
+	{
+		return [
+			self::HIGH,
+			self::LOW1,
+			self::LOW2,
+			self::NONE,
+		];
 	}
 
 }

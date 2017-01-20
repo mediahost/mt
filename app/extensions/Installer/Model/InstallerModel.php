@@ -54,26 +54,6 @@ class InstallerModel extends Object
 	}
 
 	/**
-	 * Create all nested vats
-	 * @return boolean
-	 */
-	public function installVats(array $vats)
-	{
-		$this->allowChangeEntityId(Vat::getClassName());
-		$vatRepo = $this->em->getRepository(Vat::getClassName());
-		foreach ($vats as $id => $value) {
-			$vat = $vatRepo->find($id);
-			if (!$vat) {
-				$vat = new Vat($id, $value);
-			}
-			$vat->value = $value;
-			$this->em->persist($vat);
-		}
-		$this->em->flush();
-		return TRUE;
-	}
-
-	/**
 	 * Create all nested roles
 	 * @return boolean
 	 */
@@ -212,7 +192,7 @@ class InstallerModel extends Object
 		];
 
 		$vatRepo = $this->em->getRepository(Vat::getClassName());
-		$defaultVat = $vatRepo->find(Vat::HIGH);
+		$defaultVat = $vatRepo->find(1);
 
 		foreach ($shippings as $id => $name) {
 			$shipping = $shippingsRepo->find($id);

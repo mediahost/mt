@@ -15,7 +15,17 @@
 	<div class="col-md-6">
 		<div class="list-group">
 
-			<a n:href="reSaveProducts! App\AppModule\Presenters\ServicePresenter::PRODUCT_RESAVE_CATEGORIES_IDS"
+			<a n:href="updateStocks!"
+					class="list-group-item delete-confirm">
+				<h4 class="list-group-item-heading">
+					{_'Update Stocks - init prices'}
+				</h4>
+				<p class="list-group-item-text">
+					{_'Init Shop variant prices'}
+				</p>
+			</a>
+
+			<a n:href="updateProducts! App\AppModule\Presenters\ServicePresenter::PRODUCT_UPDATE_CATEGORIES_IDS"
 					class="list-group-item delete-confirm">
 				<h4 class="list-group-item-heading">
 					{_'Update Products - categoriesIds'}
@@ -25,7 +35,7 @@
 				</p>
 			</a>
 
-			<a n:href="reSaveProducts! App\AppModule\Presenters\ServicePresenter::PRODUCT_RESAVE_FULLTEXT"
+			<a n:href="updateProducts! App\AppModule\Presenters\ServicePresenter::PRODUCT_UPDATE_FULLTEXT"
 					class="list-group-item delete-confirm">
 				<h4 class="list-group-item-heading">
 					{_'Update Products - fulltext'}

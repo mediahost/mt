@@ -37,12 +37,15 @@ use Nette\Utils\DateTime;
  * @property string $gift
  * @property string $pohodaCode
  * @property string $importedFrom
+ * @property-write ShopVariant $shopVariant
  */
 class Stock extends BaseEntity
 {
 
 	const DEFAULT_PRICE_BASE = 'A';
 	const DEFAULT_PRICE_VERSION = 1;
+	const RECALCULATE_RATE_CZK = 27;
+	const RECALCULATE_RATE_PLN = 4.4;
 
 	use Identifier;
 	use Model\Blameable\Blameable;
@@ -91,6 +94,12 @@ class Stock extends BaseEntity
 	/** @ORM\OneToMany(targetEntity="Visit", mappedBy="stock") */
 	protected $visits;
 
+	/** @var string */
+	private $priceBase = self::DEFAULT_PRICE_BASE;
+
+	/** @var integer */
+	private $priceVersion = self::DEFAULT_PRICE_VERSION;
+
 	public function __construct()
 	{
 		$this->product = new Product();
@@ -103,6 +112,20 @@ class Stock extends BaseEntity
 	public function __toString()
 	{
 		return (string)$this->product;
+	}
+
+	public function setShopVariant(ShopVariant $variant)
+	{
+		if ($variant->shop->priceLetter) {
+			$this->priceBase = $variant->shop->priceLetter;
+			if ($variant->priceNumber) {
+				$this->priceVersion = $variant->priceNumber;
+			} else {
+				throw new EntityException('Shop Variant has no number. Please set it for ' . $variant->fullName);
+			}
+		} else {
+			throw new EntityException('Shop has no letter. Please set it for ' . $variant->shop);
+		}
 	}
 
 	public function isNew()

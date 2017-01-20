@@ -19,8 +19,8 @@ use Nette\Utils\FileSystem;
 class ServicePresenter extends BasePresenter
 {
 
-	const PRODUCT_RESAVE_CATEGORIES_IDS = 1;
-	const PRODUCT_RESAVE_FULLTEXT = 2;
+	const PRODUCT_UPDATE_CATEGORIES_IDS = 1;
+	const PRODUCT_UPDATE_FULLTEXT = 2;
 
 	/** @var Connection @inject */
 	public $connection;
@@ -44,7 +44,7 @@ class ServicePresenter extends BasePresenter
 	 */
 	public function actionDefault()
 	{
-		$this->redirect('tools');
+		$this->redirect('updates');
 	}
 
 	/**
@@ -157,11 +157,23 @@ class ServicePresenter extends BasePresenter
 	/**
 	 * @secured
 	 * @resource('service')
-	 * @privilege('reSaveProducts')
+	 * @privilege('updateStocks')
 	 */
-	public function handleReSaveProducts($method = self::PRODUCT_RESAVE_CATEGORIES_IDS)
+	public function handleUpdateStocks()
 	{
-		$count = $this->resaveProducts($method);
+		$count = $this->updateStocks();
+		$message = $this->translator->translate('%count% stocks was updated', $count);
+		$this->flashMessage($message, 'success');
+	}
+
+	/**
+	 * @secured
+	 * @resource('service')
+	 * @privilege('updateProducts')
+	 */
+	public function handleUpdateProducts($method = self::PRODUCT_UPDATE_CATEGORIES_IDS)
+	{
+		$count = $this->updateProducts($method);
 		$message = $this->translator->translate('%count% products was updated', $count);
 		$this->flashMessage($message, 'success');
 	}
@@ -173,7 +185,7 @@ class ServicePresenter extends BasePresenter
 	 */
 	public function handleUpdateOrders()
 	{
-		$count = $this->resaveOrders();
+		$count = $this->updateOrders();
 		$message = $this->translator->translate('%count% orders was updated', $count);
 		$this->flashMessage($message, 'success');
 	}
@@ -284,18 +296,40 @@ class ServicePresenter extends BasePresenter
 		return $this;
 	}
 
-	private function resaveProducts($method)
+	private function updateStocks()
+	{
+		$criteria = [
+			'defaultPriceB3' => NULL,
+		];
+
+		$stockRepo = $this->em->getRepository(Stock::getClassName());
+		$stocks = $stockRepo->findBy($criteria, [
+			'updatedAt' => 'ASC',
+		], 500);
+
+		$counter = 0;
+		foreach ($stocks as $stock) {
+			$stock->shopVariant = $this->shopVariant;
+			$stock->recalculateVersionPrices();
+			$this->em->persist($stock);
+			$counter++;
+		}
+		$this->em->flush();
+		return $counter;
+	}
+
+	private function updateProducts($method)
 	{
 		switch ($method) {
 			default:
-			case self::PRODUCT_RESAVE_CATEGORIES_IDS:
+			case self::PRODUCT_UPDATE_CATEGORIES_IDS:
 				$criteria = [
 					'categoriesIds' => NULL,
 					'mainCategory NOT' => NULL,
 				];
 				$method = 'updateCategoriesForOptimized';
 				break;
-			case self::PRODUCT_RESAVE_FULLTEXT:
+			case self::PRODUCT_UPDATE_FULLTEXT:
 				$criteria = [
 					'active' => TRUE,
 					'fulltext' => NULL,
@@ -319,7 +353,7 @@ class ServicePresenter extends BasePresenter
 		return $counter;
 	}
 
-	private function resaveOrders()
+	private function updateOrders()
 	{
 		$criteria = [
 			'shop' => NULL,

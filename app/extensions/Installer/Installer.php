@@ -211,7 +211,6 @@ class Installer extends Object
 		$this->installDoctrine($prefix);
 		$this->installRoles($prefix);
 		$this->installUsers($prefix);
-		$this->installVats($prefix);
 		$this->installUnits($prefix);
 		$this->installSigns($prefix);
 		$this->installPages($prefix);
@@ -260,24 +259,6 @@ class Installer extends Object
 		$name = $lockPrefix . $this->getLockName(__METHOD__);
 		if ($this->lock($name)) {
 			$this->model->installUnits(Unit::getAllNames());
-			$this->onSuccessInstall($this, $name);
-			$this->messages[$name] = [self::INSTALL_SUCCESS];
-		} else {
-			$this->onLockedInstall($this, $name);
-			$this->messages[$name] = [self::INSTALL_LOCKED];
-		}
-	}
-
-	/**
-	 * Instal vats
-	 * @param string $lockPrefix
-	 */
-	private function installVats($lockPrefix = NULL)
-	{
-		$name = $lockPrefix . $this->getLockName(__METHOD__);
-		if ($this->lock($name)) {
-			$vats = (array) $this->settings->modules->vats;
-			$this->model->installVats($vats);
 			$this->onSuccessInstall($this, $name);
 			$this->messages[$name] = [self::INSTALL_SUCCESS];
 		} else {

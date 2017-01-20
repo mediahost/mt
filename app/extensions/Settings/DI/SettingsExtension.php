@@ -16,11 +16,6 @@ class SettingsExtension extends CompilerExtension
 				'enabled' => FALSE,
 				'allowedIps' => ['127.0.0.1'],
 			],
-			'vats' => [ // vat levels
-				Vat::HIGH => 20,
-				Vat::LOW => 15,
-				Vat::NONE => 0,
-			],
 			'order' => [
 				'enabled' => TRUE,
 				'states' => [
