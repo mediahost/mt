@@ -177,7 +177,7 @@ class ProductList extends Control
 		return $this;
 	}
 
-	public function addFilterProducers($producer)
+	public function addFilterProducer($producer)
 	{
 		$this->getHolder()->filterProducer($producer);
 		$this->setLimitPrices();
