@@ -14,7 +14,9 @@ use Nette\Application\UI\ITemplateFactory;
 use Nette\Http\Request;
 use Nette\Mail\IMailer;
 use Nette\Mail\Message;
+use Nette\Mail\SmtpException;
 use Nette\Utils\ArrayHash;
+use Tracy\Debugger;
 
 abstract class BaseMessage extends Message
 {
@@ -137,7 +139,11 @@ abstract class BaseMessage extends Message
 	public function send()
 	{
 		$this->beforeSend();
-		$this->mailer->send($this);
+		try {
+			$this->mailer->send($this);
+		} catch (SmtpException $e) {
+			Debugger::log($e->getMessage(), 'smtp');
+		}
 		$this->afterSend();
 	}
 
