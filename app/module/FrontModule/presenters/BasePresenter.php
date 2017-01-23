@@ -219,7 +219,6 @@ abstract class BasePresenter extends BaseBasePresenter
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
 		$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
 		$pageRepo = $this->em->getRepository(Page::getClassName());
-		$pageRepo->findAllWithCache($this->locale);
 		$settings = $this->settings;
 		$this->template->menuPages = ArrayHash::from([
 			'page1' => $this->link('Homepage:'),
@@ -243,7 +242,6 @@ abstract class BasePresenter extends BaseBasePresenter
 			$stockRepo->find(132622),
 			$stockRepo->find(132249),
 			$stockRepo->find(131219),
-			$stockRepo->find(132621),
 		];
 		$this->template->mostSearchedModels = [
 			$modelRepo->find(1),
