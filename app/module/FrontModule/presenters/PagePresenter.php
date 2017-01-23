@@ -35,7 +35,7 @@ class PagePresenter extends BasePresenter
 	{
 		$pageRepo = $this->em->getRepository(Page::getClassName());
 		$this->page = $pageRepo->find($id);
-		
+
 		if (!$this->page) {
 			$message = $this->translator->translate('wasntFoundShe', NULL, ['name' => $this->translator->translate('Page')]);
 			$this->flashMessage($message, 'warning');
