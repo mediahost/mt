@@ -4,6 +4,21 @@ body {
 	background-image: url(@pathImages + "greyzz.png");
 }
 
+h1 {
+	&.main-headline {
+		font-size: 24px;
+		margin-bottom: 25px;
+		color: #21334a;
+	}
+}
+@media (max-width: 1199px) {
+	h1 {
+		&.main-headline {
+			font-size: 20px;
+		}
+	}
+}
+
 .global-wrapper {
 	background-color: transparent;
 }
@@ -17,6 +32,27 @@ body {
 	img {
 		height: 58px;
 		width: auto;
+	}
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+	.navbar-brand {
+		margin-bottom: 0px !important;
+		margin-right: 20px;
+		height: auto;
+		img {
+			width: 200px;
+			height: auto;
+		}
+	}
+	.navbar-main-search {
+		width: 500px;
+		.form-control {
+			padding-left: 10px;
+		}
+	}
+	#frm-search .tt-menu {
+		width: 500px !important;
 	}
 }
 
@@ -74,6 +110,12 @@ body {
 				}
 			}
 		}
+	}
+}
+
+@media (max-width: 768px) {
+	#frm-search .tt-menu {
+		width: 450px;
 	}
 }
 
@@ -557,6 +599,10 @@ UI Loading
 
 .side-banner-left, .side-banner-right {
 	display: none;
+}
+
+#main-nav-collapse {
+	padding-left: 0px;
 }
 
 @basePageWidth: 1170px;

@@ -738,7 +738,7 @@ hr {
 	box-shadow: none;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 991px) {
 	.navbar-main-search {
 		width: 100%;
 		border: none;
@@ -773,7 +773,7 @@ hr {
 	padding-left: 10px;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 991px) {
 	.navbar-main-search-category {
 		width: 100%;
 	}
