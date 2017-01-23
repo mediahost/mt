@@ -112,7 +112,7 @@ class MainFilter extends BaseControl
 
 		$minPrice = $maxPrice = NULL;
 		$glue = preg_quote(';');
-		if (preg_match('/^(\d+)' . $glue . '(\d+)$/', $values->price, $matches)) {
+		if (isset($values->price) && preg_match('/^(\d+)' . $glue . '(\d+)$/', $values->price, $matches)) {
 			$minPriceRaw = $matches[1];
 			$maxPriceRaw = $matches[2];
 
