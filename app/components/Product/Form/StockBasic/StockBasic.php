@@ -4,6 +4,7 @@ namespace App\Components\Product\Form;
 
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
+use App\Model\Entity\Shop;
 use App\Model\Entity\Stock;
 use App\Model\Facade\VatFacade;
 use Nette\Utils\ArrayHash;
@@ -24,26 +25,30 @@ class StockBasic extends StockBase
 
 		$form = new Form();
 		$form->setTranslator($this->translator)
-				->setRenderer(new MetronicFormRenderer());
+			->setRenderer(new MetronicFormRenderer());
 		$form->getElementPrototype()->class('ajax');
 
 		$product = $this->stock->product;
 		$product->setCurrentLocale($this->translator->getLocale());
+		$shopRepo = $this->em->getRepository(Shop::getClassName());
 
 		$nameMax = 90;
 		$form->addText('name', 'Name', NULL, $nameMax)
-				->addRule(Form::MAX_LENGTH, 'Max length in Pohoda is %d', $nameMax)
-				->setAttribute('placeholder', $product->name);
+			->addRule(Form::MAX_LENGTH, 'Max length in Pohoda is %d', $nameMax)
+			->setAttribute('placeholder', $product->name);
 		$form->addText('pohodaCode', 'Code for Pohoda', NULL, 20)
-				->setOption('description', 'Identification for synchronizing')
-				->addRule(Form::FILLED, 'Product must be synchronized');
+			->setOption('description', 'Identification for synchronizing')
+			->addRule(Form::FILLED, 'Product must be synchronized');
 		$form->addText('gift', 'Gift', NULL, 50);
 		$form->addText('barcode', 'Barcode', NULL, 50);
-		$form->addCheckSwitch('active', 'Active');
+		foreach ($shopRepo->findAll() as $shop) {
+			$name = $this->translator->translate('Active for %shop%', NULL, ['shop' => $shop]);
+			$form->addCheckSwitch('active' . $shop->priceLetter, $name);
+		}
 		$form->addWysiHtml('perex', 'Perex', 4)
-						->getControlPrototype()->class[] = 'page-html-content';
+			->getControlPrototype()->class[] = 'page-html-content';
 		$form->addWysiHtml('description', 'Description', 10)
-						->getControlPrototype()->class[] = 'page-html-content';
+			->getControlPrototype()->class[] = 'page-html-content';
 
 		$form->addSubmit('save', 'Save');
 
@@ -61,10 +66,15 @@ class StockBasic extends StockBase
 
 	private function load(ArrayHash $values)
 	{
+		$shopRepo = $this->em->getRepository(Shop::getClassName());
+
 		$this->stock->barcode = $values->barcode;
 		$this->stock->gift = $values->gift;
 		$this->stock->pohodaCode = $values->pohodaCode;
-		$this->stock->active = $values->active;
+		foreach ($shopRepo->findAll() as $shop) {
+			$attrName = 'active' . $shop->priceLetter;
+			$this->stock->$attrName = $values->$attrName;
+		}
 
 		$this->stock->product->translateAdd($this->translator->getLocale())->name = $values->name;
 		$this->stock->product->translateAdd($this->translator->getLocale())->perex = $values->perex;
@@ -85,12 +95,17 @@ class StockBasic extends StockBase
 	/** @return array */
 	protected function getDefaults()
 	{
+		$shopRepo = $this->em->getRepository(Shop::getClassName());
+
 		$values = [
 			'pohodaCode' => $this->stock->pohodaCode,
 			'barcode' => $this->stock->barcode,
 			'gift' => $this->stock->gift,
-			'active' => $this->stock->active,
 		];
+		foreach ($shopRepo->findAll() as $shop) {
+			$attrName = 'active' . $shop->priceLetter;
+			$values[$attrName] = $this->stock->$attrName;
+		}
 		if ($this->stock->product) {
 			$this->stock->product->setCurrentLocale($this->translator->getLocale());
 			$values += [

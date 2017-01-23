@@ -1136,6 +1136,9 @@ msgstr "Vložiť nazov tovaru"
 msgid "Active"
 msgstr "Aktívny"
 
+msgid "Active for %shop%"
+msgstr "Aktívny pre %shop%"
+
 msgid "Vat included"
 msgstr "vrátane DPH"
 

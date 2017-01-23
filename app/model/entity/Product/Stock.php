@@ -30,6 +30,8 @@ use Nette\Utils\DateTime;
  * @property DateTime $deletedAt
  * @property DateTime $updatedPohodaDataAt
  * @property boolean $active
+ * @property boolean $activeA
+ * @property boolean $activeB
  * @property int $quantity
  * @property int $lock
  * @property int $inStore
@@ -72,6 +74,12 @@ class Stock extends BaseEntity
 
 	/** @ORM\Column(type="boolean") */
 	protected $active = TRUE;
+
+	/** @ORM\Column(type="boolean") */
+	protected $activeA = TRUE;
+
+	/** @ORM\Column(type="boolean") */
+	protected $activeB = TRUE;
 
 	/** @ORM\Column(type="string", length=50, nullable=true) */
 	protected $barcode;

@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
+use Nette\Utils\Strings;
 
 /**
  * @ORM\Entity(repositoryClass="App\Model\Repository\ProductRepository")
@@ -23,7 +24,7 @@ class Shop extends BaseEntity
 	use Identifier;
 
 	/** @ORM\Column(type="string", length=1) */
-	protected $priceLetter;
+	private $priceLetter;
 
 	/** @ORM\OneToMany(targetEntity="ShopVariant", mappedBy="shop", cascade={"persist", "remove"}) */
 	protected $variants;
@@ -60,6 +61,16 @@ class Shop extends BaseEntity
 		};
 		$this->variants->exists($hasVariant);
 		return $variant;
+	}
+
+	public function getPriceLetter()
+	{
+		return Strings::upper($this->priceLetter);
+	}
+
+	public function setPriceLetter($value)
+	{
+		$this->priceLetter = Strings::upper($value);
 	}
 
 	public function addVariant(ShopVariant $variant)
