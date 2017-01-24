@@ -41,7 +41,7 @@ class StockAdd extends StockBase
 
 		$form = new Form();
 		$form->setTranslator($this->translator)
-				->setRenderer(new MetronicHorizontalFormRenderer());
+			->setRenderer(new MetronicHorizontalFormRenderer());
 
 		$unitRepo = $this->em->getRepository(Unit::getClassName());
 		$defaultUnit = $unitRepo->find(1);
@@ -51,42 +51,42 @@ class StockAdd extends StockBase
 
 		$form->addGroup();
 		$form->addText('name', 'Product title', NULL, 150)
-				->setAttribute('class', MetronicTextInputBase::SIZE_XL)
-				->setRequired('Insert product name');
+			->setAttribute('class', MetronicTextInputBase::SIZE_XL)
+			->setRequired('Insert product name');
 		$form->addText('pohodaCode', 'Code for Pohoda', NULL, 20)
-				->setAttribute('placeholder', 'automaticly generated')
-				->setAttribute('class', MetronicTextInputBase::SIZE_XL)
-				->setOption('description', 'Identification for synchronizing');
+			->setAttribute('placeholder', 'automaticly generated')
+			->setAttribute('class', MetronicTextInputBase::SIZE_XL)
+			->setOption('description', 'Identification for synchronizing');
 		$form->addCheckSwitch('active', 'Active')
-				->setDefaultValue(TRUE);
+			->setDefaultValue(TRUE);
 
 		$form->addGroup('Price');
 		$form->addCheckSwitch('with_vat', 'Vat included', 'YES', 'NO')
-				->setDefaultValue(TRUE);
+			->setDefaultValue(TRUE);
 		$form->addText('price', 'Price')
-				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
-				->setRequired();
+			->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
+			->setRequired();
 		$form->addSelect2('vat', 'Vat', $this->vatFacade->getValues())
-						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
+			->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
 
 		$form->addGroup('Quantity');
 		$form->addTouchSpin('quantity', 'Quantity')
-				->setMax(1000)
-				->setPostfix($defaultUnit)
-				->setSize(MetronicTextInputBase::SIZE_M)
-				->setDefaultValue(0);
+			->setMax(1000)
+			->setPostfix($defaultUnit)
+			->setSize(MetronicTextInputBase::SIZE_M)
+			->setDefaultValue(0);
 
 		$form->addGroup('Category');
 		$form->addSelect2('main_category', 'Main category', $categories)
-						->setPrompt('Select some category')
-						->setRequired('Select some category')
-						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XL;
+			->setPrompt('Select some category')
+			->setRequired('Select some category')
+			->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XL;
 
 		$form->addGroup('Description');
 		$form->addWysiHtml('perex', 'Perex', 4)
-						->getControlPrototype()->class[] = 'page-html-content';
+			->getControlPrototype()->class[] = 'page-html-content';
 		$form->addWysiHtml('description', 'Description', 10)
-						->getControlPrototype()->class[] = 'page-html-content';
+			->getControlPrototype()->class[] = 'page-html-content';
 
 		$form->addSubmit('save', 'Save');
 
@@ -123,14 +123,14 @@ class StockAdd extends StockBase
 		$vatRepo = $this->em->getRepository(Vat::getClassName());
 		$vat = $vatRepo->find($values->vat);
 		$this->stock->vat = $vat;
-		
+
 		$this->stock->setDefaltPrice($values->price, $values->with_vat);
 		$groupRepo = $this->em->getRepository(Group::getClassName());
 		$groups = $groupRepo->findBy(['type' => Group::TYPE_BONUS]);
 		foreach ($groups as $group) {
 			$this->stock->addDiscount($group->getDiscount(), $group);
 		}
-		
+
 		return $this;
 	}
 

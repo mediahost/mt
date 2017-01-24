@@ -32,19 +32,19 @@ trait ProductCategories
 	/** @ORM\ManyToMany(targetEntity="Category", inversedBy="products") */
 	protected $categories;
 
-	/** @ORM\Column(type="simple_array") */
+	/** @ORM\Column(type="simple_array", nullable=true) */
 	private $categoriesIds;
 
 	/** @ORM\ManyToMany(targetEntity="ProducerModel", inversedBy="products") */
 	protected $accessoriesFor;
 
-	/** @ORM\Column(type="simple_array") */
+	/** @ORM\Column(type="simple_array", nullable=true) */
 	private $accessoriesProducerIds;
 
-	/** @ORM\Column(type="simple_array") */
+	/** @ORM\Column(type="simple_array", nullable=true) */
 	private $accessoriesLineIds;
 
-	/** @ORM\Column(type="simple_array") */
+	/** @ORM\Column(type="simple_array", nullable=true) */
 	private $accessoriesModelIds;
 
 	/** @ORM\ManyToOne(targetEntity="App\Model\Entity\Heureka\Category") */
