@@ -10,6 +10,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  *
  * @property string $code
  * @property float $value
+ * @property float $fixed
  */
 class BankRate extends BaseEntity
 {
@@ -24,6 +25,9 @@ class BankRate extends BaseEntity
 	/** @ORM\Column(type="float") */
 	protected $value;
 
+	/** @ORM\Column(type="float", nullable=true) */
+	protected $fixed;
+
 	public function __construct($code, $value)
 	{
 		$this->code = $code;
@@ -31,9 +35,14 @@ class BankRate extends BaseEntity
 		parent::__construct();
 	}
 
+	public function getValue($forcedRaw = FALSE)
+	{
+		return $forcedRaw || !$this->fixed ? $this->value : $this->fixed;
+	}
+
 	public function __toString()
 	{
-		return (string) ($this->code . ':' . $this->value);
+		return (string)($this->code . ':' . $this->value);
 	}
 
 }

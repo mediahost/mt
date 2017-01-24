@@ -97,7 +97,6 @@ abstract class BasePresenter extends Presenter
 	{
 		parent::startup();
 		$this->setLocale();
-		$this->loadCurrencyRates();
 		$this->loadPriceLevel();
 		$this->loadShop();
 	}
@@ -141,23 +140,7 @@ abstract class BasePresenter extends Presenter
 	}
 
 	// </editor-fold>
-	// <editor-fold desc="currency">
-
-	private function loadCurrencyRates()
-	{
-		$rateRepo = $this->em->getRepository(Rate::getClassName());
-		$rates = $rateRepo->findValuePairs();
-
-		$defaultCode = $this->exchange->getDefault()->getCode();
-		foreach ($this->exchange as $code => $currency) {
-			$isDefault = strtolower($code) === strtolower($defaultCode);
-			$isInDb = array_key_exists($code, $rates);
-			if (!$isDefault && $isInDb) {
-				$rateRelated = ExchangeHelper::getRelatedRate($rates[$code], $currency);
-				$this->exchange->addRate($code, $rateRelated);
-			}
-		}
-	}
+	// <editor-fold desc="price level">
 
 	private function loadPriceLevel()
 	{

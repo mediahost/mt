@@ -5,7 +5,6 @@ services:
 	# Entity Listeners
 	- {class: App\Listeners\Model\Entity\ImageListener, inject: yes}
 	- {class: App\Listeners\Model\Entity\FileListener, inject: yes}
-	- {class: App\Listeners\Model\Entity\RateListener, inject: yes}
 	- {class: App\Listeners\Model\Entity\ProductListener, inject: yes}
 	- {class: App\Listeners\Model\Entity\StockListener, inject: yes}
 	- {class: App\Listeners\Model\Entity\CategoryListener, inject: yes}

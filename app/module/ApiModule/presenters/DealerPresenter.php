@@ -175,7 +175,6 @@ class DealerPresenter extends BasePresenter
 			}
 
 			// set currency with rate
-			$this->loadCurrencyRates();
 			$currency = $this->request->getPost('currency', $this->exchange->getWeb()->getCode());
 			if (array_key_exists(Strings::upper($currency), $this->exchange)) {
 				$this->exchange->setWeb($currency);
@@ -268,22 +267,6 @@ class DealerPresenter extends BasePresenter
 			} catch (FacadeException $ex) {
 				$this->resource->state = 'error';
 				$this->resource->message = 'Other error in order process. Please contact us.';
-			}
-		}
-	}
-
-	private function loadCurrencyRates()
-	{
-		$rateRepo = $this->em->getRepository(Rate::getClassName());
-		$rates = $rateRepo->findValuePairs();
-
-		$defaultCode = $this->exchange->getDefault()->getCode();
-		foreach ($this->exchange as $code => $currency) {
-			$isDefault = strtolower($code) === strtolower($defaultCode);
-			$isInDb = array_key_exists($code, $rates);
-			if (!$isDefault && $isInDb) {
-				$rateRelated = ExchangeHelper::getRelatedRate($rates[$code], $currency);
-				$this->exchange->addRate($code, $rateRelated);
 			}
 		}
 	}

@@ -8,6 +8,7 @@ use GuzzleHttp\Exception\RequestException;
 use h4kuna\Exchange\Currency\Property;
 use Kdyby\Doctrine\DBALException;
 use Kdyby\Doctrine\EntityManager;
+use Tracy\Debugger;
 
 class BankRates extends Ecb\Day
 {
@@ -39,8 +40,7 @@ class BankRates extends Ecb\Day
 			return $row;
 		} else {
 			$property = parent::createProperty($row);
-			$this->saveBankRate($property);
-			return $property;
+			return $this->saveBankRate($property);
 		}
 	}
 
@@ -55,8 +55,17 @@ class BankRates extends Ecb\Day
 				$rate = new BankRate($property->getCode(), $property->getForeing());
 			}
 			$rateRepo->save($rate);
+
+			if ($rate->fixed) {
+				$row = [
+					'currency' => $rate->code,
+					'rate' => $rate->value,
+				];
+				$property = parent::createProperty($row);
+			}
 		} catch (DBALException $e) {
 		}
+		return $property;
 	}
 
 	private function loadOldRates()
@@ -64,7 +73,7 @@ class BankRates extends Ecb\Day
 		$rateRepo = $this->em->getRepository(BankRate::getClassName());
 		$currencies = [];
 		foreach ($rateRepo->findAll() as $rate) {
-			$currencies[] = new Property(1, $rate->getCode(), $rate->getValue());
+			$currencies[] = new Property(1, $rate->code, $rate->value);
 		}
 		return $currencies;
 	}

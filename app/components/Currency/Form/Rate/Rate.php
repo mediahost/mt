@@ -9,6 +9,7 @@ use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity;
 use h4kuna\Exchange\Currency\Property;
 use h4kuna\Exchange\Exchange;
+use Nette\Utils\Strings;
 
 class Rate extends BaseControl
 {
@@ -33,16 +34,21 @@ class Rate extends BaseControl
 		$defaultCurrency = $this->exchange->getDefault();
 		$defaultSymbol = $defaultCurrency->getFormat()->symbol;
 
+		$rateRepo = $this->em->getRepository(Entity\BankRate::getClassName());
+
 		$rates = $form->addContainer('rates');
 		foreach ($this->exchange as $code => $currency) {
 			/* @var $currency Property */
 			if ($code !== $defaultCurrency->getCode()) {
 				$currency->revertRate();
-				$rating = sprintf('ECB: 1%s = %.3f %s', $defaultSymbol, $currency->getRate(), $code);
+
+				$rate = $rateRepo->findOneByCode(Strings::upper($code));
+
+				$rating = sprintf('ECB: 1%s = %.3f %s', $defaultSymbol, $rate->getValue(TRUE), $code);
 				$rates->addText($code, $this->translator->translate('%code% rate', NULL, ['code' => $code]))
-								->setOption('description', $rating)
-								->setAttribute('placeholder', $currency->getRate())
-								->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_M;
+					->setOption('description', $rating)
+					->setAttribute('placeholder', $currency->getRate())
+					->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_M;
 			}
 		}
 
@@ -56,7 +62,7 @@ class Rate extends BaseControl
 	public function formSucceeded(Form $form, $values)
 	{
 		foreach ($values->rates as $code => $rate) {
-			$rate = preg_replace('/[\,\.]/', '.', $rate);
+			$rate = Entity\Price::strToFloat($rate);
 			$this->saveRate($code, $rate);
 		}
 		$this->onAfterSave();
@@ -64,19 +70,15 @@ class Rate extends BaseControl
 
 	private function saveRate($code, $value)
 	{
-		$rateRepo = $this->em->getRepository(Entity\Rate::getClassName());
-		$rate = $rateRepo->find($code);
-		if ($rate) {
-			if (!empty($value)) {
-				$rate->value = $value;
-				$rateRepo->save($rate);
-			} else {
-				$rateRepo->delete($rate);
-			}
-		} else if (!empty($value)) {
-			$rate = new Entity\Rate($code, $value);
-			$rateRepo->save($rate);
+		$rateRepo = $this->em->getRepository(Entity\BankRate::getClassName());
+		$rate = $rateRepo->findOneByCode(Strings::upper($code));
+		if (!$rate) {
+			$rate = new Entity\BankRate($code, $value);
 		}
+
+		$rate->fixed = empty($value) ? NULL : $value;
+		$this->em->persist($rate);
+		$this->em->flush();
 		return $this;
 	}
 
@@ -86,8 +88,8 @@ class Rate extends BaseControl
 		$values = [
 			'rates' => [],
 		];
-		$rateRepo = $this->em->getRepository(Entity\Rate::getClassName());
-		foreach ($rateRepo->findPairs('value') as $code => $rate) {
+		$rateRepo = $this->em->getRepository(Entity\BankRate::getClassName());
+		foreach ($rateRepo->findPairs('fixed') as $code => $rate) {
 			$values['rates'][$code] = $rate;
 		}
 		return $values;
