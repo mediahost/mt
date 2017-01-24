@@ -1,4 +1,4 @@
-{form form}	
+{form form}
 	{? $form->render('begin')}
 
 	<div class="alert alert-danger" n:if="$form->errors">
@@ -18,11 +18,12 @@
 				{!$form->renderer->renderPair($control)}
 				{if $control->name === 'price'}
 					{include groups, form => $form}
+					{include shops, form => $form}
 				{/if}
 			{/if}
 		{/foreach}
 		{if count($buttons)}
-		{!$form->renderer->renderPairMulti($buttons)}
+			{!$form->renderer->renderPairMulti($buttons)}
 		{/if}
 	</div>
 
@@ -30,15 +31,29 @@
 {/form}
 
 {define groups}
-{var fixed => App\Model\Entity\Discount::FIXED_PRICE}
-{var percents => App\Model\Entity\Discount::PERCENTAGE}
-{foreach $form['fixed']->getComponents() as $key => $control}
-	<div class="form-group">
-		{$form->renderer->renderLabel($control)}
-		<div class="col-md-{$form->renderer->inputWidth}">
-			<div class="inline-block">{input $form[$fixed][$key]}</div>
-			<div class="inline-block">{input $form[$percents][$key]}</div>
+	{var fixed => App\Model\Entity\Discount::FIXED_PRICE}
+	{var percents => App\Model\Entity\Discount::PERCENTAGE}
+	{foreach $form[$fixed]->getComponents() as $key => $control}
+		<div class="form-group">
+			{$form->renderer->renderLabel($control)}
+			<div class="col-md-{$form->renderer->inputWidth}">
+				<div class="inline-block">{input $form[$fixed][$key]}</div>
+				<div class="inline-block">{input $form[$percents][$key]}</div>
+			</div>
 		</div>
-	</div>
-{/foreach}
+	{/foreach}
+{/define}
+
+{define shops}
+	{foreach $form['shopSync']->getComponents() as $key => $control}
+		<div class="form-group">
+			{$form->renderer->renderLabel($control)}
+			<div class="col-md-{$form->renderer->inputWidth}">
+				<div class="inline-block">{input $form['shopSync'][$key]}</div>
+				<div class="inline-block" id="{$form['shopPrice'][$key]->getOptions()['id']}">
+					{input $form['shopPrice'][$key]}
+				</div>
+			</div>
+		</div>
+	{/foreach}
 {/define}

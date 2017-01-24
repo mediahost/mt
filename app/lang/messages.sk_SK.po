@@ -1142,6 +1142,12 @@ msgstr "Aktívny pre %shop%"
 msgid "Vat for %shop%"
 msgstr "DPH pre %shop%"
 
+msgid "Other for %shop%"
+msgstr "Iná pre %shop%"
+
+msgid "Price for %shop%"
+msgstr "Cena pre %shop%"
+
 msgid "Vat included"
 msgstr "vrátane DPH"
 

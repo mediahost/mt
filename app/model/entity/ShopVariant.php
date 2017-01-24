@@ -13,6 +13,7 @@ use Nette\Utils\Strings;
  * @property string $locale
  * @property Shop $shop
  * @property-read string $name
+ * @property-read string $priceCode
  * @property-read string $fullName
  * @property int $priceNumber
  */
@@ -41,9 +42,19 @@ class ShopVariant extends BaseEntity
 		return '#' . $this->id . ' - ' . $this->locale;
 	}
 
+	public function getPriceCode()
+	{
+		return $this->shop->priceLetter . $this->priceNumber;
+	}
+
 	public function getFullName()
 	{
 		return $this->shop . ' | ' . Strings::upper($this->locale);
+	}
+
+	public function isDefault()
+	{
+		return $this->priceNumber === Stock::DEFAULT_PRICE_VERSION && $this->shop->priceLetter === Stock::DEFAULT_PRICE_BASE;
 	}
 
 	public function __toString()

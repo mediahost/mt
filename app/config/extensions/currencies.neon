@@ -9,6 +9,7 @@ exchangeExtension:
 	currencies: {
 		eur: [decimal: 2, point: ',', thousand: ' ', mask: '1 S', symbol: '€']
 		czk: [decimal: 2, point: ',', thousand: ' ', mask: '1 S', symbol: 'Kč'] 
+		pln: [decimal: 2, point: ',', thousand: ' ', mask: '1 S', symbol: 'zł']
 	}
 	vat: 0
 	vatIn: false

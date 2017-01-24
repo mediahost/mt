@@ -45,7 +45,7 @@ trait StockDefaultPrice
 	 * @param Group|int $groupOrLevel Group or level
 	 * @return Price
 	 */
-	public function getPrice($groupOrLevel = NULL)
+	public function getPrice($groupOrLevel = NULL, $priceBase = NULL, $priceVersion = NULL)
 	{
 		if ($groupOrLevel instanceof Group) {
 			$level = $this->getLevelFromGroup($groupOrLevel);
@@ -56,28 +56,37 @@ trait StockDefaultPrice
 		if ($level && array_key_exists($level, $priceProperties)) {
 			$priceProperty = $priceProperties[$level];
 		} else {
-			$priceProperty = 'defaultPrice' . $this->priceBase . $this->priceVersion;
+			$priceBase = $priceBase ? $priceBase : $this->priceBase;
+			$priceVersion = $priceVersion ? $priceVersion : $this->priceVersion;
+			$priceProperty = 'defaultPrice' . $priceBase . $priceVersion;
 		}
-		return new Price($this->getVat(), $this->$priceProperty);
+		return new Price($this->getVat($priceBase), $this->$priceProperty);
 	}
 
-	public function setDefaultPrice($value, $withVat = FALSE)
+	public function getDefaultPrice($priceBase = NULL, $priceVersion = NULL)
 	{
-		$this->setPrice($value, NULL, $withVat);
+		return $this->getPrice(NULL, $priceBase, $priceVersion);
+	}
+
+	public function setDefaultPrice($value, $withVat = FALSE, $priceBase = NULL, $priceVersion = NULL)
+	{
+		$this->setPrice($value, NULL, $withVat, $priceBase, $priceVersion);
 		$this->recalculatePrices();
 		return $this;
 	}
 
-	public function setPrice($value, Group $group = NULL, $withVat = FALSE)
+	public function setPrice($value, Group $group = NULL, $withVat = FALSE, $priceBase = NULL, $priceVersion = NULL)
 	{
-		$price = new Price($this->vat, $value, !$withVat);
+		$price = new Price($this->getVat($priceBase), $value, !$withVat);
 
 		$priceProperties = self::getPriceProperties();
 		$level = $this->getLevelFromGroup($group);
 		if ($level && array_key_exists($level, $priceProperties)) {
 			$priceProperty = $priceProperties[$level];
 		} else {
-			$priceProperty = 'defaultPrice' . $this->priceBase . $this->priceVersion;
+			$priceBase = $priceBase ? $priceBase : $this->priceBase;
+			$priceVersion = $priceVersion ? $priceVersion : $this->priceVersion;
+			$priceProperty = 'defaultPrice' . $priceBase . $priceVersion;
 		}
 		$this->$priceProperty = $price->withoutVat;
 

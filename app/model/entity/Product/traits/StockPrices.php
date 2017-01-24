@@ -42,8 +42,7 @@ trait StockPrices
 		$defaultAttr = $attr . self::DEFAULT_PRICE_BASE . self::DEFAULT_PRICE_VERSION;
 
 		foreach (self::getPriceProperties($attr) as $key => $property) {
-			$shopLetter = substr($key, 0, 1);
-			$shopNumber = substr($key, 1);
+			list($shopLetter, $shopNumber) = self::parseShopId($key);
 			$propertyAttr = $attr . $key;
 
 			if ($property !== $defaultAttr && $this->isSynchronizePrice($shopLetter, $shopNumber)) {
@@ -53,10 +52,10 @@ trait StockPrices
 						$this->$propertyAttr = $this->$defaultAttr;
 						break;
 					case 2: // CZK
-						$this->$propertyAttr = $this->$defaultAttr / self::RECALCULATE_RATE_CZK;
+						$this->$propertyAttr = $this->$defaultAttr * self::RECALCULATE_RATE_CZK;
 						break;
 					case 3: // PLN
-						$this->$propertyAttr = $this->$defaultAttr / self::RECALCULATE_RATE_PLN;
+						$this->$propertyAttr = $this->$defaultAttr * self::RECALCULATE_RATE_PLN;
 						break;
 				}
 			}
@@ -78,6 +77,13 @@ trait StockPrices
 			}
 		}
 		return $this;
+	}
+
+	public static function parseShopId($shopId)
+	{
+		$shopLetter = substr($shopId, 0, 1);
+		$shopNumber = substr($shopId, 1);
+		return [$shopLetter, $shopNumber];
 	}
 
 }

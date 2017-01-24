@@ -11,10 +11,12 @@ use App\Model\Entity\Group;
 use App\Model\Entity\GroupDiscount;
 use App\Model\Entity\Price;
 use App\Model\Entity\Shop;
+use App\Model\Entity\ShopVariant;
 use App\Model\Entity\Stock;
 use App\Model\Entity\Vat;
 use App\Model\Facade\VatFacade;
 use Nette\Utils\ArrayHash;
+use Nette\Utils\Strings;
 
 class StockPrice extends StockBase
 {
@@ -44,8 +46,9 @@ class StockPrice extends StockBase
 
 		$form = new Form();
 		$form->setTranslator($this->translator)
-				->setRenderer(new MetronicHorizontalFormRenderer(4, 8));
-		$form->getElementPrototype()->class('form-horizontal ajax');
+			->setRenderer(new MetronicHorizontalFormRenderer(4, 8));
+//		$form->getElementPrototype()->class('form-horizontal ajax');
+		$form->getElementPrototype()->class('form-horizontal');
 
 		$groupRepo = $this->em->getRepository(Group::getClassName());
 		$groups = $groupRepo->findAll();
@@ -56,10 +59,10 @@ class StockPrice extends StockBase
 		$defaultPrice = $this->defaultWithVat ? $this->stock->price->withVat : $this->stock->price->withoutVat;
 
 		$form->addCheckSwitch('with_vat', 'Prices are with VAT', 'YES', 'NO')
-				->setDefaultValue($this->defaultWithVat);
+			->setDefaultValue($this->defaultWithVat);
 		$form->addText('price', 'Price')
-				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
-				->setRequired();
+			->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
+			->setRequired();
 
 		$fixed = $form->addContainer(Discount::FIXED_PRICE);
 		$percents = $form->addContainer(Discount::PERCENTAGE);
@@ -77,27 +80,62 @@ class StockPrice extends StockBase
 			}
 
 			$fixed->addText($group->id, $group->name)
-					->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
-					->setAttribute('placeholder', $this->exchangeHelper->format($placeholderPrice));
+				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
+				->setAttribute('placeholder', $this->exchangeHelper->format($placeholderPrice));
 			$percents->addText($group->id, $group->name)
-					->setAttribute('class', ['mask_percentage', MetronicTextInputBase::SIZE_S])
-					->setAttribute('placeholder', ($this->percentIsSale ? $placeholderPercentage : (100 - $placeholderPercentage)) . '%');
+				->setAttribute('class', ['mask_percentage', MetronicTextInputBase::SIZE_S])
+				->setAttribute('placeholder', ($this->percentIsSale ? $placeholderPercentage : (100 - $placeholderPercentage)) . '%');
 		}
 
+		$shopSync = $form->addContainer('shopSync');
+		$shopPrices = $form->addContainer('shopPrice');
+		foreach ($shops as $shop) {
+			foreach ($shop->variants as $variant) {
+				/** @var ShopVariant $variant */
+				if (!$variant->isDefault()) {
+					$id = $shop->priceLetter . $variant->priceNumber;
+
+					$nameSync = $this->translator->translate('Other for %shop%', NULL, ['shop' => $variant->fullName]);
+					$shopSync->addCheckSwitch($id, $nameSync, 'YES', 'NO')
+						->addCondition(Form::EQUAL, TRUE)
+						->toggle('price_' . $id);
+
+					switch ($variant->locale) {
+						case 'cs':
+							$currency = 'czk';
+							break;
+						case 'pl':
+							$currency = 'pln';
+							break;
+						case 'sk':
+						default:
+							$currency = 'eur';
+							break;
+					}
+					$defaultPrice = $this->stock->getDefaultPrice($shop->priceLetter, $variant->priceNumber);
+					$defaultPriceValue = $this->defaultWithVat ? $defaultPrice->withVat : $defaultPrice->withoutVat;
+					$formatedDefaultPrice = $this->exchangeHelper->format($defaultPriceValue, Strings::upper($currency), Strings::upper($currency));
+					$shopPrices->addText($id)
+						->setAttribute('class', ['mask_currency_' . Strings::lower($currency), MetronicTextInputBase::SIZE_S])
+						->setAttribute('placeholder', $formatedDefaultPrice)
+						->setOption('id', 'price_' . $id);
+				}
+			}
+		}
+
+		$shopVat = $form->addContainer('shopVat');
 		foreach ($shops as $shop) {
 			/** @var Shop $shop */
-			$name = $this->translator->translate('Vat for %shop%', NULL, ['shop' => $shop]);
-			$form->addSelect2('vat' . $shop->priceLetter, $name, $shop->vatValues)
+			$nameVat = $this->translator->translate('Vat for %shop%', NULL, ['shop' => $shop]);
+			$shopVat->addSelect2($shop->priceLetter, $nameVat, $shop->vatValues)
 				->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
 		}
-		$form->addSelect2('vat', 'Vat', $this->vatFacade->getValues())
-						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
 
 		$form->addText('purchase', 'Purchase price')
-				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
+			->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
 
 		$form->addSubmit('save', 'Save')
-				->setAttribute('data-dismiss-after', 'true');
+			->setAttribute('data-dismiss-after', 'true');
 
 		$form->setDefaults($this->getDefaults());
 		$form->onSuccess[] = $this->formSucceeded;
@@ -116,8 +154,22 @@ class StockPrice extends StockBase
 		$this->stock->setPurchasePrice($values->purchase > 0 ? $values->purchase : NULL, $values->with_vat);
 
 		$vatRepo = $this->em->getRepository(Vat::getClassName());
-		$vat = $vatRepo->find($values->vat);
-		$this->stock->vat = $vat;
+		if (isset($values->shopVat)) {
+			foreach ($values->shopVat as $priceLetter => $vatId) {
+				$vat = $vatRepo->find($vatId);
+				$this->stock->setVat($vat, $priceLetter);
+			}
+		}
+
+		if (isset($values->shopSync) && isset($values->shopPrice)) {
+			foreach ($values->shopSync as $shopId => $isSetted) {
+				list($shopLetter, $shopNumber) = Stock::parseShopId($shopId);
+				$this->stock->setSynchronizePrice($shopLetter, $shopNumber, !$isSetted);
+				if ($isSetted) {
+					$this->stock->setPrice($values->shopPrice[$shopId], NULL, $values->with_vat, $shopLetter, $shopNumber);
+				}
+			}
+		}
 
 		$fixed = $values->{Discount::FIXED_PRICE};
 		$percents = $values->{Discount::PERCENTAGE};
@@ -130,8 +182,8 @@ class StockPrice extends StockBase
 				$fixedPrice = new Price($this->stock->vat, $fixedValue, !$values->with_vat);
 				$discount = new Discount($fixedPrice->withoutVat, Discount::FIXED_PRICE);
 			} else if ($percentValue &&
-					0 < $percentValue && $percentValue < 100 &&
-					(($this->percentIsSale && $percentValue > 0) || (!$this->percentIsSale && $percentValue < 100))
+				0 < $percentValue && $percentValue < 100 &&
+				(($this->percentIsSale && $percentValue > 0) || (!$this->percentIsSale && $percentValue < 100))
 			) {
 				$value = $this->percentIsSale ? $percentValue : (100 - $percentValue);
 				$discount = new Discount($value, Discount::PERCENTAGE);
@@ -139,7 +191,7 @@ class StockPrice extends StockBase
 
 			$this->loadDiscount($discount, $groupId);
 		}
-		$this->stock->setDefaltPrice($values->price, $values->with_vat);
+		$this->stock->setDefaultPrice($values->price, $values->with_vat);
 
 		return $this;
 	}
@@ -181,16 +233,25 @@ class StockPrice extends StockBase
 	{
 		$values = [];
 		if ($this->stock->purchasePrice) {
-			$values += [
-				'purchase' => $this->defaultWithVat ? $this->stock->purchasePrice->withVat : $this->stock->purchasePrice->withoutVat,
-			];
+			$values['purchase'] = $this->defaultWithVat ? $this->stock->purchasePrice->withVat : $this->stock->purchasePrice->withoutVat;
 		}
 		if ($this->stock->price) {
-			$values += [
-				'price' => $this->defaultWithVat ? $this->stock->price->withVat : $this->stock->price->withoutVat,
-				'with_vat' => $this->defaultWithVat,
-				'vat' => $this->stock->price->vat->id,
-			];
+			$values['price'] = $this->defaultWithVat ? $this->stock->price->withVat : $this->stock->price->withoutVat;
+			$values['with_vat'] = $this->defaultWithVat;
+		}
+		$shopRepo = $this->em->getRepository(Shop::getClassName());
+		foreach ($shopRepo->findAll() as $shop) {
+			/** @var Shop $shop */
+			$values['shopVat'][$shop->priceLetter] = $this->stock->getVat($shop->priceLetter)->id;
+			foreach ($shop->variants as $variant) {
+				/** @var ShopVariant $variant */
+				$isSync = $this->stock->isSynchronizePrice($shop->priceLetter, $variant->priceNumber);
+				$values['shopSync'][$variant->priceCode] = !$isSync;
+				if (!$isSync) {
+					$shopPrice = $this->stock->getPrice(NULL, $shop->priceLetter, $variant->priceNumber);
+					$values['shopPrice'][$variant->priceCode] = $this->defaultWithVat ? $shopPrice->withVat : $shopPrice->withoutVat;
+				}
+			}
 		}
 		foreach ($this->stock->groupDiscounts as $groupDiscount) {
 			/* @var $groupDiscount GroupDiscount */

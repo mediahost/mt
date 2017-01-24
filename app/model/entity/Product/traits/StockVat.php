@@ -54,16 +54,18 @@ trait StockVat
 	/** @ORM\ManyToOne(targetEntity="Vat") */
 	private $vatB;
 
-	public function setVat(Vat $vat)
+	public function setVat(Vat $vat, $priceBase = NULL)
 	{
-		$vatAttr = 'vat' . $this->priceBase;
+		$priceBase = $priceBase ? $priceBase : $this->priceBase;
+		$vatAttr = 'vat' . $priceBase;
 		$this->$vatAttr = $vat;
 		return $this;
 	}
 
-	public function getVat()
+	public function getVat($priceBase = NULL)
 	{
-		$vatAttr = 'vat' . $this->priceBase;
+		$priceBase = $priceBase ? $priceBase : $this->priceBase;
+		$vatAttr = 'vat' . $priceBase;
 		return $this->$vatAttr;
 	}
 
