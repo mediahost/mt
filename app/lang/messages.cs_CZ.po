@@ -1135,6 +1135,9 @@ msgstr "Aktivní"
 msgid "Active for %shop%"
 msgstr "Aktivní pro %shop%"
 
+msgid "Vat for %shop%"
+msgstr "DPH pro %shop%"
+
 msgid "Vat included"
 msgstr "včetně DPH"
 

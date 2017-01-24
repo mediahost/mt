@@ -10,6 +10,7 @@ use App\Model\Entity\Discount;
 use App\Model\Entity\Group;
 use App\Model\Entity\GroupDiscount;
 use App\Model\Entity\Price;
+use App\Model\Entity\Shop;
 use App\Model\Entity\Stock;
 use App\Model\Entity\Vat;
 use App\Model\Facade\VatFacade;
@@ -43,11 +44,14 @@ class StockPrice extends StockBase
 
 		$form = new Form();
 		$form->setTranslator($this->translator)
-				->setRenderer(new MetronicHorizontalFormRenderer());
+				->setRenderer(new MetronicHorizontalFormRenderer(4, 8));
 		$form->getElementPrototype()->class('form-horizontal ajax');
 
 		$groupRepo = $this->em->getRepository(Group::getClassName());
 		$groups = $groupRepo->findAll();
+
+		$shopRepo = $this->em->getRepository(Shop::getClassName());
+		$shops = $shopRepo->findAll();
 
 		$defaultPrice = $this->defaultWithVat ? $this->stock->price->withVat : $this->stock->price->withoutVat;
 
@@ -80,6 +84,12 @@ class StockPrice extends StockBase
 					->setAttribute('placeholder', ($this->percentIsSale ? $placeholderPercentage : (100 - $placeholderPercentage)) . '%');
 		}
 
+		foreach ($shops as $shop) {
+			/** @var Shop $shop */
+			$name = $this->translator->translate('Vat for %shop%', NULL, ['shop' => $shop]);
+			$form->addSelect2('vat' . $shop->priceLetter, $name, $shop->vatValues)
+				->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
+		}
 		$form->addSelect2('vat', 'Vat', $this->vatFacade->getValues())
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
 

@@ -35,7 +35,7 @@
 {foreach $form['fixed']->getComponents() as $key => $control}
 	<div class="form-group">
 		{$form->renderer->renderLabel($control)}
-		<div class="col-md-9">
+		<div class="col-md-{$form->renderer->inputWidth}">
 			<div class="inline-block">{input $form[$fixed][$key]}</div>
 			<div class="inline-block">{input $form[$percents][$key]}</div>
 		</div>

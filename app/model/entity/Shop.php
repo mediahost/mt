@@ -13,6 +13,8 @@ use Nette\Utils\Strings;
  *
  * @property string $priceLetter
  * @property ArrayCollection $variants
+ * @property ArrayCollection $vats
+ * @property array $vatValues
  * @property Address $address
  * @property BankAccount $bankAccounts
  * @property BankAccount $bankAccount1
@@ -38,7 +40,7 @@ class Shop extends BaseEntity
 	/** @ORM\OneToOne(targetEntity="BankAccount", cascade={"persist", "remove"}) */
 	protected $bankAccount2;
 
-	/** @ORM\OneToMany(targetEntity="ShopVariant", mappedBy="shop") */
+	/** @ORM\OneToMany(targetEntity="Vat", mappedBy="shop") */
 	protected $vats;
 
 	public function getBankAccounts()
@@ -78,6 +80,15 @@ class Shop extends BaseEntity
 		$variant->shop = $this;
 		$this->variants->add($variant);
 		return $this;
+	}
+
+	public function getVatValues()
+	{
+		$values = [];
+		foreach ($this->vats as $vat) {
+			$values[$vat->id] = (string)$vat;
+		}
+		return $values;
 	}
 
 	public function __construct($letter)

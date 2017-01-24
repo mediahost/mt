@@ -1123,6 +1123,9 @@ msgstr "Active"
 msgid "Active for %shop%"
 msgstr "Active for %shop%"
 
+msgid "Vat for %shop%"
+msgstr "Vat for %shop%"
+
 msgid "Vat included"
 msgstr "Vat included"
 

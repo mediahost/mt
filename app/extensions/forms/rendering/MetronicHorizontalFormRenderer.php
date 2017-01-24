@@ -12,8 +12,8 @@ class MetronicHorizontalFormRenderer extends MetronicFormRenderer
 	const DEFAULT_LABEL_WIDTH = '3';
 	const DEFAULT_INPUT_WIDTH = '9';
 
-	private $labelWidth;
-	private $inputWidth;
+	public $labelWidth;
+	public $inputWidth;
 
 	public function __construct($labelWidth = self::DEFAULT_LABEL_WIDTH, $inputWidth = self::DEFAULT_INPUT_WIDTH)
 	{

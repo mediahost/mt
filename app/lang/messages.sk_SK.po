@@ -1139,6 +1139,9 @@ msgstr "Aktívny"
 msgid "Active for %shop%"
 msgstr "Aktívny pre %shop%"
 
+msgid "Vat for %shop%"
+msgstr "DPH pre %shop%"
+
 msgid "Vat included"
 msgstr "vrátane DPH"
 

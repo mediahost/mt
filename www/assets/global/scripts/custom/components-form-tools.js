@@ -463,15 +463,21 @@ var ComponentsFormTools = function () {
 			url: basePath + '/assets/global/plugins/jquery-inputmask/inputmask/phone-codes/phone-codes.json'
 		});
 
-		$('.mask_currency').inputmask('numeric', {
+		var maskCurrencyParams = {
 			rightAlign: 0,
 			prefix: '',
-			suffix: ' ' + currencySymbol,
 			radixPoint: ",",
 			groupSeparator: ' ',
 			autoGroup: !0,
 			digits: 2
-		});
+		};
+		maskCurrencyParams.suffix = ' ' + currencySymbol;
+		$('.mask_currency').inputmask('numeric', maskCurrencyParams);
+		$('.mask_currency_eur').inputmask('numeric', maskCurrencyParams);
+		maskCurrencyParams.suffix =  ' Kč';
+		$('.mask_currency_czk').inputmask('numeric', maskCurrencyParams);
+		maskCurrencyParams.suffix =  ' zł';
+		$('.mask_currency_pln').inputmask('numeric', maskCurrencyParams);
 
 		$('.mask_percentage').inputmask('decimal', {
 			rightAlign: 0,
