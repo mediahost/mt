@@ -18,8 +18,8 @@
 					<div class="clearfix">
 						<a href="{$basePath}/foto/{$product->image|size}" class="popup-gallery-image">
 							<img src="{$basePath}/foto/{$product->image|size:460,460}"
-								 alt="{$product}"
-								 title="{$product}"/>
+							     alt="{$product}"
+							     title="{$product}"/>
 						</a>
 					</div>
 				</div>
@@ -40,63 +40,65 @@
 							{$product}
 						</a>
 					</h1>
-					<p class="product-page-price">
-						{$stock->getPrice($priceLevel)|currencyVat}
-					</p>
-					<div class="row">
-						<div class="col-md-6">
-							<p class="text-muted text-sm vat">
-								{_'include %value% VAT', NULL, ['value' => $stock->vat]}
-							</p>
-						</div>
-						<div class="col-md-6">
-							<p class="text-right product-availability">
-								{_'Availability'}:
-								{if $stock->inStore > 10}
-									<strong>{_'In Stock'}</strong>
-								{elseif $stock->inStore > 0}
-									<strong>{$stock->inStore} {$product->unit}</strong>
-								{else}
-									<strong>{_'Temporarily Sold Out'}</strong>
-								{/if}
-							</p>
-						</div>
-					</div>
-					<div n:if="$stock->vat->isNone()">
-						<p n:if="$stock->vat->isNone()">
-							{_'NoVatLaw2'}
+					{if $stock->isActive()}
+						<p class="product-page-price">
+							{$stock->getPrice($priceLevel)|currencyVat}
 						</p>
-						<p n:if="$stock->vat->isNone()">
-							{_'NoVatLaw'}
-						</p>
-					</div>
-					<div class="row">
-						<div class="col-md-5 product-page-cart">
-							{control addToCart}
-						</div>
-						<div class="col-md-7 text-right">
-							<div n:if="$homecreditCalc" class="product-homecredit">
-								<a href="{$homecreditCalc}"
-								   id="homecreditCalc"
-								   data-fancybox-type="iframe">
-									<img src="{$basePath}/images/homecredit/splatkova_kalkulacka_sk.jpg"
-										 alt="{_'HomeCredit iCalc'}"/>
-								</a>
+						<div class="row">
+							<div class="col-md-6">
+								<p class="text-muted text-sm vat">
+									{_'include %value% VAT', NULL, ['value' => $stock->vat]}
+								</p>
 							</div>
-							{*<div class="product-recommend">*}
-								{*<a href="#recommend" data-toggle="modal">*}
-									{*<span class="fa fa-send"></span>*}
-									{*{_'Recommend'}*}
-								{*</a>*}
-							{*</div>*}
-							{*<div class="product-watchdog">*}
-								{*<a href="#watchdog" data-toggle="modal">*}
-									{*<span class="fa fa-bar-chart-o"></span>*}
-									{*{_'Watch Price'}*}
-								{*</a>*}
-							{*</div>*}
+							<div class="col-md-6">
+								<p class="text-right product-availability">
+									{_'Availability'}:
+									{if $stock->inStore > 10}
+										<strong>{_'In Stock'}</strong>
+									{elseif $stock->inStore > 0}
+										<strong>{$stock->inStore} {$product->unit}</strong>
+									{else}
+										<strong>{_'Temporarily Sold Out'}</strong>
+									{/if}
+								</p>
+							</div>
 						</div>
-					</div>
+						<div n:if="$stock->vat->isNone()">
+							<p n:if="$stock->vat->isNone()">
+								{_'NoVatLaw2'}
+							</p>
+							<p n:if="$stock->vat->isNone()">
+								{_'NoVatLaw'}
+							</p>
+						</div>
+						<div class="row">
+							<div class="col-md-5 product-page-cart">
+								{control addToCart}
+							</div>
+							<div class="col-md-7 text-right">
+								<div n:if="$homecreditCalc" class="product-homecredit">
+									<a href="{$homecreditCalc}"
+									   id="homecreditCalc"
+									   data-fancybox-type="iframe">
+										<img src="{$basePath}/images/homecredit/splatkova_kalkulacka_sk.jpg"
+										     alt="{_'HomeCredit iCalc'}"/>
+									</a>
+								</div>
+								{*<div class="product-recommend">*}
+									{*<a href="#recommend" data-toggle="modal">*}
+										{*<span class="fa fa-send"></span>*}
+										{*{_'Recommend'}*}
+									{*</a>*}
+								{*</div>*}
+								{*<div class="product-watchdog">*}
+									{*<a href="#watchdog" data-toggle="modal">*}
+										{*<span class="fa fa-bar-chart-o"></span>*}
+										{*{_'Watch Price'}*}
+									{*</a>*}
+								{*</div>*}
+							</div>
+						</div>
+					{/if}
 				</ul>
 			</div>
 			<div class="col-md-12 product-page-desc-lg" n:if="$product->perex">

@@ -112,6 +112,7 @@ abstract class BasePresenter extends Presenter
 		$this->template->designSettings = $this->settings->design; // TODO: remove design settings
 		$this->template->pageInfo = $this->settings->pageInfo;
 		$this->template->shop = $this->shopVariant->shop;
+		$this->template->shopVariant = $this->shopVariant;
 
 		$currency = $this->exchange[$this->exchange->getWeb()];
 		$this->template->exchange = $this->exchange;
@@ -157,7 +158,7 @@ abstract class BasePresenter extends Presenter
 
 	private function loadShop()
 	{
-		$this->shopVariant = $this->shopFacade->getShopVariant($this->locale);
+		$this->shopVariant = $this->shopFacade->getShopVariant();
 	}
 
 	// </editor-fold>

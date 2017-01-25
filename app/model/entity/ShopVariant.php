@@ -11,6 +11,7 @@ use Nette\Utils\Strings;
  * @ORM\Entity
  *
  * @property string $locale
+ * @property string $currency
  * @property Shop $shop
  * @property-read string $name
  * @property-read string $priceCode
@@ -22,14 +23,17 @@ class ShopVariant extends BaseEntity
 
 	use Identifier;
 
-	/** @ORM\Column(type="string", length=2) */
-	protected $locale;
-
 	/** @ORM\ManyToOne(targetEntity="Shop", inversedBy="variants") */
 	protected $shop;
 
 	/** @ORM\Column(type="smallint") */
 	protected $priceNumber;
+
+	/** @ORM\Column(type="string", length=2, nullable=true) */
+	protected $locale;
+
+	/** @ORM\Column(type="string", length=3, nullable=true) */
+	protected $currency;
 
 	public function __construct($locale)
 	{

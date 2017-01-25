@@ -310,11 +310,12 @@ abstract class BasePresenter extends BaseBasePresenter
 	{
 		return new Multiplier(function ($itemId) {
 			$control = $this->iStockPrint->create();
-			$control->setStockById($itemId);
-			$control->setPriceLevel($this->priceLevel);
-			$control->setMainClasses($this->stockComponentClasses);
-			$control->setShowLabels($this->stockComponentLabels);
-			$control->setShowSecondImage($this->stockComponentSecondImage);
+			$control->setShopVariant($this->shopVariant)
+				->setStockById($itemId)
+				->setPriceLevel($this->priceLevel)
+				->setMainClasses($this->stockComponentClasses)
+				->setShowLabels($this->stockComponentLabels)
+				->setShowSecondImage($this->stockComponentSecondImage);
 			return $control;
 		});
 	}
@@ -326,6 +327,7 @@ abstract class BasePresenter extends BaseBasePresenter
 			->setExchange($this->exchange, $this->exchange->getWeb())
 			->setItemsPerPage($this->settings->pageConfig->itemsPerRow, $this->settings->pageConfig->rowsPerPage)
 			->setAjax()
+			->setShopVariant($this->shopVariant)
 			->setLevel($this->priceLevel)
 			->setSorting(ProductList::SORT_BY_PRICE_DESC);
 

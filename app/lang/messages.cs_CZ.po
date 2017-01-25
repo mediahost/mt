@@ -475,7 +475,7 @@ msgid "Edit User"
 msgstr "Upravit uživatele"
 
 msgid "View Cart"
-msgstr "Prohlédnout košík"
+msgstr "Zobrazit košík"
 
 msgid "Finish order"
 msgstr "Dokončit objednávku"

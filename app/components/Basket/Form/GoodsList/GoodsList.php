@@ -5,6 +5,7 @@ namespace App\Components\Basket\Form;
 use App\Components\BaseControl;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
+use App\Model\Entity\ShopVariant;
 use App\Model\Entity\Stock;
 use App\Model\Facade\BasketFacade;
 use App\Model\Facade\Exception\BasketFacadeException;
@@ -27,10 +28,10 @@ class GoodsList extends BaseControl
 	// </editor-fold>
 
 	/** @var int */
-	private $max = self::MAX;
-
-	/** @var int */
 	protected $priceLevel;
+
+	/** @var ShopVariant */
+	protected $shopVariant;
 
 	/** @return Form */
 	protected function createComponentForm()
@@ -143,6 +144,12 @@ class GoodsList extends BaseControl
 	public function setPriceLevel($level)
 	{
 		$this->priceLevel = $level;
+		return $this;
+	}
+
+	public function setShopVariant(ShopVariant $variant)
+	{
+		$this->shopVariant = $variant;
 		return $this;
 	}
 

@@ -80,7 +80,6 @@ class StockBasic extends StockBase
 		$this->stock->product->translateAdd($this->translator->getLocale())->perex = $values->perex;
 		$this->stock->product->translateAdd($this->translator->getLocale())->description = $values->description;
 		$this->stock->product->mergeNewTranslations();
-		$this->stock->product->active = $values->active;
 
 		return $this;
 	}

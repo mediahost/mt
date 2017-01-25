@@ -26,9 +26,11 @@ class PaymentsFacade extends Object
 	{
 		$paymentsList = [];
 		$paymentsRepo = $this->em->getRepository(Payment::getClassName());
-		
-		$criteria = [];
-		
+
+		$criteria = [
+			'active' => TRUE,
+		];
+
 		$currencyCode = $this->exchange->getExchange()->getWeb()->getCode();
 		switch ($currencyCode) {
 			case 'EUR':
@@ -37,12 +39,10 @@ class PaymentsFacade extends Object
 				$criteria['isHomecreditSk'] = FALSE;
 				break;
 		}
-		
+
 		$payments = $paymentsRepo->findBy($criteria);
 		foreach ($payments as $payment) {
-			if ($payment->active) {
-				$paymentsList[$payment->id] = $this->getPaymentShippingFormat($payment, $basket, $level, $withVat);
-			}
+			$paymentsList[$payment->id] = $this->getPaymentShippingFormat($payment, $basket, $level, $withVat);
 		}
 		return $paymentsList;
 	}
@@ -51,11 +51,11 @@ class PaymentsFacade extends Object
 	{
 		$shippingsList = [];
 		$shippingsRepo = $this->em->getRepository(Shipping::getClassName());
-		$shippings = $shippingsRepo->findAll();
+		$shippings = $shippingsRepo->findBy([
+			'active' => TRUE,
+		]);
 		foreach ($shippings as $shipping) {
-			if ($shipping->active) {
-				$shippingsList[$shipping->id] = $this->getPaymentShippingFormat($shipping, $basket, $level, $withVat);
-			}
+			$shippingsList[$shipping->id] = $this->getPaymentShippingFormat($shipping, $basket, $level, $withVat);
 		}
 		return $shippingsList;
 	}

@@ -86,4 +86,14 @@ trait StockPrices
 		return [$shopLetter, $shopNumber];
 	}
 
+	public function getShopLetter()
+	{
+		return $this->priceBase ? $this->priceBase : self::DEFAULT_PRICE_BASE;
+	}
+
+	public function getShopVariantNumber()
+	{
+		return $this->priceVersion ? $this->priceVersion : self::DEFAULT_PRICE_VERSION;
+	}
+
 }

@@ -14,6 +14,7 @@ use App\Model\Entity\Category;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
+use App\Model\Entity\ShopVariant;
 use App\Model\Facade\BasketFacade;
 use App\Model\Facade\ProductFacade;
 use App\Model\Facade\StockFacade;
@@ -143,6 +144,9 @@ class ProductList extends Control
 
 	/** @var int */
 	protected $priceLevel;
+
+	/** @var ShopVariant */
+	protected $shopVariant;
 
 	/** @var int */
 	protected $limitPriceMin;
@@ -306,6 +310,13 @@ class ProductList extends Control
 	{
 		$this->priceLevel = $level;
 		$this->getHolder()->setPriceLevel($level);
+		return $this;
+	}
+
+	public function setShopVariant(ShopVariant $variant)
+	{
+		$this->shopVariant = $variant;
+		$this->getHolder()->setShopVariant($variant);
 		return $this;
 	}
 
@@ -630,6 +641,7 @@ class ProductList extends Control
 	{
 		return new Multiplier(function ($itemId) {
 			$control = $this->iStockPrint->create()
+				->setShopVariant($this->shopVariant)
 				->setStockById($itemId)
 				->setPriceLevel($this->priceLevel);
 			return $control;

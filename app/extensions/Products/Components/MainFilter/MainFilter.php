@@ -58,11 +58,11 @@ class MainFilter extends BaseControl
 		$form->addCheckbox('onlyAvailable', 'Only Available')
 			->setDefaultValue($this->stored);
 
-		$limitPriceMin = floor($this->exchange->change($this->limitPriceMin));
-		$limitPriceMax = ceil($this->exchange->change($this->limitPriceMax));
+		$limitPriceMin = floor($this->limitPriceMin);
+		$limitPriceMax = ceil($this->limitPriceMax);
 
-		$fromValue = $this->priceMin ? floor($this->exchange->change($this->priceMin)) : NULL;
-		$toValue = $this->priceMax ? ceil($this->exchange->change($this->priceMax)) : NULL;
+		$fromValue = $this->priceMin ? floor($this->priceMin) : NULL;
+		$toValue = $this->priceMax ? ceil($this->priceMax) : NULL;
 
 		if ($limitPriceMax > 0) {
 			$form->addText('price', 'Range')

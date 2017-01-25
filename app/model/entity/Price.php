@@ -10,6 +10,7 @@ use Nette\Object;
  * @property float $withoutVat
  * @property Vat $vat
  * @property float $vatSum
+ * @property bool $convertible
  */
 class Price extends Object
 {
@@ -25,18 +26,32 @@ class Price extends Object
 	/** @var int */
 	private $precision = self::PRECISION;
 
+	/** @var bool */
+	private $convertible = TRUE;
+
 	public function __construct(Vat $vat, $value = NULL, $withoutVat = TRUE)
 	{
 		$this->setVat($vat);
 		if ($value !== NULL) {
 			if (!is_float($value)) {
-				$value = self::strToFloat((string) $value);
+				$value = self::strToFloat((string)$value);
 			}
 			$this->setValue($value, $withoutVat);
 		}
 	}
 
 	/*	 * ******************************************************************* */
+
+	public function setConvertible($value = TRUE)
+	{
+		$this->convertible = $value;
+		return $this;
+	}
+
+	public function getConvertible()
+	{
+		return $this->convertible;
+	}
 
 	public function setVat(Vat $vat)
 	{
@@ -52,7 +67,7 @@ class Price extends Object
 
 	public function setWithoutVat($value)
 	{
-		$this->value = (float) round($value, $this->precision);
+		$this->value = (float)round($value, $this->precision);
 		return $this;
 	}
 
@@ -77,19 +92,19 @@ class Price extends Object
 	/** @return float */
 	public function getVatSum()
 	{
-		return (float) round($this->value * $this->vat->downDecimal, $this->precision);
+		return (float)round($this->value * $this->vat->downDecimal, $this->precision);
 	}
 
 	/** @return float */
 	public function getWithVat()
 	{
-		return (float) round($this->value * $this->vat->upDecimal, $this->precision);
+		return (float)round($this->value * $this->vat->upDecimal, $this->precision);
 	}
 
 	/** @return float */
 	public function getWithoutVat()
 	{
-		return (float) round($this->value, $this->precision);
+		return (float)round($this->value, $this->precision);
 	}
 
 	public function getPrecision()
@@ -101,17 +116,17 @@ class Price extends Object
 
 	public function __toString()
 	{
-		return (string) $this->getWithoutVat();
+		return (string)$this->getWithoutVat();
 	}
 
 	public static function strToFloat($string)
 	{
-		return (float) preg_replace('/,/', '.', $string);
+		return (float)preg_replace('/,/', '.', $string);
 	}
 
 	public static function floatToStr($float)
 	{
-		return preg_replace('/\./', ',', (string) $float);
+		return preg_replace('/\./', ',', (string)$float);
 	}
 
 }

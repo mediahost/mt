@@ -22,14 +22,13 @@ class ExchangeHelper
 		return $this->exchange;
 	}
 
-	public function format($number, $from = NULL, $to = NULL, $vat = NULL)
+	public function format($price, $from = NULL, $to = NULL, $vat = FALSE)
 	{
-		if ($number instanceof Price) {
-			if ($vat === TRUE) {
-				$vat = $number->vat->value;
-				$number = $number->withVat;
-			} else {
-				$number = $number->withoutVat;
+		$number = $price;
+		if ($price instanceof Price) {
+			$number = $vat ? $price->withVat : $price->withoutVat;
+			if (!$price->convertible) {
+				return $this->formatNumber($number, TRUE);
 			}
 		}
 		return $this->exchange->format($number, $from, $to);
@@ -40,14 +39,13 @@ class ExchangeHelper
 		return $this->format($price, $from, $to, TRUE);
 	}
 
-	public function change($price, $from = NULL, $to = NULL, $round = NULL, $vat = NULL)
+	public function change($price, $from = NULL, $to = NULL, $round = NULL, $vat = FALSE)
 	{
+		$number = $price;
 		if ($price instanceof Price) {
-			if ($vat === TRUE) {
-				$vat = $price->vat->value;
-				$price = $price->withVat;
-			} else {
-				$price = $price->withoutVat;
+			$number = $vat ? $price->withVat : $price->withoutVat;
+			if (!$price->convertible) {
+				return $number;
 			}
 		}
 		return $this->exchange->change($price, $from, $to, $round);

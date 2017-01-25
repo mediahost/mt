@@ -130,13 +130,13 @@
 									 alt="{$product->name}" title="{$product->name}"/>
 							</a>
 						</div>
-						<div class="col-md-8 product-item">
+						<div class="col-md-7 product-item">
 							<a n:href="Product: $product->id">
 								<span class="quantity">{$item->quantity}x</span>
 								<span class="name">{$product->name}</span>
 							</a>
 						</div>
-						<div class="col-md-2 price text-right">
+						<div class="col-md-3 price text-right">
 							{$item->getTotalPrice($exchange, $priceLevel)|asCurrency:TRUE}
 						</div>
 					</div>

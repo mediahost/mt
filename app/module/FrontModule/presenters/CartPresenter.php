@@ -263,8 +263,9 @@ class CartPresenter extends BasePresenter
 	public function createComponentGoodsList()
 	{
 		$control = $this->iGoodsListFactory->create();
-		$control->setPriceLevel($this->priceLevel);
-		$control->setAjax();
+		$control->setShopVariant($this->shopVariant)
+			->setPriceLevel($this->priceLevel)
+			->setAjax();
 		$control->onSend = function () {
 			$this->redirect('payments');
 		};
@@ -325,23 +326,23 @@ class CartPresenter extends BasePresenter
 		$control = $this->gpWebPayFactory->create($operation);
 
 		$control->onCheckout[] = function (GPWebPayControl $control, Request $request) {
-			
+
 		};
 
-		$control->onSuccess[] = function(GPWebPayControl $control, Response $response) use ($order) {
+		$control->onSuccess[] = function (GPWebPayControl $control, Response $response) use ($order) {
 			$this->orderFacade->payOrder($order, Order::PAYMENT_BLAME_CARD);
 			$mail = $this->iSuccessPaymentFactory->create();
 			$mail->addTo($order->mail)
-					->setOrder($order)
-					->send();
+				->setOrder($order)
+				->send();
 			$this->redirect('done');
 		};
-		$control->onError[] = function(GPWebPayControl $control, GPWebPayException $exception) use ($order) {
+		$control->onError[] = function (GPWebPayControl $control, GPWebPayException $exception) use ($order) {
 			Debugger::log('ORDER: ' . $order->id . '; ' . $exception->getMessage(), 'card_payment_errors');
 			$mail = $this->iErrorPaymentFactory->create();
 			$mail->addTo($order->mail)
-					->setOrder($order)
-					->send();
+				->setOrder($order)
+				->send();
 			$this->redirect('done');
 		};
 

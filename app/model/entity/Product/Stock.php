@@ -147,6 +147,12 @@ class Stock extends BaseEntity
 		$this->product->active = $value;
 	}
 
+	public function isActive()
+	{
+		$attr = 'active' . $this->getShopLetter();
+		return $this->active && $this->$attr;
+	}
+
 	public function setChangePohodaData($time = 'now')
 	{
 		$datetime = $time instanceof DateTime ? $time : DateTime::from($time);

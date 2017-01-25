@@ -4,6 +4,7 @@ namespace App\Components\Product\Form;
 
 use App\Components\BaseControl;
 use App\Components\BaseControlException;
+use App\Model\Entity\ShopVariant;
 use App\Model\Entity\Sign;
 use App\Model\Entity\Stock;
 use App\Model\Facade\BasketFacade;
@@ -21,6 +22,9 @@ class PrintStock extends BaseControl
 
 	/** @var int */
 	private $priceLevel = NULL;
+
+	/** @var ShopVariant */
+	private $shopVariant;
 
 	/** @var bool */
 	private $showLabels = TRUE;
@@ -132,12 +136,19 @@ class PrintStock extends BaseControl
 	{
 		$this->stock = $stock;
 		$this->stock->product->setCurrentLocale($this->translator->getLocale());
+		$this->stock->setShopVariant($this->shopVariant);
 		return $this;
 	}
 
 	public function setPriceLevel($level)
 	{
 		$this->priceLevel = $level;
+		return $this;
+	}
+
+	public function setShopVariant(ShopVariant $variant)
+	{
+		$this->shopVariant = $variant;
 		return $this;
 	}
 

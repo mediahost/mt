@@ -9,6 +9,7 @@ use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
 use App\Model\Entity\Product;
+use App\Model\Entity\ShopVariant;
 use App\Model\Entity\Stock;
 use App\Model\Entity\Vat;
 use App\Model\Repository\BaseRepository;
@@ -53,6 +54,9 @@ class DataHolder extends Object
 
 	/** @var string */
 	private $priceLevelName;
+
+	/** @var ShopVariant */
+	protected $shopVariant;
 
 	/** @var int total count of items */
 	private $count;
@@ -99,14 +103,22 @@ class DataHolder extends Object
 		if (array_key_exists($level, $allowedProperties)) {
 			$this->priceLevelName = $allowedProperties[$level];
 		} else {
-			$this->priceLevelName = self::DEFAULT_PRICE_LEVEL;
+			$this->priceLevelName = self::DEFAULT_PRICE_LEVEL . $this->shopVariant->priceCode;
 		}
+		return $this;
+	}
+
+	public function setShopVariant(ShopVariant $variant)
+	{
+		$this->shopVariant = $variant;
+		return $this;
 	}
 
 	public function setPaging($limit = NULL, $offset = NULL)
 	{
 		$this->limit = $limit;
 		$this->offset = $offset;
+		return $this;
 	}
 
 	public function setSorting($by, $dir = Criteria::ASC)
@@ -123,6 +135,7 @@ class DataHolder extends Object
 		}
 		$dir = $dir === Criteria::DESC ? $dir : Criteria::ASC;
 		$this->orderBy = [$by => $dir];
+		return $this;
 	}
 
 	// </editor-fold>
@@ -273,6 +286,7 @@ class DataHolder extends Object
 	{
 		$this->addProductCriteria('active', TRUE);
 		$this->addStockCriteria('active', TRUE);
+		$this->addStockCriteria('active' . $this->shopVariant->shop->priceLetter, TRUE);
 		return $this;
 	}
 
