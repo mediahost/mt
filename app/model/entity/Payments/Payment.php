@@ -17,9 +17,12 @@ use Knp\DoctrineBehaviors\Model;
  * @property bool $isHomecreditSk
  * @property string $name
  * @property string $html
+ * @property string $errorHtml
  * @property Price $price
  * @property Price $freePrice
  * @property ArrayCollection $shippings
+ * @property ShopVariant $shopVariant
+ * @property string $currency
  */
 class Payment extends BaseTranslatable
 {
@@ -85,7 +88,9 @@ class Payment extends BaseTranslatable
 	public function getPrice(Basket $basket = NULL, $level = NULL)
 	{
 		$price = $basket ? $this->getPriceByBasket($basket, $level) : $this->getBasePrice();
-		return new Price($this->vat, $price, !$this->isPriceInPercent());
+		$priceEntity = new Price($this->vat, $price, !$this->isPriceInPercent());
+		$priceEntity->convertible = FALSE;
+		return $priceEntity;
 	}
 
 	public function getPercentPrice()
@@ -191,6 +196,11 @@ class Payment extends BaseTranslatable
 	public function containShipping(Shipping $shipping)
 	{
 		return $this->shippings->contains($shipping);
+	}
+
+	public function getCurrency()
+	{
+		return $this->shopVariant->currency;
 	}
 
 	public function __toString()

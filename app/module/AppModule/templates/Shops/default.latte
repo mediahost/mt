@@ -51,7 +51,7 @@
 								{var $code = substr($locale,0,2)}
 								{var $variant = $shop->getVariant($code)}
 								{if $variant}
-									<span class="btn btn-xs btn-default">{$variant}</span>
+									<span class="btn btn-xs btn-default">{$variant->name}</span>
 								{else}
 									<a n:href="addVariant! 'code' => $code, 'shopId' => $shop->id" class="btn btn-xs btn-success">
 										<i class="fa fa-plus"></i>

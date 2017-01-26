@@ -18,6 +18,8 @@ use Knp\DoctrineBehaviors\Model;
  * @property Price $price
  * @property Price $freePrice
  * @property ArrayCollection $payments
+ * @property ShopVariant $shopVariant
+ * @property string $currency
  */
 class Shipping extends BaseTranslatable
 {
@@ -210,6 +212,11 @@ class Shipping extends BaseTranslatable
 	public function isForLocality($locale)
 	{
 		return !$this->locality || $this->locality == $locale;
+	}
+
+	public function getCurrency()
+	{
+		return $this->shopVariant->currency;
 	}
 
 	public function __toString()

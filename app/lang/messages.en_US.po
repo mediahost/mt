@@ -1408,11 +1408,11 @@ msgstr "Payment"
 msgid "Payments"
 msgstr "Payments"
 
-msgid "Edit Payment '%name%'"
-msgstr "Edit Payment '%name%'"
+msgid "Edit Payment '%name%' for %shop%"
+msgstr "Edit Payment '%name%' for %shop%"
 
-msgid "Edit Shipping '%name%'"
-msgstr "Edit Shipping '%name%'"
+msgid "Edit Shipping '%name%' for %shop%"
+msgstr "Edit Shipping '%name%' for %shop%"
 
 msgid "For Shippings"
 msgstr "For Shippings"

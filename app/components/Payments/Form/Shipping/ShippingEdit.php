@@ -13,6 +13,7 @@ use App\Model\Facade\VatFacade;
 use Nette\Security\User;
 use Nette\Utils\ArrayHash;
 use Nette\Utils\Html;
+use Nette\Utils\Strings;
 
 class ShippingEdit extends BaseControl
 {
@@ -54,20 +55,20 @@ class ShippingEdit extends BaseControl
 			$form->addCheckSwitch('cond2', 'Apply condition #2', 'YES', 'NO')
 					->setOption('description', 'If sum of products in special category is bigger then special limit, then price has zero value.');
 			$form->addText('free', 'Free price')
-					->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
+					->setAttribute('class', ['mask_currency_' . Strings::lower($this->shipping->currency), MetronicTextInputBase::SIZE_S]);
 			$form->addSelect2('locality', 'Locality', [NULL => 'All', 'cs' => 'CZ', 'sk' => 'SK'])
 					->setAttribute('class', [MetronicTextInputBase::SIZE_S]);
 			$form->addGroup('Admin part');
 		}
 
 		$form->addText('price', 'Price')
-				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
+				->setAttribute('class', ['mask_currency_' . Strings::lower($this->shipping->currency), MetronicTextInputBase::SIZE_S])
 				->setRequired();
 		$form->addText('percentPrice', 'Percent Price')
 			->setAttribute('class', ['mask_percentage', MetronicTextInputBase::SIZE_S])
 			->setOption('description', 'If percentage is set than price will be zero.');
 
-		$form->addSelect2('vat', 'Vat', $this->vatFacade->getValues())
+		$form->addSelect2('vat', 'Vat', $this->vatFacade->getValues($this->shipping->shopVariant->shop))
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
 
 		$form->addCheckSwitch('with_vat', 'With VAT', 'YES', 'NO')

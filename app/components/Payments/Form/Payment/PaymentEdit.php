@@ -14,6 +14,7 @@ use App\Model\Facade\VatFacade;
 use Nette\Security\User;
 use Nette\Utils\ArrayHash;
 use Nette\Utils\Html;
+use Nette\Utils\Strings;
 
 class PaymentEdit extends BaseControl
 {
@@ -47,7 +48,9 @@ class PaymentEdit extends BaseControl
 		$form->setRenderer(new MetronicFormRenderer());
 
 		$shippingRepo = $this->em->getRepository(Shipping::getClassName());
-		$shippings = $shippingRepo->findPairs('name');
+		$shippings = $shippingRepo->findPairs([
+			'shopVariant' => $this->payment->shopVariant,
+		], 'name');
 
 		if ($this->user->isAllowed('payments', 'editAll')) {
 			$form->addGroup('Superadmin part');
@@ -58,18 +61,18 @@ class PaymentEdit extends BaseControl
 			$form->addCheckSwitch('isCard', 'Is Card Payment', 'YES', 'NO');
 			$form->addCheckSwitch('isHomecreditSk', 'Is Home Credit SK Payment', 'YES', 'NO');
 			$form->addText('free', 'Free price')
-				->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
+				->setAttribute('class', ['mask_currency_' . Strings::lower($this->payment->currency), MetronicTextInputBase::SIZE_S]);
 			$form->addGroup('Admin part');
 		}
 
 		$form->addText('price', 'Price')
-			->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
+			->setAttribute('class', ['mask_currency_' . Strings::lower($this->payment->currency), MetronicTextInputBase::SIZE_S])
 			->setRequired();
 		$form->addText('percentPrice', 'Percent Price')
 			->setAttribute('class', ['mask_percentage', MetronicTextInputBase::SIZE_S])
 			->setOption('description', 'If percentage is set than price will be zero.');
 
-		$form->addSelect2('vat', 'Vat', $this->vatFacade->getValues())
+		$form->addSelect2('vat', 'Vat', $this->vatFacade->getValues($this->payment->shopVariant->shop))
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
 
 		$form->addCheckSwitch('with_vat', 'With VAT', 'YES', 'NO')

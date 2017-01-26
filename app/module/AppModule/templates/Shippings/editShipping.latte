@@ -7,7 +7,7 @@
 	<a n:href="Shippings:">{_'Shippings'}</a>
 </li>
 <li>
-	<span>{_"Edit Shipping '%name%'", ['name' => $shippingName]}</span>
+	<span>{_"Edit Shipping '%name%' for %shop%", ['name' => $shippingName, 'shop' => $shipping->shopVariant]}</span>
 </li>
 {/block}
 
@@ -19,7 +19,7 @@
 				<div class="caption font-green-sharp">
 					<i class="fa fa-edit font-green-sharp"></i>
 					<span class="caption-subject bold">
-						{_"Edit Shipping '%name%'", ['name' => $shippingName]}
+						{_"Edit Shipping '%name%' for %shop%", ['name' => $shippingName, 'shop' => $shipping->shopVariant]}
 					</span>
 				</div>
 				<div class="actions">

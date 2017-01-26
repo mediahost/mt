@@ -16,7 +16,7 @@ class ExchangeHelper
 	{
 		$this->exchange = $exchange;
 	}
-	
+
 	public function getExchange()
 	{
 		return $this->exchange;
@@ -28,7 +28,7 @@ class ExchangeHelper
 		if ($price instanceof Price) {
 			$number = $vat ? $price->withVat : $price->withoutVat;
 			if (!$price->convertible) {
-				return $this->formatNumber($number, TRUE);
+				return $this->formatNumber($number, TRUE, $to);
 			}
 		}
 		return $this->exchange->format($number, $from, $to);
@@ -48,7 +48,7 @@ class ExchangeHelper
 				return $number;
 			}
 		}
-		return $this->exchange->change($price, $from, $to, $round);
+		return $this->exchange->change($number, $from, $to, $round);
 	}
 
 	public function changeVat(Price $price, $from = NULL, $to = NULL, $round = NULL)
@@ -56,9 +56,9 @@ class ExchangeHelper
 		return $this->change($price, $from, $to, $round, TRUE);
 	}
 
-	public function formatNumber($number, $withSymbol = FALSE)
+	public function formatNumber($number, $withSymbol = FALSE, $to = NULL)
 	{
-		$format = clone $this->exchange->getWeb()->getFormat();
+		$format = $to ? clone $this->exchange[$to]->getFormat() : clone $this->exchange->getWeb()->getFormat();
 		if (!$withSymbol) {
 			$format->symbol = NULL;
 		}
@@ -67,8 +67,8 @@ class ExchangeHelper
 
 	public static function getRelatedRate($newRate, Property $originCurrency)
 	{
-		$dbRate = (float) $newRate;
-		$originRate = (float) $originCurrency->getForeing();
+		$dbRate = (float)$newRate;
+		$originRate = (float)$originCurrency->getForeing();
 		$rateRelated = $originRate / $dbRate;
 		return $rateRelated;
 	}

@@ -2,6 +2,7 @@
 
 namespace App\Model\Facade;
 
+use App\Model\Entity\Shop;
 use App\Model\Entity\Vat;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\EntityRepository;
@@ -22,10 +23,14 @@ class VatFacade extends Object
 		$this->vatRepo = $this->em->getRepository(Vat::getClassName());
 	}
 
-	public function getValues()
+	public function getValues(Shop $shop = NULL)
 	{
 		$vats = [];
-		foreach ($this->vatRepo->findAll() as $vat) {
+		$conditions = [];
+		if ($shop) {
+			$conditions['shop'] = $shop;
+		}
+		foreach ($this->vatRepo->findBy($conditions) as $vat) {
 			$vats[$vat->id] = (string) $vat;
 		}
 		return $vats;

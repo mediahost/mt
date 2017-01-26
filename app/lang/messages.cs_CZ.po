@@ -1366,11 +1366,11 @@ msgstr "Platba"
 msgid "Payments"
 msgstr "Platby"
 
-msgid "Edit Payment '%name%'"
-msgstr "Úprava platby '%name%'"
+msgid "Edit Payment '%name%' for %shop%"
+msgstr "Úprava platby '%name%' pro %shop%"
 
-msgid "Edit Shipping '%name%'"
-msgstr "Úprava poštovného '%name%'"
+msgid "Edit Shipping '%name%' for %shop%"
+msgstr "Úprava poštovného '%name%' pro %shop%"
 
 msgid "For Shippings"
 msgstr "Pro dopravy"

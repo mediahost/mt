@@ -1,39 +1,59 @@
 {block pageTitle}
-{_'Shippings & Payments'}
+	{_'Shippings & Payments'}
 {/block}
 
 {block breadcrumbItems}
-<li><span>{_'Shippings & Payments'}</span></li>
-		{/block}
+	<li><span>{_'Shippings & Payments'}</span></li>
+{/block}
 
 {block content}
+	<div class="row">
+		<div class="col-md-12 margin-bottom-10">
+			<div class="btn-group btn-group-circle">
+				<a n:if="$user->isAllowed('payments', 'viewAll')"
+						n:href="this 'variant' => NULL"
+						n:class="btn, btn-default, !isset($activeVariant) ? active">
+					<span n:if="!isset($activeVariant)" class="fa fa-filter"></span>
+					{_'All'}
+				</a>
+				<a n:foreach="$shopVariants as $variant"
+						n:href="this 'variant' => $variant->id"
+						n:class="btn, btn-default, isset($activeVariant) && $activeVariant->id === $variant->id ? active">
+					<span n:if="isset($activeVariant) && $activeVariant->id === $variant->id" class="fa fa-filter"></span>
+					{$variant}
+				</a>
+			</div>
+		</div>
+	</div>
 
-<div class="row">
-	<div class="col-md-6">
-		<div class="portlet light">
-			<div class="portlet-title">
-				<div class="caption font-green-sharp">
-					<i class="fa fa-truck font-green-sharp"></i>
-					<span class="caption-subject bold uppercase">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="portlet light">
+				<div class="portlet-title">
+					<div class="caption font-green-sharp">
+						<i class="fa fa-truck font-green-sharp"></i>
+						<span class="caption-subject bold uppercase">
 						{_'Shippings'}
 					</span>
+					</div>
+					<div class="actions">
+						<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title=""
+						   title="">
+						</a>
+					</div>
 				</div>
-				<div class="actions">
-					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
-					</a>
-				</div>
-			</div>
-			<div class="portlet-body">
-				<table class="table table-bordered table-hover">
-					<thead>
+				<div class="portlet-body">
+					<table class="table table-bordered table-hover">
+						<thead>
 						<tr>
 							<th width="10%" n:if="$user->isAllowed('payments', 'viewAll')">#</th>
 							<th>{_'Shipping'}</th>
 							<th>{_'Price'}</th>
+							<th n:if="$user->isAllowed('payments', 'viewAll') && !isset($activeVariant)">{_'Shop'}</th>
 							<th width="10%"></th>
 						</tr>
-					</thead>
-					<tbody>
+						</thead>
+						<tbody>
 						<tr n:foreach="$shippings as $shipping" n:if="$shipping->active || $user->isAllowed('payments', 'viewAll')">
 							<td n:if="$user->isAllowed('payments', 'viewAll')">
 								{$shipping->id}
@@ -42,7 +62,10 @@
 								{_$shipping}
 							</td>
 							<td>
-								{if $shipping->isPriceInPercent()}{$shipping->percentPrice|percentage}{else}{$shipping->price|currencyVat}{/if}
+								{if $shipping->isPriceInPercent()}{$shipping->percentPrice|percentage}{else}{$shipping->price|currencyVat:NULL,$shipping->currency}{/if}
+							</td>
+							<td n:if="$user->isAllowed('payments', 'viewAll') && !isset($activeVariant)">
+								{$shipping->shopVariant}
 							</td>
 							<td>
 								<a n:href="editShipping $shipping->id" class="btn btn-xs btn-mini">
@@ -51,36 +74,38 @@
 								</a>
 							</td>
 						</tr>
-					</tbody>
-				</table>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="col-md-6">
-		<div class="portlet light">
-			<div class="portlet-title">
-				<div class="caption font-green-sharp">
-					<i class="fa fa-euro font-green-sharp"></i>
-					<span class="caption-subject bold uppercase">
+		<div class="col-md-6">
+			<div class="portlet light">
+				<div class="portlet-title">
+					<div class="caption font-green-sharp">
+						<i class="fa fa-euro font-green-sharp"></i>
+						<span class="caption-subject bold uppercase">
 						{_'Payments'}
 					</span>
+					</div>
+					<div class="actions">
+						<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title=""
+						   title="">
+						</a>
+					</div>
 				</div>
-				<div class="actions">
-					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
-					</a>
-				</div>
-			</div>
-			<div class="portlet-body">
-				<table class="table table-bordered table-hover">
-					<thead>
+				<div class="portlet-body">
+					<table class="table table-bordered table-hover">
+						<thead>
 						<tr>
 							<th width="10%" n:if="$user->isAllowed('payments', 'viewAll')">#</th>
 							<th>{_'Payment'}</th>
 							<th>{_'Price'}</th>
+							<th n:if="$user->isAllowed('payments', 'viewAll') && !isset($activeVariant)">{_'Shop'}</th>
 							<th width="10%"></th>
 						</tr>
-					</thead>
-					<tbody>
+						</thead>
+						<tbody>
 						<tr n:foreach="$payments as $payment" n:if="$payment->active || $user->isAllowed('payments', 'viewAll')">
 							<td n:if="$user->isAllowed('payments', 'viewAll')">
 								{$payment->id}
@@ -89,7 +114,10 @@
 								{_$payment}
 							</td>
 							<td>
-								{if $payment->isPriceInPercent()}{$payment->percentPrice|percentage}{else}{$payment->price|currencyVat}{/if}
+								{if $payment->isPriceInPercent()}{$payment->percentPrice|percentage}{else}{$payment->price|currencyVat:NULL,$payment->currency}{/if}
+							</td>
+							<td n:if="$user->isAllowed('payments', 'viewAll') && !isset($activeVariant)">
+								{$payment->shopVariant}
 							</td>
 							<td>
 								<a n:href="editPayment $payment->id" class="btn btn-xs btn-mini">
@@ -98,9 +126,10 @@
 								</a>
 							</td>
 						</tr>
-					</tbody>
-				</table>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
+{/block}

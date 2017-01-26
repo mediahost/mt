@@ -8,6 +8,7 @@ use App\Components\Payments\Form\PaymentEdit;
 use App\Components\Payments\Form\ShippingEdit;
 use App\Model\Entity\Payment;
 use App\Model\Entity\Shipping;
+use App\Model\Entity\ShopVariant;
 use App\Model\Repository\PaymentRepository;
 use App\Model\Repository\ShippingRepository;
 
@@ -42,10 +43,24 @@ class ShippingsPresenter extends BasePresenter
 	 * @resource('shippings')
 	 * @privilege('default')
 	 */
-	public function actionDefault()
+	public function actionDefault($variant = NULL)
 	{
-		$this->template->payments = $this->paymentRepo->findAll();
-		$this->template->shippings = $this->shippingRepo->findAll();
+		if (!$variant && !$this->user->isAllowed('payments', 'viewAll')) {
+			$this->redirect('this', ['variant' => $this->settings->pageConfig->shop->defaultVariant]);
+		}
+		$shopVariantRepo = $this->em->getRepository(ShopVariant::getClassName());
+
+		$criteria = [];
+		if ($variant) {
+			$activeVariant = $shopVariantRepo->find($variant);
+			if ($activeVariant) {
+				$criteria['shopVariant'] = $activeVariant;
+			}
+			$this->template->activeVariant = $activeVariant;
+		}
+		$this->template->shopVariants = $shopVariantRepo->findAll();
+		$this->template->payments = $this->paymentRepo->findBy($criteria);
+		$this->template->shippings = $this->shippingRepo->findBy($criteria);
 	}
 
 	/**
@@ -62,6 +77,7 @@ class ShippingsPresenter extends BasePresenter
 			$this->redirect('default');
 		} else {
 			$this['shippingForm']->setShipping($shipping);
+			$this->template->shipping = $shipping;
 			$this->template->shippingName = $this->translator->translate($shipping);
 		}
 	}
@@ -80,6 +96,7 @@ class ShippingsPresenter extends BasePresenter
 			$this->redirect('default');
 		} else {
 			$this['paymentForm']->setPayment($payment);
+			$this->template->payment = $payment;
 			$this->template->paymentName = $this->translator->translate($payment);
 		}
 	}

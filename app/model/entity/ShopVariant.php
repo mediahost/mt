@@ -74,7 +74,7 @@ class ShopVariant extends BaseEntity
 
 	public function __toString()
 	{
-		return $this->getName();
+		return $this->getFullName();
 	}
 
 }
