@@ -70,7 +70,10 @@ class CartPresenter extends BasePresenter
 
 		$basket = $this->basketFacade->basket;
 		$shippingRepo = $this->em->getRepository(Shipping::getClassName());
-		$shipping = $shippingRepo->find(Shipping::DPD);
+		$shipping = $shippingRepo->findOneBy([
+			'freePrice >' => 0,
+			'shopVariant' => $this->shopVariant,
+		]);
 
 		$freeShippingPrice = $shipping->freePrice->withVat;
 		$specialFreeShippingPrice = Shipping::SPECIAL_LIMIT;
@@ -159,7 +162,7 @@ class CartPresenter extends BasePresenter
 				$this['webPay']->handleCheckout();
 			} else if ($payByHomecredit) {
 				$this->homecredit->setOrder($order);
-				$this->homecredit->setReturnLink($this->link('//:Front:Cart:done', ['payment' => Payment::HOMECREDIT_SK]));
+				$this->homecredit->setReturnLink($this->link('//:Front:Cart:done'));
 				$this->redirectUrl($this->homecredit->getIShopLink());
 			} else {
 				$this->redirect('done');
@@ -169,18 +172,10 @@ class CartPresenter extends BasePresenter
 		}
 	}
 
-	public function actionDone($payment)
+	public function actionDone()
 	{
 		$orderId = $this->getSessionSection()->orderId;
 		$orderRepo = $this->em->getRepository(Order::getClassName());
-
-		switch ($payment) {
-			case Payment::HOMECREDIT_SK:
-				if ($this->homecredit->isPayed($this->getParameter('hc_ret'))) {
-					// nothing (can be sign as payd)
-				}
-				break;
-		}
 
 		try {
 			if ($orderId) {

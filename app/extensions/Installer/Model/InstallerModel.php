@@ -162,62 +162,6 @@ class InstallerModel extends Object
 			$state->type = $type;
 			$stateRepo->save($state);
 		}
-		$this->installShippingsAndPayments();
-		return TRUE;
-	}
-
-	/**
-	 * Create default shippings and payments
-	 * @return boolean
-	 * @throws InvalidArgumentException
-	 */
-	public function installShippingsAndPayments()
-	{
-		$shippingsRepo = $this->em->getRepository(Shipping::getClassName());
-		$shippings = [
-			Shipping::PERSONAL => 'payments.shipping.personal',
-			Shipping::CZECH_POST => 'payments.shipping.czech_post',
-			Shipping::SLOVAK_POST => 'payments.shipping.slovak_post',
-			Shipping::DPD => 'payments.shipping.dpd',
-			Shipping::PPL => 'payments.shipping.ppl',
-		];
-
-		$paymentsRepo = $this->em->getRepository(Payment::getClassName());
-		$payments = [
-			Payment::PERSONAL => 'payments.payment.personal',
-			Payment::ON_DELIVERY => 'payments.payment.on_delivery',
-			Payment::BANK_ACCOUNT => 'payments.payment.bank_account',
-			Payment::CARD_PAYMENT => 'payments.payment.card_payment',
-			Payment::HOMECREDIT_SK => 'payments.payment.homecredit_sk',
-		];
-
-		$vatRepo = $this->em->getRepository(Vat::getClassName());
-		$defaultVat = $vatRepo->find(1);
-
-		foreach ($shippings as $id => $name) {
-			$shipping = $shippingsRepo->find($id);
-			if (!$shipping) {
-				$shipping = new Shipping();
-				$shipping->active = FALSE;
-			}
-			if (!$shipping->vat) {
-				$shipping->vat = $defaultVat;
-			}
-			$shipping->name = $name;
-			$shippingsRepo->save($shipping);
-		}
-		foreach ($payments as $id => $name) {
-			$payment = $paymentsRepo->find($id);
-			if (!$payment) {
-				$payment = new Payment();
-				$payment->active = FALSE;
-			}
-			if (!$payment->vat) {
-				$payment->vat = $defaultVat;
-			}
-			$payment->name = $name;
-			$paymentsRepo->save($payment);
-		}
 		return TRUE;
 	}
 

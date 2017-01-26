@@ -24,13 +24,10 @@ use Knp\DoctrineBehaviors\Model;
 class Payment extends BaseTranslatable
 {
 
-	const PERSONAL = 1;
-	const ON_DELIVERY = 2;
-	const BANK_ACCOUNT = 3;
-	const CARD_PAYMENT = 4;
-	const HOMECREDIT_SK = 5;
-
 	use Model\Translatable\Translatable;
+
+	/** @ORM\ManyToOne(targetEntity="ShopVariant", inversedBy="payments") */
+	protected $shopVariant;
 
 	/** @ORM\Column(type="boolean") */
 	protected $active;
@@ -46,6 +43,9 @@ class Payment extends BaseTranslatable
 
 	/** @ORM\Column(type="boolean") */
 	protected $isCard = FALSE;
+
+	/** @ORM\Column(type="boolean") */
+	protected $isOnDelivery = FALSE;
 
 	/** @ORM\Column(type="boolean") */
 	protected $isHomecreditSk = FALSE;

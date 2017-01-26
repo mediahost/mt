@@ -2,6 +2,7 @@
 
 namespace App\Model\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
@@ -17,6 +18,8 @@ use Nette\Utils\Strings;
  * @property-read string $priceCode
  * @property-read string $fullName
  * @property int $priceNumber
+ * @property ArrayCollection $shippings
+ * @property ArrayCollection $payments
  */
 class ShopVariant extends BaseEntity
 {
@@ -35,10 +38,18 @@ class ShopVariant extends BaseEntity
 	/** @ORM\Column(type="string", length=3, nullable=true) */
 	protected $currency;
 
+	/** @ORM\OneToMany(targetEntity="Shipping", mappedBy="shopVariant") */
+	protected $shippings;
+
+	/** @ORM\OneToMany(targetEntity="Payment", mappedBy="shopVariant") */
+	protected $payments;
+
 	public function __construct($locale)
 	{
 		parent::__construct();
 		$this->locale = $locale;
+		$this->shippings = new ArrayCollection();
+		$this->payments = new ArrayCollection();
 	}
 
 	public function getName()

@@ -114,7 +114,10 @@ class ExportGeneratorPresenter extends BasePresenter
 		$stocks = $this->stockFacade->getExportStocksArray($showOnlyInStore, $denyCategory, NULL, TRUE);
 
 		$paymentRepo = $this->em->getRepository(Payment::getClassName());
-		$paymentOnDelivery = $paymentRepo->find(Payment::ON_DELIVERY);
+		$paymentOnDelivery = $paymentRepo->findOneBy([
+			'isOnDelivery' => TRUE,
+			'shopVariant' => $this->shopVariant,
+		]);
 		$shippingRepo = $this->em->getRepository(Shipping::getClassName());
 		$shippings = $shippingRepo->findBy([
 			'active' => TRUE,

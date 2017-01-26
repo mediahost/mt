@@ -22,16 +22,13 @@ use Knp\DoctrineBehaviors\Model;
 class Shipping extends BaseTranslatable
 {
 
-	const PERSONAL = 1;
-	const CZECH_POST = 2;
-	const SLOVAK_POST = 3;
-	const DPD = 4;
-	const PPL = 5;
-	//
 	const SPECIAL_LIMIT = 50; // with VAT
 	const SPECIAL_PRICE = 1.9; // with VAT
 
 	use Model\Translatable\Translatable;
+
+	/** @ORM\ManyToOne(targetEntity="ShopVariant", inversedBy="shippings") */
+	protected $shopVariant;
 
 	/** @ORM\Column(type="boolean") */
 	protected $active;
@@ -99,7 +96,7 @@ class Shipping extends BaseTranslatable
 
 	public function isPriceInPercent()
 	{
-		return (bool) $this->percentPrice;
+		return (bool)$this->percentPrice;
 	}
 
 	public function getPriceByStocks(array $stocks, array $quantities = [])
