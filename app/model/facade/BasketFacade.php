@@ -33,6 +33,9 @@ class BasketFacade extends Object
 	/** @var IUserStorage @inject */
 	public $userStorage;
 
+	/** @var ShopFacade @inject */
+	public $shopFacade;
+
 	/** @var BasketRepository */
 	private $basketRepo;
 
@@ -50,6 +53,7 @@ class BasketFacade extends Object
 		if (!$this->basket) {
 			$this->basket = $this->userStorage->getBasket();
 		}
+		$this->basket->setShopVariant($this->shopFacade->getShopVariant());
 		return $this->basket;
 	}
 

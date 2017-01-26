@@ -10,6 +10,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
 /**
  * @ORM\Entity
  *
+ * @property Basket $basket
  * @property Stock $stock
  * @property int $quantity
  */
@@ -23,16 +24,22 @@ class BasketItem extends BaseEntity
 
 	/** @ORM\ManyToOne(targetEntity="Stock") */
 	protected $stock;
-	
+
 	/** @ORM\Column(type="integer") */
 	protected $quantity;
-	
+
 	public function getTotalPrice(Exchange $exchange = NULL, $level = NULL, $withVat = TRUE)
 	{
 		$price = $this->stock->getPrice($level);
 		$priceValue = $withVat ? $price->withVat : $price->withoutVat;
-		$exchangedValue = $exchange ? $exchange->change($priceValue, NULL, NULL, Price::PRECISION) : $priceValue;
+		$exchangedValue = $exchange && $price->convertible ? $exchange->change($priceValue, NULL, NULL, Price::PRECISION) : $priceValue;
 		return $exchangedValue * $this->quantity;
+	}
+
+	public function getStock()
+	{
+		$this->stock->setShopVariant($this->basket->shopVariant);
+		return $this->stock;
 	}
 
 }

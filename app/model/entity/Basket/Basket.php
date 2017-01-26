@@ -29,6 +29,7 @@ use Nette\Utils\Random;
  * @property Address $shippingAddress
  * @property bool $isCompany
  * @property DateTime $sendedMailAt
+ * @property ShopVariant $shopVariant
  */
 class Basket extends BaseEntity
 {
@@ -69,6 +70,9 @@ class Basket extends BaseEntity
 	/** @ORM\Column(type="datetime", nullable=true) */
 	protected $sendedMailAt;
 
+	/** @var ShopVariant */
+	protected $shopVariant;
+
 	public function __construct(User $user = NULL)
 	{
 		if ($user) {
@@ -78,6 +82,12 @@ class Basket extends BaseEntity
 		$this->vouchers = new ArrayCollection();
 		$this->changeItemsAt = new DateTime();
 		parent::__construct();
+	}
+
+	public function setShopVariant(ShopVariant $variant)
+	{
+		$this->shopVariant = $variant;
+		return $this;
 	}
 
 	public function setUser(User $user)
@@ -234,7 +244,7 @@ class Basket extends BaseEntity
 	public function needAddress()
 	{
 		return ($this->shipping && $this->shipping->needAddress) ||
-				($this->payment && $this->payment->needAddress);
+			($this->payment && $this->payment->needAddress);
 	}
 
 	public function getShippingAddress($realShipping = FALSE)
@@ -408,7 +418,7 @@ class Basket extends BaseEntity
 
 	public function __toString()
 	{
-		return (string) $this->id;
+		return (string)$this->id;
 	}
 
 }
