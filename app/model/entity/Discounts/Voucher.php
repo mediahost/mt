@@ -25,10 +25,10 @@ class Voucher extends DiscountBase
 	const CODE_LENGTH = 7;
 
 	/** @ORM\Column(type="datetime", nullable=true) */
-    protected $activeFrom;
+	protected $activeFrom;
 
 	/** @ORM\Column(type="datetime", nullable=true) */
-    protected $activeTo;
+	protected $activeTo;
 
 	/** @ORM\Column(type="string", length=32) */
 	protected $code;
@@ -65,7 +65,7 @@ class Voucher extends DiscountBase
 	{
 		return Strings::upper($this->code);
 	}
-	
+
 	public function getSymbol($symbol = NUll)
 	{
 		switch ($this->type) {
@@ -75,7 +75,7 @@ class Voucher extends DiscountBase
 				return $symbol ? ' ' . $symbol : NULL;
 		}
 	}
-	
+
 	public function getValueString($symbol = NUll, Exchange $exchange = NULL)
 	{
 		switch ($this->type) {
@@ -84,7 +84,7 @@ class Voucher extends DiscountBase
 				break;
 			default:
 				if ($exchange && $this->currency) {
-					$string = $exchange->format($this->value, $this->currency , $this->currency);
+					$string = $exchange->format($this->value, $this->currency, $this->currency);
 				} else {
 					$string = Price::floatToStr($this->value) . $this->getSymbol($symbol);
 				}
@@ -92,7 +92,7 @@ class Voucher extends DiscountBase
 		}
 		return $string;
 	}
-	
+
 	public function getDiscountValue($fromValue, Exchange $exchange = NULL)
 	{
 		switch ($this->type) {
@@ -101,7 +101,7 @@ class Voucher extends DiscountBase
 				break;
 			default:
 				if ($exchange && $this->currency) {
-					$value = $exchange->change($this->value, $this->currency , $this->currency, 2);
+					$value = $exchange->change($this->value, $this->currency, $this->currency, 2);
 				} else {
 					$value = $this->value;
 				}
@@ -109,12 +109,12 @@ class Voucher extends DiscountBase
 		}
 		return $value;
 	}
-	
+
 	public function __toString()
 	{
 		return $this->code . ' -' . $this->getValue() . $this->getSymbol();
 	}
-	
+
 	static public function getTypesArray()
 	{
 		return [

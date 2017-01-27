@@ -45,10 +45,6 @@
                       version="2.0">
 
 		{cache $order->id, tags => ['pohoda/order/' . $order->id, 'pohoda/orders']}
-			{if $order->currency !== $homeCurrency}
-				{? $order->setExchangeRate($exchange, TRUE)}	
-			{/if}
-
 			<ord:order version="2.0">
 				<!--prijata objednavka s polozkama-->
 				<ord:orderHeader>
@@ -105,10 +101,10 @@
 						<ord:rateVAT>{include #vat, item => $item}</ord:rateVAT>
 						<ord:discountPercentage>0.00</ord:discountPercentage>
 						<ord:homeCurrency n:if="$order->currency === $homeCurrency">
-							<typ:unitPrice>{$item->price|change:NULL,NULL,2}</typ:unitPrice>
+							<typ:unitPrice>{$item->price|change:$order->currency,$order->currency,2}</typ:unitPrice>
 						</ord:homeCurrency>
 						<ord:foreignCurrency n:if="$order->currency !== $homeCurrency">
-							<typ:unitPrice>{$item->price|change:NULL,NULL,2}</typ:unitPrice>
+							<typ:unitPrice>{$item->price|change:$order->currency,$order->currency,2}</typ:unitPrice>
 						</ord:foreignCurrency>
 
 					</ord:orderItem>
@@ -121,10 +117,10 @@
 						<ord:rateVAT>{include #vat, item => $tax}</ord:rateVAT>
 						<ord:discountPercentage>0.00</ord:discountPercentage>
 						<ord:homeCurrency n:if="$order->currency === $homeCurrency">
-							<typ:unitPrice>{$tax->price|change:NULL,NULL,2}</typ:unitPrice>
+							<typ:unitPrice>{$tax->price|change:$order->currency,$order->currency,2}</typ:unitPrice>
 						</ord:homeCurrency>
 						<ord:foreignCurrency n:if="$order->currency !== $homeCurrency">
-							<typ:unitPrice>{$tax->price|change:NULL,NULL,2}</typ:unitPrice>
+							<typ:unitPrice>{$tax->price|change:$order->currency,$order->currency,2}</typ:unitPrice>
 						</ord:foreignCurrency>
 
 					</ord:orderItem>
@@ -137,10 +133,10 @@
 						<ord:rateVAT>none</ord:rateVAT>
 						<ord:discountPercentage>0.00</ord:discountPercentage>
 						<ord:homeCurrency n:if="$order->currency === $homeCurrency">
-							<typ:unitPrice>-{$voucher->getDiscountValue($productsTotalWith, $exchange)|change:NULL,NULL,2}</typ:unitPrice>
+							<typ:unitPrice>-{$voucher->getDiscountValue($productsTotalWith, $exchange)|change:$order->currency,$order->currency,2}</typ:unitPrice>
 						</ord:homeCurrency>
 						<ord:foreignCurrency n:if="$order->currency !== $homeCurrency">
-							<typ:unitPrice>-{$voucher->getDiscountValue($productsTotalWith, $exchange)|change:NULL,NULL,2}</typ:unitPrice>
+							<typ:unitPrice>-{$voucher->getDiscountValue($productsTotalWith, $exchange)|change:$order->currency,$order->currency,2}</typ:unitPrice>
 						</ord:foreignCurrency>
 
 					</ord:orderItem>
@@ -156,10 +152,6 @@
 				</ord:orderSummary>
 
 			</ord:order>
-
-			{if $order->currency !== $homeCurrency}
-				{? $order->removeExchangeRate($exchange)}
-			{/if}
 		{/cache}
 
     </dat:dataPackItem>

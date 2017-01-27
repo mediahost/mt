@@ -130,9 +130,11 @@ class ShippingEdit extends BaseControl
 				$shipping->setPercentPrice($values->percentPrice);
 				$shipping->setPrice(0, $values->with_vat);
 			} else {
-				$vatRepo = $this->em->getRepository(Vat::getClassName());
-				$vat = $vatRepo->find($values->vat);
-				$shipping->vat = $vat;
+				if ($shipping->id === $this->shipping->id) {
+					$vatRepo = $this->em->getRepository(Vat::getClassName());
+					$vat = $vatRepo->find($values->vat);
+					$shipping->vat = $vat;
+				}
 				$shipping->setPrice($values->price, $values->with_vat);
 				$shipping->setPercentPrice(NULL);
 			}

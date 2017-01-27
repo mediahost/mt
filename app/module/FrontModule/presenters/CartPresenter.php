@@ -73,10 +73,13 @@ class CartPresenter extends BasePresenter
 		$shipping = $shippingRepo->findOneBy([
 			'freePrice >' => 0,
 			'shopVariant' => $this->shopVariant,
+		], [
+			'freePrice' => 'DESC',
 		]);
 
+		$currency = $this->exchange->getWeb()->getCode();
 		$freeShippingPrice = $shipping->freePrice->withVat;
-		$specialFreeShippingPrice = Shipping::SPECIAL_LIMIT;
+		$specialFreeShippingPrice = Shipping::getSpecialLimit($currency);
 		$productsTotal = $basket->getItemsTotalPrice(NULL, $this->priceLevel, TRUE);
 		$specialTotal = $basket->getSumOfItemsInSpecialCategory($this->priceLevel, TRUE);
 
@@ -85,10 +88,10 @@ class CartPresenter extends BasePresenter
 
 		if (!$this->basketFacade->isEmpty()) {
 			if ($buyMore > 0) {
-				$this->template->buyMore = $this->exchange->format($buyMore);
+				$this->template->buyMore = $this->exchange->format($buyMore, $currency, $currency);
 			}
 			if ($buySpecialMore > 0) {
-				$this->template->buySpecialMore = $this->exchange->format($buySpecialMore);
+				$this->template->buySpecialMore = $this->exchange->format($buySpecialMore, $currency, $currency);
 				$this->template->specialCategoriesLinks = $specialCategoriesLinks;
 			}
 		}
@@ -154,7 +157,7 @@ class CartPresenter extends BasePresenter
 			$basket = $this->basketFacade->getBasket();
 			$user = $this->user->id ? $this->user->identity : NULL;
 			$order = $this->orderFacade->createFromBasket($basket, $user);
-			$this->basketFacade->clearBasket();
+//			$this->basketFacade->clearBasket();
 
 			$this->getSessionSection()->orderId = $order->id;
 

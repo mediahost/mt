@@ -10,6 +10,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
 /**
  * @ORM\Entity
  *
+ * @property Order $order
  * @property Stock $stock
  * @property string $name
  * @property Price $price
@@ -51,7 +52,9 @@ class OrderItem extends BaseEntity
 	public function getPrice()
 	{
 		$vat = $this->getVat();
-		return new Price($vat, $this->price);
+		$price = new Price($vat, $this->price);
+		$price->convertible = FALSE;
+		return $price;
 	}
 
 	/** @return Vat */
@@ -64,7 +67,8 @@ class OrderItem extends BaseEntity
 	{
 		$price = $this->getPrice();
 		$priceValue = $withVat ? $price->withVat : $price->withoutVat;
-		$exchangedValue = $exchange ? $exchange->change($priceValue, NULL, NULL, Price::PRECISION) : $priceValue;
+		$currency = $this->order->currency;
+		$exchangedValue = $exchange ? $exchange->change($priceValue, $currency, $currency, Price::PRECISION) : $priceValue;
 		return $exchangedValue * $this->quantity;
 	}
 

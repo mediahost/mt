@@ -14,8 +14,6 @@
 			<div class="cart-page">
 				<div class="cart-content summary-data goods-data">
 
-					{$order->setExchangeRate($exchange, TRUE)}
-
 					<div class="note note-info">
 						<h2 class="block" n:if="$order->needPin">{_'PIN'}: {$order->pin}</h2>
 						<h4 class="block">{_'order.state.type.headline.type_' . $order->state->type->id}</h4>
@@ -200,7 +198,7 @@
 							</li>
 						</ul>
 					</div>
-					{$order->removeExchangeRate($exchange)}
+
 				</div>
 			</div>
 		</div>

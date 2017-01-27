@@ -142,12 +142,14 @@ class PaymentEdit extends BaseControl
 			$payment->isHomecreditSk = $values->isHomecreditSk;
 		}
 
-		$shippingRepo = $this->em->getRepository(Shipping::getClassName());
-		$payment->clearShippings();
-		foreach ($values->shippings as $shippingId) {
-			$shipping = $shippingRepo->find($shippingId);
-			if ($shipping) {
-				$payment->addShipping($shipping);
+		if ($payment->id === $this->payment->id) {
+			$shippingRepo = $this->em->getRepository(Shipping::getClassName());
+			$payment->clearShippings();
+			foreach ($values->shippings as $shippingId) {
+				$shipping = $shippingRepo->find($shippingId);
+				if ($shipping) {
+					$payment->addShipping($shipping);
+				}
 			}
 		}
 
@@ -156,9 +158,11 @@ class PaymentEdit extends BaseControl
 				$payment->setPercentPrice($values->percentPrice);
 				$payment->setPrice(0, $values->with_vat);
 			} else {
-				$vatRepo = $this->em->getRepository(Vat::getClassName());
-				$vat = $vatRepo->find($values->vat);
-				$payment->vat = $vat;
+				if ($payment->id === $this->payment->id) {
+					$vatRepo = $this->em->getRepository(Vat::getClassName());
+					$vat = $vatRepo->find($values->vat);
+					$payment->vat = $vat;
+				}
 				$payment->setPrice($values->price, $values->with_vat);
 				$payment->setPercentPrice(NULL);
 			}

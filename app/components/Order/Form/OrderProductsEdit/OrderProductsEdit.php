@@ -61,14 +61,20 @@ class OrderProductsEdit extends BaseControl
 
 		$shippings = [NULL => 'payments.form.select'];
 		$shippingRepo = $this->em->getRepository(Shipping::getClassName());
-		$shippings += $shippingRepo->findPairs(['active' => TRUE], 'name');
+		$shippings += $shippingRepo->findPairs([
+			'active' => TRUE,
+			'shopVariant' => $this->order->shopVariant,
+		], 'name');
 		$form->addSelect2('shipping', 'Shipping', $shippings)
 						->setDisabled($disabled)
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_M;
 
 		$payments = [NULL => 'payments.form.select'];
 		$paymentRepo = $this->em->getRepository(Payment::getClassName());
-		$payments += $paymentRepo->findPairs(['active' => TRUE], 'name');
+		$payments += $paymentRepo->findPairs([
+			'active' => TRUE,
+			'shopVariant' => $this->order->shopVariant,
+		], 'name');
 		$form->addSelect2('payment', 'Payment', $payments)
 						->setDisabled($disabled)
 						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_M;
@@ -107,6 +113,7 @@ class OrderProductsEdit extends BaseControl
 				$this->setOrderItem($stockId, $quantity);
 			} catch (InsufficientQuantityException $e) {
 				$stockRepo = $this->em->getRepository(Stock::getClassName());
+				/** @var Stock $stock */
 				$stock = $stockRepo->find($stockId);
 				if ($stock) {
 					$quantityInOrder = $this->order->getItemCount($stock);
@@ -178,6 +185,7 @@ class OrderProductsEdit extends BaseControl
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
 		/* @var $stock Stock */
 		$stock = $stockRepo->find($stockId);
+		$stock->setShopVariant($this->order->shopVariant);
 
 		if ($stock) {
 			$priceLevel = ($this->order->user && $this->order->user->group) ? $this->order->user->group->level : NULL;

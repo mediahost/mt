@@ -36,7 +36,9 @@ class OrderPaymentBase extends BaseEntity
 	public function getPrice()
 	{
 		$vat = $this->getVat();
-		return new Price($vat, $this->price);
+		$price = new Price($vat, $this->price);
+		$price->convertible = FALSE;
+		return $price;
 	}
 
 	/** @return Vat */

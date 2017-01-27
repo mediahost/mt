@@ -103,9 +103,6 @@ class Order extends BaseEntity
 	/** @ORM\Column(type="float", nullable=true) */
 	private $rate;
 
-	/** @var IProperty */
-	private $tmpCurrency = NULL;
-
 	/** @ORM\Column(type="string", length=255, nullable=true) */
 	protected $note;
 
@@ -320,9 +317,6 @@ class Order extends BaseEntity
 	/** @return float */
 	public function getItemsTotalPrice(Exchange $exchange = NULL, $withVat = TRUE)
 	{
-		if ($exchange) {
-			$this->setExchangeRate($exchange);
-		}
 		$totalPrice = 0;
 		foreach ($this->items as $item) {
 			$totalPrice += $item->getTotalPrice($exchange, $withVat);
@@ -354,18 +348,16 @@ class Order extends BaseEntity
 	/** @return float */
 	public function getPaymentsTotalPrice(Exchange $exchange = NULL, $withVat = TRUE)
 	{
-		if ($exchange) {
-			$this->setExchangeRate($exchange);
-		}
 		$totalPrice = 0;
+		$currency = $this->currency;
 		if ($this->shipping && $this->shipping->price) {
 			$priceValue = $withVat ? $this->shipping->price->withVat : $this->shipping->price->withoutVat;
-			$exchangedValue = $exchange ? $exchange->change($priceValue, NULL, NULL, Price::PRECISION) : $priceValue;
+			$exchangedValue = $exchange ? $exchange->change($priceValue, $currency, $currency, Price::PRECISION) : $priceValue;
 			$totalPrice += $exchangedValue;
 		}
 		if ($this->payment && $this->payment->price) {
 			$priceValue = $withVat ? $this->payment->price->withVat : $this->payment->price->withoutVat;
-			$exchangedValue = $exchange ? $exchange->change($priceValue, NULL, NULL, Price::PRECISION) : $priceValue;
+			$exchangedValue = $exchange ? $exchange->change($priceValue, $currency, $currency, Price::PRECISION) : $priceValue;
 			$totalPrice += $exchangedValue;
 		}
 
@@ -453,33 +445,6 @@ class Order extends BaseEntity
 	public function __toString()
 	{
 		return (string)$this->id;
-	}
-
-	public function setExchangeRate(Exchange $exchange, $setWeb = FALSE)
-	{
-		if ($this->currency && array_key_exists($this->currency, $exchange)) {
-			if ($setWeb) {
-				$this->tmpCurrency = $exchange->getWeb();
-				$exchange->setWeb($this->currency);
-			}
-			if ($this->rate) {
-				$currency = $exchange[$this->currency];
-				$rateRelated = ExchangeHelper::getRelatedRate($this->rate, $currency);
-				$exchange->addRate($this->currency, $rateRelated);
-			}
-		}
-	}
-
-	public function removeExchangeRate(Exchange $exchange)
-	{
-		if ($this->currency && array_key_exists($this->currency, $exchange)) {
-			if ($this->rate) {
-				$exchange->removeRate($this->currency);
-			}
-			if ($this->tmpCurrency) {
-				$exchange->setWeb($this->tmpCurrency);
-			}
-		}
 	}
 
 }

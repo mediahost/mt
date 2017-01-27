@@ -106,6 +106,7 @@ class Shipping extends BaseTranslatable
 	public function getPriceByStocks(array $stocks, array $quantities = [])
 	{
 		$basket = new Basket();
+		$basket->shopVariant = $this->shopVariant;
 		foreach ($stocks as $stock) {
 			if ($stock instanceof Stock) {
 				$quantity = array_key_exists($stock->id, $quantities) ? $quantities[$stock->id] : 1;
@@ -145,8 +146,9 @@ class Shipping extends BaseTranslatable
 	 */
 	private function applyCond1($price, Basket $basket, $level = NULL)
 	{
-		$specialLimit = new Price($this->vat, self::SPECIAL_LIMIT, FALSE);
-		$specialPrice = new Price($this->vat, self::SPECIAL_PRICE, FALSE);
+		$currency = $basket->shopVariant->currency;
+		$specialLimit = new Price($this->vat, self::getSpecialLimit($currency), FALSE);
+		$specialPrice = new Price($this->vat, self::getSpecialPrice($currency), FALSE);
 		if ($basket->hasItemInSpecialCategory()) {
 			$specialSum = $basket->getSumOfItemsInSpecialCategory($level, TRUE);
 			if ($specialSum <= $specialLimit->withVat && $this->price > $specialPrice->withVat) {
@@ -166,7 +168,8 @@ class Shipping extends BaseTranslatable
 	 */
 	private function applyCond2($price, Basket $basket, $level = NULL)
 	{
-		$specialLimit = new Price($this->vat, self::SPECIAL_LIMIT, FALSE);
+		$currency = $basket->shopVariant->currency;
+		$specialLimit = new Price($this->vat, self::getSpecialLimit($currency), FALSE);
 		if ($basket->hasItemInSpecialCategory()) {
 			$specialSum = $basket->getSumOfItemsInSpecialCategory($level, TRUE);
 			if ($specialSum > $specialLimit->withVat) {
@@ -219,6 +222,30 @@ class Shipping extends BaseTranslatable
 	public function getCurrency()
 	{
 		return $this->shopVariant->currency;
+	}
+
+	public static function getSpecialLimit($currency)
+	{
+		switch ($currency) {
+			case 'CZK':
+				return self::SPECIAL_LIMIT * 30;
+			case 'PLN':
+				return self::SPECIAL_LIMIT * 5;
+			default:
+				return self::SPECIAL_LIMIT;
+		}
+	}
+
+	public static function getSpecialPrice($currency)
+	{
+		switch ($currency) {
+			case 'CZK':
+				return self::SPECIAL_PRICE * 30;
+			case 'PLN':
+				return self::SPECIAL_PRICE * 5;
+			default:
+				return self::SPECIAL_PRICE;
+		}
 	}
 
 	public function __toString()
