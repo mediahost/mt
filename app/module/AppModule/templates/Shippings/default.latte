@@ -59,10 +59,14 @@
 								{$shipping->id}
 							</td>
 							<td>
-								{_$shipping}
+								<s n:tag-if="!$shipping->active">{_$shipping}</s>
 							</td>
 							<td>
-								{if $shipping->isPriceInPercent()}{$shipping->percentPrice|percentage}{else}{$shipping->price|currencyVat:NULL,$shipping->currency}{/if}
+								{if $shipping->isPriceInPercent()}
+									{$shipping->percentPrice|percentage}
+								{else}
+									{$shipping->price|currencyVat:$shipping->currency,$shipping->currency}
+								{/if}
 							</td>
 							<td n:if="$user->isAllowed('payments', 'viewAll') && !isset($activeVariant)">
 								{$shipping->shopVariant}
@@ -111,10 +115,14 @@
 								{$payment->id}
 							</td>
 							<td>
-								{_$payment}
+								<s n:tag-if="!$payment->active">{_$payment}</s>
 							</td>
 							<td>
-								{if $payment->isPriceInPercent()}{$payment->percentPrice|percentage}{else}{$payment->price|currencyVat:NULL,$payment->currency}{/if}
+								{if $payment->isPriceInPercent()}
+									{$payment->percentPrice|percentage}
+								{else}
+									{$payment->price|currencyVat:$payment->currency,$payment->currency}
+								{/if}
 							</td>
 							<td n:if="$user->isAllowed('payments', 'viewAll') && !isset($activeVariant)">
 								{$payment->shopVariant}

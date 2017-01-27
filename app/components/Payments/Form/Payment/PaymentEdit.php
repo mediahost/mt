@@ -103,66 +103,81 @@ class PaymentEdit extends BaseControl
 
 	public function formSucceeded(Form $form, $values)
 	{
-		$this->load($values);
-		$this->save();
+		$paymentRepo = $this->em->getRepository(Payment::getClassName());
+
+		$this->load($values, $this->payment);
+		$paymentRepo->save($this->payment);
+
+		$infoConnected = $paymentRepo->findBy([
+			'name' => $this->payment->name,
+		]);
+		foreach ($infoConnected as $payment) {
+			$hasSameCurrency = $this->payment->shopVariant->currency === $payment->shopVariant->currency;
+			$hasSameLocale = $this->payment->shopVariant->locale === $payment->shopVariant->locale;
+			$this->load($values, $payment, $hasSameCurrency, $hasSameLocale);
+			$paymentRepo->save($payment);
+		}
+
 		$this->onAfterSave($this->payment);
 	}
 
-	private function load(ArrayHash $values)
+	private function load(ArrayHash $values, Payment $payment, $loadPrice = TRUE, $loadTranslate = TRUE)
 	{
-		$shippingRepo = $this->em->getRepository(Shipping::getClassName());
+		if (isset($values->active)) {
+			$payment->active = $values->active;
+		}
+		if (isset($values->needAddress)) {
+			$payment->needAddress = $values->needAddress;
+		}
+		if (isset($values->cond1)) {
+			$payment->useCond1 = $values->cond1;
+		}
+		if (isset($values->cond2)) {
+			$payment->useCond2 = $values->cond2;
+		}
+		if (isset($values->isCard)) {
+			$payment->isCard = $values->isCard;
+		}
+		if (isset($values->isHomecreditSk)) {
+			$payment->isHomecreditSk = $values->isHomecreditSk;
+		}
 
-		$this->payment->clearShippings();
+		$shippingRepo = $this->em->getRepository(Shipping::getClassName());
+		$payment->clearShippings();
 		foreach ($values->shippings as $shippingId) {
 			$shipping = $shippingRepo->find($shippingId);
 			if ($shipping) {
-				$this->payment->addShipping($shipping);
+				$payment->addShipping($shipping);
 			}
 		}
 
-		if ($values->percentPrice) {
-			$this->payment->setPercentPrice($values->percentPrice);
-			$this->payment->setPrice(0, $values->with_vat);
-		} else {
-			$vatRepo = $this->em->getRepository(Vat::getClassName());
-			$vat = $vatRepo->find($values->vat);
-			$this->payment->vat = $vat;
-			$this->payment->setPrice($values->price, $values->with_vat);
-			$this->payment->setPercentPrice(NULL);
+		if ($loadPrice) {
+			if ($values->percentPrice) {
+				$payment->setPercentPrice($values->percentPrice);
+				$payment->setPrice(0, $values->with_vat);
+			} else {
+				$vatRepo = $this->em->getRepository(Vat::getClassName());
+				$vat = $vatRepo->find($values->vat);
+				$payment->vat = $vat;
+				$payment->setPrice($values->price, $values->with_vat);
+				$payment->setPercentPrice(NULL);
+			}
+			if (isset($values->free)) {
+				$payment->setFreePrice($values->free, $values->with_vat);
+			}
 		}
-		if (isset($values->active)) {
-			$this->payment->active = $values->active;
-		}
-		if (isset($values->needAddress)) {
-			$this->payment->needAddress = $values->needAddress;
-		}
-		if (isset($values->cond1)) {
-			$this->payment->useCond1 = $values->cond1;
-		}
-		if (isset($values->cond2)) {
-			$this->payment->useCond2 = $values->cond2;
-		}
-		if (isset($values->isCard)) {
-			$this->payment->isCard = $values->isCard;
-		}
-		if (isset($values->isHomecreditSk)) {
-			$this->payment->isHomecreditSk = $values->isHomecreditSk;
-		}
-		if (isset($values->free)) {
-			$this->payment->setFreePrice($values->free, $values->with_vat);
-		}
-		
-		$this->payment->translateAdd($this->translator->getLocale())->html = $values->html;
-		$this->payment->translateAdd($this->translator->getLocale())->errorHtml = $values->errorHtml;
-		$this->payment->mergeNewTranslations();
 
-		return $this;
-	}
+		if ($loadTranslate) {
+			$translation = $payment->translateAdd($this->translator->getLocale());
+			if (empty($values->html) && empty($values->errorHtml)) {
+				$payment->removeTranslation($translation);
+			} else {
+				$translation->html = $values->html;
+				$translation->errorHtml = $values->errorHtml;
+				$payment->mergeNewTranslations();
+			}
+		}
 
-	private function save()
-	{
-		$paymentRepo = $this->em->getRepository(Payment::getClassName());
-		$paymentRepo->save($this->payment);
 		return $this;
 	}
 
