@@ -18,6 +18,7 @@ voucher:
 	insert: 'Insert'
 	wasAdded: 'Voucher was added.'
 	invalid: 'Voucher code is invalid.'
+	invalidCurrency: 'Voucher code is invalid for this currency.'
 	inactive: 'Voucher is not active.'
 	alreadyInCart: 'Voucher is already in cart.'
 	higherThanProducts: 'Discount has a higher value than products in order.'

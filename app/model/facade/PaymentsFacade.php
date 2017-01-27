@@ -22,6 +22,9 @@ class PaymentsFacade extends Object
 	/** @var ExchangeHelper @inject */
 	public $exchange;
 
+	/** @var ShopFacade @inject */
+	public $shopFacade;
+
 	public function getPaymentsList(Basket $basket, $level = NULL, $withVat = TRUE)
 	{
 		$paymentsList = [];
@@ -29,6 +32,7 @@ class PaymentsFacade extends Object
 
 		$criteria = [
 			'active' => TRUE,
+			'shopVariant' => $this->shopFacade->getShopVariant(),
 		];
 
 		$currencyCode = $this->exchange->getExchange()->getWeb()->getCode();
@@ -53,6 +57,7 @@ class PaymentsFacade extends Object
 		$shippingsRepo = $this->em->getRepository(Shipping::getClassName());
 		$shippings = $shippingsRepo->findBy([
 			'active' => TRUE,
+			'shopVariant' => $this->shopFacade->getShopVariant(),
 		]);
 		foreach ($shippings as $shipping) {
 			$shippingsList[$shipping->id] = $this->getPaymentShippingFormat($shipping, $basket, $level, $withVat);

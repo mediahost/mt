@@ -41,29 +41,34 @@ class VoucherEdit extends BaseControl
 
 		if ($this->voucher->isNew()) {
 			$form->addServerValidatedText('code', 'Code')
-							->setRequired('Code is required')
-							->addServerRule([$this, 'validateCode'], $this->translator->translate('%value% is already used.'))
-							->setValue($this->voucher->code)
-							->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_M;
+				->setRequired('Code is required')
+				->addServerRule([$this, 'validateCode'], $this->translator->translate('%value% is already used.'))
+				->setValue($this->voucher->code)
+				->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_M;
 
 			$form->addText('value', 'Value')
-							->setRequired('Value is required')
-							->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_M;
+				->setRequired('Value is required')
+				->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_M;
 			if ($this->voucher->type === Voucher::PERCENTAGE) {
 				$form['value']->addRule(Form::RANGE, 'Must be between %d and %d', [1, 99]);
 				$form['value']->getControlPrototype()->class[] = 'mask_percentage';
 			} else {
 				$form['value']->addRule(Form::MIN, 'Must be bigger than %d', 0.1);
-				$form['value']->getControlPrototype()->class[] = 'mask_currency';
+				$currencies = [];
+				foreach ($this->exchange->getArrayCopy() as $code => $currency) {
+					$currencies[$code] = $code;
+				}
+				$form->addSelect2('currency', 'Currency', $currencies)
+					->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_M;
 			}
 		}
 
 		$form->addDatePicker('activeFrom', 'Active from')
-				->setSize(DatePicker::SIZE_M)
-				->setPlaceholder($this->translator->translate('now'));
+			->setSize(DatePicker::SIZE_M)
+			->setPlaceholder($this->translator->translate('now'));
 		$form->addDatePicker('activeTo', 'Active to')
-				->setSize(DatePicker::SIZE_M)
-				->setPlaceholder($this->translator->translate('without ending'));
+			->setSize(DatePicker::SIZE_M)
+			->setPlaceholder($this->translator->translate('without ending'));
 
 		$form->addSubmit('save', 'Save');
 
@@ -92,6 +97,7 @@ class VoucherEdit extends BaseControl
 		if ($values->value) {
 			$this->voucher->setValue(Price::strToFloat($values->value));
 		}
+		$this->voucher->currency = isset($values->currency) ? $values->currency : NULL;
 		if ($values->activeFrom) {
 			$this->voucher->activeFrom = $values->activeFrom;
 		}
@@ -113,6 +119,7 @@ class VoucherEdit extends BaseControl
 	{
 		$values = [
 			'value' => $this->voucher->value,
+			'currency' => $this->voucher->currency,
 			'activeFrom' => $this->voucher->activeFrom,
 			'activeTo' => $this->voucher->activeTo,
 		];

@@ -13,14 +13,16 @@ use Nette\Utils\Strings;
  *
  * @property string $type
  * @property float $value
+ * @property bool $active
  * @property DateTime $activeFrom
  * @property DateTime $activeTo
  * @property string $code
+ * @property string $currency
  */
 class Voucher extends DiscountBase
 {
 
-	const CODE_LENGHT = 7;
+	const CODE_LENGTH = 7;
 
 	/** @ORM\Column(type="datetime", nullable=true) */
     protected $activeFrom;
@@ -31,6 +33,9 @@ class Voucher extends DiscountBase
 	/** @ORM\Column(type="string", length=32) */
 	protected $code;
 
+	/** @ORM\Column(type="string", length=3, nullable=true) */
+	protected $currency;
+
 	/** @ORM\ManyToMany(targetEntity="Basket", mappedBy="vouchers") */
 	protected $baskets;
 
@@ -39,7 +44,7 @@ class Voucher extends DiscountBase
 
 	public function __construct($value = 0, $type = self::DEFAULT_TYPE)
 	{
-		$this->code = Random::generate(self::CODE_LENGHT);
+		$this->code = Random::generate(self::CODE_LENGTH);
 		parent::__construct($value, $type);
 	}
 

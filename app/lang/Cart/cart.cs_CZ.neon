@@ -14,10 +14,11 @@ order:
 	contact: 'Kontaktní údaje'
 
 voucher:
-	code: 'Slovový kód'
+	code: 'Slevový kód'
 	insert: 'Vložit'
 	wasAdded: 'Sleva byla přidána.'
 	invalid: 'Slevový kód není platný.'
+	invalidCurrency: 'Slevový kód není platný pro tuto měnu.'
 	inactive: 'Sleva není momentálně aktivní.'
 	alreadyInCart: 'Sleva je již ve vašem košíku.'
 	higherThanProducts: 'Sleva je vyšší než částka za vaše produkty a nelze ji použít.'
