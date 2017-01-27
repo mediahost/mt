@@ -20,47 +20,47 @@ class VouchersGrid extends BaseControl
 
 		$repo = $this->em->getRepository(Voucher::getClassName());
 		$qb = $repo->createQueryBuilder('v')
-				->select('v');
+			->select('v');
 		$grid->model = new Doctrine($qb, []);
 
 		$grid->setDefaultSort([
 			'activeTo' => 'DESC',
 		]);
-		
+
 		$grid->addColumnText('code', 'Code')
-				->setFilterText()
-				->setSuggestion();
+			->setFilterText()
+			->setSuggestion();
 		$grid->getColumn('code')->headerPrototype->width = '10%';
 
 		$grid->addColumnNumber('value', 'Value')
-				->setCustomRender(function (Voucher $item) {
-					return $item->getValueString($this->exchange->getDefault()->getFormat()->getSymbol());
-				})
-				->setSortable()
-				->setFilterNumber();
-		
+			->setCustomRender(function (Voucher $item) {
+				return $item->getValueString(NULL, $this->exchange);
+			})
+			->setSortable()
+			->setFilterNumber();
+
 		$grid->addColumnText('type', 'Type')
-				->setCustomRender(function (Voucher $item) {
-					return $this->translator->translate($item->type);
-				})
-				->setFilterSelect(Voucher::getTypesArray());
+			->setCustomRender(function (Voucher $item) {
+				return $this->translator->translate($item->type);
+			})
+			->setFilterSelect(Voucher::getTypesArray());
 		$grid->getColumn('type')->headerPrototype->width = '8%';
-		
+
 		$grid->addColumnBoolean('active', 'Active');
 
 		$grid->addActionHref('edit', 'Edit')
-				->setIcon('fa fa-edit');
+			->setIcon('fa fa-edit');
 
 		$grid->addActionHref('delete', 'Delete')
-						->setIcon('fa fa-trash-o')
-						->setConfirm(function($item) {
-							$message = $this->translator->translate('Are you sure you want to delete \'%name%\'?', NULL, ['name' => (string) $item]);
-							return $message;
-						})
-						->setDisable(function($item) {
-							return !$this->presenter->canDelete($item);
-						})
-				->elementPrototype->class[] = 'red';
+			->setIcon('fa fa-trash-o')
+			->setConfirm(function ($item) {
+				$message = $this->translator->translate('Are you sure you want to delete \'%name%\'?', NULL, ['name' => (string)$item]);
+				return $message;
+			})
+			->setDisable(function ($item) {
+				return !$this->presenter->canDelete($item);
+			})
+			->getElementPrototype()->class[] = 'red';
 
 		$grid->setActionWidth("20%");
 

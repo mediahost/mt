@@ -66,27 +66,27 @@ class Voucher extends DiscountBase
 		return Strings::upper($this->code);
 	}
 	
-	public function getSymbol($currency = NUll)
+	public function getSymbol($symbol = NUll)
 	{
 		switch ($this->type) {
 			case self::PERCENTAGE:
 				return '%';
 			default:
-				return $currency ? ' ' . $currency : NULL;
+				return $symbol ? ' ' . $symbol : NULL;
 		}
 	}
 	
-	public function getValueString($currency = NUll, Exchange $exchange = NULL)
+	public function getValueString($symbol = NUll, Exchange $exchange = NULL)
 	{
 		switch ($this->type) {
 			case self::PERCENTAGE:
-				$string = Price::floatToStr($this->value) . $this->getSymbol($currency);
+				$string = Price::floatToStr($this->value) . $this->getSymbol($symbol);
 				break;
 			default:
-				if ($exchange) {
-					$string = $exchange->format($this->value);
+				if ($exchange && $this->currency) {
+					$string = $exchange->format($this->value, $this->currency , $this->currency);
 				} else {
-					$string = Price::floatToStr($this->value) . $this->getSymbol($currency);
+					$string = Price::floatToStr($this->value) . $this->getSymbol($symbol);
 				}
 				break;
 		}
@@ -100,8 +100,8 @@ class Voucher extends DiscountBase
 				$value = ($fromValue / 100) * $this->value;
 				break;
 			default:
-				if ($exchange) {
-					$value = $exchange->change($this->value, NULL, NULL, 2);
+				if ($exchange && $this->currency) {
+					$value = $exchange->change($this->value, $this->currency , $this->currency, 2);
 				} else {
 					$value = $this->value;
 				}
