@@ -51,38 +51,38 @@ class ShippingEdit extends BaseControl
 			$form->addCheckSwitch('active', 'Active', 'YES', 'NO');
 			$form->addCheckSwitch('needAddress', 'Need Address', 'YES', 'NO');
 			$form->addCheckSwitch('cond1', 'Apply condition #1', 'YES', 'NO')
-					->setOption('description', 'If sum of products in special category is lower then special limit, then price has special value.');
+				->setOption('description', 'If sum of products in special category is lower then special limit, then price has special value.');
 			$form->addCheckSwitch('cond2', 'Apply condition #2', 'YES', 'NO')
-					->setOption('description', 'If sum of products in special category is bigger then special limit, then price has zero value.');
+				->setOption('description', 'If sum of products in special category is bigger then special limit, then price has zero value.');
 			$form->addText('free', 'Free price')
-					->setAttribute('class', ['mask_currency_' . Strings::lower($this->shipping->currency), MetronicTextInputBase::SIZE_S]);
+				->setAttribute('class', ['mask_currency_' . Strings::lower($this->shipping->currency), MetronicTextInputBase::SIZE_S]);
 			$form->addSelect2('locality', 'Locality', [NULL => 'All', 'cs' => 'CZ', 'sk' => 'SK'])
-					->setAttribute('class', [MetronicTextInputBase::SIZE_S]);
+				->setAttribute('class', [MetronicTextInputBase::SIZE_S]);
 			$form->addGroup('Admin part');
 		}
 
 		$form->addText('price', 'Price')
-				->setAttribute('class', ['mask_currency_' . Strings::lower($this->shipping->currency), MetronicTextInputBase::SIZE_S])
-				->setRequired();
+			->setAttribute('class', ['mask_currency_' . Strings::lower($this->shipping->currency), MetronicTextInputBase::SIZE_S])
+			->setRequired();
 		$form->addText('percentPrice', 'Percent Price')
 			->setAttribute('class', ['mask_percentage', MetronicTextInputBase::SIZE_S])
 			->setOption('description', 'If percentage is set than price will be zero.');
 
 		$form->addSelect2('vat', 'Vat', $this->vatFacade->getValues($this->shipping->shopVariant->shop))
-						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
+			->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
 
 		$form->addCheckSwitch('with_vat', 'With VAT', 'YES', 'NO')
-				->setDefaultValue($this->defaultWithVat);
+			->setDefaultValue($this->defaultWithVat);
 
 		$allowedTags = Html::el()->setText($this->translator->translate('Allowed tags') . ':');
 		$tagOrderNumber = Html::el()->setText('%order_number% - ' . $this->translator->translate('Order number'));
 		$separator = Html::el('br');
 		$description = $allowedTags
-				->add($separator)
-				->add($tagOrderNumber);
+			->add($separator)
+			->add($tagOrderNumber);
 		$form->addWysiHtml('html', 'Text', 10)
-						->setOption('description', $description)
-						->getControlPrototype()->class[] = 'page-html-content';
+			->setOption('description', $description)
+			->getControlPrototype()->class[] = 'page-html-content';
 
 		$form->addSubmit('save', 'Save');
 
@@ -93,52 +93,68 @@ class ShippingEdit extends BaseControl
 
 	public function formSucceeded(Form $form, $values)
 	{
-		$this->load($values);
-		$this->save();
+		$shippingRepo = $this->em->getRepository(Shipping::getClassName());
+
+		$this->load($values, $this->shipping);
+		$shippingRepo->save($this->shipping);
+
+		$infoConnected = $shippingRepo->findBy([
+			'name' => $this->shipping->name,
+		]);
+		foreach ($infoConnected as $shipping) {
+			$hasSameCurrency = $this->shipping->shopVariant->currency === $shipping->shopVariant->currency;
+			$hasSameLocale = $this->shipping->shopVariant->locale === $shipping->shopVariant->locale;
+			$this->load($values, $shipping, $hasSameCurrency, $hasSameLocale);
+			$shippingRepo->save($shipping);
+		}
+
 		$this->onAfterSave($this->shipping);
 	}
 
-	private function load(ArrayHash $values)
+	private function load(ArrayHash $values, Shipping $shipping, $loadPrice = TRUE, $loadTranslation = TRUE)
 	{
-		if ($values->percentPrice) {
-			$this->shipping->setPercentPrice($values->percentPrice);
-			$this->shipping->setPrice(0, $values->with_vat);
-		} else {
-			$vatRepo = $this->em->getRepository(Vat::getClassName());
-			$vat = $vatRepo->find($values->vat);
-			$this->shipping->vat = $vat;
-			$this->shipping->setPrice($values->price, $values->with_vat);
-			$this->shipping->setPercentPrice(NULL);
-		}
 		if (isset($values->active)) {
-			$this->shipping->active = $values->active;
+			$shipping->active = $values->active;
 		}
 		if (isset($values->needAddress)) {
-			$this->shipping->needAddress = $values->needAddress;
+			$shipping->needAddress = $values->needAddress;
 		}
 		if (isset($values->cond1)) {
-			$this->shipping->useCond1 = $values->cond1;
+			$shipping->useCond1 = $values->cond1;
 		}
 		if (isset($values->cond2)) {
-			$this->shipping->useCond2 = $values->cond2;
+			$shipping->useCond2 = $values->cond2;
 		}
-		if (isset($values->free)) {
-			$this->shipping->setFreePrice($values->free, $values->with_vat);
-		}
-		if (isset($values->locality)) {
-			$this->shipping->locality = $values->locality;
+		if ($loadPrice) {
+			if ($values->percentPrice) {
+				$shipping->setPercentPrice($values->percentPrice);
+				$shipping->setPrice(0, $values->with_vat);
+			} else {
+				$vatRepo = $this->em->getRepository(Vat::getClassName());
+				$vat = $vatRepo->find($values->vat);
+				$shipping->vat = $vat;
+				$shipping->setPrice($values->price, $values->with_vat);
+				$shipping->setPercentPrice(NULL);
+			}
+			if (isset($values->free)) {
+				$shipping->setFreePrice($values->free, $values->with_vat);
+			}
 		}
 
-		$this->shipping->translateAdd($this->translator->getLocale())->html = $values->html;
-		$this->shipping->mergeNewTranslations();
+		if ($loadTranslation) {
+			if (isset($values->locality)) {
+				$shipping->locality = $values->locality;
+			}
 
-		return $this;
-	}
+			$translation = $shipping->translateAdd($this->translator->getLocale());
+			if (empty($values->html)) {
+				$shipping->removeTranslation($translation);
+			} else {
+				$translation->html = $values->html;
+				$shipping->mergeNewTranslations();
+			}
+		}
 
-	private function save()
-	{
-		$shippingRepo = $this->em->getRepository(Shipping::getClassName());
-		$shippingRepo->save($this->shipping);
 		return $this;
 	}
 
