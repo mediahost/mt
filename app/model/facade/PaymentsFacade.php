@@ -70,7 +70,8 @@ class PaymentsFacade extends Object
 		$name = $this->translator->translate($paymentOrShipping);
 		$freeName = $this->translator->translate('cart.free');
 		$value = $paymentOrShipping->getPrice($basket, $level);
-		$price = $value->withVat > 0 ? $this->exchange->format($value, NULL, NULL, $withVat) : $freeName;
+		$currency = $paymentOrShipping->shopVariant->currency;
+		$price = $value->withVat > 0 ? $this->exchange->format($value, $currency, $currency, $withVat) : $freeName;
 		return "{$name} ({$price})";
 	}
 

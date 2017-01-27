@@ -82,7 +82,9 @@ class Shipping extends BaseTranslatable
 	public function getPrice(Basket $basket = NULL, $level = NULL)
 	{
 		$price = $basket ? $this->getPriceByBasket($basket, $level) : $this->getBasePrice();
-		return new Price($this->vat, $price, !$this->isPriceInPercent());
+		$priceEntity = new Price($this->vat, $price, !$this->isPriceInPercent());
+		$priceEntity->convertible = FALSE;
+		return $priceEntity;
 	}
 
 	public function getPercentPrice()
