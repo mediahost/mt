@@ -52,7 +52,7 @@ class DataHolder extends Object
 	private $productIds;
 
 	/** @var string */
-	private $priceLevelName;
+	private $priceLevelName = self::DEFAULT_PRICE_LEVEL;
 
 	/** @var int total count of items */
 	private $count;
@@ -96,7 +96,7 @@ class DataHolder extends Object
 	public function setPriceLevel($level)
 	{
 		$allowedProperties = Stock::getPriceProperties();
-		if (array_key_exists($level, $allowedProperties)) {
+		if ($level && array_key_exists($level, $allowedProperties)) {
 			$this->priceLevelName = $allowedProperties[$level];
 		} else {
 			$this->priceLevelName = self::DEFAULT_PRICE_LEVEL;
