@@ -68,6 +68,10 @@ class TwitterConnect extends BaseControl
 			Debugger::log($e->getMessage(), 'twitter');
 			$message = $this->translator->translate('We are sorry, twitter authentication failed hard.');
 			$this->presenter->flashMessage($message);
+		} catch (\OAuthException $e) {
+			Debugger::log($e->getMessage(), 'twitter');
+			$message = $this->translator->translate('We are sorry, twitter authentication failed hard.');
+			$this->presenter->flashMessage($message);
 		}
 	}
 
