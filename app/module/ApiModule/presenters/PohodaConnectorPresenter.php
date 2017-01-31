@@ -51,10 +51,12 @@ class PohodaConnectorPresenter extends BasePresenter
 			$list->setExchange($this->exchange, $this->exchange->getDefault());
 			$list->addFilterUpdatedFrom($lastConvert);
 
+			$newProductsTime = new DateTime('-' . $this->settings->modules->pohoda->newProductsExportDaysBack);
 			$insertList = $this->iProductListFactory->create();
+			$insertList->stored = FALSE;
 			$insertList->setTranslator($this->translator);
 			$insertList->setExchange($this->exchange, $this->exchange->getDefault());
-			$insertList->addFilterCreatedFrom(new DateTime('- 3 days'));
+			$insertList->addFilterCreatedFrom($newProductsTime);
 
 			$pohodaRepo->findAll(); // load all items in doctrine and find will be without SQL
 			$this->template->stocks = $list->getData(FALSE);
