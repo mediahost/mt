@@ -52,15 +52,15 @@ class ProducerEdit extends BaseControl
 
 		$form->addGroup();
 		$form->addText('name', 'Name')
-				->setRequired('Name is required');
+			->setRequired('Name is required');
 
 		switch ($this->type) {
 			case Producer::ID:
 				$form->addUploadImageWithPreview('image', 'Image')
-						->setPreview('/foto/200-150/' . ($this->entity->image ? $this->entity->image : 'default.png'), (string) $this->entity)
-						->setSize(200, 150)
-						->addCondition(Form::FILLED)
-						->addRule(Form::IMAGE, 'Image must be in valid image format');
+					->setPreview('/foto/200-150/' . ($this->entity->image ? $this->entity->image : 'default.png'), (string)$this->entity)
+					->setSize(200, 150)
+					->addCondition(Form::FILLED)
+					->addRule(Form::IMAGE, 'Image must be in valid image format');
 				$form->addWysiHtml('service_html', 'Text for service', 8);
 				break;
 			case ProducerLine::ID:
@@ -68,35 +68,35 @@ class ProducerEdit extends BaseControl
 			case ProducerModel::ID:
 				$form->addWysiHtml('html', 'Text', 8);
 				$form->addUploadImageWithPreview('image', 'Image')
-						->setPreview('/foto/200-150/' . ($this->entity->image ? $this->entity->image : 'default.png'), (string) $this->entity)
-						->setSize(200, 150)
-						->addCondition(Form::FILLED)
-						->addRule(Form::IMAGE, 'Image must be in valid image format');
+					->setPreview('/foto/200-150/' . ($this->entity->image ? $this->entity->image : 'default.png'), (string)$this->entity)
+					->setSize(200, 150)
+					->addCondition(Form::FILLED)
+					->addRule(Form::IMAGE, 'Image must be in valid image format');
 
 				$parameterRepo = $this->em->getRepository(ModelParameter::getClassName());
 				$parameters = $parameterRepo->findAll();
 
 				if (count($parameters)) {
 					$form->addSubmit('partSave', 'Save')
-									->getControlPrototype()->class[] = 'btn-primary';
+						->getControlPrototype()->class[] = 'btn-primary';
 					$form->addGroup('Prices');
 
 					$form->addCheckSwitch('with_vat', 'Prices are with VAT', 'YES', 'NO')
-							->setDefaultValue($this->defaultWithVat);
+						->setDefaultValue($this->defaultWithVat);
 					$form->addSelect2('vat', 'Vat', $this->vatFacade->getValues())
-									->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
+						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
 
 					$prices = $form->addContainer('prices');
 					foreach ($parameters as $parameter) {
-						$prices->addText($parameter->id, (string) $parameter)
-								->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
+						$prices->addText($parameter->id, (string)$parameter)
+							->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
 					}
 				}
 				break;
 		}
 
 		$form->addSubmit('save', 'Save')
-						->getControlPrototype()->class[] = 'btn-primary';
+			->getControlPrototype()->class[] = 'btn-primary';
 		if ($this->entity->isNew()) {
 			$form->addSubmit('saveAdd', 'Save & Add next');
 		}
@@ -111,7 +111,7 @@ class ProducerEdit extends BaseControl
 		$this->load($values);
 		$this->save();
 
-		$componentsArray = (array) $form->getComponents();
+		$componentsArray = (array)$form->getComponents();
 		$isSubmitedByAdd = array_key_exists('saveAdd', $componentsArray) ? $form['saveAdd']->submittedBy : FALSE;
 		$this->onAfterSave($this->entity, $this->type, $isSubmitedByAdd);
 	}
@@ -135,7 +135,12 @@ class ProducerEdit extends BaseControl
 	private function loadProducer(ArrayHash $values)
 	{
 		$lang = $this->entity->isNew() ? $this->translator->getDefaultLocale() : $this->translator->getLocale();
-		$this->entity->translateAdd($lang)->serviceHtml = $values->service_html;
+		if (empty($values->service_html)) {
+			$translation = $this->entity->translate($lang);
+			$this->entity->removeTranslation($translation);
+		} else {
+			$this->entity->translateAdd($lang)->serviceHtml = $values->service_html;
+		}
 		$this->entity->mergeNewTranslations();
 		if ($values->image->isImage()) {
 			$this->entity->image = $values->image;
@@ -145,7 +150,12 @@ class ProducerEdit extends BaseControl
 	private function loadProducerModel(ArrayHash $values)
 	{
 		$lang = $this->entity->isNew() ? $this->translator->getDefaultLocale() : $this->translator->getLocale();
-		$this->entity->translateAdd($lang)->html = $values->html;
+		if (empty($values->html)) {
+			$translation = $this->entity->translate($lang);
+			$this->entity->removeTranslation($translation);
+		} else {
+			$this->entity->translateAdd($lang)->html = $values->html;
+		}
 		$this->entity->mergeNewTranslations();
 		if ($values->image->isImage()) {
 			$this->entity->image = $values->image;
