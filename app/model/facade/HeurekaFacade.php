@@ -78,7 +78,7 @@ class HeurekaFacade extends Object
 			}
 		}
 
-		if ($save && isset($id) && isset($name) && isset($fullname)) {
+		if ($save && isset($id) && !empty($name) && !empty($fullname)) {
 			$category = $this->categoryRepo->find($id);
 			if (!$category) {
 				$category = new Category($locale, $id);
