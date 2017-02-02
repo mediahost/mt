@@ -84,9 +84,12 @@ class HeurekaFacade extends Object
 				$category = new Category($locale, $id);
 			}
 			$category->setCurrentLocale($locale);
-			$category->translateAdd($locale);
-			$category->name = $name;
-			$category->fullname = $fullname;
+			$translation = $category->translate($locale);
+			if (!$translation->id) {
+				$translation = $category->translateAdd($locale);
+			}
+			$translation->name = $name;
+			$translation->fullname = $fullname;
 			$category->mergeNewTranslations();
 			$this->categoryRepo->save($category);
 		}
