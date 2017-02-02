@@ -16,9 +16,7 @@ class RouterFactory
 
 	const LOCALE_PARAM_NAME = 'locale';
 	const LOCALE_DEFAULT_LANG = 'sk';
-	const LOCALE_PARAM = '[<locale=sk cs|sk|en>/]'; // TODO: remove on PHP 5.6
-	// TODO: PHP 5.6 can concat strings
-//	const LOCALE_PARAM = '[<' . self::LOCALE_PARAM_NAME . '=' . self::LOCALE_DEFAULT_LANG . ' cs|sk|en>/]';
+	const LOCALE_PARAM = '[<' . self::LOCALE_PARAM_NAME . '=' . self::LOCALE_DEFAULT_LANG . ' cs|sk|en>/]';
 
 	/** @var PageFacade @inject */
 	public $pageFacade;
