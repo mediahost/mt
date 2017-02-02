@@ -9,6 +9,9 @@ trait StockDefaultPrice
 {
 
 	/** @ORM\Column(type="float", nullable=true) */
+	private $oldPrice; // TODO: delete
+
+	/** @ORM\Column(type="float", nullable=true) */
 	private $defaultPrice; // TODO: delete
 
 	/** @ORM\Column(type="float", nullable=true) */
