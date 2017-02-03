@@ -35,18 +35,18 @@ class StocksGrid extends BaseControl
 
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
 		$qb = $stockRepo->createQueryBuilder('s')
-				->select('s, p')
-				->leftJoin('s.product', 'p')
-				->leftJoin('p.translations', 't')
-				->where('t.locale = :lang OR t.locale = :defaultLang')
-				->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
-				->setParameter('lang', $this->translator->getLocale())
-				->setParameter('defaultLang', $this->translator->getDefaultLocale())
-				->setParameter('now', new DateTime());
+			->select('s, p')
+			->leftJoin('s.product', 'p')
+			->leftJoin('p.translations', 't')
+			->where('t.locale = :lang OR t.locale = :defaultLang')
+			->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
+			->setParameter('lang', $this->translator->getLocale())
+			->setParameter('defaultLang', $this->translator->getDefaultLocale())
+			->setParameter('now', new DateTime());
 
 		if (count($this->ids)) {
 			$qb->andWhere('s.id IN (:ids)')
-					->setParameter('ids', $this->ids);
+				->setParameter('ids', $this->ids);
 		}
 
 		$grid->model = new Doctrine($qb, [
@@ -62,171 +62,171 @@ class StocksGrid extends BaseControl
 		$signRepo = $this->em->getRepository(Sign::getClassName());
 		$signs = $signRepo->findAll();
 
-		/*		 * ************************************************ */
+		/***************************************************/
 		$grid->addColumnNumber('id', 'ID')
-				->setSortable()
-				->setFilterNumber();
+			->setSortable()
+			->setFilterNumber();
 		$grid->getColumn('id')->headerPrototype->width = '5%';
 
-		/*		 * ************************************************ */
+		/***************************************************/
 		$grid->addColumnNumber('pohodaCode', 'Code')
-				->setSortable()
-				->setFilterNumber();
+			->setSortable()
+			->setFilterNumber();
 		$grid->getColumn('pohodaCode')->headerPrototype->width = '5%';
 
-		/*		 * ************************************************ */
+		/***************************************************/
 		$grid->addColumnImage('image', 'Image')
-				->setColumn('product.image')
-				->setSize(50, 32);
+			->setColumn('product.image')
+			->setSize(50, 32);
 
-		/*		 * ************************************************ */
+		/***************************************************/
 		$grid->addColumnText('title', 'Product title')
-				->setColumn('product.name')
-				->setCustomRender(function ($row) use ($signs) {
-					$name = $row->product->translate($this->translator->getLocale())->name;
-					$signColors = [
-						1 => 'danger',
-						2 => 'success',
-						3 => 'primary',
-					];
-					foreach ($signs as $sign) {
-						if ($row->product->hasSign($sign)) {
-							$sign->setCurrentLocale($this->translator->getLocale());
-							$color = array_key_exists($sign->id, $signColors) ? $signColors[$sign->id] : 'label-info';
-							$name .= ' ' . Html::el('span class="badge badge-roundless badge-' . $color . '"')->setText($sign);
-						}
+			->setColumn('product.name')
+			->setCustomRender(function ($row) use ($signs) {
+				$name = $row->product->translate($this->translator->getLocale())->name;
+				$signColors = [
+					1 => 'danger',
+					2 => 'success',
+					3 => 'primary',
+				];
+				foreach ($signs as $sign) {
+					if ($row->product->hasSign($sign)) {
+						$sign->setCurrentLocale($this->translator->getLocale());
+						$color = array_key_exists($sign->id, $signColors) ? $signColors[$sign->id] : 'label-info';
+						$name .= ' ' . Html::el('span class="badge badge-roundless badge-' . $color . '"')->setText($sign);
 					}
-					return $name;
-				})
-				->setSortable()
-				->setFilterText()
-				->setSuggestion();
+				}
+				return $name;
+			})
+			->setSortable()
+			->setFilterText()
+			->setSuggestion();
 
-		/*		 * ************************************************ */
+		/***************************************************/
 		$grid->addColumnNumber('purchasePrice', 'Purchase price')
-				->setCustomRender(function ($row) {
-					if ($row->purchasePrice) {
-						return $this->exchange->format($row->purchasePrice->withoutVat);
-					}
-					return NULL;
-				})
-				->setCustomRenderExport(function ($row) {
-					if ($row->purchasePrice) {
-						return Price::floatToStr($row->purchasePrice->withoutVat);
-					}
-					return NULL;
-				})
-				->setSortable()
-				->setFilterNumber();
+			->setCustomRender(function ($row) {
+				if ($row->purchasePrice) {
+					return $this->exchange->format($row->purchasePrice->withoutVat);
+				}
+				return NULL;
+			})
+			->setCustomRenderExport(function ($row) {
+				if ($row->purchasePrice) {
+					return Price::floatToStr($row->purchasePrice->withoutVat);
+				}
+				return NULL;
+			})
+			->setSortable()
+			->setFilterNumber();
 		$grid->getColumn('purchasePrice')->headerPrototype->style = 'width:130px';
 		$grid->getColumn('purchasePrice')->cellPrototype->style = 'text-align: right';
 
-		/*		 * ************************************************ */
+		/***************************************************/
 		$grid->addColumnNumber('defaultPrice', 'Price')
-				->setCustomRender(function ($row) {
-					$link = Html::el('a', [
-								'data-toggle' => 'modal',
-								'data-target' => '#editPrice',
-							])
-							->href($this->presenter->link('editPrices', $row->id))
-							->setText($this->exchange->format($row->price->withoutVat));
-					return $link;
-				})
-				->setCustomRenderExport(function ($row) {
-					return Price::floatToStr($row->price->withoutVat);
-				})
-				->setSortable()
-				->setFilterNumber();
+			->setCustomRender(function ($row) {
+				$link = Html::el('a', [
+					'data-toggle' => 'modal',
+					'data-target' => '#editPrice',
+				])
+					->href($this->presenter->link('editPrices', $row->id))
+					->setText($this->exchange->format($row->price->withoutVat));
+				return $link;
+			})
+			->setCustomRenderExport(function ($row) {
+				return Price::floatToStr($row->price->withoutVat);
+			})
+			->setSortable()
+			->setFilterNumber();
 		$grid->getColumn('defaultPrice')->headerPrototype->style = 'width:110px';
 		$grid->getColumn('defaultPrice')->cellPrototype->style = 'text-align: right';
 //		$grid->getColumn('defaultPrice')->cellPrototype->class[] = 'changeOnClick'; // commented for link with ajax edit
 		$grid->getColumn('defaultPrice')
-				->setEditableCallback(function ($id, $newValue, $oldValue, $column) {
-					$stockRepo = $this->em->getRepository(Stock::getClassName());
-					$stock = $stockRepo->find($id);
-					if ($stock) {
-						$stock->setDefaltPrice($newValue);
-						$stockRepo->save($stock);
-						return TRUE;
-					} else {
-						return FALSE;
-					}
-				})
-				->setEditableRowCallback(function ($id, $column) {
-					return $this->em->getRepository(Stock::getClassName())->find($id);
-				})
-				->setEditableValueCallback(function (Stock $item) {
-					return $item->price->withoutVat;
-				});
+			->setEditableCallback(function ($id, $newValue, $oldValue, $column) {
+				$stockRepo = $this->em->getRepository(Stock::getClassName());
+				$stock = $stockRepo->find($id);
+				if ($stock) {
+					$stock->setDefaltPrice($newValue);
+					$stockRepo->save($stock);
+					return TRUE;
+				} else {
+					return FALSE;
+				}
+			})
+			->setEditableRowCallback(function ($id, $column) {
+				return $this->em->getRepository(Stock::getClassName())->find($id);
+			})
+			->setEditableValueCallback(function (Stock $item) {
+				return $item->price->withoutVat;
+			});
 
-		/*		 * ************************************************ */
+		/***************************************************/
 		$groupRepo = $this->em->getRepository(Group::getClassName());
 		$groups = $groupRepo->findAll();
 		foreach ($groups as $group) {
 			$priceLevel = 'price' . $group->level;
-			$grid->addColumnNumber($priceLevel, (string) $group)
-					->setOnlyForExport()
-					->setCustomRenderExport(function ($row) use ($priceLevel, $group) {
-						$discount = $row->getDiscountByGroup($group);
-						if ($discount && $discount->type === Discount::PERCENTAGE) {
-							return (StockPrice::PERCENT_IS_PRICE ? $discount->value : 100 - $discount->value) . '%';
-						}
-						return Price::floatToStr($row->$priceLevel->withoutVat);
-					});
+			$grid->addColumnNumber($priceLevel, (string)$group)
+				->setOnlyForExport()
+				->setCustomRenderExport(function ($row) use ($priceLevel, $group) {
+					$discount = $row->getDiscountByGroup($group);
+					if ($discount && $discount->type === Discount::PERCENTAGE) {
+						return (StockPrice::PERCENT_IS_PRICE ? $discount->value : 100 - $discount->value) . '%';
+					}
+					return Price::floatToStr($row->$priceLevel->withoutVat);
+				});
 		}
 
-		/*		 * ************************************************ */
+		/***************************************************/
 		$grid->addColumnNumber('quantity', 'Store')
-				->setDisableExport()
-				->setNumberFormat(0, NULL, ' ')
-				->setSortable()
-				->setFilterNumber();
+			->setDisableExport()
+			->setNumberFormat(0, NULL, ' ')
+			->setSortable()
+			->setFilterNumber();
 		$grid->getColumn('quantity')->headerPrototype->style = 'width:100px';
 		$grid->getColumn('quantity')->cellPrototype->style = 'text-align: right';
 
-		/*		 * ************************************************ */
+		/***************************************************/
 		$grid->addColumnNumber('inStore', 'E-shop')
-				->setDisableExport()
-				->setNumberFormat(0, NULL, ' ')
-				->setSortable()
-				->setFilterNumber();
+			->setDisableExport()
+			->setNumberFormat(0, NULL, ' ')
+			->setSortable()
+			->setFilterNumber();
 		$grid->getColumn('inStore')->headerPrototype->style = 'width:100px';
 		$grid->getColumn('inStore')->cellPrototype->style = 'text-align: right';
 
-		/*		 * ************************************************ */
+		/***************************************************/
 		$grid->addColumnNumber('lock', 'Locked')
-				->setColumn('locked')
-				->setDisableExport()
-				->setNumberFormat(0, NULL, ' ')
-				->setSortable()
-				->setFilterNumber();
+			->setColumn('locked')
+			->setDisableExport()
+			->setNumberFormat(0, NULL, ' ')
+			->setSortable()
+			->setFilterNumber();
 		$grid->getColumn('lock')->headerPrototype->style = 'width:90px';
 		$grid->getColumn('lock')->cellPrototype->style = 'text-align: right';
 
-		/*		 * ************************************************ */
+		/***************************************************/
 		$grid->addColumnBoolean('active', 'Public')
-				->setDisableExport()
-				->setSortable()
-				->setFilterSelect([1 => 'YES', 0 => 'NO']);
+			->setDisableExport()
+			->setSortable()
+			->setFilterSelect([1 => 'YES', 0 => 'NO']);
 		$grid->getColumn('active')->headerPrototype->style = 'width:95px';
 
 		$grid->addActionHref('view', NULL)
-				->setCustomRender(function ($item) {
-					$icon = Html::el('i class="fa fa-eye"');
-					return Html::el('a class="grid-action-view btn btn-xs btn-mini"')
-							->href($this->presenter->link(':Front:Product:', ['id' => $item->getUrlId(), 'slug' => $item->getSlug()]))
-							->setHtml($icon . ' ' . $this->translator->translate('View on web'));
-				});
+			->setCustomRender(function ($item) {
+				$icon = Html::el('i class="fa fa-eye"');
+				return Html::el('a class="grid-action-view btn btn-xs btn-mini"')
+					->href($this->presenter->link(':Front:Product:', ['id' => $item->getUrlId(), 'slug' => $item->getSlug()]))
+					->setHtml($icon . ' ' . $this->translator->translate('View on web'));
+			});
 
 		$grid->addActionHref('edit', 'Edit')
-				->setIcon('fa fa-edit');
+			->setIcon('fa fa-edit');
 
 		$grid->addActionHref('delete', 'Delete')
-						->setIcon('fa fa-trash-o')
-						->setConfirm(function($item) {
-							$message = $this->translator->translate('Are you sure you want to delete \'%name%\'?', NULL, ['name' => (string) $item]);
-							return $message;
-						})
+			->setIcon('fa fa-trash-o')
+			->setConfirm(function ($item) {
+				$message = $this->translator->translate('Are you sure you want to delete \'%name%\'?', NULL, ['name' => (string)$item]);
+				return $message;
+			})
 			->getElementPrototype()->class[] = 'red';
 
 		$operation = [
@@ -237,7 +237,7 @@ class StocksGrid extends BaseControl
 		$grid->setActionWidth("20%");
 
 		$grid->setExport('stocks')
-				->setCsv(';');
+			->setCsv(';');
 
 		return $grid;
 	}
