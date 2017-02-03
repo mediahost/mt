@@ -1,0 +1,121 @@
+admin:
+	sidebar:
+		newsletter: 'Newsletter'
+		subscribers: 'Odberatelia'
+
+	newsletter:
+		default:
+			title: 'Newsletter'
+		new:
+			title: 'Nová zpráva'
+			counter:
+				pre: 'Bude odoslaných'
+				post: 'správ!'
+		grid:
+			all: 'všetko'
+			createMessage: 'Vytvoriť správu'
+			title: 'Prehľad správ'
+			header:
+				subject: 'Predmet'
+				created: 'Vytvorené'
+				type: 'Príjemcovia'
+				locale: 'Jazyk'
+				status: 'Stav'
+				stats: 'Počet odoslaných'
+			types:
+				users: 'používatelia'
+				dealers: 'díleri'
+			status:
+				running: 'spustený'
+				paused: 'pozastavený'
+				sent: 'odoslaný'
+				unknown: 'neznámy'
+			action:
+				pause: 'Pozastaviť'
+				run: 'Spustiť'
+		form:
+			all: 'všetko'
+			subject: 'Predmet'
+			content: 'Telo'
+			recipients: 'Príjemcovia'
+			groups: 'Skupiny'
+			users: 'používatelia'
+			dealers: 'díleri'
+			locale: 'Jazyk'
+			attachment: 'Príloha'
+			testEmail: 'Testovací e-mail'
+			send: 'Odoslať'
+			sendTest: 'Odoslať testovacie'
+
+	subscriber:
+		default:
+			title: 'Odberatelia'
+		add:
+			title: 'Pridať odberateľa'
+		grid:
+			all: 'všetko'
+			addSubscriber: 'Pridať odberateľa'
+			title: 'Prehľad odberateľov'
+			header:
+				id: 'ID #'
+				email: 'E-mail'
+				subscribed: 'Prihlásených'
+				ip: 'IP'
+				type: 'Typ'
+				locale: 'Jazyk'
+			types:
+				user: 'uživatel'
+				dealer: 'díler'
+				unknown: 'neznámý'
+
+front:
+	headline: 'Newsletter'
+
+subscribeForm:
+	mail: 'Zaregistrujte sa k odberu noviniek'
+	placeholder: 'Zadajte váš e-mail'
+	submit: 'Prihlásiť'
+	success: 'Odber úspešne prihlásený.'
+	validator:
+		mail: 'Zlý formát'
+
+presenter:
+	success: 'Odhlásenie z odberu prebehlo úspešne!'
+	tokenNotMatch: 'Token pre odhlásenie sa nezhoduje s e-mailom!'
+	template:
+		h1: 'Odhlásiť odber noviniek'
+
+unsubscribeForm:
+	label: 'E-mail'
+	submit: 'Odhlásiť odber'
+	emailSent: 'Poslali sme vám potvrdzovací e-mail. Prejdite do emailovej schránky.'
+
+messages:
+	unsubscribe:
+		subject: 'Odhlásenie odberu noviniek'
+	handleDelete:
+		notFound: 'Odberateľ s ID %id% nebol nájdený.'
+		success: 'Odberateľ "%email%" bol úspešne zmazaný z databázy.'
+	addSubscriber:
+		success: 'Nový odberateľ bol úspešne uložený.'
+		alreadyExists: 'Odberateľ tohto typu s e-mailom "%email%" už existuje v databáze.'
+	newMessage:
+		testSuccess: 'Testovací e-mail bol úspešne odoslaný na adresu %recipient%!'
+		queue: 'Odoslanie správ bolo úspešne zaradené do fronty. Emaily sa budú postune odosielať.'
+
+message:
+	base:
+		layout:
+			unsubscribe: 'Pokiaľ si už neželáte dostávať ďalšie správy, môžete sa %ahref%odhlásit</a> z odberu.'
+			webview: 'Zobraziť v prehliadači'
+		footer:
+			address:
+				alt: 'Adresa'
+			contact:
+				alt: 'Kontakt'
+				label: 'Potrebujete poradiť?'
+			bank:
+				alt: 'Info'
+				label:
+					sk: 'Bankové spojenie v SR'
+					cz: 'Bavnkové spojenie v ČR'

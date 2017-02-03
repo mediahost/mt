@@ -1,0 +1,15 @@
+shipping:
+	personal: 'Osobne'
+	czech_post: 'Česká Pošta'
+	slovak_post: 'Slovenská Pošta'
+	dpd: 'DPD'
+	ppl: 'PPL'
+payment:
+	personal: 'Osobne'
+	on_delivery: 'Dobierkou'
+	bank_account: 'Prevodom na účet vopred'
+	card_payment: 'Platba kartou'
+	homecredit_sk: 'Prostredníctvom Home Credit'
+
+form:
+	select: '--- bez zmeny ---'

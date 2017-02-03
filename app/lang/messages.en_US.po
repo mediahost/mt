@@ -28,6 +28,9 @@ msgstr "Czech"
 msgid "locale_sk"
 msgstr "Slovak"
 
+msgid "locale_pl"
+msgstr "Polish"
+
 msgid "locale_en"
 msgstr "English"
 

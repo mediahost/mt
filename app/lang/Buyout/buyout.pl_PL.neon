@@ -1,0 +1,64 @@
+# Components
+modelQuestion:
+	input:
+		price: 'Základná cena'
+		question: 'Otázka'
+		yes: 'Áno'
+		no: 'Nie'
+		save: 'Uložiť'
+		add: 'Pridať'
+	required:
+		price: 'Zadajte výkupnú cenu!'
+
+request:
+	input:
+		yes: 'Áno'
+		no: 'Nie'
+		email: 'E-mail'
+		fullname: 'Meno a priezvisko'
+		phone: 'Telefón'
+		message: 'Správa'
+		send: 'Súhlasím s cenou'
+		placeholder:
+			message: 'Vložte prípadné doplňujúce informácie'
+	page:
+		questions: 'Výkupné otázky'
+		questionsDescribe: 'Zodpovedzte tieto otázky a zobrazí sa Vám výkupná cena'
+		sellUsPhone: 'Predajte nám Váš telefón'
+		usedPhonePrice: 'Navrhovaná cena výkupu'
+		newPhonePrice: 'Nový telefón %name% vykúpime za cenu'
+		ifAgree: 'Pokiaľ je naša navrhovaná cena výkupu pre Vás prijateľná, tak telefón vykupime.'
+		fillForm: 'Vyplnte formulár nižšie a budeme Vás kontaktovať.'
+	required:
+		fullname: 'Zadajte svoje meno a priezvisko'
+		email: 'Zadajte svoj e-mail'
+	template:
+		price: 'Výkupná cena'
+		total: 'Celková cena'
+		new: 'Nový'
+		used: 'Používaný'
+
+
+# E-mail messages
+email:
+	their:
+		subject: 'Požiadavka na výkup telefónu'
+		template:
+			subtitle: 'Výkup z e-shopu'
+			from: 'Vaše údaje'
+			phone: 'Telefon'
+	our:
+		subject: 'Požiadavka na výkup telefónu'
+		template:
+			subtitle: 'Výkup z e-shopu'
+			from: 'Zákazník'
+			phone: 'Telefon'
+	template:
+		model: 'Model' 
+		summary: 'Výkupná cena'
+		state: 'Stav'
+		new: 'Nový'
+		used: 'Používaný'
+		answer:
+			y: 'Áno'
+			n: 'Nie'

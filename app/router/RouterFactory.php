@@ -16,7 +16,7 @@ class RouterFactory
 
 	const LOCALE_PARAM_NAME = 'locale';
 	const LOCALE_DEFAULT_LANG = 'sk';
-	const LOCALE_PARAM = '[<' . self::LOCALE_PARAM_NAME . '=' . self::LOCALE_DEFAULT_LANG . ' cs|sk|en>/]';
+	const LOCALE_PARAM = '[<' . self::LOCALE_PARAM_NAME . '=' . self::LOCALE_DEFAULT_LANG . ' cs|sk|pl|en>/]';
 
 	/** @var PageFacade @inject */
 	public $pageFacade;
@@ -149,7 +149,7 @@ class RouterFactory
 			'action' => 'default',
 		]);
 
-		$frontRouter[] = new Route('[<locale=sk cs|sk>/]vykup[/<producer>[/<line>]]', [
+		$frontRouter[] = new Route('[<locale=sk cs|sk|pl>/]vykup[/<producer>[/<line>]]', [
 			'presenter' => 'Buyout',
 			'action' => 'default',
 		]);
@@ -158,7 +158,7 @@ class RouterFactory
 			'action' => 'default',
 			'locale' => 'en',
 		]);
-		$frontRouter[] = new Route('[<locale=sk cs|sk>/]kupim/<model>', [
+		$frontRouter[] = new Route('[<locale=sk cs|sk|pl>/]kupim/<model>', [
 			'presenter' => 'Buyout',
 			'action' => 'model',
 		]);
@@ -167,7 +167,7 @@ class RouterFactory
 			'action' => 'model',
 			'locale' => 'en',
 		]);
-		$frontRouter[] = new Route('[<locale=sk cs|sk>/]servis[/<producer>[/<line>]]', [
+		$frontRouter[] = new Route('[<locale=sk cs|sk|pl>/]servis[/<producer>[/<line>]]', [
 			'presenter' => 'Service',
 			'action' => 'default',
 		]);
@@ -176,7 +176,7 @@ class RouterFactory
 			'action' => 'default',
 			'locale' => 'en',
 		]);
-		$frontRouter[] = new Route('[<locale=sk cs|sk>/]oprava/<model>', [
+		$frontRouter[] = new Route('[<locale=sk cs|sk|pl>/]oprava/<model>', [
 			'presenter' => 'Service',
 			'action' => 'model',
 		]);
@@ -194,6 +194,11 @@ class RouterFactory
 			'presenter' => 'Producer',
 			'action' => 'default',
 			'locale' => 'cs',
+		]);
+		$frontRouter[] = new Route('pl/producent[/<producer>[/<line>]]', [
+			'presenter' => 'Producer',
+			'action' => 'default',
+			'locale' => 'pl',
 		]);
 		$frontRouter[] = new Route('en/producer[/<producer>[/<line>]]', [
 			'presenter' => 'Producer',

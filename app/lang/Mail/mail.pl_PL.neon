@@ -1,0 +1,43 @@
+subject:
+	forgotten: 'Zabudnuté heslo'
+	createRegistration: 'Vaša registrácia'
+	verify: 'Overenie e-mailu'
+	changeStateOrder: 'Vaša objednávka č.%id%'
+	changePaymentOrder: 'Platba objednávky č.%id%'
+	createOrder: 'Vaša objednávka č.%id%'
+	createOrderShop: 'Nová objednávka č.%id%'
+	unfinished: 'Nedokončená objednávka'
+	available: 'Naskladnenie tovaru'
+	loweredPrice: 'Zmena ceny tovaru'
+	recommend: 'Mám pre teba skvelý tip na nákup v %name%'
+basket:
+	salutation: 'Pekný deň,'
+	unfinished: 'Hovorí sa, že v živote neľutujeme veci, ktoré sme urobili, ale tie, ktoré sme neskúsili. Snáď vaša nedokončená objednávka nebude jednou z nich. Ešte to môžete zmeniť!'
+	subtitle: 'Ak v objednávke neplánujete pokračovať, nič sa nedeje, uvoľníme ju pre ostatných záujemcov.'
+	continue: 'Pokračovať v objednávke'
+order:
+	salutation: 'Vážený zákazník'
+	headline: 'Objednávka č.%number%'
+	weWillInformYou: 'O ďalšom postupe vašej objednávky vás budeme informovať e-mailom.'
+	shopNotice: 'Na vašom webe %name% je nová objednávka.'
+	pinCode: 'Objednávke bol pridelený PIN: %pin%'
+	change:
+		done:
+			successfullyCompleted: 'Vaša objednávka bola úspešne dokončená.'
+			lookingForward: 'Tešíme sa na váš ďalší nákup.'
+		storno:
+			wasCanceled: 'Vaša objednávka bola zrušená.'
+			contactUs: 'V prípade akejkoľvek nezrovnalosti nás prosím ihneď kontaktujte.'
+		expeded:
+			hasBeenExpeded: 'Vaša objednávka bola expedovaná.'
+		payment:
+			successfully: 'Vaša objednávka bola úspešne zaplatená.'
+	new:
+		recieved: 'ďakujeme Vám za Váš nákup, práve sme prijali vašu objednávku.'
+watchdog:
+	salutation: 'Pekný deň,'
+	available: 'práve bol naskladnený produkt, o ktorý ste prejavili záujem. Radi vám umožníme jeho nákup na našich stránkach.'
+	loweredPrice: 'práve došlo k zníženie ceny výrobku pod cenu, ktorú ste si priali. Radi vám umožníme nákup za túto cenu.'
+	visit: 'Prejsť na tovar'
+recommend:
+	visit: 'Prejsť na tovar'

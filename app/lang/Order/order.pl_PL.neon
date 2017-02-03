@@ -1,0 +1,12 @@
+state:
+	type:
+		headline:
+			type_1: 'Objednávka čaká na spracovanie'
+			type_2: 'Objednávka bola vyexpedovaná'
+			type_3: 'Objednávka už bola vybavená'
+			type_4: 'Objednávka čaká na spracovanie'
+		comment:
+			type_1: ''
+			type_2: ''
+			type_3: ''
+			type_4: ''

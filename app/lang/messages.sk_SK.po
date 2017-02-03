@@ -35,6 +35,9 @@ msgstr "Čeština"
 msgid "locale_sk"
 msgstr "Slovenčina"
 
+msgid "locale_pl"
+msgstr "Poľština"
+
 msgid "locale_en"
 msgstr "Angličtina"
 

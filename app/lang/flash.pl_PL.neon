@@ -1,0 +1,4 @@
+signOutSuccess: 'Bol ste úspešne odhlásený.'
+signedInRequired: 'Pre prístup do tejto sekcie musíte byť prihlásený!'
+cart:
+	stockNotFound: 'Požadovaný produkt nebol nájdený'

@@ -1,0 +1,23 @@
+producer:
+	contactShop:
+	    name: 'Meno'
+	    mail: 'E-mail'
+	    phone: 'Telefon'
+	    message: 'Vaša správa'
+	    send: 'Odeslať'
+	    validator:
+	        mail: 'Vložte svoj e-mail'
+	        message:
+	            fill: 'Zanechajte správu'
+	            min: 'Zadajte aspoň %d znakov'
+recommend:
+	from: 'Váš e-mail'
+	to: 'Komu'
+	message: 'Vzkaz'
+	send: 'Odoslať'
+	verification:
+		mail:
+			fill: 'Zadajte e-mail'
+			format: 'Zadajte správný e-mail'
+		message:
+			fill: 'Zadajte vzkaz'

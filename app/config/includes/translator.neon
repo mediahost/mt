@@ -1,9 +1,9 @@
 extensions:
 	translation: Kdyby\Translation\DI\TranslationExtension
 
-translation:
+translation: # https://docs.moodle.org/dev/Table_of_locales
 	default: sk
 	fallback: [sk, sk_SK]
-	whitelist: [sk, cs, en]
+	whitelist: [sk, cs, pl, en]
 	resolvers:
 		header: off
