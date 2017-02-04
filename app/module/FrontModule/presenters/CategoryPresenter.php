@@ -100,10 +100,12 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 			->addFilterFulltext($text)
 			->setSorting(ProductList::SORT_BY_PRICE_DESC);
 
+		$currency = $this->shopVariant->currency;
 		$stocks = $list->getData();
 		$items = [];
 		foreach ($stocks as $stock) {
 			/* @var $stock Stock */
+			$stock->setShopVariant($this->shopVariant);
 			$product = $stock->product;
 			$price = $stock->getPrice($this->priceLevel);
 			$item = [];
@@ -113,9 +115,9 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 			$item['description'] = $product->description;
 			$item['perex'] = $product->perex;
 			$item['priceNoVat'] = $price->withoutVat;
-			$item['priceNoVatFormated'] = $this->exchange->format($price->withoutVat);
+			$item['priceNoVatFormated'] = $this->exchange->format($price->withoutVat, $currency, $currency);
 			$item['priceWithVat'] = $price->withVat;
-			$item['priceWithVatFormated'] = $this->exchange->format($price->withVat);
+			$item['priceWithVatFormated'] = $this->exchange->format($price->withVat, $currency, $currency);
 			$item['url'] = $this->link('//:Front:Product:', ['id' => $stock->getUrlId(), 'slug' => $stock->getSlug(), 'searched' => $text]);
 			$item['image_original'] = $this->link('//:Foto:Foto:', ['name' => $product->image]);
 			$item['image_thumbnail_100'] = $this->link('//:Foto:Foto:', ['size' => '100-0', 'name' => $product->image]);
