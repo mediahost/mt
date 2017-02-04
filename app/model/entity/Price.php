@@ -121,6 +121,7 @@ class Price extends Object
 
 	public static function strToFloat($string)
 	{
+		$string = preg_replace('/\s+/', '', $string);
 		return (float)preg_replace('/,/', '.', $string);
 	}
 
