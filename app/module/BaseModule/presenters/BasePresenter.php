@@ -97,8 +97,8 @@ abstract class BasePresenter extends Presenter
 	{
 		parent::startup();
 		$this->setLocale();
-		$this->loadPriceLevel();
 		$this->loadShop();
+		$this->loadPriceLevel();
 	}
 
 	protected function beforeRender()
@@ -145,10 +145,12 @@ abstract class BasePresenter extends Presenter
 
 	private function loadPriceLevel()
 	{
-		if ($this->user->loggedIn) {
-			$identity = $this->user->identity;
-			if ($identity->group) {
-				$this->priceLevel = $identity->group->level;
+		if ($this->shopVariant->currency === $this->exchange->getDefault()->getCode()) {
+			if ($this->user->loggedIn) {
+				$identity = $this->user->identity;
+				if ($identity->group) {
+					$this->priceLevel = $identity->group->level;
+				}
 			}
 		}
 	}
