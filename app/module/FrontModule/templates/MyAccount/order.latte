@@ -87,13 +87,13 @@
 										<strong>{$item->quantity}x</strong>
 									</td>
 									<td class="goods-page-price">
-										<strong>{$stock->price->withVat|currency}</strong>
+										<strong>{$stock->price->withVat|currency:$order->currency,$order->currency}</strong>
 									</td>
 									<td class="goods-page-vat">
 										<strong>{$stock->vat}</strong>
 									</td>
 									<td class="goods-page-total">
-										<strong>{$item->getTotalPrice($exchange)|asCurrency:TRUE}</strong>
+										<strong>{$item->getTotalPrice()|currency:$order->currency,$order->currency}</strong>
 									</td>
 								</tr>
 							{/foreach}
@@ -110,12 +110,12 @@
 										<strong>1x</strong>
 									</td>
 									<td class="goods-page-price">
-										<strong>-{$voucher->getValueString($currencySymbol, $exchange)}</strong>
+										<strong>-{$voucher->getValueString($currencySymbol)|currency:$order->currency,$order->currency}</strong>
 									</td>
 									<td class="goods-page-vat">
 									</td>
 									<td class="goods-page-total">
-										<strong>-{$voucher->getDiscountValue($productsTotalWith, $exchange)|asCurrency:TRUE}</strong>
+										<strong>-{$voucher->getDiscountValue($productsTotalWith)|currency:$order->currency,$order->currency}</strong>
 									</td>
 								</tr>
 							{/foreach}
@@ -130,13 +130,13 @@
 									<strong>1x</strong>
 								</td>
 								<td class="goods-page-price">
-									<strong>{$order->shipping->price->withVat|currency}</strong>
+									<strong>{$order->shipping->price->withVat|currency:$order->currency,$order->currency}</strong>
 								</td>
 								<td class="goods-page-vat">
 									<strong>{$order->shipping->vat}</strong>
 								</td>
 								<td class="goods-page-total">
-									<strong>{$order->shipping->price->withVat|currency}</strong>
+									<strong>{$order->shipping->price->withVat|currency:$order->currency,$order->currency}</strong>
 								</td>
 							</tr>
 							<tr>
@@ -150,13 +150,13 @@
 									<strong>1x</strong>
 								</td>
 								<td class="goods-page-price">
-									<strong>{$order->payment->price->withVat|currency}</strong>
+									<strong>{$order->payment->price->withVat|currency:$order->currency,$order->currency}</strong>
 								</td>
 								<td class="goods-page-vat">
 									<strong>{$order->payment->vat}</strong>
 								</td>
 								<td class="goods-page-total">
-									<strong>{$order->payment->price->withVat|currency}</strong>
+									<strong>{$order->payment->price->withVat|currency:$order->currency,$order->currency}</strong>
 								</td>
 							</tr>
 						</table>
@@ -167,33 +167,33 @@
 							<li>
 								<em>{_'cart.withoutVat'}</em>
 								<strong class="price">
-									{$order->getTotalPrice($exchange, FALSE)|asCurrency:TRUE}
+									{$order->getTotalPrice(NULL, FALSE)|currency:$order->currency,$order->currency}
 								</strong>
 							</li>
 							<li>
 								<em>{_'cart.vat'}</em>
 								<strong class="price">
-									{$order->getVatSum($exchange)|asCurrency:TRUE}
+									{$order->vatSum|currency:$order->currency,$order->currency}
 								</strong>
 							</li>
 							<li>
 								<em>{_'cart.totalVat'}</em>
 								<strong class="price">
-									{$order->getTotalPrice($exchange)|asCurrency:TRUE}
+									{$order->totalPrice|currency:$order->currency,$order->currency}
 								</strong>
 							</li>
 							<li>
 								{if $order->hasVouchers()}
 									<em>{_'cart.discount'}</em>
 									<strong class="price discount">
-										-{$order->getVouchersTotalPrice($exchange)|asCurrency:TRUE}
+										-{$order->vouchersTotalPrice|currency:$order->currency,$order->currency}
 									</strong>
 								{/if}
 							</li>
 							<li class="shopping-total-price">
 								<em>{_'cart.total'}</em>
 								<strong class="price">
-									{$order->getTotalPriceToPay($exchange)|asCurrency:TRUE}
+									{$order->totalPriceToPay|currency:$order->currency,$order->currency}
 								</strong>
 							</li>
 						</ul>

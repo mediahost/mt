@@ -30,6 +30,9 @@
 						<th>
 							{_'State'}
 						</th>
+						<th>
+							{_'Price'}
+						</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -42,6 +45,9 @@
 						</td>
 						<td>
 							<a n:href="MyAccount:order $order->id">{_'order.state.type.headline.type_' . $order->state->type->id}</a>
+						</td>
+						<td>
+							{$order->getTotalPriceToPay()|currency:$order->currency,$order->currency}
 						</td>
 					</tr>
 					</tbody>

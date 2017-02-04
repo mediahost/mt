@@ -381,7 +381,7 @@ class Order extends BaseEntity
 	}
 
 	/** @return float */
-	public function getVatSum(Exchange $exchange)
+	public function getVatSum(Exchange $exchange = NULL)
 	{
 		$withVat = $this->getTotalPrice($exchange, TRUE);
 		$withoutVat = $this->getTotalPrice($exchange, FALSE);
