@@ -290,7 +290,6 @@ var Frontend = function () {
 				empty: '<div class="empty-message">' + locale.empty[lang] + '</div>',
 				suggestion: formatResult,
 				footer: function (data) {
-					console.log(data.query);
 					return '<div class="more-message"><a href="search/' + data.query + '">' + locale.all[lang] + '</a></div>';
 				}
 			}
