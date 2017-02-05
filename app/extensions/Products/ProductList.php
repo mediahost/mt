@@ -15,6 +15,7 @@ use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
 use App\Model\Entity\ShopVariant;
+use App\Model\Entity\Stock;
 use App\Model\Facade\BasketFacade;
 use App\Model\Facade\ProductFacade;
 use App\Model\Facade\StockFacade;
@@ -33,7 +34,7 @@ class ProductList extends Control
 	const SORT_BY_PRICE_DESC = 2;
 	const SORT_BY_NAME_ASC = 3;
 	const SORT_BY_NAME_DESC = 4;
-	const DEFAULT_PRICE_LEVEL = 'defaultPrice';
+	const DEFAULT_PRICE_LEVEL = Stock::DEFAULT_PRICE_NAME;
 
 	// <editor-fold defaultstate="collapsed" desc="injects">
 

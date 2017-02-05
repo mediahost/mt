@@ -299,7 +299,7 @@ class ServicePresenter extends BasePresenter
 	private function updateStocks()
 	{
 		$criteria = [
-			'defaultPriceB3' => NULL,
+			Stock::DEFAULT_PRICE_NAME . 'B3' => NULL,
 		];
 
 		$stockRepo = $this->em->getRepository(Stock::getClassName());

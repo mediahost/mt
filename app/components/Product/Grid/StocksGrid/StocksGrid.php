@@ -122,7 +122,7 @@ class StocksGrid extends BaseControl
 		$grid->getColumn('purchasePrice')->cellPrototype->style = 'text-align: right';
 
 		/***************************************************/
-		$grid->addColumnNumber('defaultPrice', 'Price')
+		$grid->addColumnNumber(Stock::DEFAULT_PRICE_NAME, 'Price')
 			->setCustomRender(function ($row) {
 				$link = Html::el('a', [
 					'data-toggle' => 'modal',
@@ -137,10 +137,10 @@ class StocksGrid extends BaseControl
 			})
 			->setSortable()
 			->setFilterNumber();
-		$grid->getColumn('defaultPrice')->headerPrototype->style = 'width:110px';
-		$grid->getColumn('defaultPrice')->cellPrototype->style = 'text-align: right';
-//		$grid->getColumn('defaultPrice')->cellPrototype->class[] = 'changeOnClick'; // commented for link with ajax edit
-		$grid->getColumn('defaultPrice')
+		$grid->getColumn(Stock::DEFAULT_PRICE_NAME)->headerPrototype->style = 'width:110px';
+		$grid->getColumn(Stock::DEFAULT_PRICE_NAME)->cellPrototype->style = 'text-align: right';
+//		$grid->getColumn(Stock::DEFAULT_PRICE_NAME)->cellPrototype->class[] = 'changeOnClick'; // commented for link with ajax edit
+		$grid->getColumn(Stock::DEFAULT_PRICE_NAME)
 			->setEditableCallback(function ($id, $newValue, $oldValue, $column) {
 				$stockRepo = $this->em->getRepository(Stock::getClassName());
 				$stock = $stockRepo->find($id);

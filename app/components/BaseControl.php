@@ -3,6 +3,7 @@
 namespace App\Components;
 
 use App\Extensions\Settings\SettingsStorage;
+use App\Model\Facade\ShopFacade;
 use Exception;
 use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\EntityManager;
@@ -27,6 +28,9 @@ abstract class BaseControl extends UI\Control
 
 	/** @var Exchange @inject */
 	public $exchange;
+
+	/** @var ShopFacade @inject */
+	public $shopFacade;
 
 	/** @var string */
 	protected $templateFile = self::DEFAULT_TEMPLATE;

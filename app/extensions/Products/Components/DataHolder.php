@@ -29,7 +29,7 @@ class DataHolder extends Object
 
 	const STOCK_ALIAS = 's';
 	const PRODUCT_ALIAS = 'p';
-	const DEFAULT_PRICE_LEVEL = 'defaultPrice';
+	const DEFAULT_PRICE_LEVEL = Stock::DEFAULT_PRICE_NAME;
 	const ORDER_BY_PRICE = 'price';
 	const ORDER_BY_NAME = 'name';
 	const PREFIX_ACCESSORIES = 'num_';

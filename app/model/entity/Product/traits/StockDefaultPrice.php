@@ -61,7 +61,7 @@ trait StockDefaultPrice
 		} else {
 			$priceBase = $priceBase ? $priceBase : $this->priceBase;
 			$priceVersion = $priceVersion ? $priceVersion : $this->priceVersion;
-			$priceProperty = 'defaultPrice' . $priceBase . $priceVersion;
+			$priceProperty = self::DEFAULT_PRICE_NAME . $priceBase . $priceVersion;
 		}
 		$price = new Price($this->getVat($priceBase), $this->$priceProperty);
 		$price->convertible = FALSE;
@@ -91,7 +91,7 @@ trait StockDefaultPrice
 		} else {
 			$priceBase = $priceBase ? $priceBase : $this->priceBase;
 			$priceVersion = $priceVersion ? $priceVersion : $this->priceVersion;
-			$priceProperty = 'defaultPrice' . $priceBase . $priceVersion;
+			$priceProperty = self::DEFAULT_PRICE_NAME . $priceBase . $priceVersion;
 		}
 		$this->$priceProperty = $price->withoutVat;
 
@@ -102,13 +102,13 @@ trait StockDefaultPrice
 
 	public function isSynchronizePrice($shopLetter = self::DEFAULT_PRICE_BASE, $shopNumber = self::DEFAULT_PRICE_VERSION)
 	{
-		$attr = 'synchronizePrice' . $shopLetter . $shopNumber;
+		$attr = self::SYNCHRONIZE_PRICE_NAME . $shopLetter . $shopNumber;
 		return $this->$attr;
 	}
 
 	public function setSynchronizePrice($shopLetter = self::DEFAULT_PRICE_BASE, $shopNumber = self::DEFAULT_PRICE_VERSION, $value = TRUE)
 	{
-		$attr = 'synchronizePrice' . $shopLetter . $shopNumber;
+		$attr = self::SYNCHRONIZE_PRICE_NAME . $shopLetter . $shopNumber;
 		$this->$attr = $value;
 		return $this;
 	}

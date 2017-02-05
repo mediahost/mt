@@ -14,7 +14,7 @@ trait StockPrices
 			case 'price':
 				$suffixRegExp = '\d+';
 				break;
-			case 'defaultPrice':
+			case self::DEFAULT_PRICE_NAME:
 				$suffixRegExp = '\w\d+';
 				break;
 			default:
@@ -38,7 +38,7 @@ trait StockPrices
 
 	public function recalculateVersionPrices()
 	{
-		$attr = 'defaultPrice';
+		$attr = self::DEFAULT_PRICE_NAME;
 		$defaultAttr = $attr . self::DEFAULT_PRICE_BASE . self::DEFAULT_PRICE_VERSION;
 
 		foreach (self::getPriceProperties($attr) as $key => $property) {

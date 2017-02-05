@@ -36,6 +36,9 @@ class StockFacade extends Object
 	/** @var SettingsStorage @inject */
 	public $settings;
 
+	/** @var ShopFacade @inject */
+	public $shopFacade;
+
 	/** @var IStorage @inject */
 	public $cacheStorage;
 
@@ -162,9 +165,10 @@ class StockFacade extends Object
 
 	public function getExportStocksArray($onlyInStore = TRUE, Category $denyCategory = NULL, $limit = NULL, $withHeureka = FALSE)
 	{
+		$priceName = $this->shopFacade->getDefaultPriceName();
 		$qb = $this->stockRepo->createQueryBuilder('s')
 			->select('v')
-			->addSelect('partial s.{id, barcode, gift, defaultPrice, inStore}')
+			->addSelect('partial s.{id, barcode, gift, ' . $priceName . ', inStore}')
 			->addSelect('partial t.{id, name, description, locale, slug}')
 			->addSelect('partial i.{id, filename}')
 			->addSelect('partial p.{id}')
@@ -211,7 +215,7 @@ class StockFacade extends Object
 	public function getExportShortStocksArray($onlyInStore = TRUE, Category $denyCategory = NULL, $limit = NULL)
 	{
 		$qb = $this->stockRepo->createQueryBuilder('s')
-			->addSelect('partial s.{id, barcode, defaultPrice, inStore}')
+			->addSelect('partial s.{id, barcode, inStore}')
 			->addSelect('partial t.{id, name, description, slug, locale}')
 			->addSelect('partial i.{id, filename}')
 			->addSelect('partial p.{id}')

@@ -85,7 +85,7 @@ class StockListener extends Object implements Subscriber
 		$changes = $uow->getEntityChangeSet($stock);
 		if (is_array($changes)) {
 			foreach ($changes as $key => $change) {
-				if (preg_match('/^defaultPrice$/', $key) || preg_match('/^price(\d+)$/', $key)) {
+				if (preg_match('/^' . Stock::DEFAULT_PRICE_NAME . '$/', $key) || preg_match('/^price(\d+)$/', $key)) {
 					return TRUE;
 				}
 			}

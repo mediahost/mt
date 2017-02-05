@@ -12,6 +12,7 @@ use App\Model\Entity\Discount;
 use App\Model\Entity\Group;
 use App\Model\Entity\Price;
 use App\Model\Entity\Stock;
+use App\Model\Facade\ShopFacade;
 use Nette\Http\FileUpload;
 use Nette\Utils\ArrayHash;
 
@@ -63,7 +64,7 @@ class CsvStockImport extends BaseControl
 			1 => 'pohodaCode',
 			2 => 'name',
 			3 => 'purchasePrice',
-			4 => 'defaultPrice',
+			4 => $this->shopFacade->getDefaultPriceName(),
 		];
 		$groupRepo = $this->em->getRepository(Group::getClassName());
 		$groups = $groupRepo->findAll();

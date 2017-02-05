@@ -4,6 +4,7 @@ namespace App\Model\Facade;
 
 use App\Extensions\Settings\SettingsStorage;
 use App\Model\Entity\ShopVariant;
+use App\Model\Entity\Stock;
 use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Object;
@@ -20,6 +21,7 @@ class ShopFacade extends Object
 	/** @var Exchange @inject */
 	public $exchange;
 
+	/** @return ShopVariant */
 	public function getShopVariant()
 	{
 		$shopVariantRepo = $this->em->getRepository(ShopVariant::getClassName());
@@ -33,9 +35,12 @@ class ShopFacade extends Object
 			$shopVariant = $shopVariantRepo->find($this->settings->pageConfig->shop->defaultVariant);
 		}
 
-//		$shopVariant = $shopVariantRepo->find(5);
-
 		return $shopVariant;
+	}
+
+	public function getDefaultPriceName()
+	{
+		return Stock::DEFAULT_PRICE_NAME . $this->getShopVariant()->priceCode;
 	}
 
 }

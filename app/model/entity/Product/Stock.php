@@ -44,6 +44,8 @@ use Nette\Utils\DateTime;
 class Stock extends BaseEntity
 {
 
+	const DEFAULT_PRICE_NAME = 'defaultPrice';
+	const SYNCHRONIZE_PRICE_NAME = 'synchronizePrice';
 	const DEFAULT_PRICE_BASE = 'A';
 	const DEFAULT_PRICE_VERSION = 1;
 	const RECALCULATE_RATE_CZK = 27;
