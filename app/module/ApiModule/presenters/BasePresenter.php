@@ -3,6 +3,7 @@
 namespace App\ApiModule\Presenters;
 
 use App\Extensions\Settings\SettingsStorage;
+use App\Model\Facade\ShopFacade;
 use Drahak\Restful\Application\UI\ResourcePresenter;
 use Drahak\Restful\IResource;
 use h4kuna\Exchange\Exchange;
@@ -29,6 +30,9 @@ abstract class BasePresenter extends ResourcePresenter
 
 	/** @var SettingsStorage @inject */
 	public $settings;
+
+	/** @var ShopFacade @inject */
+	public $shopFacade;
 
 	public function setView($view = NULL)
 	{

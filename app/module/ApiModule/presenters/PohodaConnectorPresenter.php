@@ -49,6 +49,7 @@ class PohodaConnectorPresenter extends BasePresenter
 			$list = $this->iProductListFactory->create();
 			$list->setTranslator($this->translator);
 			$list->setExchange($this->exchange, $this->exchange->getDefault());
+			$list->setShopVariant($this->shopFacade->getShopVariant());
 			$list->addFilterUpdatedFrom($lastConvert);
 
 			$newProductsTime = new DateTime('-' . $this->settings->modules->pohoda->newProductsExportDaysBack);
@@ -62,6 +63,7 @@ class PohodaConnectorPresenter extends BasePresenter
 			$this->template->stocks = $list->getData(FALSE);
 			$this->template->stocksToInsert = $insertList->getData(FALSE);
 
+			$this->template->shopVariant = $this->shopFacade->getShopVariant();
 			$this->template->pohodaRepo = $pohodaRepo;
 			$this->template->ico = $this->settings->modules->pohoda->ico;
 			$this->template->defaultStorage = $this->settings->modules->pohoda->defaultStorage;
@@ -92,6 +94,7 @@ class PohodaConnectorPresenter extends BasePresenter
 			$minusTime = '-' . $this->settings->modules->pohoda->ordersExportDaysBack;
 			$lastEditTime = DateTime::from($minusTime);
 			$conditions = [
+				'shop' => $this->shopFacade->getShopVariant()->shop,
 				'createdAt >=' => $lastEditTime,
 				'state.type !=' => $type,
 			];

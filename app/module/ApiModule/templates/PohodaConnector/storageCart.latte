@@ -15,11 +15,13 @@
     >
 
 	{foreach $stocksToInsert as $stock}
+		{$stock->setShopVariant($shopVariant)}
 		{? $insertedStockIds[$stock->id] = $stock->id}
 		{include insert, stock => $stock}
     {/foreach}
 
     {foreach $stocks as $stock}
+	    {$stock->setShopVariant($shopVariant)}
 		{var pohodaItems => $pohodaRepo->findByCodeAliasById($stock->pohodaCode)}
 
 		{if !count($pohodaItems) && !array_key_exists($stock->id, $insertedStockIds)}
