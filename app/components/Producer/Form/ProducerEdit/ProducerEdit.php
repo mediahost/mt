@@ -8,7 +8,6 @@ use App\Forms\Controls\TextInputBased\MetronicTextInputBase;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\ModelParameter;
-use App\Model\Entity\ParameterPrice;
 use App\Model\Entity\Producer;
 use App\Model\Entity\ProducerLine;
 use App\Model\Entity\ProducerModel;
@@ -169,6 +168,8 @@ class ProducerEdit extends BaseControl
 				$parameterPrice = $this->entity->getParameterPriceByParameter($parameter, TRUE);
 				$parameterPrice->vat = $vat;
 				$parameterPrice->setPrice($price, $values->with_vat);
+			} else {
+				$this->entity->removeParameterPriceByParameter($parameter);
 			}
 		}
 	}

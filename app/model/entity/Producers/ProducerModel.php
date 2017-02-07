@@ -42,7 +42,7 @@ class ProducerModel extends BaseTranslatable implements IProducer
 	/** @ORM\ManyToOne(targetEntity="ProducerLine", inversedBy="models") */
 	protected $line;
 
-	/** @ORM\OneToMany(targetEntity="ParameterPrice", mappedBy="model", cascade={"persist", "remove"}) */
+	/** @ORM\OneToMany(targetEntity="ParameterPrice", mappedBy="model", cascade={"persist", "remove"}, orphanRemoval=true) */
 	protected $parameterPrices;
 
 	/** @ORM\ManyToMany(targetEntity="Product", mappedBy="accessoriesFor") */
@@ -92,6 +92,18 @@ class ProducerModel extends BaseTranslatable implements IProducer
 		}
 
 		return $parameterPrice;
+	}
+
+	public function removeParameterPriceByParameter(ModelParameter $parameter)
+	{
+		$removeParameter = function ($key, ParameterPrice $item) use ($parameter) {
+			if ($item->parameter->id === $parameter->id) {
+				$this->parameterPrices->remove($key);
+				return FALSE;
+			}
+			return TRUE;
+		};
+		return $this->parameterPrices->forAll($removeParameter);
 	}
 
 	public function getFullName($glue = ' / ')
