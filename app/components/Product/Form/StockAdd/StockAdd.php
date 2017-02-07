@@ -124,7 +124,7 @@ class StockAdd extends StockBase
 		$vat = $vatRepo->find($values->vat);
 		$this->stock->vat = $vat;
 
-		$this->stock->setDefaltPrice($values->price, $values->with_vat);
+		$this->stock->setDefaultPrice($values->price, $values->with_vat);
 		$groupRepo = $this->em->getRepository(Group::getClassName());
 		$groups = $groupRepo->findBy(['type' => Group::TYPE_BONUS]);
 		foreach ($groups as $group) {

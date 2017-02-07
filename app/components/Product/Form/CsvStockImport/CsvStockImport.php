@@ -64,7 +64,7 @@ class CsvStockImport extends BaseControl
 			1 => 'pohodaCode',
 			2 => 'name',
 			3 => 'purchasePrice',
-			4 => $this->shopFacade->getDefaultPriceName(),
+			4 => Stock::DEFAULT_PRICE_NAME,
 		];
 		$groupRepo = $this->em->getRepository(Group::getClassName());
 		$groups = $groupRepo->findAll();
@@ -109,7 +109,7 @@ class CsvStockImport extends BaseControl
 					$stock->addDiscount($discount, $group);
 				}
 			}
-			$stock->setDefaltPrice($row->defaultPrice);
+			$stock->setDefaultPrice($row->defaultPrice);
 			$stockRepo->save($stock);
 			return $stock->id;
 		}

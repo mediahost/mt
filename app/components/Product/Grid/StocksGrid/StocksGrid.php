@@ -139,13 +139,12 @@ class StocksGrid extends BaseControl
 			->setFilterNumber();
 		$grid->getColumn(Stock::DEFAULT_PRICE_NAME)->headerPrototype->style = 'width:110px';
 		$grid->getColumn(Stock::DEFAULT_PRICE_NAME)->cellPrototype->style = 'text-align: right';
-//		$grid->getColumn(Stock::DEFAULT_PRICE_NAME)->cellPrototype->class[] = 'changeOnClick'; // commented for link with ajax edit
 		$grid->getColumn(Stock::DEFAULT_PRICE_NAME)
 			->setEditableCallback(function ($id, $newValue, $oldValue, $column) {
 				$stockRepo = $this->em->getRepository(Stock::getClassName());
 				$stock = $stockRepo->find($id);
 				if ($stock) {
-					$stock->setDefaltPrice($newValue);
+					$stock->setDefaultPrice($newValue);
 					$stockRepo->save($stock);
 					return TRUE;
 				} else {
