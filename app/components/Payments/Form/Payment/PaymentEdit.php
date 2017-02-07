@@ -73,24 +73,24 @@ class PaymentEdit extends BaseControl
 			->setOption('description', 'If percentage is set than price will be zero.');
 
 		$form->addSelect2('vat', 'Vat', $this->vatFacade->getValues($this->payment->shopVariant->shop))
-						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
+			->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
 
 		$form->addCheckSwitch('with_vat', 'With VAT', 'YES', 'NO')
-				->setDefaultValue($this->defaultWithVat);
+			->setDefaultValue($this->defaultWithVat);
 
 		$allowedTags = Html::el()->setText($this->translator->translate('Allowed tags') . ':');
 		$tagOrderNumber = Html::el()->setText('%order_number% - ' . $this->translator->translate('Order number'));
 		$separator = Html::el('br');
 		$description = $allowedTags
-				->add($separator)
-				->add($tagOrderNumber);
+			->add($separator)
+			->add($tagOrderNumber);
 		$form->addWysiHtml('html', 'Text', 10)
-						->setOption('description', $description)
-						->getControlPrototype()->class[] = 'page-html-content';
-		
+			->setOption('description', $description)
+			->getControlPrototype()->class[] = 'page-html-content';
+
 		$form->addWysiHtml('errorHtml', 'Text while Error', 10)
-						->setOption('description', $description)
-						->getControlPrototype()->class[] = 'page-html-content';
+			->setOption('description', $description)
+			->getControlPrototype()->class[] = 'page-html-content';
 
 		$form->addMultiSelect2('shippings', 'For Shippings', $shippings);
 
@@ -112,16 +112,14 @@ class PaymentEdit extends BaseControl
 			'name' => $this->payment->name,
 		]);
 		foreach ($infoConnected as $payment) {
-			$hasSameCurrency = $this->payment->shopVariant->currency === $payment->shopVariant->currency;
-			$hasSameLocale = $this->payment->shopVariant->locale === $payment->shopVariant->locale;
-			$this->load($values, $payment, $hasSameCurrency, $hasSameLocale);
+			$this->load($values, $payment);
 			$paymentRepo->save($payment);
 		}
 
 		$this->onAfterSave($this->payment);
 	}
 
-	private function load(ArrayHash $values, Payment $payment, $loadPrice = TRUE, $loadTranslate = TRUE)
+	private function load(ArrayHash $values, Payment $payment)
 	{
 		if (isset($values->active)) {
 			$payment->active = $values->active;
@@ -142,36 +140,40 @@ class PaymentEdit extends BaseControl
 			$payment->isHomecreditSk = $values->isHomecreditSk;
 		}
 
-		if ($payment->id === $this->payment->id) {
-			$shippingRepo = $this->em->getRepository(Shipping::getClassName());
-			$payment->clearShippings();
-			foreach ($values->shippings as $shippingId) {
-				$shipping = $shippingRepo->find($shippingId);
-				if ($shipping) {
-					$payment->addShipping($shipping);
-				}
+		$shippingRepo = $this->em->getRepository(Shipping::getClassName());
+		$payment->clearShippings();
+		foreach ($values->shippings as $shippingId) {
+			$shipping = $shippingRepo->find($shippingId);
+			if ($payment->id !== $this->payment->id) {
+				$shipping = $shippingRepo->findOneBy([
+					'name' => $shipping->name,
+					'shopVariant' => $payment->shopVariant,
+				]);
+			}
+			if ($shipping) {
+				$payment->addShipping($shipping);
 			}
 		}
 
-		if ($loadPrice) {
-			if ($values->percentPrice) {
-				$payment->setPercentPrice($values->percentPrice);
-				$payment->setPrice(0, $values->with_vat);
-			} else {
-				if ($payment->id === $this->payment->id) {
-					$vatRepo = $this->em->getRepository(Vat::getClassName());
-					$vat = $vatRepo->find($values->vat);
-					$payment->vat = $vat;
-				}
-				$payment->setPrice($values->price, $values->with_vat);
-				$payment->setPercentPrice(NULL);
+		if ($values->percentPrice) {
+			$payment->setPercentPrice($values->percentPrice);
+			$payment->setPrice(0, $values->with_vat);
+		} else {
+			if ($payment->id === $this->payment->id) {
+				$vatRepo = $this->em->getRepository(Vat::getClassName());
+				$vat = $vatRepo->find($values->vat);
+				$payment->vat = $vat;
 			}
-			if (isset($values->free)) {
-				$payment->setFreePrice($values->free, $values->with_vat);
-			}
+			$priceValue = $this->change($values->price, $payment->shopVariant->currency);
+			$payment->setPrice($priceValue, $values->with_vat);
+			$payment->setPercentPrice(NULL);
+		}
+		if (isset($values->free)) {
+			$freePrice = $this->change($values->free, $payment->shopVariant->currency);
+			$payment->setFreePrice($freePrice, $values->with_vat);
 		}
 
-		if ($loadTranslate) {
+		if ($this->payment->shopVariant->locale === $payment->shopVariant->locale) {
 			$translation = $payment->translateAdd($this->translator->getLocale());
 			if (empty($values->html) && empty($values->errorHtml)) {
 				$payment->removeTranslation($translation);

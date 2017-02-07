@@ -102,16 +102,14 @@ class ShippingEdit extends BaseControl
 			'name' => $this->shipping->name,
 		]);
 		foreach ($infoConnected as $shipping) {
-			$hasSameCurrency = $this->shipping->shopVariant->currency === $shipping->shopVariant->currency;
-			$hasSameLocale = $this->shipping->shopVariant->locale === $shipping->shopVariant->locale;
-			$this->load($values, $shipping, $hasSameCurrency, $hasSameLocale);
+			$this->load($values, $shipping);
 			$shippingRepo->save($shipping);
 		}
 
 		$this->onAfterSave($this->shipping);
 	}
 
-	private function load(ArrayHash $values, Shipping $shipping, $loadPrice = TRUE, $loadTranslation = TRUE)
+	private function load(ArrayHash $values, Shipping $shipping)
 	{
 		if (isset($values->active)) {
 			$shipping->active = $values->active;
@@ -125,25 +123,27 @@ class ShippingEdit extends BaseControl
 		if (isset($values->cond2)) {
 			$shipping->useCond2 = $values->cond2;
 		}
-		if ($loadPrice) {
-			if ($values->percentPrice) {
-				$shipping->setPercentPrice($values->percentPrice);
-				$shipping->setPrice(0, $values->with_vat);
-			} else {
-				if ($shipping->id === $this->shipping->id) {
-					$vatRepo = $this->em->getRepository(Vat::getClassName());
-					$vat = $vatRepo->find($values->vat);
-					$shipping->vat = $vat;
-				}
-				$shipping->setPrice($values->price, $values->with_vat);
-				$shipping->setPercentPrice(NULL);
+
+		if ($values->percentPrice) {
+			$shipping->setPercentPrice($values->percentPrice);
+			$shipping->setPrice(0, $values->with_vat);
+		} else {
+			if ($shipping->id === $this->shipping->id) {
+				$vatRepo = $this->em->getRepository(Vat::getClassName());
+				$vat = $vatRepo->find($values->vat);
+				$shipping->vat = $vat;
 			}
-			if (isset($values->free)) {
-				$shipping->setFreePrice($values->free, $values->with_vat);
-			}
+			$priceValue = $this->change($values->price, $shipping->shopVariant->currency);
+			$shipping->setPrice($priceValue, $values->with_vat);
+			$shipping->setPercentPrice(NULL);
 		}
 
-		if ($loadTranslation) {
+		if (isset($values->free)) {
+			$freeValue = $this->change($values->free, $shipping->shopVariant->currency);
+			$shipping->setFreePrice($freeValue, $values->with_vat);
+		}
+
+		if ($this->shipping->shopVariant->locale === $shipping->shopVariant->locale) {
 			if (isset($values->locality)) {
 				$shipping->locality = $values->locality;
 			}

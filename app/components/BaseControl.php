@@ -3,6 +3,8 @@
 namespace App\Components;
 
 use App\Extensions\Settings\SettingsStorage;
+use App\Model\Entity\Price;
+use App\Model\Entity\Stock;
 use App\Model\Facade\ShopFacade;
 use Exception;
 use h4kuna\Exchange\Exchange;
@@ -55,6 +57,20 @@ abstract class BaseControl extends UI\Control
 		return $this;
 	}
 
+	protected function change($value, $currency)
+	{
+		$value = Price::strToFloat($value);
+		switch ($currency) {
+			case 'EUR':
+			default:
+				return $value;
+			case 'CZK':
+				return $value * Stock::RECALCULATE_RATE_CZK;
+			case 'PLN':
+				return $value * Stock::RECALCULATE_RATE_PLN;
+		}
+	}
+
 	/**
 	 * Set ajax for form
 	 */
@@ -77,10 +93,10 @@ abstract class BaseControl extends UI\Control
 		$engine = new Engine();
 		$template = new Template($engine);
 		$template->setTranslator($this->translator)
-				->setFile($file)
-				->setParameters([
-					'item' => $item,
-		]);
+			->setFile($file)
+			->setParameters([
+				'item' => $item,
+			]);
 		return $template;
 	}
 
@@ -97,5 +113,5 @@ abstract class BaseControl extends UI\Control
 
 class BaseControlException extends Exception
 {
-	
+
 }
