@@ -8,6 +8,7 @@ use App\Extensions\Grido\BaseGrid;
 use App\Model\Entity\Discount;
 use App\Model\Entity\Group;
 use App\Model\Entity\Price;
+use App\Model\Entity\ShopVariant;
 use App\Model\Entity\Sign;
 use App\Model\Entity\Stock;
 use Grido\Components\Export;
@@ -132,9 +133,7 @@ class StocksGrid extends BaseControl
 					->setText($this->exchange->format($row->price->withoutVat));
 				return $link;
 			})
-			->setCustomRenderExport(function ($row) {
-				return Price::floatToStr($row->price->withoutVat);
-			})
+			->setDisableExport()
 			->setSortable()
 			->setFilterNumber();
 		$grid->getColumn(Stock::DEFAULT_PRICE_NAME)->headerPrototype->style = 'width:110px';
@@ -159,13 +158,31 @@ class StocksGrid extends BaseControl
 			});
 
 		/***************************************************/
+		$shopVariantRepo = $this->em->getRepository(ShopVariant::getClassName());
+		$shopVariants = $shopVariantRepo->findAll();
+		foreach ($shopVariants as $shopVariant) {
+			/** @var ShopVariant $shopVariant */
+			$priceName = Stock::DEFAULT_PRICE_NAME . $shopVariant->priceCode;
+			$grid->addColumnNumber($priceName, $shopVariant->getFullName())
+				->setOnlyForExport()
+				->setCustomRenderExport(function (Stock $row) use ($priceName, $shopVariant) {
+					if ($shopVariant->isDefault() || !$row->isSynchronizePrice($shopVariant->shop->priceLetter, $shopVariant->priceNumber)) {
+						$price = $row->getPrice(NULL, $shopVariant->shop->priceLetter, $shopVariant->priceNumber);
+						return Price::floatToStr($price->withoutVat);
+					} else {
+						return NULL;
+					}
+				});
+		}
+
+		/***************************************************/
 		$groupRepo = $this->em->getRepository(Group::getClassName());
 		$groups = $groupRepo->findAll();
 		foreach ($groups as $group) {
 			$priceLevel = 'price' . $group->level;
 			$grid->addColumnNumber($priceLevel, (string)$group)
 				->setOnlyForExport()
-				->setCustomRenderExport(function ($row) use ($priceLevel, $group) {
+				->setCustomRenderExport(function (Stock $row) use ($priceLevel, $group) {
 					$discount = $row->getDiscountByGroup($group);
 					if ($discount && $discount->type === Discount::PERCENTAGE) {
 						return (StockPrice::PERCENT_IS_PRICE ? $discount->value : 100 - $discount->value) . '%';

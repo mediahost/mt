@@ -62,9 +62,9 @@ class ShopVariant extends BaseEntity
 		return $this->shop->priceLetter . $this->priceNumber;
 	}
 
-	public function getFullName()
+	public function getFullName($currency = TRUE)
 	{
-		return $this->shop . ' | ' . Strings::upper($this->locale);
+		return $this->shop . ' | ' . Strings::upper($currency ? $this->currency : $this->locale);
 	}
 
 	public function isDefault()

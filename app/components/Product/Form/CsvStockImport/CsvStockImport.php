@@ -11,6 +11,7 @@ use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Discount;
 use App\Model\Entity\Group;
 use App\Model\Entity\Price;
+use App\Model\Entity\ShopVariant;
 use App\Model\Entity\Stock;
 use App\Model\Facade\ShopFacade;
 use Nette\Http\FileUpload;
@@ -64,8 +65,14 @@ class CsvStockImport extends BaseControl
 			1 => 'pohodaCode',
 			2 => 'name',
 			3 => 'purchasePrice',
-			4 => Stock::DEFAULT_PRICE_NAME,
 		];
+
+		$shopVariantRepo = $this->em->getRepository(ShopVariant::getClassName());
+		$shopVariants = $shopVariantRepo->findAll();
+		foreach ($shopVariants as $shopVariant) {
+			$aliases[] = Stock::DEFAULT_PRICE_NAME . $shopVariant->priceCode;
+		}
+
 		$groupRepo = $this->em->getRepository(Group::getClassName());
 		$groups = $groupRepo->findAll();
 		foreach ($groups as $group) {
@@ -79,14 +86,16 @@ class CsvStockImport extends BaseControl
 		$row = ArrayHash::from($rowArray);
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
 		$groupRepo = $this->em->getRepository(Group::getClassName());
+		$shopVariantRepo = $this->em->getRepository(ShopVariant::getClassName());
 		/* @var $stock Stock */
 		$stock = $stockRepo->find($row->id);
 		if ($stock) {
-			$groups = $groupRepo->findAll();
 			$stock->product->name = $row->name;
 			$stock->setPurchasePrice($row->purchasePrice);
-			/* @var $group Group */
+
+			$groups = $groupRepo->findAll();
 			foreach ($groups as $group) {
+				/* @var $group Group */
 				$priceName = 'price' . $group->level;
 				$priceValue = $row->$priceName;
 
@@ -109,7 +118,21 @@ class CsvStockImport extends BaseControl
 					$stock->addDiscount($discount, $group);
 				}
 			}
-			$stock->setDefaultPrice($row->defaultPrice);
+
+			$shopVariants = $shopVariantRepo->findAll();
+			foreach ($shopVariants as $shopVariant) {
+				/* @var $shopVariant ShopVariant */
+				$priceName = Stock::DEFAULT_PRICE_NAME . $shopVariant->priceCode;
+				$priceValue = $row->$priceName;
+				if ($priceValue) {
+					$stock->setSynchronizePrice($shopVariant->shop->priceLetter, $shopVariant->priceNumber, FALSE);
+					$stock->setDefaultPrice($priceValue, FALSE, $shopVariant->shop->priceLetter, $shopVariant->priceNumber, FALSE);
+				} else {
+					$stock->setSynchronizePrice($shopVariant->shop->priceLetter, $shopVariant->priceNumber);
+				}
+			}
+			$stock->recalculatePrices();
+
 			$stockRepo->save($stock);
 			return $stock->id;
 		}

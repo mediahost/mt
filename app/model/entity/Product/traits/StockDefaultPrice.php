@@ -73,10 +73,12 @@ trait StockDefaultPrice
 		return $this->getPrice(NULL, $priceBase, $priceVersion);
 	}
 
-	public function setDefaultPrice($value, $withVat = FALSE, $priceBase = NULL, $priceVersion = NULL)
+	public function setDefaultPrice($value, $withVat = FALSE, $priceBase = NULL, $priceVersion = NULL, $recalculate = TRUE)
 	{
 		$this->setPrice($value, NULL, $withVat, $priceBase, $priceVersion);
-		$this->recalculatePrices();
+		if ($recalculate && !$priceBase && !$priceVersion) {
+			$this->recalculatePrices();
+		}
 		return $this;
 	}
 
