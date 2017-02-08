@@ -7,6 +7,7 @@ use App\Forms\Form;
 use App\Forms\Renderers\MetronicHorizontalFormRenderer;
 use App\Model\Entity\Category;
 use App\Model\Entity\Group;
+use App\Model\Entity\Shop;
 use App\Model\Entity\Stock;
 use App\Model\Entity\Unit;
 use App\Model\Entity\Vat;
@@ -49,6 +50,9 @@ class StockAdd extends StockBase
 
 		$categories = $this->categoryFacade->getCategoriesList($this->translator->getLocale());
 
+		$shopRepo = $this->em->getRepository(Shop::getClassName());
+		$shops = $shopRepo->findAll();
+
 		$form->addGroup();
 		$form->addText('name', 'Product title', NULL, 150)
 			->setAttribute('class', MetronicTextInputBase::SIZE_XL)
@@ -66,8 +70,13 @@ class StockAdd extends StockBase
 		$form->addText('price', 'Price')
 			->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
 			->setRequired();
-		$form->addSelect2('vat', 'Vat', $this->vatFacade->getValues())
-			->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
+		$shopVat = $form->addContainer('shopVat');
+		foreach ($shops as $shop) {
+			/** @var Shop $shop */
+			$nameVat = $this->translator->translate('Vat for %shop%', NULL, ['shop' => $shop]);
+			$shopVat->addSelect2($shop->priceLetter, $nameVat, $shop->vatValues)
+				->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
+		}
 
 		$form->addGroup('Quantity');
 		$form->addTouchSpin('quantity', 'Quantity')
@@ -121,8 +130,12 @@ class StockAdd extends StockBase
 		$this->stock->active = $values->active;
 
 		$vatRepo = $this->em->getRepository(Vat::getClassName());
-		$vat = $vatRepo->find($values->vat);
-		$this->stock->vat = $vat;
+		if (isset($values->shopVat)) {
+			foreach ($values->shopVat as $priceLetter => $vatId) {
+				$vat = $vatRepo->find($vatId);
+				$this->stock->setVat($vat, $priceLetter);
+			}
+		}
 
 		$this->stock->setDefaultPrice($values->price, $values->with_vat);
 		$groupRepo = $this->em->getRepository(Group::getClassName());
