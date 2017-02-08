@@ -2,7 +2,6 @@
 
 namespace App\BaseModule\Presenters;
 
-use App\ExchangeHelper;
 use App\Extensions\Settings\SettingsStorage;
 use App\Model\Entity\Rate;
 use App\Model\Entity\ShopVariant;
@@ -22,6 +21,8 @@ use Kdyby\Translation\Translator;
 use Nette\Application\ForbiddenRequestException;
 use Nette\Application\UI\Presenter;
 use Nette\Caching\IStorage;
+use Nette\Mail\IMailer;
+use Nette\Mail\SmtpMailer;
 use Tracy\Debugger;
 use WebLoader\Nette\CssLoader;
 use WebLoader\Nette\LoaderFactory;
@@ -51,6 +52,9 @@ abstract class BasePresenter extends Presenter
 
 	/** @var Translator @inject */
 	public $translator;
+
+	/** @var IMailer @inject */
+	public $mailer;
 
 	/** @var SettingsStorage @inject */
 	public $settings;
@@ -161,6 +165,17 @@ abstract class BasePresenter extends Presenter
 	private function loadShop()
 	{
 		$this->shopVariant = $this->shopFacade->getShopVariant();
+		$this->changeSmtpMailerOptions();
+	}
+
+	private function changeSmtpMailerOptions()
+	{
+		$mailers = $this->settings->pageConfig->smtpMailers;
+		if ($this->mailer instanceof SmtpMailer && count($mailers) && array_key_exists($this->shopVariant->priceCode, $mailers)) {
+			$code = $this->shopVariant->priceCode;
+			$options = (array)$mailers->$code;
+			$this->mailer->setOptions($options);
+		}
 	}
 
 	// </editor-fold>

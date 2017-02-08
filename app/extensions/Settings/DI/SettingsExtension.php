@@ -176,6 +176,7 @@ class SettingsExtension extends CompilerExtension
 				'id' => 1,
 				'defaultVariant' => 1,
 			],
+			'smtpMailers' => [],
 		],
 		'expiration' => [
 			'recovery' => '30 minutes',
