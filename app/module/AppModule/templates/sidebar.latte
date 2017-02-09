@@ -60,48 +60,11 @@
 						<span class="title">{_'Products'}</span><span class="selected"></span>
 					</a>
 				</li>
-				<li n:if="$user->isAllowed('categories', 'default')"
-					n:class="$presenter->isLinkCurrent('Categories:*') ? active">
-					<a n:href="Categories:">
-						<i class="icon-notebook"></i>
-						<span class="title">{_'Categories'}</span><span class="selected"></span>
-					</a>
-				</li>
-				<li n:if="$user->isAllowed('users', 'default')"
-					n:class="$presenter->isLinkCurrent('Users:*') ? active">
-					<a n:href="Users:">
-						<i class="fa fa-user"></i>
-						<span class="title">{_'Users'}</span><span class="selected"></span>
-					</a>
-				</li>
-				<li n:if="$user->isAllowed('vouchers', 'default')"
-					n:class="$presenter->isLinkCurrent('Voucher:*') ? active">
-					<a n:href="Voucher:">
-						<i class="fa fa-scissors"></i>
-						<span class="title">{_'Discounts'}</span>
-						<span class="selected"></span>
-					</a>
-				</li>
 				<li n:if="$user->isAllowed('pages', 'default')"
 					n:class="$presenter->isLinkCurrent('Pages:*') ? active">
 					<a n:href="Pages:">
 						<i class="fa fa-bullhorn"></i>
 						<span class="title">{_'Pages'}</span><span class="selected"></span>
-					</a>
-				</li>
-				<li n:if="$user->isAllowed('newsletter', 'default')"
-					n:class="$presenter->isLinkCurrent('Newsletter:*') ? active">
-					<a n:href="Newsletter:">
-						<i class="fa fa-newspaper-o"></i>
-						<span class="title">{_'newsletter.admin.sidebar.newsletter'}</span>
-						<span class="selected"></span>
-					</a>
-				</li>
-				<li n:if="$user->isAllowed('buyout', 'default')"
-					n:class="$presenter->isLinkCurrent('Buyout:*') ? active">
-					<a n:href="Buyout:">
-						<i class="fa fa-balance-scale"></i>
-						<span class="title">{_'Buyout'}</span><span class="selected"></span>
 					</a>
 				</li>
 			{/if}
@@ -118,21 +81,6 @@
 						<i class="fa fa-shopping-cart"></i>
 						<span class="title">{_'Shops'}</span><span class="selected"></span>
 					</a>
-				</li>
-				<li n:if="$user->isAllowed('examples', 'default')"
-					n:class="start, $presenter->isLinkCurrent('Examples:*') ? active">
-					<a n:href="Examples:">
-						<i class="fa fa-life-ring"></i>
-						<span class="title">{_'Examples'}</span><span class="selected"></span>
-					</a>
-					<ul class="sub-menu">
-						<li n:class="$presenter->isLinkCurrent('Examples:form') ? active">
-							<a n:href="Examples:form">
-								<i class="fa fa-file-text-o"></i>
-								{_'Form'}
-							</a>
-						</li>
-					</ul>
 				</li>
 				<li n:if="$user->isAllowed('service', 'tools')"
 					n:class="start, $presenter->isLinkCurrent('Service:*') ? active">
@@ -184,42 +132,6 @@
 				</a>
 			</li>
 
-			<li n:if="$user->isAllowed('groups', 'default')"
-				n:class="$presenter->isLinkCurrent('Groups:*') ? active">
-				<a n:href="Groups:">
-					<i class="icon-users"></i> 
-					<span class="title">{_'Groups'}</span>
-					<span class="selected"></span>
-				</a>
-			</li>
-
-			<li n:if="$user->isAllowed('producers', 'default')"
-				n:class="$presenter->isLinkCurrent('Producers:*') ? active">
-				<a n:href="Producers:">
-					<i class="fa fa-building-o"></i> 
-					<span class="title">{_'Producers'}</span>
-					<span class="selected"></span>
-				</a>
-			</li>
-
-			<li n:if="$user->isAllowed('parameters', 'default')"
-				n:class="$presenter->isLinkCurrent('Parameters:*') ? active">
-				<a n:href="Parameters:">
-					<i class="icon-list"></i> 
-					<span class="title">{_'Parameters'}</span>
-					<span class="selected"></span>
-				</a>
-			</li>
-
-			<li n:if="$user->isAllowed('signs', 'default')"
-				n:class="$presenter->isLinkCurrent('Signs:*') ? active">
-				<a n:href="Signs:">
-					<i class="icon-tag"></i> 
-					<span class="title">{_'Signs'}</span>
-					<span class="selected"></span>
-				</a>
-			</li>
-
 			<li n:if="$user->isAllowed('subscriber', 'default')"
 				n:class="$presenter->isLinkCurrent('Subscriber:*') ? active">
 				<a n:href="Subscriber:">
@@ -227,40 +139,6 @@
 					<span class="title">{_'newsletter.admin.sidebar.subscribers'}</span>
 					<span class="selected"></span>
 				</a>
-			</li>
-			
-			<li n:if="$user->isAllowed('question', 'default')"
-				n:class="$presenter->isLinkCurrent('Question:*') ? active">
-				<a n:href="Question:">
-					<i class="fa fa-question"></i>
-					<span class="title">{_'Buyout questions'}</span>
-					<span class="selected"></span>
-				</a>
-			</li>
-
-			<li n:if="$user->isAllowed('settings', 'default')"
-				n:class="$presenter->isLinkCurrent('Settings:*') ? active">
-				<a n:href="Settings:">
-					<i class="icon-settings"></i> 
-					<span class="title">{_'Settings'}</span>
-					<span class="selected"></span>
-				</a>
-				<ul class="sub-menu">
-					<li n:if="$user->isAllowed('settings', 'default')"
-						n:class="$presenter->isLinkCurrent('Settings:default') ? active">
-						<a n:href="Settings:">
-							<i class="fa fa-dollar"></i>
-							{_'Currency rate'}
-						</a>
-					</li>
-					<li n:if="$user->isAllowed('settings', 'units')"
-						n:class="$presenter->isLinkCurrent('Settings:units') ? active">
-						<a n:href="Settings:units">
-							<i class="fa fa-flask"></i>
-							{_'Units'}
-						</a>
-					</li>
-				</ul>
 			</li>
 			<!-- END TOGETHER AREA -->
 		</ul>
