@@ -247,6 +247,9 @@ msgstr "Edit questions for selected model"
 msgid "Edit questions for model"
 msgstr "Edit questions for model"
 
+msgid "Questions"
+msgstr "Questions"
+
 msgid "Products"
 msgstr "Products"
 
@@ -1107,6 +1110,18 @@ msgstr "YES"
 
 msgid "NO"
 msgstr "NO"
+
+msgid "Yes/No"
+msgstr "Yes/No"
+
+msgid "Variable options"
+msgstr "Variable options"
+
+msgid "Answer #%number%"
+msgstr "Answer #%number%"
+
+msgid "More answers"
+msgstr "More answers"
 
 msgid "CSV file"
 msgstr "CSV file"

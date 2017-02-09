@@ -4,6 +4,8 @@ namespace App\AppModule\Presenters;
 
 use App\Components\Buyout\Form\IModelQuestionFactory;
 use App\Components\Buyout\Form\ModelQuestion;
+use App\Components\Buyout\Grid\IQuestionsGridFactory;
+use App\Components\Buyout\Grid\QuestionsGrid;
 use App\Model\Entity\ProducerModel;
 
 class BuyoutPresenter extends BasePresenter
@@ -11,6 +13,9 @@ class BuyoutPresenter extends BasePresenter
 
 	/** @var IModelQuestionFactory @inject */
 	public $iModelQuestionFactory;
+
+	/** @var IQuestionsGridFactory @inject */
+	public $iQuestionsGridFactory;
 
 	/**
 	 * @secured
@@ -74,6 +79,12 @@ class BuyoutPresenter extends BasePresenter
 	protected function createComponentModelQuestion()
 	{
 		return $this->iModelQuestionFactory->create();
+	}
+
+	/** @return QuestionsGrid */
+	protected function createComponentQuestionsGrid()
+	{
+		return $this->iQuestionsGridFactory->create();
 	}
 
 }

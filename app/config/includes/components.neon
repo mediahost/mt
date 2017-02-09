@@ -38,10 +38,10 @@ services:
 	- {implement: App\Components\User\Grid\IUsersGridFactory, inject: yes}
 
 	# Buyout
-	- {implement: App\Components\Question\IGridControlFactory, inject: yes}
-	- {implement: App\Components\Question\IEntityControlFactory, inject: yes}
+	- {implement: App\Components\Buyout\Form\IQuestionEditFactory, inject: yes}
 	- {implement: App\Components\Buyout\Form\IModelQuestionFactory, inject: yes}
 	- {implement: App\Components\Buyout\Form\IRequestFactory, inject: yes}
+	- {implement: App\Components\Buyout\Grid\IQuestionsGridFactory, inject: yes}
 
 	# Stock
 	- {implement: App\Components\Product\Form\IPrintStockFactory, inject: yes}

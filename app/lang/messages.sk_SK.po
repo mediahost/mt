@@ -257,6 +257,9 @@ msgstr "Upraviť otázky pre vybraný model"
 msgid "Edit questions for model"
 msgstr "Upraviť otázky pre model"
 
+msgid "Questions"
+msgstr "Otázky"
+
 msgid "Products"
 msgstr "Tovar"
 
@@ -1123,6 +1126,18 @@ msgstr "Áno"
 
 msgid "NO"
 msgstr "Nie"
+
+msgid "Yes/No"
+msgstr "Áno/Nie"
+
+msgid "Various options"
+msgstr "Rôzne možnosti"
+
+msgid "Answer #%number%"
+msgstr "Odpoveď č.%number%"
+
+msgid "More answers"
+msgstr "Viac odpovedí"
 
 msgid "CSV file"
 msgstr "CSV súbor"

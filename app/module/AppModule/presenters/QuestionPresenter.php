@@ -2,24 +2,19 @@
 
 namespace App\AppModule\Presenters;
 
-use App\Components\Question\GridControl;
-use App\Components\Question\IEntityControlFactory;
-use App\Components\Question\IGridControlFactory;
+use App\Components\Buyout\Form\IQuestionEditFactory;
+use App\Components\Buyout\Form\QuestionEdit;
+use App\Components\Buyout\Grid\IQuestionsGridFactory;
 use App\Model\Entity\Buyout\Question;
-use Kdyby\Doctrine\DBALException;
 
 class QuestionPresenter extends BasePresenter
 {
 
-	/**
-	 * @var IGridControlFactory @inject
-	 */
-	public $iGridControlFactory;
+	/** @var IQuestionsGridFactory @inject */
+	public $iQuestionsGridFactory;
 
-	/**
-	 * @var IEntityControlFactory @inject
-	 */
-	public $iEntityControlFactory;
+	/** @var IQuestionEditFactory @inject */
+	public $iQuestionEditFactory;
 
 	/**
 	 * @secured
@@ -83,14 +78,13 @@ class QuestionPresenter extends BasePresenter
 	/** @return GridControl */
 	public function createComponentGrid()
 	{
-		return $this->iGridControlFactory->create();
+		return $this->iQuestionsGridFactory->create();
 	}
 
-	/** @return  */
+	/** @return QuestionEdit */
 	public function createComponentForm()
 	{
-		$control = $this->iEntityControlFactory->create();
-		return $control;
+		return $this->iQuestionEditFactory->create();
 	}
 
 }

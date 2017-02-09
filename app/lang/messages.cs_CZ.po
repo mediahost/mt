@@ -254,6 +254,9 @@ msgstr "Upravit otázky pro vybraný model"
 msgid "Edit questions for model"
 msgstr "Upravit otázky pro model"
 
+msgid "Questions"
+msgstr "Otázky"
+
 msgid "Products"
 msgstr "Zboží"
 
@@ -1115,10 +1118,22 @@ msgid "Prices are with VAT"
 msgstr "Ceny jsou s DPH"
 
 msgid "YES"
-msgstr "ANO"
+msgstr "Ano"
 
 msgid "NO"
-msgstr "NE"
+msgstr "Ne"
+
+msgid "Yes/No"
+msgstr "Ano/Ne"
+
+msgid "Various options"
+msgstr "Různé možnosti"
+
+msgid "Answer #%number%"
+msgstr "Odpověď č.%number%"
+
+msgid "More answers"
+msgstr "Více odpovědí"
 
 msgid "CSV file"
 msgstr "CSV soubor"
