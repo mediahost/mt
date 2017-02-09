@@ -21,7 +21,7 @@ class QuestionTranslation extends BaseEntity
 	/** @ORM\Column(type="text") */
 	protected $text;
 
-	/** @ORM\Column(type="text") */
+	/** @ORM\Column(type="text", nullable=true) */
 	protected $notice;
 
 }

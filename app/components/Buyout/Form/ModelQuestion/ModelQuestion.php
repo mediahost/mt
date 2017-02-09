@@ -123,7 +123,9 @@ class ModelQuestion extends BaseControl
 
 					$question = new Question();
 					$question->translateAdd($locale)
-							->setText($container['text']);
+							->setText($container['text'])
+							->setChoiceA($this->translator->translate('Yes'))
+							->setChoiceB($this->translator->translate('No'));
 
 					$question->mergeNewTranslations();
 					$this->em->persist($question);

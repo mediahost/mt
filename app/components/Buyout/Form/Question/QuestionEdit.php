@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Components\Question;
+namespace App\Components\Buyout\Form;
 
 use App\Components\BaseControl;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Buyout\Question;
 use Nette\Utils\ArrayHash;
+use Tracy\Debugger;
 
-class EntityControl extends BaseControl
+class QuestionEdit extends BaseControl
 {
 
 	/** @var Question */
@@ -24,8 +25,22 @@ class EntityControl extends BaseControl
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
 
+		$checkedType = $form->addCheckSwitch('type', 'More answers', 'Yes', 'No')
+			->addCondition(Form::EQUAL, TRUE);
+
 		$form->addText('text', 'Text')
-				->setRequired('Text is required');
+			->setRequired('Text is required');
+
+		$form->addWysiHtml('notice', 'Notice', 10)
+			->getControlPrototype()->class[] = 'page-html-content';
+
+		$answers = $form->addContainer('answer');
+		for ($i = 1; $i <= Question::ANSWERS_COUNT; $i++) {
+			$id = 'answer-' . $i;
+			$checkedType->toggle($id);
+			$answers->addText($i, $this->translator->translate('Answer #%number%', NULL, ['number' => $i]))
+				->setOption('id', $id);
+		}
 
 		$form->addSubmit('save', 'Save');
 
@@ -47,14 +62,22 @@ class EntityControl extends BaseControl
 		}
 
 		$this->entity->translateAdd($locale)
-				->setText($values->text);
+			->setText($values->text)
+			->setNotice($values->notice);
+
+		if ($values->type && $values->answer && current($values->answer)) {
+			$this->entity->type = Question::RADIO;
+			// TODO: add answers
+		} else {
+			$this->entity->type = Question::BOOL;
+		}
 
 		$this->entity->mergeNewTranslations();
 		$this->em->persist($this->entity)
-				->flush();
+			->flush();
 
 		$message = $this->translator->translate('successfullySaved', NULL, [
-			'type' => $this->translator->translate('Question'), 'name' => (string) $this->entity
+			'type' => $this->translator->translate('Question'), 'name' => (string)$this->entity
 		]);
 		$this->presenter->flashMessage($message, 'success');
 		$this->presenter->redirect('default');
@@ -71,6 +94,7 @@ class EntityControl extends BaseControl
 
 		$this['form']->setDefaults([
 			'text' => $question->text,
+			'text' => $question->text,
 		]);
 
 		return $this;
@@ -78,9 +102,9 @@ class EntityControl extends BaseControl
 
 }
 
-interface IEntityControlFactory
+interface IQuestionEditFactory
 {
 
-	/** @return EntityControl */
+	/** @return QuestionEdit */
 	function create();
 }
