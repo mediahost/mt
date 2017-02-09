@@ -47,9 +47,7 @@ class EntityControl extends BaseControl
 		}
 
 		$this->entity->translateAdd($locale)
-				->setText($values->text)
-				->setChoiceA($this->translator->translate('Yes'))
-				->setChoiceB($this->translator->translate('No'));
+				->setText($values->text);
 
 		$this->entity->mergeNewTranslations();
 		$this->em->persist($this->entity)
@@ -73,8 +71,6 @@ class EntityControl extends BaseControl
 
 		$this['form']->setDefaults([
 			'text' => $question->text,
-			'choiceA' => $question->choiceA,
-			'choiceB' => $question->choiceB,
 		]);
 
 		return $this;
