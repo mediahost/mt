@@ -120,6 +120,7 @@ class ProductsPresenter extends BasePresenter
 	 */
 	public function actionExportCategory(array $categoryIds)
 	{
+		ini_set('max_execution_time', 120);
 		$ids = [];
 		$categoryRepo = $this->em->getRepository(Category::getClassName());
 		foreach ($categoryIds as $categoryId) {
