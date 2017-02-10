@@ -3,12 +3,14 @@ modelQuestion:
 	input:
 		price: 'Základní cena'
 		question: 'Otázka'
+		answer: 'Odpověď č.%number%'
 		yes: 'Ano'
 		no: 'Ne'
 		save: 'Uložit'
 		add: 'Přidat'
 	required:
 		price: 'Zadejte výkupní cenu!'
+	notSelect: '--- Nevyplněno ---'
 
 request:
 	input:

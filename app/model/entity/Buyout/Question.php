@@ -2,8 +2,10 @@
 
 namespace App\Model\Entity\Buyout;
 
-use Doctrine\ORM\Mapping as ORM;
 use App\Model\Entity\BaseTranslatable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Kdyby\Translation\Translator;
 use Knp\DoctrineBehaviors\Model;
 
 /**
@@ -14,9 +16,14 @@ use Knp\DoctrineBehaviors\Model;
  * @property string $notice
  * @property string $type
  * @property string $formatedType
+ * @property array $answersArray
  */
 class Question extends BaseTranslatable
 {
+
+	/**
+	 * UPDATE `buyout_question` SET type` = 'bool';
+	 */
 
 	const ANSWERS_COUNT = 5;
 	const BOOL = 'bool';
@@ -27,6 +34,15 @@ class Question extends BaseTranslatable
 
 	/** @ORM\Column(type="string", length=10) */
 	protected $type = self::DEFAULT_TYPE;
+
+	/** @ORM\OneToMany(targetEntity="Answer", mappedBy="question", cascade={"persist", "remove"}, orphanRemoval=true) */
+	private $answers;
+
+	public function __construct($currentLocale = NULL)
+	{
+		parent::__construct($currentLocale);
+		$this->answers = new ArrayCollection();
+	}
 
 	public function __toString()
 	{
@@ -52,6 +68,62 @@ class Question extends BaseTranslatable
 	{
 		$types = self::getTypes();
 		return array_key_exists($this->type, $types) ? $types[$this->type] : $this->type;
+	}
+
+	public function addAnswer($id, Translator $translator, $text)
+	{
+		$existed = FALSE;
+		$editAnswer = function ($key, Answer $answer) use ($id, $translator, $text, &$existed) {
+			if ($key + 1 == $id) {
+				$translation = $answer->translate($translator->getLocale());
+				if ($translation->locale !== $translator->getLocale()) {
+					$translation = $answer->translateAdd($translator->getLocale());
+				}
+				$translation->text = $text;
+				$answer->mergeNewTranslations();
+				$existed = TRUE;
+			}
+			return !$existed;
+		};
+		$this->answers->forAll($editAnswer);
+		if (!$existed) {
+			$answer = new Answer($translator->getDefaultLocale());
+			$answer->question = $this;
+			$translation = $answer->translateAdd($translator->getDefaultLocale());
+			$translation->text = $text;
+			$answer->mergeNewTranslations();
+			$this->answers->add($answer);
+		}
+		return $this;
+	}
+
+	public function removeAnswer($id, Translator $translator, $removeAllLocale = TRUE)
+	{
+		$deleteAnswer = function ($key, Answer $answer) use ($id, $translator, $removeAllLocale) {
+			if ($key + 1 == $id) {
+				$translation = $answer->translate($translator->getLocale());
+				if ($removeAllLocale || $translation->locale === $translator->getDefaultLocale()) {
+					$this->answers->remove($key);
+				} else {
+					$answer->removeTranslation($translation);
+				}
+				return FALSE;
+			}
+			return TRUE;
+		};
+		$this->answers->forAll($deleteAnswer);
+		return $this;
+	}
+
+	public function getAnswersArray()
+	{
+		$answers = [];
+		foreach ($this->answers as $key => $answer) {
+			/** @var $answer Answer */
+			$answer->setCurrentLocale($answer->question->getCurrentLocale());
+			$answers[$key + 1] = (string)$answer;
+		}
+		return $answers;
 	}
 
 	public static function getTypes()

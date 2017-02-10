@@ -21,7 +21,7 @@ $('.modal.ajax').on('loaded.bs.modal', function (e) {
 
 $.nette.ext('netteAjax', {
 	complete: function (payload, t, params) {
-		if (params.nette.el.attr('data-dismiss-after')) {
+		if (params.nette && params.nette.el.attr('data-dismiss-after')) {
 			params.nette.el.closest('.modal').find('[data-dismiss="modal"]').click();
 		}
 		for (i in payload.snippets) {

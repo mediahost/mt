@@ -5,6 +5,7 @@ namespace App\AppModule\Presenters;
 use App\Components\Buyout\Form\IQuestionEditFactory;
 use App\Components\Buyout\Form\QuestionEdit;
 use App\Components\Buyout\Grid\IQuestionsGridFactory;
+use App\Components\Buyout\Grid\QuestionsGrid;
 use App\Model\Entity\Buyout\Question;
 
 class QuestionPresenter extends BasePresenter
@@ -44,7 +45,6 @@ class QuestionPresenter extends BasePresenter
 	public function actionEdit($id)
 	{
 		$question = $this->em->getRepository(Question::getClassName())->find($id);
-
 		$this['form']->setEntity($question);
 	}
 
@@ -75,7 +75,7 @@ class QuestionPresenter extends BasePresenter
 		$this->redirect('default');
 	}
 
-	/** @return GridControl */
+	/** @return QuestionsGrid */
 	public function createComponentGrid()
 	{
 		return $this->iQuestionsGridFactory->create();
@@ -84,7 +84,15 @@ class QuestionPresenter extends BasePresenter
 	/** @return QuestionEdit */
 	public function createComponentForm()
 	{
-		return $this->iQuestionEditFactory->create();
+		$control = $this->iQuestionEditFactory->create();
+		$control->onAfterSave[] = function (Question $saved) {
+			$message = $this->translator->translate('successfullySaved', NULL, [
+				'type' => $this->translator->translate('Question'), 'name' => (string)$saved
+			]);
+			$this->flashMessage($message, 'success');
+			$this->redirect('this');
+		};
+		return $control;
 	}
 
 }

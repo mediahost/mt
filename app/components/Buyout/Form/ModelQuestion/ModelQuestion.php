@@ -5,6 +5,7 @@ namespace App\Components\Buyout\Form;
 use App\Components\BaseControl;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
+use App\Forms\Renderers\MetronicHorizontalFormRenderer;
 use App\Model\Entity\Buyout\ModelQuestion as ModelQuestionEntity;
 use App\Model\Entity\Buyout\Question;
 use App\Model\Entity\ProducerModel;
@@ -31,33 +32,57 @@ class ModelQuestion extends BaseControl
 	protected function createComponentForm()
 	{
 		$form = new Form();
-		$form->setTranslator($this->translator->domain('buyout.modelQuestion'))
-				->setRenderer(new MetronicFormRenderer());
+		$domain = 'buyout.modelQuestion.';
+		$form->setTranslator($this->translator)
+			->setRenderer(new MetronicHorizontalFormRenderer(3, 9));
 
-		$form->addText('buyoutPrice', 'input.price')
-						->setRequired('required.price')
-						->getControlPrototype()->class[] = 'mask_currency form-control input-small';
-		$form['buyoutPrice']->getLabelPrototype()->class[] = 'control-label col-md-3';
+		$form->addText('buyoutPrice', $domain . 'input.price')
+			->setRequired($domain . 'required.price')
+			->getControlPrototype()->class[] = 'mask_currency input-small';
 
-		$questions = $form->addDynamic('questions', function (Container $question) {
-			$question->addTypeahead('text', 'input.question', function ($query) {
-						return $this->questionFacade->suggestByText($query, $this->translator->getLocale());
-					})
-					->setAttribute('autocomplete', 'off');
+		$questionRepo = $this->em->getRepository(Question::getClassName());
+		$questions = [NULL => $domain . 'notSelect'] + $questionRepo->findPairsTranslate($this->translator->getLocale(), 't.text');
+		$boolQuestions = $questionRepo->findPairs(['type' => Question::BOOL], 'id');
+		$radioQuestions = $questionRepo->findPairs(['type' => Question::RADIO], 'id');
 
-			$question->addText('yes', 'input.yes')
-							->getControlPrototype()->class[] = 'mask_currency form-control input-small';
+		$addDynamics = function (Container $container) use ($questions, $domain, $boolQuestions, $radioQuestions) {
+			$name = $this->translator->translate($domain . 'input.question', NULL, ['number' => $container->name + 1]);
+			$select = $container->addSelect('question', $name, $questions);
+			$select->getControlPrototype()->class[] = 'select2';
+			$boolCondition = $select->addCondition(Form::IS_IN, array_values($boolQuestions));
+			$radioCondition = $select->addCondition(Form::IS_IN, array_values($radioQuestions));
 
-			$question->addText('no', 'input.no')
-							->getControlPrototype()->class[] = 'mask_currency form-control input-small';
-		}, 5);
+			$answers = $container->addContainer('answers');
 
-		$questions->addSubmit('add', 'input.add')
-						->setValidationScope(FALSE)
-				->onClick[] = $this->addQuestionClicked;
+			$id = 'answer-yes-' . $container->name;
+			$boolCondition->toggle($id);
+			$answers->addText('yes', $domain . 'input.yes')
+				->setOption('id', $id)
+				->getControlPrototype()->class[] = 'mask_currency input-small';
 
-		$form->addSubmit('save', 'input.save')
-						->getControlPrototype()->class[] = 'btn-primary';
+			$id = 'answer-no-' . $container->name;
+			$boolCondition->toggle($id);
+			$answers->addText('no', $domain . 'input.no')
+				->setOption('id', $id)
+				->getControlPrototype()->class[] = 'mask_currency input-small';
+
+			for ($i = 1; $i <= Question::ANSWERS_COUNT; $i++) {
+				$id = 'answer-num-' . $i . '-' . $container->name;
+				$radioCondition->toggle($id);
+				$answers->addText($i, $this->translator->translate($domain . 'input.answer', NULL, ['number' => $i]))
+					->setOption('id', $id)
+					->getControlPrototype()->class[] = 'mask_currency input-small';
+			}
+
+		};
+		$dynamics = $form->addDynamic('questions', $addDynamics, self::QUESTION_LIMIT);
+
+		$dynamics->addSubmit('add', $domain . 'input.add')
+			->setValidationScope(FALSE)
+			->onClick[] = $this->addQuestionClicked;
+
+		$form->addSubmit('save', $domain . 'input.save')
+			->getControlPrototype()->class[] = 'btn-primary';
 
 		$form->onSuccess[] = $this->formSucceeded;
 		return $form;
@@ -123,9 +148,9 @@ class ModelQuestion extends BaseControl
 
 					$question = new Question();
 					$question->translateAdd($locale)
-							->setText($container['text'])
-							->setChoiceA($this->translator->translate('Yes'))
-							->setChoiceB($this->translator->translate('No'));
+						->setText($container['text'])
+						->setChoiceA($this->translator->translate('Yes'))
+						->setChoiceB($this->translator->translate('No'));
 
 					$question->mergeNewTranslations();
 					$this->em->persist($question);
@@ -142,7 +167,7 @@ class ModelQuestion extends BaseControl
 				} else {
 					$modelQuestion = new ModelQuestionEntity();
 					$modelQuestion->setQuestion($question)
-							->setModel($this->model);
+						->setModel($this->model);
 				}
 
 				$modelQuestion->setPrice($container['yes'], $container['no']);

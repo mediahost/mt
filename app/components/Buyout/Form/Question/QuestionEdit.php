@@ -67,7 +67,14 @@ class QuestionEdit extends BaseControl
 
 		if ($values->type && $values->answer && current($values->answer)) {
 			$this->entity->type = Question::RADIO;
-			// TODO: add answers
+			foreach ($values->answer as $id => $text) {
+				if ($text) {
+					$this->entity->addAnswer($id, $this->translator, $text);
+				} else {
+					$isDefaultLocale = $this->translator->getDefaultLocale() === $this->translator->getLocale();
+					$this->entity->removeAnswer($id, $this->translator, $isDefaultLocale);
+				}
+			}
 		} else {
 			$this->entity->type = Question::BOOL;
 		}
@@ -76,11 +83,7 @@ class QuestionEdit extends BaseControl
 		$this->em->persist($this->entity)
 			->flush();
 
-		$message = $this->translator->translate('successfullySaved', NULL, [
-			'type' => $this->translator->translate('Question'), 'name' => (string)$this->entity
-		]);
-		$this->presenter->flashMessage($message, 'success');
-		$this->presenter->redirect('default');
+		$this->onAfterSave($this->entity);
 	}
 
 	/**
@@ -94,7 +97,9 @@ class QuestionEdit extends BaseControl
 
 		$this['form']->setDefaults([
 			'text' => $question->text,
-			'text' => $question->text,
+			'notice' => $question->notice,
+			'type' => $question->isRadio(),
+			'answer' => $question->answersArray,
 		]);
 
 		return $this;

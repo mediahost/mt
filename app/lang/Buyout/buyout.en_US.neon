@@ -3,12 +3,14 @@ modelQuestion:
 	input:
 		price: 'Basic Price'
 		question: 'Question'
+		answer: 'Answer #%number%'
 		yes: 'Yes'
 		no: 'No'
 		save: 'Save'
 		add: 'Add'
 	required:
 		price: 'Enter buyout price!'
+	notSelect: '--- Not filled ---'
 
 request:
 	input:
