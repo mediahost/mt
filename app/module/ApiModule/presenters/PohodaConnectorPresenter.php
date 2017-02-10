@@ -57,6 +57,7 @@ class PohodaConnectorPresenter extends BasePresenter
 			$insertList->stored = FALSE;
 			$insertList->setTranslator($this->translator);
 			$insertList->setExchange($this->exchange, $this->exchange->getDefault());
+			$insertList->setShopVariant($this->shopFacade->getShopVariant());
 			$insertList->addFilterCreatedFrom($newProductsTime);
 
 			$pohodaRepo->findAll(); // load all items in doctrine and find will be without SQL
