@@ -34,7 +34,7 @@ class ModelQuestion extends BaseControl
 		$form = new Form();
 		$domain = 'buyout.modelQuestion.';
 		$form->setTranslator($this->translator)
-			->setRenderer(new MetronicHorizontalFormRenderer(3, 9));
+			->setRenderer(new MetronicHorizontalFormRenderer(4, 8));
 
 		$form->addText('buyoutPrice', $domain . 'input.price')
 			->setRequired($domain . 'required.price')
@@ -105,10 +105,6 @@ class ModelQuestion extends BaseControl
 		$button->parent->createOne();
 	}
 
-	/**
-	 * @param ProducerModel $model
-	 * @return ModelQuestion
-	 */
 	public function setModel(ProducerModel $model)
 	{
 		$this->model = $model;
@@ -132,6 +128,18 @@ class ModelQuestion extends BaseControl
 		]);
 
 		return $this;
+	}
+
+	public function getQuestions()
+	{
+		$questionRepo = $this->em->getRepository(Question::getClassName());
+		$questions = [];
+		foreach ($questionRepo->findAll() as $question) {
+			/** @var Question $question */
+			$question->setCurrentLocale($this->translator->getLocale());
+			$questions[$question->id] = $question->answersArray;
+		}
+		return $questions;
 	}
 
 	private function processData(Form $form, ArrayHash $values)

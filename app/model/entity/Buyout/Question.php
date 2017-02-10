@@ -123,7 +123,7 @@ class Question extends BaseTranslatable
 			$answer->setCurrentLocale($answer->question->getCurrentLocale());
 			$answers[$key + 1] = (string)$answer;
 		}
-		return $answers;
+		return $this->isRadio() ? $answers : NULL;
 	}
 
 	public static function getTypes()

@@ -11,7 +11,7 @@ jQuery(document).ready(function () {
 	Fullscreen.init();
 	AppContent.init();
 	
-	Buyout.init('[data-typeahead-url]');
+	Buyout.init();
 	Newsletter.init();
 });
 
