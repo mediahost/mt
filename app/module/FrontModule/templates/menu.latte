@@ -22,7 +22,7 @@
 		{ifset $menuPages->page1}
 			<li class="dropdown yamm-fw">
 				<a n:href="Producer:">
-					<span>{_'menu.subtitle.page1'}</span>{_'menu.headline.page1'}
+					<span>{_'menu.subtitle.pageHome'}</span>{_'menu.headline.pageHome'}
 					<i class="drop-caret" data-toggle="dropdown"></i>
 				</a>
 				<ul class="dropdown-menu">
@@ -86,7 +86,11 @@
 		{ifset $menuPages->page3}
 			<li n:class="count($producers) ? dropdown, yamm-fw">
 				<a n:href="Service:">
-					<span>{_'menu.subtitle.page3'}</span>{_'menu.headline.page3'}
+					{if $menuPages->page3->linkHeadline}
+						<span>{$menuPages->page3->linkSubscribe}</span>{$menuPages->page3->linkHeadline}
+					{else}
+						<span></span>{$menuPages->page3}
+					{/if}
 					<i class="drop-caret" data-toggle="dropdown"></i>
 				</a>
 				<ul n:if="count($producers)" class="dropdown-menu">
@@ -148,7 +152,11 @@
 		{ifset $menuPages->page2}
 			<li n:ifset="$menuPages->page2" n:class="count($producers) ? dropdown, yamm-fw">
 				<a n:href="Buyout:">
-					<span>{_'menu.subtitle.page2'}</span>{_'menu.headline.page2'}
+					{if $menuPages->page2->linkHeadline}
+						<span>{$menuPages->page2->linkSubscribe}</span>{$menuPages->page2->linkHeadline}
+					{else}
+						<span></span>{$menuPages->page2}
+					{/if}
 					<i class="drop-caret" data-toggle="dropdown"></i>
 				</a>
 				<ul n:if="count($producers)" class="dropdown-menu">
@@ -210,17 +218,29 @@
 		{/ifset}
 		<li n:ifset="$menuPages->page4">
 			<a n:href="{$menuPages->page4->link}">
-				<span>{_'menu.subtitle.page4'}</span>{_'menu.headline.page4'}
+				{if $menuPages->page4->linkHeadline}
+					<span>{$menuPages->page4->linkSubscribe}</span>{$menuPages->page4->linkHeadline}
+				{else}
+					<span></span>{$menuPages->page4}
+				{/if}
 			</a>
 		</li>
 		<li n:ifset="$menuPages->page5">
 			<a n:href="$menuPages->page5->link">
-				<span>{_'menu.subtitle.page5'}</span>{_'menu.headline.page5'}
+				{if $menuPages->page5->linkHeadline}
+					<span>{$menuPages->page5->linkSubscribe}</span>{$menuPages->page5->linkHeadline}
+				{else}
+					<span></span>{$menuPages->page5}
+				{/if}
 			</a>
 		</li>
 		<li n:ifset="$menuPages->page6">
 			<a n:href="Page: $menuPages->page6->id">
-				<span>{_'menu.subtitle.page6'}</span>{_'menu.headline.page6'}
+				{if $menuPages->page6->linkHeadline}
+					<span>{$menuPages->page6->linkSubscribe}</span>{$menuPages->page6->linkHeadline}
+				{else}
+					<span></span>{$menuPages->page6}
+				{/if}
 			</a>
 		</li>
 	</ul>

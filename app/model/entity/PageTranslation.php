@@ -22,6 +22,12 @@ class PageTranslation extends BaseEntity
 	/** @ORM\Column(type="string", length=50, nullable=false) */
 	protected $name;
 
+	/** @ORM\Column(type="string", length=50, nullable=true) */
+	protected $linkHeadline;
+
+	/** @ORM\Column(type="string", length=50, nullable=true) */
+		protected $linkSubscribe;
+
 	/** @ORM\Column(type="text", nullable=true) */
 	protected $html;
 
