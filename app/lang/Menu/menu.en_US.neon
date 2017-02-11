@@ -1,17 +1,7 @@
 subtitle:
-	page1: 'All for'
-	page2: 'Unbeatable'
-	page3: 'Even warantly'
-	page4: 'Earn rewards'
-	page5: 'Buy in bulk'
-	page6: 'All for'
+	pageHome: 'All for'
 headline:
-	page1: 'My Phone'
-	page2: 'Buyout'
-	page3: 'Service'
-	page4: 'Bonus Program'
-	page5: 'Dealer'
-	page6: 'Contact'
+	pageHome: 'My Phone'
 brand:
 	top: 'Top brands'
 	more: 'More brands'

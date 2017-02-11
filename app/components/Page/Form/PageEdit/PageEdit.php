@@ -8,7 +8,9 @@ use App\Forms\Controls\TextInputBased\MetronicTextInputBase;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Page;
+use App\Model\Entity\Role;
 use Nette\Application\UI\InvalidLinkException;
+use Nette\Security\User;
 use Nette\Utils\ArrayHash;
 
 class PageEdit extends BaseControl
@@ -16,6 +18,9 @@ class PageEdit extends BaseControl
 
 	/** @var Page */
 	private $page;
+
+	/** @var User @inject */
+	public $user;
 
 	// <editor-fold desc="events">
 
@@ -34,19 +39,27 @@ class PageEdit extends BaseControl
 		$form->setRenderer(new MetronicFormRenderer());
 
 		$form->addText('name', 'Name')
-						->setRequired('Name is required')
-						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XL;
+			->setRequired('Name is required')
+			->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XL;
 
 		$form->addText('comment', 'Comment')
-						->setAttribute('placeholder', 'Shortly about contain of page')
-						->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XL;
+			->setAttribute('placeholder', 'Shortly about contain of page')
+			->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XL;
+
+		if ($this->user->isAllowed('pages', 'editAll')) {
+			$form->addText('linkHeadline', 'Link Headline')
+				->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XL;
+
+			$form->addText('linkSubscribe', 'Link Subscribe')
+				->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XL;
+		}
 
 		$form->addText('link', 'Link')
-				->setAttribute('placeholder', 'Fill if you want to redirect to other page');
+			->setAttribute('placeholder', 'Fill if you want to redirect to other page');
 
 		$form->addWysiHtml('html', 'Text', 30)
-						->setRequired('Content is required')
-						->getControlPrototype()->class[] = 'page-html-content';
+			->setRequired('Content is required')
+			->getControlPrototype()->class[] = 'page-html-content';
 
 		$form->addSubmit('save', 'Save');
 
@@ -69,8 +82,15 @@ class PageEdit extends BaseControl
 	private function load(ArrayHash $values)
 	{
 		$lang = $this->page->isNew() ? $this->translator->getDefaultLocale() : $this->translator->getLocale();
-		$this->page->translateAdd($lang)->name = $values->name;
-		$this->page->translateAdd($lang)->html = $values->html;
+		$translation = $this->page->translateAdd($lang);
+		$translation->name = $values->name;
+		$translation->html = $values->html;
+		if (isset($values->linkHeadline)) {
+			$translation->linkHeadline = $values->linkHeadline;
+		}
+		if (isset($values->linkSubscribe)) {
+			$translation->linkSubscribe = $values->linkSubscribe;
+		}
 		$this->page->comment = $values->comment;
 		if ($values->link) {
 			$realLink = @$this->presenter->link($values->link);
@@ -101,6 +121,8 @@ class PageEdit extends BaseControl
 				'comment' => $this->page->comment,
 				'link' => $this->page->link,
 				'html' => $this->page->html,
+				'linkHeadline' => $this->page->linkHeadline,
+				'linkSubscribe' => $this->page->linkSubscribe,
 			];
 		}
 		return $values;

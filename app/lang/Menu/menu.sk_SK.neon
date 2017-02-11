@@ -1,17 +1,7 @@
 ﻿subtitle:
-	page1: 'Všetko pre'
-	page2: 'Bezkonkurenčný'
-	page3: 'Aj pozáručný'
-	page4: 'Vernostný program'
-	page5: 'Nakupujte vo veľkom'
-	page6: 'Všetko o nás'
+	pageHome: 'Všetko pre'
 headline:
-	page1: 'Môj telefón'
-	page2: 'Výkup'
-	page3: 'Servis'
-	page4: 'Odmeny'
-	page5: 'Veľkoobchod'
-	page6: 'Kontakt'
+	pageHome: 'Môj telefón'
 brand:
 	top: 'Top značky'
 	more: 'Ďalšie značky'
