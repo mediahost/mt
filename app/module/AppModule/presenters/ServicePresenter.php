@@ -299,7 +299,7 @@ class ServicePresenter extends BasePresenter
 	private function updateStocks()
 	{
 		$criteria = [
-			Stock::DEFAULT_PRICE_NAME . 'B3' => NULL,
+			'active' => TRUE,
 		];
 
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
@@ -309,8 +309,9 @@ class ServicePresenter extends BasePresenter
 
 		$counter = 0;
 		foreach ($stocks as $stock) {
+			/** @var Stock $stock */
 			$stock->shopVariant = $this->shopVariant;
-			$stock->recalculateVersionPrices();
+			$stock->recalculatePrices();
 			$this->em->persist($stock);
 			$counter++;
 		}

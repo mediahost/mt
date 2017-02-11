@@ -345,7 +345,7 @@ class Basket extends BaseEntity
 	public function getPaymentsPrice(Exchange $exchange = NULL, $level = NULL, $withVat = TRUE)
 	{
 		$totalPrice = 0;
-		$currency = $this->shipping->shopVariant->currency;
+		$currency = $this->shopVariant->currency;
 		if ($this->shipping) {
 			$shippingPrice = $this->shipping->getPrice($this, $level);
 			$priceValue = $withVat ? $shippingPrice->withVat : $shippingPrice->withoutVat;
@@ -388,6 +388,7 @@ class Basket extends BaseEntity
 
 	public function import(Basket $basket, $skipException = FALSE, $checkQuantity = TRUE)
 	{
+		$this->shopVariant = $basket->shopVariant;
 		if ($basket->itemsCount) {
 			$this->items->clear();
 		}
