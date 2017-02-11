@@ -43,6 +43,12 @@ class Shop extends BaseEntity
 	/** @ORM\OneToMany(targetEntity="Vat", mappedBy="shop") */
 	protected $vats;
 
+	/** @ORM\Column(type="simple_array", nullable=true) */
+	private $deniedLocales;
+
+	/** @ORM\Column(type="simple_array", nullable=true) */
+	private $deniedCurrencies;
+
 	public function getBankAccounts()
 	{
 		$accounts = new ArrayCollection();
@@ -89,6 +95,16 @@ class Shop extends BaseEntity
 			$values[$vat->id] = (string)$vat;
 		}
 		return $values;
+	}
+
+	public function isLocaleDenied($locale)
+	{
+		return is_array($this->deniedCurrencies) && in_array($locale, $this->deniedLocales);
+	}
+
+	public function isCurrencyDenied($currency)
+	{
+		return is_array($this->deniedCurrencies) && in_array($currency, $this->deniedCurrencies);
 	}
 
 	public function __construct($letter)

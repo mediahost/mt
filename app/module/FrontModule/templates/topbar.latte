@@ -9,7 +9,9 @@
 				</div>
 				<div class="col-md-8">
 					<ul class="nav navbar-nav navbar-right navbar-right-no-mar">
-						<li n:foreach="$exchange as $currCode => $curr" n:class="currency-menu, $currCode == $currency->getCode() ? current">
+						<li n:foreach="$exchange as $currCode => $curr"
+								n:if="!$shop->isCurrencyDenied($currCode)"
+								n:class="currency-menu, $currCode == $currency->getCode() ? current">
 							<a n:href="setCurrency! $currCode">
 								{$curr->getFormat()->getSymbol()}
 							</a>
@@ -23,7 +25,7 @@
 								<div class="langs-block-others">
 									{foreach $allowedLanguages as $allowedLang}
 										{var $code = substr($allowedLang,0,2)}
-										{continueIf $code === $locale}
+										{continueIf $code === $locale || $shop->isLocaleDenied($code)}
 										{if $user->loggedIn}
 											{var $args = [locale => $code, overwrite => yes]}
 										{else}
