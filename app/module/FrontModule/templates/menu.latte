@@ -216,30 +216,33 @@
 				</ul>
 			</li>
 		{/ifset}
-		<li n:ifset="$menuPages->page4">
-			<a n:href="{$menuPages->page4->link}">
-				{if $menuPages->page4->linkHeadline}
-					<span>{$menuPages->page4->linkSubscribe}</span>{$menuPages->page4->linkHeadline}
+		{var liPage => $menuPages->page4}
+		<li n:ifset="$liPage">
+			<a {if $liPage->link}href="{link $liPage->link}"{else}href="{link Page: $liPage->id}"{/if}>
+				{if $liPage->linkHeadline}
+					<span>{$liPage->linkSubscribe}</span>{$liPage->linkHeadline}
 				{else}
-					<span></span>{$menuPages->page4}
+					<span></span>{$liPage}
 				{/if}
 			</a>
 		</li>
-		<li n:ifset="$menuPages->page5">
-			<a n:href="$menuPages->page5->link">
-				{if $menuPages->page5->linkHeadline}
-					<span>{$menuPages->page5->linkSubscribe}</span>{$menuPages->page5->linkHeadline}
+		{var liPage => $menuPages->page5}
+		<li n:ifset="$liPage">
+			<a {if $liPage->link}href="{link $liPage->link}"{else}href="{link Page: $liPage->id}"{/if}>
+				{if $liPage->linkHeadline}
+					<span>{$liPage->linkSubscribe}</span>{$liPage->linkHeadline}
 				{else}
-					<span></span>{$menuPages->page5}
+					<span></span>{$liPage}
 				{/if}
 			</a>
 		</li>
-		<li n:ifset="$menuPages->page6">
-			<a n:href="Page: $menuPages->page6->id">
-				{if $menuPages->page6->linkHeadline}
-					<span>{$menuPages->page6->linkSubscribe}</span>{$menuPages->page6->linkHeadline}
+		{var liPage => $menuPages->page6}
+		<li n:ifset="$liPage">
+			<a {if $liPage->link}href="{link $liPage->link}"{else}href="{link Page: $liPage->id}"{/if}>
+				{if $liPage->linkHeadline}
+					<span>{$liPage->linkSubscribe}</span>{$liPage->linkHeadline}
 				{else}
-					<span></span>{$menuPages->page6}
+					<span></span>{$liPage}
 				{/if}
 			</a>
 		</li>
