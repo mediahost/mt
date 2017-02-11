@@ -204,8 +204,10 @@ abstract class BasePresenter extends Presenter
 	public function handleSetCurrency($currency)
 	{
 		try {
-			$this->exchange->setWeb($this->exchange[$currency], TRUE);
-			$this->user->storage->setCurrency($this->exchange[$currency]);
+			if (!$this->shopVariant->shop->isCurrencyDenied($currency)) {
+				$this->exchange->setWeb($this->exchange[$currency], TRUE);
+				$this->user->storage->setCurrency($this->exchange[$currency]);
+			}
 		} catch (ExchangeException $e) {
 			$this->flashMessage($this->translator->translate('Requested currency isn\'t supported.'), 'warning');
 		}
