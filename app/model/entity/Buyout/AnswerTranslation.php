@@ -8,20 +8,16 @@ use Knp\DoctrineBehaviors\Model;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="buyout_question_translation")
+ * @ORM\Table(name="buyout_answer_translation")
  *
  * @property string $text
- * @property string $notice
  */
-class QuestionTranslation extends BaseEntity
+class AnswerTranslation extends BaseEntity
 {
 
 	use Model\Translatable\Translation;
 
 	/** @ORM\Column(type="text") */
 	protected $text;
-
-	/** @ORM\Column(type="text", nullable=true) */
-	protected $notice;
 
 }

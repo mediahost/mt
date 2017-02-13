@@ -1,44 +1,21 @@
-
 var Buyout = Buyout || {};
 
-Buyout.init = function (element) {
-	$(element).each(function () {
-		$this = $(this);
-		var bh = new Bloodhound({
-			datumTokenizer: Bloodhound.tokenizers.obj.whitespace,
-			queryTokenizer: Bloodhound.tokenizers.whitespace,
-			remote: {
-				url: $this.data('typeahead-url'),
-				wildcard: '__QUERY_PLACEHOLDER__'
-			}
-		});
+Buyout.init = function () {
+	var configJson = document.getElementById('buyoutConfig');
+	var configVars = JSON.parse(configJson.textContent || configJson.innerHTML);
+	var questionAnswers = JSON.parse(configVars.questionAnswers);
 
-		$this.typeahead({
-			hint: true,
-			minLength: 1,
-			highlight: true
-		},
-		{
-			display: 'text',
-			source: bh,
-			templates: {
-				empty: '<div class="empty-message">There\'s nothing to loose</div>',
-				suggestion: function (payload) {
-					return '<div>' + payload.text + '</div>';
-				}
-			}
-		});
+	$(document).on('change', '#frm-modelQuestion-form select[name^=questions]', function (e) {
+		var $target = $(e.target);
+		var value = $target.val();
+		var matches = $target.attr('name').match(/^questions\[(\d)\]/);
+		var number = matches[1];
+
+		if (questionAnswers[value]) {
+			$.each(questionAnswers[value], function (key, answer) {
+				var id = 'answer-num-' + key + '-' + number;
+				$('#' + id + ' label').html(answer);
+			});
+		}
 	});
 };
-
-$.nette.ext('typeahead', {
-	load: function (jqXHR, settings) {
-		$('[data-typeahead-url]').each(function () {
-			$(this).typeahead('destroy');
-		});
-	},
-	complete: function (jqXHR, status, settings) {
-		Buyout.init('[data-typeahead-url]');
-	}
-}, {
-});

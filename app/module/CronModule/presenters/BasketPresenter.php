@@ -27,6 +27,7 @@ class BasketPresenter extends BasePresenter
 		if (count($baskets)) {
 			foreach ($baskets as $basket) {
 				/* @var $basket Basket */
+				$basket->setShopVariant($this->shopVariant);
 				if ($basket->user && $basket->user->locale) {
 					$this->translator->setLocale($basket->user->locale);
 				} else {

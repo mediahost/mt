@@ -2,24 +2,20 @@
 
 namespace App\AppModule\Presenters;
 
-use App\Components\Question\GridControl;
-use App\Components\Question\IEntityControlFactory;
-use App\Components\Question\IGridControlFactory;
+use App\Components\Buyout\Form\IQuestionEditFactory;
+use App\Components\Buyout\Form\QuestionEdit;
+use App\Components\Buyout\Grid\IQuestionsGridFactory;
+use App\Components\Buyout\Grid\QuestionsGrid;
 use App\Model\Entity\Buyout\Question;
-use Kdyby\Doctrine\DBALException;
 
 class QuestionPresenter extends BasePresenter
 {
 
-	/**
-	 * @var IGridControlFactory @inject
-	 */
-	public $iGridControlFactory;
+	/** @var IQuestionsGridFactory @inject */
+	public $iQuestionsGridFactory;
 
-	/**
-	 * @var IEntityControlFactory @inject
-	 */
-	public $iEntityControlFactory;
+	/** @var IQuestionEditFactory @inject */
+	public $iQuestionEditFactory;
 
 	/**
 	 * @secured
@@ -49,7 +45,6 @@ class QuestionPresenter extends BasePresenter
 	public function actionEdit($id)
 	{
 		$question = $this->em->getRepository(Question::getClassName())->find($id);
-
 		$this['form']->setEntity($question);
 	}
 
@@ -80,16 +75,23 @@ class QuestionPresenter extends BasePresenter
 		$this->redirect('default');
 	}
 
-	/** @return GridControl */
+	/** @return QuestionsGrid */
 	public function createComponentGrid()
 	{
-		return $this->iGridControlFactory->create();
+		return $this->iQuestionsGridFactory->create();
 	}
 
-	/** @return  */
+	/** @return QuestionEdit */
 	public function createComponentForm()
 	{
-		$control = $this->iEntityControlFactory->create();
+		$control = $this->iQuestionEditFactory->create();
+		$control->onAfterSave[] = function (Question $saved) {
+			$message = $this->translator->translate('successfullySaved', NULL, [
+				'type' => $this->translator->translate('Question'), 'name' => (string)$saved
+			]);
+			$this->flashMessage($message, 'success');
+			$this->redirect('this');
+		};
 		return $control;
 	}
 
