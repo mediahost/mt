@@ -89,6 +89,7 @@ class ProductPresenter extends ProductCategoryBasePresenter
 		$this->stock = $product->stock;
 		$this->stock->setShopVariant($this->shopVariant);
 		$this->homecredit->setProduct($this->stock->getPrice($this->priceLevel)->withVat);
+		$this->homecredit->setShopVariant($this->shopVariant);
 
 		/** @var $category Category */
 		if ($this->c && $category = $categoryRepo->find($this->c)) {
