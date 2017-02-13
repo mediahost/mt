@@ -166,6 +166,7 @@ abstract class BasePresenter extends Presenter
 	{
 		$this->shopVariant = $this->shopFacade->getShopVariant();
 		$this->changeSmtpMailerOptions();
+		$this->loadPageInfo();
 	}
 
 	private function changeSmtpMailerOptions()
@@ -176,6 +177,24 @@ abstract class BasePresenter extends Presenter
 			$options = (array)$mailers->$code;
 			$this->mailer->setOptions($options);
 		}
+	}
+
+	private function loadPageInfo()
+	{
+		$projectName = $this->settings->pageInfo->projectName;
+		$url = $this->getHttpRequest()->getUrl()->host;
+		if (preg_match('/^(?:www\.)?(\w+)\.(cz|sk|pl)$/', $url, $matches)) {
+			$locale = '.' . $matches[2];
+			switch ($matches[1]) {
+				case 'mobilnetelefony':
+					$projectName = 'MobilneTelefony' . $locale;
+					break;
+				case 'mobilgen':
+					$projectName = 'Mobilgen' . $locale;
+					break;
+			}
+		}
+		$this->settings->pageInfo->projectName = $projectName;
 	}
 
 	// </editor-fold>
