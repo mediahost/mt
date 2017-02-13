@@ -4,7 +4,6 @@ namespace App\Components\Buyout\Form;
 
 use App\Components\BaseControl;
 use App\Forms\Form;
-use App\Forms\Renderers\MetronicFormRenderer;
 use App\Forms\Renderers\MetronicHorizontalFormRenderer;
 use App\Model\Entity\Buyout\ModelQuestion as ModelQuestionEntity;
 use App\Model\Entity\Buyout\Question;
@@ -111,15 +110,22 @@ class ModelQuestion extends BaseControl
 		$this->model->setCurrentLocale($this->translator->getLocale());
 
 		if (!$this['form']->isSubmitted()) {
-			$i = 0;
-
-			foreach ($this->model->questions as $mq) {
-				$this['form']['questions'][$i]->setValues([
-					'text' => $mq->question->text,
-					'yes' => $mq->priceA,
-					'no' => $mq->priceB,
+			$key = 0;
+			foreach ($this->model->questions as $modelQuestion) {
+				/** @var $modelQuestion ModelQuestionEntity */
+				$answers = [
+					'yes' => $modelQuestion->priceYes,
+					'no' => $modelQuestion->priceNo,
+				];
+				for ($i = 1; $i <= Question::ANSWERS_COUNT; $i++) {
+					$attr = 'price' . $i;
+					$answers[$i] = $modelQuestion->$attr;
+				}
+				$this['form']['questions'][$key]->setValues([
+					'question' => $modelQuestion->question->id,
+					'answers' => $answers,
 				]);
-				$i++;
+				$key++;
 			}
 		}
 
@@ -148,38 +154,36 @@ class ModelQuestion extends BaseControl
 		$keep = [];
 
 		foreach ($form['questions']->values as $container) {
-			if ($container['text'] != NULL) {
-				$question = $this->questionFacade->findOneByText($container['text'], $this->translator->getLocale());
 
-				if (!$question) {
-					$locale = $this->translator->getDefaultLocale();
-
-					$question = new Question();
-					$question->translateAdd($locale)
-						->setText($container['text'])
-						->setChoiceA($this->translator->translate('Yes'))
-						->setChoiceB($this->translator->translate('No'));
-
-					$question->mergeNewTranslations();
-					$this->em->persist($question);
-					$modelQuestion = NULL;
-				} else {
-					$modelQuestion = $this->em->getRepository(ModelQuestionEntity::getClassName())->findOneBy([
+			if ($container->question) {
+				$questionRepo = $this->em->getRepository(Question::getClassName());
+				$question = $questionRepo->find($container->question);
+				if ($question) {
+					$modelQuestionRepo = $this->em->getRepository(ModelQuestionEntity::getClassName());
+					$modelQuestion = $modelQuestionRepo->findOneBy([
 						'question' => $question,
 						'model' => $this->model,
 					]);
-				}
 
-				if ($modelQuestion) {
-					$keep[$question->id] = $modelQuestion;
-				} else {
-					$modelQuestion = new ModelQuestionEntity();
-					$modelQuestion->setQuestion($question)
-						->setModel($this->model);
-				}
+					if ($modelQuestion) {
+						$keep[$question->id] = $modelQuestion;
+					} else {
+						$modelQuestion = new ModelQuestionEntity();
+						$modelQuestion->question = $question;
+						$modelQuestion->model = $this->model;
+					}
 
-				$modelQuestion->setPrice($container['yes'], $container['no']);
-				$this->em->persist($modelQuestion);
+					if ($question->isBool()) {
+						$modelQuestion->setPriceBool($container->answers->yes, $container->answers->no);
+					} else if ($question->isRadio()) {
+						$prices = [];
+						for ($i = 1; $i <= Question::ANSWERS_COUNT; $i++) {
+							$prices[$i] = $container->answers->$i;
+						}
+						$modelQuestion->setPriceRadio($prices);
+					}
+					$this->em->persist($modelQuestion);
+				}
 			}
 		}
 

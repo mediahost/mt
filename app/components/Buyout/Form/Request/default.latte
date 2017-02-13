@@ -25,13 +25,23 @@
 								<th class="question-label">{label $i /}</th>
 								{var $name = $i->name}
 								{var $question = $model->questions[$name]}
-								<td n:foreach="$form[questions][$name]->items as $key => $label"
-										class="question-answer"
-										data-question-value="{if $key == 'y'}{$question->priceA}{elseif $key == 'n'}{$question->priceB}{/if}">
-									{label $name:$key}
-										{input $name:$key class=>'i-radio'} {$label}
-									{/label}
-								</td>
+								{if $i instanceof \App\Forms\Controls\ChoiseBased\RadioList}
+									<td n:foreach="$form[questions][$name]->items as $key => $label"
+											class="question-answer-bool"
+											data-question-type="bool"
+											data-question-value="{if $key == 'y'}{$question->priceYes}{elseif $key == 'n'}{$question->priceNo}{/if}">
+										{label $name:$key}
+											{input $name:$key class=>'i-radio'} {$label}
+										{/label}
+									</td>
+								{elseif $i instanceof \App\Forms\Controls\SelectBased\Select2}
+									<td colspan="2"
+									    class="question-answer-radio"
+									    data-question-type="radio"
+									    data-question-value="{$question->pricesArray|jsonEncode}">
+										{input $form[questions][$name]}
+									</td>
+								{/if}
 							</tr>
 						{/foreach}
 						</tbody>

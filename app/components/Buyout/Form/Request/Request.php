@@ -48,11 +48,16 @@ class Request extends BaseControl
 
 		$questions = $form->addContainer('questions');
 		foreach ($this->model->questions as $qm) {
-			$questions->addRadioList($qm->id, $qm->question->text, [
-				'y' => $this->translator->translate('buyout.request.input.yes'),
-				'n' => $this->translator->translate('buyout.request.input.no'),
-			]);
-			$questions[$qm->id]->getSeparatorPrototype()->setName(NULL);
+			$qm->question->setCurrentLocale($this->translator->getLocale());
+			if ($qm->question->isBool()) {
+				$questions->addRadioList($qm->id, $qm->question->text, [
+					'y' => $this->translator->translate('buyout.request.input.yes'),
+					'n' => $this->translator->translate('buyout.request.input.no'),
+				]);
+				$questions[$qm->id]->getSeparatorPrototype()->setName(NULL);
+			} else if ($qm->question->isRadio()) {
+				$questions->addSelect2($qm->id, $qm->question->text, $qm->question->answersArray);
+			}
 		}
 
 		$form->addText('email', 'buyout.request.input.email')

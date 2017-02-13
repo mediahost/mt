@@ -21,10 +21,6 @@ use Knp\DoctrineBehaviors\Model;
 class Question extends BaseTranslatable
 {
 
-	/**
-	 * UPDATE `buyout_question` SET type` = 'bool';
-	 */
-
 	const ANSWERS_COUNT = 5;
 	const BOOL = 'bool';
 	const RADIO = 'radio';

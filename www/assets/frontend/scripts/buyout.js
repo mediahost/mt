@@ -15,8 +15,21 @@ var Buyout = function () {
 			radios.each(function (i, radio) {
 				var $radio = $(radio);
 				if ($radio.is(':checked')) {
-					var $answer = $radio.closest('.question-answer');
-					var answerValue = parseFloat($answer.attr('data-question-value'));
+					var $answer = $radio.closest('.question-answer-bool');
+					if ($answer.length) {
+						var answerValue = parseFloat($answer.data('questionValue'));
+						fullPriceValue += answerValue;
+					}
+				}
+			});
+			var selects = $question.find('select');
+			selects.each(function (i, select) {
+				var $select = $(select);
+				var $answer = $select.closest('.question-answer-radio');
+				var answerValues = $answer.data('questionValue');
+				var selectedVal = $select.val();
+				var answerValue = answerValues[selectedVal];
+				if (answerValue) {
 					fullPriceValue += answerValue;
 				}
 			});
@@ -29,6 +42,9 @@ var Buyout = function () {
 
 	var handleForm = function () {
 		$(document).on('ifChecked', '#buyout div.i-radio', function () {
+			recalculatePrice();
+		});
+		$(document).on('change', '#buyout select', function () {
 			recalculatePrice();
 		});
 
@@ -48,6 +64,8 @@ var Buyout = function () {
 
 			recalculatePrice();
 		});
+
+		recalculatePrice();
 	};
 
 	return {
