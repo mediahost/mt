@@ -120,9 +120,13 @@ class Payments extends BaseControl
 	protected function getDefaults()
 	{
 		$basket = $this->basketFacade->getBasket();
+		$shippingId = $basket->shipping && $basket->shipping->active && $basket->shipping->shopVariant->id === $basket->shopVariant->id
+			? $basket->shipping->id : NULL;
+		$paymentId = $basket->payment && $basket->payment->active && $basket->payment->shopVariant->id === $basket->shopVariant->id
+			? $basket->payment->id : NULL;
 		$values = [
-			'shipping' => $basket->shipping && $basket->shipping->active ? $basket->shipping->id : NULL,
-			'payment' => $basket->payment && $basket->payment->active ? $basket->payment->id : NULL,
+			'shipping' => $shippingId,
+			'payment' => $paymentId,
 		];
 		return $values;
 	}
