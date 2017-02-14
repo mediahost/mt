@@ -48,11 +48,16 @@ class Request extends BaseControl
 
 		$questions = $form->addContainer('questions');
 		foreach ($this->model->questions as $qm) {
-			$questions->addRadioList($qm->id, $qm->question->text, [
-				'y' => $this->translator->translate('buyout.request.input.yes'),
-				'n' => $this->translator->translate('buyout.request.input.no'),
-			]);
-			$questions[$qm->id]->getSeparatorPrototype()->setName(NULL);
+			$qm->question->setCurrentLocale($this->translator->getLocale());
+			if ($qm->question->isBool()) {
+				$questions->addRadioList($qm->id, $qm->question->text, [
+					'y' => $this->translator->translate('buyout.request.input.yes'),
+					'n' => $this->translator->translate('buyout.request.input.no'),
+				]);
+				$questions[$qm->id]->getSeparatorPrototype()->setName(NULL);
+			} else if ($qm->question->isRadio()) {
+				$questions->addSelect2($qm->id, $qm->question->text, $qm->question->answersArray);
+			}
 		}
 
 		$form->addText('email', 'buyout.request.input.email')
@@ -86,16 +91,24 @@ class Request extends BaseControl
 		$this->summary = (int)$this->model->buyoutPrice;
 
 		foreach ($values['questions'] as $id => $question) {
+			/** @var ModelQuestionEntity $qm */
 			$qm = $this->model->questions[$id];
-
-			$price = 0;
-
-			if ($question === 'y') {
-				$price = (int)$qm->priceA;
-			} else if ($question === 'n') {
-				$price = (int)$qm->priceB;
+			$price = NULL;
+			if ($qm->question->isBool()) {
+				switch ($question) {
+					case 'y':
+						$price = $qm->priceYes;
+						break;
+					case 'n':
+						$price = $qm->priceNo;
+						break;
+				}
+			} else if ($qm->question->isRadio()) {
+				$price = $qm->getPriceRadio($question);
 			}
-			$this->summary += $price;
+			if ($price !== NULL) {
+				$this->summary += $price;
+			}
 		}
 
 		if ($this->summary < 0) {

@@ -21,10 +21,6 @@ use Knp\DoctrineBehaviors\Model;
 class Question extends BaseTranslatable
 {
 
-	/**
-	 * UPDATE `buyout_question` SET type` = 'bool';
-	 */
-
 	const ANSWERS_COUNT = 5;
 	const BOOL = 'bool';
 	const RADIO = 'radio';
@@ -113,6 +109,20 @@ class Question extends BaseTranslatable
 		};
 		$this->answers->forAll($deleteAnswer);
 		return $this;
+	}
+
+	public function getAnswerItem($key)
+	{
+		if ($this->isRadio()) {
+			foreach ($this->answers as $keyOrigin => $answer) {
+				/** @var $answer Answer */
+				$answer->setCurrentLocale($answer->question->getCurrentLocale());
+				if ($key == ($keyOrigin + 1)) {
+					return (string)$answer;
+				}
+			}
+		}
+		return NULL;
 	}
 
 	public function getAnswersArray()

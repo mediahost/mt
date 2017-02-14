@@ -169,7 +169,7 @@ abstract class BuyoutServiceBasePresenter extends BasePresenter
 		$control = $this->iRequestFactory->create();
 		$control->onSend = function () {
 			$this->flashMessage($this->translator->translate('Your buyout request has been sent.'), 'success');
-			$this->redirect('this', ['producer' => NULL, 'line' => NULL, 'model' => NULL]);
+			$this->redirect('default', ['producer' => NULL, 'line' => NULL, 'model' => NULL]);
 		};
 
 		if ($this->model) {

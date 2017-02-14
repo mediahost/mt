@@ -105,6 +105,7 @@ class CartPresenter extends BasePresenter
 		$uncompleteBasket = $basketRepo->findOneByAccessHash($cart);
 
 		if ($uncompleteBasket) {
+			$uncompleteBasket->setShopVariant($this->shopVariant);
 			$this->basketFacade->import($uncompleteBasket, FALSE);
 			$this->flashMessage($this->translator->translate('cart.recovered'), 'success');
 		} else {
