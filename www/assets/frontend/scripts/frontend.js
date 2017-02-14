@@ -63,6 +63,10 @@ var Frontend = function () {
 		});
 	};
 
+	var handleTooltip = function () {
+		$('.tooltips').tooltip();
+	};
+
 	var handleProductDetail = function () {
 		$("#homecreditCalc").fancybox({
 			'height': '90%'
@@ -308,6 +312,7 @@ var Frontend = function () {
 			handleOwl();
 			handleLightbox();
 			handleICheck();
+			handleTooltip();
 			handleProductFilter();
 			handleProductDetail();
 			handleDisableButtons();

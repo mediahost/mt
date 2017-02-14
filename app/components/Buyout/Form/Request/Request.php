@@ -91,16 +91,24 @@ class Request extends BaseControl
 		$this->summary = (int)$this->model->buyoutPrice;
 
 		foreach ($values['questions'] as $id => $question) {
+			/** @var ModelQuestionEntity $qm */
 			$qm = $this->model->questions[$id];
-
-			$price = 0;
-
-			if ($question === 'y') {
-				$price = (int)$qm->priceA;
-			} else if ($question === 'n') {
-				$price = (int)$qm->priceB;
+			$price = NULL;
+			if ($qm->question->isBool()) {
+				switch ($question) {
+					case 'y':
+						$price = $qm->priceYes;
+						break;
+					case 'n':
+						$price = $qm->priceNo;
+						break;
+				}
+			} else if ($qm->question->isRadio()) {
+				$price = $qm->getPriceRadio($question);
 			}
-			$this->summary += $price;
+			if ($price !== NULL) {
+				$this->summary += $price;
+			}
 		}
 
 		if ($this->summary < 0) {

@@ -111,6 +111,20 @@ class Question extends BaseTranslatable
 		return $this;
 	}
 
+	public function getAnswerItem($key)
+	{
+		if ($this->isRadio()) {
+			foreach ($this->answers as $keyOrigin => $answer) {
+				/** @var $answer Answer */
+				$answer->setCurrentLocale($answer->question->getCurrentLocale());
+				if ($key == ($keyOrigin + 1)) {
+					return (string)$answer;
+				}
+			}
+		}
+		return NULL;
+	}
+
 	public function getAnswersArray()
 	{
 		$answers = [];

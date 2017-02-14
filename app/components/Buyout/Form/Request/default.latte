@@ -22,9 +22,17 @@
 						<tbody>
 						{foreach $_form->getComponents(FALSE, '\Nette\Forms\IControl') as $i}
 							<tr class="question">
-								<th class="question-label">{label $i /}</th>
 								{var $name = $i->name}
 								{var $question = $model->questions[$name]}
+								<th class="question-label">
+									{label $i /}
+									<span n:if="$question->question->notice"
+											class="fa fa-question-circle tooltips"
+											data-container="body"
+											data-placement="right"
+											data-html="true"
+											data-original-title="{$question->question->notice}"></span>
+								</th>
 								{if $i instanceof \App\Forms\Controls\ChoiseBased\RadioList}
 									<td n:foreach="$form[questions][$name]->items as $key => $label"
 											class="question-answer-bool"

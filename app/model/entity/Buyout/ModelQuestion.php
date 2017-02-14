@@ -101,6 +101,15 @@ class ModelQuestion extends BaseEntity
 		return $this;
 	}
 
+	public function getPriceRadio($key)
+	{
+		$property = 'price' . $key;
+		if (property_exists($this, $property)) {
+			return $this->$property;
+		}
+		return NULL;
+	}
+
 	public function getPricesArray()
 	{
 		$prices = [];
