@@ -41,12 +41,6 @@ class ModelQuestion extends BaseEntity
 	protected $question;
 
 	/** @ORM\Column(type="float", nullable=true) */
-	private $priceA; // TODO: delete
-
-	/** @ORM\Column(type="float", nullable=true) */
-	private $priceB; // TODO: delete
-
-	/** @ORM\Column(type="float", nullable=true) */
 	protected $priceYes;
 
 	/** @ORM\Column(type="float", nullable=true) */
