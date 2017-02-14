@@ -7,6 +7,17 @@ var AppContent = function () {
 		});
 	};
 
+	var handleCheckboxTarget = function () {
+		$('input[type=checkbox]').on('change', function (e) {
+			var $target = $(e.target);
+			if ($target.is(':checked') && $target.data('targetOn')) {
+				window.location.href = $target.data('targetOn');
+			} else if($target.data('targetOff')) {
+				window.location.href = $target.data('targetOff');
+			}
+		});
+	};
+
 	// https://github.com/HubSpot/offline
 	var handleOffline = function (minutes) {
 		if (typeof Offline !== 'undefined') {
@@ -24,7 +35,8 @@ var AppContent = function () {
 		//main function to initiate the module
 		init: function () {
 			handleLoadingButton();
-			handleOffline(3);
+			handleCheckboxTarget();
+			// handleOffline(3);
 		}
 	};
 

@@ -17,27 +17,14 @@
 				</div>
 				<div class="actions">
 					{foreach $shops as $shopItem}
-						<a class="btn btn-circle btn-warning"
-								n:href="this 'filterShop' => $shopItem->id, 'filterVariant' => NULL, 'showAll' => FALSE">
-							<i n:if="$filteredShopId == $shopItem->id" class="fa fa-filter"></i>
+						<label class="checkbox-inline">
+							<input type="checkbox"
+							       {if $filteredShopId === $shopItem->id || !$filteredShopId}checked="checked"{/if}
+							       data-target-on="{link this 'filterShop' . $shopItem->priceLetter => TRUE}"
+							       data-target-off="{link this 'filterShop' . $shopItem->priceLetter => FALSE}">
 							{$shopItem}
-						</a>
-						<a class="btn btn-circle btn-default"
-								n:if="$filteredShopId == $shopItem->id"
-								n:foreach="$shopItem->variants as $variantItem"
-								n:href="this 'filterShop' => $shopItem->id, 'filterVariant' => $variantItem->id, 'showAll' => FALSE">
-							<i n:if="$filteredVariantId == $variantItem->id" class="fa fa-filter"></i>
-							{$variantItem->fullName}
-						</a>
+						</label>
 					{/foreach}
-					<a class="btn btn-circle btn-danger"
-							n:href="this 'filterShop' => NULL, 'filterVariant' => NULL, 'showAll' => TRUE">
-						<i n:if="$filteredShopId == NULL" class="fa fa-filter"></i>
-						{_'All'}
-					</a>
-					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title=""
-					   title="">
-					</a>
 				</div>
 			</div>
 			<div class="portlet-body">

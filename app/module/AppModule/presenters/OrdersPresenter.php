@@ -16,6 +16,7 @@ use App\Model\Entity\ShopVariant;
 use App\Model\Repository\OrderRepository;
 use App\Model\Repository\ShopRepository;
 use Exception;
+use Tracy\Debugger;
 
 class OrdersPresenter extends BasePresenter
 {
@@ -53,12 +54,17 @@ class OrdersPresenter extends BasePresenter
 	 * @resource('orders')
 	 * @privilege('default')
 	 */
-	public function actionDefault($filterShop = NULL, $filterVariant = NULL, $showAll = FALSE)
+	public function actionDefault($filterShopA = TRUE, $filterShopB = FALSE)
 	{
-		if ($showAll) {
-			$filterShop = $filterVariant = NULL;
-		} else if (!$filterShop && !$filterShop) {
+		$filterVariant = NULL;
+		if ($filterShopA && $filterShopB) {
+			$filterShop = NULL;
+		} else if (!$filterShopA && !$filterShopB) {
 			$filterShop = $this->shopVariant->shop->id;
+		} else if ($filterShopA) {
+			$filterShop = 1;
+		} else if ($filterShopB) {
+			$filterShop = 2;
 		}
 
 		$shopRepo = $this->em->getRepository(Shop::getClassName());
