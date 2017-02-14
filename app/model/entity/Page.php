@@ -13,6 +13,8 @@ use Knp\DoctrineBehaviors\Model;
  * @property string $html
  * @property string $comment
  * @property string $link
+ * @property string $linkHeadline
+ * @property string $linkSubscribe
  */
 class Page extends BaseTranslatable
 {

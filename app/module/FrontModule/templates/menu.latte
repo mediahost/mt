@@ -22,7 +22,7 @@
 		{ifset $menuPages->page1}
 			<li class="dropdown yamm-fw">
 				<a n:href="Producer:">
-					<span>{_'menu.subtitle.page1'}</span>{_'menu.headline.page1'}
+					<span>{_'menu.subtitle.pageHome'}</span>{_'menu.headline.pageHome'}
 					<i class="drop-caret" data-toggle="dropdown"></i>
 				</a>
 				<ul class="dropdown-menu">
@@ -83,144 +83,165 @@
 				</ul>
 			</li>
 		{/ifset}
-		{ifset $menuPages->page3}
-			<li n:class="count($producers) ? dropdown, yamm-fw">
-				<a n:href="Service:">
-					<span>{_'menu.subtitle.page3'}</span>{_'menu.headline.page3'}
-					<i class="drop-caret" data-toggle="dropdown"></i>
-				</a>
-				<ul n:if="count($producers)" class="dropdown-menu">
-					<li class="yamm-content">
-						<div class="row row-eq-height row-col-border">
-							<div class="col-md-2">
-								<h5>{_'menu.brand.top'}</h5>
-								<ul class="dropdown-menu-items-list">
-									{foreach $producers as $producer}
-										<li><a n:href="Service: 'producer' => $producer->slug">{$producer}</a></li>
-										{breakIf $iterator->counter >= $topColCnt}
-									{/foreach}
-								</ul>
-							</div>
-							<div n:class="col-md-2, $secondColCond ? no-border" n:if="$firstColCond">
-								<h5>{_'menu.brand.more'}</h5>
-								<ul class="dropdown-menu-items-list">
-									{foreach $producers as $producer}
-										{continueIf $iterator->counter <= $topColCnt}
-										<li><a n:href="Service: 'producer' => $producer->slug">{$producer}</a></li>
-										{breakIf $iterator->counter >= $firstColCnt}
-									{/foreach}
-								</ul>
-							</div>
-							<div n:class="col-md-2, $thirdColCond ? no-border" n:if="$secondColCond">
-								<h5>&nbsp;</h5>
-								<ul class="dropdown-menu-items-list">
-									{foreach $producers as $producer}
-										{continueIf $iterator->counter <= $firstColCnt}
-										<li><a n:href="Service: 'producer' => $producer->slug">{$producer}</a></li>
-										{breakIf $iterator->counter >= $secondColCnt}
-									{/foreach}
-								</ul>
-							</div>
-							<div n:class="col-md-2" n:if="$thirdColCond">
-								<h5>&nbsp;</h5>
-								<ul class="dropdown-menu-items-list">
-									{foreach $producers as $producer}
-										{continueIf $iterator->counter <= $secondColCnt}
-										<li><a n:href="Service: 'producer' => $producer->slug">{$producer}</a></li>
-										{breakIf $iterator->counter >= $thirdColCnt}
-									{/foreach}
-								</ul>
-							</div>
-							<div class="col-md-4">
-								<h5>{_'menu.brand.searched'}</h5>
-								<ul class="dropdown-menu-items-list">
-									<li n:foreach="$mostSearchedModels as $model"
-											n:ifset="$model">
-										<a n:href="Service:model 'model' => $model->getSlug()">{$model}</a>
-									</li>
-								</ul>
-							</div>
+		{var liPage => $menuPages->page3}
+		<li n:ifset="$liPage" n:class="count($producers) ? dropdown, yamm-fw">
+			<a {if $liPage->link}href="{link $liPage->link}" {else}href="{link Page: $liPage->id}"{/if}>
+				{if $liPage->linkHeadline}
+					<span>{$liPage->linkSubscribe}</span>{$liPage->linkHeadline}
+				{else}
+					<span></span>{$liPage}
+				{/if}
+				<i class="drop-caret" data-toggle="dropdown"></i>
+			</a>
+			<ul n:if="count($producers)" class="dropdown-menu">
+				<li class="yamm-content">
+					<div class="row row-eq-height row-col-border">
+						<div class="col-md-2">
+							<h5>{_'menu.brand.top'}</h5>
+							<ul class="dropdown-menu-items-list">
+								{foreach $producers as $producer}
+									<li><a n:href="Service: 'producer' => $producer->slug">{$producer}</a></li>
+									{breakIf $iterator->counter >= $topColCnt}
+								{/foreach}
+							</ul>
 						</div>
-					</li>
-				</ul>
-			</li>
-		{/ifset}
-		{ifset $menuPages->page2}
-			<li n:ifset="$menuPages->page2" n:class="count($producers) ? dropdown, yamm-fw">
-				<a n:href="Buyout:">
-					<span>{_'menu.subtitle.page2'}</span>{_'menu.headline.page2'}
-					<i class="drop-caret" data-toggle="dropdown"></i>
-				</a>
-				<ul n:if="count($producers)" class="dropdown-menu">
-					<li class="yamm-content">
-						<div class="row row-eq-height row-col-border">
-							<div class="col-md-2">
-								<h5>{_'menu.brand.top'}</h5>
-								<ul class="dropdown-menu-items-list">
-									{foreach $producers as $producer}
-										<li><a n:href="Buyout: 'producer' => $producer->slug">{$producer}</a></li>
-										{breakIf $iterator->counter >= $topColCnt}
-									{/foreach}
-								</ul>
-							</div>
-							<div n:class="col-md-2, $secondColCond ? no-border" n:if="$firstColCond">
-								<h5>{_'menu.brand.more'}</h5>
-								<ul class="dropdown-menu-items-list">
-									{foreach $producers as $producer}
-										{continueIf $iterator->counter <= $topColCnt}
-										<li><a n:href="Buyout: 'producer' => $producer->slug">{$producer}</a></li>
-										{breakIf $iterator->counter >= $firstColCnt}
-									{/foreach}
-								</ul>
-							</div>
-							<div n:class="col-md-2, $thirdColCond ? no-border" n:if="$secondColCond">
-								<h5>&nbsp;</h5>
-								<ul class="dropdown-menu-items-list">
-									{foreach $producers as $producer}
-										{continueIf $iterator->counter <= $firstColCnt}
-										<li><a n:href="Buyout: 'producer' => $producer->slug">{$producer}</a></li>
-										{breakIf $iterator->counter >= $secondColCnt}
-									{/foreach}
-								</ul>
-							</div>
-							<div n:class="col-md-2" n:if="$thirdColCond">
-								<h5>&nbsp;</h5>
-								<ul class="dropdown-menu-items-list">
-									{foreach $producers as $producer}
-										{continueIf $iterator->counter <= $secondColCnt}
-										<li><a n:href="Buyout: 'producer' => $producer->slug">{$producer}</a></li>
-										{breakIf $iterator->counter >= $thirdColCnt}
-									{/foreach}
-								</ul>
-							</div>
-							<div class="col-md-4">
-								<h5>{_'menu.brand.searched'}</h5>
-								<ul class="dropdown-menu-items-list">
-									<li n:foreach="$mostSearchedModels as $model"
-											n:ifset="$model">
-										<a n:href="Buyout:model 'model' => $model->getSlug()">{$model}</a>
-									</li>
-								</ul>
-							</div>
+						<div n:class="col-md-2, $secondColCond ? no-border" n:if="$firstColCond">
+							<h5>{_'menu.brand.more'}</h5>
+							<ul class="dropdown-menu-items-list">
+								{foreach $producers as $producer}
+									{continueIf $iterator->counter <= $topColCnt}
+									<li><a n:href="Service: 'producer' => $producer->slug">{$producer}</a></li>
+									{breakIf $iterator->counter >= $firstColCnt}
+								{/foreach}
+							</ul>
 						</div>
+						<div n:class="col-md-2, $thirdColCond ? no-border" n:if="$secondColCond">
+							<h5>&nbsp;</h5>
+							<ul class="dropdown-menu-items-list">
+								{foreach $producers as $producer}
+									{continueIf $iterator->counter <= $firstColCnt}
+									<li><a n:href="Service: 'producer' => $producer->slug">{$producer}</a></li>
+									{breakIf $iterator->counter >= $secondColCnt}
+								{/foreach}
+							</ul>
+						</div>
+						<div n:class="col-md-2" n:if="$thirdColCond">
+							<h5>&nbsp;</h5>
+							<ul class="dropdown-menu-items-list">
+								{foreach $producers as $producer}
+									{continueIf $iterator->counter <= $secondColCnt}
+									<li><a n:href="Service: 'producer' => $producer->slug">{$producer}</a></li>
+									{breakIf $iterator->counter >= $thirdColCnt}
+								{/foreach}
+							</ul>
+						</div>
+						<div class="col-md-4">
+							<h5>{_'menu.brand.searched'}</h5>
+							<ul class="dropdown-menu-items-list">
+								<li n:foreach="$mostSearchedModels as $model"
+										n:ifset="$model">
+									<a n:href="Service:model 'model' => $model->getSlug()">{$model}</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</li>
+		{var liPage => $menuPages->page2}
+		<li n:ifset="$liPage" n:class="count($producers) ? dropdown, yamm-fw">
+			<a {if $liPage->link}href="{link $liPage->link}" {else}href="{link Page: $liPage->id}"{/if}>
+				{if $liPage->linkHeadline}
+					<span>{$liPage->linkSubscribe}</span>{$liPage->linkHeadline}
+				{else}
+					<span></span>{$liPage}
+				{/if}
+				<i class="drop-caret" data-toggle="dropdown"></i>
+			</a>
+			<ul n:if="count($producers)" class="dropdown-menu">
+				<li class="yamm-content">
+					<div class="row row-eq-height row-col-border">
+						<div class="col-md-2">
+							<h5>{_'menu.brand.top'}</h5>
+							<ul class="dropdown-menu-items-list">
+								{foreach $producers as $producer}
+									<li><a n:href="Buyout: 'producer' => $producer->slug">{$producer}</a></li>
+									{breakIf $iterator->counter >= $topColCnt}
+								{/foreach}
+							</ul>
+						</div>
+						<div n:class="col-md-2, $secondColCond ? no-border" n:if="$firstColCond">
+							<h5>{_'menu.brand.more'}</h5>
+							<ul class="dropdown-menu-items-list">
+								{foreach $producers as $producer}
+									{continueIf $iterator->counter <= $topColCnt}
+									<li><a n:href="Buyout: 'producer' => $producer->slug">{$producer}</a></li>
+									{breakIf $iterator->counter >= $firstColCnt}
+								{/foreach}
+							</ul>
+						</div>
+						<div n:class="col-md-2, $thirdColCond ? no-border" n:if="$secondColCond">
+							<h5>&nbsp;</h5>
+							<ul class="dropdown-menu-items-list">
+								{foreach $producers as $producer}
+									{continueIf $iterator->counter <= $firstColCnt}
+									<li><a n:href="Buyout: 'producer' => $producer->slug">{$producer}</a></li>
+									{breakIf $iterator->counter >= $secondColCnt}
+								{/foreach}
+							</ul>
+						</div>
+						<div n:class="col-md-2" n:if="$thirdColCond">
+							<h5>&nbsp;</h5>
+							<ul class="dropdown-menu-items-list">
+								{foreach $producers as $producer}
+									{continueIf $iterator->counter <= $secondColCnt}
+									<li><a n:href="Buyout: 'producer' => $producer->slug">{$producer}</a></li>
+									{breakIf $iterator->counter >= $thirdColCnt}
+								{/foreach}
+							</ul>
+						</div>
+						<div class="col-md-4">
+							<h5>{_'menu.brand.searched'}</h5>
+							<ul class="dropdown-menu-items-list">
+								<li n:foreach="$mostSearchedModels as $model"
+										n:ifset="$model">
+									<a n:href="Buyout:model 'model' => $model->getSlug()">{$model}</a>
+								</li>
+							</ul>
+						</div>
+					</div>
 
-					</li>
-				</ul>
-			</li>
-		{/ifset}
-		<li n:ifset="$menuPages->page4">
-			<a n:href="{$menuPages->page4->link}">
-				<span>{_'menu.subtitle.page4'}</span>{_'menu.headline.page4'}
+				</li>
+			</ul>
+		</li>
+		{var liPage => $menuPages->page4}
+		<li n:ifset="$liPage">
+			<a {if $liPage->link}href="{link $liPage->link}" {else}href="{link Page: $liPage->id}"{/if}>
+				{if $liPage->linkHeadline}
+					<span>{$liPage->linkSubscribe}</span>{$liPage->linkHeadline}
+				{else}
+					<span></span>{$liPage}
+				{/if}
 			</a>
 		</li>
-		<li n:ifset="$menuPages->page5">
-			<a n:href="$menuPages->page5->link">
-				<span>{_'menu.subtitle.page5'}</span>{_'menu.headline.page5'}
+		{var liPage => $menuPages->page5}
+		<li n:ifset="$liPage">
+			<a {if $liPage->link}href="{link $liPage->link}" {else}href="{link Page: $liPage->id}"{/if}>
+				{if $liPage->linkHeadline}
+					<span>{$liPage->linkSubscribe}</span>{$liPage->linkHeadline}
+				{else}
+					<span></span>{$liPage}
+				{/if}
 			</a>
 		</li>
-		<li n:ifset="$menuPages->page6">
-			<a n:href="Page: $menuPages->page6->id">
-				<span>{_'menu.subtitle.page6'}</span>{_'menu.headline.page6'}
+		{var liPage => $menuPages->page6}
+		<li n:ifset="$liPage">
+			<a {if $liPage->link}href="{link $liPage->link}" {else}href="{link Page: $liPage->id}"{/if}>
+				{if $liPage->linkHeadline}
+					<span>{$liPage->linkSubscribe}</span>{$liPage->linkHeadline}
+				{else}
+					<span></span>{$liPage}
+				{/if}
 			</a>
 		</li>
 	</ul>

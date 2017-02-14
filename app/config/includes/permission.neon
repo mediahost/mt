@@ -67,7 +67,7 @@ services:
 			- allow('admin', 'users')
 			- allow('admin', 'images')
 
-			- deny('admin', 'pages', 'delete') # pages can be link to template, only superadmin can delete
+			- deny('admin', 'pages', ['delete', 'editAll']) # pages can be link to template, only superadmin can delete
 			- deny('admin', 'payments', ['viewAll', 'editAll'])
 			- deny('admin', 'groups', ['editBonus', 'deleteBonus', 'recountPrices'])
 
