@@ -25,6 +25,7 @@ admin:
 			types:
 				users: 'users'
 				dealers: 'dealers'
+				shop: 'shop'
 			status:
 				running: 'running'
 				paused: 'paused'
@@ -46,6 +47,7 @@ admin:
 			testEmail: 'E-mail for test'
 			send: 'Send'
 			sendTest: 'Send test'
+			shop: 'Shop'
 
 	subscriber:
 		default:
@@ -63,6 +65,7 @@ admin:
 				ip: 'IP'
 				type: 'Type'
 				locale: 'Locale'
+				shop: 'Shop'
 			types:
 				user: 'user'
 				dealer: 'dealer'

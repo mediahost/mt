@@ -4,9 +4,12 @@
         {elseif $item->type == App\Model\Entity\Newsletter\Message::TYPE_DEALER}
             {var $color = 'label-danger'}
 			{var $name = $localeDomain . '.types.dealers'}
-		{elseif $item->type == App\Model\Entity\Newsletter\Message::TYPE_GROUP}
-            {var $color = 'label-warning'}
-			{var $name = $item->group->name}
+        {elseif $item->type == App\Model\Entity\Newsletter\Message::TYPE_GROUP}
+	        {var $color = 'label-warning'}
+	        {var $name = $item->group->name}
+        {elseif $item->type == App\Model\Entity\Newsletter\Message::TYPE_SHOP}
+	        {var $color = 'label-info'}
+	        {var $name = $item->group->name}
 		{else}
             {var $color = 'label-default'}
 			{var $name = $localeDomain . '.types.unknown'}

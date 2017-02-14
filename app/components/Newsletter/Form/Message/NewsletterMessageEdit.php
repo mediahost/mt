@@ -11,8 +11,10 @@ use App\Model\Entity\Group;
 use App\Model\Entity\Newsletter\Message;
 use App\Model\Entity\Newsletter\Status;
 use App\Model\Entity\Newsletter\Subscriber;
+use App\Model\Entity\Shop;
 use App\Model\Facade\LocaleFacade;
 use App\Model\Facade\NewsletterFacade;
+use App\Model\Facade\ShopFacade;
 use App\Model\Facade\SubscriberFacade;
 use Nette\Http\FileUpload;
 use Nette\Http\Request;
@@ -66,6 +68,7 @@ class NewsletterMessageEdit extends BaseControl
 			SubscriberFacade::RECIPIENT_USER => self::LOCALE_DOMAIN . '.form.users',
 			SubscriberFacade::RECIPIENT_DEALER => self::LOCALE_DOMAIN . '.form.dealers',
 			self::LOCALE_DOMAIN . '.form.groups' => $groups,
+			self::LOCALE_DOMAIN . '.form.shop' => $this->shopFacade->getPairs(TRUE),
 		];
 		$form->addSelect('recipients', self::LOCALE_DOMAIN . '.form.recipients', $recipients)
 				->setDefaultValue($this->recipientsValue)
@@ -136,7 +139,7 @@ class NewsletterMessageEdit extends BaseControl
 		} elseif ($this->recipientsValue === SubscriberFacade::RECIPIENT_DEALER) {
 			$this->localeValue = self::DEFAULT_LOCALE_DEALER;
 			$form['locale']->setDisabled(TRUE);
-		} elseif (is_numeric($this->recipientsValue)) {
+		} else {
 			$this->localeValue = self::DEFAULT_LOCALE_GROUP;
 		}
 		$form['locale']->setValue($this->localeValue);
@@ -192,6 +195,13 @@ class NewsletterMessageEdit extends BaseControl
 			$message->group = $group;
 
 			$recipients = $group->users;
+		} else if (preg_match('/^' . ShopFacade::PAIR_KEY_ALIAS . '(\w)$/', $values->recipients, $matches)) {
+			$shop = $this->em->getRepository(Shop::getClassName())->findOneBy([
+				'priceLetter' => $matches[1],
+			]);
+			$message->type = Message::TYPE_SHOP;
+			$message->shop = $shop;
+			$recipients = $this->subscriberFacade->findByType(Subscriber::TYPE_USER, $values->locale, $shop);
 		} else {
 			throw new BaseControlException('Unknown recipient type.');
 		}

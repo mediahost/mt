@@ -2,16 +2,18 @@
 
 namespace App\Model\Entity\Newsletter;
 
+use App\Model\Entity\Shop;
 use App\Model\Entity\User;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="newsletter_subscriber", uniqueConstraints={@ORM\UniqueConstraint(name="subscriber_unique", columns={"mail", "type"})})
- * 
+ *
  * @property string $mail
  * @property int $type
  * @property string $locale
@@ -19,6 +21,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  * @property User $user
  * @property string $ip
  * @property DateTime $subscribed
+ * @property Shop $shop
  */
 class Subscriber extends BaseEntity
 {
@@ -26,7 +29,7 @@ class Subscriber extends BaseEntity
 	const TYPE_USER = 0;
 	const TYPE_DEALER = 1;
 
-	use \Kdyby\Doctrine\Entities\Attributes\Identifier;
+	use Identifier;
 
 	/** @ORM\Column(type="string", length=255) */
 	protected $mail;
@@ -36,6 +39,9 @@ class Subscriber extends BaseEntity
 
 	/** @ORM\Column(type="string", length=2) */
 	protected $locale;
+
+	/** @ORM\ManyToOne(targetEntity="App\Model\Entity\Shop") */
+	protected $shop;
 
 	/** @ORM\Column(type="string", length=8, unique=true, nullable=true) */
 	protected $token;

@@ -3,5 +3,6 @@ locales:
 	cs_CZ: 'czech'
 	en_US: 'english'
 	sk_SK: 'slovak'
+	pl_PL: 'polish'
 text:
     mainHeadline: 'Buy, sell or repair your phone at unbeatable prices'

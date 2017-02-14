@@ -30,6 +30,9 @@ class NewsletterFacade extends Object
 	/** @var Translator @inject */
 	public $translator;
 
+	/** @var ShopFacade @inject */
+	public $shopFacade;
+
 	/**
 	 * @param User|string $identifier
 	 */
@@ -55,6 +58,7 @@ class NewsletterFacade extends Object
 		$subscriber->ip = $this->request->getRemoteAddress();
 		$subscriber->subscribed = new DateTime();
 		$subscriber->locale = $this->translator->getLocale();
+		$subscriber->shop = $this->shopFacade->getShopVariant()->shop;
 
 		if ($user !== NULL) {
 			$user->setSubscriber($subscriber);
@@ -63,7 +67,7 @@ class NewsletterFacade extends Object
 		}
 
 		$this->em->persist($subscriber)
-				->flush();
+			->flush();
 	}
 
 	/**
@@ -83,11 +87,11 @@ class NewsletterFacade extends Object
 			}
 		} elseif (is_string($identifier)) {
 			$subscriber = $this->findSubscriber($identifier);
-			
+
 			if ($subscriber === NULL) {
 				return;
 			}
-			
+
 			$user = $subscriber->user;
 		} else {
 			throw new InvalidArgumentException('Argument must be Subscriber, User or e-mail');
@@ -109,23 +113,14 @@ class NewsletterFacade extends Object
 		$this->em->flush();
 	}
 
-	/**
-	 * @param string $email
-	 * @param int $type
-	 * @return Subscriber|NULL
-	 */
 	public function findSubscriber($email, $type = Subscriber::TYPE_USER)
 	{
 		return $this->em->getRepository(Subscriber::getClassName())->findOneBy([
-					'mail' => $email,
-					'type' => $type,
+			'mail' => $email,
+			'type' => $type,
 		]);
 	}
 
-	/**
-	 * @todo Change for to Do-While cycle.
-	 * @return string
-	 */
 	public function generateToken()
 	{
 		for ($i = 0; $i < self::TOKEN_ATTEMPTS; $i++) {
@@ -147,9 +142,6 @@ class NewsletterFacade extends Object
 		return $generated;
 	}
 
-	/**
-	 * @param Message $message
-	 */
 	public function pause(Message $message)
 	{
 		$this->em->beginTransaction();
@@ -160,15 +152,16 @@ class NewsletterFacade extends Object
 		$qb = $this->em->createQueryBuilder();
 
 		$qb->update(Status::getClassName(), 's')
-				->set('s.status', Message::STATUS_PAUSED)
-				->where($qb->expr()->andX(
-								$qb->expr()->eq('s.message', ':message'), $qb->expr()->eq('s.status', ':status')
-						)
+			->set('s.status', Message::STATUS_PAUSED)
+			->where(
+				$qb->expr()->andX(
+					$qb->expr()->eq('s.message', ':message'), $qb->expr()->eq('s.status', ':status')
 				)
-				->setParameters([
-					'message' => $message,
-					'status' => Message::STATUS_RUNNING,
-		]);
+			)
+			->setParameters([
+				'message' => $message,
+				'status' => Message::STATUS_RUNNING,
+			]);
 
 		$query = $qb->getQuery();
 
@@ -177,9 +170,6 @@ class NewsletterFacade extends Object
 		$this->em->commit();
 	}
 
-	/**
-	 * @param Message $message
-	 */
 	public function run(Message $message)
 	{
 		$this->em->beginTransaction();
@@ -190,15 +180,16 @@ class NewsletterFacade extends Object
 		$qb = $this->em->createQueryBuilder();
 
 		$qb->update(Status::getClassName(), 's')
-				->set('s.status', Message::STATUS_RUNNING)
-				->where($qb->expr()->andX(
-								$qb->expr()->eq('s.message', ':message'), $qb->expr()->eq('s.status', ':status')
-						)
+			->set('s.status', Message::STATUS_RUNNING)
+			->where(
+				$qb->expr()->andX(
+					$qb->expr()->eq('s.message', ':message'), $qb->expr()->eq('s.status', ':status')
 				)
-				->setParameters([
-					'message' => $message,
-					'status' => Message::STATUS_PAUSED,
-		]);
+			)
+			->setParameters([
+				'message' => $message,
+				'status' => Message::STATUS_PAUSED,
+			]);
 
 		$query = $qb->getQuery();
 
