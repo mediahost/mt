@@ -9,6 +9,8 @@ use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity;
 use h4kuna\Exchange\Currency\Property;
 use h4kuna\Exchange\Exchange;
+use Nette\Caching\Cache;
+use Nette\Caching\IStorage;
 use Nette\Utils\Strings;
 
 class Rate extends BaseControl
@@ -16,6 +18,9 @@ class Rate extends BaseControl
 
 	/** @var Exchange @inject */
 	public $exchange;
+
+	/** @var IStorage @inject */
+	public $cacheStorage;
 
 	// <editor-fold desc="events">
 
@@ -79,6 +84,14 @@ class Rate extends BaseControl
 		$rate->fixed = empty($value) ? NULL : $value;
 		$this->em->persist($rate);
 		$this->em->flush();
+
+		// resave rate in cache for immediately change rate effect
+		$cache = new Cache($this->cacheStorage, 'BankRates');
+		/** @var Property $data */
+		$data = $cache->load($code);
+		$newProperty = new Property($data->getHome(), $data->getCode(), $rate->value);
+		$cache->save($code, $newProperty);
+
 		return $this;
 	}
 
