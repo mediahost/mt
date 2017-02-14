@@ -144,6 +144,7 @@ class Request extends BaseControl
 	{
 		$this->template->model = $this->model;
 		$this->template->summary = $this->summary;
+		$this->template->exchange = $this->exchange;
 		parent::render();
 	}
 

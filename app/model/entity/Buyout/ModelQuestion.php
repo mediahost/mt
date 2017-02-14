@@ -4,6 +4,7 @@ namespace App\Model\Entity\Buyout;
 
 use App\Model\Entity\ProducerModel;
 use Doctrine\ORM\Mapping as ORM;
+use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
 
@@ -104,22 +105,22 @@ class ModelQuestion extends BaseEntity
 		return NULL;
 	}
 
-	public function getPricesArray()
+	public function getPricesArray(Exchange $exchange = NULL)
 	{
 		$prices = [];
 		if ($this->question->isBool()) {
 			$prices = [
-				'yes' => $this->priceYes,
-				'no' => $this->priceNo,
+				'yes' => $exchange ? $exchange->change($this->priceYes) : $this->priceYes,
+				'no' => $exchange ? $exchange->change($this->priceNo) : $this->priceNo,
 			];
 		} else if ($this->question->isRadio()) {
 			$prices = [
-				1 => $this->price1,
-				2 => $this->price2,
-				3 => $this->price3,
-				4 => $this->price4,
-				5 => $this->price5,
-				6 => $this->price6,
+				1 => $exchange ? $exchange->change($this->price1) : $this->price1,
+				2 => $exchange ? $exchange->change($this->price2) : $this->price2,
+				3 => $exchange ? $exchange->change($this->price3) : $this->price3,
+				4 => $exchange ? $exchange->change($this->price4) : $this->price4,
+				5 => $exchange ? $exchange->change($this->price5) : $this->price5,
+				6 => $exchange ? $exchange->change($this->price6) : $this->price6,
 			];
 		}
 		return $prices;
