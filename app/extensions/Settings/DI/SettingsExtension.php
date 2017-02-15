@@ -62,6 +62,9 @@ class SettingsExtension extends CompilerExtension
 					'gns' => 4, // genius
 				],
 			],
+			'discount' => [
+				'enabled' => TRUE,
+			],
 			'pohoda' => [
 				'enabled' => FALSE,
 				'ico' => '',

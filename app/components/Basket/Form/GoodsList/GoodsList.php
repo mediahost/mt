@@ -151,9 +151,14 @@ class GoodsList extends BaseControl
 		return $this;
 	}
 
-	public function setShopVariant(ShopVariant $variant, $allowDiscount = TRUE)
+	public function setShopVariant(ShopVariant $variant)
 	{
 		$this->shopVariant = $variant;
+		return $this;
+	}
+
+	public function setAllowDiscount($allowDiscount = TRUE)
+	{
 		$this->allowDiscount = $allowDiscount;
 		return $this;
 	}
