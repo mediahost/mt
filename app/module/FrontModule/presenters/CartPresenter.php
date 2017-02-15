@@ -263,6 +263,7 @@ class CartPresenter extends BasePresenter
 	{
 		$control = $this->iGoodsListFactory->create();
 		$control->setShopVariant($this->shopVariant)
+			->setAllowDiscount($this->settings->modules->discount->enabled)
 			->setPriceLevel($this->priceLevel)
 			->setAjax();
 		$control->onSend = function () {
