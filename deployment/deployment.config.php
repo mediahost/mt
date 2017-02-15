@@ -38,6 +38,7 @@ return array(
 			!www/foto/original/default.png
 			www/adminer/database-log.sql
 			*.local.neon
+			*.page.neon
 			*.server.neon
 			*.server_dev.neon
 			*.server_test.neon
