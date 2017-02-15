@@ -118,7 +118,7 @@ hr {
 		border-radius: 5px;
 		overflow: hidden;
 		width: 1200px;
-		margin: 30px auto;
+		margin: 10px auto;
 		-webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 	}
