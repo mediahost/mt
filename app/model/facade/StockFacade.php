@@ -102,7 +102,7 @@ class StockFacade extends Object
 			->innerJoin('s.product', 'p')
 			->innerJoin('p.signs', 'signs')
 			->where('signs.sign = :sign')
-			->andWhere('s.active = :active AND p.active = :active')
+			->andWhere('s.' . $this->getActiveName() . ' = :active AND p.active = :active')
 			->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
 			->andWhere('s.inStore >= 1')
 			->setParameter('active', TRUE)
@@ -147,7 +147,7 @@ class StockFacade extends Object
 		$qb = $this->stockRepo
 			->createQueryBuilder('s')
 			->innerJoin('s.product', 'p')
-			->andWhere('s.active = :active AND p.active = :active')
+			->andWhere('s.' . $this->getActiveName() . ' = :active AND p.active = :active')
 			->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
 			->andWhere('s.inStore >= 3')
 			->setParameter('active', TRUE)
@@ -182,7 +182,7 @@ class StockFacade extends Object
 			->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
 			->andWhere('p.deletedAt IS NULL OR p.deletedAt > :now')
 			->setParameter('now', new DateTime())
-			->andWhere('s.active = :active')
+			->andWhere('s.' . $this->getActiveName() . ' = :active')
 			->andWhere('p.active = :active')
 			->setParameter('active', TRUE);
 
@@ -192,7 +192,7 @@ class StockFacade extends Object
 				->addSelect('IDENTITY(c.heurekaCategory) as c_heurekaCategoryId')
 				->innerJoin('p.mainCategory', 'c');
 		}
-		
+
 		if ($onlyInStore) {
 			$qb
 				->andWhere("s.inStore >= :inStore")
@@ -229,7 +229,7 @@ class StockFacade extends Object
 			->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
 			->andWhere('p.deletedAt IS NULL OR p.deletedAt > :now')
 			->setParameter('now', new DateTime())
-			->andWhere('s.active = :active')
+			->andWhere('s.' . $this->getActiveName() . ' = :active')
 			->andWhere('p.active = :active')
 			->setParameter('active', TRUE);
 		if ($onlyInStore) {
@@ -259,7 +259,7 @@ class StockFacade extends Object
 			->andWhere('s.deletedAt IS NULL OR s.deletedAt > :now')
 			->andWhere('p.deletedAt IS NULL OR p.deletedAt > :now')
 			->setParameter('now', new DateTime())
-			->andWhere('s.active = :active')
+			->andWhere('s.' . $this->getActiveName() . ' = :active')
 			->andWhere('p.active = :active')
 			->setParameter('active', TRUE);
 		if ($onlyInStore) {
@@ -293,6 +293,12 @@ class StockFacade extends Object
 		$this->em->flush();
 
 		return $this;
+	}
+
+	private function getActiveName()
+	{
+		$shopLetter = $this->shopFacade->getShopVariant()->shop->priceLetter;
+		return 'active' . $shopLetter;
 	}
 
 }
