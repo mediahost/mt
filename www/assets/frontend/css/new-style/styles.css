@@ -73,7 +73,7 @@ label {
 }
 
 a {
-	color: #48ac40;
+	color: #12a641;
 }
 
 .text-sm {
@@ -217,7 +217,7 @@ hr {
 
 .navbar-main .navbar-nav > li:hover > a {
 	background: #fff;
-	color: #48ac40;
+	color: #12a641;
 }
 
 .navbar-main .navbar-nav > li.open > a {
@@ -238,6 +238,15 @@ hr {
 @media (min-width: 992px) {
 	.navbar-main .dropdown:hover > .dropdown-menu {
 		display: block;
+	}
+}
+
+@media (max-width: 767px) {
+	.navbar-main .navbar-nav > li > a {
+		padding-left: 35px;
+	}
+	.navbar.navbar-main.yamm {
+		min-height: 0px;
 	}
 }
 
@@ -269,18 +278,12 @@ hr {
 	display: block;
 	font-size: 11px;
 	line-height: 1em;
-	opacity: 0.3;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
-	filter: alpha(opacity=30);
 	height: 10px;
 	margin-bottom: 2px;
 }
 
 .navbar-nav > li > a:hover > span {
 	color: #000;
-	opacity: 0.7;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
-	filter: alpha(opacity=70);
 }
 
 .navbar-main-white .navbar-nav > li > a > span {
@@ -456,7 +459,7 @@ hr {
 }
 
 .dropdown-menu-category > li:hover > a {
-	background: #48ac40;
+	background: #12a641;
 	color: #fff;
 }
 
@@ -652,7 +655,7 @@ hr {
 
 .dropdown-menu-shipping-cart-price {
 	font-weight: 500;
-	color: #48ac40;
+	color: #12a641;
 	margin-bottom: 0;
 }
 
@@ -778,9 +781,9 @@ hr {
 		width: 100%;
 	}
 
-	.navbar-main-search-category .form-control {
-		padding-left: 60px;
-	}
+	/*.navbar-main-search-category .form-control {*/
+		/*padding-left: 60px;*/
+	/*}*/
 }
 
 .navbar-main-search-category-select {
@@ -1058,7 +1061,7 @@ hr {
 	position: relative;
 	background: #262626;
 	padding-top: 30px;
-	border-top: 2px solid #48ac40;
+	border-top: 2px solid #12a641;
 	color: #fff;
 }
 
@@ -2363,8 +2366,8 @@ header.main {
 
 .btn-primary {
 	color: #fff !important;
-	background: #48ac40;
-	border-color: #48ac40;
+	background: #12a641;
+	border-color: #12a641;
 }
 
 .btn-primary:hover {

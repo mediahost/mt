@@ -1,7 +1,7 @@
 @import "../definitions.less";
 
 body {
-	background-image: url(@pathImages + "greyzz.png");
+	background-image: url(@pathImages + "binding_light.png");
 }
 
 h1 {
@@ -11,6 +11,7 @@ h1 {
 		color: #21334a;
 	}
 }
+
 @media (max-width: 1199px) {
 	h1 {
 		&.main-headline {
@@ -27,11 +28,16 @@ h1 {
 	padding: 0px;
 	margin: 0px;
 	margin-left: 0px !important;
-	color: white !important;
 	font-size: 35px;
 	img {
 		height: 58px;
 		width: auto;
+	}
+}
+
+.navbar-toggle {
+	.icon-bar {
+		background-color: #12a641;
 	}
 }
 
@@ -45,12 +51,14 @@ h1 {
 			height: auto;
 		}
 	}
+
 	.navbar-main-search {
 		width: 500px;
 		.form-control {
 			padding-left: 10px;
 		}
 	}
+
 	#frm-search .tt-menu {
 		width: 500px !important;
 	}
@@ -63,7 +71,26 @@ h1 {
 }
 
 .navbar-main {
-	background: #48ac40;
+	background: white;
+	.navbar-nav {
+		& > li {
+			& > a {
+				color: #777;
+			}
+			&:hover {
+				& > a {
+					background: #12a641;
+					color: white;
+					& > span {
+						color: white;
+					}
+				}
+			}
+		}
+	}
+	.dropdown-menu {
+		border-top: 2px solid #12a641;
+	}
 }
 
 .navbar-pad {
@@ -72,7 +99,17 @@ h1 {
 }
 
 .navbar-before {
-	background: #000000;
+	background: #12a641;
+}
+
+.navbar-main-search-category {
+	border: 1px #e7e7e7 solid;
+	padding-left: 0px;
+}
+
+.navbar-main-search-submit {
+	background-color: #12a641;
+	color: white;
 }
 
 #frm-search {
@@ -525,7 +562,7 @@ UI Loading
 .currency-menu {
 	&.current {
 		a {
-			color: #90cc8c !important;
+			color: #dcf275 !important;
 		}
 	}
 }
@@ -563,7 +600,6 @@ UI Loading
 	width: 110px;
 	display: none;
 	margin-top: 12px;
-	border-top: solid 2px rgb(77, 77, 77);
 	box-shadow: 5px 5px rgba(91, 91, 91, 0.2);
 	position: relative;
 	transition: opacity .3s ease-in-out;
@@ -600,6 +636,13 @@ UI Loading
 			}
 		}
 	}
+}
+
+.row.row-col-gap-sm > [class^="col-"] {
+	margin-bottom: 10px;
+}
+.banner {
+	height: 170px;
 }
 
 .side-banner-left, .side-banner-right {
