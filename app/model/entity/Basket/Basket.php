@@ -70,7 +70,7 @@ class Basket extends BaseEntity
 	/** @ORM\Column(type="datetime", nullable=true) */
 	protected $sendedMailAt;
 
-	/** @var ShopVariant */
+	/** @ORM\ManyToOne(targetEntity="ShopVariant") */
 	protected $shopVariant;
 
 	public function __construct(User $user = NULL)

@@ -17,7 +17,7 @@ class HomepagePresenter extends BasePresenter
 		$this->stockComponentLabels = TRUE;
 		$this->stockComponentSecondImage = FALSE;
 
-		$this->template->newStocks = $this->stockFacade->getNews(3);
+		$this->template->newStocks = $this->stockFacade->getNews(20);
 		$this->template->saleStocks = $this->stockFacade->getSales(3);
 		$this->template->topStocks = $this->stockFacade->getTops(3);
 		$this->template->specialStocks = $this->stockFacade->getSpecials(3);
