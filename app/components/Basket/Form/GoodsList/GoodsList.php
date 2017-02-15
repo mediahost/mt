@@ -30,6 +30,9 @@ class GoodsList extends BaseControl
 	/** @var int */
 	protected $priceLevel;
 
+	/** @var bool */
+	protected $allowDiscount = TRUE;
+
 	/** @var ShopVariant */
 	protected $shopVariant;
 
@@ -136,6 +139,7 @@ class GoodsList extends BaseControl
 		$this->template->exchange = $this->exchange;
 		$currency = $this->exchange[$this->exchange->getWeb()];
 		$this->template->currencySymbol = $currency->getFormat()->getSymbol();
+		$this->template->allowDiscount = $this->allowDiscount;
 		parent::render();
 	}
 
@@ -147,9 +151,10 @@ class GoodsList extends BaseControl
 		return $this;
 	}
 
-	public function setShopVariant(ShopVariant $variant)
+	public function setShopVariant(ShopVariant $variant, $allowDiscount = TRUE)
 	{
 		$this->shopVariant = $variant;
+		$this->allowDiscount = $allowDiscount;
 		return $this;
 	}
 
