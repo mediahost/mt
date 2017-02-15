@@ -25,6 +25,7 @@ admin:
 			types:
 				users: 'uživatelé'
 				dealers: 'dealeři'
+				shop: 'obchod'
 			status:
 				running: 'spuštěný'
 				paused: 'pozastavený'
@@ -46,6 +47,7 @@ admin:
 			testEmail: 'Testovací e-mail'
 			send: 'Odeslat'
 			sendTest: 'Odeslat testovací'
+			shop: 'Obchod'
 
 	subscriber:
 		default:
@@ -63,6 +65,7 @@ admin:
 				ip: 'IP'
 				type: 'Typ'
 				locale: 'Jazyk'
+				shop: 'Obchod'
 			types:
 				user: 'uživatel'
 				dealer: 'dealer'

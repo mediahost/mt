@@ -5,6 +5,7 @@ namespace App\Model\Entity\Newsletter;
 use App\Model\Entity\File;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
 use Nette\Http\FileUpload;
 
@@ -18,11 +19,12 @@ class Message extends BaseEntity
 	const TYPE_USER = 0;
 	const TYPE_DEALER = 1;
 	const TYPE_GROUP = 2;
+	const TYPE_SHOP = 3;
 	const STATUS_PAUSED = 0;
 	const STATUS_RUNNING = 1;
 	const STATUS_SENT = 2;
 
-	use \Kdyby\Doctrine\Entities\Attributes\Identifier;
+	use Identifier;
 
 	/** @ORM\Column(type="string", length=255) */
 	protected $subject;
@@ -47,6 +49,12 @@ class Message extends BaseEntity
 	 * @ORM\JoinColumn(nullable=true)
 	 */
 	protected $group;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="App\Model\Entity\Shop")
+	 * @ORM\JoinColumn(nullable=true)
+	 */
+	protected $shop;
 
 	/** @ORM\Column(type="boolean") */
 	protected $unsubscribable = TRUE;
@@ -89,7 +97,7 @@ class Message extends BaseEntity
 
 	public function __toString()
 	{
-		return $this->subject;
+		return (string)$this->subject;
 	}
 
 }

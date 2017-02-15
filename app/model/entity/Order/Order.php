@@ -2,12 +2,10 @@
 
 namespace App\Model\Entity;
 
-use App\ExchangeHelper;
 use App\Model\Facade\Exception\InsufficientQuantityException;
 use App\Model\Facade\Exception\MissingItemException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use h4kuna\Exchange\Currency\IProperty;
 use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;

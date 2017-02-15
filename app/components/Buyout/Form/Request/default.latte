@@ -37,7 +37,7 @@
 									<td n:foreach="$form[questions][$name]->items as $key => $label"
 											class="question-answer-bool"
 											data-question-type="bool"
-											data-question-value="{if $key == 'y'}{$question->priceYes}{elseif $key == 'n'}{$question->priceNo}{/if}">
+											data-question-value="{if $key == 'y'}{$question->priceYes|change}{elseif $key == 'n'}{$question->priceNo|change}{/if}">
 										{label $name:$key}
 											{input $name:$key class=>'i-radio'} {$label}
 										{/label}
@@ -46,7 +46,7 @@
 									<td colspan="2"
 									    class="question-answer-radio"
 									    data-question-type="radio"
-									    data-question-value="{$question->pricesArray|jsonEncode}">
+									    data-question-value="{$question->getPricesArray($exchange)|jsonEncode}">
 										{input $form[questions][$name]}
 									</td>
 								{/if}
@@ -59,7 +59,7 @@
 								{_'buyout.request.page.usedPhonePrice'}:
 							</th>
 							<td colspan="2">
-								<p class="product-page-price price" data-fullPrice="{$model->buyoutPrice}">
+								<p class="product-page-price price" data-fullPrice="{$model->buyoutPrice|change}">
 									{$model->buyoutPrice|currency}
 								</p>
 							</td>

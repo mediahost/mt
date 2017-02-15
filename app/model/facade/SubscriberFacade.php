@@ -5,6 +5,7 @@ namespace App\Model\Facade;
 use App\Model\Entity\Group;
 use App\Model\Entity\Newsletter\Status;
 use App\Model\Entity\Newsletter\Subscriber;
+use App\Model\Entity\Shop;
 use Exception;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\EntityRepository;
@@ -35,32 +36,26 @@ class SubscriberFacade extends Object
 		$this->repository = $this->em->getRepository(Subscriber::getClassName());
 	}
 
-	/**
-	 * @param int $type
-	 * @param string $locale
-	 * @return Subscriber[]
-	 */
-	public function findByType($type, $locale = NULL)
+	public function findByType($type, $locale = NULL, Shop $shop = NULL)
 	{
 		$criteria['type'] = $type;
-
-		if (!empty($locale)) {
+		if ($shop) {
+			$criteria['shop'] = $shop;
+		}
+		if ($locale) {
 			$criteria['locale'] = $locale;
 		}
 
 		return $this->repository->findBy($criteria);
 	}
 
-	/**
-	 * @param int $type
-	 * @param string $locale
-	 * @return int
-	 */
-	public function countByType($type, $locale = NULL)
+	public function countByType($type, $locale = NULL, Shop $shop = NULL)
 	{
 		$criteria['type'] = $type;
-
-		if (!empty($locale)) {
+		if ($shop) {
+			$criteria['shop'] = $shop;
+		}
+		if ($locale) {
 			$criteria['locale'] = $locale;
 		}
 
@@ -89,6 +84,15 @@ class SubscriberFacade extends Object
 			$group = $this->em->getRepository(Group::getClassName())->find($recipient);
 
 			$count = count($group->users);
+		} else if (preg_match('/^' . ShopFacade::PAIR_KEY_ALIAS . '(\w)$/', $recipient, $matches)) {
+			$locales = $this->localeFacade->getLocalesToSelect();
+			$shop = $this->em->getRepository(Shop::getClassName())->findOneBy([
+				'priceLetter' => $matches[1],
+			]);
+
+			foreach ($locales as $locale => $label) {
+				$count[$locale] = $this->countByType(Subscriber::TYPE_USER, $locale, $shop);
+			}
 		} else {
 			throw new Exception('Unknown recipient type.');
 		}
