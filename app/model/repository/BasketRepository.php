@@ -22,50 +22,48 @@ class BasketRepository extends BaseRepository
 		];
 
 		$qb = $this->createQueryBuilder('b')
-				->whereCriteria($criteria);
+			->whereCriteria($criteria);
 
 		if ($withItems) {
 			$qb->join('b.items', 'i');
 		}
 
 		return $qb->getQuery()
-						->getResult();
+			->getResult();
 	}
 
-	public function findEmpty($olderThan = NULL)
+	public function findEmpty($olderThan = NULL, $mustBeEmpty = TRUE)
 	{
-		$emptyCriteria = [
-			'user' => NULL,
-			'shipping' => NULL,
-			'payment' => NULL,
-			'shippingAddress' => NULL,
-			'billingAddress' => NULL,
-			'mail' => NULL,
-			'sendedMailAt' => NULL,
-			'accessHash' => NULL,
-		];
+		if ($mustBeEmpty) {
+			$emptyCriteria = [
+				'user' => NULL,
+				'shipping' => NULL,
+				'payment' => NULL,
+				'shippingAddress' => NULL,
+				'billingAddress' => NULL,
+				'mail' => NULL,
+				'sendedMailAt' => NULL,
+				'accessHash' => NULL,
+			];
+		} else {
+			$emptyCriteria = [];
+		}
+
 		if ($olderThan) {
 			$emptyCriteria['updatedAt <='] = new DateTime('-' . $olderThan);
 		}
 
 		$qb = $this->createQueryBuilder('b')
-				->setMaxResults(10000)
-				->whereCriteria($emptyCriteria);
+			->whereCriteria($emptyCriteria);
 
 		return $qb->getQuery()
-						->getResult();
+			->setMaxResults(10000)
+			->getResult();
 	}
 
 	public function findOlders($olderThan)
 	{
-		$criteria['updatedAt <='] = new DateTime('-' . $olderThan);
-
-		$qb = $this->createQueryBuilder('b')
-				->whereCriteria($criteria);
-
-		return $qb->getQuery()
-						->setMaxResults(10000)
-						->getResult();
+		return $this->findEmpty($olderThan, FALSE);
 	}
 
 }
