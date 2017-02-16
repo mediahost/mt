@@ -8,6 +8,7 @@ use App\Model\Entity\ShopVariant;
 use App\Model\Entity\Stock;
 use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\EntityManager;
+use Nette\Http\Request;
 use Nette\Object;
 
 class ShopFacade extends Object
@@ -21,21 +22,38 @@ class ShopFacade extends Object
 	/** @var SettingsStorage @inject */
 	public $settings;
 
-	/** @var Exchange @inject */
-	public $exchange;
+	/** @var Request @inject */
+	public $httpRequest;
 
 	/** @return ShopVariant */
 	public function getShopVariant()
 	{
 		$shopVariantRepo = $this->em->getRepository(ShopVariant::getClassName());
 
-		$shopVariant = $shopVariantRepo->findOneBy([
-			'currency' => $this->exchange->getWeb()->getCode(),
-			'shop' => $this->settings->pageConfig->shop->id,
-		]);
+		$shopVariant = NULL;
+		$shopVariantId = $this->settings->pageConfig->shop->defaultVariant;
+		$domain = $this->httpRequest->getUrl()->getHost();
+		if (preg_match('/^(?:www\.)?((\w+)\.(\w{2}))$/', $domain, $matches)) {
+			switch ($matches[2]) {
+				case 'mobilnetelefony':
+					break;
+				case 'mobilgen':
+					switch ($matches[3]) {
+						case 'cz':
+							$shopVariantId = 4;
+							break;
+						case 'pl':
+							$shopVariantId = 5;
+							break;
+						case 'sk':
+							break;
+					}
+					break;
+			}
+		}
 
 		if (!$shopVariant) {
-			$shopVariant = $shopVariantRepo->find($this->settings->pageConfig->shop->defaultVariant);
+			$shopVariant = $shopVariantRepo->find($shopVariantId);
 		}
 
 		return $shopVariant;
