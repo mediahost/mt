@@ -38,12 +38,12 @@ return array(
 			!www/foto/original/default.png
 			www/adminer/database-log.sql
 			*.local.neon
-			*.page.neon
 			*.server.neon
 			*.server_dev.neon
 			*.server_test.neon
 			*.server_ver*.neon
 			*.local.example.neon
+			/app/config/settings.local
 			composer.lock
 			composer.json
 			*.md
