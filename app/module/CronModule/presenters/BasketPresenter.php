@@ -22,7 +22,7 @@ class BasketPresenter extends BasePresenter
 
 		/* @var $basketRepo BasketRepository */
 		$basketRepo = $this->em->getRepository(Basket::getClassName());
-		$baskets = $basketRepo->findUnfinished();
+		$baskets = $basketRepo->findUnfinished($this->shopVariant);
 
 		if (count($baskets)) {
 			foreach ($baskets as $basket) {

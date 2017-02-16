@@ -2,12 +2,13 @@
 
 namespace App\Model\Repository;
 
+use App\Model\Entity\ShopVariant;
 use Nette\Utils\DateTime;
 
 class BasketRepository extends BaseRepository
 {
 
-	public function findUnfinished($withItems = TRUE)
+	public function findUnfinished(ShopVariant $shopVariant, $withItems = TRUE)
 	{
 		// init time of start module
 		$init = '2016-01-12 17:00:00';
@@ -15,6 +16,7 @@ class BasketRepository extends BaseRepository
 		$minusTime = '24 hours';
 
 		$criteria = [
+			'shopVariant' => $shopVariant,
 			'changeItemsAt >=' => new DateTime($init),
 			'changeItemsAt <=' => new DateTime('-' . $minusTime),
 			'mail NOT' => NULL,
