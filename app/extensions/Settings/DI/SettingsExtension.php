@@ -63,7 +63,7 @@ class SettingsExtension extends CompilerExtension
 				],
 			],
 			'discount' => [
-				'enabled' => TRUE,
+				'enabled' => FALSE,
 			],
 			'pohoda' => [
 				'enabled' => FALSE,
