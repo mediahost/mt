@@ -14,7 +14,6 @@
     >
 
     {foreach $orderItems as $orderItem}
-		{cache $orderItem->id, tags => ['pohoda/stock/' . $orderItem->stock->id, 'pohoda/stocks']}
 			{var stock => $orderItem->stock}
 			<dat:dataPackItem id="00{$orderItem->id}" 
 							  version="2.0">
@@ -37,14 +36,12 @@
 					</stk:stockHeader>
 				</stk:stock>
 			</dat:dataPackItem>
-		{/cache}
     {/foreach}
 
     <dat:dataPackItem n:foreach="$orders as $order" 
                       id="01{$order->id}" 
                       version="2.0">
 
-		{cache $order->id, tags => ['pohoda/order/' . $order->id, 'pohoda/orders']}
 			<ord:order version="2.0">
 				<!--prijata objednavka s polozkama-->
 				<ord:orderHeader>
@@ -152,7 +149,6 @@
 				</ord:orderSummary>
 
 			</ord:order>
-		{/cache}
 
     </dat:dataPackItem>
 
