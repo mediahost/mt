@@ -1773,7 +1773,7 @@ hr {
 }
 
 .category-pagination > li > a {
-	color: #486d97;
+	color: #12a641;
 	-webkit-border-radius: 3px !important;
 	border-radius: 3px !important;
 	-webkit-transition: 0.3s;
@@ -1784,7 +1784,7 @@ hr {
 }
 
 .category-pagination > li > a:hover {
-	border-color: #486d97;
+	border-color: #12a641;
 	background: #fff;
 }
 
@@ -1799,11 +1799,16 @@ hr {
 }
 
 .category-pagination > li.last > a {
-	background: #486d97;
+	background: #12a641;
 	color: #fff;
-	border-color: #486d97;
+	border-color: #12a641;
 	padding-left: 20px;
 	padding-right: 20px;
+}
+
+.category-pagination > li.last > a:hover {
+	background: #2d8b4b;
+	border-color: #2d8b4b;
 }
 
 .category-pagination-sign {
@@ -4849,8 +4854,8 @@ header.main {
 
 .i-check.checked,
 .i-radio.checked {
-	border: 1px solid #486d97;
-	background: #486d97;
+	border: 1px solid #12a641;
+	background: #12a641;
 }
 
 .i-check.checked:before,
@@ -5129,7 +5134,7 @@ header.main {
 	-webkit-border-radius: 50%;
 	border-radius: 50%;
 	top: 22px;
-	background: #486d97;
+	background: #12a641;
 	-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 	cursor: pointer;
