@@ -1,160 +1,163 @@
 {layout none}
 {contentType application/xml}
 <?xml version="1.0" encoding="utf-8"?>
-<dat:dataPack 
-    id="{!= time()}" 
-    ico="{$ico}" 
-    application="App" 
-    version = "2.0" 
-    note="Import Objednávky | Last edit time: {$lastEditTime|date:'H:i:s d.m.Y'}"
-    xmlns:dat="http://www.stormware.cz/schema/version_2/data.xsd"        
-    xmlns:ord="http://www.stormware.cz/schema/version_2/order.xsd"		
-    xmlns:stk="http://www.stormware.cz/schema/version_2/stock.xsd"          
-    xmlns:typ="http://www.stormware.cz/schema/version_2/type.xsd" 
-    >
+<dat:dataPack
+		id="{!= time()}"
+		ico="{$ico}"
+		application="App"
+		version="2.0"
+		note="Import Objednávky | Last edit time: {$lastEditTime|date:'H:i:s d.m.Y'}"
+		xmlns:dat="http://www.stormware.cz/schema/version_2/data.xsd"
+		xmlns:ord="http://www.stormware.cz/schema/version_2/order.xsd"
+		xmlns:stk="http://www.stormware.cz/schema/version_2/stock.xsd"
+		xmlns:typ="http://www.stormware.cz/schema/version_2/type.xsd">
 
-    {foreach $orderItems as $orderItem}
-			{var stock => $orderItem->stock}
-			{var fromCurrency => $orderItem->order->shopVariant->currency}
-			<dat:dataPackItem id="00{$orderItem->id}" 
-							  version="2.0">
-				<stk:stock version="2.0">
-					<stk:stockHeader>
-						<!--  Zásoba  -->
-						<stk:stockType>card</stk:stockType>
-						<stk:code>{$stock->pohodaCode}</stk:code>
-						<stk:isSales>true</stk:isSales>
-						<stk:isInternet>true</stk:isInternet>
-						<stk:sellingRateVAT>{include #vat, item => $orderItem}</stk:sellingRateVAT>
-						<stk:name><![CDATA[{$orderItem->name}]]></stk:name>
-						<stk:storage>
+	{foreach $orderItems as $orderItem}
+		{var stock => $orderItem->stock}
+		{var fromCurrency => $orderItem->order->shopVariant->currency}
+		<dat:dataPackItem id="00{$orderItem->id}"
+		                  version="2.0">
+			<stk:stock version="2.0">
+				<stk:stockHeader>
+					<!--  Zásoba  -->
+					<stk:stockType>card</stk:stockType>
+					<stk:code>{$stock->pohodaCode}</stk:code>
+					<stk:isSales>true</stk:isSales>
+					<stk:isInternet>true</stk:isInternet>
+					<stk:sellingRateVAT>{include #vat, item => $orderItem}</stk:sellingRateVAT>
+					<stk:name><![CDATA[{$orderItem->name}]]></stk:name>
+					<stk:storage>
+						<typ:ids>{$defaultStorage}</typ:ids>
+					</stk:storage>
+					<stk:typePrice>
+						<typ:ids>{$typePrice}</typ:ids>
+					</stk:typePrice>
+					<stk:sellingPrice>{$orderItem->price->withoutVat|change:$fromCurrency,$homeCurrency,2}</stk:sellingPrice>
+				</stk:stockHeader>
+			</stk:stock>
+		</dat:dataPackItem>
+	{/foreach}
+
+	<dat:dataPackItem n:foreach="$orders as $order"
+			id="01{$order->id}"
+			version="2.0">
+		{var fromCurrency => $order->shopVariant->currency}
+		{var toCurrency => $order->currency}
+		{var isHomeCurrency => $toCurrency === $homeCurrency}
+
+		<ord:order version="2.0">
+			<!--prijata objednavka s polozkama-->
+			<ord:orderHeader>
+				<ord:orderType>receivedOrder</ord:orderType>
+				<ord:number>
+					<typ:numberRequested>{$order->id}</typ:numberRequested>
+				</ord:number>
+				<ord:numberOrder>{$order->id}</ord:numberOrder>
+				<ord:date>{$order->createdAt|date:'Y-m-d'}</ord:date>
+				<ord:dateFrom>{$order->createdAt|date:'Y-m-d'}</ord:dateFrom>
+				<ord:text>Objednávka z internetového obchodu {$pageInfo->projectName}</ord:text>
+				<ord:partnerIdentity>
+					<typ:address>
+						<typ:company n:if="$order->billingAddress->isCompany()">{$order->billingAddress->name|truncate:96:''}</typ:company>
+						<typ:name n:if="!$order->billingAddress->isCompany()">{$order->billingAddress->name|truncate:32:''}</typ:name>
+						<typ:city>{$order->billingAddress->city|truncate:45:''}</typ:city>
+						<typ:street>{$order->billingAddress->street|truncate:64:''}</typ:street>
+						<typ:zip>{$order->billingAddress->zipcode|truncate:15:''}</typ:zip>
+						<typ:ico n:if="$order->billingAddress->ico">{$order->billingAddress->ico|truncate:15:''}</typ:ico>
+						<typ:icDph n:if="$order->billingAddress->dic">{$order->billingAddress->dic|truncate:18:''}</typ:icDph>
+						<typ:phone n:if="$order->billingAddress->phone">{$order->billingAddress->phone|truncate:40:''}</typ:phone>
+						<typ:email>{$order->mail}</typ:email>
+					</typ:address>
+					<typ:shipToAddress n:if="$order->shippingAddress">
+						<typ:name>{$order->shippingAddress->name|truncate:32:''}</typ:name>
+						<typ:city>{$order->shippingAddress->city|truncate:45:''}</typ:city>
+						<typ:street>{$order->shippingAddress->street|truncate:64:''}</typ:street>
+						<typ:zip>{$order->shippingAddress->zipcode|truncate:15:''}</typ:zip>
+						<typ:phone>{$order->shippingAddress->phone|truncate:40:''}</typ:phone>
+					</typ:shipToAddress>
+				</ord:partnerIdentity>
+
+				<ord:paymentType>
+					<typ:ids>{_$order->payment->name|truncate:20:''}</typ:ids>
+				</ord:paymentType>
+
+				<ord:note>{$order->billingAddress->note}</ord:note>
+				<ord:intNote>{$order->note}</ord:intNote>
+			</ord:orderHeader>
+			<ord:orderDetail>
+				<ord:orderItem n:foreach="$order->items as $item">
+					{var stock => $item->stock}
+					<ord:stockItem>
+						<typ:store>
 							<typ:ids>{$defaultStorage}</typ:ids>
-						</stk:storage>
-						<stk:typePrice>
-							<typ:ids>{$typePrice}</typ:ids>
-						</stk:typePrice>
-						<stk:sellingPrice>{$orderItem->price->withoutVat|change:$fromCurrency,$homeCurrency,2}</stk:sellingPrice>
-					</stk:stockHeader>
-				</stk:stock>
-			</dat:dataPackItem>
-    {/foreach}
-
-    <dat:dataPackItem n:foreach="$orders as $order" 
-                      id="01{$order->id}" 
-                      version="2.0">
-			{var fromCurrency => $order->shopVariant->currency}
-			{var toCurrency => $order->currency}
-			{var isHomeCurrency => $toCurrency === $homeCurrency}
-
-			<ord:order version="2.0">
-				<!--prijata objednavka s polozkama-->
-				<ord:orderHeader>
-					<ord:orderType>receivedOrder</ord:orderType>
-					<ord:number>
-						<typ:numberRequested>{$order->id}</typ:numberRequested>
-					</ord:number>
-					<ord:numberOrder>{$order->id}</ord:numberOrder>
-					<ord:date>{$order->createdAt|date:'Y-m-d'}</ord:date>
-					<ord:dateFrom>{$order->createdAt|date:'Y-m-d'}</ord:dateFrom>
-					<ord:text>Objednávka z internetového obchodu {$pageInfo->projectName}</ord:text>
-					<ord:partnerIdentity>
-						<typ:address>
-							<typ:company n:if="$order->billingAddress->isCompany()">{$order->billingAddress->name|truncate:96:''}</typ:company>
-							<typ:name n:if="!$order->billingAddress->isCompany()">{$order->billingAddress->name|truncate:32:''}</typ:name>
-							<typ:city>{$order->billingAddress->city|truncate:45:''}</typ:city>
-							<typ:street>{$order->billingAddress->street|truncate:64:''}</typ:street>
-							<typ:zip>{$order->billingAddress->zipcode|truncate:15:''}</typ:zip>
-							<typ:ico n:if="$order->billingAddress->ico">{$order->billingAddress->ico|truncate:15:''}</typ:ico>
-							<typ:icDph n:if="$order->billingAddress->dic">{$order->billingAddress->dic|truncate:18:''}</typ:icDph>
-							<typ:phone n:if="$order->billingAddress->phone">{$order->billingAddress->phone|truncate:40:''}</typ:phone>
-							<typ:email>{$order->mail}</typ:email>
-						</typ:address>
-						<typ:shipToAddress n:if="$order->shippingAddress">
-							<typ:name>{$order->shippingAddress->name|truncate:32:''}</typ:name>
-							<typ:city>{$order->shippingAddress->city|truncate:45:''}</typ:city>
-							<typ:street>{$order->shippingAddress->street|truncate:64:''}</typ:street>
-							<typ:zip>{$order->shippingAddress->zipcode|truncate:15:''}</typ:zip>
-							<typ:phone>{$order->shippingAddress->phone|truncate:40:''}</typ:phone>
-						</typ:shipToAddress>
-					</ord:partnerIdentity>
-
-					<ord:paymentType>
-						<typ:ids>{_$order->payment->name|truncate:20:''}</typ:ids>
-					</ord:paymentType>
-
-					<ord:note>{$order->billingAddress->note}</ord:note>
-					<ord:intNote>{$order->note}</ord:intNote>
-				</ord:orderHeader>
-				<ord:orderDetail>
-					<ord:orderItem n:foreach="$order->items as $item">
-						{var stock => $item->stock}
-						<ord:stockItem>
-							<typ:store><typ:ids>{$defaultStorage}</typ:ids></typ:store>
-							<typ:stockItem>
-								<typ:ids>{$stock->pohodaCode}</typ:ids>
-							</typ:stockItem>
-						</ord:stockItem>
-						<ord:code>{$stock->pohodaCode}</ord:code>
-						<ord:text><![CDATA[{$item->name|truncate:90:''}]]></ord:text>
-						<ord:quantity>{$item->quantity}</ord:quantity>
-						<ord:delivered>0</ord:delivered>
-						<ord:payVAT>false</ord:payVAT>
-						<ord:rateVAT>{include #vat, item => $item}</ord:rateVAT>
-						<ord:discountPercentage>0.00</ord:discountPercentage>
-						<ord:homeCurrency n:if="$isHomeCurrency">
-							<typ:unitPrice>{$item->price|change:$fromCurrency,$toCurrency,2}</typ:unitPrice>
-						</ord:homeCurrency>
-						<ord:foreignCurrency n:if="!$isHomeCurrency">
-							<typ:unitPrice>{$item->price|change:$fromCurrency,$toCurrency,2}</typ:unitPrice>
-						</ord:foreignCurrency>
-
-					</ord:orderItem>
-
-					{var taxes => ['Shipping' => $order->shipping, 'Payment' => $order->payment]}
-					<ord:orderItem n:foreach="$taxes as $type => $tax">
-						<ord:text>{_$type|truncate:17:''} - {_$tax->name|truncate:70:''}</ord:text>
-						<ord:quantity>1</ord:quantity>
-						<ord:payVAT>false</ord:payVAT>
-						<ord:rateVAT>{include #vat, item => $tax}</ord:rateVAT>
-						<ord:discountPercentage>0.00</ord:discountPercentage>
-						<ord:homeCurrency n:if="$isHomeCurrency">
-							<typ:unitPrice>{$tax->price|change:$fromCurrency,$toCurrency,2}</typ:unitPrice>
-						</ord:homeCurrency>
-						<ord:foreignCurrency n:if="!$isHomeCurrency">
-							<typ:unitPrice>{$tax->price|change:$fromCurrency,$toCurrency,2}</typ:unitPrice>
-						</ord:foreignCurrency>
-
-					</ord:orderItem>
-					
-					{var productsTotalWith => $order->getItemsTotalPrice($exchange)}
-					<ord:orderItem n:foreach="$order->vouchers as $voucher">
-						<ord:text>{_'Discount'} - {$voucher->code} -{$voucher->getValueString($currencySymbol, $exchange)}</ord:text>
-						<ord:quantity>1</ord:quantity>
-						<ord:payVAT>false</ord:payVAT>
-						<ord:rateVAT>none</ord:rateVAT>
-						<ord:discountPercentage>0.00</ord:discountPercentage>
-						<ord:homeCurrency n:if="$isHomeCurrency">
-							<typ:unitPrice>-{$voucher->getDiscountValue($productsTotalWith, $exchange)|round:2}</typ:unitPrice>
-						</ord:homeCurrency>
-						<ord:foreignCurrency n:if="!$isHomeCurrency">
-							<typ:unitPrice>-{$voucher->getDiscountValue($productsTotalWith, $exchange)|round:2}</typ:unitPrice>
-						</ord:foreignCurrency>
-
-					</ord:orderItem>
-
-				</ord:orderDetail>
-
-				<ord:orderSummary>
-					<ord:roundingDocument>none</ord:roundingDocument>
+						</typ:store>
+						<typ:stockItem>
+							<typ:ids>{$stock->pohodaCode}</typ:ids>
+						</typ:stockItem>
+					</ord:stockItem>
+					<ord:code>{$stock->pohodaCode}</ord:code>
+					<ord:text><![CDATA[{$item->name|truncate:90:''}]]></ord:text>
+					<ord:quantity>{$item->quantity}</ord:quantity>
+					<ord:delivered>0</ord:delivered>
+					<ord:payVAT>false</ord:payVAT>
+					<ord:rateVAT>{include #vat, item => $item}</ord:rateVAT>
+					<ord:discountPercentage>0.00</ord:discountPercentage>
+					<ord:homeCurrency n:if="$isHomeCurrency">
+						<typ:unitPrice>{$item->price|change:$fromCurrency,$toCurrency,2}</typ:unitPrice>
+					</ord:homeCurrency>
 					<ord:foreignCurrency n:if="!$isHomeCurrency">
-						<typ:currency><typ:ids>{$toCurrency}</typ:ids></typ:currency>
-						<typ:rate n:if="$order->rate">{$order->rate}</typ:rate>
+						<typ:unitPrice>{$item->price|change:$fromCurrency,$toCurrency,2}</typ:unitPrice>
 					</ord:foreignCurrency>
-				</ord:orderSummary>
 
-			</ord:order>
+				</ord:orderItem>
 
-    </dat:dataPackItem>
+				{var taxes => ['Shipping' => $order->shipping, 'Payment' => $order->payment]}
+				<ord:orderItem n:foreach="$taxes as $type => $tax">
+					<ord:text>{_$type|truncate:17:''} - {_$tax->name|truncate:70:''}</ord:text>
+					<ord:quantity>1</ord:quantity>
+					<ord:payVAT>false</ord:payVAT>
+					<ord:rateVAT>{include #vat, item => $tax}</ord:rateVAT>
+					<ord:discountPercentage>0.00</ord:discountPercentage>
+					<ord:homeCurrency n:if="$isHomeCurrency">
+						<typ:unitPrice>{$tax->price|change:$fromCurrency,$toCurrency,2}</typ:unitPrice>
+					</ord:homeCurrency>
+					<ord:foreignCurrency n:if="!$isHomeCurrency">
+						<typ:unitPrice>{$tax->price|change:$fromCurrency,$toCurrency,2}</typ:unitPrice>
+					</ord:foreignCurrency>
+
+				</ord:orderItem>
+
+				{var productsTotalWith => $order->getItemsTotalPrice($exchange)}
+				<ord:orderItem n:foreach="$order->vouchers as $voucher">
+					<ord:text>{_'Discount'} - {$voucher->code} -{$voucher->getValueString($currencySymbol, $exchange)}</ord:text>
+					<ord:quantity>1</ord:quantity>
+					<ord:payVAT>false</ord:payVAT>
+					<ord:rateVAT>none</ord:rateVAT>
+					<ord:discountPercentage>0.00</ord:discountPercentage>
+					<ord:homeCurrency n:if="$isHomeCurrency">
+						<typ:unitPrice>-{$voucher->getDiscountValue($productsTotalWith, $exchange)|round:2}</typ:unitPrice>
+					</ord:homeCurrency>
+					<ord:foreignCurrency n:if="!$isHomeCurrency">
+						<typ:unitPrice>-{$voucher->getDiscountValue($productsTotalWith, $exchange)|round:2}</typ:unitPrice>
+					</ord:foreignCurrency>
+
+				</ord:orderItem>
+
+			</ord:orderDetail>
+
+			<ord:orderSummary>
+				<ord:roundingDocument>none</ord:roundingDocument>
+				<ord:foreignCurrency n:if="!$isHomeCurrency">
+					<typ:currency>
+						<typ:ids>{$toCurrency}</typ:ids>
+					</typ:currency>
+					<typ:rate n:if="$order->rate">{$order->rate}</typ:rate>
+				</ord:foreignCurrency>
+			</ord:orderSummary>
+
+		</ord:order>
+
+	</dat:dataPackItem>
 
 </dat:dataPack>
 
