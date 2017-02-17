@@ -17,11 +17,14 @@
 				</div>
 				<div class="actions">
 					{foreach $shops as $shopItem}
-						<label class="checkbox-inline">
+						{var isChecked => in_array($shopItem->id, $filteredShopIds)}
+						{var isDiabled => count($filteredShopIds) === 1 && $isChecked}
+						<label n:class="checkbox-inline, $isDiabled ? disabled">
 							<input type="checkbox"
-							       {if $filteredShopId === $shopItem->id || !$filteredShopId}checked="checked"{/if}
-							       data-target-on="{link this 'filterShop' . $shopItem->priceLetter => TRUE}"
-							       data-target-off="{link this 'filterShop' . $shopItem->priceLetter => FALSE}">
+							       class="shopSwitch"
+							       value="{$shopItem->id}"
+							       {if $isDiabled}disabled="disabled"{/if}
+									{if $isChecked}checked="checked"{/if}>
 							{$shopItem}
 						</label>
 					{/foreach}

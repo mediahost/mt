@@ -12,11 +12,8 @@ use App\Components\Order\Grid\IOrdersGridFactory;
 use App\Components\Order\Grid\OrdersGrid;
 use App\Model\Entity\Order;
 use App\Model\Entity\Shop;
-use App\Model\Entity\ShopVariant;
 use App\Model\Repository\OrderRepository;
-use App\Model\Repository\ShopRepository;
 use Exception;
-use Tracy\Debugger;
 
 class OrdersPresenter extends BasePresenter
 {
@@ -54,24 +51,16 @@ class OrdersPresenter extends BasePresenter
 	 * @resource('orders')
 	 * @privilege('default')
 	 */
-	public function actionDefault($filterShopA = TRUE, $filterShopB = FALSE)
+	public function actionDefault($filteredShops = [])
 	{
-		$filterVariant = NULL;
-		if ($filterShopA && $filterShopB) {
-			$filterShop = NULL;
-		} else if (!$filterShopA && !$filterShopB) {
-			$filterShop = $this->shopVariant->shop->id;
-		} else if ($filterShopA) {
-			$filterShop = 1;
-		} else if ($filterShopB) {
-			$filterShop = 2;
+		if (!count($filteredShops)) {
+			$filteredShops[] = $this->shopVariant->shop->id;
 		}
 
 		$shopRepo = $this->em->getRepository(Shop::getClassName());
 		$this->template->shops = $shopRepo->findAll();
-		$this->template->filteredShopId = $filterShop;
-		$this->template->filteredVariantId = $filterVariant;
-		$this['ordersGrid']->setShop($filterShop, $filterVariant);
+		$this->template->filteredShopIds = $filteredShops;
+		$this['ordersGrid']->setShop($filteredShops);
 	}
 
 	/**
