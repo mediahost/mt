@@ -152,25 +152,46 @@ class Basket extends BaseEntity
 		return $this;
 	}
 
-	public function addVoucher(Voucher $voucher, $level = NULL)
+	public function addVoucher(Voucher $voucher, $level = NULL, Exchange $exchange = NULL)
 	{
 		if ($this->vouchers->contains($voucher)) {
 			throw new EntityException('cart.voucher.alreadyInCart');
 		}
 
-		$this->checkVoucherConditions($voucher, $level);
+		$this->checkVoucherConditions($voucher, $level, $exchange);
 
 		$this->vouchers->add($voucher);
 		return $this;
 	}
 
-	private function checkVoucherConditions(Voucher $voucher, $level = NULL)
+	public function checkVoucherConditions(Voucher $voucher, $level = NULL, Exchange $exchange = NULL, $checkSum = TRUE)
 	{
-		$itemsTotalSum = $this->getItemsTotalPrice(NULL, $level);
-
-		if (round($this->getVouchersTotalPrice()) >= $itemsTotalSum) {
-			throw new EntityException('cart.voucher.sumIsHigherThanProducts');
+		// voucher is still active
+		if (!$voucher->active) {
+			throw new EntityException('cart.voucher.inactive');
 		}
+
+		// voucher is for used currency
+		if ($voucher->currency && $voucher->currency != $exchange->getWeb()->getCode()) {
+			throw new EntityException('cart.voucher.invalidCurrency');
+		}
+
+		// vouchers summary is lower than items total price
+		$itemsTotalSum = $this->getItemsTotalPrice($exchange, $level);
+		$voucherSum = 0;
+		if ($checkSum) {
+			$voucherSum += $this->getVouchersTotalPrice($exchange, $level);
+		}
+		$voucherSum += $voucher->getDiscountValue($itemsTotalSum, $exchange);
+		if ($voucherSum >= $itemsTotalSum) {
+			if ($checkSum) {
+				throw new EntityException('cart.voucher.sumIsHigherThanProducts');
+			} else {
+				throw new EntityException('cart.voucher.higherThanProducts');
+			}
+		}
+
+		// voucher is in allowed type
 		switch ($voucher->type) {
 			case Voucher::MINUS_VALUE:
 				if ($voucher->value >= $itemsTotalSum) {

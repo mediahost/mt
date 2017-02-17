@@ -90,7 +90,7 @@ class GoodsList extends BaseControl
 	{
 		if ($form['insert']->submittedBy) {
 			try {
-				$this->basketFacade->addVoucher($values->voucher);
+				$this->basketFacade->addVoucher($values->voucher, NULL, $this->exchange);
 				$this->presenter->flashMessage($this->translator->translate('cart.voucher.wasAdded'), 'success');
 			} catch (BasketFacadeException $ex) {
 				$this->presenter->flashMessage($this->translator->translate($ex->getMessage()), 'danger');
