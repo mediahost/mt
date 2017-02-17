@@ -21,7 +21,7 @@
 *.server_dev.neon
 *.server_test.neon
 *.server_ver*.neon
-/app/config/settings.local/*
+/app/config/settings.local*
 
 #################
 ## Vendor (3rd side libs)

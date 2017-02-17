@@ -43,7 +43,7 @@ return array(
 			*.server_test.neon
 			*.server_ver*.neon
 			*.local.example.neon
-			/app/config/settings.local
+			/app/config/settings.local*
 			composer.lock
 			composer.json
 			*.md
