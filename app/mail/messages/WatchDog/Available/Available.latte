@@ -32,7 +32,7 @@
 							</a>
 						</td>
 						<td style="padding:5px 10px 0px 0px" align="right">
-							<b><font color="#398000">{$stock->price|currencyVat}</font></b>
+							<b><font color="#398000">{$stock->price|currencyVat:$shopVariant->currency}</font></b>
 						</td>
 					</tr>
 				</tbody>

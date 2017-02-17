@@ -121,10 +121,9 @@ class OrdersGrid extends BaseControl
 		$grid->getColumn('note')->cellPrototype->class[] = 'changeOnDblClick';
 
 		$grid->addColumnText('totalPrice', 'Total price')
-			->setCustomRender(function ($item) {
-				$toCurrency = $item->currency;
+			->setCustomRender(function (Order $item) {
 				$totalPrice = $item->getTotalPriceToPay($this->exchange);
-				return $this->exchange->formatTo($totalPrice, $toCurrency);
+				return $this->exchange->format($totalPrice, $item->currency, $item->currency);
 			})
 			->setFilterNumber();
 		$grid->getColumn('totalPrice')->headerPrototype->width = '10%';

@@ -53,7 +53,6 @@ class OrderItem extends BaseEntity
 	{
 		$vat = $this->getVat();
 		$price = new Price($vat, $this->price);
-		$price->convertible = FALSE;
 		return $price;
 	}
 
@@ -67,8 +66,9 @@ class OrderItem extends BaseEntity
 	{
 		$price = $this->getPrice();
 		$priceValue = $withVat ? $price->withVat : $price->withoutVat;
-		$currency = $this->order->currency;
-		$exchangedValue = $exchange ? $exchange->change($priceValue, $currency, $currency, Price::PRECISION) : $priceValue;
+		$fromCurrency = $this->order->shopVariant->currency;
+		$toCurrency = $this->order->currency;
+		$exchangedValue = $exchange ? $exchange->change($priceValue, $fromCurrency, $toCurrency, Price::PRECISION) : $priceValue;
 		return $exchangedValue * $this->quantity;
 	}
 

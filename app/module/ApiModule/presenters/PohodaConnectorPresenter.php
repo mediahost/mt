@@ -87,6 +87,8 @@ class PohodaConnectorPresenter extends BasePresenter
 			$this->resource->state = 'error';
 			$this->resource->message = 'This module is not allowed';
 		} else {
+			$homeCurrency = $this->shopFacade->getShopVariant()->shop->homeCurrency;
+			$this->exchange->setWeb($homeCurrency);
 
 			$orderTypeRepo = $this->em->getRepository(OrderStateType::getClassName());
 			$type = $orderTypeRepo->find(OrderStateType::STORNO);
@@ -116,7 +118,7 @@ class PohodaConnectorPresenter extends BasePresenter
 			$this->template->vatRates = $this->settings->modules->pohoda->vatRates;
 			$this->template->lastEditTime = $lastEditTime;
 			$this->template->pageInfo = $this->settings->pageInfo;
-			$this->template->homeCurrency = $this->exchange->getDefault()->getCode();
+			$this->template->homeCurrency = $homeCurrency;
 			$this->template->exchange = $this->exchange;
 			$currency = $this->exchange[$this->exchange->getWeb()];
 			$this->template->currencySymbol = $currency->getFormat()->getSymbol();

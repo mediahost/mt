@@ -15,6 +15,7 @@
 
     {foreach $orderItems as $orderItem}
 			{var stock => $orderItem->stock}
+			{var fromCurrency => $orderItem->order->shopVariant->currency}
 			<dat:dataPackItem id="00{$orderItem->id}" 
 							  version="2.0">
 				<stk:stock version="2.0">
@@ -32,7 +33,7 @@
 						<stk:typePrice>
 							<typ:ids>{$typePrice}</typ:ids>
 						</stk:typePrice>
-						<stk:sellingPrice>{$orderItem->price->withoutVat|round:2}</stk:sellingPrice>
+						<stk:sellingPrice>{$orderItem->price->withoutVat|change:$fromCurrency,$homeCurrency,2}</stk:sellingPrice>
 					</stk:stockHeader>
 				</stk:stock>
 			</dat:dataPackItem>
@@ -41,6 +42,9 @@
     <dat:dataPackItem n:foreach="$orders as $order" 
                       id="01{$order->id}" 
                       version="2.0">
+			{var fromCurrency => $order->shopVariant->currency}
+			{var toCurrency => $order->currency}
+			{var isHomeCurrency => $toCurrency === $homeCurrency}
 
 			<ord:order version="2.0">
 				<!--prijata objednavka s polozkama-->
@@ -97,11 +101,11 @@
 						<ord:payVAT>false</ord:payVAT>
 						<ord:rateVAT>{include #vat, item => $item}</ord:rateVAT>
 						<ord:discountPercentage>0.00</ord:discountPercentage>
-						<ord:homeCurrency n:if="$order->currency === $homeCurrency">
-							<typ:unitPrice>{$item->price|change:$order->currency,$order->currency,2}</typ:unitPrice>
+						<ord:homeCurrency n:if="$isHomeCurrency">
+							<typ:unitPrice>{$item->price|change:$fromCurrency,$toCurrency,2}</typ:unitPrice>
 						</ord:homeCurrency>
-						<ord:foreignCurrency n:if="$order->currency !== $homeCurrency">
-							<typ:unitPrice>{$item->price|change:$order->currency,$order->currency,2}</typ:unitPrice>
+						<ord:foreignCurrency n:if="!$isHomeCurrency">
+							<typ:unitPrice>{$item->price|change:$fromCurrency,$toCurrency,2}</typ:unitPrice>
 						</ord:foreignCurrency>
 
 					</ord:orderItem>
@@ -113,11 +117,11 @@
 						<ord:payVAT>false</ord:payVAT>
 						<ord:rateVAT>{include #vat, item => $tax}</ord:rateVAT>
 						<ord:discountPercentage>0.00</ord:discountPercentage>
-						<ord:homeCurrency n:if="$order->currency === $homeCurrency">
-							<typ:unitPrice>{$tax->price|change:$order->currency,$order->currency,2}</typ:unitPrice>
+						<ord:homeCurrency n:if="$isHomeCurrency">
+							<typ:unitPrice>{$tax->price|change:$fromCurrency,$toCurrency,2}</typ:unitPrice>
 						</ord:homeCurrency>
-						<ord:foreignCurrency n:if="$order->currency !== $homeCurrency">
-							<typ:unitPrice>{$tax->price|change:$order->currency,$order->currency,2}</typ:unitPrice>
+						<ord:foreignCurrency n:if="!$isHomeCurrency">
+							<typ:unitPrice>{$tax->price|change:$fromCurrency,$toCurrency,2}</typ:unitPrice>
 						</ord:foreignCurrency>
 
 					</ord:orderItem>
@@ -129,11 +133,11 @@
 						<ord:payVAT>false</ord:payVAT>
 						<ord:rateVAT>none</ord:rateVAT>
 						<ord:discountPercentage>0.00</ord:discountPercentage>
-						<ord:homeCurrency n:if="$order->currency === $homeCurrency">
-							<typ:unitPrice>-{$voucher->getDiscountValue($productsTotalWith, $exchange)|change:$order->currency,$order->currency,2}</typ:unitPrice>
+						<ord:homeCurrency n:if="$isHomeCurrency">
+							<typ:unitPrice>-{$voucher->getDiscountValue($productsTotalWith, $exchange)|round:2}</typ:unitPrice>
 						</ord:homeCurrency>
-						<ord:foreignCurrency n:if="$order->currency !== $homeCurrency">
-							<typ:unitPrice>-{$voucher->getDiscountValue($productsTotalWith, $exchange)|change:$order->currency,$order->currency,2}</typ:unitPrice>
+						<ord:foreignCurrency n:if="!$isHomeCurrency">
+							<typ:unitPrice>-{$voucher->getDiscountValue($productsTotalWith, $exchange)|round:2}</typ:unitPrice>
 						</ord:foreignCurrency>
 
 					</ord:orderItem>
@@ -142,8 +146,8 @@
 
 				<ord:orderSummary>
 					<ord:roundingDocument>none</ord:roundingDocument>
-					<ord:foreignCurrency n:if="$order->currency !== $homeCurrency">
-						<typ:currency><typ:ids>{$order->currency}</typ:ids></typ:currency>
+					<ord:foreignCurrency n:if="!$isHomeCurrency">
+						<typ:currency><typ:ids>{$toCurrency}</typ:ids></typ:currency>
 						<typ:rate n:if="$order->rate">{$order->rate}</typ:rate>
 					</ord:foreignCurrency>
 				</ord:orderSummary>

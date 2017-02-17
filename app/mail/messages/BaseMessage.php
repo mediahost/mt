@@ -76,6 +76,7 @@ abstract class BaseMessage extends Message
 		$shopVariant = $this->shopFacade->getShopVariant($this->translator->getLocale());
 		$currency = $this->exchange[$this->exchange->getWeb()];
 		$this->params += [
+			'shopVariant' => $shopVariant,
 			'shopInfo' => $shopVariant->shop,
 			'pageInfo' => $this->settings->pageInfo,
 			'mail' => $this,
