@@ -50,7 +50,7 @@
 								{/ifset}
 							</td>
 							<td class="goods-page-price">
-								<strong>{$stock->getPrice($priceLevel)|currencyVat}</strong>
+								<strong>{$stock->getPrice($priceLevel)|currencyVat:$shopVariant->currency}</strong>
 							</td>
 							<td class="goods-page-vat">
 								<strong>{$stock->vat}</strong>

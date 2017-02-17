@@ -349,13 +349,13 @@ class Basket extends BaseEntity
 		if ($this->shipping) {
 			$shippingPrice = $this->shipping->getPrice($this, $level);
 			$priceValue = $withVat ? $shippingPrice->withVat : $shippingPrice->withoutVat;
-			$exchangedValue = $exchange ? $exchange->change($priceValue, $currency, $currency, Price::PRECISION) : $priceValue;
+			$exchangedValue = $exchange ? $exchange->change($priceValue, $currency, NULL, Price::PRECISION) : $priceValue;
 			$totalPrice += $exchangedValue;
 		}
 		if ($this->payment) {
 			$paymentPrice = $this->payment->getPrice($this, $level);
 			$priceValue = $withVat ? $paymentPrice->withVat : $paymentPrice->withoutVat;
-			$exchangedValue = $exchange ? $exchange->change($priceValue, $currency, $currency, Price::PRECISION) : $priceValue;
+			$exchangedValue = $exchange ? $exchange->change($priceValue, $currency, NULL, Price::PRECISION) : $priceValue;
 			$totalPrice += $exchangedValue;
 		}
 

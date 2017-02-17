@@ -32,7 +32,12 @@ class BasketItem extends BaseEntity
 	{
 		$price = $this->getStock()->getPrice($level);
 		$priceValue = $withVat ? $price->withVat : $price->withoutVat;
-		$exchangedValue = $exchange && $price->convertible ? $exchange->change($priceValue, NULL, NULL, Price::PRECISION) : $priceValue;
+		if ($exchange && $price->convertible) {
+			$fromCurrency = $this->basket->shopVariant->currency;
+			$exchangedValue = $exchange->change($priceValue, $fromCurrency, NULL, Price::PRECISION);
+		} else {
+			$exchangedValue = $priceValue;
+		}
 		return $exchangedValue * $this->quantity;
 	}
 

@@ -99,7 +99,9 @@ class PrintStock extends BaseControl
 		$this->template->id = $this->stock->id . '-' . Random::generate();
 		$this->template->stock = $this->stock;
 		$this->template->basket = $this->basketFacade;
+		$this->template->shopVariant = $this->shopVariant;
 		$this->template->priceLevel = $this->priceLevel;
+		$this->template->currency = $this->exchange->getWeb();
 		$this->template->showLabels = $this->showLabels;
 		$this->template->showSecondImage = $this->showSecondImage;
 		$this->template->mainClasses = implode(' ', $this->mainClasses);

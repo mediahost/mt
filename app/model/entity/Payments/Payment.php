@@ -89,7 +89,6 @@ class Payment extends BaseTranslatable
 	{
 		$price = $basket ? $this->getPriceByBasket($basket, $level) : $this->getBasePrice();
 		$priceEntity = new Price($this->vat, $price, !$this->isPriceInPercent());
-		$priceEntity->convertible = FALSE;
 		return $priceEntity;
 	}
 

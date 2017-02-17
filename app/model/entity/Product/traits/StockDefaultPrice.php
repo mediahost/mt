@@ -64,7 +64,6 @@ trait StockDefaultPrice
 			$priceProperty = self::DEFAULT_PRICE_NAME . $priceBase . $priceVersion;
 		}
 		$price = new Price($this->getVat($priceBase), $this->$priceProperty);
-		$price->convertible = FALSE;
 		return $price;
 	}
 

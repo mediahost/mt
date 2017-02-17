@@ -135,6 +135,7 @@ class GoodsList extends BaseControl
 	public function render()
 	{
 		$this->template->basket = $this->basketFacade;
+		$this->template->shopVariant = $this->shopVariant;
 		$this->template->priceLevel = $this->priceLevel;
 		$this->template->exchange = $this->exchange;
 		$currency = $this->exchange[$this->exchange->getWeb()];
