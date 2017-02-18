@@ -281,10 +281,13 @@ class RouterFactory
 		switch ($this->shopFacade->getDomainName()) {
 			case 'cz':
 				$this->defaultLocale = 'cs';
+				break;
 			case 'sk':
 				$this->defaultLocale = 'sk';
+				break;
 			case 'pl':
 				$this->defaultLocale = 'pl';
+				break;
 		}
 	}
 
