@@ -10,7 +10,7 @@
 		{var image => $product['image']}
 		{var producer => NULL}
 		{*{var producer => $loadedStock->product->producer}*}
-		{var vat => new App\Model\Entity\Vat($stock['vat']['value'])}
+		{var vat => new App\Model\Entity\Vat($stock[$vatName]['value'])}
 		{var price => new App\Model\Entity\Price($vat, $stock[$defaultPriceName])}
 
 		{var heurekaCatIdProduct => $stockItem['p_heurekaCategoryId']}

@@ -175,7 +175,7 @@ class StockFacade extends Object
 			->innerJoin('s.product', 'p')
 			->leftJoin('p.translations', 't')
 			->innerJoin('p.image', 'i')
-			->innerJoin('s.vat', 'v')
+			->innerJoin('s.' . $this->getVatName(), 'v')
 			->andWhere('(t.locale = :locale OR t.locale = :defaultLocale)')
 			->setParameter('locale', $this->translator->getLocale())
 			->setParameter('defaultLocale', $this->translator->getDefaultLocale())
@@ -295,10 +295,16 @@ class StockFacade extends Object
 		return $this;
 	}
 
-	private function getActiveName()
+	public function getActiveName()
 	{
 		$shopLetter = $this->shopFacade->getShopVariant()->shop->priceLetter;
 		return 'active' . $shopLetter;
+	}
+
+	public function getVatName()
+	{
+		$shopLetter = $this->shopFacade->getShopVariant()->shop->priceLetter;
+		return 'vat' . $shopLetter;
 	}
 
 }
