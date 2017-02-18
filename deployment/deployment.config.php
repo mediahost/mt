@@ -37,12 +37,8 @@ return array(
 			www/foto/*
 			!www/foto/original/default.png
 			www/adminer/database-log.sql
-			*.local.neon
-			*.server.neon
-			*.server_dev.neon
-			*.server_test.neon
-			*.server_ver*.neon
-			*.local.example.neon
+			*.local*.neon
+			*.server*.neon
 			/app/config/settings.local*
 			composer.lock
 			composer.json

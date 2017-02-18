@@ -17,10 +17,7 @@
 ## Nette configs
 #################
 *.local.neon
-*.server.neon
-*.server_dev.neon
-*.server_test.neon
-*.server_ver*.neon
+*.server*.neon
 /app/config/settings.local*
 
 #################
