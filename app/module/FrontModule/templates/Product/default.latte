@@ -42,7 +42,7 @@
 					</h1>
 					{if $stock->isActive()}
 						<p class="product-page-price">
-							{$stock->getPrice($priceLevel)|currencyVat}
+							{$stock->getPrice($priceLevel)|currencyVat:$shopVariant->currency}
 						</p>
 						<div class="row">
 							<div class="col-md-6">

@@ -43,6 +43,9 @@ class Shop extends BaseEntity
 	/** @ORM\OneToMany(targetEntity="Vat", mappedBy="shop") */
 	protected $vats;
 
+	/** @ORM\Column(type="string", length=3, nullable=true) */
+	protected $homeCurrency;
+
 	/** @ORM\Column(type="simple_array", nullable=true) */
 	private $deniedLocales;
 

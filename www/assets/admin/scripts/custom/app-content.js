@@ -7,14 +7,33 @@ var AppContent = function () {
 		});
 	};
 
-	var handleCheckboxTarget = function () {
-		$('input[type=checkbox]').on('change', function (e) {
+	var handleOrderShops = function () {
+		$('input[type=checkbox].shopSwitch').on('change', function (e) {
 			var $target = $(e.target);
-			if ($target.is(':checked') && $target.data('targetOn')) {
-				window.location.href = $target.data('targetOn');
-			} else if($target.data('targetOff')) {
-				window.location.href = $target.data('targetOff');
+			var shopId = $target.val();
+			var query = parse_url(window.location, 'query');
+			var path = parse_url(window.location, 'path');
+			var params = {};
+			parse_str(query, params);
+
+			var selectedKey = null;
+			var isSelected = false;
+			var newKey = 0;
+			$.each(params.filteredShops, function (key, value) {
+				if (value == shopId) {
+					isSelected = true;
+					selectedKey = key;
+				}
+				newKey++;
+			});
+
+			if ($target.is(':checked') && !isSelected) {
+				params.filteredShops[newKey] = shopId;
+			} else if (!$target.is(':checked') && isSelected) {
+				delete params.filteredShops[selectedKey];
 			}
+			url = path + '?' + http_build_query(params);
+			window.location.href = url;
 		});
 	};
 
@@ -35,7 +54,7 @@ var AppContent = function () {
 		//main function to initiate the module
 		init: function () {
 			handleLoadingButton();
-			handleCheckboxTarget();
+			handleOrderShops();
 			// handleOffline(3);
 		}
 	};

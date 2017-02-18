@@ -65,7 +65,7 @@
 										<strong>{$item->quantity}x</strong>
 									</td>
 									<td class="goods-page-price">
-										<strong>{$stock->getPrice($priceLevel)|currencyVat}</strong>
+										<strong>{$stock->getPrice($priceLevel)|currencyVat:$shopVariant->currency}</strong>
 									</td>
 									<td class="goods-page-vat">
 										<strong>{$stock->vat}</strong>
@@ -108,13 +108,13 @@
 									<strong>1x</strong>
 								</td>
 								<td class="goods-page-price">
-									<strong>{$basket->getShippingPrice($priceLevel)|currencyVat}</strong>
+									<strong>{$basket->getShippingPrice($priceLevel)|currencyVat:$shopVariant->currency}</strong>
 								</td>
 								<td class="goods-page-vat">
 									<strong>{$basket->shipping->vat}</strong>
 								</td>
 								<td class="goods-page-total">
-									<strong>{$basket->getShippingPrice($priceLevel)|currencyVat}</strong>
+									<strong>{$basket->getShippingPrice($priceLevel)|currencyVat:$shopVariant->currency}</strong>
 								</td>
 							</tr>
 							<tr>
@@ -128,13 +128,13 @@
 									<strong>1x</strong>
 								</td>
 								<td class="goods-page-price">
-									<strong>{$basket->getPaymentPrice($priceLevel)|currencyVat}</strong>
+									<strong>{$basket->getPaymentPrice($priceLevel)|currencyVat:$shopVariant->currency}</strong>
 								</td>
 								<td class="goods-page-vat">
 									<strong>{$basket->payment->vat}</strong>
 								</td>
 								<td class="goods-page-total">
-									<strong>{$basket->getPaymentPrice($priceLevel)|currencyVat}</strong>
+									<strong>{$basket->getPaymentPrice($priceLevel)|currencyVat:$shopVariant->currency}</strong>
 								</td>
 							</tr>
 						</table>

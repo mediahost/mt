@@ -21,11 +21,11 @@ class OrdersGrid extends BaseControl
 	/** @var OrderFacade @inject */
 	public $orderFacade;
 
-	/** @var Shop */
-	private $shop;
+	/** @var Shop[] */
+	private $shops = [];
 
-	/** @var ShopVariant */
-	private $shopVariant;
+	/** @var ShopVariant[] */
+	private $shopVariants = [];
 
 	/** @return Grid */
 	protected function createComponentGrid()
@@ -37,14 +37,25 @@ class OrdersGrid extends BaseControl
 		$repo = $this->em->getRepository(Order::getClassName());
 		$qb = $repo->createQueryBuilder('o')
 			->leftJoin('o.billingAddress', 'a');
-		if ($this->shop) {
-			$qb->andWhere('o.shop = :shop')
-				->setParameter('shop', $this->shop);
+
+		if (count($this->shopVariants)) {
+			if (count($this->shopVariants) === 1) {
+				$qb->andWhere('o.shopVariant = :shopVariant')
+					->setParameter('shopVariant', current($this->shopVariants));
+			} else {
+				$qb->andWhere('o.shopVariant IN (:shopVariants)')
+					->setParameter('shopVariants', $this->shopVariants);
+			}
+		} elseif (count($this->shops)) {
+			if (count($this->shops) === 1) {
+				$qb->andWhere('o.shop = :shop')
+					->setParameter('shop', current($this->shops));
+			} else {
+				$qb->andWhere('o.shop IN (:shops)')
+					->setParameter('shops', $this->shops);
+			}
 		}
-		if ($this->shopVariant) {
-			$qb->andWhere('o.shopVariant = :shopVariant')
-				->setParameter('shopVariant', $this->shopVariant);
-		}
+
 		$grid->setModel(new Doctrine($qb, [
 			'billingAddress' => 'a',
 			'billingAddress.name' => 'a.name',
@@ -121,10 +132,9 @@ class OrdersGrid extends BaseControl
 		$grid->getColumn('note')->cellPrototype->class[] = 'changeOnDblClick';
 
 		$grid->addColumnText('totalPrice', 'Total price')
-			->setCustomRender(function ($item) {
-				$toCurrency = $item->currency;
+			->setCustomRender(function (Order $item) {
 				$totalPrice = $item->getTotalPriceToPay($this->exchange);
-				return $this->exchange->formatTo($totalPrice, $toCurrency);
+				return $this->exchange->format($totalPrice, $item->currency, $item->currency);
 			})
 			->setFilterNumber();
 		$grid->getColumn('totalPrice')->headerPrototype->width = '10%';
@@ -176,15 +186,25 @@ class OrdersGrid extends BaseControl
 		return $grid;
 	}
 
-	public function setShop($shopId = NULL, $variantId = NULL)
+	public function setShop(array $shopIds = [], array $variantIds = [])
 	{
-		if ($variantId) {
-			$shopVariantRepo = $this->em->getRepository(ShopVariant::getClassName());
-			$this->shopVariant = $shopVariantRepo->find($variantId);
-			$this->shop = $this->shopVariant->shop;
-		} else if ($shopId) {
-			$shopRepo = $this->em->getRepository(Shop::getClassName());
-			$this->shop = $shopRepo->find($shopId);
+		if (count($variantIds)) {
+			foreach ($variantIds as $variantId) {
+				$shopVariantRepo = $this->em->getRepository(ShopVariant::getClassName());
+				$variant = $shopVariantRepo->find($variantId);
+				if ($variant) {
+					$this->shopVariants[] = $variant;
+					$this->shops[] = $variant->shop;
+				}
+			}
+		} else if (count($shopIds)) {
+			foreach ($shopIds as $shopId) {
+				$shopRepo = $this->em->getRepository(Shop::getClassName());
+				$shop = $shopRepo->find($shopId);
+				if ($shop) {
+					$this->shops[] = $shop;
+				}
+			}
 		}
 		return $this;
 	}

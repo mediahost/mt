@@ -38,7 +38,7 @@
 				</div>
 				<div class="col-md-6 col-sm-12 col-xs-4 product-caption-price">
 					<span class="product-caption-price-new">
-						{$stock->getPrice($priceLevel)|currencyVat}
+						{$stock->getPrice($priceLevel)|currencyVat:$shopVariant->currency}
 					</span>
 					{*<a n:href="addToCart! $showLabels, $showSecondImage, $mainClasses"*}
 							{*n:class="ajax, btn, $basket->getCountAllowedToAdd($stock) ? btn-primary : btn-default, add2cart, !$basket->getCountAllowedToAdd($stock) ? disabled"*}

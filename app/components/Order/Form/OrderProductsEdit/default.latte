@@ -45,7 +45,7 @@
 								<a href="{plink Products:edit $stock->id}">{$item->name}</a>
 							</td>
 							<td class="text-right">
-								{$item->price|currencyVat}
+								{$item->price|currencyVat:$order->shopVariant->currency,$order->currency}
 							</td>
 							<td class="text-center">
 								{$item->vat}
@@ -59,7 +59,7 @@
 							</td>
 						</tr>
 						<tr n:if="isset($form['quantities'][$stock->id]) && $form['quantities'][$stock->id]->hasErrors()">
-							<td colspan="5" class="alert alert-danger">
+							<td colspan="7" class="alert alert-danger">
 								{foreach $form['quantities'][$stock->id]->getErrors() as $error}
 									<span>{$error}</span><br n:if="!$iterator->last"/>
 								{/foreach}
@@ -82,13 +82,13 @@
 						<td class="hidden-xs" colspan="2"></td>
 						<td>{_'Shipping'} - {_$order->shipping}</td>
 						<td colspan="3">{input shipping}</td>
-						<td class="text-right">{$order->shipping->price|currencyVat}</td>
+						<td class="text-right">{$order->shipping->price|currencyVat:$order->shopVariant->currency,$order->currency}</td>
 					</tr>
 					<tr>
 						<td class="hidden-xs" colspan="2"></td>
 						<td>{_'Payment'} - {_$order->payment}</td>
 						<td colspan="3">{input payment}</td>
-						<td class="text-right">{$order->payment->price|currencyVat}</td>
+						<td class="text-right">{$order->payment->price|currencyVat:$order->shopVariant->currency,$order->currency}</td>
 					</tr>
 				</tbody>
 				<tfoot>

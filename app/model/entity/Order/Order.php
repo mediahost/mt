@@ -347,15 +347,16 @@ class Order extends BaseEntity
 	public function getPaymentsTotalPrice(Exchange $exchange = NULL, $withVat = TRUE)
 	{
 		$totalPrice = 0;
-		$currency = $this->currency;
+		$fromCurrency = $this->shopVariant->currency;
+		$toCurrency = $this->currency;
 		if ($this->shipping && $this->shipping->price) {
 			$priceValue = $withVat ? $this->shipping->price->withVat : $this->shipping->price->withoutVat;
-			$exchangedValue = $exchange ? $exchange->change($priceValue, $currency, $currency, Price::PRECISION) : $priceValue;
+			$exchangedValue = $exchange ? $exchange->change($priceValue, $fromCurrency, $toCurrency, Price::PRECISION) : $priceValue;
 			$totalPrice += $exchangedValue;
 		}
 		if ($this->payment && $this->payment->price) {
 			$priceValue = $withVat ? $this->payment->price->withVat : $this->payment->price->withoutVat;
-			$exchangedValue = $exchange ? $exchange->change($priceValue, $currency, $currency, Price::PRECISION) : $priceValue;
+			$exchangedValue = $exchange ? $exchange->change($priceValue, $fromCurrency, $toCurrency, Price::PRECISION) : $priceValue;
 			$totalPrice += $exchangedValue;
 		}
 

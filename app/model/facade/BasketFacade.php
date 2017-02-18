@@ -54,7 +54,13 @@ class BasketFacade extends Object
 			$this->basket = $this->userStorage->getBasket();
 		}
 		$this->basket->setShopVariant($this->shopFacade->getShopVariant());
-		$this->removeIncorrectVouchers();
+
+		$level = NULL;
+		$identity = $this->userStorage->getIdentity();
+		if ($identity && $identity->group) {
+			$level = $identity->group->level;
+		}
+		$this->removeIncorrectVouchers($level);
 		return $this->basket;
 	}
 
@@ -100,7 +106,7 @@ class BasketFacade extends Object
 		return $quantity;
 	}
 
-	public function addVoucher($code, $level = NULL)
+	public function addVoucher($code, $level = NULL, Exchange $exchange = NULL)
 	{
 		if (empty($code)) {
 			throw new Exception\BasketFacadeException('cart.voucher.invalid');
@@ -111,16 +117,10 @@ class BasketFacade extends Object
 		if (!$voucher) {
 			throw new Exception\BasketFacadeException('cart.voucher.invalid');
 		}
-		if ($voucher->currency && $voucher->currency != $this->exchange->getWeb()->getCode()) {
-			throw new Exception\BasketFacadeException('cart.voucher.invalidCurrency');
-		}
-		if (!$voucher->active) {
-			throw new Exception\BasketFacadeException('cart.voucher.inactive');
-		}
 
 		try {
 			$basket = $this->getBasket();
-			$basket->addVoucher($voucher, $level);
+			$basket->addVoucher($voucher, $level, $exchange);
 			$this->basketRepo->save($basket);
 		} catch (EntityException $ex) {
 			throw new Exception\BasketFacadeException($ex->getMessage());
@@ -136,11 +136,11 @@ class BasketFacade extends Object
 		return $this;
 	}
 
-	private function removeIncorrectVouchers()
+	private function removeIncorrectVouchers($level = NULL)
 	{
 		/** @var Voucher $voucher */
 		foreach ($this->basket->vouchers as $voucher) {
-			if ($voucher->currency && $voucher->currency != $this->exchange->getWeb()->getCode()) {
+			if ($this->basket->checkVoucherConditions($voucher, $level, $this->exchange, FALSE)) {
 				$this->basket->removeVoucher($voucher);
 			}
 		}

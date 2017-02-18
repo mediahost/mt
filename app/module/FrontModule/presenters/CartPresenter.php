@@ -88,10 +88,10 @@ class CartPresenter extends BasePresenter
 
 		if (!$this->basketFacade->isEmpty()) {
 			if ($buyMore > 0) {
-				$this->template->buyMore = $this->exchange->format($buyMore, $currency, $currency);
+				$this->template->buyMore = $this->exchange->format($buyMore, $this->shopVariant->currency, $currency);
 			}
 			if ($buySpecialMore > 0) {
-				$this->template->buySpecialMore = $this->exchange->format($buySpecialMore, $currency, $currency);
+				$this->template->buySpecialMore = $this->exchange->format($buySpecialMore, NULL, $currency);
 				$this->template->specialCategoriesLinks = $specialCategoriesLinks;
 			}
 		}
@@ -158,7 +158,7 @@ class CartPresenter extends BasePresenter
 			$basket = $this->basketFacade->getBasket();
 			$user = $this->user->id ? $this->user->identity : NULL;
 			$order = $this->orderFacade->createFromBasket($basket, $user);
-//			$this->basketFacade->clearBasket();
+			$this->basketFacade->clearBasket();
 
 			$this->getSessionSection()->orderId = $order->id;
 
