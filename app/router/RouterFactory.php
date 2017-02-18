@@ -2,8 +2,10 @@
 
 namespace App\Router;
 
+use App\Extensions\Settings\SettingsStorage;
 use App\Model\Facade\PageFacade;
 use App\Model\Facade\ProducerFacade;
+use App\Model\Facade\ShopFacade;
 use App\Model\Facade\UriFacade;
 use Drahak\Restful\Application\Routes\ResourceRoute;
 use Nette\Application\IRouter;
@@ -15,8 +17,15 @@ class RouterFactory
 {
 
 	const LOCALE_PARAM_NAME = 'locale';
-	const LOCALE_DEFAULT_LANG = 'sk';
-	const LOCALE_PARAM = '[<' . self::LOCALE_PARAM_NAME . '=' . self::LOCALE_DEFAULT_LANG . ' cs|sk|pl|en>/]';
+
+	/** @var string */
+	private $defaultLocale;
+
+	/** @var array */
+	private $allowedLocales = [];
+
+	/** @var ShopFacade @inject */
+	public $shopFacade;
 
 	/** @var PageFacade @inject */
 	public $pageFacade;
@@ -27,6 +36,9 @@ class RouterFactory
 	/** @var ProducerFacade @inject */
 	public $producerFacade;
 
+	/** @var SettingsStorage @inject */
+	public $settings;
+
 	/**
 	 * @return IRouter
 	 */
@@ -35,6 +47,8 @@ class RouterFactory
 		if (!Configurator::detectDebugMode()) {
 			Route::$defaultFlags = Route::SECURED;
 		}
+
+		$this->init();
 
 		$router = new RouteList();
 
@@ -135,7 +149,7 @@ class RouterFactory
 		// </editor-fold>
 		// <editor-fold desc="App">
 
-		$adminRouter[] = new Route(self::LOCALE_PARAM . 'app[/<presenter>[/<action>[/<id>]]]', [
+		$adminRouter[] = new Route($this->getLocaleParam() . 'app[/<presenter>[/<action>[/<id>]]]', [
 			'presenter' => 'Dashboard',
 			'action' => 'default',
 			'id' => NULL,
@@ -208,43 +222,43 @@ class RouterFactory
 
 		$slugs = '[0-9a-z/-]+';
 
-		$frontRouter[] = new FilterRoute(self::LOCALE_PARAM . 'appropriate/<producer>[/<line>[/<model>]]', [
+		$frontRouter[] = new FilterRoute($this->getLocaleParam() . 'appropriate/<producer>[/<line>[/<model>]]', [
 			'presenter' => 'Category',
 			'action' => 'appropriate',
 		]);
-		$frontRouter[] = new Route(self::LOCALE_PARAM . 'search[/<text>]', [
+		$frontRouter[] = new Route($this->getLocaleParam() . 'search[/<text>]', [
 			'presenter' => 'Category',
 			'action' => 'search',
 			'text' => NULL,
 			'c' => NULL,
 		]);
-		$frontRouter[] = new Route(self::LOCALE_PARAM . 'most-searched', [
+		$frontRouter[] = new Route($this->getLocaleParam() . 'most-searched', [
 			'presenter' => 'MostSearched',
 			'action' => 'default',
 		]);
-		$frontRouter[] = new Route(self::LOCALE_PARAM . 'producer[/<producer>[/<line>[/<model>]]]', [
+		$frontRouter[] = new Route($this->getLocaleParam() . 'producer[/<producer>[/<line>[/<model>]]]', [
 			'presenter' => 'Category',
 			'action' => 'producer',
 			'producer' => NULL,
 			'line' => NULL,
 			'model' => NULL,
 		]);
-		$frontRouter[] = new FilterRoute(self::LOCALE_PARAM . 'c/[<slug ' . $slugs . '>/][page-<products-page \d+>/]<c [0-9]+>.htm[l]', [
+		$frontRouter[] = new FilterRoute($this->getLocaleParam() . 'c/[<slug ' . $slugs . '>/][page-<products-page \d+>/]<c [0-9]+>.htm[l]', [
 			'presenter' => 'Category',
 			'action' => 'default',
 			'products-page' => 1,
 		]);
 
-		$frontRouter[] = $routePage = new FilterRoute(self::LOCALE_PARAM . 'p/<id ' . $slugs . '>', [
+		$frontRouter[] = $routePage = new FilterRoute($this->getLocaleParam() . 'p/<id ' . $slugs . '>', [
 			'presenter' => 'Page',
 			'action' => 'default',
 		]);
 
-		$frontRouter[] = $routeProduct = new FilterRoute(self::LOCALE_PARAM . '[<slug [0-9a-z-]+>-]<id [0-9]+>.htm[l]', [
+		$frontRouter[] = $routeProduct = new FilterRoute($this->getLocaleParam() . '[<slug [0-9a-z-]+>-]<id [0-9]+>.htm[l]', [
 			'presenter' => 'Product',
 			'action' => 'default',
 		]);
-		$frontRouter[] = $routeMain = new FilterRoute(self::LOCALE_PARAM . '<presenter>[/<action>[/<id>]]', [
+		$frontRouter[] = $routeMain = new FilterRoute($this->getLocaleParam() . '<presenter>[/<action>[/<id>]]', [
 			'presenter' => 'Homepage',
 			'action' => 'default',
 			'id' => NULL,
@@ -257,6 +271,27 @@ class RouterFactory
 		// </editor-fold>
 
 		return $router;
+	}
+
+	private function init()
+	{
+		$shopSettings = $this->settings->pageConfig->shop;
+		$this->defaultLocale = $shopSettings->defaultLocale;
+		$this->allowedLocales = (array)$shopSettings->allowedLocales;
+		switch ($this->shopFacade->getDomainName()) {
+			case 'cz':
+				$this->defaultLocale = 'cs';
+			case 'sk':
+				$this->defaultLocale = 'sk';
+			case 'pl':
+				$this->defaultLocale = 'pl';
+		}
+	}
+
+	private function getLocaleParam()
+	{
+		$allowedLocales = implode('|', $this->allowedLocales);
+		return '[<' . self::LOCALE_PARAM_NAME . '=' . $this->defaultLocale . ' ' . $allowedLocales . '>/]';
 	}
 
 }

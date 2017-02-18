@@ -25,6 +25,23 @@ class ShopFacade extends Object
 	/** @var Request @inject */
 	public $httpRequest;
 
+	/** @var string */
+	private $websiteName;
+
+	/** @var string */
+	private $domainName;
+
+	private function loadWebInfo()
+	{
+		if (!$this->websiteName || !$this->domainName) {
+			$domain = $this->httpRequest->getUrl()->getHost();
+			if (preg_match('/^(?:www\.)?((\w+)\.(\w{2}))$/', $domain, $matches)) {
+				$this->websiteName = $matches[2];
+				$this->domainName = $matches[3];
+			}
+		}
+	}
+
 	/** @return ShopVariant */
 	public function getShopVariant()
 	{
@@ -32,24 +49,20 @@ class ShopFacade extends Object
 
 		$shopVariant = NULL;
 		$shopVariantId = $this->settings->pageConfig->shop->defaultVariant;
-		$domain = $this->httpRequest->getUrl()->getHost();
-		if (preg_match('/^(?:www\.)?((\w+)\.(\w{2}))$/', $domain, $matches)) {
-			switch ($matches[2]) {
-				case 'mobilnetelefony':
-					break;
-				case 'mobilgen':
-					switch ($matches[3]) {
-						case 'cz':
-							$shopVariantId = 4;
-							break;
-						case 'pl':
-							$shopVariantId = 5;
-							break;
-						case 'sk':
-							break;
-					}
-					break;
-			}
+		$this->loadWebInfo();
+		switch ($this->websiteName) {
+			case 'mobilnetelefony':
+				break;
+			case 'mobilgen':
+				switch ($this->domainName) {
+					case 'cz':
+						$shopVariantId = 4;
+						break;
+					case 'pl':
+						$shopVariantId = 5;
+						break;
+				}
+				break;
 		}
 
 		if (!$shopVariant) {
@@ -72,6 +85,18 @@ class ShopFacade extends Object
 	public function getDefaultPriceName()
 	{
 		return Stock::DEFAULT_PRICE_NAME . $this->getShopVariant()->priceCode;
+	}
+
+	public function getWebsiteName()
+	{
+		$this->loadWebInfo();
+		return $this->websiteName;
+	}
+
+	public function getDomainName()
+	{
+		$this->loadWebInfo();
+		return $this->domainName;
 	}
 
 }
