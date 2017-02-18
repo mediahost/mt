@@ -95,9 +95,6 @@ abstract class BasePresenter extends Presenter
 	/** @var int */
 	protected $priceLevel = NULL;
 
-	/** @var string */
-	protected $localeDomain = NULL;
-
 	// </editor-fold>
 
 	protected function startup()
@@ -113,7 +110,7 @@ abstract class BasePresenter extends Presenter
 		$this->template->setTranslator($this->translator);
 		$this->template->lang = $this->translator->getLocale(); // TODO: remove lang from latte
 		$this->template->locale = $this->translator->getLocale();
-		$this->template->localeDomain = $this->localeDomain;
+		$this->template->localeDomain = $this->shopFacade->getDomainName();
 		$this->template->defaultLocale = $this->translator->getDefaultLocale();
 		$this->template->allowedLanguages = $this->translator->getAvailableLocales();
 
@@ -186,18 +183,14 @@ abstract class BasePresenter extends Presenter
 	private function loadPageInfo()
 	{
 		$projectName = $this->settings->pageInfo->projectName;
-		$url = $this->getHttpRequest()->getUrl()->host;
-		if (preg_match('/^(?:www\.)?(\w+)\.(cz|sk|pl)$/', $url, $matches)) {
-			$this->localeDomain = $matches[2];
-			$extend = '.' . $this->localeDomain;
-			switch ($matches[1]) {
-				case 'mobilnetelefony':
-					$projectName = 'MobilneTelefony' . $extend;
-					break;
-				case 'mobilgen':
-					$projectName = 'Mobilgen' . $extend;
-					break;
-			}
+		$extend = '.' . $this->shopFacade->getDomainName();
+		switch ($this->shopFacade->getWebsiteName()) {
+			case 'mobilnetelefony':
+				$projectName = 'MobilneTelefony' . $extend;
+				break;
+			case 'mobilgen':
+				$projectName = 'Mobilgen' . $extend;
+				break;
 		}
 		$this->settings->pageInfo->projectName = $projectName;
 	}
