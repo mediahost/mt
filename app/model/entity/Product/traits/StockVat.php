@@ -8,9 +8,6 @@ trait StockVat
 {
 
 	/** @ORM\ManyToOne(targetEntity="Vat") */
-	private $vat; // TODO: delete
-
-	/** @ORM\ManyToOne(targetEntity="Vat") */
 	private $vatA;
 
 	/** @ORM\ManyToOne(targetEntity="Vat") */
