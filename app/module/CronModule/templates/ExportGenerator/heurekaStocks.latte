@@ -24,7 +24,7 @@
 		<DESCRIPTION><![CDATA[{$translation['description']}]]></DESCRIPTION>
 		<URL>{link '//:Front:Product:', 'id' => $product['id'], 'slug' => $translation['slug'], 'locale' => $locale}</URL>
 		<IMGURL>{link '//:Foto:Foto:', '400-400', $image['filename']}</IMGURL>
-		<PRICE_VAT>{$price->withVat|changeVat:$shopVariant->currency,NULL,2}</PRICE_VAT>
+		<PRICE_VAT>{$price|changeVat:$shopVariant->currency,NULL,2}</PRICE_VAT>
 		<HEUREKA_CPC n:if="$cpc">{$cpc}</HEUREKA_CPC>
 		<MANUFACTURER n:if="$producer"><![CDATA[{$producer}]]></MANUFACTURER>
 		{if $heurekaCatProduct}
@@ -42,11 +42,11 @@
 		<DELIVERY n:foreach="$shippings as $shipping" n:if="!$hideDelivery && $shipping->isForLocality($locale)">
 			<DELIVERY_ID>{_$shipping}</DELIVERY_ID>
 			{var shippingPrice => $shipping->getPriceByStocks([$loadedStock])}
-			<DELIVERY_PRICE>{$shippingPrice->withVat|changeVat:$shopVariant->currency,NULL,2}</DELIVERY_PRICE>
+			<DELIVERY_PRICE>{$shippingPrice|changeVat:$shopVariant->currency,NULL,2}</DELIVERY_PRICE>
 			<DELIVERY_PRICE_COD n:if="$paymentOnDelivery && $paymentOnDelivery->containShipping($shipping)">
 				{var paymentPrice => $paymentOnDelivery->getPriceByStocks([$loadedStock])}
 				{var codPrice => $shippingPrice->withVat + $paymentPrice->withVat}
-				{$codPrice|changeVat:$shopVariant->currency,NULL,2}
+				{$codPrice|change:$shopVariant->currency,NULL,2}
 			</DELIVERY_PRICE_COD>
 		</DELIVERY>
 
