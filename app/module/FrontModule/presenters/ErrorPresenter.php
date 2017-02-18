@@ -5,11 +5,18 @@ namespace App\FrontModule\Presenters;
 use Nette;
 use Nette\Diagnostics\Debugger;
 
-/**
- * Error presenter.
- */
 class ErrorPresenter extends BasePresenter
 {
+
+	protected function startup()
+	{
+		Nette\Application\UI\Presenter::startup();
+	}
+
+	protected function beforeRender()
+	{
+
+	}
 
 	/**
 	 * @param  Exception
@@ -17,6 +24,7 @@ class ErrorPresenter extends BasePresenter
 	 */
 	public function renderDefault($exception)
 	{
+		$this->setLayout(FALSE);
 		if ($exception instanceof Nette\Application\BadRequestException) {
 			$code = $exception->getCode();
 			// load template 403.latte or 404.latte or ... 4xx.latte
