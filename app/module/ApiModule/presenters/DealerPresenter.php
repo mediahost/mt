@@ -15,6 +15,7 @@ use App\Model\Entity\User;
 use App\Model\Facade\Exception\FacadeException;
 use App\Model\Facade\Exception\InsufficientQuantityException;
 use App\Model\Facade\OrderFacade;
+use App\Model\Facade\ShopFacade;
 use App\Model\Facade\StockFacade;
 use App\Model\Facade\UserFacade;
 use Drahak\Restful\Application\Responses\TextResponse;
@@ -41,6 +42,9 @@ class DealerPresenter extends BasePresenter
 
 	/** @var FilesManager @inject */
 	public $filesManager;
+
+	/** @var ShopFacade @inject */
+	public $shopFacade;
 
 	/** @var User */
 	private $dealer;
@@ -182,6 +186,7 @@ class DealerPresenter extends BasePresenter
 
 			// create order
 			$basket = new Basket();
+			$basket->setShopVariant($this->shopFacade->getShopVariant());
 
 			$stocks = [];
 			$stockIds = $this->request->getPost('stocks', []);
