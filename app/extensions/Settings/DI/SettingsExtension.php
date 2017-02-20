@@ -78,6 +78,7 @@ class SettingsExtension extends CompilerExtension
 				'removeParsedXmlOlderThan' => '7 days',
 				'ordersExportDaysBack' => '7 days',
 				'newProductsExportDaysBack' => '7 days',
+				'editedProductsExportDaysBack' => '1 days',
 				'newCodeLenght' => 8,
 				'newCodeCharlist' => 'a-Z0-9',
 				'vatRates' => [

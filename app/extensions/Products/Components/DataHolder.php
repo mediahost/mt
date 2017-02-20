@@ -446,7 +446,7 @@ class DataHolder extends Object
 			$orx = new Orx();
 			foreach ($vatPricesLow as $vatId => $price) {
 				$andx = new Andx();
-				$andx->add('vat = :vat' . $vatId);
+				$andx->add('vat' . $this->shopVariant->shop->priceLetter . ' = :vat' . $vatId);
 				$andx->add($this->priceLevelName . ' >= :lowPrice' . $vatId);
 				$orx->add($andx);
 				$params['vat' . $vatId] = $vatId;
@@ -460,7 +460,7 @@ class DataHolder extends Object
 			$orx = new Orx();
 			foreach ($vatPricesHigh as $vatId => $price) {
 				$andx = new Andx();
-				$andx->add('vat = :vat' . $vatId);
+				$andx->add('vat' . $this->shopVariant->shop->priceLetter . ' = :vat' . $vatId);
 				$andx->add($this->priceLevelName . ' <= :highPrice' . $vatId);
 				$orx->add($andx);
 				$params['vat' . $vatId] = $vatId;

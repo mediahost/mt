@@ -133,6 +133,7 @@ class ExportGeneratorPresenter extends BasePresenter
 		$this->template->locale = $locale;
 		$this->template->defaultLocale = $this->translator->getDefaultLocale();
 		$this->template->defaultPriceName = $this->shopFacade->getDefaultPriceName();
+		$this->template->vatName = $this->stockFacade->getVatName();
 		$this->template->shopVariant = $this->shopVariant;
 		$this->template->cpc = $this->settings->modules->heureka->cpc;
 		$this->template->deliveryStoreTime = $this->settings->modules->heureka->deliveryStoreTime;
@@ -179,6 +180,7 @@ class ExportGeneratorPresenter extends BasePresenter
 		$this->template->locale = $this->translator->getLocale();
 		$this->template->defaultLocale = $this->translator->getDefaultLocale();
 		$this->template->defaultPriceName = $this->shopFacade->getDefaultPriceName();
+		$this->template->vatName = $this->stockFacade->getVatName();
 		$this->template->shopVariant = $this->shopVariant;
 		$this->template->deliveryStoreTime = $this->settings->modules->zbozi->deliveryStoreTime;
 		$this->template->deliveryNotInStoreTime = $this->settings->modules->zbozi->deliveryNotInStoreTime;

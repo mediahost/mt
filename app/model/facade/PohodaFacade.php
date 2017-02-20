@@ -92,7 +92,6 @@ class PohodaFacade extends Object
 
 				$stock = $stockRepo->findOneBy([
 					'pohodaCode' => $pohodaProduct->code,
-					'active' => TRUE,
 					'deletedAt' => NULL,
 				]);
 				$change = FALSE;
