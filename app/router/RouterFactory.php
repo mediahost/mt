@@ -22,7 +22,7 @@ class RouterFactory
 	private $defaultLocale;
 
 	/** @var array */
-	private $allowedLocales = [];
+	private $allowedLocales = ['sk', 'cs', 'pl', 'en'];
 
 	/** @var ShopFacade @inject */
 	public $shopFacade;
@@ -33,11 +33,8 @@ class RouterFactory
 	/** @var UriFacade @inject */
 	public $uriFacade;
 
-	/** @var ProducerFacade @inject */
-	public $producerFacade;
-
-	/** @var SettingsStorage @inject */
-	public $settings;
+//	/** @var SettingsStorage @inject */
+//	public $settings;
 
 	/**
 	 * @return IRouter
@@ -275,15 +272,15 @@ class RouterFactory
 
 	private function init()
 	{
-		$shopSettings = $this->settings->pageConfig->shop;
-		$this->defaultLocale = $shopSettings->defaultLocale;
-		$this->allowedLocales = (array)$shopSettings->allowedLocales;
+//		$shopSettings = $this->settings->pageConfig->shop;
+//		$this->defaultLocale = $shopSettings->defaultLocale;
 		switch ($this->shopFacade->getDomainName()) {
-			case 'cz':
-				$this->defaultLocale = 'cs';
-				break;
+			default:
 			case 'sk':
 				$this->defaultLocale = 'sk';
+				break;
+			case 'cz':
+				$this->defaultLocale = 'cs';
 				break;
 			case 'pl':
 				$this->defaultLocale = 'pl';

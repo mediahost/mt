@@ -19,9 +19,6 @@ class ShopFacade extends Object
 	/** @var EntityManager @inject */
 	public $em;
 
-	/** @var SettingsStorage @inject */
-	public $settings;
-
 	/** @var Request @inject */
 	public $httpRequest;
 
@@ -48,13 +45,17 @@ class ShopFacade extends Object
 		$shopVariantRepo = $this->em->getRepository(ShopVariant::getClassName());
 
 		$shopVariant = NULL;
-		$shopVariantId = $this->settings->pageConfig->shop->defaultVariant;
 		$this->loadWebInfo();
 		switch ($this->websiteName) {
+			default:
 			case 'mobilnetelefony':
+				$shopVariantId = 1;
 				break;
 			case 'mobilgen':
 				switch ($this->domainName) {
+					default:
+						$shopVariantId = 3;
+						break;
 					case 'cz':
 						$shopVariantId = 4;
 						break;

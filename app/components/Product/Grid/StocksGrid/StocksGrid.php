@@ -124,6 +124,7 @@ class StocksGrid extends BaseControl
 
 		/***************************************************/
 		$grid->addColumnNumber(Stock::DEFAULT_PRICE_NAME, 'Price')
+			->setColumn($this->shopFacade->getDefaultPriceName())
 			->setCustomRender(function ($row) {
 				$link = Html::el('a', [
 					'data-toggle' => 'modal',

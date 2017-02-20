@@ -111,6 +111,7 @@ class Payment extends BaseTranslatable
 	public function getPriceByStocks(array $stocks, array $quantities = [])
 	{
 		$basket = new Basket();
+		$basket->shopVariant = $this->shopVariant;
 		foreach ($stocks as $stock) {
 			if ($stock instanceof Stock) {
 				$quantity = array_key_exists($stock->id, $quantities) ? $quantities[$stock->id] : 1;
