@@ -46,11 +46,12 @@ class PohodaConnectorPresenter extends BasePresenter
 
 			$lastConvert = $this->pohodaFacade->getLastSync(PohodaFacade::ANY_IMPORT, PohodaFacade::LAST_CONVERT);
 
+			$editedProductsTime = new DateTime('-' . $this->settings->modules->pohoda->editedProductsExportDaysBack);
 			$list = $this->iProductListFactory->create();
 			$list->setTranslator($this->translator);
 			$list->setExchange($this->exchange, $this->exchange->getDefault());
 			$list->setShopVariant($this->shopFacade->getShopVariant());
-			$list->addFilterUpdatedFrom($lastConvert);
+			$list->addFilterUpdatedFrom($editedProductsTime);
 
 			$newProductsTime = new DateTime('-' . $this->settings->modules->pohoda->newProductsExportDaysBack);
 			$insertList = $this->iProductListFactory->create();

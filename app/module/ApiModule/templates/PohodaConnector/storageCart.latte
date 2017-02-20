@@ -82,7 +82,9 @@
 		</stk:actionType>
 		<stk:stockHeader>
 			<stk:sellingPrice>{$stock->price}</stk:sellingPrice>
+			<stk:sellingRateVAT>{include vat, item => $stock}</stk:sellingRateVAT>
 			<stk:purchasingPrice n:if="$stock->purchasePrice">{$stock->purchasePrice}</stk:purchasingPrice>
+			<stk:purchasingRateVAT n:if="$stock->purchasePrice">{include vat, item => $stock}</stk:purchasingRateVAT>
 			<stk:name><![CDATA[{$stock->product->name}]]></stk:name>
 		</stk:stockHeader>
 	</stk:stock>
