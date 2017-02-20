@@ -180,11 +180,6 @@ class SettingsExtension extends CompilerExtension
 				'id' => 1,
 				'defaultVariant' => 1,
 				'defaultLocale' => 'sk',
-				'allowedLocales' => [
-					'sk',
-					'cs',
-					'en',
-				],
 			],
 			'smtpMailers' => [],
 		],
