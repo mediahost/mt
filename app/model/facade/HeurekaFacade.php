@@ -2,6 +2,7 @@
 
 namespace App\Model\Facade;
 
+use App\Helpers;
 use App\Model\Entity\Heureka\Category;
 use App\Model\Repository\HeurekaCategoryRepository;
 use Doctrine\ORM\Query;
@@ -42,11 +43,22 @@ class HeurekaFacade extends Object
 						break;
 					}
 					if ($reader->nodeType === XMLReader::ELEMENT && $reader->name === 'CATEGORY') {
+						switch ($locale) {
+							case 'cs':
+								$names = [0 => 'Heureka.cz'];
+								break;
+							case 'sk':
+								$names = [0 => 'Heureka.sk'];
+								break;
+							default:
+								$names = [];
+								break;
+						}
 						while ($reader->read()) {
 							if ($reader->nodeType === XMLReader::ELEMENT && $reader->name === 'CATEGORY_ID') {
 								$id = $reader->readString();
 								$save = in_array($id, $allowedCategories);
-								$this->readCategory($reader, $locale, $save);
+								$this->readCategory($reader, $locale, $save, $names);
 							}
 						}
 					}
@@ -57,14 +69,14 @@ class HeurekaFacade extends Object
 		$this->categoryRepo->clearResultCache(HeurekaCategoryRepository::ALL_CATEGORIES_CACHE_ID . $locale);
 	}
 
-	private function readCategory(XMLReader &$reader, $locale, $save = TRUE)
+	private function readCategory(XMLReader &$reader, $locale, $save = TRUE, array &$names = [], $deep = 1)
 	{
 		while ($reader->read()) {
 			if ($reader->nodeType === XMLReader::END_ELEMENT && $reader->name === 'CATEGORY') {
 				break;
 			}
 			if ($reader->nodeType === XMLReader::ELEMENT && $reader->name === 'CATEGORY') {
-				$this->readCategory($reader, $locale, $save);
+				$this->readCategory($reader, $locale, $save, $names, $deep + 1);
 			}
 
 			if ($reader->nodeType === XMLReader::ELEMENT && $reader->name === 'CATEGORY_ID') {
@@ -72,13 +84,21 @@ class HeurekaFacade extends Object
 			}
 			if ($reader->nodeType === XMLReader::ELEMENT && $reader->name === 'CATEGORY_NAME') {
 				$name = $reader->readString();
+				if ($save) {
+					$names[$deep] = $name;
+				}
 			}
 			if ($reader->nodeType === XMLReader::ELEMENT && $reader->name === 'CATEGORY_FULLNAME') {
 				$fullname = $reader->readString();
 			}
 		}
 
-		if ($save && isset($id) && !empty($name) && !empty($fullname)) {
+		if ($save && isset($id) && !empty($name)) {
+			if (empty($fullname)) {
+				$fullname = Helpers::concatStrings(' | ', $names);
+			}
+			unset($names[$deep]);
+
 			$category = $this->categoryRepo->find($id);
 			if (!$category) {
 				$category = new Category($locale, $id);
