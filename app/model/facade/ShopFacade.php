@@ -32,7 +32,7 @@ class ShopFacade extends Object
 	{
 		if (!$this->websiteName || !$this->domainName) {
 			$domain = $this->httpRequest->getUrl()->getHost();
-			if (preg_match('/^(?:www\.)?((\w+)\.(\w{2}))$/', $domain, $matches)) {
+			if (preg_match('/^(?:w+\.)?((\w+)\.(\w{2}))$/', $domain, $matches)) {
 				$this->websiteName = $matches[2];
 				$this->domainName = $matches[3];
 			}

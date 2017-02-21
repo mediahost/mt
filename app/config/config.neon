@@ -31,14 +31,14 @@ php:
 nette:
 	application:
 		errorPresenter: 'Front:Error'
-		catchExceptions: FALSE
+		catchExceptions: on
 		mapping:
 			*: App\*Module\Presenters\*Presenter
 
 	session:
-		autoStart: true
+		autoStart: on
 		expiration: 14 days
-		debugger: true
+		debugger: on
 
 	debugger:
 		email: 'pupe.dupe@gmail.com,kapicak@kapicak.com'
