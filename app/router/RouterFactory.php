@@ -33,8 +33,8 @@ class RouterFactory
 	/** @var UriFacade @inject */
 	public $uriFacade;
 
-//	/** @var SettingsStorage @inject */
-//	public $settings;
+	/** @var SettingsStorage @inject */
+	public $settings;
 
 	/**
 	 * @return IRouter
@@ -272,8 +272,8 @@ class RouterFactory
 
 	private function init()
 	{
-//		$shopSettings = $this->settings->pageConfig->shop;
-//		$this->defaultLocale = $shopSettings->defaultLocale;
+		$shopSettings = $this->settings->pageConfig->shop;
+		$this->defaultLocale = $shopSettings->defaultLocale;
 		switch ($this->shopFacade->getDomainName()) {
 			default:
 			case 'sk':
