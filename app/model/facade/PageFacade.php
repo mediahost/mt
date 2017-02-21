@@ -100,7 +100,7 @@ class PageFacade extends Object
 	/** @return Cache */
 	public function getCache()
 	{
-		$cache = new Cache($this->cacheStorage, get_class($this));
+		$cache = new Cache($this->cacheStorage, preg_replace('/\\\/', '.', get_class($this)));
 		return $cache;
 	}
 

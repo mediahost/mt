@@ -216,37 +216,60 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	protected function loadTemplateMenu()
 	{
+		$cache = new Cache($this->cacheStorage, 'FrontModule.loadTemplateMenu');
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
 		$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
 		$pageRepo = $this->em->getRepository(Page::getClassName());
 		$settings = $this->settings;
-		$this->template->menuPages = ArrayHash::from([
+
+		$menuPages = ArrayHash::from([
 			'page1' => $this->link('Homepage:'),
 			'page2' => $pageRepo->find($settings->pageConfig->pageIds->orderByPhonePageId),
 			'page3' => $pageRepo->find($settings->pageConfig->pageIds->termPageId),
 			'page4' => $pageRepo->find($settings->pageConfig->pageIds->complaintPageId),
 			'page5' => $pageRepo->find($settings->pageConfig->pageIds->contactPageId),
 		]);
-		$this->template->footerPages = ArrayHash::from([]);
-		$this->template->mostSearchedStocks = [
-			$stockRepo->find(4291),
-			$stockRepo->find(132626),
-			$stockRepo->find(131213),
-			$stockRepo->find(131680),
-			$stockRepo->find(132622),
-			$stockRepo->find(132249),
-			$stockRepo->find(131219),
-		];
-		$this->template->mostSearchedModels = [
-			$modelRepo->find(1),
-			$modelRepo->find(2),
-			$modelRepo->find(3),
-			$modelRepo->find(4),
-			$modelRepo->find(5),
-			$modelRepo->find(6),
-			$modelRepo->find(7),
-			$modelRepo->find(8),
-		];
+		$footerPages = ArrayHash::from([]);
+
+		$keyMostSearchedStocks = $this->locale . '_mostSearchedStocks';
+		$mostSearchedStocks = $cache->load($keyMostSearchedStocks);
+		if (!$mostSearchedStocks) {
+			$mostSearchedStocks = [
+				$stockRepo->find(4291),
+				$stockRepo->find(132626),
+				$stockRepo->find(131213),
+				$stockRepo->find(131680),
+				$stockRepo->find(132622),
+				$stockRepo->find(132249),
+				$stockRepo->find(131219),
+			];
+			$cache->save($keyMostSearchedStocks, $mostSearchedStocks, [
+				Cache::EXPIRE => '2 hours',
+			]);
+		}
+
+		$keyMostSearchedModels = $this->locale . '_mostSearchedModels';
+		$mostSearchedModels = $cache->load($keyMostSearchedModels);
+		if (!$mostSearchedModels) {
+			$mostSearchedModels = [
+				$modelRepo->find(1),
+				$modelRepo->find(2),
+				$modelRepo->find(3),
+				$modelRepo->find(4),
+				$modelRepo->find(5),
+				$modelRepo->find(6),
+				$modelRepo->find(7),
+				$modelRepo->find(8),
+			];
+			$cache->save($keyMostSearchedModels, $mostSearchedModels, [
+				Cache::EXPIRE => '2 hours',
+			]);
+		}
+
+		$this->template->menuPages = $menuPages;
+		$this->template->footerPages = $footerPages;
+		$this->template->mostSearchedStocks = $mostSearchedStocks;
+		$this->template->mostSearchedModels = $mostSearchedModels;
 	}
 
 	protected function loadTemplateSigns()
