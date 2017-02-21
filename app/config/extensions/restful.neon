@@ -1,3 +1,6 @@
+extensions:
+	restful: Drahak\Restful\DI\RestfulExtension
+
 restful:
 	convention: 'snake_case'
 	cacheDir: '%tempDir%/cache'
