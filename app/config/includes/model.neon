@@ -1,6 +1,4 @@
 services:
-	doctrine: Kdyby\Doctrine\DI\OrmExtension
-	annotations: Kdyby\Annotations\DI\AnnotationsExtension
 	userCalllable: App\Model\Entity\UserCallable
 
 	# Facades

@@ -50,7 +50,10 @@ services:
 	urlScript:
 		factory: @httpRequest::getUrl()
 
-	nette.templateFactory: App\Templating\TemplateFactory
+	nette.templateFactory:
+		class: App\Templating\TemplateFactory
+		setup:
+			- $exchange(@App\ExchangeHelper)
 
 	- App\Extensions\PaymentNotification\CSOBResolver
 	- App\Extensions\PaymentNotification\VUBResolver
@@ -60,15 +63,10 @@ services:
 			- $resolvers([@App\Extensions\PaymentNotification\CSOBResolver, @App\Extensions\PaymentNotification\VUBResolver])
 
 extensions:
-	onControlCreate: App\Extensions\ListenersGenericRegistration\DI\EventOnControlCreateCreateExtension
-	events: Kdyby\Events\DI\EventsExtension
 	installer: App\Extensions\Installer\DI\InstallerExtension
 	settings: App\Extensions\Settings\DI\SettingsExtension
 	foto: App\Extensions\Foto\DI\FotoExtension
 	userStorage: App\Extensions\UserStorage\DI\UserStorageExtension
-	replicator: Kdyby\Replicator\DI\ReplicatorExtension
-	restful: Drahak\Restful\DI\RestfulExtension
-	nextrasForms: Nextras\Forms\DI\FormsExtension
 	filesManager: App\Extensions\FilesManager\DI\FilesManagerExtension
 	todoQueue: App\Extensions\FilesManager\DI\TodoQueueExtension
 	gpwebpay: Pixidos\GPWebPay\DI\GPWebPayExtension
