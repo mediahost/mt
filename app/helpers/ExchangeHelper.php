@@ -10,12 +10,7 @@ class ExchangeHelper
 {
 
 	/** @var Exchange @inject */
-	private $exchange;
-
-	public function __construct(Exchange $exchange)
-	{
-		$this->exchange = $exchange;
-	}
+	public $exchange;
 
 	public function getExchange()
 	{
