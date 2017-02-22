@@ -38,10 +38,16 @@
 
 <div class="global-wrapper clearfix" id="global-wrapper">
 
+	{? \Tracy\Debugger::timer('layout TOPBAR')}
 	{include 'topbar.latte'}
+	{? \Tracy\Debugger::barDump(\Tracy\Debugger::timer('layout TOPBAR'), 'layout TOPBAR')}
+
+	{? \Tracy\Debugger::barDump(NULL, 'layout HEADER (START)')}
+	{? \Tracy\Debugger::timer('layout HEADER')}
 	{snippetArea header}
 		{include 'header.latte'}
 	{/snippetArea}
+	{? \Tracy\Debugger::barDump(\Tracy\Debugger::timer('layout HEADER'), 'layout HEADER (END)')}
 
 	<!-- BEGIN FLASH MESSAGES-->
 	<div class="container" n:snippet="flashMessages">
@@ -52,6 +58,8 @@
 	</div>
 	<!-- END FLASH MESSAGES-->
 
+	{? \Tracy\Debugger::barDump(NULL, 'layout CONTENT (START)')}
+	{? \Tracy\Debugger::timer('layout CONTENT')}
 	<div class="container" id="mainContainer">
 		<div class="side-banner-left">
 			<a n:href="Service:">
@@ -79,8 +87,12 @@
 
 	</div>
 	<div class="gap gap-small"></div>
+	{? \Tracy\Debugger::barDump(\Tracy\Debugger::timer('layout CONTENT'), 'layout CONTENT (END)')}
 
+	{? \Tracy\Debugger::timer('layout FOOTER')}
 	{include 'footer.latte'}
+	{? \Tracy\Debugger::barDump(\Tracy\Debugger::timer('layout FOOTER'), 'layout FOOTER')}
+
 </div>
 
 {block scripts}

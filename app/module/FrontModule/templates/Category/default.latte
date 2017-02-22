@@ -50,20 +50,27 @@
 
 	<!-- BEGIN SIDEBAR -->
 	<div class="sidebar col-md-3 col-sm-5">
+		{? \Tracy\Debugger::timer('Categories')}
 		{include categories}
+		{? \Tracy\Debugger::barDump(\Tracy\Debugger::timer('Categories'), 'Categories')}
+
+		{? \Tracy\Debugger::timer('Filter')}
 		{if $showFilter}
 			{control products:filter}
 		{/if}
+		{? \Tracy\Debugger::barDump(\Tracy\Debugger::timer('Filter'), 'Filter')}
 	</div>
 	<!-- END SIDEBAR -->
 
 	<!-- BEGIN CONTENT -->
 	<div class="col-md-9 col-sm-7">
 
+		{? \Tracy\Debugger::timer('Accessories')}
 		<div class="accessories-filter clearfix" n:if="$showAccessoriesFilter">
 			<h4>{_'Select type of your phone'}</h4>
 			{control products:accessories}
 		</div>
+		{? \Tracy\Debugger::barDump(\Tracy\Debugger::timer('Accessories'), 'Accessories')}
 
 		{*<div class="row products producers-list" data-gutter="15"*}
 				{*n:if="isset($subcategories) && count($subcategories) && $_control->getComponent('products')->getCount() > 0">*}
@@ -87,11 +94,16 @@
 			{*{/cache}*}
 		{*</div>*}
 
+		{? \Tracy\Debugger::barDump(NULL, 'ProductList (START)')}
+		{? \Tracy\Debugger::timer('ProductList')}
 		{control products:list}
+		{? \Tracy\Debugger::barDump(\Tracy\Debugger::timer('ProductList'), 'ProductList (END)')}
 
+		{? \Tracy\Debugger::timer('Paginator')}
 		<!-- BEGIN PAGINATOR -->
 		{control products:paginator}
 		<!-- END PAGINATOR -->
+		{? \Tracy\Debugger::barDump(\Tracy\Debugger::timer('Paginator'), 'Paginator')}
 
 	</div>
 	<!-- END CONTENT -->

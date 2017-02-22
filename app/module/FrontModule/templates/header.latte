@@ -29,10 +29,17 @@
 	<nav class="navbar-inverse navbar-main yamm">
 		<div class="container">
 			<div class="collapse navbar-collapse navbar-collapse-no-pad" id="main-nav-collapse">
+
+				{? \Tracy\Debugger::timer('layout HEADER menu')}
 				{include 'menu.latte'}
+				{? \Tracy\Debugger::barDump(\Tracy\Debugger::timer('layout HEADER menu'), 'layout HEADER menu')}
+
+				{? \Tracy\Debugger::timer('layout HEADER basket')}
 				<div n:snippet="basket">
 					{include 'basket.latte'}
 				</div>
+				{? \Tracy\Debugger::barDump(\Tracy\Debugger::timer('layout HEADER basket'), 'layout HEADER basket')}
+
 				<a href="#basket-dialog" id="basket-dialog-caller" class="popup-text hidden" data-effect="mfp-move-from-top"></a>
 			</div>
 		</div>

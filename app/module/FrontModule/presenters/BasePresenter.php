@@ -31,6 +31,7 @@ use Nette\Bridges\ApplicationLatte\Template;
 use Nette\Bridges\ApplicationLatte\UIMacros;
 use Nette\Caching\Cache;
 use Nette\Utils\ArrayHash;
+use Tracy\Debugger;
 
 abstract class BasePresenter extends BaseBasePresenter
 {
@@ -94,16 +95,25 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	protected function startup()
 	{
+		Debugger::barDump(microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"], 'init time');
+		$timeName = 'base startup';
+		Debugger::timer($timeName);
+
 		parent::startup();
 		$this->stockRepo = $this->em->getRepository(Stock::getClassName());
 		$this->productRepo = $this->em->getRepository(Product::getClassName());
 		$this->categoryRepo = $this->em->getRepository(Category::getClassName());
 		$this->currentBacklink = $this->storeRequest();
 		$this->createCategoryTemplate();
+
+		Debugger::barDump(Debugger::timer($timeName), $timeName . ' time');
 	}
 
 	protected function beforeRender()
 	{
+		$timeName = 'base beforeRender';
+		Debugger::timer($timeName);
+
 		parent::beforeRender();
 		$this->template->backlink = $this->currentBacklink;
 		$this->template->showSlider = $this->showSlider;
@@ -122,6 +132,8 @@ abstract class BasePresenter extends BaseBasePresenter
 		$this->loadTemplateMenu();
 		$this->loadTemplateProducers();
 		$this->loadTemplateApplets();
+
+		Debugger::barDump(Debugger::timer($timeName), $timeName . ' time');
 	}
 
 	public function createCategoryTemplate()

@@ -20,6 +20,7 @@ use App\Model\Facade\VisitFacade;
 use Nette\Application\BadRequestException;
 use Nette\Caching\IStorage;
 use Nette\Utils\Strings;
+use Tracy\Debugger;
 
 class ProductPresenter extends ProductCategoryBasePresenter
 {
@@ -47,6 +48,9 @@ class ProductPresenter extends ProductCategoryBasePresenter
 
 	public function actionDefault($id, $slug = NULL, $searched = NULL)
 	{
+		$timeName = 'actionDefault';
+		Debugger::timer($timeName);
+
 		if ($searched) {
 			$searchedRepo = $this->em->getRepository(Searched::getClassName());
 			$searchedEntity = new Searched();
@@ -109,16 +113,23 @@ class ProductPresenter extends ProductCategoryBasePresenter
 
 		// Last visited
 		$this->user->storage->addVisit($this->stock);
+
+		Debugger::barDump(Debugger::timer($timeName), $timeName . ' time');
 	}
 
 	public function renderDefault()
 	{
+		$timeName = 'renderDefault';
+		Debugger::timer($timeName);
+
 		$name = $this->template->product->seo->name ? $this->template->product->seo->name : $this->template->product;
 		$keywords = $this->template->product->seo->keywords ? $this->template->product->seo->keywords : $this->template->product;
 		$description = $this->template->product->seo->description ? $this->template->product->seo->description : $this->template->product;
 		$this->changePageInfo(self::PAGE_INFO_TITLE, $name);
 		$this->changePageInfo(self::PAGE_INFO_KEYWORDS, $keywords);
 		$this->changePageInfo(self::PAGE_INFO_DESCRIPTION, $description);
+
+		Debugger::barDump(Debugger::timer($timeName), $timeName . ' time');
 	}
 
 	public function actionSearchJson($text, $getProductId = TRUE, $page = 1, $perPage = 10)

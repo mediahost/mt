@@ -1,4 +1,5 @@
 {snippet stockPrint}
+	{? \Tracy\Debugger::timer('product' . $stock->id)}
 	<div class="{$mainClasses}" id="{$id}">
 		{var blockId => 'stockPrint' . $stock->id}
 		{var product => $stock->product}
@@ -49,4 +50,5 @@
 
 		</div>
 	</div>
+	{? \Tracy\Debugger::barDump(\Tracy\Debugger::timer('product' . $stock->id), 'Product ' . $stock->id)}
 {/snippet}

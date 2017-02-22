@@ -10,6 +10,7 @@ use App\Model\Entity\ProducerModel;
 use App\Model\Entity\Searched;
 use App\Model\Entity\Stock;
 use Nette\Utils\Strings;
+use Tracy\Debugger;
 
 class CategoryPresenter extends ProductCategoryBasePresenter
 {
@@ -28,6 +29,9 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 
 	public function actionDefault($c, $slug = NULL)
 	{
+		$timeName = 'actionDefault';
+		Debugger::timer($timeName);
+
 		if ($c) {
 			$this->category = $this->categoryRepo->find($c);
 		}
@@ -47,10 +51,15 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 
 		$this->setActiveCategory($this->category);
 		$this->subcategories = $this->category->children;
+
+		Debugger::barDump(Debugger::timer($timeName), $timeName . ' time');
 	}
 
 	public function renderDefault()
 	{
+		$timeName = 'renderDefault';
+		Debugger::timer($timeName);
+
 		$title = NULL;
 		$keywords = $description = [];
 		if ($this->category) {
@@ -70,6 +79,8 @@ class CategoryPresenter extends ProductCategoryBasePresenter
 		$this->changePageInfo(self::PAGE_INFO_TITLE, $title);
 		$this->changePageInfo(self::PAGE_INFO_KEYWORDS, $keywords);
 		$this->changePageInfo(self::PAGE_INFO_DESCRIPTION, $description);
+
+		Debugger::barDump(Debugger::timer($timeName), $timeName . ' time');
 	}
 
 	public function actionSearch($text)

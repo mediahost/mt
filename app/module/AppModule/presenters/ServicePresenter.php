@@ -10,11 +10,16 @@ use App\Model\Entity\Order;
 use App\Model\Entity\Product;
 use App\Model\Entity\ShopVariant;
 use App\Model\Entity\Stock;
+use App\Model\Entity\Vat;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Tools\SchemaTool;
 use Kdyby\Doctrine\Connection;
+use Nette\Utils\DateTime;
 use Nette\Utils\FileSystem;
+use Tracy\Debugger;
 
 class ServicePresenter extends BasePresenter
 {
@@ -36,6 +41,17 @@ class ServicePresenter extends BasePresenter
 
 	/** @var Foto @inject */
 	public $foto;
+
+	/**
+	 * @secured
+	 * @resource('service')
+	 * @privilege('default')
+	 */
+	public function actionFixPrices()
+	{
+		$this->fixPrices();
+		exit;
+	}
 
 	/**
 	 * @secured
@@ -393,6 +409,107 @@ class ServicePresenter extends BasePresenter
 			$stockRepo->save($stock);
 		}
 		return $this;
+	}
+
+	private function fixPrices()
+	{
+		$repaired = 0;
+		$stockRepo = $this->em->getRepository(Stock::getClassName());
+
+		$criteria = [
+			'active' => TRUE,
+			'activeA' => TRUE,
+			'updatedAt >= ' => new DateTime('now - 15 day'),
+		];
+		$orderBy = [
+			'updatedAt' => 'ASC',
+		];
+		$stocks = $stockRepo->findBy($criteria, $orderBy, 9500, 0);
+		Debugger::barDump(count($stocks));
+
+		foreach ($stocks as $stock) {
+			$wrongPrice = FALSE;
+
+			$backupPrice = $this->findPrice($stock->id);
+			if (!$backupPrice) {
+				continue;
+			} else {
+				$backupPrice = (float)$backupPrice;
+			}
+			$stockPrice = $stock->getPrice()->withoutVat;
+
+			$stockPriceEurOrig = $stockPrice / 27;
+			$stockPriceEur = round($stockPriceEurOrig, 2);
+			if ($stockPriceEur == $backupPrice) {
+				$wrongPrice = TRUE;
+			} else {
+				$stockPriceEurPercent = $stockPriceEurOrig / 100;
+				$tolerantPercents = 5;
+				$tolerantValue = $tolerantPercents * $stockPriceEurPercent;
+				$tolerantMinus = $stockPriceEurOrig - $tolerantValue;
+				$tolerantPlus = $stockPriceEurOrig + $tolerantValue;
+				if ($tolerantMinus <= $backupPrice && $backupPrice <= $tolerantPlus) {
+					$wrongPrice = TRUE;
+				}
+			}
+
+			$stockPricePercent = $stockPrice / 100;
+			$diff = abs($stockPrice - $backupPrice);
+			$percentageDiff = $diff / $stockPricePercent;
+			if ($percentageDiff > 80) {
+				$wrongPrice = TRUE;
+			}
+
+			if ($wrongPrice) {
+				Debugger::barDump($stock->id);
+				$logMess = 'ID: ' . $stock->id . '; '
+					. 'Actual: ' . $stockPrice . '; '
+					. 'Changed To: ' . $backupPrice;
+				Debugger::barDump($logMess);
+				exit;
+				Debugger::log($logMess, 'price-revision');
+
+				$stock->defaultPrice = $backupPrice;
+
+				$stockRepo->save($stock);
+
+				$repaired++;
+			}
+			if ($repaired > 0) {
+				break;
+			}
+		}
+		Debugger::barDump($repaired, 'repaired COUNT');
+	}
+
+	private function findPrice($id)
+	{
+		$stockRepo = $this->em->getRepository(Stock::getClassName());
+		$rsm = new ResultSetMapping();
+		$rsm->addScalarResult('default_price_a1', 'price');
+		$sql = 'SELECT default_price_a1 FROM stock_20170220 WHERE id = ' . $id;
+		$query = $stockRepo->createNativeQuery($sql, $rsm);
+
+		$result = $query->getOneOrNullResult();
+		if ($result) {
+			return current($result);
+		}
+		return NULL;
+	}
+
+	private function findVatId($id)
+	{
+		$stockRepo = $this->em->getRepository(Stock::getClassName());
+		$rsm = new ResultSetMapping();
+		$rsm->addScalarResult('vat_a_id', 'vat');
+		$sql = 'SELECT vat_a_id FROM stock_20170220 WHERE id = ' . $id;
+		$query = $stockRepo->createNativeQuery($sql, $rsm);
+
+		$result = $query->getOneOrNullResult();
+		if ($result) {
+			return current($result);
+		}
+		return NULL;
 	}
 
 }
