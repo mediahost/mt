@@ -26,6 +26,7 @@ return array(
 			/deployment
 			/doc
 			/files
+			/backup
 			log/*
 			!log/.htaccess
 			temp/*
