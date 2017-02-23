@@ -3,7 +3,6 @@
 namespace App\BaseModule\Presenters;
 
 use App\Extensions\Settings\SettingsStorage;
-use App\Model\Entity\Rate;
 use App\Model\Entity\ShopVariant;
 use App\Model\Facade\BasketFacade;
 use App\Model\Facade\CategoryFacade;
