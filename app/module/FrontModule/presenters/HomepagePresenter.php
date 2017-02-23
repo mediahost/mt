@@ -3,7 +3,6 @@
 namespace App\FrontModule\Presenters;
 
 use App\Model\Entity\Category;
-use Tracy\Debugger;
 
 class HomepagePresenter extends BasePresenter
 {
@@ -14,9 +13,6 @@ class HomepagePresenter extends BasePresenter
 
 	public function renderDefault()
 	{
-		$timeName = 'renderDefault';
-		Debugger::timer($timeName);
-
 		$this->stockComponentClasses = [];
 		$this->stockComponentLabels = TRUE;
 		$this->stockComponentSecondImage = FALSE;
@@ -35,8 +31,6 @@ class HomepagePresenter extends BasePresenter
 
 		$titleText = $this->translator->translate('shopTitle');
 		$this->changePageInfo(self::PAGE_INFO_TITLE, $titleText);
-
-		Debugger::barDump(Debugger::timer($timeName), $timeName . ' time');
 	}
 
 }
