@@ -22,6 +22,9 @@ class ShopFacade extends Object
 	/** @var Request @inject */
 	public $httpRequest;
 
+	/** @var SettingsStorage @inject */
+	public $settings;
+
 	/** @var string */
 	private $websiteName;
 
@@ -46,8 +49,8 @@ class ShopFacade extends Object
 
 		$shopVariant = NULL;
 		$this->loadWebInfo();
+		$shopVariantId = $this->settings->pageConfig->shop->defaultVariant;
 		switch ($this->websiteName) {
-			default:
 			case 'mobilnetelefony':
 				$shopVariantId = 1;
 				break;
