@@ -27,19 +27,18 @@ class StockImage extends StockBase
 			->setRenderer(new MetronicFormRenderer());
 		$form->getElementPrototype()->class('ajax');
 
-		$imageSizeX = 200;
-		$imageSizeY = 150;
+		$imageSizeX = 300;
 		
 		$form->addUploadImageWithPreview('image', 'Main Image')
-				->setPreview("/foto/{$imageSizeX}-{$imageSizeY}/" . ($this->stock->product->image ? $this->stock->product->image : 'default.png'), $this->stock->product->name)
-				->setSize($imageSizeX, $imageSizeY)
+				->setPreview("/foto/{$imageSizeX}-0/" . ($this->stock->product->image ? $this->stock->product->image : 'default.png'), $this->stock->product->name)
+				->setSize($imageSizeX, $imageSizeX)
 				->addCondition(Form::FILLED)
 				->addRule(Form::IMAGE, 'Image must be in valid image format');
 
 		$form->addUploadImageWithPreview('next', 'New other image', TRUE)
 				->setTexting('Select new')
-				->setPreview("/foto/{$imageSizeY}-0/default.png", 'Next image')
-				->setSize($imageSizeX, $imageSizeY)
+				->setPreview("/foto/{$imageSizeX}-0/default.png", 'Next image')
+				->setSize($imageSizeX, $imageSizeX)
 				->addCondition(Form::FILLED)
 				->addRule(Form::IMAGE, 'Image must be in valid image format');
 

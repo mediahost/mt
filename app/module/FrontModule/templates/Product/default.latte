@@ -17,7 +17,7 @@
 				<div n:class="product-page-product-wrap, !count($product->images) ? no-others">
 					<div class="clearfix">
 						<a href="{$basePath}/foto/{$product->image|size}" class="popup-gallery-image">
-							<img src="{$basePath}/foto/{$product->image|size:460,460}"
+							<img src="{$basePath}/foto/{$product->image|size:500,500}"
 							     alt="{$product}"
 							     title="{$product}"/>
 						</a>
@@ -26,7 +26,7 @@
 				<ul class="other-images" n:if="count($product->images)">
 					<li n:foreach="$product->images as $image">
 						<a href="{$basePath}/foto/{$image|size}" class="popup-gallery-image">
-							<img src="{$basePath}/foto/{$image|size:100}" alt="{$product}" title="{$product}"/>
+							<img src="{$basePath}/foto/{$image|size:300}" alt="{$product}" title="{$product}"/>
 						</a>
 					</li>
 				</ul>
@@ -84,12 +84,12 @@
 										     alt="{_'HomeCredit iCalc'}"/>
 									</a>
 								</div>
-								{*<div class="product-recommend">*}
-									{*<a href="#recommend" data-toggle="modal">*}
-										{*<span class="fa fa-send"></span>*}
-										{*{_'Recommend'}*}
-									{*</a>*}
-								{*</div>*}
+								<div class="product-recommend">
+									<a href="#recommend" data-toggle="modal">
+										<span class="fa fa-send"></span>
+										{_'Recommend'}
+									</a>
+								</div>
 								{*<div class="product-watchdog">*}
 									{*<a href="#watchdog" data-toggle="modal">*}
 										{*<span class="fa fa-bar-chart-o"></span>*}

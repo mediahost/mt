@@ -46,8 +46,8 @@ class CategoryEdit extends BaseControl
 		$form->addSelect2('heurekaCategory', 'Heureka Category', [NULL => '--- No Category ---'] + $heurekaCategories);
 
 		$form->addUploadImageWithPreview('image', 'Image')
-			->setPreview('/foto/200-150/' . ($this->category->image ? $this->category->image : 'default.png'), $this->category->name)
-			->setSize(200, 150)
+			->setPreview('/foto/300-0/' . ($this->category->image ? $this->category->image : 'default.png'), $this->category->name)
+			->setSize(300, 300)
 			->addCondition(Form::FILLED)
 			->addRule(Form::IMAGE, 'Image must be in valid image format');
 
