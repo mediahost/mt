@@ -216,6 +216,15 @@ class Foto extends Object
 		}
 	}
 
+	public function createThumbnail($size, $name, $subFolder = NULL)
+	{
+		if ($subFolder) {
+			$name = Helpers::getPath($subFolder, $name);
+		}
+		$filename = Helpers::getPath($this->originalFolder, $name);
+		return $this->resize($filename, $name, $size);
+	}
+
 	public function createThumbnails($size = NULL, $subFolder = NULL, &$resizedCount = FALSE)
 	{
 		if (!$size) {
