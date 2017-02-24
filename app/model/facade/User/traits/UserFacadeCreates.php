@@ -27,10 +27,11 @@ trait UserFacadeCreates
 		if ($this->isUnique($mail)) {
 			$user = new User();
 			$user->setMail($mail)
-					->setPassword($password)
-					->addRole($role)
-					->setLocale($this->translator->getDefaultLocale())
-					->setCurrency($this->exchange->getDefault()->getCode());
+				->setPassword($password)
+				->addRole($role)
+				->setLocale($this->translator->getDefaultLocale())
+				->setCurrency($this->exchange->getDefault()->getCode())
+				->setShop($this->shopFacade->getShopVariant()->shop);
 
 			$this->em->persist($user);
 
@@ -55,12 +56,13 @@ trait UserFacadeCreates
 	{
 		$user = new User($registration->mail);
 		$user->setHash($registration->hash)
-				->addRole($role)
-				->setRequiredRole($registration->role)
-				->setLocale($this->translator->getLocale())
-				->setCurrency($this->exchange->getWeb()->getCode())
-				->setWantBeDealer($registration->wantBeDealer);
-		
+			->addRole($role)
+			->setRequiredRole($registration->role)
+			->setLocale($this->translator->getLocale())
+			->setCurrency($this->exchange->getWeb()->getCode())
+			->setWantBeDealer($registration->wantBeDealer)
+			->setShop($this->shopFacade->getShopVariant()->shop);
+
 		if ($registration->billingAddress) {
 			$user->billingAddress = $registration->billingAddress;
 		}
@@ -68,12 +70,22 @@ trait UserFacadeCreates
 		$this->em->persist($user);
 
 		if ($registration->facebookId) {
-			$user->facebook = new Facebook($registration->facebookId);
+			$facebook = $this->facebookRepo->find($registration->facebookId);
+			if ($facebook) {
+				$user->facebook = $facebook;
+			} else {
+				$user->facebook = new Facebook($registration->facebookId);
+			}
 			$user->facebook->setAccessToken($registration->facebookAccessToken);
 		}
 
 		if ($registration->twitterId) {
-			$user->twitter = new Twitter($registration->twitterId);
+			$twitter = $this->facebookRepo->find($registration->twitterId);
+			if ($twitter) {
+				$user->twitter = $twitter;
+			} else {
+				$user->twitter = new Twitter($registration->twitterId);
+			}
 			$user->twitter->setAccessToken($registration->twitterAccessToken);
 		}
 
@@ -84,7 +96,7 @@ trait UserFacadeCreates
 		}
 
 		$this->registrationRepo->delete($registration);
-		
+
 		$this->em->flush();
 		return $user;
 	}
@@ -100,23 +112,23 @@ trait UserFacadeCreates
 
 		$registration = new Registration();
 		$registration
-				->setMail($user->mail)
-				->setHash($user->hash)
-				->setRole($this->roleDao->find($user->requiredRole->id))
-				->setWantBeDealer($user->wantBeDealer);
-		
+			->setMail($user->mail)
+			->setHash($user->hash)
+			->setRole($this->roleDao->find($user->requiredRole->id))
+			->setWantBeDealer($user->wantBeDealer);
+
 		if ($user->billingAddress) {
 			$registration->billingAddress = $user->billingAddress;
 		}
 
 		if ($user->facebook) {
 			$registration->setFacebookId($user->facebook->id)
-					->setFacebookAccessToken($user->facebook->accessToken);
+				->setFacebookAccessToken($user->facebook->accessToken);
 		}
 
 		if ($user->twitter) {
 			$registration->setTwitterId($user->twitter->id)
-					->setTwitterAccessToken($user->twitter->accessToken);
+				->setTwitterAccessToken($user->twitter->accessToken);
 		}
 
 		$registration->setVerification(Random::generate(32), new DateTime('now + ' . $this->settings->expiration->verification));

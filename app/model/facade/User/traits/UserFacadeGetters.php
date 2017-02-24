@@ -13,7 +13,9 @@ trait UserFacadeGetters
 	 */
 	public function getUsers()
 	{
-		return $this->userRepo->findPairs('mail');
+		return $this->userRepo->findPairs([
+			'shop' => $this->shopFacade->getShopVariant()->shop,
+		], 'mail');
 	}
 
 	/**
@@ -23,7 +25,7 @@ trait UserFacadeGetters
 	 */
 	public function getUserMailsInRole(Role $role)
 	{
-		return $this->userRepo->findPairsByRoleId($role->id, 'mail');
+		return $this->userRepo->findPairsByRoleId($role->id, $this->shopFacade->getShopVariant()->shop, 'mail');
 	}
 
 }

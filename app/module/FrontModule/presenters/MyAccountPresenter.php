@@ -77,7 +77,7 @@ class MyAccountPresenter extends BasePresenter
 	 */
 	public function actionOrders()
 	{
-		$this->template->orders = $this->orderFacade->getAllOrders($this->user->identity, $this->shopVariant);
+		$this->template->orders = $this->orderFacade->getAllOrders($this->user->identity);
 	}
 
 	/**

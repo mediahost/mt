@@ -2,6 +2,7 @@
 
 namespace App\Model\Repository;
 
+use App\Model\Entity\Shop;
 use App\Model\Entity\User;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\NoResultException;
@@ -11,11 +12,14 @@ use Exception;
 class UserRepository extends BaseRepository
 {
 
-	public function findIdByMail($mail)
+	public function findIdByMail($mail, Shop $shop)
 	{
 		$qb = $this->createQueryBuilder('e')
 				->select('e.id')
-				->whereCriteria(['mail' => $mail]);
+				->whereCriteria([
+					'mail' => $mail,
+					'shop' => $shop,
+				]);
 
 		try {
 			$result = $qb->setMaxResults(1)
@@ -26,7 +30,7 @@ class UserRepository extends BaseRepository
 		}
 	}
 
-	public function findPairsByRoleId($roleId, $value = NULL, $orderBy = [], $key = NULL)
+	public function findPairsByRoleId($roleId, Shop $shop, $value = NULL, $orderBy = [], $key = NULL)
 	{
 		if (!is_array($orderBy)) {
 			$key = $orderBy;
@@ -42,7 +46,9 @@ class UserRepository extends BaseRepository
 				->from($this->getEntityName(), 'e', 'e.' . $key)
 				->innerJoin('e.roles', 'r')
 				->where('r.id = :roleid')
+				->andWhere('e.shop = :shop')
 				->setParameter('roleid', $roleId)
+				->setParameter('shop', $shop)
 				->autoJoinOrderBy((array) $orderBy)
 				->getQuery();
 

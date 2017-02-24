@@ -15,6 +15,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
 use Nette\Security\IIdentity;
 
 /**
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="user_unique", columns={"mail", "shop"})})
  * @ORM\Entity(repositoryClass="App\Model\Repository\UserRepository")
  * @ORM\EntityListeners({"App\Listeners\Model\Entity\UserListener"})
  *
@@ -28,12 +29,16 @@ use Nette\Security\IIdentity;
  * @property Subscriber $subscriber
  * @property bool $wantBeDealer
  * @property int $bonusCount
+ * @property Shop $shop
  * @method User setMail(string $mail)
  * @method User setLocale(string $locale)
  * @method User setCurrency(string $code)
+ * @method User setShop(Shop $shop)
  */
 class User extends BaseEntity implements IIdentity, IUserSocials
 {
+
+	// TODO: UPDATE `user` SET `shop_id` = '1';
 
 	use Identifier;
 	use UserRoles;
@@ -41,7 +46,7 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	use UserPassword;
 	use UserSocials;
 
-	/** @ORM\Column(type="string", nullable=false, unique=true) */
+	/** @ORM\Column(type="string", nullable=false) */
 	protected $mail;
 
 	/** @ORM\Column(type="string", length=8, nullable=true) */
@@ -76,6 +81,9 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 
 	/** @ORM\Column(type="integer") */
 	protected $bonusCount = 0;
+
+	/** @ORM\ManyToOne(targetEntity="Shop") */
+	public $shop;
 
 	public function __construct($mail = NULL)
 	{
