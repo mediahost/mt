@@ -13,8 +13,10 @@ var AppContent = function () {
 			var shopId = $target.val();
 			var query = parse_url(window.location, 'query');
 			var path = parse_url(window.location, 'path');
-			var params = {};
-			parse_str(query, params);
+			var params = {filteredShops:{}};
+			if (typeof query != 'undefined') {
+				parse_str(query, params);
+			}
 
 			var selectedKey = null;
 			var isSelected = false;
