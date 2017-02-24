@@ -15,7 +15,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
 use Nette\Security\IIdentity;
 
 /**
- * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="user_unique", columns={"mail", "shop"})})
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="user_unique", columns={"mail", "shop_id"})})
  * @ORM\Entity(repositoryClass="App\Model\Repository\UserRepository")
  * @ORM\EntityListeners({"App\Listeners\Model\Entity\UserListener"})
  *
@@ -83,7 +83,7 @@ class User extends BaseEntity implements IIdentity, IUserSocials
 	protected $bonusCount = 0;
 
 	/** @ORM\ManyToOne(targetEntity="Shop") */
-	public $shop;
+	protected $shop;
 
 	public function __construct($mail = NULL)
 	{

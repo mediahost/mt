@@ -68,7 +68,7 @@ class NewsletterMessageEdit extends BaseControl
 			SubscriberFacade::RECIPIENT_USER => self::LOCALE_DOMAIN . '.form.users',
 			SubscriberFacade::RECIPIENT_DEALER => self::LOCALE_DOMAIN . '.form.dealers',
 			self::LOCALE_DOMAIN . '.form.groups' => $groups,
-			self::LOCALE_DOMAIN . '.form.shop' => $this->shopFacade->getPairs(TRUE),
+			self::LOCALE_DOMAIN . '.form.shop' => $this->shopFacade->getShopPairs(TRUE),
 		];
 		$form->addSelect('recipients', self::LOCALE_DOMAIN . '.form.recipients', $recipients)
 				->setDefaultValue($this->recipientsValue)
@@ -195,7 +195,7 @@ class NewsletterMessageEdit extends BaseControl
 			$message->group = $group;
 
 			$recipients = $group->users;
-		} else if (preg_match('/^' . ShopFacade::PAIR_KEY_ALIAS . '(\w)$/', $values->recipients, $matches)) {
+		} else if (preg_match('/^' . ShopFacade::SHOP_PAIR_KEY_ALIAS . '(\w)$/', $values->recipients, $matches)) {
 			$shop = $this->em->getRepository(Shop::getClassName())->findOneBy([
 				'priceLetter' => $matches[1],
 			]);

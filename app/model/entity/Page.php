@@ -15,6 +15,8 @@ use Knp\DoctrineBehaviors\Model;
  * @property string $link
  * @property string $linkHeadline
  * @property string $linkSubscribe
+ * @property Shop $shop
+ * @property ShopVariant $shopVariant
  */
 class Page extends BaseTranslatable
 {
@@ -26,6 +28,12 @@ class Page extends BaseTranslatable
 
 	/** @ORM\Column(type="string", length=256, nullable=true) */
 	protected $link;
+
+	/** @ORM\ManyToOne(targetEntity="Shop") */
+	protected $shop;
+
+	/** @ORM\ManyToOne(targetEntity="ShopVariant") */
+	protected $shopVariant;
 	
 	public function __construct($currentLocale = NULL, $id = NULL)
 	{

@@ -8,6 +8,8 @@ use App\Forms\Controls\TextInputBased\MetronicTextInputBase;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Page;
+use App\Model\Entity\Shop;
+use App\Model\Entity\ShopVariant;
 use Nette\Application\UI\InvalidLinkException;
 use Nette\Security\User;
 use Nette\Utils\ArrayHash;
@@ -51,6 +53,14 @@ class PageEdit extends BaseControl
 
 			$form->addText('linkSubscribe', 'Link Subscribe')
 				->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XL;
+
+			$shops = [NULL => '---'] + $this->shopFacade->getShopPairs();
+			$form->addSelect2('shop', 'Shop', $shops)
+				->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_M;
+
+			$variants = [NULL => '---'] + $this->shopFacade->getVariantPairs();
+			$form->addSelect2('shopVariant', 'Shop variant', $variants)
+				->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_M;
 		}
 
 		$form->addText('link', 'Link')
@@ -89,6 +99,20 @@ class PageEdit extends BaseControl
 		}
 		if (isset($values->linkSubscribe)) {
 			$translation->linkSubscribe = $values->linkSubscribe;
+		}
+		if (isset($values->shop) && $values->shop) {
+			$shopRepo = $this->em->getRepository(Shop::getClassName());
+			$shop = $shopRepo->find($values->shop);
+			if ($shop) {
+				$this->page->shop = $shop;
+			}
+		}
+		if (isset($values->shopVariant) && $values->shopVariant) {
+			$shopVariantRepo = $this->em->getRepository(ShopVariant::getClassName());
+			$shopVariant = $shopVariantRepo->find($values->shopVariant);
+			if ($shopRepo) {
+				$this->page->shopVariant = $shopVariant;
+			}
 		}
 		$this->page->comment = $values->comment;
 		if ($values->link) {

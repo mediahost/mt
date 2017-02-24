@@ -27,6 +27,9 @@ class PageFacade extends Object
 	/** @var IStorage @inject */
 	public $cacheStorage;
 
+	/** @var ShopFacade @inject */
+	public $shopFacade;
+
 	/** @var PageRepository */
 	private $pageRepo;
 
@@ -86,11 +89,25 @@ class PageFacade extends Object
 	/** @return array */
 	private function getLocaleSlugsArray($locale)
 	{
-		$localeSlugs = [];
 		$pages = $this->pageRepo->findAll();
+
+		$pagesBySlug = [];
 		foreach ($pages as $page) {
+			$page->setCurrentLocale($locale);
+			if (array_key_exists($page->slug, $pagesBySlug)) {
+				if (($page->shopVariant && $page->shopVariant->id === $this->shopFacade->getShopVariant()->id) ||
+					($page->shop && $page->shop->id === $this->shopFacade->getShopVariant()->shop->id)
+				) {
+					$pagesBySlug[$page->slug] = $page;
+				}
+			} else {
+				$pagesBySlug[$page->slug] = $page;
+			}
+		}
+
+		$localeSlugs = [];
+		foreach ($pagesBySlug as $page) {
 			if (!$page->isInterLink()) {
-				$page->setCurrentLocale($locale);
 				$localeSlugs[$page->id] = $page->slug;
 			}
 		}
