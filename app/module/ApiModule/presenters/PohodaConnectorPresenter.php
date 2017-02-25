@@ -3,14 +3,11 @@
 namespace App\ApiModule\Presenters;
 
 use App\Extensions\Products\IProductListFactory;
-use App\Extensions\Products\ProductList;
 use App\Model\Entity\Order;
 use App\Model\Entity\OrderStateType;
 use App\Model\Entity\PohodaItem;
-use App\Model\Entity\Stock;
 use App\Model\Facade\PohodaFacade;
 use App\Model\Repository\PohodaItemRepository;
-use App\Model\Repository\StockRepository;
 use Exception;
 use Nette\Http\FileUpload;
 use Nette\Http\IRequest;
