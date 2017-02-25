@@ -4,8 +4,10 @@ namespace App\Model\Facade;
 
 use App\Extensions\Settings\SettingsStorage;
 use App\Model\Entity\Address;
+use App\Model\Entity\Facebook;
 use App\Model\Entity\Registration;
 use App\Model\Entity\Role;
+use App\Model\Entity\Twitter;
 use App\Model\Entity\User;
 use App\Model\Facade\Traits\UserFacadeCreates;
 use App\Model\Facade\Traits\UserFacadeDelete;
@@ -35,21 +37,24 @@ class UserFacade extends Object
 
 	/** @var EntityManager @inject */
 	public $em;
-	
+
 	/** @var SettingsStorage @inject */
 	public $settings;
-	
+
 	/** @var Exchange @inject */
 	public $exchange;
-	
+
 	/** @var Translator @inject */
 	public $translator;
-	
+
 	/** @var OrderFacade @inject */
 	public $orderFacade;
-	
+
 	/** @var SubscriberFacade @inject */
 	public $subscriberFacade;
+
+	/** @var ShopFacade @inject */
+	public $shopFacade;
 
 	/** @var UserRepository */
 	private $userRepo;
@@ -60,6 +65,12 @@ class UserFacade extends Object
 	/** @var RegistrationRepository */
 	private $registrationRepo;
 
+	/** @var EntityRepository */
+	private $facebookRepo;
+
+	/** @var EntityRepository */
+	private $twitterRepo;
+
 	/** @var EntityDao */
 	private $roleDao;
 
@@ -69,6 +80,8 @@ class UserFacade extends Object
 		$this->userRepo = $this->em->getRepository(User::getClassName());
 		$this->addressRepo = $this->em->getRepository(Address::getClassName());
 		$this->registrationRepo = $this->em->getRepository(Registration::getClassName());
+		$this->facebookRepo = $this->em->getRepository(Facebook::getClassName());
+		$this->twitterRepo = $this->em->getRepository(Twitter::getClassName());
 		$this->roleDao = $this->em->getDao(Role::getClassName());
 	}
 
@@ -76,7 +89,7 @@ class UserFacade extends Object
 	{
 		return $this->findByMail($mail) === NULL;
 	}
-	
+
 	public function recountBonus(User $user)
 	{
 		if ($user->isDealer()) {
@@ -84,7 +97,7 @@ class UserFacade extends Object
 		}
 		$user->bonusCount = $this->orderFacade->getActualBonusCount($user);
 		$this->userRepo->save($user);
-		
+
 		$this->setBonusGroup($user);
 		return $this;
 	}

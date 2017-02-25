@@ -349,12 +349,16 @@ class PohodaFacade extends Object
 				}
 
 				// update/add product
-				if (isset($item->stk_id)) {
-					$product = $productRepo->find($item->stk_id);
-					if (!$product && isset($storage) && isset($item->stk_code)) {
-						$product = new PohodaItem($item->stk_id);
+				if (isset($item->stk_code) && isset($storage)) {
+					$product = $productRepo->findOneBy([
+						'code' => $item->stk_code,
+						'storage' => $storage,
+					]);
+					if (!$product && isset($item->stk_code)) {
+						$product = new PohodaItem(NULL);
 					}
 				}
+
 				if (isset($product) && $product) {
 					if (isset($storage)) {
 						$product->storage = $storage;
@@ -403,6 +407,7 @@ class PohodaFacade extends Object
 
 					$product->resetSynchronize();
 					$this->em->persist($product);
+					$this->em->flush();
 					$counter++;
 				}
 

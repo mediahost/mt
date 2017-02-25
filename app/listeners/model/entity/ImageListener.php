@@ -67,6 +67,15 @@ class ImageListener extends Object implements Subscriber
 		$requestedFormat = ImageUtils::PNG;
 		$filename = $image->requestedFilename;
 		$this->fotoService->create($image->source, $filename, $folder, $requestedFormat);
+		if ($folder === Image::FOLDER_PRODUCTS) {
+			$thumbnailSizes = [
+				'300-0',
+				'500-500',
+			];
+			foreach ($thumbnailSizes as $size) {
+				$this->fotoService->createThumbnail($size, $filename, Image::FOLDER_PRODUCTS);
+			}
+		}
 		return $filename;
 	}
 

@@ -73,7 +73,7 @@ class SubscriberGrid extends BaseControl
 
 		////////// Shop //////////
 		$grid->addColumnText('shop', self::LOCALE_DOMAIN . '.header.shop')
-			->setFilterSelect($this->shopFacade->getPairs());
+			->setFilterSelect($this->shopFacade->getShopPairs());
 		$grid->getColumn('shop')->headerPrototype->width = '10%';
 
 		////////// Actions //////////

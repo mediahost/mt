@@ -10,22 +10,22 @@ trait UserFacadeFinders
 
 	public function findByMail($mail)
 	{
-		return $this->userRepo->findOneBy(['mail' => $mail]);
+		return $this->findOneBy(['mail' => $mail]);
 	}
 
 	public function findByFacebookId($id)
 	{
-		return $this->userRepo->findOneBy(['facebook.id' => $id]);
+		return $this->findOneBy(['facebook.id' => $id]);
 	}
 
 	public function findByClientId($id)
 	{
-		return $this->userRepo->findOneBy(['clientId' => $id]);
+		return $this->findOneBy(['clientId' => $id]);
 	}
 
 	public function findByTwitterId($id)
 	{
-		return $this->userRepo->findOneBy(['twitter.id' => $id]);
+		return $this->findOneBy(['twitter.id' => $id]);
 	}
 
 	/**
@@ -53,7 +53,8 @@ trait UserFacadeFinders
 	{
 		if (!empty($token)) {
 			$user = $this->userRepo->findOneBy([
-					'recoveryToken' => $token
+				'shop' => $this->shopFacade->getShopVariant()->shop,
+				'recoveryToken' => $token,
 			]);
 
 			if ($user) {
@@ -67,6 +68,15 @@ trait UserFacadeFinders
 		}
 
 		return NULL;
+	}
+
+	private function findOneBy(array $conditions)
+	{
+		$finded = $this->userRepo->findOneBy($conditions);
+		if ($finded && $finded->shop->id !== $this->shopFacade->getShopVariant()->shop->id && !$finded->isForAllShops()) {
+			$finded = NULL;
+		}
+		return $finded;
 	}
 
 }

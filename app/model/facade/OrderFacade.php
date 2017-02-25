@@ -225,12 +225,12 @@ class OrderFacade extends Object
 		$this->orderRepo->save($order);
 	}
 
-	public function getAllOrders(User $user, ShopVariant $shopVariant)
+	public function getAllOrders(User $user)
 	{
 		$orderRepo = $this->em->getRepository(Order::getClassName());
 		$conditions = [
 			'mail' => $user->mail,
-			'shop' => $shopVariant->shop,
+			'shop' => $user->shop,
 		];
 		return $orderRepo->findBy($conditions, ['id' => 'DESC']);
 	}
@@ -239,6 +239,7 @@ class OrderFacade extends Object
 	{
 		$conditions = [
 			'mail' => $user->mail,
+			'shop' => $user->shop,
 		];
 
 		if (count($stateTypes)) {

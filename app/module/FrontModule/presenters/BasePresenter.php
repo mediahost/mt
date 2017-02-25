@@ -216,7 +216,6 @@ abstract class BasePresenter extends BaseBasePresenter
 
 	protected function loadTemplateMenu()
 	{
-		$cache = new Cache($this->cacheStorage, 'FrontModule.loadTemplateMenu');
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
 		$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
 		$pageRepo = $this->em->getRepository(Page::getClassName());

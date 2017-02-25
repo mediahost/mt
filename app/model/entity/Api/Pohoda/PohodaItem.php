@@ -3,6 +3,7 @@
 namespace App\Model\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Kdyby\Doctrine\Entities\BaseEntity;
 use Knp\DoctrineBehaviors\Model;
 
@@ -35,14 +36,8 @@ class PohodaItem extends BaseEntity
 	const VALUE_VAT_NONE = 'none';
 	const VALUE_TRUE = 'true';
 
+	use Identifier;
 	use Model\Timestampable\Timestampable;
-
-	/**
-	 * @ORM\Id
-	 * @ORM\Column(type="integer")
-	 * @var string
-	 */
-	protected $id;
 
 	/** @ORM\Column(type="string", length=64) */
 	protected $code;
@@ -100,13 +95,6 @@ class PohodaItem extends BaseEntity
 
 	/** @ORM\Column(type="boolean") */
 	protected $skipped = FALSE;
-
-	public function __construct($id)
-	{
-		$this->id = $id;
-		$this->resetSynchronize();
-		parent::__construct();
-	}
 
 	public function resetSynchronize()
 	{

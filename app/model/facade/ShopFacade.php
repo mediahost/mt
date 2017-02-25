@@ -14,13 +14,17 @@ use Nette\Object;
 class ShopFacade extends Object
 {
 
-	const PAIR_KEY_ALIAS = 'shop';
+	const SHOP_PAIR_KEY_ALIAS = 'shop';
+	const VARIANT_PAIR_KEY_ALIAS = 'variant';
 
 	/** @var EntityManager @inject */
 	public $em;
 
 	/** @var Request @inject */
 	public $httpRequest;
+
+	/** @var SettingsStorage @inject */
+	public $settings;
 
 	/** @var string */
 	private $websiteName;
@@ -46,8 +50,8 @@ class ShopFacade extends Object
 
 		$shopVariant = NULL;
 		$this->loadWebInfo();
+		$shopVariantId = $this->settings->pageConfig->shop->defaultVariant;
 		switch ($this->websiteName) {
-			default:
 			case 'mobilnetelefony':
 				$shopVariantId = 1;
 				break;
@@ -73,14 +77,24 @@ class ShopFacade extends Object
 		return $shopVariant;
 	}
 
-	public function getPairs($aliasId = FALSE)
+	public function getShopPairs($aliasId = FALSE)
 	{
 		$shopRepo = $this->em->getRepository(Shop::getClassName());
 		$shopList = [];
 		foreach ($shopRepo->findAll() as $shop) {
-			$shopList[$aliasId ? (self::PAIR_KEY_ALIAS . $shop->priceLetter) : $shop->id] = (string)$shop;
+			$shopList[$aliasId ? (self::SHOP_PAIR_KEY_ALIAS . $shop->priceLetter) : $shop->id] = (string)$shop;
 		}
 		return $shopList;
+	}
+
+	public function getVariantPairs($aliasId = FALSE)
+	{
+		$shopVariantRepo = $this->em->getRepository(ShopVariant::getClassName());
+		$variantList = [];
+		foreach ($shopVariantRepo->findAll() as $shopVariant) {
+			$variantList[$aliasId ? (self::VARIANT_PAIR_KEY_ALIAS . $shopVariant->priceLetter) : $shopVariant->id] = (string)$shopVariant;
+		}
+		return $variantList;
 	}
 
 	public function getDefaultPriceName()

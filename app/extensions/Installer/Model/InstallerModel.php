@@ -86,7 +86,7 @@ class InstallerModel extends Object
 			$pass = $initUserData[0];
 			$role = $initUserData[1];
 			$roleRepo = $this->em->getRepository(Role::getClassName());
-			$roleEntity =$roleRepo->findOneByName($role);
+			$roleEntity = $roleRepo->findOneByName($role);
 			if (!$roleEntity) {
 				throw new InvalidArgumentException('Invalid name of role. Check if exists role with name \'' . $role . '\'.');
 			}

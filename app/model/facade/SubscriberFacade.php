@@ -84,7 +84,7 @@ class SubscriberFacade extends Object
 			$group = $this->em->getRepository(Group::getClassName())->find($recipient);
 
 			$count = count($group->users);
-		} else if (preg_match('/^' . ShopFacade::PAIR_KEY_ALIAS . '(\w)$/', $recipient, $matches)) {
+		} else if (preg_match('/^' . ShopFacade::SHOP_PAIR_KEY_ALIAS . '(\w)$/', $recipient, $matches)) {
 			$locales = $this->localeFacade->getLocalesToSelect();
 			$shop = $this->em->getRepository(Shop::getClassName())->findOneBy([
 				'priceLetter' => $matches[1],

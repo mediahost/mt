@@ -79,8 +79,8 @@
 					{? $product->setCurrentLocale($lang)}
 					<a n:href="Product: 'id' => $product->getUrlId(), 'slug' => $product->getSlug()"
 							class="dropdown-menu-shipping-cart-img">
-						<img src="{$basePath}/foto/{$product->image|size:60}"
-							 alt="{$product->name}" title="{$product->name}"/>
+						<img src="{$basePath}/foto/{$product->image|size:300}"
+						     alt="{$product->name}" title="{$product->name}"/>
 					</a>
 					<div class="dropdown-menu-shipping-cart-inner">
 						<p class="dropdown-menu-shipping-cart-price">
@@ -125,9 +125,10 @@
 					{? $product->setCurrentLocale($lang)}
 					<div class="row">
 						<div class="col-md-2 image">
-							<a n:href="Product: 'id' => $product->getUrlId(), 'slug' => $product->getSlug()">
-								<img src="{$basePath}/foto/{$product->image|size:60}"
-									 alt="{$product->name}" title="{$product->name}"/>
+							<a n:href="Product: 'id' => $product->getUrlId(), 'slug' => $product->getSlug()"
+									class="dropdown-menu-shipping-cart-img">
+								<img src="{$basePath}/foto/{$product->image|size:300}"
+								     alt="{$product->name}" title="{$product->name}"/>
 							</a>
 						</div>
 						<div class="col-md-7 product-item">

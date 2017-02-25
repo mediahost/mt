@@ -56,8 +56,8 @@ class ProducerEdit extends BaseControl
 		switch ($this->type) {
 			case Producer::ID:
 				$form->addUploadImageWithPreview('image', 'Image')
-					->setPreview('/foto/200-150/' . ($this->entity->image ? $this->entity->image : 'default.png'), (string)$this->entity)
-					->setSize(200, 150)
+					->setPreview('/foto/300-0/' . ($this->entity->image ? $this->entity->image : 'default.png'), (string)$this->entity)
+					->setSize(300, 300)
 					->addCondition(Form::FILLED)
 					->addRule(Form::IMAGE, 'Image must be in valid image format');
 				$form->addWysiHtml('service_html', 'Text for service', 8);
@@ -67,8 +67,8 @@ class ProducerEdit extends BaseControl
 			case ProducerModel::ID:
 				$form->addWysiHtml('html', 'Text', 8);
 				$form->addUploadImageWithPreview('image', 'Image')
-					->setPreview('/foto/200-150/' . ($this->entity->image ? $this->entity->image : 'default.png'), (string)$this->entity)
-					->setSize(200, 150)
+					->setPreview('/foto/300-0/' . ($this->entity->image ? $this->entity->image : 'default.png'), (string)$this->entity)
+					->setSize(300, 300)
 					->addCondition(Form::FILLED)
 					->addRule(Form::IMAGE, 'Image must be in valid image format');
 
