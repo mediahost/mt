@@ -110,6 +110,11 @@ class Shop extends BaseEntity
 		return is_array($this->deniedCurrencies) && in_array($currency, $this->deniedCurrencies);
 	}
 
+	public function isCurrencyAllowed($currency)
+	{
+		return !$this->isCurrencyDenied($currency);
+	}
+
 	public function __construct($letter)
 	{
 		parent::__construct();
