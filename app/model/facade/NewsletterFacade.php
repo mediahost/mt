@@ -5,6 +5,7 @@ namespace App\Model\Facade;
 use App\Model\Entity\Newsletter\Message;
 use App\Model\Entity\Newsletter\Status;
 use App\Model\Entity\Newsletter\Subscriber;
+use App\Model\Entity\Shop;
 use App\Model\Entity\User;
 use DateTime;
 use InvalidArgumentException;
@@ -118,6 +119,7 @@ class NewsletterFacade extends Object
 		return $this->em->getRepository(Subscriber::getClassName())->findOneBy([
 			'mail' => $email,
 			'type' => $type,
+			'shop' => $this->shopFacade->getShopVariant()->shop,
 		]);
 	}
 
