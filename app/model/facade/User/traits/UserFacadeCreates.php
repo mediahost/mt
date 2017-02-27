@@ -46,6 +46,17 @@ trait UserFacadeCreates
 		return NULL;
 	}
 
+	public function createForSocial()
+	{
+		$user = new User();
+		$user
+			->setLocale($this->translator->getLocale())
+			->setCurrency($this->exchange->getDefault()->getCode())
+			->setShop($this->shopFacade->getShopVariant()->shop);
+		$user->requiredRole = $this->roleDao->findOneByName(Role::USER);
+		return $user;
+	}
+
 	/**
 	 * Create user from registration and delete registration entity
 	 * @param Registration $registration

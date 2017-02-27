@@ -102,11 +102,7 @@ class FacebookConnect extends BaseControl
 	 */
 	protected function createUser(ArrayHash $me)
 	{
-		$user = new Entity\User();
-		$user->setLocale($this->translator->getLocale())
-				->setCurrency($this->exchange->getDefault()->getCode());
-		$roleRepo = $this->em->getRepository(Entity\Role::getClassName());
-		$user->requiredRole = $roleRepo->findOneByName(Entity\Role::USER);
+		$user = $this->userFacade->createForSocial();
 
 		if (isset($me->email)) {
 			$user->mail = $me->email;
@@ -115,7 +111,11 @@ class FacebookConnect extends BaseControl
 			$this->session->verification = FALSE;
 		}
 
-		$fb = new Entity\Facebook($me->id);
+		$fbRepo = $this->em->getRepository(Entity\Facebook::getClassName());
+		$fb = $fbRepo->find($me->id);
+		if (!$fb) {
+			$fb = new Entity\Facebook($me->id);
+		}
 		$this->loadFacebookEntity($fb, $me);
 
 		$user->facebook = $fb;
@@ -177,7 +177,7 @@ class FacebookConnect extends BaseControl
 		$this->onlyConnect = $onlyConnect;
 		return $this;
 	}
-	
+
 	public function setBacklink($backlink)
 	{
 		$this->backlink = $backlink;
