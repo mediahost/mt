@@ -20,7 +20,7 @@
 			</a>
 			<ul class="dropdown-menu dropdown-menu-category no-after">
 				{if $user->isAllowed('myAccount')}
-					<li n:if="!$user->identity->isDealer()">
+					<li n:if="$bonusAllowed && !$user->identity->isDealer()">
 						<a n:href="MyAccount:bonus">
 							<i class="fa fa-database dropdown-menu-category-icon"></i>
 							{_'Bonus Points'} ({$user->identity->bonusCount})

@@ -268,6 +268,9 @@ class OrderFacade extends Object
 	public function getActualBonusCount(User $user)
 	{
 		$bonusSettings = $this->settings->modules->bonus;
+		if (!$bonusSettings->enabled) {
+			return 0;
+		}
 		$startDate = new DateTime($bonusSettings->enabledFrom);
 		$stateTypesIds = [OrderStateType::EXPEDED, OrderStateType::DONE];
 		

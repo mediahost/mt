@@ -54,6 +54,7 @@ class SettingsExtension extends CompilerExtension
 				'clearOlder' => '14 days'
 			],
 			'bonus' => [ // fixed IDs for bonus groups
+				'enabled' => FALSE,
 				'enabledFrom' => '2016-03-01 00:00:00',
 				'values' => [
 					'bsc' => 1, // basic

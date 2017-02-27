@@ -113,6 +113,7 @@ abstract class BasePresenter extends BaseBasePresenter
 
 		$this->template->basket = $this->basketFacade;
 		$this->template->loginError = $this['signInModal']->hasErrors();
+		$this->template->bonusAllowed = $this->settings->modules->bonus->enabled;
 
 		$this->template->pageKeywords = $this->settings->pageInfo->keywords;
 		$this->template->pageDescription = $this->settings->pageInfo->description;
