@@ -50,7 +50,11 @@ class TwitterConnect extends BaseControl
 			$data = $this->twitter->tryAuthenticate();
 
 			if ($this->onlyConnect) {
-				$tw = new Entity\Twitter($data['user']->id_str);
+				$twRepo = $this->em->getRepository(Entity\Twitter::getClassName());
+				$tw = $twRepo->find($data['user']->id_str);
+				if (!$tw) {
+					$tw = new Entity\Twitter($data['user']->id_str);
+				}
 				$this->loadTwitterEntity($tw, $data);
 				$this->onConnect($tw);
 			} else {
