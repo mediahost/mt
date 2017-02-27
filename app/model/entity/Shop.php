@@ -23,6 +23,8 @@ use Nette\Utils\Strings;
 class Shop extends BaseEntity
 {
 
+	const DEFAULT_ID = 1;
+
 	use Identifier;
 
 	/** @ORM\Column(type="string", length=1) */
@@ -113,6 +115,11 @@ class Shop extends BaseEntity
 	public function isCurrencyAllowed($currency)
 	{
 		return !$this->isCurrencyDenied($currency);
+	}
+
+	public function isDefault()
+	{
+		return $this->id === self::DEFAULT_ID;
 	}
 
 	public function __construct($letter)

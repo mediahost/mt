@@ -33,6 +33,7 @@ class SettingsExtension extends CompilerExtension
 					'done' => OrderStateType::LOCK_DONE,
 					'storno' => OrderStateType::LOCK_STORNO,
 				],
+				'showFilter' => TRUE,
 			],
 			'categories' => [ // product categories
 				'enabled' => FALSE,

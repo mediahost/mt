@@ -15,7 +15,7 @@
 					<i class="fa fa-inbox"></i>
 					<span class="caption-subject bold uppercase">{_'Orders'}</span>
 				</div>
-				<div class="actions">
+				<div class="actions" n:if="$showFilter">
 					{foreach $shops as $shopItem}
 						{var isChecked => in_array($shopItem->id, $filteredShopIds)}
 						{var isDiabled => count($filteredShopIds) === 1 && $isChecked}
