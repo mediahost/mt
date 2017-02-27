@@ -8,6 +8,7 @@ use App\Forms\Form;
 use App\Forms\Renderers\MetronicFormRenderer;
 use App\Model\Entity\Group;
 use App\Model\Entity\Role;
+use App\Model\Entity\Shop;
 use App\Model\Entity\User;
 use App\Model\Facade\RoleFacade;
 use App\Model\Facade\UserFacade;
@@ -57,6 +58,10 @@ class UserBasic extends BaseControl
 		$form = new Form();
 		$form->setTranslator($this->translator);
 		$form->setRenderer(new MetronicFormRenderer());
+
+		if ($this->userIdentity->isAllowed('users', 'editAll')) {
+			$form->addSelect2('shop', 'Shop', $this->shopFacade->getShopPairs());
+		}
 
 		$mail = $form->addServerValidatedText('mail', 'E-mail')
 				->addRule(Form::EMAIL, 'Fill right format')
@@ -148,6 +153,17 @@ class UserBasic extends BaseControl
 			}
 		}
 
+		if (isset($values->shop) && $values->shop) {
+			$shopRepo = $this->em->getRepository(Shop::getClassName());
+			$shop = $shopRepo->find($values->shop);
+			if ($shop) {
+				$this->user->shop = $shop;
+			}
+		}
+		if (!$this->user->shop) {
+			$this->user->shop = $this->shopFacade->getShopVariant()->shop;
+		}
+
 		return $this;
 	}
 
@@ -165,6 +181,7 @@ class UserBasic extends BaseControl
 			'mail' => $this->user->mail,
 			'roles' => $this->user->getRolesKeys(),
 			'group' => $this->user->dealerGroup ? $this->user->dealerGroup->id : NULL,
+			'shop' => $this->user->shop ? $this->user->shop->id : $this->shopFacade->getShopVariant()->shop->id,
 		];
 		return $values;
 	}
