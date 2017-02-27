@@ -64,7 +64,11 @@ class FacebookConnect extends BaseControl
 				$me = $fb->api('/me');
 
 				if ($this->onlyConnect) {
-					$fb = new Entity\Facebook($me->id);
+					$fbRepo = $this->em->getRepository(Entity\Facebook::getClassName());
+					$fb = $fbRepo->find($me->id);
+					if (!$fb) {
+						$fb = new Entity\Facebook($me->id);
+					}
 					$this->loadFacebookEntity($fb, $me);
 					$this->onConnect($fb);
 				} else {

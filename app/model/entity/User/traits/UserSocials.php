@@ -27,10 +27,10 @@ interface IUserSocials
 trait UserSocials
 {
 
-	/** @ORM\OneToOne(targetEntity="Facebook", fetch="LAZY", cascade={"persist", "remove"}) */
+	/** @ORM\ManyToOne(targetEntity="Facebook", fetch="LAZY", cascade={"persist", "remove"}) */
 	protected $facebook;
 
-	/** @ORM\OneToOne(targetEntity="Twitter", fetch="LAZY", cascade={"persist", "remove"}) */
+	/** @ORM\ManyToOne(targetEntity="Twitter", fetch="LAZY", cascade={"persist", "remove"}) */
 	protected $twitter;
 
 	public function clearFacebook()
