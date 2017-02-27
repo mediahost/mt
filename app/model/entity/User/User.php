@@ -38,8 +38,6 @@ use Nette\Security\IIdentity;
 class User extends BaseEntity implements IIdentity, IUserSocials
 {
 
-	// TODO: UPDATE `user` SET `shop_id` = '1';
-
 	use Identifier;
 	use UserRoles;
 	use UserGroups;

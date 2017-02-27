@@ -91,13 +91,14 @@ class TwitterConnect extends BaseControl
 	protected function createUser(array $data)
 	{
 		$userData = $data['user'];
-		$user = new Entity\User();
-		$user->setLocale($this->translator->getLocale())
-				->setCurrency($this->exchange->getDefault()->getCode());
-		$roleRepo = $this->em->getRepository(Entity\Role::getClassName());
-		$user->requiredRole = $roleRepo->findOneByName(Entity\Role::USER);
 
-		$twitter = new Entity\Twitter($userData->id_str);
+		$user = $this->userFacade->createForSocial();
+
+		$twRepo = $this->em->getRepository(Entity\Twitter::getClassName());
+		$twitter = $twRepo->find($userData->id_str);
+		if (!$twitter) {
+			$twitter = new Entity\Twitter($userData->id_str);
+		}
 		$this->loadTwitterEntity($twitter, $data);
 		$user->twitter = $twitter;
 
