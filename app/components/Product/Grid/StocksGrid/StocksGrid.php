@@ -250,6 +250,7 @@ class StocksGrid extends BaseControl
 			'export' => $this->translator->translate('Grido.Export'),
 		];
 		$grid->setOperation($operation, $this->handleOperations);
+		$grid->canExportAll = FALSE;
 
 		$grid->setActionWidth("20%");
 
