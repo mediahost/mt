@@ -130,7 +130,7 @@ class PohodaConnectorPresenter extends BasePresenter
 	public function actionCreateStore($use_gzip_upload)
 	{
 		proc_nice(19);
-		ini_set('max_execution_time', 250);
+		ini_set('max_execution_time', 250); // 900
 
 		if (!$this->settings->modules->pohoda->enabled || !$this->settings->modules->pohoda->allowedCreateStore) {
 			$this->resource->state = 'error';
@@ -152,7 +152,7 @@ class PohodaConnectorPresenter extends BasePresenter
 	public function actionCreateShortStock($use_gzip_upload)
 	{
 		proc_nice(19);
-		ini_set('max_execution_time', 120);
+		ini_set('max_execution_time', 120); // 900
 
 		if (!$this->settings->modules->pohoda->enabled || !$this->settings->modules->pohoda->allowedCreateShortStock) {
 			$this->resource->state = 'error';
