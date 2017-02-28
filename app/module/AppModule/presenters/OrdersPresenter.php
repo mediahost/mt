@@ -53,13 +53,16 @@ class OrdersPresenter extends BasePresenter
 	 */
 	public function actionDefault($filteredShops = [])
 	{
-		if (!count($filteredShops)) {
+		if ($this->shopVariant->shop->isDefault()) {
+			$filteredShops = array_keys($this->shopFacade->getShopPairs());
+		} else if (!count($filteredShops)) {
 			$filteredShops[] = $this->shopVariant->shop->id;
 		}
 
 		$shopRepo = $this->em->getRepository(Shop::getClassName());
 		$this->template->shops = $shopRepo->findAll();
 		$this->template->filteredShopIds = $filteredShops;
+		$this->template->showFilter = $this->settings->modules->order->showFilter;
 		$this['ordersGrid']->setShop($filteredShops);
 	}
 

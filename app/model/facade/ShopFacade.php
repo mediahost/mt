@@ -91,7 +91,7 @@ class ShopFacade extends Object
 	{
 		$shopVariantRepo = $this->em->getRepository(ShopVariant::getClassName());
 		$variantList = [];
-		foreach ($shopVariantRepo->findAll() as $shopVariant) {
+		foreach ($shopVariantRepo->findBy(['active' => TRUE]) as $shopVariant) {
 			$variantList[$aliasId ? (self::VARIANT_PAIR_KEY_ALIAS . $shopVariant->priceLetter) : $shopVariant->id] = (string)$shopVariant;
 		}
 		return $variantList;

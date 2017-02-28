@@ -92,6 +92,10 @@ class UserFacade extends Object
 
 	public function recountBonus(User $user)
 	{
+		if (!$this->settings->modules->bonus->enabled) {
+			return $this;
+		}
+
 		if ($user->isDealer()) {
 			return $this;
 		}

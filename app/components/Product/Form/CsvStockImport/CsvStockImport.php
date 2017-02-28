@@ -70,7 +70,10 @@ class CsvStockImport extends BaseControl
 		$shopVariantRepo = $this->em->getRepository(ShopVariant::getClassName());
 		$shopVariants = $shopVariantRepo->findAll();
 		foreach ($shopVariants as $shopVariant) {
-			$aliases[] = Stock::DEFAULT_PRICE_NAME . $shopVariant->priceCode;
+			/** @var ShopVariant $shopVariant */
+			if ($shopVariant->active) {
+				$aliases[] = Stock::DEFAULT_PRICE_NAME . $shopVariant->priceCode;
+			}
 		}
 
 		$groupRepo = $this->em->getRepository(Group::getClassName());

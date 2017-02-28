@@ -20,6 +20,8 @@ class BaseGrid extends Grid
 	/** @var string */
 	private $actionWidth;
 
+	public $canExportAll = TRUE;
+
 	/**
 	 * Custom condition callback for filter birthday.
 	 * @param string $value

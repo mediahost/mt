@@ -211,7 +211,7 @@
 										{formContainer buttons}
 											{input perPage, class => 'hide'}
 										{/formContainer}
-										<a n:if="$control->hasExport()"
+										<a n:if="$control->hasExport() && $control->canExportAll"
 										   class="export btn btn-icon-only default"
 										   href="{=$control->getComponent(\Grido\Components\Export::ID)->link('export!')}"
 										   title="{_'Grido.ExportAllItems'}">

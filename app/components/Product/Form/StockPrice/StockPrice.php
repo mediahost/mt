@@ -91,7 +91,7 @@ class StockPrice extends StockBase
 		foreach ($shops as $shop) {
 			foreach ($shop->variants as $variant) {
 				/** @var ShopVariant $variant */
-				if (!$variant->isDefault()) {
+				if (!$variant->isDefault() && $variant->active) {
 					$id = $shop->priceLetter . $variant->priceNumber;
 
 					$nameSync = $this->translator->translate('Other for %shop%', NULL, ['shop' => $variant->fullName]);

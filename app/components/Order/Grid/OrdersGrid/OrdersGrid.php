@@ -160,12 +160,15 @@ class OrdersGrid extends BaseControl
 			})
 			->setSortable()
 			->setFilterSelect([
-				NULL => '--- anyone ---',
+				NULL => '---',
 				'CZK' => 'CZK',
 				'EUR' => 'EUR',
 			]);
 		$grid->getColumn('currency')->headerPrototype->width = '7%';
-		$grid->getColumn('locale')->cellPrototype->style = 'text-align: center';
+
+		$grid->addColumnText('shopVariant', 'Shop')
+			->setSortable()
+			->setFilterSelect([NULL => '---'] + $this->shopFacade->getVariantPairs());
 
 		$grid->addActionHref('edit', 'Edit')
 			->setIcon('fa fa-edit');

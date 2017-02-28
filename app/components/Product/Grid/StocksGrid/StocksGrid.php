@@ -163,17 +163,19 @@ class StocksGrid extends BaseControl
 		$shopVariants = $shopVariantRepo->findAll();
 		foreach ($shopVariants as $shopVariant) {
 			/** @var ShopVariant $shopVariant */
-			$priceName = Stock::DEFAULT_PRICE_NAME . $shopVariant->priceCode;
-			$grid->addColumnNumber($priceName, $shopVariant->getFullName())
-				->setOnlyForExport()
-				->setCustomRenderExport(function (Stock $row) use ($priceName, $shopVariant) {
-					if ($shopVariant->isDefault() || !$row->isSynchronizePrice($shopVariant->shop->priceLetter, $shopVariant->priceNumber)) {
-						$price = $row->getPrice(NULL, $shopVariant->shop->priceLetter, $shopVariant->priceNumber);
-						return Price::floatToStr($price->withoutVat);
-					} else {
-						return NULL;
-					}
-				});
+			if ($shopVariant->active) {
+				$priceName = Stock::DEFAULT_PRICE_NAME . $shopVariant->priceCode;
+				$grid->addColumnNumber($priceName, $shopVariant->getFullName())
+					->setOnlyForExport()
+					->setCustomRenderExport(function (Stock $row) use ($priceName, $shopVariant) {
+						if ($shopVariant->isDefault() || !$row->isSynchronizePrice($shopVariant->shop->priceLetter, $shopVariant->priceNumber)) {
+							$price = $row->getPrice(NULL, $shopVariant->shop->priceLetter, $shopVariant->priceNumber);
+							return Price::floatToStr($price->withoutVat);
+						} else {
+							return NULL;
+						}
+					});
+			}
 		}
 
 		/***************************************************/
@@ -250,6 +252,7 @@ class StocksGrid extends BaseControl
 			'export' => $this->translator->translate('Grido.Export'),
 		];
 		$grid->setOperation($operation, $this->handleOperations);
+		$grid->canExportAll = FALSE;
 
 		$grid->setActionWidth("20%");
 

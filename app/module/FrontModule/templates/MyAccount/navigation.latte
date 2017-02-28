@@ -9,7 +9,8 @@
 				{_'My Orders'}
 			</a>
 		</li>
-		<li n:class="list-group-item, clearfix, $presenter->isLinkCurrent('MyAccount:bonus') ? active">
+		<li n:if="$bonusAllowed"
+				n:class="list-group-item, clearfix, $presenter->isLinkCurrent('MyAccount:bonus') ? active">
 			<a n:href="MyAccount:bonus">
 				<i class="fa fa-angle-right"></i>
 				{_'Bonus Points'}

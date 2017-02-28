@@ -83,6 +83,9 @@ trait UserFacadeSetters
 			return $this;
 		}
 
+		if (!$this->settings->modules->bonus->enabled) {
+			return $this;
+		}
 		$bonusIds = $this->settings->modules->bonus->values;
 		$groupLimits = [
 			$bonusIds->bsc => [1, 1000],

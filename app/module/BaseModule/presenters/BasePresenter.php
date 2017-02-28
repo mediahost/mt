@@ -165,6 +165,7 @@ abstract class BasePresenter extends Presenter
 	private function loadShop()
 	{
 		$this->shopVariant = $this->shopFacade->getShopVariant();
+		$this->changeCurrency();
 		$this->changeSmtpMailerOptions();
 		$this->loadPageInfo();
 	}
@@ -220,7 +221,7 @@ abstract class BasePresenter extends Presenter
 	public function handleSetCurrency($currency)
 	{
 		try {
-			if (!$this->shopVariant->shop->isCurrencyDenied($currency)) {
+			if ($this->shopVariant->shop->isCurrencyAllowed($currency)) {
 				$this->exchange->setWeb($this->exchange[$currency], TRUE);
 				$this->user->storage->setCurrency($this->exchange[$currency]);
 			}
@@ -229,6 +230,15 @@ abstract class BasePresenter extends Presenter
 		}
 
 		$this->redirect('this');
+	}
+
+	private function changeCurrency()
+	{
+		$currency = $this->user->identity->currency;
+		if (!$currency || $this->shopVariant->shop->isCurrencyDenied($currency)) {
+			$currency = $this->shopVariant->currency;
+		}
+		$this->exchange->setWeb($currency);
 	}
 
 	// </editor-fold>

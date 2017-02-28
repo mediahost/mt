@@ -20,6 +20,7 @@ use Nette\Utils\Strings;
  * @property int $priceNumber
  * @property ArrayCollection $shippings
  * @property ArrayCollection $payments
+ * @property bool $active
  */
 class ShopVariant extends BaseEntity
 {
@@ -43,6 +44,9 @@ class ShopVariant extends BaseEntity
 
 	/** @ORM\OneToMany(targetEntity="Payment", mappedBy="shopVariant") */
 	protected $payments;
+
+	/** @ORM\Column(type="boolean") */
+	protected $active = TRUE;
 
 	public function __construct($locale)
 	{

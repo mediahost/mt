@@ -33,6 +33,7 @@ class SettingsExtension extends CompilerExtension
 					'done' => OrderStateType::LOCK_DONE,
 					'storno' => OrderStateType::LOCK_STORNO,
 				],
+				'showFilter' => TRUE,
 			],
 			'categories' => [ // product categories
 				'enabled' => FALSE,
@@ -54,6 +55,7 @@ class SettingsExtension extends CompilerExtension
 				'clearOlder' => '14 days'
 			],
 			'bonus' => [ // fixed IDs for bonus groups
+				'enabled' => FALSE,
 				'enabledFrom' => '2016-03-01 00:00:00',
 				'values' => [
 					'bsc' => 1, // basic
