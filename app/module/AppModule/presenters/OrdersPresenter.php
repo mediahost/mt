@@ -53,10 +53,12 @@ class OrdersPresenter extends BasePresenter
 	 */
 	public function actionDefault($filteredShops = [])
 	{
-		if ($this->shopVariant->shop->isDefault()) {
-			$filteredShops = array_keys($this->shopFacade->getShopPairs());
-		} else if (!count($filteredShops)) {
-			$filteredShops[] = $this->shopVariant->shop->id;
+		if (!count($filteredShops)) {
+			if ($this->shopVariant->shop->isDefault()) {
+				$filteredShops = array_keys($this->shopFacade->getShopPairs());
+			} else {
+				$filteredShops[] = $this->shopVariant->shop->id;
+			}
 		}
 
 		$shopRepo = $this->em->getRepository(Shop::getClassName());
