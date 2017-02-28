@@ -52,13 +52,6 @@
 					<span class="title">{_'Orders'}</span><span class="selected"></span>
 				</a>
 			</li>
-			<li n:if="$user->isAllowed('products', 'default')"
-					n:class="$presenter->isLinkCurrent('Products:*') ? active">
-				<a n:href="Products:">
-					<i class="icon-rocket"></i>
-					<span class="title">{_'Products'}</span><span class="selected"></span>
-				</a>
-			</li>
 			<li n:if="$user->isAllowed('pages', 'default')"
 					n:class="$presenter->isLinkCurrent('Pages:*') ? active">
 				<a n:href="Pages:">
