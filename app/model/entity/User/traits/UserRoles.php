@@ -60,11 +60,6 @@ trait UserRoles
 		return $array;
 	}
 
-	public function isForAllShops()
-	{
-		return in_array(Role::SUPERADMIN, $this->getRoles());
-	}
-
 	/** @return array with roleID => roleName */
 	public function getRoles()
 	{
