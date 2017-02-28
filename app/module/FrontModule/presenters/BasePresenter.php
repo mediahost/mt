@@ -22,6 +22,7 @@ use App\Model\Entity\Sign;
 use App\Model\Entity\Stock;
 use App\Model\Entity\Voucher;
 use App\Model\Facade\CategoryFacade;
+use App\Model\Facade\PageFacade;
 use App\Model\Repository\CategoryRepository;
 use App\Model\Repository\ProductRepository;
 use App\Model\Repository\StockRepository;
@@ -38,6 +39,9 @@ abstract class BasePresenter extends BaseBasePresenter
 	const PAGE_INFO_TITLE = 'title';
 	const PAGE_INFO_KEYWORDS = 'keywords';
 	const PAGE_INFO_DESCRIPTION = 'description';
+
+	/** @var PageFacade @inject */
+	public $pageFacade;
 
 	/** @var ISubscribeFactory @inject */
 	public $iSubscribeControlFactory;
@@ -219,15 +223,13 @@ abstract class BasePresenter extends BaseBasePresenter
 	{
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
 		$modelRepo = $this->em->getRepository(ProducerModel::getClassName());
-		$pageRepo = $this->em->getRepository(Page::getClassName());
-		$settings = $this->settings;
 
 		$menuPages = ArrayHash::from([
 			'page1' => $this->link('Homepage:'),
-			'page2' => $pageRepo->find($settings->pageConfig->pageIds->orderByPhonePageId),
-			'page3' => $pageRepo->find($settings->pageConfig->pageIds->termPageId),
-			'page4' => $pageRepo->find($settings->pageConfig->pageIds->complaintPageId),
-			'page5' => $pageRepo->find($settings->pageConfig->pageIds->contactPageId),
+			'page2' => $this->pageFacade->findByType(Page::TYPE_PHONE_ORDER),
+			'page3' => $this->pageFacade->findByType(Page::TYPE_TERMS),
+			'page4' => $this->pageFacade->findByType(Page::TYPE_COMPLAINT),
+			'page5' => $this->pageFacade->findByType(Page::TYPE_CONTACT),
 		]);
 		$footerPages = ArrayHash::from([]);
 		$mostSearchedStocks = [

@@ -5,6 +5,7 @@ namespace App\Components\Page\Grid;
 use App\Components\BaseControl;
 use App\Extensions\Grido\BaseGrid;
 use App\Model\Entity\Page;
+use App\Model\Entity\Shop;
 use Grido\DataSources\Doctrine;
 use Grido\Grid;
 use Nette\Security\User;
@@ -14,6 +15,9 @@ class PagesGrid extends BaseControl
 
 	/** @var User @inject */
 	public $user;
+
+	/** @var Shop */
+	public $shop;
 
 	/** @return Grid */
 	protected function createComponentGrid()
@@ -28,6 +32,10 @@ class PagesGrid extends BaseControl
 			->where('t.locale = :lang OR t.locale = :defaultLang')
 			->setParameter('lang', $this->translator->getLocale())
 			->setParameter('defaultLang', $this->translator->getDefaultLocale());
+		if ($this->shop) {
+			$qb->andWhere('p.shop = :shop OR p.shop IS NULL')
+				->setParameter('shop', $this->shop);
+		}
 		$grid->model = new Doctrine($qb, [
 			'name' => 't.name',
 		]);
@@ -54,9 +62,15 @@ class PagesGrid extends BaseControl
 			->setFilterText()
 			->setSuggestion();
 
-		$grid->addColumnText('shop', 'Shop')
-			->setSortable()
-			->setFilterSelect([NULL => '---'] + $this->shopFacade->getShopPairs());
+		if ($this->user->isAllowed('pages', 'editAll')) {
+			$grid->addColumnText('type', 'Type')
+				->setSortable()
+				->setFilterSelect([NULL => '---'] + Page::getTypes());
+
+			$grid->addColumnText('shop', 'Shop')
+				->setSortable()
+				->setFilterSelect([NULL => '---'] + $this->shopFacade->getShopPairs());
+		}
 
 		$grid->addColumnText('shopVariant', 'Shop variant')
 			->setSortable()
@@ -79,6 +93,11 @@ class PagesGrid extends BaseControl
 		$grid->setActionWidth("20%");
 
 		return $grid;
+	}
+
+	public function setShop(Shop $shop)
+	{
+		$this->shop = $shop;
 	}
 
 }

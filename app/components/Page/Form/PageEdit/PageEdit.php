@@ -54,6 +54,10 @@ class PageEdit extends BaseControl
 			$form->addText('linkSubscribe', 'Link Subscribe')
 				->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XL;
 
+			$types = [NULL => '---'] + Page::getTypes();
+			$form->addSelect2('type', 'Type', $types)
+				->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_M;
+
 			$shops = [NULL => '---'] + $this->shopFacade->getShopPairs();
 			$form->addSelect2('shop', 'Shop', $shops)
 				->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_M;
@@ -100,19 +104,24 @@ class PageEdit extends BaseControl
 		if (isset($values->linkSubscribe)) {
 			$translation->linkSubscribe = $values->linkSubscribe;
 		}
-		if (isset($values->shop) && $values->shop) {
-			$shopRepo = $this->em->getRepository(Shop::getClassName());
-			$shop = $shopRepo->find($values->shop);
-			if ($shop) {
-				$this->page->shop = $shop;
+		if (isset($values->shop)) {
+			$shop = NULL;
+			if ($values->shop) {
+				$shopRepo = $this->em->getRepository(Shop::getClassName());
+				$shop = $shopRepo->find($values->shop);
 			}
+			$this->page->shop = $shop;
 		}
-		if (isset($values->shopVariant) && $values->shopVariant) {
-			$shopVariantRepo = $this->em->getRepository(ShopVariant::getClassName());
-			$shopVariant = $shopVariantRepo->find($values->shopVariant);
-			if ($shopRepo) {
-				$this->page->shopVariant = $shopVariant;
+		if (isset($values->shopVariant)) {
+			$shopVariant = NULL;
+			if ($values->shopVariant) {
+				$shopVariantRepo = $this->em->getRepository(ShopVariant::getClassName());
+				$shopVariant = $shopVariantRepo->find($values->shopVariant);
 			}
+			$this->page->shopVariant = $shopVariant;
+		}
+		if (isset($values->type)) {
+			$this->page->type = $values->type;
 		}
 		$this->page->comment = $values->comment;
 		if ($values->link) {
@@ -146,6 +155,9 @@ class PageEdit extends BaseControl
 				'html' => $this->page->html,
 				'linkHeadline' => $this->page->linkHeadline,
 				'linkSubscribe' => $this->page->linkSubscribe,
+				'type' => $this->page->rawType,
+				'shop' => $this->page->shop ? $this->page->shop->id : NULL,
+				'shopVariant' => $this->page->shopVariant ? $this->page->shopVariant->id : NULL,
 			];
 		}
 		return $values;
