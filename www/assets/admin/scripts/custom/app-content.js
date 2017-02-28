@@ -13,9 +13,16 @@ var AppContent = function () {
 			var shopId = $target.val();
 			var query = parse_url(window.location, 'query');
 			var path = parse_url(window.location, 'path');
-			var params = {filteredShops:{}};
+			var params = {filteredShops: {}};
 			if (typeof query != 'undefined') {
 				parse_str(query, params);
+			}
+			if (Object.keys(params.filteredShops).length === 0) {
+				$('input[type=checkbox].shopSwitch').each(function (key, item) {
+					if ($(item).is(':checked')) {
+						params.filteredShops[key] = $(item).val();
+					}
+				});
 			}
 
 			var selectedKey = null;
@@ -26,8 +33,9 @@ var AppContent = function () {
 					isSelected = true;
 					selectedKey = key;
 				}
-				newKey++;
+				newKey = key;
 			});
+			newKey++;
 
 			if ($target.is(':checked') && !isSelected) {
 				params.filteredShops[newKey] = shopId;
