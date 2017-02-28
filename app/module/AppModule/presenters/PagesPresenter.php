@@ -42,7 +42,9 @@ class PagesPresenter extends BasePresenter
 	 */
 	public function actionDefault()
 	{
-		
+		if (!$this->user->isAllowed('pages', 'editAll')) {
+			$this['pagesGrid']->setShop($this->shopVariant->shop);
+		}
 	}
 
 	/**

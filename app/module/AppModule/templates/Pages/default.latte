@@ -16,7 +16,7 @@
 					<span class="caption-subject bold uppercase">{_'Pages'}</span>
 				</div>
 				<div class="actions">
-					<a n:href="Pages:add" class="btn btn-circle green-sharp">
+					<a n:if="$user->isAllowed('pages', 'add')" n:href="Pages:add" class="btn btn-circle green-sharp">
 						<i class="fa fa-plus"></i> {_'Add Page'}
 					</a>
 					<a class="btn btn-circle btn-icon-only btn-default fullscreen" href="#" data-original-title="" title="">
