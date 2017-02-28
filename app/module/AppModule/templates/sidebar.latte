@@ -9,8 +9,8 @@
 					$designSettings->sidebarMenuHover ? page-sidebar-menu-hover-submenu,
 					$designSettings->sidebarMenuLight ? page-sidebar-menu-light,
 					$designSettings->sidebarFixed ? page-sidebar-menu-fixed : page-sidebar-menu-default"
-			data-auto-scroll="true"
-			data-slide-speed="200">
+				data-auto-scroll="true"
+				data-slide-speed="200">
 			<li class="sidebar-toggler-wrapper">
 				<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
 				<div class="sidebar-toggler hide" data-url="{link toggleSidebar!}"></div>
@@ -32,42 +32,40 @@
 				</form>
 				<!-- END RESPONSIVE QUICK SEARCH FORM -->
 			</li>
-			
+
 			<li class="start">
 				<a n:href=":Front:Homepage:">
-					<i class="icon-globe"></i> 
+					<i class="icon-globe"></i>
 					<span class="title">{_'Online Store'}</span>
 					<span class="selected"></span>
 				</a>
 			</li>
 
 			<!-- BEGIN ADMIN -->
-			{if $user->isAllowed('users')}
-				<li class="heading">
-					<h3 class="uppercase">{_'Administration'}</h3>
-				</li>
-				<li n:if="$user->isAllowed('orders', 'default')"
+			<li class="heading">
+				<h3 class="uppercase">{_'Administration'}</h3>
+			</li>
+			<li n:if="$user->isAllowed('orders', 'default')"
 					n:class="$presenter->isLinkCurrent('Orders:*') ? active">
-					<a n:href="Orders:">
-						<i class="fa fa-inbox"></i>
-						<span class="title">{_'Orders'}</span><span class="selected"></span>
-					</a>
-				</li>
-				<li n:if="$user->isAllowed('products', 'default')"
+				<a n:href="Orders:">
+					<i class="fa fa-inbox"></i>
+					<span class="title">{_'Orders'}</span><span class="selected"></span>
+				</a>
+			</li>
+			<li n:if="$user->isAllowed('products', 'default')"
 					n:class="$presenter->isLinkCurrent('Products:*') ? active">
-					<a n:href="Products:">
-						<i class="icon-rocket"></i>
-						<span class="title">{_'Products'}</span><span class="selected"></span>
-					</a>
-				</li>
-				<li n:if="$user->isAllowed('pages', 'default')"
+				<a n:href="Products:">
+					<i class="icon-rocket"></i>
+					<span class="title">{_'Products'}</span><span class="selected"></span>
+				</a>
+			</li>
+			<li n:if="$user->isAllowed('pages', 'default')"
 					n:class="$presenter->isLinkCurrent('Pages:*') ? active">
-					<a n:href="Pages:">
-						<i class="fa fa-bullhorn"></i>
-						<span class="title">{_'Pages'}</span><span class="selected"></span>
-					</a>
-				</li>
-			{/if}
+				<a n:href="Pages:">
+					<i class="fa fa-bullhorn"></i>
+					<span class="title">{_'Pages'}</span><span class="selected"></span>
+				</a>
+			</li>
 			<!-- END ADMIN -->
 
 			<!-- BEGIN SUPERADMIN -->
@@ -83,7 +81,7 @@
 					</a>
 				</li>
 				<li n:if="$user->isAllowed('service', 'tools')"
-					n:class="start, $presenter->isLinkCurrent('Service:*') ? active">
+						n:class="start, $presenter->isLinkCurrent('Service:*') ? active">
 					<a n:href="Service:">
 						<i class="fa fa-gears"></i>
 						<span class="title">{_'Service'}</span><span class="selected"></span>
@@ -122,9 +120,9 @@
 			<li class="heading">
 				<h3 class="uppercase">{_'Settings'}</h3>
 			</li>
-			
+
 			<li n:if="$user->isAllowed('shippings', 'default')"
-				n:class="$presenter->isLinkCurrent('Shippings:*') ? active">
+					n:class="$presenter->isLinkCurrent('Shippings:*') ? active">
 				<a n:href="Shippings:">
 					<i class="fa fa-truck"></i>
 					<span class="title">{_'Shippings & Payments'}</span>
@@ -133,7 +131,7 @@
 			</li>
 
 			<li n:if="$user->isAllowed('subscriber', 'default')"
-				n:class="$presenter->isLinkCurrent('Subscriber:*') ? active">
+					n:class="$presenter->isLinkCurrent('Subscriber:*') ? active">
 				<a n:href="Subscriber:">
 					<i class="fa fa-rss"></i>
 					<span class="title">{_'newsletter.admin.sidebar.subscribers'}</span>
