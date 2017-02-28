@@ -47,7 +47,7 @@ class Subscriber extends BaseEntity
 	protected $token;
 
 	/**
-	 * @ORM\OneToOne(targetEntity="App\Model\Entity\User", inversedBy="subscriber")
+	 * @ORM\ManyToOne(targetEntity="App\Model\Entity\User", inversedBy="subscriber")
 	 * @ORM\JoinColumn(nullable=true)
 	 */
 	protected $user;
