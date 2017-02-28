@@ -9,8 +9,8 @@
 					$designSettings->sidebarMenuHover ? page-sidebar-menu-hover-submenu,
 					$designSettings->sidebarMenuLight ? page-sidebar-menu-light,
 					$designSettings->sidebarFixed ? page-sidebar-menu-fixed : page-sidebar-menu-default"
-			data-auto-scroll="true"
-			data-slide-speed="200">
+				data-auto-scroll="true"
+				data-slide-speed="200">
 			<li class="sidebar-toggler-wrapper">
 				<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
 				<div class="sidebar-toggler hide" data-url="{link toggleSidebar!}"></div>
@@ -32,79 +32,77 @@
 				</form>
 				<!-- END RESPONSIVE QUICK SEARCH FORM -->
 			</li>
-			
+
 			<li class="start">
 				<a n:href=":Front:Homepage:">
-					<i class="icon-globe"></i> 
+					<i class="icon-globe"></i>
 					<span class="title">{_'Online Store'}</span>
 					<span class="selected"></span>
 				</a>
 			</li>
 
 			<!-- BEGIN ADMIN -->
-			{if $user->isAllowed('users')}
-				<li class="heading">
-					<h3 class="uppercase">{_'Administration'}</h3>
-				</li>
-				<li n:if="$user->isAllowed('orders', 'default')"
+			<li class="heading">
+				<h3 class="uppercase">{_'Administration'}</h3>
+			</li>
+			<li n:if="$user->isAllowed('orders', 'default')"
 					n:class="$presenter->isLinkCurrent('Orders:*') ? active">
-					<a n:href="Orders:">
-						<i class="fa fa-inbox"></i>
-						<span class="title">{_'Orders'}</span><span class="selected"></span>
-					</a>
-				</li>
-				<li n:if="$user->isAllowed('products', 'default')"
+				<a n:href="Orders:">
+					<i class="fa fa-inbox"></i>
+					<span class="title">{_'Orders'}</span><span class="selected"></span>
+				</a>
+			</li>
+			<li n:if="$user->isAllowed('products', 'default')"
 					n:class="$presenter->isLinkCurrent('Products:*') ? active">
-					<a n:href="Products:">
-						<i class="icon-rocket"></i>
-						<span class="title">{_'Products'}</span><span class="selected"></span>
-					</a>
-				</li>
-				<li n:if="$user->isAllowed('categories', 'default')"
+				<a n:href="Products:">
+					<i class="icon-rocket"></i>
+					<span class="title">{_'Products'}</span><span class="selected"></span>
+				</a>
+			</li>
+			<li n:if="$user->isAllowed('categories', 'default')"
 					n:class="$presenter->isLinkCurrent('Categories:*') ? active">
-					<a n:href="Categories:">
-						<i class="icon-notebook"></i>
-						<span class="title">{_'Categories'}</span><span class="selected"></span>
-					</a>
-				</li>
-				<li n:if="$user->isAllowed('users', 'default')"
+				<a n:href="Categories:">
+					<i class="icon-notebook"></i>
+					<span class="title">{_'Categories'}</span><span class="selected"></span>
+				</a>
+			</li>
+			<li n:if="$user->isAllowed('users', 'default')"
 					n:class="$presenter->isLinkCurrent('Users:*') ? active">
-					<a n:href="Users:">
-						<i class="fa fa-user"></i>
-						<span class="title">{_'Users'}</span><span class="selected"></span>
-					</a>
-				</li>
-				<li n:if="$user->isAllowed('vouchers', 'default')"
+				<a n:href="Users:">
+					<i class="fa fa-user"></i>
+					<span class="title">{_'Users'}</span><span class="selected"></span>
+				</a>
+			</li>
+			<li n:if="$user->isAllowed('vouchers', 'default')"
 					n:class="$presenter->isLinkCurrent('Voucher:*') ? active">
-					<a n:href="Voucher:">
-						<i class="fa fa-scissors"></i>
-						<span class="title">{_'Discounts'}</span>
-						<span class="selected"></span>
-					</a>
-				</li>
-				<li n:if="$user->isAllowed('pages', 'default')"
+				<a n:href="Voucher:">
+					<i class="fa fa-scissors"></i>
+					<span class="title">{_'Discounts'}</span>
+					<span class="selected"></span>
+				</a>
+			</li>
+			<li n:if="$user->isAllowed('pages', 'default')"
 					n:class="$presenter->isLinkCurrent('Pages:*') ? active">
-					<a n:href="Pages:">
-						<i class="fa fa-bullhorn"></i>
-						<span class="title">{_'Pages'}</span><span class="selected"></span>
-					</a>
-				</li>
-				<li n:if="$user->isAllowed('newsletter', 'default')"
+				<a n:href="Pages:">
+					<i class="fa fa-bullhorn"></i>
+					<span class="title">{_'Pages'}</span><span class="selected"></span>
+				</a>
+			</li>
+			<li n:if="$user->isAllowed('newsletter', 'default')"
 					n:class="$presenter->isLinkCurrent('Newsletter:*') ? active">
-					<a n:href="Newsletter:">
-						<i class="fa fa-newspaper-o"></i>
-						<span class="title">{_'newsletter.admin.sidebar.newsletter'}</span>
-						<span class="selected"></span>
-					</a>
-				</li>
-				<li n:if="$user->isAllowed('buyout', 'default')"
+				<a n:href="Newsletter:">
+					<i class="fa fa-newspaper-o"></i>
+					<span class="title">{_'newsletter.admin.sidebar.newsletter'}</span>
+					<span class="selected"></span>
+				</a>
+			</li>
+			<li n:if="$user->isAllowed('buyout', 'default')"
 					n:class="$presenter->isLinkCurrent('Buyout:*') ? active">
-					<a n:href="Buyout:">
-						<i class="fa fa-balance-scale"></i>
-						<span class="title">{_'Buyout'}</span><span class="selected"></span>
-					</a>
-				</li>
-			{/if}
+				<a n:href="Buyout:">
+					<i class="fa fa-balance-scale"></i>
+					<span class="title">{_'Buyout'}</span><span class="selected"></span>
+				</a>
+			</li>
 			<!-- END ADMIN -->
 
 			<!-- BEGIN SUPERADMIN -->
@@ -120,7 +118,7 @@
 					</a>
 				</li>
 				<li n:if="$user->isAllowed('examples', 'default')"
-					n:class="start, $presenter->isLinkCurrent('Examples:*') ? active">
+						n:class="start, $presenter->isLinkCurrent('Examples:*') ? active">
 					<a n:href="Examples:">
 						<i class="fa fa-life-ring"></i>
 						<span class="title">{_'Examples'}</span><span class="selected"></span>
@@ -135,7 +133,7 @@
 					</ul>
 				</li>
 				<li n:if="$user->isAllowed('service', 'tools')"
-					n:class="start, $presenter->isLinkCurrent('Service:*') ? active">
+						n:class="start, $presenter->isLinkCurrent('Service:*') ? active">
 					<a n:href="Service:">
 						<i class="fa fa-gears"></i>
 						<span class="title">{_'Service'}</span><span class="selected"></span>
@@ -174,9 +172,9 @@
 			<li class="heading">
 				<h3 class="uppercase">{_'Settings'}</h3>
 			</li>
-			
+
 			<li n:if="$user->isAllowed('shippings', 'default')"
-				n:class="$presenter->isLinkCurrent('Shippings:*') ? active">
+					n:class="$presenter->isLinkCurrent('Shippings:*') ? active">
 				<a n:href="Shippings:">
 					<i class="fa fa-truck"></i>
 					<span class="title">{_'Shippings & Payments'}</span>
@@ -185,52 +183,52 @@
 			</li>
 
 			<li n:if="$user->isAllowed('groups', 'default')"
-				n:class="$presenter->isLinkCurrent('Groups:*') ? active">
+					n:class="$presenter->isLinkCurrent('Groups:*') ? active">
 				<a n:href="Groups:">
-					<i class="icon-users"></i> 
+					<i class="icon-users"></i>
 					<span class="title">{_'Groups'}</span>
 					<span class="selected"></span>
 				</a>
 			</li>
 
 			<li n:if="$user->isAllowed('producers', 'default')"
-				n:class="$presenter->isLinkCurrent('Producers:*') ? active">
+					n:class="$presenter->isLinkCurrent('Producers:*') ? active">
 				<a n:href="Producers:">
-					<i class="fa fa-building-o"></i> 
+					<i class="fa fa-building-o"></i>
 					<span class="title">{_'Producers'}</span>
 					<span class="selected"></span>
 				</a>
 			</li>
 
 			<li n:if="$user->isAllowed('parameters', 'default')"
-				n:class="$presenter->isLinkCurrent('Parameters:*') ? active">
+					n:class="$presenter->isLinkCurrent('Parameters:*') ? active">
 				<a n:href="Parameters:">
-					<i class="icon-list"></i> 
+					<i class="icon-list"></i>
 					<span class="title">{_'Parameters'}</span>
 					<span class="selected"></span>
 				</a>
 			</li>
 
 			<li n:if="$user->isAllowed('signs', 'default')"
-				n:class="$presenter->isLinkCurrent('Signs:*') ? active">
+					n:class="$presenter->isLinkCurrent('Signs:*') ? active">
 				<a n:href="Signs:">
-					<i class="icon-tag"></i> 
+					<i class="icon-tag"></i>
 					<span class="title">{_'Signs'}</span>
 					<span class="selected"></span>
 				</a>
 			</li>
 
 			<li n:if="$user->isAllowed('subscriber', 'default')"
-				n:class="$presenter->isLinkCurrent('Subscriber:*') ? active">
+					n:class="$presenter->isLinkCurrent('Subscriber:*') ? active">
 				<a n:href="Subscriber:">
 					<i class="fa fa-rss"></i>
 					<span class="title">{_'newsletter.admin.sidebar.subscribers'}</span>
 					<span class="selected"></span>
 				</a>
 			</li>
-			
+
 			<li n:if="$user->isAllowed('question', 'default')"
-				n:class="$presenter->isLinkCurrent('Question:*') ? active">
+					n:class="$presenter->isLinkCurrent('Question:*') ? active">
 				<a n:href="Question:">
 					<i class="fa fa-question"></i>
 					<span class="title">{_'Buyout questions'}</span>
@@ -239,22 +237,22 @@
 			</li>
 
 			<li n:if="$user->isAllowed('settings', 'default')"
-				n:class="$presenter->isLinkCurrent('Settings:*') ? active">
+					n:class="$presenter->isLinkCurrent('Settings:*') ? active">
 				<a n:href="Settings:">
-					<i class="icon-settings"></i> 
+					<i class="icon-settings"></i>
 					<span class="title">{_'Settings'}</span>
 					<span class="selected"></span>
 				</a>
 				<ul class="sub-menu">
 					<li n:if="$user->isAllowed('settings', 'default')"
-						n:class="$presenter->isLinkCurrent('Settings:default') ? active">
+							n:class="$presenter->isLinkCurrent('Settings:default') ? active">
 						<a n:href="Settings:">
 							<i class="fa fa-dollar"></i>
 							{_'Currency rate'}
 						</a>
 					</li>
 					<li n:if="$user->isAllowed('settings', 'units')"
-						n:class="$presenter->isLinkCurrent('Settings:units') ? active">
+							n:class="$presenter->isLinkCurrent('Settings:units') ? active">
 						<a n:href="Settings:units">
 							<i class="fa fa-flask"></i>
 							{_'Units'}
