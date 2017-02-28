@@ -15,6 +15,7 @@ use Nette\Http\Request;
 use Nette\Mail\IMailer;
 use Nette\Mail\Message;
 use Nette\Mail\SmtpException;
+use Nette\Mail\SmtpMailer;
 use Nette\Utils\ArrayHash;
 use Tracy\Debugger;
 
@@ -115,7 +116,14 @@ abstract class BaseMessage extends Message
 
 	protected function beforeSend()
 	{
-
+		if (!$this->getHeader('From')) {
+			$from = $this->settings->mails->automatFrom;
+			$name = $this->settings->pageInfo->projectName;
+			if ($this->mailer instanceof SmtpMailer && $this->mailer->username) {
+				$from = $this->mailer->username;
+			}
+			$this->setFrom($from, $name);
+		}
 	}
 
 	protected function afterSend()

@@ -9,7 +9,6 @@ class CreateRegistrationMessage extends BaseMessage
 
 	protected function beforeSend()
 	{
-		$this->setFrom($this->settings->mails->automatFrom, $this->settings->pageInfo->projectName);
 		$this->setSubject($this->translator->translate('mail.subject.createRegistration'));
 		parent::beforeSend();
 	}

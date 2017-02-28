@@ -9,7 +9,6 @@ class VerificationMessage extends BaseMessage
 
 	protected function beforeSend()
 	{
-		$this->setFrom($this->settings->mails->automatFrom, $this->settings->pageInfo->projectName);
 		$this->setSubject($this->translator->translate('mail.subject.verify'));
 		parent::beforeSend();
 	}

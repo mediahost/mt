@@ -73,7 +73,7 @@ class OrdersGrid extends BaseControl
 			->setSortable()
 			->setFilterText()
 			->setSuggestion();
-		$grid->getColumn('id')->headerPrototype->width = '7%';
+		$grid->getColumn('id')->headerPrototype->width = '80px';
 
 		$stateRepo = $this->em->getRepository(OrderState::getClassName());
 		$stateList = $stateRepo->findPairs('name');
@@ -86,6 +86,8 @@ class OrdersGrid extends BaseControl
 			->setSortable()
 			->setCustomRender($stateRenderer)
 			->setFilterSelect([NULL => '--- anyone ---'] + $stateList);
+		$grid->getColumn('state')->headerPrototype->width = '200px';
+		$grid->getColumn('state')->cellPrototype->class[] = 'changeOnClick';
 		$grid->getColumn('state')
 			->setEditableControl($stateSelector)
 			->setEditableCallback(function ($id, $newValue, $oldValue, $column) {
@@ -96,7 +98,6 @@ class OrdersGrid extends BaseControl
 					return FALSE;
 				}
 			});
-		$grid->getColumn('state')->cellPrototype->class[] = 'changeOnClick';
 
 		$grid->addColumnDate('paymentDate', 'Payment date')
 			->setSortable()
@@ -137,21 +138,21 @@ class OrdersGrid extends BaseControl
 				return $this->exchange->format($totalPrice, $item->currency, $item->currency);
 			})
 			->setFilterNumber();
-		$grid->getColumn('totalPrice')->headerPrototype->width = '10%';
+		$grid->getColumn('totalPrice')->headerPrototype->width = '100px';
 		$grid->getColumn('totalPrice')->cellPrototype->style = 'text-align: right';
 
 		$grid->addColumnDate('createdAt', 'Created At', 'd.m.Y H:i:s')
 			->setSortable()
 			->setFilterText()
 			->setSuggestion();
-		$grid->getColumn('createdAt')->headerPrototype->width = '10%';
+		$grid->getColumn('createdAt')->headerPrototype->width = '150px';
 		$grid->getColumn('createdAt')->cellPrototype->style = 'text-align: center';
 
 		$grid->addColumnText('locale', 'Language')
 			->setSortable()
 			->setFilterText()
 			->setSuggestion();
-		$grid->getColumn('locale')->headerPrototype->width = '4%';
+		$grid->getColumn('locale')->headerPrototype->width = '60px';
 		$grid->getColumn('locale')->cellPrototype->style = 'text-align: center';
 
 		$grid->addColumnText('currency', 'Currency')
@@ -164,7 +165,7 @@ class OrdersGrid extends BaseControl
 				'CZK' => 'CZK',
 				'EUR' => 'EUR',
 			]);
-		$grid->getColumn('currency')->headerPrototype->width = '7%';
+		$grid->getColumn('currency')->headerPrototype->width = '60px';
 
 		$grid->addColumnText('shopVariant', 'Shop')
 			->setSortable()
