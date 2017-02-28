@@ -22,6 +22,7 @@ use App\Model\Entity\Sign;
 use App\Model\Entity\Stock;
 use App\Model\Entity\Voucher;
 use App\Model\Facade\CategoryFacade;
+use App\Model\Facade\PageFacade;
 use App\Model\Repository\CategoryRepository;
 use App\Model\Repository\ProductRepository;
 use App\Model\Repository\StockRepository;
@@ -38,6 +39,9 @@ abstract class BasePresenter extends BaseBasePresenter
 	const PAGE_INFO_TITLE = 'title';
 	const PAGE_INFO_KEYWORDS = 'keywords';
 	const PAGE_INFO_DESCRIPTION = 'description';
+
+	/** @var PageFacade @inject */
+	public $pageFacade;
 
 	/** @var ISubscribeFactory @inject */
 	public $iSubscribeControlFactory;
@@ -228,13 +232,13 @@ abstract class BasePresenter extends BaseBasePresenter
 			'page3' => $settings->modules->service->enabled ? $pageRepo->find($settings->modules->service->pageId) : NULL,
 			'page4' => $pageRepo->find($settings->pageConfig->pageIds->bonusPageId),
 			'page5' => $settings->modules->dealer->enabled ? $pageRepo->find($settings->modules->dealer->pageId) : NULL,
-			'page6' => $pageRepo->find($settings->pageConfig->pageIds->contactPageId),
+			'page6' => $this->pageFacade->findByType(Page::TYPE_CONTACT),
 		]);
 		$footerPages = ArrayHash::from([
-			'page1' => $pageRepo->find($settings->pageConfig->pageIds->orderByPhonePageId),
-			'page2' => $pageRepo->find($settings->pageConfig->pageIds->termPageId),
-			'page3' => $pageRepo->find($settings->pageConfig->pageIds->complaintPageId),
-			'page4' => $pageRepo->find($settings->pageConfig->pageIds->contactPageId),
+			'page1' => $this->pageFacade->findByType(Page::TYPE_PHONE_ORDER),
+			'page2' => $this->pageFacade->findByType(Page::TYPE_TERMS),
+			'page3' => $this->pageFacade->findByType(Page::TYPE_COMPLAINT),
+			'page4' => $this->pageFacade->findByType(Page::TYPE_CONTACT),
 		]);
 		$mostSearchedStocks = [
 			$stockRepo->find(4291),

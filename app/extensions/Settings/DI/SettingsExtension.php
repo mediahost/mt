@@ -172,10 +172,6 @@ class SettingsExtension extends CompilerExtension
 			'itemsPerRow' => 3,
 			'rowsPerPage' => 4,
 			'pageIds' => [
-				'termPageId' => 1,
-				'complaintPageId' => 1,
-				'contactPageId' => 1,
-				'orderByPhonePageId' => 1,
 				'bonusPageId' => 1,
 			],
 			'shop' => [

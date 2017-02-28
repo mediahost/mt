@@ -42,6 +42,32 @@ class PageFacade extends Object
 		$this->pageRepo = $this->em->getRepository(Page::getClassName());
 	}
 
+	public function findByType($type)
+	{
+		$shopVariant = $this->shopFacade->getShopVariant();
+
+		$page = $this->pageRepo->findOneBy([
+			'type' => $type,
+			'shopVariant' => $shopVariant,
+		]);
+		if ($page) {
+			return $page;
+		}
+
+		$page = $this->pageRepo->findOneBy([
+			'type' => $type,
+			'shop' => $shopVariant->shop,
+		]);
+		if ($page) {
+			return $page;
+		}
+
+		$page = $this->pageRepo->findOneBy([
+			'type' => $type,
+		]);
+		return $page;
+	}
+
 	public function slugToId($uri, Request $request)
 	{
 		$locale = $request->getParameter(RouterFactory::LOCALE_PARAM_NAME);

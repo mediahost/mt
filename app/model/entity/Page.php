@@ -25,7 +25,7 @@ class Page extends BaseTranslatable
 
 	const TYPE_CONTACT = 'contact';
 	const TYPE_TERMS = 'terms';
-	const TYPE_CALL_ORDER = 'call_order';
+	const TYPE_PHONE_ORDER = 'phone_order';
 	const TYPE_COMPLAINT = 'complaint';
 
 	use Model\Translatable\Translatable;
@@ -96,7 +96,7 @@ class Page extends BaseTranslatable
 		return [
 			self::TYPE_CONTACT => 'Contact',
 			self::TYPE_TERMS => 'Terms and Conditions',
-			self::TYPE_CALL_ORDER => 'Order by phone',
+			self::TYPE_PHONE_ORDER => 'Order by phone',
 			self::TYPE_COMPLAINT => 'Complaint',
 		];
 	}
