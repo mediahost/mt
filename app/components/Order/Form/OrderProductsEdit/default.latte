@@ -35,7 +35,8 @@
 						<tr n:ifset="$form['quantities'][$stock->id]">
 							<td class="hidden-xs text-center">
 								<a href="{plink Products:edit $stock->id}">
-									<img src="{$basePath}/foto/{$product->image|size:300}" alt="{$product}" />
+									<img src="{$basePath}/foto/{$product->image|size:300}"
+									     style="width:50px" alt="{$product}" />
 								</a>
 							</td>
 							<td>
