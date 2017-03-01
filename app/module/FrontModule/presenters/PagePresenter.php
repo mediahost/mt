@@ -26,8 +26,12 @@ class PagePresenter extends BasePresenter
 	
 	public function actionTerms()
 	{
-		$id = $this->settings->pageConfig->pageIds->termPageId;
-		$this->getPage($id);
+		$this->page = $this->pageFacade->findByType(Page::TYPE_TERMS);
+		if (!$this->page) {
+			$message = $this->translator->translate('wasntFoundShe', NULL, ['name' => $this->translator->translate('Page')]);
+			$this->flashMessage($message, 'warning');
+			$this->redirect('Homepage:');
+		}
 		$this->setView('default');
 	}
 	
