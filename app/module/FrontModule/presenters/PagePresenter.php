@@ -37,8 +37,10 @@ class PagePresenter extends BasePresenter
 	
 	private function getPage($id)
 	{
-		$pageRepo = $this->em->getRepository(Page::getClassName());
-		$this->page = $pageRepo->find($id);
+		if ($id) {
+			$pageRepo = $this->em->getRepository(Page::getClassName());
+			$this->page = $pageRepo->find($id);
+		}
 
 		if (!$this->page) {
 			$message = $this->translator->translate('wasntFoundShe', NULL, ['name' => $this->translator->translate('Page')]);
