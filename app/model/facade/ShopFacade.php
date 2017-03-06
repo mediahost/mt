@@ -6,7 +6,6 @@ use App\Extensions\Settings\SettingsStorage;
 use App\Model\Entity\Shop;
 use App\Model\Entity\ShopVariant;
 use App\Model\Entity\Stock;
-use h4kuna\Exchange\Exchange;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Http\Request;
 use Nette\Object;
@@ -70,6 +69,18 @@ class ShopFacade extends Object
 				break;
 		}
 
+		$shopVariantForceId = $this->httpRequest->getQuery('shopVariantForce');
+		$locale = $this->httpRequest->getQuery('locale');
+		if ($shopVariantForceId) {
+			$conditions = [
+				'id' => $shopVariantForceId,
+				'active' => TRUE,
+			];
+			if ($locale) {
+				$conditions['locale'] = $locale;
+			}
+			$shopVariant = $shopVariantRepo->findOneBy($conditions);
+		}
 		if (!$shopVariant) {
 			$shopVariant = $shopVariantRepo->find($shopVariantId);
 		}
