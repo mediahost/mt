@@ -3,6 +3,17 @@
 $purge = array(
 	'temp/deployment',
 );
+
+$before = array(
+	'local:composer install --no-dev -d ./../',
+);
+
+$after = array();
+if (!isset($allowInstall) || $allowInstall) {
+	$after[] = $domain . '/install?printHtml=0';
+}
+$after[] = 'local:composer install --dev -d ./../';
+
 if (!isset($allowDeleteCache) || $allowDeleteCache) {
 	$purge[] = 'temp/cache';
 	$purge[] = 'temp/install';
@@ -50,13 +61,8 @@ return array(
 			*.rst
 		',
 		'allowdelete' => TRUE,
-		'before' => array(
-			'local:composer install --no-dev -d ./../'
-		),
-		'after' => array(
-			$domain . '/install?printHtml=0',
-			'local:composer install --dev -d ./../'
-		),
+		'before' => $before,
+		'after' => $after,
 		'purge' => $purge,
 		'preprocess' => FALSE,
 	),
