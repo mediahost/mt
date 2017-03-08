@@ -130,7 +130,7 @@ class StockPrice extends StockBase
 				->getControlPrototype()->class[] = MetronicTextInputBase::SIZE_XS;
 		}
 
-		$form->addText('purchase', 'Purchase price')
+		$form->addText('purchase', 'Purchase price without VAT')
 			->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
 
 		$form->addSubmit('save', 'Save')
@@ -150,7 +150,7 @@ class StockPrice extends StockBase
 
 	private function load(ArrayHash $values)
 	{
-		$this->stock->setPurchasePrice($values->purchase > 0 ? $values->purchase : NULL, $values->with_vat);
+		$this->stock->setPurchasePrice($values->purchase > 0 ? $values->purchase : NULL);
 
 		$vatRepo = $this->em->getRepository(Vat::getClassName());
 		if (isset($values->shopVat)) {
@@ -232,7 +232,7 @@ class StockPrice extends StockBase
 	{
 		$values = [];
 		if ($this->stock->purchasePrice) {
-			$values['purchase'] = $this->defaultWithVat ? $this->stock->purchasePrice->withVat : $this->stock->purchasePrice->withoutVat;
+			$values['purchase'] = $this->stock->purchasePrice->withoutVat;
 		}
 		if ($this->stock->price) {
 			$values['price'] = $this->defaultWithVat ? $this->stock->price->withVat : $this->stock->price->withoutVat;

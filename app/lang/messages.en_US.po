@@ -1210,6 +1210,9 @@ msgstr "New other image"
 msgid "Purchase price"
 msgstr "Purchase price"
 
+msgid "Purchase price without VAT"
+msgstr "Purchase price without VAT"
+
 msgid "Old price"
 msgstr "Old price"
 
@@ -1236,6 +1239,9 @@ msgstr "Product title"
 
 msgid "Purchase price"
 msgstr "Purchase price"
+
+msgid "Purchase price without VAT"
+msgstr "Purchase price without VAT"
 
 msgid "Store"
 msgstr "Store"
