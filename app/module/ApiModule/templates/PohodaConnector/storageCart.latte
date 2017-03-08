@@ -47,7 +47,6 @@
 			<stk:code>{$stock->pohodaCode}</stk:code>
 			<stk:isSales>true</stk:isSales>
 			<stk:isInternet>true</stk:isInternet>
-			<stk:purchasingRateVAT>{include vat, item => $stock}</stk:purchasingRateVAT>
 			<stk:sellingRateVAT>{include vat, item => $stock}</stk:sellingRateVAT>
 			<stk:name><![CDATA[{$stock->product->name|truncate:90:''}]]></stk:name>
 			<stk:storage>
@@ -84,7 +83,6 @@
 			<stk:sellingPrice>{$stock->price}</stk:sellingPrice>
 			<stk:sellingRateVAT>{include vat, item => $stock}</stk:sellingRateVAT>
 			<stk:purchasingPrice n:if="$stock->purchasePrice">{$stock->purchasePrice}</stk:purchasingPrice>
-			<stk:purchasingRateVAT n:if="$stock->purchasePrice">{include vat, item => $stock}</stk:purchasingRateVAT>
 			<stk:name><![CDATA[{$stock->product->name}]]></stk:name>
 		</stk:stockHeader>
 	</stk:stock>

@@ -1190,6 +1190,9 @@ msgstr "Ďalší nový obrázok"
 msgid "Purchase price"
 msgstr "Kúpna cena"
 
+msgid "Purchase price without VAT"
+msgstr "Kúpna cena bez DPH"
+
 msgid "Old price"
 msgstr "Stará cena"
 
