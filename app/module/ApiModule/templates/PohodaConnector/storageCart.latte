@@ -57,7 +57,6 @@
 				<typ:ids>{$typePrice}</typ:ids>
 			</stk:typePrice>
 			<stk:sellingPrice>{$stock->price}</stk:sellingPrice>
-			<stk:purchasingPrice n:if="$stock->purchasePrice">{$stock->purchasePrice}</stk:purchasingPrice>
 		</stk:stockHeader>
 	</stk:stock>
 </dat:dataPackItem>
@@ -82,7 +81,6 @@
 		<stk:stockHeader>
 			<stk:sellingPrice>{$stock->price}</stk:sellingPrice>
 			<stk:sellingRateVAT>{include vat, item => $stock}</stk:sellingRateVAT>
-			<stk:purchasingPrice n:if="$stock->purchasePrice">{$stock->purchasePrice}</stk:purchasingPrice>
 			<stk:name><![CDATA[{$stock->product->name}]]></stk:name>
 		</stk:stockHeader>
 	</stk:stock>
