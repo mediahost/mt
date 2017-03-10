@@ -100,7 +100,7 @@ class PageFacade extends Object
 		}
 
 		$cache = $this->getCache();
-		$cacheKey = self::KEY_ALL_SLUGS . '_' . $locale;
+		$cacheKey = self::KEY_ALL_SLUGS . '_' . $locale . '_' . $this->shopFacade->getShopVariant()->id;
 
 		$slugs[$locale] = $cache->load($cacheKey);
 		if (!$slugs[$locale]) {
@@ -117,17 +117,21 @@ class PageFacade extends Object
 	{
 		$pages = $this->pageRepo->findAll();
 
+		$priorities = [];
 		$pagesBySlug = [];
 		foreach ($pages as $page) {
 			$page->setCurrentLocale($locale);
-			if (array_key_exists($page->slug, $pagesBySlug)) {
-				if (($page->shopVariant && $page->shopVariant->id === $this->shopFacade->getShopVariant()->id) ||
-					($page->shop && $page->shop->id === $this->shopFacade->getShopVariant()->shop->id)
-				) {
-					$pagesBySlug[$page->slug] = $page;
-				}
-			} else {
+			if ($page->shopVariant && $page->shopVariant->id === $this->shopFacade->getShopVariant()->id) {
 				$pagesBySlug[$page->slug] = $page;
+				$priorities[$page->slug] = 3;
+			} else if ($page->shop && $page->shop->id === $this->shopFacade->getShopVariant()->shop->id
+				&& array_key_exists($page->slug, $priorities) && $priorities[$page->slug] < 3
+			) {
+				$pagesBySlug[$page->slug] = $page;
+				$priorities[$page->slug] = 2;
+			} else if (!array_key_exists($page->slug, $priorities)) {
+				$pagesBySlug[$page->slug] = $page;
+				$priorities[$page->slug] = 1;
 			}
 		}
 
