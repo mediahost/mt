@@ -52,13 +52,13 @@ class ShopVariant extends BaseEntity
 	/** @ORM\Column(type="boolean") */
 	protected $active = TRUE;
 
-	/** @ORM\OneToOne(targetEntity="Address", cascade={"persist", "remove"}) */
+	/** @ORM\OneToOne(targetEntity="Address", cascade={"persist", "remove"}, fetch="EAGER") */
 	protected $address;
 
-	/** @ORM\OneToOne(targetEntity="BankAccount", cascade={"persist", "remove"}) */
+	/** @ORM\OneToOne(targetEntity="BankAccount", cascade={"persist", "remove"}, fetch="EAGER") */
 	protected $bankAccount1;
 
-	/** @ORM\OneToOne(targetEntity="BankAccount", cascade={"persist", "remove"}) */
+	/** @ORM\OneToOne(targetEntity="BankAccount", cascade={"persist", "remove"}, fetch="EAGER") */
 	protected $bankAccount2;
 
 	public function __construct($locale)
@@ -94,7 +94,6 @@ class ShopVariant extends BaseEntity
 		if ($raw) {
 			return $this->address;
 		}
-
 		$importedAddress = clone $this->shop->address;
 		if ($this->address) {
 			$importedAddress->import($this->address);
