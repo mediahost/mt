@@ -5,6 +5,7 @@ namespace App\AppModule\Presenters;
 use App\Components\Currency\Form\IRateFactory;
 use App\Components\Currency\Form\Rate;
 use App\Components\Shop\Form\IShopEditFactory;
+use App\Components\Shop\Form\IVariantEditFactory;
 use App\Components\Shop\Form\ShopEdit;
 use App\Components\Unit\Form\IUnitsEditFactory;
 use App\Components\Unit\Form\UnitsEdit;
@@ -12,21 +13,31 @@ use App\Model\Entity\Shop;
 use App\Model\Entity\ShopVariant;
 use App\Model\Entity\Unit;
 use App\Model\Entity\Variant;
+use App\Model\Repository\ShopRepository;
 use Kdyby\Doctrine\EntityRepository;
 
 class ShopsPresenter extends BasePresenter
 {
 
 	/** @var Shop */
-	private $shop;
+	private $shopEntity;
+
+	/** @var ShopVariant */
+	private $variantEntity;
+
+	/** @var ShopRepository */
+	private $shopRepo;
 
 	/** @var EntityRepository */
-	private $shopRepo;
+	private $shopVariantRepo;
 
 	// <editor-fold desc="injects">
 
 	/** @var IShopEditFactory @inject */
 	public $iShopEditFactory;
+
+	/** @var IVariantEditFactory @inject */
+	public $iVariantEditFactory;
 
 	// </editor-fold>
 
@@ -34,6 +45,7 @@ class ShopsPresenter extends BasePresenter
 	{
 		parent::startup();
 		$this->shopRepo = $this->em->getRepository(Shop::getClassName());
+		$this->shopVariantRepo = $this->em->getRepository(ShopVariant::getClassName());
 	}
 
 	/**
@@ -54,49 +66,48 @@ class ShopsPresenter extends BasePresenter
 	 */
 	public function actionAdd()
 	{
-		$this->shop = new Shop();
+		$this->shopEntity = new Shop();
 		$this->setView('edit');
 	}
 
 	/**
 	 * @secured
 	 * @resource('shops')
-	 * @privilege('edit')
+	 * @privilege('editShop')
 	 */
-	public function actionEdit($id)
+	public function actionEditShop($id)
 	{
-		$this->shop = $this->shopRepo->find($id);
-		if (!$this->shop) {
+		$this->shopEntity = $this->shopRepo->find($id);
+		if (!$this->shopEntity) {
 			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Shop')]);
 			$this->flashMessage($message, 'warning');
 			$this->redirect('default');
 		}
 	}
 
-	public function renderEdit()
+	public function renderEditShop()
 	{
-		$this->template->shop = $this->shop;
+		$this->template->shop = $this->shopEntity;
 	}
 
 	/**
 	 * @secured
 	 * @resource('shops')
-	 * @privilege('addVariant')
+	 * @privilege('editVariant')
 	 */
-	public function handleAddVariant($shopId, $code)
+	public function actionEditVariant($id)
 	{
-		$this->shop = $this->shopRepo->find($shopId);
-		if (!$this->shop) {
-			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Shop')]);
+		$this->variantEntity = $this->shopVariantRepo->find($id);
+		if (!$this->variantEntity) {
+			$message = $this->translator->translate('wasntFound', NULL, ['name' => $this->translator->translate('Variant')]);
 			$this->flashMessage($message, 'warning');
 			$this->redirect('default');
 		}
+	}
 
-		$variant = new ShopVariant($code);
-		$this->shop->addVariant($variant);
-		$this->shopRepo->save($this->shop);
-
-		$this->redirect('default');
+	public function renderEditVariant()
+	{
+		$this->template->variant = $this->variantEntity;
 	}
 
 	// <editor-fold desc="forms">
@@ -105,9 +116,22 @@ class ShopsPresenter extends BasePresenter
 	public function createComponentShopForm()
 	{
 		$control = $this->iShopEditFactory->create();
-		$control->setShop($this->shop);
+		$control->setShop($this->shopEntity);
 		$control->onAfterSave = function () {
 			$message = $this->translator->translate('Shop was successfully saved.');
+			$this->flashMessage($message, 'success');
+			$this->redirect('default');
+		};
+		return $control;
+	}
+
+	/** @return ShopEdit */
+	public function createComponentVariantForm()
+	{
+		$control = $this->iVariantEditFactory->create();
+		$control->setVariant($this->variantEntity);
+		$control->onAfterSave = function () {
+			$message = $this->translator->translate('Shop variant was successfully saved.');
 			$this->flashMessage($message, 'success');
 			$this->redirect('default');
 		};

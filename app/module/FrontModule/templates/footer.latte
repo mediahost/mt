@@ -6,11 +6,11 @@
 				<div class="col-md-3">
 					<h4 class="widget-title-sm">{$pageInfo->projectName}</h4>
 					<address class="margin-bottom-40">
-						<strong>{$shop->address->company}</strong><br>
-						{$shop->address->street}<br>
-						{$shop->address->zipcode} {$shop->address->city}<br>
-						{_'IČO'}: {$shop->address->ico}<br>
-						{_'DIČ'}: {$shop->address->dic}
+						<strong>{$shopVariant->address->company}</strong><br>
+						{$shopVariant->address->street}<br>
+						{$shopVariant->address->zipcode} {$shopVariant->address->city}<br>
+						{_'IČO'}: {$shopVariant->address->ico}<br>
+						{_'DIČ'}: {$shopVariant->address->dic}
 					</address>
 					<h4 class="widget-title-sm">{_'Open hours'}</h4>
 					<table>
@@ -31,15 +31,15 @@
 					<address class="margin-bottom-40">
 						<address class="margin-bottom-10">
 							<strong>Konzultácie ohľadom spracovania objednávok</strong><br>
-							{_'Phone'}: {$shop->address->phone}<br>
+							{_'Phone'}: {$shopVariant->address->phone}<br>
 							{_'Email'}: <a
-									href="mailto:{$shop->address->mail}">{$shop->address->mail}</a><br>
+									href="mailto:{$shopVariant->address->mail}">{$shopVariant->address->mail}</a><br>
 						</address>
 						<address class="margin-bottom-40">
 							<strong>Reklamácie, servis</strong><br>
-							{_'Phone'}: {$shop->address->phoneHome}<br>
+							{_'Phone'}: {$shopVariant->address->phoneHome}<br>
 							{_'Email'}: <a
-									href="mailto:{$shop->address->mailHome}">{$shop->address->mailHome}</a><br>
+									href="mailto:{$shopVariant->address->mailHome}">{$shopVariant->address->mailHome}</a><br>
 						</address>
 					</address>
 				</div>
@@ -61,7 +61,7 @@
 			<div class="row">
 				<div class="col-md-6">
 					<p class="copyright-text">
-						Copyright &copy; <a href="http://mediahost.sk/">Mediahost.sk </a> 2016.
+						Copyright &copy; <a href="http://mediahost.sk/">Mediahost.sk</a> {time()|date:'Y'}.
 						All rights reseved.
 					</p>
 				</div>

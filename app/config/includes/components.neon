@@ -112,6 +112,7 @@ services:
 
 	# Shops
 	- {implement: App\Components\Shop\Form\IShopEditFactory, inject: yes}
+	- {implement: App\Components\Shop\Form\IVariantEditFactory, inject: yes}
 
 	# Example
 	- {implement: App\Components\Example\Form\IExampleFormFactory, inject: yes}

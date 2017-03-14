@@ -21,6 +21,10 @@ use Nette\Utils\Strings;
  * @property ArrayCollection $shippings
  * @property ArrayCollection $payments
  * @property bool $active
+ * @property Address $address
+ * @property BankAccount $bankAccounts
+ * @property BankAccount $bankAccount1
+ * @property BankAccount $bankAccount2
  */
 class ShopVariant extends BaseEntity
 {
@@ -48,6 +52,15 @@ class ShopVariant extends BaseEntity
 	/** @ORM\Column(type="boolean") */
 	protected $active = TRUE;
 
+	/** @ORM\OneToOne(targetEntity="Address", cascade={"persist", "remove"}) */
+	protected $address;
+
+	/** @ORM\OneToOne(targetEntity="BankAccount", cascade={"persist", "remove"}) */
+	protected $bankAccount1;
+
+	/** @ORM\OneToOne(targetEntity="BankAccount", cascade={"persist", "remove"}) */
+	protected $bankAccount2;
+
 	public function __construct($locale)
 	{
 		parent::__construct();
@@ -74,6 +87,72 @@ class ShopVariant extends BaseEntity
 	public function isDefault()
 	{
 		return $this->priceNumber === Stock::DEFAULT_PRICE_VERSION && $this->shop->priceLetter === Stock::DEFAULT_PRICE_BASE;
+	}
+
+	public function getAddress($raw = FALSE)
+	{
+		if ($raw) {
+			return $this->address;
+		}
+
+		$importedAddress = clone $this->shop->address;
+		if ($this->address) {
+			$importedAddress->import($this->address);
+		}
+		return $importedAddress;
+	}
+
+	public function getBankAccount1($raw = FALSE)
+	{
+		if ($raw) {
+			return $this->bankAccount1;
+		}
+
+		if ($this->shop->bankAccount1) {
+			$importedAccount = clone $this->shop->bankAccount1;
+			if ($this->bankAccount1) {
+				$importedAccount->import($this->address);
+			}
+			return $importedAccount;
+		} else {
+			return $this->bankAccount1;
+		}
+	}
+
+	public function getBankAccount2($raw = FALSE)
+	{
+		if ($raw) {
+			return $this->bankAccount2;
+		}
+
+		if ($this->shop->bankAccount2) {
+			$importedAccount = clone $this->shop->bankAccount2;
+			if ($this->bankAccount2) {
+				$importedAccount->import($this->address);
+			}
+			return $importedAccount;
+		} else {
+			return $this->bankAccount2;
+		}
+	}
+
+	public function getBankAccounts($raw = FALSE)
+	{
+		$accounts = new ArrayCollection();
+		$accounts->add($this->getBankAccount1($raw));
+		$accounts->add($this->getBankAccount2($raw));
+		return $accounts;
+	}
+
+	public function getReplacementTags()
+	{
+		$address = $this->getAddress();
+		return [
+			'%mail_1%' => $address->mail,
+			'%mail_2%' => $address->mailHome,
+			'%phone_number_1%' => $address->phone,
+			'%phone_number_2%' => $address->phoneHome,
+		];
 	}
 
 	public function __toString()

@@ -61,6 +61,25 @@ class BankAccount extends BaseEntity
 		return $this->country;
 	}
 
+	public function import(BankAccount $account, $force = FALSE)
+	{
+		if ($force || $account->number) {
+			$this->number = $account->number;
+		}
+		if ($force || $account->code) {
+			$this->code = $account->code;
+		}
+		if ($force || $account->iban) {
+			$this->iban = $account->iban;
+		}
+		if ($force || $account->swift) {
+			$this->swift = $account->swift;
+		}
+		if ($force || $account->country) {
+			$this->country = $account->country;
+		}
+	}
+
 	public function __toString()
 	{
 		return (string) $this->getFullNumber();
