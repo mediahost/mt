@@ -151,7 +151,9 @@ class ExportGeneratorPresenter extends BasePresenter
 		$this->message = 'File was generated';
 	}
 
-	/** MAX Priority CPU using */
+	/**
+	 * Validace feedu: https://www.zbozi.cz/validace-feedu/
+	 */
 	public function actionZboziStocks()
 	{
 		proc_nice(19);
