@@ -115,6 +115,7 @@ class SettingsExtension extends CompilerExtension
 				'onlyInStore' => TRUE,
 				'deliveryStoreTime' => 0,
 				'deliveryNotInStoreTime' => NULL,
+				'denyCategoryId' => NULL,
 				'locales' => ['cs'],
 			],
 			'producer' => [
