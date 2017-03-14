@@ -171,9 +171,15 @@ class ExportGeneratorPresenter extends BasePresenter
 
 		/* @var $stockRepo StockRepository */
 		$stockRepo = $this->em->getRepository(Stock::getClassName());
+		$categoryRepo = $this->em->getRepository(Category::getClassName());
+		$categoryRepo->findAll();
 
 		$showOnlyInStore = $this->settings->modules->zbozi->onlyInStore;
-		$stocks = $this->stockFacade->getExportStocksArray($showOnlyInStore);
+		$denyCategory = NULL;
+		if ($this->settings->modules->zbozi->denyCategoryId) {
+			$denyCategory = $categoryRepo->find($this->settings->modules->zbozi->denyCategoryId);
+		}
+		$stocks = $this->stockFacade->getExportStocksArray($showOnlyInStore, $denyCategory);
 
 		$this->template->stocks = $stocks;
 		$this->template->stockRepo = $stockRepo;
