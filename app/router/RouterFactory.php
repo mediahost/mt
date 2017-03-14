@@ -69,21 +69,27 @@ class RouterFactory
 		// </editor-fold>
 		// <editor-fold desc="Api">
 
+		// GET - connector stahuje z tého adresy objednávky
+		// ak zde chybaju objednavky, tak treba skontrolovat kolko dni dozadu berie objednat
+		// (v app/config/settings.local/settings.modules.neon - settings->modules->pohoda->newProductsExportDaysBack)
 		$apiRouter[] = new ResourceRoute('xml_pohoda/objednavky.php', [
 			'presenter' => 'PohodaConnector',
 			'action' => 'readOrders',
 		], ResourceRoute::GET | ResourceRoute::POST);
 
+		// GET - connector stahuje z této adresy produkty
 		$apiRouter[] = new ResourceRoute('xml_pohoda/download_stock.php', [
 			'presenter' => 'PohodaConnector',
 			'action' => 'readStorageCart'
 		], ResourceRoute::GET | ResourceRoute::POST);
 
+		// POST - na tuto adresu posílá connector XML data
 		$apiRouter[] = new ResourceRoute('xml_pohoda/zasoby.php', [
 			'presenter' => 'PohodaConnector',
 			'action' => 'createStore'
 		], ResourceRoute::GET | ResourceRoute::POST);
 
+		// POST - na tuto adresu posílá connector XML data
 		$apiRouter[] = new ResourceRoute('xml_pohoda/zasoby_short.php', [
 			'presenter' => 'PohodaConnector',
 			'action' => 'createShortStock'
