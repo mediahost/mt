@@ -111,7 +111,7 @@ class ShopVariant extends BaseEntity
 		if ($this->shop->bankAccount1) {
 			$importedAccount = clone $this->shop->bankAccount1;
 			if ($this->bankAccount1) {
-				$importedAccount->import($this->address);
+				$importedAccount->import($this->bankAccount1);
 			}
 			return $importedAccount;
 		} else {
@@ -128,7 +128,7 @@ class ShopVariant extends BaseEntity
 		if ($this->shop->bankAccount2) {
 			$importedAccount = clone $this->shop->bankAccount2;
 			if ($this->bankAccount2) {
-				$importedAccount->import($this->address);
+				$importedAccount->import($this->bankAccount2);
 			}
 			return $importedAccount;
 		} else {
