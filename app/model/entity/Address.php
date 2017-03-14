@@ -250,6 +250,7 @@ class Address extends BaseEntity
 		$countries = [
 			'SK' => 'Slovenská republika',
 			'CZ' => 'Česká republika',
+			'PL' => 'Poland',
 			'AT' => 'Austria',
 			'BE' => 'Belgium',
 			'BG' => 'Bulgaria',
@@ -266,7 +267,6 @@ class Address extends BaseEntity
 			'LT' => 'Lithuania',
 			'LU' => 'Luxembourg',
 			'NL' => 'Netherlands',
-			'PL' => 'Poland',
 			'PT' => 'Portugal',
 			'RO' => 'Romania',
 			'SI' => 'Slovenia',

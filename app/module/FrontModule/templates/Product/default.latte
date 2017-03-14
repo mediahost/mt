@@ -84,12 +84,12 @@
 										     alt="{_'HomeCredit iCalc'}"/>
 									</a>
 								</div>
-								<div class="product-recommend">
-									<a href="#recommend" data-toggle="modal">
-										<span class="fa fa-send"></span>
-										{_'Recommend'}
-									</a>
-								</div>
+								{*<div class="product-recommend">*}
+									{*<a href="#recommend" data-toggle="modal">*}
+										{*<span class="fa fa-send"></span>*}
+										{*{_'Recommend'}*}
+									{*</a>*}
+								{*</div>*}
 								{*<div class="product-watchdog">*}
 									{*<a href="#watchdog" data-toggle="modal">*}
 										{*<span class="fa fa-bar-chart-o"></span>*}
@@ -116,7 +116,7 @@
 				</ul>
 				<div class="tab-content">
 					<div class="tab-pane fade in active" id="description">
-						<p>{$product->description|noescape}</p>
+						<p>{$product->getDescription($shopVariant->getReplacementTags())|noescape}</p>
 					</div>
 					<div n:if="$params && count($params)" class="tab-pane fade" id="parameters">
 						<table class="table">

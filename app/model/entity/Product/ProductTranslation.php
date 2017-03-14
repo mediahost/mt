@@ -56,6 +56,15 @@ class ProductTranslation extends BaseEntity
 		return $this;
 	}
 
+	public function getDescription(array $replace = [])
+	{
+		$description = $this->description;
+		foreach ($replace as $search => $replacement) {
+			$description = preg_replace('/' . preg_quote($search, '/') . '/', $replacement, $description);
+		}
+		return $description;
+	}
+
 	public function getSeo()
 	{
 		if (!$this->seo) {

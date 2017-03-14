@@ -8,6 +8,7 @@ use App\Model\Entity\Shop;
 use App\Model\Entity\Stock;
 use App\Model\Facade\VatFacade;
 use Nette\Utils\ArrayHash;
+use Nette\Utils\Html;
 
 class StockBasic extends StockBase
 {
@@ -47,7 +48,18 @@ class StockBasic extends StockBase
 		}
 		$form->addWysiHtml('perex', 'Perex', 4)
 			->getControlPrototype()->class[] = 'page-html-content';
+
+		$tags = $this->shopFacade->getShopVariant()->getReplacementTags();
+		$allowedTags = Html::el()->setText($this->translator->translate('Allowed tags') . ':');
+		$separator = Html::el('br');
+		foreach ($tags as $key => $tag) {
+			$tagOrderNumber = Html::el()->setText($key . ' » ' . $tag);
+			$allowedTags
+				->add($separator)
+				->add($tagOrderNumber);
+		}
 		$form->addWysiHtml('description', 'Description', 10)
+			->setOption('description', $allowedTags)
 			->getControlPrototype()->class[] = 'page-html-content';
 
 		$form->addSubmit('save', 'Save');
