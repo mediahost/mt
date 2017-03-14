@@ -15,7 +15,6 @@ use App\Mail\Messages\Order\Payment\ISuccessPaymentFactory;
 use App\Model\Entity\Basket;
 use App\Model\Entity\Category;
 use App\Model\Entity\Order;
-use App\Model\Entity\Payment;
 use App\Model\Entity\Shipping;
 use App\Model\Facade\Exception\ItemsIsntOnStockException;
 use Doctrine\ORM\NoResultException;
