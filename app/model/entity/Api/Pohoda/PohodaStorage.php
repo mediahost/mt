@@ -9,6 +9,8 @@ use Kdyby\Doctrine\Entities\BaseEntity;
  * @ORM\Entity
  *	
  * @property int $id
+ * @property string $name
+ * @property bool $allowed
  * @property string $ids
  */
 class PohodaStorage extends BaseEntity
@@ -23,6 +25,9 @@ class PohodaStorage extends BaseEntity
 	
 	/** @ORM\Column(type="string", length=64) */
 	protected $name;
+
+	/** @ORM\Column(type="boolean", nullable=true) */
+	protected $allowed = FALSE;
 
 	/** @ORM\OneToMany(targetEntity="PohodaItem", mappedBy="storage") */
 	protected $products;
