@@ -2,6 +2,7 @@
 
 namespace App\Model\Repository;
 
+use App\Model\Entity\PohodaItem;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\Expr\Func;
 use Exception;
@@ -84,7 +85,11 @@ class PohodaItemRepository extends BaseRepository
 		if (array_key_exists($code, $codes)) {
 			$ids = $codes[$code];
 			foreach ($ids as $id) {
-				$items[] = $this->find($id);
+				/** @var PohodaItem $item */
+				$item = $this->find($id);
+				if ($item && $item->storage->allowed) {
+					$items[] = $item;
+				}
 			}
 		}
 		return $items;

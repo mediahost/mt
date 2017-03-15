@@ -67,6 +67,7 @@ class PohodaFacade extends Object
 			throw new MissingSettingsException('Pohoda language must be set.');
 		}
 		$conditions = [
+			'storage.allowed' => TRUE,
 			'isInternet' => 'true',
 			'synchronized' => FALSE,
 			'skipped' => FALSE,

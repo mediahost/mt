@@ -131,7 +131,10 @@ class StockPrice extends StockBase
 		}
 
 		$form->addText('purchase', 'Purchase price without VAT')
-			->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S]);
+			->setDisabled()
+			->setOmitted(FALSE)
+			->setAttribute('class', ['mask_currency', MetronicTextInputBase::SIZE_S])
+			->setOption('description', 'Editable only in Pohoda');
 
 		$form->addSubmit('save', 'Save')
 			->setAttribute('data-dismiss-after', 'true');

@@ -8,6 +8,7 @@ use Kdyby\Doctrine\Entities\BaseEntity;
 use Knp\DoctrineBehaviors\Model;
 
 /**
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="pohoda_item_unique", columns={"code", "storage_id"})})
  * @ORM\Entity(repositoryClass="App\Model\Repository\PohodaItemRepository")
  *
  * @property int $id
@@ -45,7 +46,7 @@ class PohodaItem extends BaseEntity
 	/** @ORM\Column(type="string", length=90, nullable=true) */
 	protected $name;
 
-	/** @ORM\ManyToOne(targetEntity="PohodaStorage", inversedBy="products", cascade="all") */
+	/** @ORM\ManyToOne(targetEntity="PohodaStorage", inversedBy="products", cascade={"persist"}) */
 	protected $storage;
 
 	/** @ORM\Column(type="string", length=20, nullable=true) */
