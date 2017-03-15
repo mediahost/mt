@@ -1806,3 +1806,6 @@ msgstr "Your service request has been sent."
 
 msgid "Your buyout request has been sent."
 msgstr "Your buyout request has been sent."
+
+msgid "Editable only in Pohoda"
+msgstr "Editable only in Pohoda"

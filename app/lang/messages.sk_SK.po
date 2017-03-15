@@ -1765,3 +1765,6 @@ msgstr "Vaša požiadavka na servis telefónu bola odoslaná. Budeme Vás kontak
 
 msgid "Your buyout request has been sent."
 msgstr "Vaša požiadavka na výkup telefónu bola odoslaná. Budeme Vás kontaktovať s cenovou ponukou na výkup."
+
+msgid "Editable only in Pohoda"
+msgstr "Upraviť možno iba v Pohode"
