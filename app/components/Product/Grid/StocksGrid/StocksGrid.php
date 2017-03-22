@@ -223,11 +223,12 @@ class StocksGrid extends BaseControl
 		$grid->getColumn('lock')->cellPrototype->style = 'text-align: right';
 
 		/***************************************************/
-		$grid->addColumnBoolean('active', 'Public')
+		$activeColName = 'active' . $this->shopFacade->getShopVariant()->shop->priceLetter;
+		$grid->addColumnBoolean($activeColName, 'Public')
 			->setDisableExport()
 			->setSortable()
-			->setFilterSelect([1 => 'YES', 0 => 'NO']);
-		$grid->getColumn('active')->headerPrototype->style = 'width:95px';
+			->setFilterSelect([NULL => '---', 1 => 'YES', 0 => 'NO']);
+		$grid->getColumn($activeColName)->headerPrototype->style = 'width:95px';
 
 		$grid->addActionHref('view', NULL)
 			->setCustomRender(function ($item) {
