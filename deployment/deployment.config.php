@@ -30,7 +30,11 @@ return array(
 		'test' => FALSE,
 		'ignore' => '
 			.git*
+			!.gitignore
+			!.gitattributes
+			!.gitkeep
 			.composer*
+			composer.lock
 			project.pp[jx]
 			/.idea
 			/nbproject
@@ -52,13 +56,8 @@ return array(
 			*.local*.neon
 			*.server*.neon
 			/app/config/settings.local*
-			composer.lock
-			composer.json
-			*.md
-			.bowerrc
 			/app/config/deployment.*
 			/vendor/dg/ftp-deployment
-			*.rst
 		',
 		'allowdelete' => TRUE,
 		'before' => $before,
