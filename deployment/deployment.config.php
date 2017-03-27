@@ -1,18 +1,15 @@
 <?php
 
-$purge = array(
+$purge = [
 	'temp/deployment',
-);
+];
 
-$before = array(
-	'local:composer install --no-dev -d ./../',
-);
+$before = [];
 
-$after = array();
+$after = [];
 if (!isset($allowInstall) || $allowInstall) {
 	$after[] = $domain . '/install?printHtml=0';
 }
-$after[] = 'local:composer install --dev -d ./../';
 
 if (!isset($allowDeleteCache) || $allowDeleteCache) {
 	$purge[] = 'temp/cache';
@@ -22,8 +19,8 @@ if (!isset($allowDeleteTmp) || $allowDeleteTmp) {
 	$purge[] = 'tmp/';
 }
 
-return array(
-	'my site' => array(
+return [
+	'my site' => [
 		'remote' => 'ftp://' . $username . ':' . $password . '@' . $server,
 		'passivemode' => TRUE,
 		'local' => '..',
@@ -58,13 +55,17 @@ return array(
 			/app/config/settings.local*
 			/app/config/deployment.*
 			/vendor/dg/ftp-deployment
+			/vendor/nette/tester
+			/vendor/kdyby/tester-extras
+			/vendor/mockery/mockery
+			/vendor/bin
 		',
 		'allowdelete' => TRUE,
 		'before' => $before,
 		'after' => $after,
 		'purge' => $purge,
 		'preprocess' => FALSE,
-	),
+	],
 	'tempdir' => __DIR__ . '/temp',
 	'colors' => TRUE,
-);
+];
