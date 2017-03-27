@@ -42,7 +42,10 @@ class PohodaItemRepository extends BaseRepository
 	{
 		$qb = $this->createQueryBuilder('p')
 			->select(new Func('SUM', 'p.count'))
-			->whereCriteria(['p.' . self::CODE => $code])
+			->whereCriteria([
+				'p.' . self::CODE => $code,
+				'storage.allowed' => TRUE,
+			])
 			->groupBy('p.' . self::CODE);
 
 		return $qb->setMaxResults(1)
