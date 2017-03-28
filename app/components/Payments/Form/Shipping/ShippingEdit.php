@@ -48,6 +48,7 @@ class ShippingEdit extends BaseControl
 
 		if ($this->user->isAllowed('payments', 'editAll')) {
 			$form->addGroup('Superadmin part');
+			$form->addCheckSwitch('changeConnected', 'Change Connected', 'YES', 'NO');
 			$form->addCheckSwitch('active', 'Active', 'YES', 'NO');
 			$form->addCheckSwitch('needAddress', 'Need Address', 'YES', 'NO');
 			$form->addCheckSwitch('cond1', 'Apply condition #1', 'YES', 'NO')
@@ -98,18 +99,20 @@ class ShippingEdit extends BaseControl
 		$this->load($values, $this->shipping);
 		$shippingRepo->save($this->shipping);
 
-		$infoConnected = $shippingRepo->findBy([
-			'name' => $this->shipping->name,
-		]);
-		foreach ($infoConnected as $shipping) {
-			$this->load($values, $shipping);
-			$shippingRepo->save($shipping);
+		if (isset($values->changeConnected) && $values->changeConnected) {
+			$infoConnected = $shippingRepo->findBy([
+				'name' => $this->shipping->name,
+			]);
+			foreach ($infoConnected as $shipping) {
+				$this->load($values, $shipping, FALSE);
+				$shippingRepo->save($shipping);
+			}
 		}
 
 		$this->onAfterSave($this->shipping);
 	}
 
-	private function load(ArrayHash $values, Shipping $shipping)
+	private function load(ArrayHash $values, Shipping $shipping, $isMain = TRUE)
 	{
 		if (isset($values->active)) {
 			$shipping->active = $values->active;
@@ -133,13 +136,21 @@ class ShippingEdit extends BaseControl
 				$vat = $vatRepo->find($values->vat);
 				$shipping->vat = $vat;
 			}
-			$priceValue = $this->change($values->price, $shipping->shopVariant->currency);
+			if ($isMain) {
+				$priceValue = $values->price;
+			} else {
+				$priceValue = $this->change($values->price, $shipping->shopVariant->currency);
+			}
 			$shipping->setPrice($priceValue, $values->with_vat);
 			$shipping->setPercentPrice(NULL);
 		}
 
 		if (isset($values->free)) {
-			$freeValue = $this->change($values->free, $shipping->shopVariant->currency);
+			if ($isMain) {
+				$freeValue = $values->free;
+			} else {
+				$freeValue = $this->change($values->free, $shipping->shopVariant->currency);
+			}
 			$shipping->setFreePrice($freeValue, $values->with_vat);
 		}
 

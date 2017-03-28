@@ -13,6 +13,7 @@ use Kdyby\Translation\Translator;
 use Nette\Application\UI;
 use Nette\Bridges\ApplicationLatte\Template;
 use Nette\Latte\Engine;
+use Nette\Utils\Strings;
 
 abstract class BaseControl extends UI\Control
 {
@@ -60,7 +61,7 @@ abstract class BaseControl extends UI\Control
 	protected function change($value, $currency)
 	{
 		$value = Price::strToFloat($value);
-		switch ($currency) {
+		switch (Strings::upper($currency)) {
 			case 'EUR':
 			default:
 				return $value;

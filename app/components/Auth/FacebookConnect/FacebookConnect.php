@@ -55,6 +55,7 @@ class FacebookConnect extends BaseControl
 			$fb = $dialog->getFacebook();
 
 			if (!$fb->getUser()) {
+				Debugger::log('Missing user entity', 'facebook');
 				$message = $this->translator->translate('We are sorry, facebook authentication failed hard.');
 				$this->presenter->flashMessage($message);
 				return;
