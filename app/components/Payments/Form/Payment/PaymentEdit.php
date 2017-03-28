@@ -54,6 +54,7 @@ class PaymentEdit extends BaseControl
 
 		if ($this->user->isAllowed('payments', 'editAll')) {
 			$form->addGroup('Superadmin part');
+			$form->addCheckSwitch('changeConnected', 'Change Connected', 'YES', 'NO');
 			$form->addCheckSwitch('active', 'Active', 'YES', 'NO');
 			$form->addCheckSwitch('needAddress', 'Need Address', 'YES', 'NO');
 //			$form->addCheckSwitch('cond1', 'Apply condition #1', 'YES', 'NO');
@@ -108,18 +109,20 @@ class PaymentEdit extends BaseControl
 		$this->load($values, $this->payment);
 		$paymentRepo->save($this->payment);
 
-		$infoConnected = $paymentRepo->findBy([
-			'name' => $this->payment->name,
-		]);
-		foreach ($infoConnected as $payment) {
-			$this->load($values, $payment);
-			$paymentRepo->save($payment);
+		if (isset($values->changeConnected) && $values->changeConnected) {
+			$infoConnected = $paymentRepo->findBy([
+				'name' => $this->payment->name,
+			]);
+			foreach ($infoConnected as $payment) {
+				$this->load($values, $payment, FALSE);
+				$paymentRepo->save($payment);
+			}
 		}
 
 		$this->onAfterSave($this->payment);
 	}
 
-	private function load(ArrayHash $values, Payment $payment)
+	private function load(ArrayHash $values, Payment $payment, $isMain = TRUE)
 	{
 		if (isset($values->active)) {
 			$payment->active = $values->active;
@@ -164,13 +167,21 @@ class PaymentEdit extends BaseControl
 				$vat = $vatRepo->find($values->vat);
 				$payment->vat = $vat;
 			}
-			$priceValue = $this->change($values->price, $payment->shopVariant->currency);
+			if ($isMain) {
+				$priceValue = $values->price;
+			} else {
+				$priceValue = $this->change($values->price, $shipping->shopVariant->currency);
+			}
 			$payment->setPrice($priceValue, $values->with_vat);
 			$payment->setPercentPrice(NULL);
 		}
 		if (isset($values->free)) {
-			$freePrice = $this->change($values->free, $payment->shopVariant->currency);
-			$payment->setFreePrice($freePrice, $values->with_vat);
+			if ($isMain) {
+				$freeValue = $values->free;
+			} else {
+				$freeValue = $this->change($values->free, $payment->shopVariant->currency);
+			}
+			$payment->setFreePrice($freeValue, $values->with_vat);
 		}
 
 		if ($this->payment->shopVariant->locale === $payment->shopVariant->locale) {
