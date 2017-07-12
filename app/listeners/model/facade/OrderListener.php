@@ -78,8 +78,6 @@ class OrderListener extends Object implements Subscriber
 				$messageForCustomer = $this->changeStateOrderExpededMessage->create();
 			} else if ($order->state->type->id === OrderStateType::DONE) {
 				$messageForCustomer = $this->changeStateOrderDoneMessage->create();
-			} else if ($order->state->type->id === OrderStateType::STORNO) {
-				$messageForCustomer = $this->changeStateOrderStornoMessage->create();
 			}
 
 			if ($messageForCustomer) {
