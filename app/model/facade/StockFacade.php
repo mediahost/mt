@@ -168,7 +168,7 @@ class StockFacade extends Object
 		$priceName = $this->shopFacade->getDefaultPriceName();
 		$qb = $this->stockRepo->createQueryBuilder('s')
 			->select('v')
-			->addSelect('partial s.{id, barcode, gift, ' . $priceName . ', inStore}')
+			->addSelect('partial s.{id, barcode, gift, ' . $priceName . ', inStore, stockAt}')
 			->addSelect('partial t.{id, name, description, locale, slug}')
 			->addSelect('partial i.{id, filename}')
 			->addSelect('partial p.{id}')
@@ -197,6 +197,11 @@ class StockFacade extends Object
 			$qb
 				->andWhere("s.inStore >= :inStore")
 				->setParameter('inStore', 1);
+		} else {
+			$qb
+				->andWhere("(s.inStore >= :inStore OR (s.inStore < :inStore AND s.stockAt > :today))")
+				->setParameter('inStore', 1)
+				->setParameter('today', DateTime::from('today'));
 		}
 		if ($denyCategory && count($denyCategory->childrenArray)) {
 			$qb
