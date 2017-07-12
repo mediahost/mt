@@ -18,6 +18,8 @@
 		{var heurekaCatProduct => isset($heurekaCategories[$heurekaCatIdProduct]) ? $heurekaCategories[$heurekaCatIdProduct] : NULL}
 		{var heurekaCatCategory => isset($heurekaCategories[$heurekaCatIdCategory]) ? $heurekaCategories[$heurekaCatIdCategory] : NULL}
 
+		{var $deliveryNotInStore => $stock['stockAt'] && (\Nette\Utils\DateTime::from($stock['stockAt']) > \Nette\Utils\DateTime::from('today')) ? ($stock['stockAt'])->format('Y-m-d') : $deliveryNotInStoreTime}
+
 		<ITEM_ID>{$stock['id']}</ITEM_ID>
 		<PRODUCTNAME>{if $producer}<![CDATA[{$producer}]]> | {/if}<![CDATA[{$translation['name']}]]></PRODUCTNAME>
 		<PRODUCT><![CDATA[{$translation['name']}]]></PRODUCT>
@@ -37,7 +39,7 @@
 		<EAN n:if="$stock['barcode']">{$stock['barcode']}</EAN>
 		<GIFT n:if="$stock['gift']">{$stock['gift']}</GIFT>
 
-		<DELIVERY_DATE>{$stock['inStore'] ? $deliveryStoreTime : $deliveryNotInStoreTime}</DELIVERY_DATE>
+		<DELIVERY_DATE>{$stock['inStore'] ? $deliveryStoreTime : $deliveryNotInStore}</DELIVERY_DATE>
 
 		<DELIVERY n:foreach="$shippings as $shipping" n:if="!$hideDelivery && $shipping->isForLocality($locale)">
 			<DELIVERY_ID>{_$shipping}</DELIVERY_ID>

@@ -20,6 +20,9 @@ trait StockQuantities
 	/** @ORM\Column(type="integer") */
 	private $inStore;
 
+	/** @ORM\Column(type="datetime", nullable=true) */
+	protected $stockAt;
+
 	public function setQuantity($quantity)
 	{
 		$this->quantity = $quantity > 0 ? $quantity : 0;

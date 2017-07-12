@@ -106,6 +106,7 @@ class ExportGeneratorPresenter extends BasePresenter
 		$categoryRepo->findAll();
 
 		$showOnlyInStore = $this->settings->modules->heureka->onlyInStore;
+		$showOnlyInStore = FALSE;
 		$denyCategory = NULL;
 		if ($this->settings->modules->heureka->denyCategoryId) {
 			$denyCategory = $categoryRepo->find($this->settings->modules->heureka->denyCategoryId);

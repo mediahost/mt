@@ -25,6 +25,7 @@ use Nette\Utils\DateTime;
  * @property DateTime $createdAt
  * @property DateTime $updatedAt
  * @property DateTime $deletedAt
+ * @property DateTime $stockAt
  * @property boolean $active
  * @property Unit $unit
  * @property Producer $producer
