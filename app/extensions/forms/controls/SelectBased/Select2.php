@@ -7,10 +7,30 @@ use Nette\Forms\Controls\SelectBox;
 class Select2 extends SelectBox
 {
 
+	/** @var bool */
+	private $autocomplete = FALSE;
+
 	public function __construct($label = NULL, array $items = NULL)
 	{
 		parent::__construct($label, $items);
 		$this->control->class = ['select2'];
+	}
+
+	public function setAutocomplete($class = NULL)
+	{
+		$this->autocomplete = TRUE;
+		$this->control->class[] = 'autocomplete';
+		$this->control->class[] = $class;
+		return $this;
+	}
+
+	public function getValue()
+	{
+		if ($this->autocomplete) {
+			return $this->value;
+		} else {
+			return parent::getValue();
+		}
 	}
 
 	/**

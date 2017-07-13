@@ -1765,5 +1765,17 @@ msgstr "Váš požadavek na servis telefonu byl odeslán. Co nejdříve Vás bud
 msgid "Your buyout request has been sent."
 msgstr "Váš požadavek na výkup telefonu byl odeslán. Budeme Vás kontaktovat s cenovou nabídkou na výkup."
 
-msgid "Editable only in Pohoda"
-msgstr "Upravit lze pouze v Pohodě"
+msgid "New"
+msgstr "Nový"
+
+msgid "Novice"
+msgstr "Zánovní"
+
+msgid "Used"
+msgstr "Použitý"
+
+msgid "NoviceText"
+msgstr "Nové zboží v původním a kompletním balení, na které je poskytována záruka v délce 24 měsíců. U zboží není možnost odečtu DPH."
+
+msgid "UsedText"
+msgstr "Použité zboží, které je bezvadné a před prodejem odzkoušené a na které je poskytována záruka v délce 6 měsíců. U zboží není možnost odečtu DPH."

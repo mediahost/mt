@@ -8,6 +8,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @property ArrayCollection $similars
  * @property ArrayCollection $similarsWithMe
+ * @property Product $new
+ * @property Product $novice
+ * @property Product $used
  */
 trait ProductSimilars
 {
@@ -23,6 +26,15 @@ trait ProductSimilars
 
 	/** @ORM\ManyToMany(targetEntity="Product", mappedBy="similars") */
 	protected $similarsWithMe;
+
+	/** @ORM\OneToOne(targetEntity="Product") */
+	protected $new;
+
+	/** @ORM\OneToOne(targetEntity="Product") */
+	protected $novice;
+
+	/** @ORM\OneToOne(targetEntity="Product") */
+	protected $used;
 
 	public function setSimilars(array $similars)
 	{

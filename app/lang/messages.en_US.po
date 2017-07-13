@@ -1809,3 +1809,18 @@ msgstr "Your buyout request has been sent."
 
 msgid "Editable only in Pohoda"
 msgstr "Editable only in Pohoda"
+
+msgid "New"
+msgstr "New"
+
+msgid "Novice"
+msgstr "Novice"
+
+msgid "Used"
+msgstr "Used"
+
+msgid "NoviceText"
+msgstr "Nové zboží v původním a kompletním balení, na které je poskytována záruka v délce 24 měsíců. U zboží není možnost odečtu DPH."
+
+msgid "UsedText"
+msgstr "Použité zboží, které je bezvadné a před prodejem odzkoušené a na které je poskytována záruka v délce 6 měsíců. U zboží není možnost odečtu DPH."

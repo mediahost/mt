@@ -36,13 +36,37 @@ class StockSimilar extends StockBase
 		$defaults = [];
 		foreach ($this->stock->product->similars as $product) {
 			$product->setCurrentLocale($this->translator->getLocale());
-			$similars[$product->id] = (string) $product;
+			$similars[$product->id] = (string)$product;
 			$defaults[] = $product->id;
 		}
-		
+
 		$form->addMultiSelect2('similars', 'Similars', $similars)
-				->setDefaultValue($defaults)
-				->setAutocomplete('autocompleteProducts');
+			->setDefaultValue($defaults)
+			->setAutocomplete('autocompleteProducts');
+
+		$newItems = [];
+		if ($this->stock->product->novice) {
+			$newItems[$this->stock->product->novice->id] = $this->stock->product->novice;
+		}
+		$form->addSelect2('new', 'New', $newItems)
+			->setPrompt(TRUE)
+			->setAutocomplete('autocompleteProducts');
+
+		$noviceItems = [];
+		if ($this->stock->product->novice) {
+			$noviceItems[$this->stock->product->novice->id] = $this->stock->product->novice;
+		}
+		$form->addSelect2('novice', 'Novice', $noviceItems)
+			->setPrompt(TRUE)
+			->setAutocomplete('autocompleteProducts');
+
+		$usedItems = [];
+		if ($this->stock->product->used) {
+			$usedItems[$this->stock->product->used->id] = $this->stock->product->used;
+		}
+		$form->addSelect2('used', 'Used', $usedItems)
+			->setPrompt(TRUE)
+			->setAutocomplete('autocompleteProducts');
 
 		$form->addSubmit('save', 'Save');
 
@@ -67,6 +91,16 @@ class StockSimilar extends StockBase
 		}
 		$this->stock->product->similars = $similars;
 
+		if ($values->new) {
+			$this->stock->product->new = $productRepo->find($values->new);
+		}
+		if ($values->novice) {
+			$this->stock->product->novice = $productRepo->find($values->novice);
+		}
+		if ($values->used) {
+			$this->stock->product->used = $productRepo->find($values->used);
+		}
+
 		return $this;
 	}
 
@@ -80,7 +114,11 @@ class StockSimilar extends StockBase
 	/** @return array */
 	protected function getDefaults()
 	{
-		$values = [];
+		$values = [
+			'new' => $this->stock->product->new ? $this->stock->product->new->id : NULL,
+			'novice' => $this->stock->product->novice ? $this->stock->product->novice->id : NULL,
+			'used' => $this->stock->product->used ? $this->stock->product->used->id : NULL,
+		];
 		return $values;
 	}
 

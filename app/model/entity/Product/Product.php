@@ -39,6 +39,9 @@ use Nette\Utils\DateTime;
  * @property ArrayCollection $similarsWithMe
  * @property ArrayCollection $stocks
  * @property Stock $stock Default stock item
+ * @property Product $new
+ * @property Product $novice
+ * @property Product $used
  */
 class Product extends BaseTranslatable
 {

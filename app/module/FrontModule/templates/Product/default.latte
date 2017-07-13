@@ -63,6 +63,31 @@
 								</p>
 							</div>
 						</div>
+						<div class="row">
+							<div class="col-md-12 product-links">
+								<p n:if="$stock->product->new">
+									<a n:href="Product: 'id' => $stock->product->new->stock->getUrlId(), 'slug' => $stock->product->new->stock->getSlug()">
+										{_'New'}
+										<span class="price">{$stock->product->new->stock->getPrice($priceLevel)|currencyVat:$shopVariant->currency}</span></a>
+								</p>
+								<p n:if="$stock->product->novice">
+									<a n:href="Product: 'id' => $stock->product->novice->stock->getUrlId(), 'slug' => $stock->product->novice->stock->getSlug()">
+										{_'Novice'}
+										<span class="price">{$stock->product->novice->stock->getPrice($priceLevel)|currencyVat:$shopVariant->currency}</span></a>
+									<i class="fa fa-info-circle tooltips"
+									   title="{_'NoviceText'}">
+									</i>
+								</p>
+								<p n:if="$stock->product->used">
+									<a n:href="Product: 'id' => $stock->product->used->stock->getUrlId(), 'slug' => $stock->product->used->stock->getSlug()">
+										{_'Used'}
+										<span class="price">{$stock->product->used->stock->getPrice($priceLevel)|currencyVat:$shopVariant->currency}</span></a>
+									<i class="fa fa-info-circle tooltips"
+									   title="{_'UsedText'}">
+									</i>
+								</p>
+							</div>
+						</div>
 						<div n:if="$stock->vat->isNone()">
 							<p n:if="$stock->vat->isNone()">
 								{_'NoVatLaw2'}
