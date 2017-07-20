@@ -165,6 +165,7 @@ class CartPresenter extends BasePresenter
 				$this['webPay']->handleCheckout();
 			} else if ($payByHomecredit) {
 				$this->homecredit->setOrder($order);
+				$this->homecredit->setShopVariant($this->shopVariant);
 				$this->homecredit->setReturnLink($this->link('//:Front:Cart:done'));
 				$this->redirectUrl($this->homecredit->getIShopLink());
 			} else {
