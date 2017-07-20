@@ -83,10 +83,13 @@ class StockBasic extends StockBase
 		$this->stock->barcode = $values->barcode;
 		$this->stock->gift = $values->gift;
 		$this->stock->pohodaCode = $values->pohodaCode;
+		$active = FALSE;
 		foreach ($shopRepo->findAll() as $shop) {
 			$attrName = 'active' . $shop->priceLetter;
 			$this->stock->$attrName = $values->$attrName;
+			$active |= $values->$attrName;
 		}
+		$this->stock->active = $active;
 
 		$this->stock->product->translateAdd($this->translator->getLocale())->name = $values->name;
 		$this->stock->product->translateAdd($this->translator->getLocale())->perex = $values->perex;
