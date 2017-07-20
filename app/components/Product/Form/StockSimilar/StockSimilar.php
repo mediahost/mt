@@ -40,10 +40,6 @@ class StockSimilar extends StockBase
 			$defaults[] = $product->id;
 		}
 
-		$form->addMultiSelect2('similars', 'Similars', $similars)
-			->setDefaultValue($defaults)
-			->setAutocomplete('autocompleteProducts');
-
 		$newItems = [];
 		if ($this->stock->product->novice) {
 			$newItems[$this->stock->product->novice->id] = $this->stock->product->novice;
@@ -91,15 +87,9 @@ class StockSimilar extends StockBase
 		}
 		$this->stock->product->similars = $similars;
 
-		if ($values->new) {
-			$this->stock->product->new = $productRepo->find($values->new);
-		}
-		if ($values->novice) {
-			$this->stock->product->novice = $productRepo->find($values->novice);
-		}
-		if ($values->used) {
-			$this->stock->product->used = $productRepo->find($values->used);
-		}
+		$this->stock->product->new = $values->new ? $productRepo->find($values->new) : NULL;
+		$this->stock->product->novice = $values->novice ? $productRepo->find($values->novice) : NULL;
+		$this->stock->product->used = $values->used ? $productRepo->find($values->used) : NULL;
 
 		return $this;
 	}
