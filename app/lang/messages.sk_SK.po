@@ -1783,3 +1783,9 @@ msgstr "Nové zboží v původním a kompletním balení, na které je poskytov�
 
 msgid "UsedText"
 msgstr "Použité zboží, které je bezvadné a před prodejem odzkoušené a na které je poskytována záruka v délce 6 měsíců. U zboží není možnost odečtu DPH."
+
+msgid "Show on Heureka"
+msgstr "Zobrazit na Heureka"
+
+msgid "Show on Zbozi"
+msgstr "Zobrazit na Zbozi"

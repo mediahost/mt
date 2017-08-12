@@ -112,7 +112,7 @@ class ExportGeneratorPresenter extends BasePresenter
 			$denyCategory = $categoryRepo->find($this->settings->modules->heureka->denyCategoryId);
 		}
 
-		$stocks = $this->stockFacade->getExportStocksArray($showOnlyInStore, $denyCategory, NULL, TRUE);
+		$stocks = $this->stockFacade->getExportStocksArrayHeureka($showOnlyInStore, $denyCategory, NULL);
 
 		$paymentRepo = $this->em->getRepository(Payment::getClassName());
 		$paymentOnDelivery = $paymentRepo->findOneBy([

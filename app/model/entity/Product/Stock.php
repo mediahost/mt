@@ -32,6 +32,8 @@ use Nette\Utils\DateTime;
  * @property boolean $active
  * @property boolean $activeA
  * @property boolean $activeB
+ * @property boolean $heurekaShow
+ * @property boolean $zboziShow
  * @property int $quantity
  * @property int $lock
  * @property int $inStore
@@ -82,6 +84,12 @@ class Stock extends BaseEntity
 
 	/** @ORM\Column(type="boolean") */
 	protected $activeB = TRUE;
+
+	/** @ORM\Column(type="boolean") */
+	protected $heurekaShow = TRUE;
+
+	/** @ORM\Column(type="boolean") */
+	protected $zboziShow = TRUE;
 
 	/** @ORM\Column(type="string", length=50, nullable=true) */
 	protected $barcode;

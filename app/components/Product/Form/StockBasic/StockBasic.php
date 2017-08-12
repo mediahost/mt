@@ -46,6 +46,9 @@ class StockBasic extends StockBase
 			$name = $this->translator->translate('Active for %shop%', NULL, ['shop' => $shop]);
 			$form->addCheckSwitch('active' . $shop->priceLetter, $name);
 		}
+		$form->addCheckSwitch('heurekaShow', 'Show on Heureka');
+		$form->addCheckSwitch('zboziShow', 'Show on Zbozi');
+
 		$form->addWysiHtml('perex', 'Perex', 4)
 			->getControlPrototype()->class[] = 'page-html-content';
 
@@ -83,6 +86,8 @@ class StockBasic extends StockBase
 		$this->stock->barcode = $values->barcode;
 		$this->stock->gift = $values->gift;
 		$this->stock->pohodaCode = $values->pohodaCode;
+		$this->stock->heurekaShow = $values->heurekaShow;
+		$this->stock->zboziShow = $values->zboziShow;
 		$active = FALSE;
 		foreach ($shopRepo->findAll() as $shop) {
 			$attrName = 'active' . $shop->priceLetter;
@@ -115,6 +120,8 @@ class StockBasic extends StockBase
 			'pohodaCode' => $this->stock->pohodaCode,
 			'barcode' => $this->stock->barcode,
 			'gift' => $this->stock->gift,
+			'heurekaShow' => $this->stock->heurekaShow,
+			'zboziShow' => $this->stock->zboziShow,
 		];
 		foreach ($shopRepo->findAll() as $shop) {
 			$attrName = 'active' . $shop->priceLetter;

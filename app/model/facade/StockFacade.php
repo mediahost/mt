@@ -163,7 +163,17 @@ class StockFacade extends Object
 		return [];
 	}
 
-	public function getExportStocksArray($onlyInStore = TRUE, Category $denyCategory = NULL, $limit = NULL, $withHeureka = FALSE)
+	public function getExportStocksArrayHeureka($onlyInStore = TRUE, Category $denyCategory = NULL, $limit = NULL)
+	{
+		return  $this->getExportStocksArray($onlyInStore, $denyCategory, $limit, TRUE, TRUE);
+	}
+
+	public function getExportStocksArrayZbozi($onlyInStore = TRUE, Category $denyCategory = NULL, $limit = NULL)
+	{
+		return  $this->getExportStocksArray($onlyInStore, $denyCategory, $limit, FALSE, FALSE, TRUE);
+	}
+
+	public function getExportStocksArray($onlyInStore = TRUE, Category $denyCategory = NULL, $limit = NULL, $withHeureka = FALSE, $forHeureka = FALSE, $forZbozi = FALSE)
 	{
 		$priceName = $this->shopFacade->getDefaultPriceName();
 		$qb = $this->stockRepo->createQueryBuilder('s')
@@ -191,6 +201,14 @@ class StockFacade extends Object
 				->addSelect('IDENTITY(p.heurekaCategory) as p_heurekaCategoryId')
 				->addSelect('IDENTITY(c.heurekaCategory) as c_heurekaCategoryId')
 				->innerJoin('p.mainCategory', 'c');
+		}
+		if ($forHeureka) {
+			$qb->andWhere('s.heurekaShow = :heurekaShow')
+				->setParameter('heurekaShow', TRUE);
+		}
+		if ($forZbozi) {
+			$qb->andWhere('s.zboziShow = :zboziShow')
+				->setParameter('zboziShow', TRUE);
 		}
 
 		if ($onlyInStore) {
