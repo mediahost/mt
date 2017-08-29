@@ -68,6 +68,9 @@ class Product extends BaseTranslatable
 	/** @ORM\Column(name="`fulltext`", type="text", nullable=true) */
 	private $fulltext;
 
+	/** @ORM\Column(type="boolean") */
+	protected $translated = FALSE;
+
 	/** @var array */
 	private $fulltextArray;
 

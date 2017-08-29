@@ -71,3 +71,4 @@ extensions:
 	todoQueue: App\Extensions\FilesManager\DI\TodoQueueExtension
 	gpwebpay: Pixidos\GPWebPay\DI\GPWebPayExtension
 	homecredit: App\Extensions\HomeCredit\DI\HomeCreditExtension
+	googleTranslate: App\Extensions\GoogleTranslate\DI\GoogleTranslateExtension

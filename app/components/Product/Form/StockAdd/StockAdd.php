@@ -2,6 +2,7 @@
 
 namespace App\Components\Product\Form;
 
+use App\Extensions\GoogleTranslate;
 use App\Forms\Controls\TextInputBased\MetronicTextInputBase;
 use App\Forms\Form;
 use App\Forms\Renderers\MetronicHorizontalFormRenderer;
@@ -32,6 +33,9 @@ class StockAdd extends StockBase
 
 	/** @var PohodaFacade @inject */
 	public $pohodaFacade;
+
+	/** @var GoogleTranslate @inject */
+	public $googleTranslate;
 
 	// </editor-fold>
 
@@ -149,11 +153,24 @@ class StockAdd extends StockBase
 
 	private function loadProduct(ArrayHash $values)
 	{
-		$this->stock->product->setCurrentLocale($this->translator->getDefaultLocale());
-		$this->stock->product->name = $values->name;
-		$this->stock->product->perex = $values->perex;
-		$this->stock->product->description = $values->description;
-		$this->stock->product->mergeNewTranslations();
+		foreach ($this->translator->getAvailableLocales() as $localeCode) {
+			$locale = substr($localeCode, 0, 2);
+			if ($locale == $this->translator->getDefaultLocale()) {
+				$this->stock->product->setCurrentLocale($locale);
+				$this->stock->product->name = $values->name;
+				$this->stock->product->perex = $values->perex;
+				$this->stock->product->description = $values->description;
+				$this->stock->product->mergeNewTranslations();
+			} else {
+				$translation = $this->googleTranslate->translate($values->name, $this->translator->getDefaultLocale(), $locale);
+				if ($translation) {
+					$this->stock->product->setCurrentLocale($locale);
+					$this->stock->product->name = $translation;
+					$this->stock->product->mergeNewTranslations();
+				}
+			}
+		}
+		$this->stock->product->translated = TRUE;
 
 		$categoryRepo = $this->em->getRepository(Category::getClassName());
 		$category = $categoryRepo->find($values->main_category);

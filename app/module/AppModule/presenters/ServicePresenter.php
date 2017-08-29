@@ -4,6 +4,7 @@ namespace App\AppModule\Presenters;
 
 use App\Extensions\Foto;
 use App\Extensions\FotoException;
+use App\Extensions\GoogleTranslate;
 use App\Extensions\Installer;
 use App\Model\Entity\Group;
 use App\Model\Entity\Order;
@@ -36,6 +37,9 @@ class ServicePresenter extends BasePresenter
 
 	/** @var Foto @inject */
 	public $foto;
+
+	/** @var GoogleTranslate @inject */
+	public $googleTranslate;
 
 	/**
 	 * @secured
@@ -174,6 +178,18 @@ class ServicePresenter extends BasePresenter
 	public function handleUpdateProducts($method = self::PRODUCT_UPDATE_CATEGORIES_IDS)
 	{
 		$count = $this->updateProducts($method);
+		$message = $this->translator->translate('%count% products was updated', $count);
+		$this->flashMessage($message, 'success');
+	}
+
+	/**
+	 * @secured
+	 * @resource('service')
+	 * @privilege('translateProducts')
+	 */
+	public function handleTranslateProducts()
+	{
+		$count = $this->translateProducts();
 		$message = $this->translator->translate('%count% products was updated', $count);
 		$this->flashMessage($message, 'success');
 	}
@@ -350,6 +366,45 @@ class ServicePresenter extends BasePresenter
 			$this->em->persist($product);
 			$counter++;
 		}
+		$this->em->flush();
+		return $counter;
+	}
+
+	private function translateProducts()
+	{
+		ini_set('max_execution_time', 200);
+
+		$criteria = [
+			'active' => TRUE,
+			'deletedAt' => NULL,
+			'translated' => TRUE,
+		];
+
+		$productRepo = $this->em->getRepository(Product::getClassName());
+		$products = $productRepo->findBy($criteria, [
+			'updatedAt' => 'ASC',
+		], 10);
+
+		$counter = 0;
+		$defaultLocale = $this->translator->getDefaultLocale();
+		foreach ($products as $product) {
+			$product->setCurrentLocale($defaultLocale);
+			$name = $product->name;
+			foreach ($this->translator->getAvailableLocales() as $localeCode) {
+				$locale = substr($localeCode, 0, 2);
+				if ($locale != $this->translator->getDefaultLocale()) {
+					$translation = $this->googleTranslate->translate($name, $defaultLocale, $locale);
+					if ($translation) {
+						$translate = $product->translateAdd($locale);
+						$translate->name = $translation;
+					}
+				}
+			}
+			$product->translated = TRUE;
+			$this->em->persist($product);
+			$counter++;
+		}
+		$product->setCurrentLocale($defaultLocale);
 		$this->em->flush();
 		return $counter;
 	}
