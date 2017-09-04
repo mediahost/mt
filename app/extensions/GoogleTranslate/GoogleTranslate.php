@@ -32,8 +32,12 @@ class GoogleTranslate extends Object
 		$url->setQueryParameter('source', $source);
 		$url->setQueryParameter('target', $target);
 
-		$handle = curl_init((string) $url);
-		curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
+		$handle = curl_init((string)$url->getHostUrl() . $url->getPath());
+		curl_setopt($handle, CURLOPT_POST, 1);
+		curl_setopt($handle, CURLOPT_POSTFIELDS, (string)$url->getQuery());
+		curl_setopt($handle, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt($handle, CURLOPT_HEADER, 0);
+		curl_setopt($handle, CURLOPT_RETURNTRANSFER, 1);
 		$response = curl_exec($handle);
 		$responseDecoded = json_decode($response, true);
 		curl_close($handle);

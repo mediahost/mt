@@ -153,21 +153,26 @@ class StockAdd extends StockBase
 
 	private function loadProduct(ArrayHash $values)
 	{
+		$defaultLocale = $this->translator->getDefaultLocale();
 		foreach ($this->translator->getAvailableLocales() as $localeCode) {
 			$locale = substr($localeCode, 0, 2);
-			if ($locale == $this->translator->getDefaultLocale()) {
+			if ($locale == $defaultLocale) {
 				$this->stock->product->setCurrentLocale($locale);
 				$this->stock->product->name = $values->name;
 				$this->stock->product->perex = $values->perex;
 				$this->stock->product->description = $values->description;
 				$this->stock->product->mergeNewTranslations();
 			} else {
-				$translation = $this->googleTranslate->translate($values->name, $this->translator->getDefaultLocale(), $locale);
-				if ($translation) {
-					$this->stock->product->setCurrentLocale($locale);
-					$this->stock->product->name = $translation;
-					$this->stock->product->mergeNewTranslations();
+				$this->stock->product->setCurrentLocale($locale);
+				$translatedName = $this->googleTranslate->translate($values->name, $defaultLocale, $locale);
+				$translatedPerex = $this->googleTranslate->translate($values->perex, $defaultLocale, $locale);
+				$translatedDescription = $this->googleTranslate->translate($values->description, $defaultLocale, $locale);
+				if ($translatedName) {
+					$this->stock->product->name = $translatedName;
+					$this->stock->product->perex = $translatedPerex;
+					$this->stock->product->description = $translatedDescription;
 				}
+				$this->stock->product->mergeNewTranslations();
 			}
 		}
 		$this->stock->product->translated = TRUE;

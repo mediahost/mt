@@ -377,7 +377,7 @@ class ServicePresenter extends BasePresenter
 		$criteria = [
 			'active' => TRUE,
 			'deletedAt' => NULL,
-			'translated' => TRUE,
+			'translated' => FALSE,
 		];
 
 		$productRepo = $this->em->getRepository(Product::getClassName());
@@ -390,13 +390,19 @@ class ServicePresenter extends BasePresenter
 		foreach ($products as $product) {
 			$product->setCurrentLocale($defaultLocale);
 			$name = $product->name;
+			$perex = $product->perex;
+			$description = $product->description;
 			foreach ($this->translator->getAvailableLocales() as $localeCode) {
 				$locale = substr($localeCode, 0, 2);
 				if ($locale != $this->translator->getDefaultLocale()) {
-					$translation = $this->googleTranslate->translate($name, $defaultLocale, $locale);
-					if ($translation) {
+					$translatedName = $this->googleTranslate->translate($name, $defaultLocale, $locale);
+					$translatedPerex = $this->googleTranslate->translate($perex, $defaultLocale, $locale);
+					$translatedDescription = $this->googleTranslate->translate($description, $defaultLocale, $locale);
+					if ($translatedName) {
 						$translate = $product->translateAdd($locale);
-						$translate->name = $translation;
+						$translate->name = $translatedName;
+						$translate->perex = $translatedPerex;
+						$translate->description = $translatedDescription;
 					}
 				}
 			}
@@ -404,7 +410,6 @@ class ServicePresenter extends BasePresenter
 			$this->em->persist($product);
 			$counter++;
 		}
-		$product->setCurrentLocale($defaultLocale);
 		$this->em->flush();
 		return $counter;
 	}
