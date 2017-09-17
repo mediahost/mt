@@ -74,12 +74,19 @@ abstract class BaseMessage extends Message
 
 	protected function build()
 	{
-		$shopVariant = $this->shopFacade->getShopVariant($this->translator->getLocale());
+		if ($this->order && $this->order->shopVariant) {
+			$shopVariant = $this->order->shopVariant;
+			$projectName = $shopVariant->shop->address->name;
+		} else {
+			$shopVariant = $this->shopFacade->getShopVariant($this->translator->getLocale());
+			$projectName = $this->settings->pageInfo->projectName;
+		}
 		$currency = $this->exchange[$this->exchange->getWeb()];
 		$this->params += [
 			'shopVariant' => $shopVariant,
 			'shopInfo' => $shopVariant->shop,
 			'pageInfo' => $this->settings->pageInfo,
+			'projectName' => $projectName,
 			'mail' => $this,
 			'colon' => '',
 			'locale' => $this->translator->getLocale(),
