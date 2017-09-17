@@ -63,7 +63,7 @@ class GroupsGrid extends BaseControl
 				});
 
 		$allowDelete = !$this->isBonusType();
-		$grid->addActionHref('delete', 'Delete')
+		$button = $grid->addActionHref('delete', 'Delete')
 						->setIcon('fa fa-trash-o')
 						->setDisable(function ($item) use ($allowDelete) {
 							return !$allowDelete;
@@ -71,8 +71,8 @@ class GroupsGrid extends BaseControl
 						->setConfirm(function($item) {
 							$message = $this->translator->translate('Are you sure you want to delete \'%name%\'?', NULL, ['name' => (string) $item]);
 							return $message;
-						})
-				->elementPrototype->class[] = 'red';
+						});
+		$button->getElementPrototype()->class[] = 'red';
 
 		$grid->setActionWidth("20%");
 
