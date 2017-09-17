@@ -5,6 +5,7 @@ namespace App\Extensions;
 use Exception;
 use Nette\Http\Url;
 use Nette\Object;
+use Tracy\Debugger;
 
 class GoogleTranslate extends Object
 {
@@ -26,6 +27,9 @@ class GoogleTranslate extends Object
 
 	public function translate($text, $source, $target)
 	{
+		if (empty($text)) {
+			return NULL;
+		}
 		$url = new Url(self::TRANSLATE_URL);
 		$url->setQueryParameter('key', $this->apiKey);
 		$url->setQueryParameter('q', $text);
@@ -42,7 +46,11 @@ class GoogleTranslate extends Object
 		$responseDecoded = json_decode($response, true);
 		curl_close($handle);
 
-		return $responseDecoded['data']['translations'][0]['translatedText'];
+		if (array_key_exists('error', $responseDecoded)) {
+			throw new GoogleTranslateException($responseDecoded['error']['message']);
+		} else if (array_key_exists('data', $responseDecoded)) {
+			return $responseDecoded['data']['translations'][0]['translatedText'];
+		}
 	}
 
 }

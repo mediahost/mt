@@ -16,6 +16,8 @@ use App\Model\Facade\UserFacade;
 use Doctrine\ORM\Tools\SchemaTool;
 use Kdyby\Doctrine\Connection;
 use Nette\Utils\FileSystem;
+use Nette\Utils\Strings;
+use Tracy\Debugger;
 
 class ServicePresenter extends BasePresenter
 {
@@ -392,21 +394,27 @@ class ServicePresenter extends BasePresenter
 			$name = $product->name;
 			$perex = $product->perex;
 			$description = $product->description;
+			$translated = TRUE;
 			foreach ($this->translator->getAvailableLocales() as $localeCode) {
 				$locale = substr($localeCode, 0, 2);
 				if ($locale != $this->translator->getDefaultLocale()) {
+					$translate = $product->translateAdd($locale);
 					$translatedName = $this->googleTranslate->translate($name, $defaultLocale, $locale);
 					$translatedPerex = $this->googleTranslate->translate($perex, $defaultLocale, $locale);
 					$translatedDescription = $this->googleTranslate->translate($description, $defaultLocale, $locale);
-					if ($translatedName) {
-						$translate = $product->translateAdd($locale);
-						$translate->name = $translatedName;
-						$translate->perex = $translatedPerex;
-						$translate->description = $translatedDescription;
+					$translate->name = $translatedName;
+					$translate->perex = $translatedPerex;
+					$translate->description = $translatedDescription;
+					if (!$translatedName) {
+						$translated = FALSE;
 					}
+					$shortName = Strings::truncate($translatedName, 50);
+					$shortPerex = Strings::truncate($translatedPerex, 50);
+					$shortDescription = Strings::truncate($translatedDescription, 50);
+					Debugger::log("PRODUCT ID:{$product->id};LANG:{$locale};TRANSLATED:{$translated};---{$shortName}---{$shortPerex}---{$shortDescription}", 'translations');
 				}
 			}
-			$product->translated = TRUE;
+			$product->translated = $translated;
 			$this->em->persist($product);
 			$counter++;
 		}
