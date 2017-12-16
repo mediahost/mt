@@ -5,6 +5,7 @@ namespace App\AppModule\Presenters;
 use App\Extensions\Foto;
 use App\Extensions\FotoException;
 use App\Extensions\GoogleTranslate;
+use App\Extensions\GoogleTranslateException;
 use App\Extensions\Installer;
 use App\Model\Entity\Group;
 use App\Model\Entity\Order;
@@ -399,24 +400,31 @@ class ServicePresenter extends BasePresenter
 				$locale = substr($localeCode, 0, 2);
 				if ($locale != $this->translator->getDefaultLocale()) {
 					$translate = $product->translateAdd($locale);
-					$translatedName = $this->googleTranslate->translate($name, $defaultLocale, $locale);
-					$translatedPerex = $this->googleTranslate->translate($perex, $defaultLocale, $locale);
-					$translatedDescription = $this->googleTranslate->translate($description, $defaultLocale, $locale);
-					$translate->name = $translatedName;
-					$translate->perex = $translatedPerex;
-					$translate->description = $translatedDescription;
-					if (!$translatedName) {
+					try {
+						$translatedName = $this->googleTranslate->translate($name, $defaultLocale, $locale);
+						$translatedPerex = $this->googleTranslate->translate($perex, $defaultLocale, $locale);
+						$translatedDescription = $this->googleTranslate->translate($description, $defaultLocale, $locale);
+						$translate->name = $translatedName;
+						$translate->perex = $translatedPerex;
+						$translate->description = $translatedDescription;
+						if (!$translatedName) {
+							$translated = FALSE;
+						}
+						$shortName = Strings::truncate($translatedName, 50);
+						$shortPerex = Strings::truncate($translatedPerex, 50);
+						$shortDescription = Strings::truncate($translatedDescription, 50);
+						Debugger::log("PRODUCT ID:{$product->id};LANG:{$locale};TRANSLATED:{$translated};---{$shortName}---{$shortPerex}---{$shortDescription}", 'translations');
+					} catch (GoogleTranslateException $e) {
 						$translated = FALSE;
+						Debugger::log("PRODUCT ID:{$product->id};ERROR:{$e->getMessage()}", 'translations');
 					}
-					$shortName = Strings::truncate($translatedName, 50);
-					$shortPerex = Strings::truncate($translatedPerex, 50);
-					$shortDescription = Strings::truncate($translatedDescription, 50);
-					Debugger::log("PRODUCT ID:{$product->id};LANG:{$locale};TRANSLATED:{$translated};---{$shortName}---{$shortPerex}---{$shortDescription}", 'translations');
 				}
 			}
 			$product->translated = $translated;
 			$this->em->persist($product);
-			$counter++;
+			if ($translated) {
+				$counter++;
+			}
 		}
 		$this->em->flush();
 		return $counter;

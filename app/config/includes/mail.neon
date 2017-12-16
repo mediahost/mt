@@ -20,3 +20,4 @@ services:
 	- {implement: App\Mail\Messages\Recommend\IRecommendationFactory, inject: yes}
 	- {implement: App\Mail\Messages\WatchDog\IAvailableFactory, inject: yes}
 	- {implement: App\Mail\Messages\WatchDog\ILoweredPriceFactory, inject: yes}
+	- {implement: App\Mail\Messages\NewPohodaStorage\INewPohodaStorageFactory, inject: yes}

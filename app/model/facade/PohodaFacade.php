@@ -5,6 +5,7 @@ namespace App\Model\Facade;
 use App\Extensions\FilesManager;
 use App\Extensions\Settings\SettingsStorage;
 use App\Helpers;
+use App\Mail\Messages\NewPohodaStorage\INewPohodaStorageFactory;
 use App\Model\Entity\PohodaItem;
 use App\Model\Entity\PohodaStorage;
 use App\Model\Entity\Special\XmlItem;
@@ -56,6 +57,9 @@ class PohodaFacade extends Object
 
 	/** @var SettingsStorage @inject */
 	public $settings;
+
+	/** @var INewPohodaStorageFactory @inject */
+	public $iNewPohodaStorageFactory;
 
 	public function updateFullProducts($limit = NULL, $offset = NULL)
 	{
@@ -341,17 +345,23 @@ class PohodaFacade extends Object
 					} // stk:stockPriceItem
 				} // product end
 
+				$storage = null;
 				if (isset($item->storage) && isset($item->storage->typ_id) && isset($item->storage->typ_ids)) { // update/add storage
 					$storage = $storageRepo->find($item->storage->typ_id);
 					if (!$storage) {
 						$storage = new PohodaStorage($item->storage->typ_id);
+						$message = $this->iNewPohodaStorageFactory->create();
+						$message->addTo('pupe.dupe@gmail.com,lubox11@gmail.com,kapicak@kapicak.com')
+							->setPohoda($storage, $item->stk_code);
+						$message->send();
 					}
 					$storage->name = $item->storage->typ_ids;
 					$this->em->persist($storage);
 				}
 
 				// update/add product
-				if (isset($item->stk_code) && isset($storage)) {
+				$product = null;
+				if (isset($item->stk_code) && $storage) {
 					$product = $productRepo->findOneBy([
 						'code' => $item->stk_code,
 						'storage' => $storage,
@@ -361,8 +371,8 @@ class PohodaFacade extends Object
 					}
 				}
 
-				if (isset($product) && $product) {
-					if (isset($storage)) {
+				if ($product) {
+					if ($storage && $product->storage->name != $storage->name) {
 						$product->storage = $storage;
 					}
 					if (isset($item->stk_code)) {
