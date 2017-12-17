@@ -2,13 +2,13 @@
 
 namespace App\Model\Facade;
 
+use App\Extensions\PaymentNotification\Payment;
 use App\Extensions\Settings\SettingsStorage;
 use App\Model\Entity\Basket;
 use App\Model\Entity\Order;
 use App\Model\Entity\OrderItem;
 use App\Model\Entity\OrderState;
 use App\Model\Entity\OrderStateType;
-use App\Model\Entity\ShopVariant;
 use App\Model\Entity\Stock;
 use App\Model\Entity\User;
 use App\Model\Facade\Exception\FacadeException;
@@ -223,6 +223,18 @@ class OrderFacade extends Object
 		$order->paymentDate = new DateTime();
 		$order->paymentBlame = $paymentBlame;
 		$this->orderRepo->save($order);
+	}
+
+	public function payOrderByNotification(Payment $payment)
+	{
+		$orderRepo = $this->em->getRepository(Order::getClassName());
+		$order = $orderRepo->find($payment->vs);
+		if ($order) {
+			$this->exchange->setWeb($payment->currency);
+			if ($order->getTotalPrice($this->exchange) == $payment->price) {
+				$this->payOrder($order, $payment->type);
+			}
+		}
 	}
 
 	public function getAllOrders(User $user)

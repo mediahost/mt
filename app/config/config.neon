@@ -57,10 +57,12 @@ services:
 
 	- App\Extensions\PaymentNotification\CSOBResolver
 	- App\Extensions\PaymentNotification\VUBResolver
+	- App\Extensions\PaymentNotification\SkSporitelnaResolver
 	-
 		class: App\Extensions\PaymentNotification\PaymentNotificationParser
 		setup:
-			- $resolvers([@App\Extensions\PaymentNotification\CSOBResolver, @App\Extensions\PaymentNotification\VUBResolver])
+			- $mailResolvers([@App\Extensions\PaymentNotification\CSOBResolver, @App\Extensions\PaymentNotification\VUBResolver])
+			- setSkSporitelnaResolver(@App\Extensions\PaymentNotification\SkSporitelnaResolver)
 
 extensions:
 	installer: App\Extensions\Installer\DI\InstallerExtension

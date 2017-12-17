@@ -22,6 +22,7 @@ class FilesManager extends Object
 	const EXPORT_DEALER_STOCKS = 'dealer-stocks';
 	const EXPORT_DEALER_CATEGORIES = 'dealer-categories';
 	const CSV_LOG = 'csv-log';
+	const BANK_PAYMENTS = 'banks';
 
 	/** @var string */
 	private $rootFolder;
@@ -76,18 +77,12 @@ class FilesManager extends Object
 		$path = $this->getRootDir();
 		switch ($name) {
 			case self::EXPORTS:
-				$path = Helpers::getPath($path, self::EXPORTS);
-				break;
 			case self::POHODA_IMPORT:
-				$path = Helpers::getPath($path, self::POHODA_IMPORT);
-				break;
 			case self::MAILS:
-				$path = Helpers::getPath($path, self::MAILS);
-				break;
 			case self::CSV_LOG:
-				$path = Helpers::getPath($path, self::CSV_LOG);
+			case self::BANK_PAYMENTS:
+				$path = Helpers::getPath($path, $name);
 				break;
-
 			default:
 				throw new FilesManagerException('Unknown name for dir.');
 		}

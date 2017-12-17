@@ -4,7 +4,6 @@ namespace App\Router;
 
 use App\Extensions\Settings\SettingsStorage;
 use App\Model\Facade\PageFacade;
-use App\Model\Facade\ProducerFacade;
 use App\Model\Facade\ShopFacade;
 use App\Model\Facade\UriFacade;
 use Drahak\Restful\Application\Routes\ResourceRoute;

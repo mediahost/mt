@@ -27,7 +27,7 @@ class VUBResolver implements IResolver
 		$vs = $matchesVS[1];
 		$price = floatval(str_replace(',', '.', $matchesPrice[1]));
 
-		$payment = new Payment($vs, $price, Order::PAYMENT_BLAME_VUB);
+		$payment = new Payment($vs, $price, Order::PAYMENT_BLAME_VUB, 'eur');
 		return [$payment];
 	}
 

@@ -25,7 +25,6 @@ class CSOBResolver implements IResolver
 		$payments = explode('dovoľujeme si Vám oznámiť', $matches[0]);
 		$vs = NULL;
 		$price = NULL;
-		$orderId = NULL;
 		$return = [];
 		foreach ($payments as $payment) {
 			$priceFound = preg_match('/suma:\s*\+([0-9,]*)\s*EUR/i', $payment, $matches);
@@ -39,7 +38,7 @@ class CSOBResolver implements IResolver
 				continue;
 			}
 			$vs = $matches[1];
-			$return[] = new Payment($vs, $price, Order::PAYMENT_BLAME_CSOB);
+			$return[] = new Payment($vs, $price, Order::PAYMENT_BLAME_CSOB, 'eur');
 		}
 		return $return;
 	}

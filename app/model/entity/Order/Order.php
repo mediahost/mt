@@ -47,6 +47,7 @@ class Order extends BaseEntity
 	const PAYMENT_BLAME_VUB = 2;
 	const PAYMENT_BLAME_CSOB = 3;
 	const PAYMENT_BLAME_CARD = 4;
+	const PAYMENT_BLAME_SK_SPORITELNA = 4;
 
 	use Identifier;
 	use Model\Timestampable\Timestampable;
@@ -57,6 +58,7 @@ class Order extends BaseEntity
 		self::PAYMENT_BLAME_VUB => 'VUB',
 		self::PAYMENT_BLAME_CSOB => 'CSOB',
 		self::PAYMENT_BLAME_CARD => 'WebPay',
+		self::PAYMENT_BLAME_SK_SPORITELNA => 'Sk Spoř.',
 	];
 
 	/** @ORM\Column(type="string", nullable=true) */
