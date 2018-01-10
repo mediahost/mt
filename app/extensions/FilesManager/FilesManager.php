@@ -5,7 +5,6 @@ namespace App\Extensions;
 use App\Helpers;
 use Exception;
 use Nette\DI\Container;
-use Nette\Http\FileUpload;
 use Nette\Object;
 use Nette\Utils\FileSystem;
 
