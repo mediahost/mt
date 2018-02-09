@@ -63,14 +63,14 @@
 								</p>
 							</div>
 						</div>
-						<div n:if="$stock->vat->isNone()">
-							<p n:if="$stock->vat->isNone()">
-								{_'NoVatLaw2'}
-							</p>
-							<p n:if="$stock->vat->isNone()">
-								{_'NoVatLaw'}
-							</p>
-						</div>
+						{*<div n:if="$stock->vat->isNone()">*}
+					{*<p>*}
+					{*{_'NoVatLaw2'}*}
+					{*</p>*}
+					{*<p>*}
+					{*{_'NoVatLaw'}*}
+					{*</p>*}
+						{*</div>*}
 						<div class="row">
 							<div class="col-md-5 product-page-cart">
 								{control addToCart}
