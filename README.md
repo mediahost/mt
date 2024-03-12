@@ -15,3 +15,8 @@ Instalation
 1. Create ***REMOVED*** from example
 2. Run ***REMOVED***
 
+Some secrets
+Passwd: ***REMOVED***
+email: ***REMOVED***
+test: ***REMOVED***
+
